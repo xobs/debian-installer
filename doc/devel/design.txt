@@ -36,8 +36,8 @@ This creates a menu of all modules that register as menu items, ordered
 mostly by dependency (but see menu-item-numbers.txt). The installation
 process is then a simple matter of stepping down this list, running each
 menu item in turn. This may be done by the user manually (who can choose to
-run items out of turn too), or at higher prioeity levels, is done behind
-the scened without interaction by main-menu. 
+run items out of turn too), or at higher priority levels, is done behind
+the scenes without interaction by main-menu. 
 
 Running a menu item really means configuring (or reconfiguring) the udeb
 that provides it, and so all of a menu item's dependencies must be
@@ -52,31 +52,31 @@ available media or the network. Most initrds are built from only the
 minimum set of modules needed to perform these tasks.
 
 Loading udebs is taken care of by the anna program (Anna's Not Nearly Apt).
-It in turn relies on retreiver modules, which take care of scanning media
-or the network for available udebs and retreiving them (see retreiver.txt).
-Anna chooss which of the available udebs to load, based on dependencies and
-priority information, gets them retreived, and unpacks them. This process
-may be repeated using multiple retreivers, for example modules might first
-be retreived from a driver floppy, and those drivers be used to load the
-rest of the installer from CD. After anna's final run, the complete
-installer environment has been bootstrapped, and the Debian installer can
-begin.
+It in turn relies on retriever modules, which take care of scanning media
+or the network for available udebs and retrieving them (see retriever.txt).
+Anna chooses which of the available udebs to load, based on dependencies
+and priority information, gets them retrieved, and unpacks them. This
+process may be repeated using multiple retrievers, for example modules
+might first be retrieved from a driver floppy, and those drivers be used to
+load the rest of the installer from CD. After anna's final run, the
+complete installer environment has been bootstrapped, and the Debian
+installer can begin.
 
 Of course to load modules from CD or the network, some hardware detection
 needs to be done. The installer leaves hardware detection to just another
 installer module; currently we use discover for most hardware detection.
 Hardware detecton is run multiple times, first to detect hardware that can
 be accessed by the kernel modules on the initrd, and later to detect all
-hardware accessible by the full d-i environment as bootstraped by anna.
+hardware accessible by the full d-i environment as bootstrapped by anna.
 
-The Debian installation process has three major steps: Partitioning disks
+The Debian installation process has three major steps: partitioning disks,
 installing packages, and installing the boot loader. Disk partitioning (and
 formatting and mounting to /target) is handled by an installer module or
-modules currently the partman suite on most architectures (see the partman/
-directory for docs). Package installation is done by base-installer, which
-calls debootstrap to do most of the work. Boot loader installation is
-handled by a number of architecture specific modules, such as
-grub-installer, lilo-installer, and yaboot-installer.
+modules, currently the partman suite on most architectures (see the
+partman/ directory for docs). Package installation is done by
+base-installer, which calls debootstrap to do most of the work. Boot loader
+installation is handled by a number of architecture-specific modules, such
+as grub-installer, lilo-installer, and yaboot-installer.
 
 The installation finishes up in prebaseconfig, which reboots into the
 installed system. From there base-config is run, and we're out of the part
