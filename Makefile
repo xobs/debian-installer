@@ -120,14 +120,16 @@ lib_reduce:
 	mkdir -p $(DEST)/lib
 	mklibs.sh -v -d $(DEST)/lib `find $(DEST) -type f -perm +0111`
 	# Now we have reduced libraries installed .. but they are
-	# not listed in the status file. This nasty thing puts them in.
-	# However, there's a problem -- deps on a library by udebs that
-	# are not yet installed probably won't be satisfied by this stuff.
-	# Solution unknown.
+	# not listed in the status file. This nasty thing puts them in,
+	# and alters their names to end in -reduced to indicate that
+	# they have been modified.
 	for package in $$(dpkg -S `find debian-installer/lib -type f | \
 			sed s:debian-installer::` | cut -d : -f 1 | \
 			sort | uniq); do \
 		dpkg -s $$package >> $(DPKGDIR)/status; \
+		sed "s/$$package/$$package-reduced/g" \
+			< $(DPKGDIR)/status > $(DPKGDIR)/status-new; \
+		mv -f $(DPKGDIR)/status-new $(DPKGDIR)/status; \
 	done
 
 # Reduce a status file to contain only the elements we care about.
