@@ -208,8 +208,8 @@ tree-stamp:
 	rm -rf $(DPKGDIR)/updates
 	rm -f $(DPKGDIR)/available $(DPKGDIR)/*-old $(DPKGDIR)/lock
 	# Set up modules.dep
-	mkdir -p $(TREE)/lib/modules/$(KVERS)-di/
-	depmod -q -a -b $(TREE)/ $(KVERS)-di
+	mkdir -p $(TREE)/lib/modules/$(KVERS)-$(FLAVOUR)/
+	depmod -q -a -b $(TREE)/ $(KVERS)-$(FLAVOUR)
 
 	# Move the kernel image out of the way, into a temp directory
 	# for use later. We don't need it bloating our image!
