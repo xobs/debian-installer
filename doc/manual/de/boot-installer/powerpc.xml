@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23151 -->
+<!-- original version: 24602 -->
 
   <sect2 arch="powerpc" id="boot-cd"><title>Booten von CD-ROM</title>
 
@@ -111,13 +111,79 @@ boot:
 Am yaboot-<prompt>boot:</prompt>-Prompt geben Sie entweder
 <userinput>install</userinput> oder <userinput>install video=ofonly</userinput>
 ein, gefolgt von &enterkey;.
-Mit dem <userinput>video=ofonly</userinput>-Argument erreichen Sie
-maximale Kompatibilität; probieren Sie es aus, wenn
-<userinput>install</userinput> nicht funktioniert.
+Das <userinput>video=ofonly</userinput>-Argument ist lediglich vorhanden,
+um ein Maximum an Kompatibilität zu gewährleisten; probieren Sie es aus, wenn
+<userinput>install</userinput> nicht funktionieren sollte.
 Das Debian-Installationssystem sollte nun starten.
 
 </para>
    </sect3>
+  </sect2>
+
+  <sect2 arch="powerpc" id="usb-boot">
+  <title>Booten von einem USB-Speicher</title>
+<para>
+
+Für &arch-title; ist derzeit lediglich bekannt, dass NewWorld-PowerMac-Systeme
+das Booten von USB unterstützen.
+
+</para>
+
+<para>
+
+Vergewissern Sie sich, dass Sie alles wie in <xref linkend="boot-usb-files"/>
+beschrieben vorbereitet haben. Um ein Macintosh-System von USB-Stick zu booten,
+müssen Sie den OpenFirmware-Prompt nutzen, da OpenFirmware standardmäßig
+nicht nach USB-Speicher-Geräten sucht.
+<!-- TODO: although it could be made to; watch this space -->
+Um zum Prompt zu gelangen, drücken sie während des Bootens gleichzeitig
+<keycombo><keycap>Command</keycap> <keycap>Option</keycap>
+<keycap>o</keycap> <keycap>f</keycap></keycombo> (siehe dazu
+<xref linkend="invoking-openfirmware"/>).
+
+</para><para>
+
+Sie müssen herausfinden, wo die USB-Speicher im Verzeichnisbaum der
+Geräte erscheinen, da <command>ofpath</command> dies derzeit nicht
+automatisch erkennen kann. Verwenden Sie <userinput>dev / ls</userinput>
+und <userinput>devalias</userinput> am OpenFirmware-Prompt, um eine Liste
+aller bekannten Geräte und Aliasnamen angezeigt zu bekommen. Auf dem System
+des Autors waren <filename>usb0/disk</filename>, <filename>usb0/hub/disk</filename>,
+<filename>/pci@f2000000/usb@1b,1/disk@1</filename> oder
+<filename>/pci@f2000000/usb@1b,1/hub@1/disk@1</filename> korrekte Pfadangaben
+(bei verschiedenen USB-Stick-Typen).
+
+</para><para>
+
+Haben Sie den korrekten Gerätepfad herausgefunden, nutzen Sie einen Befehl wie
+diesen, um den Installer zu booten:
+
+<informalexample><screen>
+
+boot <replaceable>usb0/disk</replaceable>:<replaceable>2</replaceable>,\\:tbxi
+
+</screen></informalexample>
+
+Die <replaceable>2</replaceable> passt für die Apple_HFS- oder Apple_Bootstrap-Partition,
+auf die Sie das Boot-Image vorher kopiert haben, und der Teil <userinput>,\\:tbxi</userinput>
+weist OpenFirmware an, von der Datei mit dem HFS-Dateityp "tbxi" in diesem
+Verzeichnis zu booten, das Sie zuvor mit <command>hattrib -b</command>
+vorbereitet haben (z.B. <command>yaboot</command>) .
+
+</para><para>
+
+Das System sollte nun starten und es sollte der <prompt>boot:</prompt>-Prompt
+angezeigt werden. Sie könnten hier zusätzliche Bootparameter angeben oder einfach
+&enterkey; drücken.
+
+</para><warning><para>
+
+Diese Bootmethode ist noch neu, und es könnte auf einigen NewWorld-Systemen
+schwierig sein, sie zum Laufen zu bringen. Wenn Sie Probleme haben, senden Sie uns
+bitte einen Installationsbericht, wie in <xref linkend="submit-bug"/> näher
+erläutert.
+
+</para></warning>
   </sect2>
 
   <sect2 arch="powerpc" id="boot-tftp"><title>Per TFTP booten</title>

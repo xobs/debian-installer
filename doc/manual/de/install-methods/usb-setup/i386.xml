@@ -1,0 +1,110 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 24628 -->
+
+   <sect3 arch="i386">
+   <title>Partitionieren eines USB-Sticks auf &arch-title;-Systemen</title>
+<para>
+
+Wir werden hier erläutern, wie Sie den Memory-Stick einrichten, sodass nur
+die erste Partition genutzt wird statt des kompletten USB-Speichers.
+
+</para><note><para>
+
+Da die meisten USB-Sticks mit einer einzelnen FAT16-Partition vorkonfiguriert
+geliefert werden, müssen Sie den Stick möglicherweise nicht neu partitionieren
+oder formatieren. Falls es trotzdem nötig ist, nutzen Sie <command>cfdisk</command>
+oder ein anderes Partitionierungs-Werkzeug, um eine FAT16-Partition zu erzeugen
+und geben Sie dann ein:
+
+<informalexample><screen>
+
+mkdosfs /dev/<replaceable>sda1</replaceable>
+
+</screen></informalexample>
+
+Sorgen Sie dafür, dass Sie den richtigen Gerätenamen für den USB-Stick
+verwenden. Das Programm <command>mkdosfs</command> ist in dem Debian-Paket
+<classname>dosfstools</classname> enthalten.
+
+</para></note><para>
+
+Um den Kernel zu starten, nachdem wir vom USB-Stick gebootet haben,
+werden wir einen Bootloader auf dem Stick ablegen. Obwohl jeder Bootloader
+(wie z.B. <command>LILO</command>) funktionieren sollte, wird empfohlen,
+<command>SYSLINUX</command> zu verwenden, da er eine FAT16-Partition
+benutzt und über eine Textdatei konfiguriert werden kann. Jedes Betriebssystem,
+das das FAT-Dateisystem unterstützt, kann verwendet werden, um die
+Konfiguration des Bootloaders zu verändern.
+
+</para><para>
+
+Um <command>SYSLINUX</command> auf die FAT16-Partition des USB-Sticks zu
+befördern, installieren Sie die Pakete <classname>syslinux</classname> und
+<classname>mtools</classname> auf Ihrem System und geben dann ein:
+
+<informalexample><screen>
+
+syslinux /dev/<replaceable>sda1</replaceable>
+
+</screen></informalexample>
+
+Hier wieder die Warnung, den richtigen Gerätenamen zu verwenden.
+Die Partition darf nicht anderweitig ins Dateisystem eingehängt sein,
+wenn <command>SYSLINUX</command> gestartet wird. Durch diese Prozedur
+wird ein Bootsektor auf die Partition geschrieben und die Datei
+<filename>ldlinux.sys</filename> erstellt, die den Bootloader-Code
+enthält.
+
+</para><para>
+
+Hängen Sie die Partition ins Dateisystem ein (<userinput>mount /dev/sda1 /mnt</userinput>)
+und kopieren Sie die folgenden Dateien vom Debian-Archiv auf den Stick:
+
+<itemizedlist>
+<listitem><para>
+
+<filename>vmlinuz</filename> (Kernel-Binär-Datei)
+
+</para></listitem>
+<listitem><para>
+
+<filename>initrd.gz</filename> (Initial-RAM-Disk-Image)
+
+</para></listitem>
+<listitem><para>
+
+<filename>syslinux.cfg</filename> (SYSLINUX-Konfigurationsdatei)
+
+</para></listitem>
+<listitem><para>
+
+Optionale Kernel-Module
+
+</para></listitem>
+</itemizedlist>
+
+Wenn Sie die Dateien umbenennen möchten, beachten Sie, dass
+<command>SYSLINUX</command> nur Dateinamen nach dem DOS-(8.3)Format
+verarbeiten kann.
+
+</para><para>
+
+Die Konfigurationsdatei <filename>syslinux.cfg</filename> sollte die
+folgenden zwei Zeilen enthalten: (Um die 2. Zeile komplett darstellen zu können,
+musste sie gesplittet werden; in der Konfigurationsdatei muss jedoch alles in
+einer Zeile stehen; das Zeilenfortführungs-Zeichen <quote>\</quote>, der
+Zeilenumbruch selbst und der zusätzliche Absatz müssen also entfernt werden!)
+
+<informalexample><screen>
+
+default vmlinuz
+append initrd=initrd.gz ramdisk_size=10000 root=/dev/rd/0 \
+	init=/linuxrc devfs=mount,dall rw
+
+</screen></informalexample>
+
+Beachten Sie bitte, dass der Wert für den Parameter <userinput>ramdisk_size</userinput>
+evtl. abhängig von dem Image, das Sie booten, noch erhöht werden muss.
+
+</para>
+   </sect3>
