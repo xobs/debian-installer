@@ -21,8 +21,9 @@ my @lists = ("pkg-lists/$type/common", "pkg-lists/$type/$deb_host_arch",
              "pkg-lists/$type/local", "pkg-lists/local");
 while (@lists) {
 	my $list=pop @lists;
-	if (! -e $list && $list !~ /local$/) {
-		print STDERR "warning: missing list, $list, for type $type\n";
+	if (! -e $list) {
+		print STDERR "warning: missing list, $list, for type $type\n"
+			if $list !~ /local$/;
 	}
 	else {
 		open (LIST, $list) || die "open $list $!";
