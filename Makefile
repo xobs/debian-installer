@@ -229,7 +229,7 @@ $(TYPE)-tree-stamp: $(TYPE)-get_udebs-stamp debian/control
 		usedblocks=`echo $$newblocks - $$oldblocks | bc`; \
 		usedcount=`echo $$newcount - $$oldcount | bc`; \
 		version=`dpkg-deb --info $$udeb | grep Version: | awk '{print $$2}'` ; \
-		echo " $$usedsize B - $$usedblocks blocks - $$usedcount files used by pkg $$pkg (version $$version )" >>diskusage-$(TYPE).txt;\
+		echo " $$usedsize B - $$usedblocks blocks - $$usedcount files used by pkg $$pkg (version $$version)" >>diskusage-$(TYPE).txt;\
 		oldsize=$$newsize ; \
 		oldblocks=$$newblocks ; \
 		oldcount=$$newcount ; \
@@ -522,7 +522,7 @@ ifneq (,$(FLOPPY_SIZE))
 	@echo "Free space: $(shell expr $(FLOPPY_SIZE) - $(SZ))k"
 endif
 	@echo "Disk usage per package:"
-	@ls -l $(TEMP)/$*/*.udeb
+	@cd $(TEMP)/$*/; ls -l *.udeb
 
 # These tagets act on all available types.
 all_build:
