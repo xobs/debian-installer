@@ -234,7 +234,7 @@ clean_%:
 .PHONY: _clean
 _clean: tree_umount
 	@[ -n "$(SUBARCH) $(MEDIUM) $(FLAVOUR)" ] || { echo "invalid target"; false; }
-	-rm -f $(STAMPS)tree-$(targetstring)-stamp $(STAMPS)extra-$(targetstring)-stamp $(STAMPS)get_udebs-$(targetstring)-stamp
+	-rm -f $(STAMPS)tree-unpack-$(targetstring)-stamp $(STAMPS)tree-$(targetstring)-stamp $(STAMPS)extra-$(targetstring)-stamp $(STAMPS)get_udebs-$(targetstring)-stamp
 	rm -f $(TEMP)/diskusage.txt
 	rm -f $(TEMP)/all.utf
 	rm -f $(TEMP)/unifont.bdf $(TREE)/unifont.bgf
@@ -264,7 +264,7 @@ rebuild_%:
 
 #
 # The general tree target.
-# FIXME: This is way too convoluted.
+# FIXME: This is way to convoluted.
 #
 $(STAMPS)tree-unpack-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
 	dh_testroot
@@ -349,7 +349,26 @@ ifdef KERNELNAME
 	rmdir $(TREE)/boot/
 endif
 
+ifdef EXTRAFILES
+	# Copy in any extra files.
+	set -e; \
+	for file in $(EXTRAFILES); do \
+		mkdir -p $(TREE)/`dirname $$file`; \
+		cp -a $$file $(TREE)/$$file; \
+	done
+endif
+
+ifdef EXTRALIBS
+	# Copy in any extra libs.
+	set -e; \
+	for file in $(EXTRALIBS); do \
+		mkdir -p $(TREE)/`dirname $$file`; \
+		cp -a $$file $(TREE)/$$file; \
+	done
+endif
+
 	@touch $@
+
 
 $(STAMPS)tree-$(targetstring)-stamp: $(STAMPS)tree-unpack-$(targetstring)-stamp
 	# Create a dev tree.
@@ -377,24 +396,6 @@ ifdef USERDEVFS
 	mknod $(TREE)/dev/loop/1 b 7 1
 	mknod $(TREE)/dev/loop/2 b 7 2 
 	mknod $(TREE)/dev/loop/3 b 7 3 
-endif
-
-ifdef EXTRAFILES
-	# Copy in any extra files
-	set -e; \
-	for file in $(EXTRAFILES); do \
-		mkdir -p $(TREE)/`dirname $$file`; \
-		cp -a $$file $(TREE)/$$file; \
-	done
-endif
-
-ifdef EXTRALIBS
-	# Copy in any extra libs.
-	set -e; \
-	for file in $(EXTRALIBS); do \
-		mkdir -p $(TREE)/`dirname $$file`; \
-		cp -a $$file $(TREE)/$$file; \
-	done
 endif
 
 ifdef EXTRADRIVERS
