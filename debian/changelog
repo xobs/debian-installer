@@ -153,6 +153,18 @@ debian-installer (20040924) UNRELEASED; urgency=high
       work.
     - Don't clean at the end of the daily build (we already clean at the
       start).
+    - Move socket-modules from powerpc root-2 to root, otherwise syslogging
+      won't work.
+    - Remove serial-modules from root-2. It's only needed for strange PPP
+      stuff which is not needed on the floppies.
+    - Remove PCMCIA support and wireless tools from root-2. The floppies are
+      only needed on OldWorld, which probably either won't have PCMCIA or
+      will have built-in networking. In the rare cases where this might be
+      needed, you can always throw the udeb on a floppy.
+    - Remove nic-extra-modules from powerpc net-drivers. We've changed the
+      module udebs so that all drivers likely to be needed on OldWorld are
+      in nic-modules.
+    - Move everything else from root-2 to net-drivers, and remove root-2.
 
  -- Joey Hess <joeyh@debian.org>  Fri, 24 Sep 2004 14:06:51 +0200
 
