@@ -130,17 +130,17 @@ create_text () {
     # Set encoding for output file
     case "$language" in
         cs)
-            CHARSET=ISO-8859-2
-            ;;
+            CHARSET=ISO-8859-2 ;;
+        el)
+            CHARSET=UTF-8 ;;
         ja)
-            CHARSET=EUC-JP
-            ;;
+            CHARSET=EUC-JP ;;
+        ko)
+            CHARSET=EUC-KR ;;
         ru)
-            CHARSET=KOI8-R
-            ;;
+            CHARSET=KOI8-R ;;
         *)
-            CHARSET=ISO-8859-1
-            ;;
+            CHARSET=ISO-8859-1 ;;
     esac
     
     /usr/bin/w3m -dump $tempdir/install.${language}.corr.html \
@@ -148,6 +148,28 @@ create_text () {
         >$destdir/install.${language}.txt
     RET=$?; [ $RET -ne 0 ] && return $RET
 
+    # Ugly hack because w3m does not compute width for table borders correctly
+    # for oriental character sets.
+    # Output is not perfect, but a lot better than when uncorrected
+    case "$language" in
+        ja)
+            mv $destdir/install.${language}.txt $tempdir
+            sed "s:¨£:¨£¨¡:g  s:¨¨:¨¨¨¡:g  s:¨¤:¨¡¨¤:g
+                 s:¨§:¨§¨¡:g  s:¨«:¨«¨¡:g  s:¨©:¨¡¨©:g
+                 s:¨¦:¨¦¨¡:g  s:¨ª:¨ª¨¡:g  s:¨¥:¨¡¨¥:g
+                 s:¨¢$: ¨¢:g  s:¨¡:¨¡¨¡:g  s:¨¢:¨¢ :g" \
+            $tempdir/install.${language}.txt >$destdir/install.${language}.txt
+            ;;
+        ko)
+            mv $destdir/install.${language}.txt $tempdir
+            sed "s:¦£:¦£¦¡:g  s:¦¨:¦¨¦¡:g  s:¦¤:¦¡¦¤:g
+                 s:¦§:¦§¦¡:g  s:¦«:¦«¦¡:g  s:¦©:¦¡¦©:g
+                 s:¦¦:¦¦¦¡:g  s:¦ª:¦ª¦¡:g  s:¦¥:¦¡¦¥:g
+                 s:¦¢$: ¦¢:g  s:¦¡:¦¡¦¡:g  s:¦¢:¦¢ :g" \
+            $tempdir/install.${language}.txt >$destdir/install.${language}.txt
+            ;;
+    esac
+    
     return 0
 }
 
@@ -239,8 +261,9 @@ RET=$?; [ $RET -ne 0 ] && exit 1
 BUILD_OK=""
 BUILD_FAIL=""
 for format in $formats ; do
-    if [ "$language" = "ja" ] && [ "$format" = "pdf" -o "$format" = "ps" ] ; then
-        echo "Warning: pdf and ps formats are currently not supported for Japanese"
+    if [ "$language" = "el" -o "$language" = "ja" -o "$language" = "ko" ] && \
+       [ "$format" = "pdf" -o "$format" = "ps" ] ; then
+        echo "Warning: pdf and ps formats are currently not supported for Greek, Japanese and Korean"
         BUILD_SKIP="$BUILD_SKIP $format"
         continue
     fi
