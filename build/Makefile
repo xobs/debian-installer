@@ -312,6 +312,9 @@ $(STAMPS)tree-unpack-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-s
 	done
 	sort -n < $(TEMP)/diskusage.txt > $(TEMP)/diskusage.txt.new && \
 		mv $(TEMP)/diskusage.txt.new $(TEMP)/diskusage.txt
+	grep-dctrl -nsPackage,Version '' $(TREE)/var/lib/dpkg/status | \
+		perl -nle '$$p = $$_; $$v = <>; chomp $$v; <>; print "$$p $$v"' | \
+		sort > $(TEMP_INITRD_LIST)
 
 	# Clean up after dpkg.
 	rm -rf $(DPKGDIR)/updates
@@ -572,9 +575,11 @@ $(TREE)/unifont.bgf: $(TEMP)/all.utf
 # Create the images for dest/. Those are the targets called from config.
 #
 # Create a compressed image of the root filesystem by way of genext2fs.
-$(INITRD): $(TEMP_INITRD)
+$(INITRD): $(TEMP_INITRD) $(TEMP_INITRD_LIST)
 	install -m 644 -D $< $@
+	install -m 644 -D $(TEMP_INITRD_LIST) $(INITRD_LIST)
 	./update-manifest $@ $(MANIFEST-INITRD)
+	./update-manifest $(INITRD_LIST) $(MANIFEST-INITRD_LIST)
 
 $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 	# Only build the font if we have rootskel-locale
@@ -599,6 +604,8 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 		exit 1 ;; \
 	esac
 	gzip -v9f $(TEMP)/initrd
+
+$(TEMP_INITRD_LIST): $(TEMP_INITRD)
 
 # raw kernel images
 $(KERNEL): TEMP_REAL_KERNEL = $(TEMP)/$(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,')
