@@ -1,35 +1,36 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- original version: 22935 -->
+<!-- revisado por nahoo, 7 noviembre 2004 -->
 
  <sect1 condition="bootable-usb" id="boot-usb-files">
- <title>Preparar ficheros para arranque desde dispositivo de memoria USB</title>
+ <title>Preparación de ficheros para el arranque desde un dispositivo de memoria USB</title>
 
 <para>
 
-Para preparar el dispositivo USB necesitará un sistema donde se está
-ejecutando GNU/Linux y que tenga soporte USB. Deberá asegurarse que
-el módulo «usb-storage» del núcleo este cargado
-(<userinput>modprobe usb-storage</userinput>) e intente ubicar que
-dispositivo SCSI ha sido asignado a la memoria USB (en este ejemplo
-se usa <filename>/dev/sda</filename>). Para escribir en el dispositivo,
-proablemtene deberá desactivar la protección de escritura.
+Para preparar el dispositivo USB necesitará un sistema donde se esté
+ejecutando GNU/Linux con soporte USB. Deberá asegurarse que
+el módulo del núcleo «usb-storage» esté cargado
+(<userinput>modprobe usb-storage</userinput>) e intente averiguar que
+dispositivo SCSI ha sido asignado al dispositivo USB (en este ejemplo
+se usa <filename>/dev/sda</filename>). Para escribir en su dispositivo,
+probablemente deberá desactivar la protección de escritura.
 
 </para><para>
 
-Note, que la memoria USB, deberá tener por lo menos 128 MB de tamaño
-(se puede realizar configuraciones con menor tamaño como se indica en
+Note, que el dispositivo USB, deberá tener por lo menos una capacidad de 128 MB
+(se pueden realizar configuraciones con menos capacidad, tal como se indica en
 <xref linkend="usb-copy-flexible"/>).
 
 </para>
 
   <sect2 id="usb-copy-easy">
-  <title>Copiar los ficheros - la forma fácil</title>
+  <title>Copiado de los ficheros - la forma fácil</title>
 <para>
 
 Existe un fichero todo-en-uno <filename>hd-media/boot.img.gz</filename>
 que contiene todos los ficheros del instalador (incluyendo el núcleo)
 así como <command>SYSLINUX</command> y su fichero de configuración.
-Simplemente deberá extraerlo directamente en la memoria USB:
+Sólo debe extraerlo directamente en el dispositivo USB:
 
 <informalexample><screen>
 
@@ -37,36 +38,36 @@ gzip -dc boot.img.gz >/dev/<replaceable>sda</replaceable>
 
 </screen></informalexample>
 
-Obviamente esto destruirá todo lo que haya en el dispositivo, de
-modo que tome precaución y use el nombre de dispositivo correcto para
-su memoria USB.
+Obviamente destruirá todo lo que haya en el dispositivo, así
+que tenga cuidado y use el nombre de dispositivo correcto para
+su dispositivo USB.
 
 </para><para>
 
-Después de esto, monte la memoria USB (<userinput>mount /dev/sda
-/mnt</userinput>), ahora tendrá un sistema de ficheros FAT en él,
-y copie una imagen ISO netinst o bussinesscard de Debian en él.
-Por favor note que el nombre del fichero debe terminar en 
-<filename>.iso</filename>. Desmonte la memoria USB
-(<userinput>umount /mnt</userinput>) y habra terminado.
+Después, monte la memoria USB (<userinput>mount /dev/sda
+/mnt</userinput>), que ahora tendrá un sistema de ficheros FAT en ella,
+y copie una imagen ISO «netinst» o «bussinesscard» de Debian en ella.
+Por favor, tenga en cuenta que el nombre del fichero debe terminar en 
+<filename>.iso</filename>. Desmonte el dispositivo USB
+(<userinput>umount /mnt</userinput>) y habrá terminado.
 
 </para>
   </sect2>
 
   <sect2 id="usb-copy-flexible">
-  <title>Copiar los ficheros - la forma flexible</title>
+  <title>Copiado de los ficheros - la forma flexible</title>
 <para>
 
-Si desea mas flexibilidad o simplemente le gusta saber que ocurre,
+Si desea más flexibilidad o simplemente le gusta saber que ocurre,
 podría usar el siguiente método para colocar los ficheros en su
-memoria USB. Le mostraremos como configurar la memoria USB para usar
+dispositivo USB. Le mostraremos como configurar la memoria USB para usar
 la primera partición en lugar de todo el dispositivo.
 
 </para><note><para>
 
 Puesto de la mayoría de memorias USB vienen con una sola partición 
-FAT16 pre-configurada, probablemente no tendrá que reparticionar o
-reformatearlo. Si tiene que hacerlo de cualquier modo, use
+FAT16 ya configurada, probablemente no tendrá que reparticionarlo o
+reformatearlo. Si aún así tiene que hacerlo, use
 <command>cfdisk</command> o cualquier otra herramienta de particionado
 para crear la partición FAT16 y luego escriba
 
@@ -78,22 +79,22 @@ mkdosfs /dev/<replaceable>sda1</replaceable>
 
 Sea precavido y use el nombre de dispositivo correcto para su memoria 
 USB. La orden <command>mkdosfs</command> se encuentra en el paquete
-<classname>dosfstools</classname> de Debian.
+de Debian <classname>dosfstools</classname>.
 
 </para></note><para>
 
-Para iniciar el núcleo después de arrancar desde la memoria USB,
+Para iniciar el núcleo después de arrancar desde el dispositivo USB,
 necesitaremos colocar un gestor de arranque en él. Aunque cualquier
 gestor de arranque (como <command>LILO</command>) debería funcionar, es
 conveniente usar <command>SYSLINUX</command>, puesto que usa una 
-partición FAT16 y puede ser reconfigurado simplemente editando un 
+partición FAT16 y puede reconfigurarse con sólo editar un 
 fichero de texto. Puede usar cualquier sistema operativo que soporte el
 sistema de ficheros FAT para hacer cambios a la configuración del
 gestor de arranque.
 
 </para><para>
 
-Para poner <command>SYSLINUX</command> en la partición FAT16 de su memoria
+Para poner <command>SYSLINUX</command> en la partición FAT16 de su dispositivo
 USB, instale los paquetes <classname>syslinux</classname> y
 <classname>mtools</classname> en su sistema, y escriba
 
@@ -105,15 +106,15 @@ syslinux /dev/<replaceable>sda1</replaceable>
 
 Nuevamente, sea precavido al usar el nombre de dispositivo correcto. La
 partición no debe estar montada cuando se inicie  <command>SYSLINUX</command>.
-Este procedimiento escribe un registro de arranque en la partición y
+Este procedimiento escribe un sector de arranque en la partición y
 crea el fichero <filename>ldlinux.sys</filename> que contiene el código
 del gestor de arranque.
 
 </para><para>
 
 Monte la partición (<userinput>mount /dev/sda1 /mnt</userinput>) y
-copie los siguientes ficheros desde los archivos de Debian, en la 
-memoria USB:
+copie los siguientes ficheros desde los archivos de Debian, en el 
+dispositivo USB:
 
 <itemizedlist>
 <listitem><para>
@@ -123,7 +124,7 @@ memoria USB:
 </para></listitem>
 <listitem><para>
 
-<filename>initrd.gz</filename> (imagen inicial de disco ram)
+<filename>initrd.gz</filename> (imagen inicial de disco RAM)
 
 </para></listitem>
 <listitem><para>
@@ -138,13 +139,13 @@ Módulos del núcleo opcionales
 </para></listitem>
 </itemizedlist>
 
-Si desea renombrar los ficheros, por favor note que 
-<command>SYSLINUX</command> solo puede procesar nombres de ficheros DOS (8.3).
+Si desea renombrar los ficheros, por favor, tenga en cuenta que 
+<command>SYSLINUX</command> sólo puede procesar nombres de ficheros DOS (8.3).
 
 </para><para>
 
 El fichero de configuración <filename>syslinux.cfg</filename> debe
-contener las siguientes dos líneas:
+contener las dos líneas siguientes:
 
 <informalexample><screen>
 
@@ -153,32 +154,32 @@ append initrd=initrd.gz ramdisk_size=10000 root=/dev/rd/0 init=/linuxrc devfs=mo
 
 </screen></informalexample>
 
-Por favor note, que el parámetro <userinput>ramdisk_size</userinput> 
-podría necesitar ser incrementado, dependiendo de la imagen que este
+Por favor, fíjese en que el parámetro <userinput>ramdisk_size</userinput> 
+podría necesitar ser incrementado, dependiendo de la imagen que esté
 arrancando.
 
 </para><para>
 
-Ahora deberá poner cualquier imagen ISO de Debian (businesscard, netinst o
-incluso una completa) en su memoria (si cabe). El nombre de fichero para
+Ahora deberá poner cualquier imagen ISO de Debian («businesscard», «netinst» o
+incluso una completa) en su dispositivo (si cabe). El nombre de fichero para
 esta imagen debe terminar en <filename>.iso</filename>.
 
 </para><para>
 
 Si desea instalar a través de la red, sin usar una imagen ISO,
 puede, por supuesto, obviar el paso anterior. En este caso tendrá
-que usar el disco ram inicial del directorio <filename>netboot</filename>
+que usar el disco RAM inicial del directorio <filename>netboot</filename>
 en lugar del que se encuentra en <filename>hd-media</filename>, debido a que 
 <filename>hd-media/initrd.gz</filename> no tiene soporte de red.
 
 </para><para>
 
-Cuando finalize, desmonte la memoria USB (<userinput>umount
-/mnt</userinput>) y active la protección de escritura.
+Cuando finalice, desmonte el dispositivo USB (<userinput>umount
+/mnt</userinput>) y active su protección de escritura.
 
 </para><warning><para>
 
-Si su sistema rechaza arrancar desde la memoria USB, éste podría
+Si su sistema rechaza arrancar desde el dispositivo USB, éste podría
 contener un registro de arranque maestro (MBR) inválido. Para
 corregirlo, use la orden <command>install-mbr</command> del
 paquete <classname>mbr</classname>:
