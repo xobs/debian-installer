@@ -115,9 +115,9 @@ tree: get_udebs
 	ln -s ash $(DEST)/bin/sh
 
 # Library reduction.
-reduce: tree
+reduce:
 	mkdir -p $(DEST)/lib
-	mklibs.sh -d $(DEST)/lib `find $(DEST) -type f -perm +0111`
+	mklibs.sh -v -d $(DEST)/lib `find $(DEST) -type f -perm +0111`
 
 stats:
 	@echo
