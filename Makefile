@@ -487,7 +487,7 @@ boot_floppy: $(IMAGE)
 # If you're paranoid (or things are mysteriously breaking..),
 # you can check the floppy to make sure it wrote properly.
 # This target will fail if the floppy doesn't match the floppy image.
-boot_floppy_check: floppy_image
+floppy_check: $(IMAGE)
 	cmp $(FLOPPYDEV) $(IMAGE)
 
 listtypes:
