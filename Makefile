@@ -225,6 +225,9 @@ ifdef USERDEVFS
 	mknod $(TREE)/dev/vc/5 c 4 5
 	mkdir -p $(TREE)/dev/rd
 	mknod $(TREE)/dev/rd/0 b 1 0
+	mknod $(TREE)/dev/tty c 5 0
+	mknod $(TREE)/dev/ttyS0 c 4 64
+	mknod $(TREE)/dev/ttyS1 c 4 65
 endif
 
 	# Move the kernel image out of the way, either into a temp directory
