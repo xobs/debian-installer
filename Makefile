@@ -18,7 +18,7 @@ FLAVOUR=386
 KERNELNAME=vmlinuz
 endif
 ifeq "$(architecture)" "powerpc"
-KVERS=2.4.18
+KVERS=2.4.19
 FLAVOUR=powerpc
 KERNELNAME=vmlinux
 endif
