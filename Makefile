@@ -146,11 +146,11 @@ compiled-stamp: $(SOURCEDIR)/udeb-sources-stamp
 	done 
 	mv $(SOURCEDIR)/*.udeb $(APTDIR)/cache/archives
 	touch compiled-stamp
-	
+
 # Ensure this exists.
 debian/control: debian/control.in
 	sed "s/@UDEB_DEPENDS@/$$deps/" < $< > $@
-	
+
 # 
 # Get all required udebs and put in UDEBDIR.
 get_udebs: $(TYPE)-get_udebs-stamp
@@ -448,8 +448,10 @@ endif
 	mv $(FLOPPY_IMAGE).new $(FLOPPY_IMAGE)
 
 # Copy files somewhere the CD build scripts can find them
+# XXX Will only use the last kernel if there are several
 cd_content: floppy_image
-	cp $(KERNEL) $(DEST)/$(TYPE)-linux
+	$(foreach NAME,$(KERNELNAME), \
+		cp -f $(TEMP)/$(NAME) $(DEST)/$(TYPE)-linux; )
 	cp syslinux.cfg $(DEST)/$(TYPE)-syslinux.cfg
 
 # Write image to floppy
