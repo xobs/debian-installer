@@ -1,28 +1,40 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 14602 -->
+<!-- original version: 19074 -->
 
 <chapter id="d-i-intro"><title>Comment utiliser l'installateur Debian ?</title>
 
- <sect1><title>Comment marche l'installateur</title>
+ <sect1><title>Comment marche l'installateur ?</title>
 <para>
 
 L'installateur Debian comprend plusieurs composants qui ont chacun une tâche 
 précise à accomplir. Chaque composant pose à l'utilisateur les questions
-nécessaires à l'exécution de sa tâche. Quand il n'y a pas de problème, le
-prochain composant prend la suite des opérations sans interroger 
-l'utilisateur (sauf quelques indications de progression). Quand il y a un
-problème, l'utilisateur voit un message d'erreur et le menu de l'installateur
-peut apparaître pour permettre le choix d'une autre action. Quand il n'y a
-pas de problème, l'utilisateur ne voit jamais le menu de l'installateur et il
-répond simplement aux questions qui lui sont posées par chaque composant.
+nécessaires à l'exécution de sa tâche. Chaque question possède une priorité et 
+cette priorité est déclarée au démarrage de l'installateur.
+</para>
+<para>
+Pour une installation standard, seules les questions essentielles (priorité
+<quote>high</quote>) sont posées. Ainsi l'installation est grandement
+automatisée, avec peu d'interventions de l'utilisateur. Les composants sont
+choisis et exécutés automatiquement selon le type d'installation demandée et
+selon votre matériel. L'installateur utilise des valeurs par défaut pour les
+questions qui ne sont pas posées à l'utilisateur.
+</para>
 
-</para><para>
-
-Une question possède une priorité. Donc quand l'installateur sait ce qu'il 
-doit faire et que l'utilisateur n'a pas besoin de connaître les autres choix
-possibles, l'installateur agira sans poser de question. Les messages 
-concernant des erreurs sérieuses ont une priorité <quote>critical</quote> pour
-que l'utilisateur les reçoivent toujours. 
+<para>
+Quand il y a un problème, l'utilisateur voit un message d'erreur et le menu 
+de l'installateur peut apparaître pour permettre le choix d'une autre action. 
+Quand il n'y a pas de problème, l'utilisateur ne voit jamais le menu de 
+l'installateur et il répond simplement aux questions qui lui sont posées par 
+chaque composant. Les messages concernant des erreurs sérieuses ont une 
+priorité <quote>critical</quote> pour que l'utilisateur les reçoivent toujours.
+</para>
+<para>
+On peut modifier les valeurs par défaut utilisées par l'installateur en passant
+des paramètres d'amorçage au démarrage de &d-i;. Si, par exemple, vous
+préférez configurer vous-même le réseau &mdash; DHCP est utilisé quand c'est 
+possible &mdash;, vous pouvez ajouter le paramètre d'amorçage
+<userinput>netcfg/disable_dhcp=true</userinput>.
+Les paramètres disponibles sont donnés dans <xref linkend="installer-args"/>. 
 
 </para><para>
 
@@ -32,9 +44,19 @@ automatiquement. Pour utiliser l'installateur dans ce mode manuel, il faut
 ajouter le paramètre de démarrage 
 <userinput>DEBCONF_PRIORITY=medium</userinput>.
 
-</para><para>
+</para>
+<para>
+Si, quand ils sont installés, vous devez passer des options aux modules du 
+noyau, vous devrez exécuter l'installateur en mode <quote>expert</quote>.
+Vous pouvez le faire en utilisant la commande <command>expert</command> au
+démarrage de l'installateur, ou en ajoutant le paramètre d'amorçage
+<userinput>debconf/priority=low</userinput>.
+Le mode expert permet de contrôler complétement le &d-i;.
+</para> 
 
-L'affichage de l'installateur se fait en mode caractère,  il ne possède pas
+<para>
+
+L'affichage de l'installateur se fait en mode caractère, il ne possède pas
 d'interface graphique. La souris ne fonctionne pas dans cet environnement.
 Voici les touches qui servent à naviguer dans les différents menus.
 La flèche <keycap>droite</keycap> ou la touche <keycap>Tab</keycap> 
@@ -58,8 +80,8 @@ décrits ci-dessous.
 
 </para><para>
 
-Les messages d'erreur sont redirigés vers la troisième console (connue comme 
-<userinput>tty3</userinput>). Vous pouvez y accéder en pressant 
+Les messages d'erreur sont redirigés vers la troisième console. Vous pouvez 
+y accéder en pressant 
 <keycombo><keycap>Left Alt</keycap><keycap>F3</keycap></keycombo> 
 (garder la touche <keycap>Alt</keycap> enfoncée pendant que vous appuyez 
 sur la touche de fonction <keycap>F3</keycap>). Revenez sur le processus
@@ -73,7 +95,7 @@ Ces messages se retrouvent aussi dans
 fichier-journal est copié dans <filename>/var/log/installer.log</filename>
 sur votre nouveau système. D'autres messages d'installation se trouvent,
 pendant l'installation, dans le fichier
-<filename>/target/var/log/debian-installer/</filename>, et, quand la
+<filename>/var/log/</filename>, et, quand la
 machine a démarré le nouveau système, ces messages se trouvent dans
 <filename>/var/log/debian-installer/</filename>.
 
@@ -93,16 +115,19 @@ dans <xref linkend="module-details"/>.
 <variablelist>
 <varlistentry>
 
-<term>Le menu-principal</term><listitem><para>
+<term>Le menu principal</term><listitem><para>
 
-affiche la liste des composants pendant les operations de l'installateur et
+affiche la liste des composants pendant les opérations de l'installateur et
 lance le composant qui a été choisi. Les questions du menu principal ont la
 priorité MEDIUM, et si la priorité que vous avez choisie est HIGH ou
 CRITICAL (HIGH, par défaut), vous ne verrez pas le menu. Quand une erreur se 
 produit, qui demande votre intervention, la priorité de la question peut être
 abaissée temporairement pour vous permettre de résoudre le problème, et dans 
 ce cas, le menu apparaît.
-
+</para>
+<para>
+Depuis le composant en cours, vous pouvez revenir au menu principal en 
+sélectionnant plusieurs fois le bouton <quote>Back</quote>.
 </para></listitem>
 </varlistentry>
 <varlistentry>
@@ -126,27 +151,25 @@ in. c'est désolant !!
       </varlistentry>
 <varlistentry>
 
-<term>ddetect</term><listitem><para>
-
-
-Détecte les disques durs, installés ou attachés à l'ordinateur.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
-<term>pcmcia</term><listitem><para>
-
-Permet la configuration des cartes PCMCIA utilisées par les portables pour 
-le réseau.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
 <term>kbd-chooser</term><listitem><para>
 
-affiche une liste des cartes clavier.
+affiche une liste des cartes clavier où choisir le bon modèle. 
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>hw-detect</term><listitem><para>
+
+détecte automatiquement la plupart des éléments matériels du système, les
+cartes réseau, les disques, PCMCIA.
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>cdrom-detect</term><listitem><para>
+
+Recherche et monte les cédéroms pour l'installation de Debian.
 
 </para></listitem>
 </varlistentry>
@@ -172,8 +195,7 @@ disque dur.
 <term>choose-mirror</term><listitem><para>
 
 affiche une liste des miroirs de l'archive Debian. L'utilisateur peut
-choisir la source des paquets qu'il veut installer. Habituellement, c'est un
-cédérom ou un miroir sur le réseau qui est choisi.
+choisir la source des paquets qu'il veut installer. 
 
 </para></listitem>
 </varlistentry>
@@ -181,7 +203,7 @@ cédérom ou un miroir sur le réseau qui est choisi.
 
 <term>cdrom-checker</term><listitem><para>
 
-veérifie l'intégrité des cédéroms. Ainsi l'utilisateur peut s'assurer que
+vérifie l'intégrité des cédéroms. Ainsi l'utilisateur peut s'assurer que
 le cédérom d'installation n'est pas corrompu.
 
 </para></listitem>
@@ -195,7 +217,7 @@ pour supprimer les programmes non indispensables de l'&d-i;, au prix de
 certaines fonctionnalités.
 
 </para></listitem>
-      </varlistentry>
+</varlistentry>
 <varlistentry>
 
 <term>anna</term><listitem><para>
@@ -208,11 +230,10 @@ récupérés sur le miroir choisi.
 <varlistentry>
 <term>partman</term><listitem><para>
 
-Allows the user to partition disks attached to the system, create file
-systems on the selected partitions, and attach them to the
-mountpoins. Included are also interesting features like a fully
-automatic mode or LVM support. This is the preferred partitioning tool
-in Debian.
+Ce programme permet de partitionner les disques du système, de créer les
+systèmes de fichiers sur les partitions et de monter ces partitions.
+Il possède d'autres fonctionnalités intéressantes comme son mode
+automatique ou la gestion de LVM. C'est le partitionneur principal de Debian.
 
 </para></listitem>
 </varlistentry>
@@ -220,8 +241,8 @@ in Debian.
 
 <term>autopartkit</term><listitem><para>
 
-Automatically partitions an entire disk according to preset
-user preferences.
+Ce programme partitionne automatiquement un disque entier suivant des
+valeurs préalablement données par l'utilisateur.
 
 </para></listitem>
 </varlistentry>
@@ -229,9 +250,8 @@ user preferences.
 
 <term>partitioner</term><listitem><para>
 
-Allows the user to partition disks attached to the system. A 
-partitioning program appropriate to your computer's architecture
-is chosen.
+Ce programme permet de partitionner les disques du système.
+Un partitionneur approprié à l'architecture de votre système est choisi.
 
 </para></listitem>
 </varlistentry>
@@ -239,15 +259,15 @@ is chosen.
 
 <term>partconf</term><listitem><para>
 
-Displays a list of partitions, and creates file systems on 
-the selected partitions according to user instructions.
+Affiche la liste des partitions et crée les systèmes de fichiers sur les
+partitions choisies selon les instructions de l'utilisateur.
 
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
 <term>lvmcfg</term><listitem><para>
-Helps the user with the configuration of the
+Aide l'utilisateur dans sa configuration de
 <firstterm>LVM</firstterm> (Logical Volume Manager).
 
 </para></listitem>
@@ -256,10 +276,9 @@ Helps the user with the configuration of the
 
 <term>mdcfg</term><listitem><para>
 
-Allows the user to setup Software <firstterm>RAID</firstterm>
-(Redundant Array of Inexpensive Disks). This Software RAID is usually
-superior to the cheap IDE (pseudo hardware) RAID controllers found on
-newer motherboards.
+Ce programme permet la configuration d'un <firstterm>RAID</firstterm> logiciel
+(Redundant Array of Inexpensive Disks). Ce RAID logiciel est supérieur aux
+contrôleurs IDE qu'on trouve sur les cartes mères récentes.
 
 </para></listitem>
 </varlistentry>
@@ -267,17 +286,8 @@ newer motherboards.
 
 <term>base-installer</term><listitem><para>
 
-Installs the most basic set of packages which would allow
-the computer to operate under Linux when rebooted. 
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
-<term>kernel-chooser</term><listitem><para>
-
-Allows the user to choose an operating system kernel version,
-if there is more than one version available.
+Ce programme installe l'ensemble des programmes de base qui permettront
+le fonctionnement de l'ordinateur sous Linux après le redémarrage.
 
 </para></listitem>
 </varlistentry>
@@ -285,11 +295,11 @@ if there is more than one version available.
 
 <term>os-prober</term><listitem><para>
 
-Detects currently installed operating systems on the computer and
-passes this information to the bootloader-installer, which may offer
-you an ability to add discovered operating systems to the bootloader's
-start menu. This way the user could easily choose at the boot time
-which operating system to start.
+Ce programme détecte les systèmes d'exploitation présents sur le système et
+passe cette information au programme bootloader-installer&nbsp;; celui-ci 
+peut vous donner
+la possibilité d'ajouter ces systèmes au menu des programmes d'amorçage.
+Ainsi vous pourrez choisir, au moment du démarrage, quel système lancer.
 
 </para></listitem>
 </varlistentry>
@@ -297,20 +307,21 @@ which operating system to start.
 
 <term>bootloader-installer</term><listitem><para>
 
-Installs a boot loader program on the hard disk, which is necessary
-for the computer to start up using Linux without using a floppy or
-CD-ROM.  Many boot loaders allow the user to choose an alternate
-operating system each time the computer boots.
+Ce programme installe un programme d'amorçage sur le disque choisi&nbsp;;
+c'est nécessaire pour démarrer Linux sans lecteur de disquette ou sans cédérom.
+Beaucoup de programmes d'amorçage permettent de choisir le système 
+d'exploitation que l'on veut lancer au démarrage de la machine.
 
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term>baseconfig</term><listitem><para>
+<term>base-config</term><listitem><para>
 
-Provides dialogs for setting up the base system packages according
-to user preferences. This is normally done after rebooting the 
-computer; it is the 'first run' of the new Debian system. 
+Ce programme fournit les dialogues qui permettent la configuration des
+paquets du système de base selon les préférences de l'utilisateur.
+Cette configuration est faite après le redémarrage de la machine, c'est la
+<quote>première</quote> du nouveau système Debian.
 
 </para></listitem>
 </varlistentry>
@@ -318,8 +329,8 @@ computer; it is the 'first run' of the new Debian system.
 
 <term>shell</term><listitem><para>
 
-Allows the user to execute a shell from the menu, or in the second
-console.
+Ce programme permet d'exécuter un interpréteur de commandes, à partir du menu 
+ou dans la deuxième console.
 
 </para></listitem>
 </varlistentry>
@@ -327,9 +338,9 @@ console.
 
 <term>bugreporter</term><listitem><para>
 
-Provides a way for the user to record information on a floppy disk
-when trouble is encountered, in order to accurately report installer
-software problems to Debian developers later.
+Ce programme permet d'enregistrer des informations sur une disquette quand
+quelque chose se passe mal&nbsp;; ainsi on peut par la suite envoyer des 
+informations précises aux développeurs Debian
 
 </para></listitem>
 </varlistentry>
