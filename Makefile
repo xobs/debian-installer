@@ -115,10 +115,6 @@ define genext2fs
 	genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` -r 0
 endef
 
-define genromfs
-	genromfs -d $(TREE) -f
-endef
-
 #
 # Globally useful variables.
 #
@@ -577,8 +573,6 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 		else \
 			$(genext2fs) $(TEMP)/initrd; \
 		fi \
-	elif [ $(INITRD_FS) = romfs ]; then \
-		$(genromfs) $(TEMP)/initrd; \
 	else \
 		echo "Unsupported filesystem type"; \
 		exit 1; \
@@ -630,8 +624,6 @@ $(TEMP_EXTRA): $(STAMPS)extra-$(targetstring)-stamp
 	install -d $(TREE)
 	set -e; if [ $(INITRD_FS) = ext2 ]; then \
 		$(genext2fs) $@; \
-	elif [ $(INITRD_FS) = romfs ]; then \
-		$(genromfs) $@; \
 	else \
 		echo "Unsupported filesystem type"; \
                 exit 1; \
