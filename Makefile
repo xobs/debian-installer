@@ -24,6 +24,11 @@ EXTRAS=""
 # debug versions of the needed udebs
 DEBUG=n
 
+# This variable can be used to copy in additional files from the system
+# that is doing the build. Useful if you need to include strace, or gdb,
+# or just something extra on a floppy.
+#EXTRAFILES=/usr/bin/strace
+
 # All output files will go here.
 DEST=dest
 
@@ -197,6 +202,14 @@ tree-stamp:
 	# for use later. We don't need it bloating our image!
 	mv -f $(TREE)/boot/vmlinuz $(KERNEL)
 	-rmdir $(TREE)/boot/
+
+	# Copy in any extra files
+	if [ "$(EXTRAFILES)" ]; then \
+		for file in $(EXTRAFILES); do \
+			mkdir -p $(TREE)/`basename $$file`; \
+			cp -a $$file $(TREE)/$$file; \
+		done; \
+	fi
 
 	# Library reduction.
 	mkdir -p $(TREE)/lib
