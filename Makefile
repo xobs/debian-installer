@@ -394,6 +394,9 @@ ifeq ($(TYPE),floppy)
 	rm -rf $(DRIVEREXTRASDIR)
 endif
 
+	# remove /linuxrc from busybox-*-udeb (workaround till its fixed)
+	-rm $(TREE)/linuxrc
+
 	# Tree target ends here. Whew!
 	touch $(TYPE)-tree-stamp
 
