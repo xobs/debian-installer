@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Reverts local changes in POT files.
+# Translators are normally not supposed to commit any changes to POT
+# files after they've run update_pot.
+
+POTDIR="./po/pot"
+
+[ -d $POTDIR ] || exit 1
+
+echo "Reverting modified POT files (if any)..."
+for POT in $(svn st $POTDIR | grep "^M" | sed "s/^M[[:space:]]*//"); do
+    svn revert $POT
+done
+echo "done."
