@@ -1,99 +1,99 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 22919 untranslated -->
+<!-- original version: 22919 -->
 
-  <sect2 arch="ia64"><title>Booting from a CD-ROM</title>
+  <sect2 arch="ia64"><title>Booten von CD-ROM</title>
 
 &boot-installer-intro-cd.xml;
 
   <note>
-  <title>CD Contents</title>
+  <title>Inhalt der CDs</title>
 
 <para>
 
-There are three basic variations of Debian Install CDs.
-The <emphasis>Business Card</emphasis> CD has a minimal installation
-that will fit on the small form factor CD media.
-It requires a network connection in order to install the rest of the
-base installation and make a usable system.
-The <emphasis>Network Install</emphasis> CD has all of the packages
-for a base install but requires a network connection to a Debian
-mirror site in order to install the
-extra packages one would want for a complete system .
-The set of Debian CDs can install a complete system from the wide
-range of packages without needing access to the network.
+Es gibt drei Basis-Varianten der Debian-Installations-CD.
+Die <emphasis>Business Card</emphasis>-Version enthält eine minimale 
+Installation und passt auf eine kleine CD-ROM.
+Sie erfordert eine Netzwerkverbindung, um den Rest der Basis-Pakete 
+zu installieren und erstellt ein bereits benutzbares System.
+Die <emphasis>Network Install</emphasis>-CD hat alle Basis-Pakete an 
+Bord, benötigt aber eine Netzwerk-Verbindung zu einem Debian-Mirror-Server, 
+um zusätzliche Pakete zu installieren, die man vielleicht haben möchte, 
+um ein vollständiges System zu bekommen. 
+Von einem kompletten Satz der Debian-CDs kann man ein vollständiges 
+System installieren und es steht die ganze Bandbreite an Paketen zur 
+Verfügung, ohne dass man eine Netzwerkverbindung braucht.
+
 </para>
   </note>
 
 <para>
 
-The IA-64 architecture uses the next generation Extensible Firmware Interface
-(EFI) from Intel.
-Unlike the traditional x86 BIOS which knows little about the boot
-device other than the partition table and Master Boot Record (MBR),
-EFI can read and write files from FAT16 or FAT32 formatted disk
-partitions.
-This simplifies the often arcane process of starting a system.
-The system boot loader and the EFI firmware that supports it have
-a full filesystem to store the files necessary for booting the
-machine.
-This means that the system disk on an IA-64 system has an additional
-disk partition dedicated to EFI instead of the simple MBR or boot
-block on more conventional systems. 
+Die IA-64-Architektur nutzt das Extensible Firmware Interface (EFI) der neuen 
+Generation von Intel. 
+Anders als das traditionelle x86-BIOS, das ausser der Partitionstabelle und 
+dem Master Boot Record (MBR) nicht viel von dem Boot-Laufwerk weiss, kann EFI 
+von FAT16- oder FAT32-formatierten Partitionen lesen und darauf schreiben. 
+Dies vereinfacht den oft obskuren Prozess des Systemstarts. 
+Dem System-Bootloader und der EFI-Firmware (wenn sie den Bootloader unterstützt) 
+steht ein komplettes Dateisystem zur Verfügung, um die zum Booten nötigen 
+Dateien zu speichern. 
+Das bedeutet, dass die System-Platte eines IA-64-Rechners eine zusätzliche Partition 
+hat, die EFI zugewiesen ist, statt nur dem MBR oder Bootblock wie bei 
+konventionelleren Systemen. 
 
 </para><para>
 
-The Debian Installer CD contains a small EFI partition where the
-<command>ELILO</command> bootloader, its configuration file, the installer's
-kernel, and initial filesystem (initrd) are located.
-The running system also contains an EFI partition where the necessary
-files for booting the system reside.
-These files are readable from the EFI Shell as described below.
+Die Debian Installer-CD enthält eine kleine EFI-Partition, in der der 
+<command>ELILO</command>-Bootloader samt seiner Konfigurationsdatei, der 
+Kernel des Installers und das Initial Filesystem (initrd) liegen. 
+Das laufende System wird später auch eine EFI-Partition haben für die 
+Dateien, die zum Booten des Systems benötigt werden. Diese Dateien 
+sind von der EFI-Shell aus lesbar, wie weiter unten beschrieben. 
 
 </para><para>
 
-Most of the details of how <command>ELILO</command> actually loads and
-starts a system are transparent to the system installer.
-However, the installer must set up an EFI partition prior to installing
-the base system.  Otherwise, the installation of <command>ELILO</command>
-will fail, rendering the system un-bootable.
-The EFI partition is allocated and formatted in the partitioning step
-of the installation prior to loading any packages on the system disk.
-The partitioning task also verifies that a suitable EFI partition is
-present before allowing the installation to proceed.
+Die meisten Details während des Lade- und Startvorgangs von 
+<command>ELILO</command> sind für den Benutzer klar erkennbar. 
+Allerdings muss der Benutzer eine EFI-Partition für den Bootloader 
+einrichten, bevor das Basissystem installiert wird. Ansonsten wird die 
+Installation von <command>ELILO</command> fehlschlagen, da das System 
+nicht bootfähig ist. Die Zuweisung und Formatierung der EFI-Partition 
+findet im Installationsschritt »Partitionierung« statt, noch bevor 
+irgendein Paket auf das System-Laufwerk geladen wird. Hier ist 
+auch sichergestellt, dass eine passende EFI-Partition vorhanden ist, 
+bevor die Installation fortgesetzt wird. 
 
 </para><para>
 
-The EFI Boot Manager is presented as the last step of the firmware
-initialization.
-It displays a menu list from which the user can select
-an option.
-Depending on the model of system and what other software has been
-loaded on the system, this menu may be different from one system
-to another.
-There should be at least two menu items displayed,
-<command>Boot Option Maintenance Menu</command> and
-<command>EFI Shell (Built-in)</command>.
-Using the first option is preferred, however, if that
-option is not available or the CD for some reason does not
-boot with it, use the second option.
+Der EFI-Bootmanager erscheint als letzter Schritt der Firmware-Initialisierung. 
+Es wird ein Menü angezeigt, aus der der Benutzer eine passende Option 
+auswählen kann. In Abhängigkeit vom Modell des System und anderer Software, 
+die bereits installiert wurde, kann sich dieses Menü von einem Rechner 
+zum anderen unterscheiden. Es sollten zumindest zwei Einträge vorhanden sein: 
+<command>Boot Option Maintenance Menu</command> und
+<command>EFI Shell (Built-in)</command>. Hier ist die erste Möglichkeit 
+vorzuziehen, allerdings müssen Sie eventuell die zweite Option wählen, 
+wenn die erste nicht vorhanden ist oder die CD aus irgendeinen Grund 
+nicht bootet. 
 
 </para>
 
   <warning>
-  <title>IMPORTANT</title>
+  <title>WICHTIG</title>
 <para>
-The EFI Boot Manager will select a default boot action, typically
-the first menu choice, within a pre-set number of seconds.
-This is indicated by a countdown at the bottom of the screen.
-Once the timer expires and the systems starts the default action,
-you may have to reboot the machine in order to continue the installation.
-If the default action is the EFI Shell, you can return to the Boot Manager
-by running <command>exit</command> at the shell prompt.
+Der EFI-Bootmanager wird nach einer voreingestellten Anzahl von 
+Sekunden die Standard-Aktion (typischerweise den ersten Menüpunkt) 
+starten. Dies ist erkennbar an dem Countdown am unteren Bildschirmrand. 
+Wenn die Zeit abgelaufen ist und die Standard-Aktion gestartet wurde, 
+müssen Sie unter Umständen den Rechner neu starten, um die 
+Installation fortsetzen zu können. Wenn als Standard-Option die 
+EFI-Shell geöffnet wird, können Sie zum Bootmanager zurückkehren, 
+indem Sie am Shell-Prompt <command>exit</command> eingeben.
 </para>
   </warning>
 
   <sect3 arch="ia64" id="bootable-cd">
-  <title>Option 1: Booting from the Boot Option Maintenance Menu</title>
+  <title>Option 1: Über das »Boot Option Maintenance Menu« starten</title>
 <para>
 
 </para>
@@ -101,221 +101,213 @@ by running <command>exit</command> at the shell prompt.
 <itemizedlist>
 
 <listitem><para>
-Insert the CD in the DVD/CD drive and reboot the machine.
-The firmware will display the EFI Boot Manager page and menu after
-it completes its system initialization.
+Legen Sie die CD in das DVD/CD-Laufwerk ein und starten Sie den 
+Rechner neu. Die Firmware zeigt den EFI-Bootmanager und das Menü 
+an, wenn die Systeminitialisierung abgeschlossen ist. 
 </para></listitem>
 
 <listitem><para>
-Select <command>Boot Maintenance Menu</command> from the menu
-with the arrow keys and press <command>ENTER</command>.
-This will display a new menu.
+Wählen Sie mittels der Pfeiltasten den Eintrag 
+<command>Boot Maintenance Menu</command> aus der Liste und drücken Sie 
+<command>ENTER</command>. Es erscheint ein neues Menü.
 </para></listitem>
 
 <listitem><para>
-Select <command>Boot From a File</command> from the menu
-with the arrow keys and press <command>ENTER</command>.
-This will display a list of devices probed by the firmware.
-You should see two menu lines containing either the label
-<command>Debian Inst [Acpi ...</command> or
-<command>Removable Media Boot</command>.
-If you examine the rest of the menu line, you will notice that
-the device and controller information should be the same.
+Wählen Sie jetzt <command>Boot From a File</command> 
+und drücken Sie <command>ENTER</command>.
+Eine Liste mit Geräten, die die Firmware erkannt hat, erscheint. 
+Sie sollten zwei Menüzeilen sehen, die entweder die Bezeichnung 
+<command>Debian Inst [Acpi ...]</command> oder 
+<command>Removable Media Boot</command> haben. 
+Wenn Sie den Rest der Zeilen näher betrachten, werden Sie feststellen, 
+dass die Geräte- und Controllerinformationen identisch sind. 
 </para></listitem>
 
 <listitem><para>
-You can choose either of the entries that refer to the CD/DVD
-drive.
-Select your choice with the arrow keys and press <command>ENTER</command>.
-If you choose <command>Removable Media Boot</command> the machine
-will immediately start the boot load sequence.
-If you choose <command>Debian Inst [Acpi ...</command> instead, it
-will display a directory listing of the bootable portion of the
-CD, requiring you to proceed to the next (additional) step.
+Sie können einen der Einträge auswählen, die auf Ihr CD/DVD-Laufwerk 
+verweisen. Markieren Sie Ihre Auswahl mit den Pfeiltasten und drücken 
+Sie <command>ENTER</command>. Wenn Sie <command>Removable Media Boot</command> 
+auswählen, wird sofort die Boot-Load-Sequenz gestartet. 
+Wenn Sie <command>Debian Inst [Acpi ...]</command> wählen, wird eine 
+Liste von Verzeichnissen auf der bootbaren Partition der CD angezeigt; 
+Sie müssen jetzt den nächsten (zusätzlichen) Schritt bestätigen. 
 </para></listitem>
 
 <listitem><para>
-You will only need this step if you chose
-<command>Debian Inst [Acpi ...</command>.
-The directory listing will also show
-<command>[Treat like Removable Media Boot]</command> on the next to
-the last line.
-Select this line with the arrow keys and press <command>ENTER</command>.
-This will start the boot load sequence.
+Diesen Schritt gibt es nur, wenn Sie <command>Debian Inst [Acpi ...]</command> 
+gewählt haben. In der Verzeichnisliste gibt es in der vorletzten 
+Zeile auch den Eintrag <command>[Treat like Removable Media Boot]</command>. 
+Markieren Sie ihn und drücken Sie <command>ENTER</command>. 
+Die Boot-Load-Sequenz startet jetzt. 
 </para></listitem>
 
 </itemizedlist>
 
 <para>
 
-These steps start the Debian boot loader which will display a
-menu page for you to select a boot kernel and options.
-Proceed to selecting the boot kernel and options.
+Jetzt wird der Debian-Bootloader gestartet und eine Menüseite 
+wird angezeigt, auf der Sie einen Bootkernel und zusätzliche 
+Optionen auswählen können, um fortzufahren. 
 
 </para>
   </sect3>
 
   <sect3 arch="ia64" id="boot-with-efi">
-  <title>Option 2: Booting from the EFI Shell</title>
+  <title>Option 2: Booten von der EFI-Shell</title>
 <para>
 
-If, for some reason, option 1 is not successful, reboot the machine
-and when the EFI Boot Manager screen appears there should be
-one option called <command>EFI Shell [Built-in]</command>.
-Boot the Debian Installer CD with the following steps:
+Wenn aus irgendeinem Grund die erste Möglichkeit nicht erfolgreich 
+ist, starten Sie den Rechner neu und wenn der EFI-Bootmanager 
+erscheint, sollte es eine Option names <command>EFI Shell [Built-in]</command> 
+geben. Booten Sie die Debian Installer-CD mit den folgenden Schritten: 
 
 </para>
 
 <itemizedlist>
 
 <listitem><para>
-Insert the CD in the DVD/CD drive and reboot the machine.
-The firmware will display the EFI Boot Manager page and menu after
-it completes system initialization.
+Legen Sie die CD in das DVD/CD-Laufwerk ein und starten Sie den 
+Rechner neu. Die Firmware zeigt den EFI-Bootmanager und das Menü 
+an, wenn die Systeminitialisierung abgeschlossen ist. 
 </para></listitem>
 
 <listitem><para>
-Select <command>EFI Shell</command> from the menu with the arrow keys
-and press <command>ENTER</command>.
-The EFI Shell will scan all of the bootable devices and display
-them to the console before displaying its command prompt.
-The recognized bootable partitions on devices will show a device name of
-<filename>fs<emphasis>n</emphasis>:</filename>.
-All other recognized partitions will be named
+Wählen Sie <command>EFI Shell</command> mit den Pfeiltasten aus dem 
+Menü aus und drücken Sie <command>ENTER</command>. 
+Die EFI-Shell wird das System nach bootfähigen Geräten durchsuchen und 
+diese auf der Konsole anzeigen, bevor der Kommando-Prompt erscheint.
+Die erkannten bootfähigen Partitionen der Laufwerke werden mit Gerätenamen 
+<filename>fs<emphasis>n</emphasis>:</filename> dargestellt. 
+Alle anderen erkannten Partitionen heissen 
 <filename>blk<emphasis>n</emphasis>:</filename>.
-If you inserted the CD just before entering the shell, this may
-take a few extra seconds as it initializes the CD drive.
+Wenn die CD eingelegt war, bevor Sie Shell gestartet haben, könnte Sie 
+dies ein paar Sekunden kosten, bis das CD-Laufwerk erkannt wurde. 
 </para>
 </listitem>
 
 <listitem><para>
-Examine the output from the shell looking for the CDROM drive.
-It is most likely the <filename>fs0:</filename> device although
-other devices with bootable partitions will also show up as
-<filename>fs<emphasis>n</emphasis></filename>.
+Achten Sie auf die Ausgabe der Shell, während das CDROM-Laufwerk 
+gesucht wird. Oft ist es das Laufwerk <filename>fs0:</filename>; 
+allerdings werden auch andere Laufwerke mit bootfähigen Partitionen 
+als <filename>fs<emphasis>n</emphasis>:</filename> angezeigt. 
 </para></listitem>
 
 <listitem><para>
-Enter <command>fs<emphasis>n</emphasis>:</command> and press
-<command>ENTER</command> to select that
-device where <emphasis>n</emphasis> is the partition number for the
-CDROM.  The shell will now display the partition number as its prompt.
+Geben Sie <command>fs<emphasis>n</emphasis>:</command> ein und 
+drücken Sie <command>ENTER</command>, um das passende Laufwerk auszuwählen, 
+wobei <emphasis>n</emphasis> die angezeigte Partitionsnummer ist.
 </para></listitem>
 
 <listitem><para>
-Enter <command>elilo</command> and press <command>ENTER</command>.
-This will start the boot load sequence.
+Geben Sie <command>elilo</command> ein und drücken Sie <command>ENTER</command>. 
+Die Boot-Load-Sequenz wird gestartet. 
 </para></listitem>
 
 </itemizedlist>
 
 <para> 
 
-As with option 1, these steps start the Debian boot loader which will
-display a menu page for you to select a boot kernel and options.
-You can also enter the shorter 
-<command>fs<emphasis>n</emphasis>:elilo</command> command at
-the shell prompt.
-Proceed to selecting the boot kernel and options.
+Wie bei der ersten Option startet der Debian-Bootloader und zeigt 
+eine Menüseite an, um einen Boot-Kernel und zusätzliche Optionen 
+zur Auswahl anzubieten. Sie können auch den schnelleren Befehl 
+<command>fs<emphasis>n</emphasis>:elilo</command> am Shell-Prompt 
+verwenden. 
+Wählen Sie Kernel und Optionen aus, um fortzufahren. 
 
 </para>
 
   </sect3>
 
   <sect3 arch="ia64" id="kernel-option-menu">
-  <title>Selecting the Boot Kernel and Options</title>
+  <title>Auswahl des Boot-Kernels und zusätzlicher Optionen</title>
 
 <para>
 
-The boot loader will display a form with a menu list and a text
-window with a <classname>Boot:</classname> prompt.
-The arrow keys select an item from the menu and any text typed
-at the keyboard will appear in the text window.
-There are also help screens which can be displayed by pressing
-the appropriate function key.
-The <classname>General</classname> help screen explains the menu
-choices and the <classname>Params</classname> screen explains
-the common command line options.
+Der Bootloader zeigt ein Formular an mit einer Menüliste und einem 
+Textfeld mit <classname>Boot:</classname>-Prompt.
+Mit den Pfeiltasten wählen Sie einen Eintrag aus dem Menü und 
+alles, was Sie über die Tastatur eingeben, erscheint in dem 
+Textfeld. Es gibt auch noch Hilfeseiten, die über die zugehörigen 
+Funktionstasten erreichbar sind. 
+Die <classname>General</classname>-Hilfeseite erklärt die Menüpunkte 
+und die <classname>Params</classname>-Seite beschreibt die wichtigsten 
+Kommandozeilen-Optionen.
 
 </para>
 
-   <title>Serial Console</title>
+   <title>Serielle Konsole</title>
 <para>
-You may choose to perform an install using a monitor and keyboard
-or using a serial connection.  To use a monitor/keyboard setup,
-select an option containing the string [VGA console].  To install
-over a serial connection, choose an option containing the string
-[<replaceable>BAUD</replaceable> baud serial console], where
-<replaceable>BAUD</replaceable> is the speed of your serial console.
-Menu items for the most typical baud rate settings on the ttyS0
-device are preconfigured.
+Sie haben die Wahl, eine Installation mittels Monitor und Tastatur 
+oder per serieller Schnittstelle vorzunehmen. Um die 
+Monitor/Tastatur-Einstellung zu nutzen, wählen Sie eine Option, die 
+[VGA console] enthält. Um per serieller Konsole zu installieren, 
+wählen Sie einen Eintrag, der [<replaceable>BAUD</replaceable> baud serial console]
+enthält, wobei Sie <replaceable>BAUD</replaceable> durch die 
+Verbindungsgeschwindigkeit Ihrer Konsole ersetzen. Für gängige Baudraten 
+an ttyS0 sind bereits vorkonfigurierte Menüeinträge vorhanden.
 </para>
 <para>
-In most circumstances, you will want the installer to use the same
-baud rate as your connection to the EFI console.  If you aren't
-sure what this setting is, you can obtain it using the command
-<command>baud</command> at the EFI shell.
+In den meisten Fällen werden Sie für den Installer die gleiche Baudrate 
+verwenden wie für die EFI-Konsole. Wenn Sie sich bei dieser Einstellung 
+nicht sicher sind, können Sie sie mit dem Befehl <command>baud</command> auf 
+der EFI-Shell kontrollieren.
 </para>
 <para>
-If there is not an option available that is configured for the serial
-device or baud rate you would like to use, you may override the console setting
-for one of the existing menu options.  For example, to use a
-57600 baud console over the ttyS1 device, enter
-<command>console=ttyS1,57600n8</command> into
-the <classname>Boot:</classname> text window.
+Wenn es für die entsprechende Schnittstelle oder Baudrate, die Sie benutzen 
+wollen, keinen passenden Eintrag gibt, können Sie die Parameter eines 
+vorhandenen Eintrags überschreiben. Wenn Sie zum Beispiel 57600 Baud per 
+Konsole an ttyS1 nutzen wollen, geben Sie in das 
+<classname>Boot:</classname>-Textfeld <command>console=ttyS1,57600n8</command>
+ein. 
 </para>
 
 <note><para>
-Most IA-64 boxes ship with a default console setting of 9600 baud.
-This setting is rather slow, and the normal installation process
-will take a significant time to draw each screen.  You should consider
-either increasing the baud rate used for performing the installation,
-or performing a Text Mode installation.  See the <classname>Params</classname>
-help menu for instructions on starting the installer in Text Mode.
+Die meisten IA-64-Rechner werden mit einer Standard-Konsoleneinstellung 
+von 9600 Baud ausgeliefert. Dies ist sehr langsam und während des normalen 
+Installationsprozesses wird es jedes Mal eine erhebliche Zeit dauern, den 
+Bildschirm neu aufzubauen. Sie sollten entweder die Baudrate für die 
+Installation erhöhen oder die Text-Mode-Installation wählen. 
+Die <classname>Params</classname>-Hilfeseite gibt Hinweise, wie Sie den 
+Installer im Text-Mode starten.
 </para></note>
 
 <warning><para>
-If you select the wrong console type, you
-will be able to select the kernel and enter parameters but both
-the display and your input will go dead as soon as the kernel starts,
-requiring you to reboot before you can begin the installation.
+Wenn Sie den falschen Konsolentyp auswählen, können Sie zwar den Kernel 
+auswählen und Bootparameter eingeben, aber sowohl das Display wie auch 
+die Tastatur sind tot, sobald der Kernel startet; in diesem Fall müssen
+Sie den Rechner neu starten, um von vorne zu beginnen.
 </para></warning>
 
 <para>
 
-Consult the <classname>General</classname> help screen for the
-description of the kernels and install modes most appropriate
-for your installation.
-You should also consult <xref linkend="boot-parms"/> below for any additional
-parameters that you may want to set in the <classname>Boot:</classname>
-text window.
-The kernel version you choose selects the kernel version that will be
-used for both the installation process and the installed system.
-If you encounter kernel problems with the installation, you may also
-have those same problems with the system you install.
-The following two steps will select and start the install:
+Die <classname>General</classname>-Hilfeseite gibt Infos über die 
+verschiedenen Kernel und Installationsmodi, die für Ihre Installation 
+am ehesten passend sind. Sie sollten ebenfalls <xref linkend="boot-parms"/>
+konsultieren bezüglich zusätzlicher Parameter, die im 
+<classname>Boot:</classname>-Textfeld eingegeben werden können.
+Die Kernelversion, die Sie auswählen, gilt sowohl für die Installation 
+wie auch für das neu installierte System. Die folgenden Schritte sind 
+nötig, um die Installation auszuwählen und zu starten:
 
 </para>
 
 <itemizedlist>
 
 <listitem><para>
-Select the kernel version and installation mode most
-appropriate to your needs with the arrow keys.
+Wählen Sie die für Sie passende Kernelversion sowie den
+Installationsmodus mit den Pfeiltasten aus.
 </para></listitem>
 
 <listitem><para>
-Enter any boot parameters by typing at the keyboard.
-The text will be displayed directly in the text window.
-This is where kernel parameters (such as serial console
-settings) are specified.
+Geben Sie eventuell nötige Bootparamter über die Tastatur ein. 
+Sie erscheinen sofort im Textfeld. Hier werden auch Kernelparameter 
+(wie z.B. die Einstellungen für die serielle Konsole) festgelegt.
 </para></listitem>
 
 <listitem><para>
-Press <command>ENTER</command>.  This will load and start the
-kernel.
-The kernel will display its usual initialization messages followed
-by the first screen of the Debian Installer.
+Drücken Sie <command>ENTER</command>. Jetzt wird der Kernel geladen 
+und gestartet. Der Kernel wird die üblichen Initialisierungs-Meldungen 
+ausgeben; danach folgt der erste Bildschirm des Debian Installers.
 </para></listitem> 
 
 </itemizedlist>
@@ -324,44 +316,44 @@ by the first screen of the Debian Installer.
 
 <para>
 
-Proceed to the next chapter to continue the installation where you will
-set up the language locale, network, and disk partitions.
+Bestätigen Sie, um zum nächsten Kapitel zu gelangen, in dem lokale 
+Einstellungen wie Sprache und Zeitzone, das Netzwerk und die Festplattenpartitionen 
+eingerichtet werden. 
 
 </para>
   </sect2>
 
-  <sect2 arch="ia64" id="boot-tftp"><title>Booting with TFTP</title>
+  <sect2 arch="ia64" id="boot-tftp"><title>Booten per TFTP</title>
 
 <para>
-Booting an IA64 system from the network is similar to a CD boot.
-The only difference is how the installation kernel is loaded.
-The EFI Boot Manager can load and start programs from a server on
-the network.
-Once the installation kernel is loaded and starts, the system install
-will proceed thru the same steps as the CD install with the exception
-that the packages of the base install will be loaded from the network
-rather than the CD drive.
-
+Ein IA64-System per Netzwerk zu booten ist vergleichbar mit dem 
+Starten von CD. Der einzige Unterschied ist die Art und Weise, 
+wie der Kernel geladen wird. Der EFI-Bootmanager kann Programme 
+von einem Server im Netzwerk laden und starten. 
+Sobald der Installationskernel geladen ist und startet, durchläuft die 
+Installation die gleichen Schritte wie bei einer Installation von CD, 
+mit einer Ausnahme: die Pakete des Basis-Systems werden über das Netzwerk 
+geladen statt vom CD-Laufwerk.
 </para>
 
 &boot-installer-intro-net.xml;
 
 <para>
 
-Network booting an ia64 system requires two architecture-specific actions.
-On the boot server, DHCP and TFTP must be configured to deliver
-<command>elilo</command>.
-On the client a new boot option must be defined in the EFI boot manager
-to enable loading over a network.
+Ein IA64-System per Netzwerk zu booten erfordert zwei architektur-spezifische 
+Aktionen: der Boot-Server, DHCP und TFTP müssen konfiguriert sein, den Befehl
+<command>elilo</command> durchzuleiten.
+Auf dem Client muss im EFI-Bootmanager eine neue Boot-Option definiert werden, 
+um das Laden per Netzwerk zu aktivieren. 
 
 </para>
 
   <sect3 arch="ia64" id="boot-tftp-server">
-  <title>Configuring the Server</title>
+  <title>Konfiguration des Servers</title>
 <para>
 
-A suitable TFTP entry for network booting an ia64 system looks something
-like this:
+Ein passender TFTP-Eintrag für den Netzwerk-Boot eines IA64-Systems 
+sieht ungefähr so aus:
 
 <informalexample><screen>
 
@@ -373,16 +365,17 @@ host mcmuffin {
 
 </screen></informalexample>
 
-Note that the goal is to get <command>elilo.efi</command> running on
-the client.
+Bedenken Sie: das Ziel ist es, <command>elilo.efi</command> auf dem Client 
+laufen zu lassen.
 
 </para><para>
 
-Extract the <filename>netboot.tar.gz</filename> file into the directory used
-as the root for your tftp server.  Typical tftp root directories include
-<filename>/var/lib/tftp</filename> and <filename>/tftpboot</filename>.
-This will create a <filename>debian-installer</filename> directory
-tree containing the boot files for an IA-64 system.
+Extrahieren Sie die Datei <filename>netboot.tar.gz</filename> in das 
+root-Verzeichnis des TFTP-Servers. (TFTP-Root-Verzeichnisse enthalten 
+üblicherweise <filename>/var/lib/tftp</filename> und 
+<filename>/tftpboot</filename>.) Hierdurch wird der Verzeichnisbaum des 
+<filename>Debian Installers</filename> erstellt, der alle Dateien für 
+den Netzwerk-Boot eines IA64-Rechners enthält.
 
 </para><para>
 
@@ -395,67 +388,67 @@ tree containing the boot files for an IA-64 system.
 [...]
 </screen></informalexample>
 
-The <filename>netboot.tar.gz</filename> contains an
-<filename>elilo.conf</filename> file that should work for most configurations.
-However, should you need to make changes to this file, you can find it in the
-<filename>debian-installer/ia64/</filename> directory.
+Das Archiv <filename>netboot.tar.gz</filename> enthält die Datei 
+<filename>elilo.conf</filename>, die für die meisten Konfigurationen passend 
+sein müsste. Wenn es jedoch nötig sein sollte, die Datei zu ändern, können Sie 
+sie im Verzeichnis <filename>debian-installer/ia64/</filename> finden. 
 
-It is possible to have different config files for different clients by naming
-them using the client's IP address in hex with the suffix
-<filename>.conf</filename> instead of <filename>elilo.conf</filename>.
-See documentation provided in the <classname>elilo</classname> package
-for details.
+Es ist möglich, für verschiedene Clients auch unterschiedliche Konfig-Dateien 
+zu erstellen, die dann nach den IP-Adressen der Clients in Hex plus der Endung 
+<filename>.conf</filename> benannt werden müssen (statt 
+<filename>elilo.conf</filename>). Details hält die Dokumentation im
+<classname>elilo</classname>-Paket bereit.
 
 </para>
   </sect3>
 
   <sect3 arch="ia64" id="boot-tftp-client">
-  <title>Configuring the Client</title>
+  <title>Konfiguration des Clients</title>
 <para>
 
-To configure the client to support TFTP booting, start by booting to
-EFI and entering the <guimenu>Boot Option Maintenance Menu</guimenu>.
+Um den Client für TFTP-Boot-Unterstützung zu konfigurieren, starten Sie 
+EFI und wählen <guimenu>Boot Option Maintenance Menu</guimenu>.
 
 <itemizedlist>
 <listitem><para>
 
-Add a boot option.
+Fügen Sie eine Boot-Option hinzu.
 
 </para></listitem>
 <listitem><para>
 
-You should see one or more lines with the text
-<guimenuitem>Load File [Acpi()/.../Mac()]</guimenuitem>.  If more
-than one of these entries exist, choose the one containing the
-MAC address of the interface from which you'll be booting.
-Use the arrow keys to highlight your choice, then press enter.
+Es sollten eine oder mehrere Zeilen mit dem Inhalt 
+<guimenuitem>Load File [Acpi()/.../Mac()]</guimenuitem> existieren. Wenn mehr 
+als eine dieser Zeilen existiert, wählen Sie diejenige, die die 
+MAC-Adresse der Schnittstelle enthält, von der Sie booten werden. 
+Markieren Sie dazu Ihre Auswahl mit den Pfeiltasten und drücken Sie Enter.
 
 </para></listitem>
 <listitem><para>
 
-Name the entry <userinput>Netboot</userinput> or something similar,
-save, and exit back to the boot options menu.  
+Geben Sie Ihrem Eintrag einen Namen wie <userinput>Netboot</userinput>
+oder ähnliches, speichern Sie und kehren Sie ins Boot-Option-Menü zurück.
 
 </para></listitem>
 </itemizedlist>
 
-You should see the new boot option you just created, and selecting it
-should initiate a DHCP query, leading to a TFTP load of
-<filename>elilo.efi</filename> from the server.
+Sie sollten die neu erstellte Boot-Option vorfinden; wenn Sie sie auswählen, 
+wird eine DHCP-Anfrage gestartet und dies führt dazu, dass 
+<filename>elilo.efi</filename> vom Server geladen wird.
 
 </para><para>
 
-The boot loader will display its prompt after it has downloaded and
-processed its configuration file.
-At this point, the installation proceeds with the same steps as a
-CD install.  Select a boot option as in above and when the kernel
-has completed installing itself from the network, it will start the
-Debian Installer.
+Der Bootloader zeigt den Boot-Prompt an, nachdem er seine Konfigurationsdatei 
+geladen und verarbeitet hat. Ab diesem Punkt durchläuft die Installation 
+die gleichen Schritte wie eine von CD. Wählen Sie eine Boot-Option wie 
+oben beschrieben; wenn der Kernel über das Netzwerk komplett geladen wurde, 
+wird der Debian Installer gestartet. 
 
 </para><para>
-
-Proceed to the next chapter to continue the installation where
-you will set up the language locale, network, and the disk partitions.
+ 
+Bestätigen Sie, um zum nächsten Kapitel zu gelangen, in dem lokale 
+Einstellungen wie Sprache und Zeitzone, das Netzwerk und die Festplattenpartitionen 
+eingerichtet werden. 
 
 </para>
   </sect3>
