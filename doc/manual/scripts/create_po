@@ -99,8 +99,8 @@ for PO in `find $PODIR -name "*.$language.po"` ; do
             if [ $count_PO != $count_POT ] ; then
                 echo "** Warning: translation for $PO has $count_PO strings, while original has $count_POT strings."
             fi
-            count_missing_PO=$(egrep "^msgstr \"\"$" $PO | wc -l)
-            count_missing_PO=$(($count_missing_PO - 1))
+            # Missing strings: If a line with 'msgstr ""' is followed by an empty line.
+            count_missing_PO=$(egrep -A 1 "^msgstr \"\"$" $PO | egrep "^$" | wc -l)
             if [ $count_missing_PO -ne 0 ] ; then
                 echo "** Warning: translation for $PO has $count_missing_PO missing strings."
             fi
