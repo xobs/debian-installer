@@ -37,7 +37,8 @@ tftpimage=$4
 # make sure the files are available
 for file in "$kernel" "$rootimage"; do
 	if [ ! -f $file ]; then
-	error "could not find: $file"
+		echo "error: could not find $file"
+		exit 1
 	fi
 done
 
