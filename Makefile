@@ -248,6 +248,8 @@ floppy_image: initrd kernel tmp_mount
 	
 	cp syslinux.cfg $(TMP_MNT)/
 	todos $(TMP_MNT)/syslinux.cfg
+# This number is used later for stats. There's gotta be a better way.
+	df -h $(TMP_MNT) | tail -1 | sed 's/[^ ]* //' | awk 'END { print $$3 }' > $(TMPDIR)/.floppy_free_stat
 	umount $(TMP_MNT)
 	syslinux $(FLOPPY_IMAGE)
 
@@ -284,6 +286,9 @@ stats:
 	@echo Total system size: $(shell du -h -s $(DEST) | cut -f 1)
 	@echo Compresses to: $(COMPRESSED_SZ)k
 	@echo Single Floppy kernel must be less than: ~$(shell expr 1400 - $(COMPRESSED_SZ) )k
+	@if [ -e $(TMPDIR)/.floppy_free_stat ]; then \
+		echo Floppy currently has `cat $(TMPDIR)/.floppy_free_stat` free!; \
+	fi
 # Add your interesting stats here.
 
 
