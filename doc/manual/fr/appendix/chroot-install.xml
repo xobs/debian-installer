@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 12756 -->
+<!-- original version: 18773 -->
 
  <sect1 id="linux-upgrade">
  <title>Installer &debian; à partir d'un système Unix/Linux</title>
@@ -68,8 +68,8 @@ partition en fonction de celui que vous souhaitez utiliser avec Debian)&nbsp;:
 
 </para><para>
 
-Attachez une partition sur <filename>/mnt/debinst</filename> (le point 
-d'installation, qui deviendra le système de fichier root 
+Montez une partition sur <filename>/mnt/debinst</filename> (le point 
+d'installation, qui deviendra le système de fichier racine 
 (<filename>/</filename>) sur votre nouveau système). Le point de montage est 
 totalement arbitraire, c'est de cette façon qu'on y fera référence par la 
 suite.
@@ -88,10 +88,10 @@ suite.
   <title>Installer <command>debootstrap</command></title>
 <para>
 
-L'outil utilisé par l'installateur de Debian et reconnu comme outil officiel 
+L'outil utilisé par l'installateur Debian et reconnu comme outil officiel 
 pour installer un système Debian de base s'appelle 
 <command>debootstrap</command>. Il utilise <command>wget</command>, mais ne 
-dépend que de la <classname>glibc</classname>. Installez
+dépend que de la <classname>/bin/sh</classname>. Installez
 <command>wget</command> s'il n'est pas déjà installé sur votre système,
 puis téléchargez et installez <command>debootstrap</command>.
 
@@ -119,8 +119,8 @@ Le programme <command>debootstrap</command> se trouve dans l'archive Debian
 (assurez-vous d'avoir sélectionné le fichier correspondant à votre
 architecture). Téléchargez le <command>debootstrap</command> .deb à partir de
 <ulink url="http://ftp.debian.org/debian/pool/main/d/debootstrap/">pool</ulink>,
-copiez le paquet dans le répertoire work, et décompressez les fichiers 
-binaires. Vous aurez besoin d'avoir les droits du super-utilisateur pour 
+copiez le paquet dans le répertoire de travail, et décompressez les fichiers 
+binaires. Vous aurez besoin d'avoir les droits du superutilisateur pour 
 installer le binaire.
 
 <informalexample><screen>
@@ -135,7 +135,7 @@ installer le binaire.
   </sect2>
 
   <sect2>
-  <title>Lancer <command>debootstrap</command> (connecté au réseau)</title>
+  <title>Lancer <command>debootstrap</command></title>
 <para>
 
 <command>Debootstrap</command> peut télécharger les fichiers nécessaires 
@@ -147,7 +147,8 @@ proximité de vous relativement au réseau. Les miroirs sont listés sur
 
 </para><para>
 
-Si vous possédez une version cédérom de &debian; Woody, attachée sur /cdrom,
+Si vous possédez une version cédérom de &debian; &releasename;, attachée sur 
+/cdrom,
 vous pouvez remplacer l'URL http par l'URL d'un fichier&nbsp;:
 <userinput>file:/cdrom/debian/</userinput>
 
@@ -170,7 +171,7 @@ Dans la commande <command>debootstrap</command> remplacez
 
 <informalexample><screen>
 
- $ /usr/sbin/debootstrap --arch ARCH woody \
+ $ /usr/sbin/debootstrap --arch ARCH sarge \
      /mnt/debinst http://http.us.debian.org/debian
 
 </screen></informalexample>
@@ -180,56 +181,11 @@ Dans la commande <command>debootstrap</command> remplacez
   </sect2>
 
   <sect2>
-  <title>Lancer <command>debootstrap</command> 
-  (En utilisant <filename>basedebs.tar</filename>)</title>
-<para>
-
-<command>Debootstrap</command> peut se servir du fichier 
-<filename>basedebs.tar</filename>, si vous l'aviez téléchargé auparavant. 
-Le fichier <filename>basedebs.tar</filename> est systématiquement 
-généré en une seule fois, ainsi, vous obtiendrez
- la dernière version d'un système de base en faisant pointer
-<command>debootstrap</command> directement sur une archive Debian comme nous
- l'avons évoqué dans la partie précédente.
-
-</para><para>
-
-Le fichier <filename>basedebs.tar</filename> se situe dans le répertoire
-<filename>base-images-current</filename> de l'archive Debian correspondante 
-à votre architecture, par exemple&nbsp;:
-<ulink url="http://http.us.debian.org/debian/dists/woody/main/disks-&architecture;/base-images-current/basedebs.tar"></ulink>
-
-</para><para>
-
-Dans la commande <command>debootstrap</command>, remplacez 
-<replaceable>ARCH</replaceable> par l'une des expressions suivantes&nbsp;:
-
-<userinput>alpha</userinput>, 
-<userinput>arm</userinput>,
-<userinput>hppa</userinput>, 
-<userinput>i386</userinput>, 
-<userinput>ia64</userinput>, 
-<userinput>m68k</userinput>,
-<userinput>mips</userinput>, 
-<userinput>mipsel</userinput>, 
-<userinput>powerpc</userinput>, 
-<userinput>s390</userinput>, ou
-<userinput>sparc</userinput>.
-<informalexample><screen>
- 
-$ /usr/sbin/debootstrap --arch ARCH --unpack-tarball \
-    /adresse-du-fichier/basedebs.tar woody /mnt/debinst
-
-</screen></informalexample>
-</para>
-  </sect2>
-
-  <sect2>
   <title>Configurer le sytème de base</title>
 
 <para>
 
-Maintenant, que vous disposez d'un vrai système Debian, autant l'utiliser.
+Maintenant vous disposez d'un vrai système Debian, certes un peu élémentaire.
 Lancez le programme <command>Chroot</command>&nbsp;:
 
 <informalexample><screen>
@@ -304,16 +260,6 @@ d'aller plus loin&nbsp;:
 
 </para>
 
-<para>
-
-Un utilisateur de Red Hat signale que, sur son système, c'est&nbsp;: 
-
-<informalexample><screen>
-
- # mount -t none proc /proc
-
-</screen></informalexample>
-</para>
    </sect3>
 
    <sect3>
@@ -469,7 +415,7 @@ les HOWTO sur la localisation.
 
 Si vous avez l'intention de démarrer ce système, vous aurez vraisemblablement
 besoin d'un noyau Linux ainsi que d'un gestionnaire de démarrage. Identifiez
-les versions «&nbsp;pré-packagées&nbsp;» des noyaux avec&nbsp;:
+les paquets contenant des noyaux avec&nbsp;:
 
 <informalexample><screen>
 
@@ -491,26 +437,30 @@ Puis installez celui que vous voulez en utilisant son nom de paquet.
   </sect2>
 
   <sect2>
-<title>Configurer le gestionnaire de démarrage</title>
+<title>Configurer le programme d'amorçage</title>
 <para>
 
-Pour que votre système &debian; puisse démarrer, configurez le gestionnaire
-de démarrage pour qu'il charge le noyau installé avec votre nouvelle partition
-root.
+Pour que votre système &debian; puisse démarrer, configurez le programme
+d'amorçage pour qu'il charge le noyau installé avec votre nouvelle partition
+racine. Debootstrap n'installe pas de programme d'amorçage mais vous pouvez
+utiliser apt-get pour en installer un.
 
 </para><para arch="i386">
 
-Consultez le <userinput>man lilo.conf</userinput> pour les instructions de 
-configuration du gestionnaire de démarrage. Si vous souhaitez conserver le 
+Faites <userinput>info grub</userinput> ou 
+<userinput>man lilo.conf</userinput> pour connaître les instructions de 
+configuration des programmes d'amorçage. Si vous souhaitez conserver le 
 système dont vous vous êtes servi pour installer Debian, ajoutez simplement 
-une entrée pour l'installation de Debian dans votre lilo.conf actuel. Vous 
-pouvez également le copier sur le nouveau système et l'éditer. Une fois que 
+une entrée pour l'installation de Debian dans votre 
+<filename>menu.lst</filename> ou dans votre <filename>lilo.conf</filename>. 
+Pour <filename>lilo.conf</filename>, vous pouvez également le copier sur le 
+nouveau système et l'éditer. Une fois que 
 vous l'aurez modifié, lancez lilo (souvenez-vous que lilo utilise le fichier 
 lilo.conf qui se trouve dans le même système que lui).
 
 </para><para arch="i386">
 
-Voici un exemple simple de fichier&nbsp;:
+Voici un exemple simple de fichier <filename>/etc/lilo.conf</filename>&nbsp;:
 
 <informalexample><screen>
 
@@ -527,16 +477,16 @@ label=Debian
 </para><para arch="powerpc">
 
 Consultez le <userinput>man yaboot.conf</userinput> pour les instructions de 
-configuration du
-gestionnaire de démarrage. Si vous souhaitez conserver le système dont vous
-vous êtes servi pour installer Debian, ajoutez simplement une entrée pour
-l'installation de Debian dans votre yaboot.conf actuel. Vous pouvez également
-le copier sur le nouveau système et l'éditer. Une fois que vous l'aurez
+configuration du programme d'amorçage. Si vous souhaitez conserver le système 
+dont vous vous êtes servi pour installer Debian, ajoutez simplement une 
+entrée pour l'installation de Debian dans votre yaboot.conf actuel. Vous 
+pouvez également le copier sur le nouveau système et l'éditer. Une fois que 
+vous l'aurez
 modifié, lancez ybin (souvenez-vous que ybin utilise le yaboot.conf qui se 
 trouve dans le même système que lui).
 </para><para arch="powerpc">
 
-Voici un exemple simple de fichier&nbsp;:
+Voici un exemple simple de fichier <filename>/etc/yaboot.conf</filename>&nbsp;:
 
 <informalexample><screen>
 
@@ -553,12 +503,6 @@ label=Debian
 
 Sur certaines machines, vous devrez utiliser <userinput>ide0:</userinput> 
 au lieu de <userinput>hd:</userinput>. 
-
-</para><para arch="not-i386;not-powerpc">
-
-<phrase condition="FIXME">
-FIXME: Someone may eventually supply an example for this architecture.
-</phrase>
 
 </para>
   </sect2>
