@@ -1,9 +1,9 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: alpha.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
+<!-- $Id: alpha.xml 23579 2004-11-02 07:25:31Z vorlon $ -->
 
 
   <sect2 arch="alpha"><title>Разметка в Tru64 UNIX</title>
-<para>Tru64 UNIX, ранее известный как Digital UNIX, который, в свою очередь, был ранее известен как OSF/1, использует схемуц разметки похожую на BSD `disk label', которая позволяет иметь до восьми разделов на каждом диске. В Linux разделы нумеруются от `1' до to `8' и в UNIX ``обукливаются'' с `a' по`h'. Ядра Linux версии 2.2 и выше всегда соотносят `1' в `a', `2' в `b' и так далее. Например, <filename>rz0e</filename> из Tru64 UNIX в Linux будет называться <filename>sda5</filename>. </para><para>Разделы в disk label могут перекрываться. Более того, для раздела`c' требуется, чтобы он распространялся на весь диск (то есть перекрывал все другие не пустые разделы). В Linux это делает <filename>sda3</filename> идентичным <filename>sda</filename> (если есть <filename>sdb3</filename>, то он одинаков с <filename>sdb</filename> и так далее). Кроме удовлетворения этого требования вы должны осторожно избегать перекрывающихся разделов. </para><para>Для другого стандартного требования нужно чтобы раздел `a' начинался сначала диска, поэтому он всегда содержит загрузочный блок и disk label. Если намереваетесь загружать Debian с этого диска, то его размер должен быть как минимум 2МБ, чтобы на него влез aboot и возможно, ядро. </para><para>Заметим, что эти два раздела требуются только для совместимости; вы не должны форматировать их, иначе вы уничтожите данные. Если вам ненужно совместно использовать диск с Tru64 Unix или одной из свободных основанных на 4.4BSD-Lite операционных систем (FreeBSD, OpenBSD или NetBSD), то вы можете проигнорировать эти требования, и использовать утилиту разметки с загрузочных дисков Debian. Подробности смотрите в <xref linkend="partition-programs"/>. </para><para>Диски могут быть размечены с помощью графической утилиты настройки, которая доступна из менеджера программ или утилитой командной строки <command>disklabel</command>. Тип раздела для файловой системы Linux должен быть `resrvd8'. Это может быть выполнено только в  <command>disklabel</command>; однако остальную настройку можно легко выполнить из графической утилиты. </para><para>Возможно, и это вполне логично, использовать раздел подкачки совместно UNIX и Linux. В этом случае нужно выполнять команду <command>mkswap</command> на этом разделе каждый раз когда система перезагружается из UNIX в Linux, так как UNIX уничтожает сигнатуру подкачки. Вы можете настроить запуск <command>mkswap</command> в Linux из сценария загрузки перед добавлением пространства подкачки командой <command>swapon -a</command>. </para><para>Если вы хотите монтировать разделы UNIX в Linux, заметим, что в Digital UNIX может использоваться два различных типа файловых систем, UFS и AdvFS, Linux понимает только последнюю. </para>
+<para>Tru64 UNIX, ранее известный как Digital UNIX, который, в свою очередь, был ранее известен как OSF/1, использует схемуц разметки похожую на BSD `disk label', которая позволяет иметь до восьми разделов на каждом диске. В Linux разделы нумеруются от `1' до to `8' и в UNIX ``обукливаются'' с `a' по`h'. Ядра Linux версии 2.2 и выше всегда соотносят `1' в `a', `2' в `b' и так далее. Например, <filename>rz0e</filename> из Tru64 UNIX в Linux будет называться <filename>sda5</filename>. </para><para>Разделы в Tru64 disk label могут перекрываться. Более того, если этот диск будет использоваться в Tru64, то для раздела`c' требуется, чтобы он распространялся на весь диск (то есть перекрывал все другие не пустые разделы). В Linux это делает <filename>sda3</filename> идентичным <filename>sda</filename> (если есть <filename>sdb3</filename>, то он одинаков с <filename>sdb</filename> и так далее). Однако, в настоящий момент, утилита разметки partman, используемая в &d-i; не работает с перекрывающимися разделами. Поэтому, не рекомендуется делать диски одновременно доступными и в Tru64 и в Debian. Разделы на Tru64 дисках могут быть смонтированы в Debian после завершения установки. </para><para>Для другого стандартного требования нужно, чтобы раздел `a' начинался сначала диска; отсюда сдедует, что он всегда содержит загрузочный блок и disk label. Если вы намереваетесь загружать Debian с этого диска, то его размер должен быть как минимум 2МБ, чтобы на него влез aboot и возможно, ядро. Заметим, что этот раздел нужен только для совместимости; на нём не нужна файловая система, или вы потеряете с неё данные. </para><para>Возможно, и это вполне логично, использовать раздел подкачки совместно UNIX и Linux. В этом случае нужно выполнять команду <command>mkswap</command> на этом разделе каждый раз когда система перезагружается из UNIX в Linux, так как UNIX уничтожает сигнатуру подкачки. Вы можете настроить запуск <command>mkswap</command> в Linux из сценария загрузки перед добавлением пространства подкачки командой <command>swapon -a</command>. </para><para>Если вы хотите монтировать разделы UNIX в Linux, заметим, что в Digital UNIX может использоваться два различных типа файловых систем, UFS и AdvFS, Linux понимает только последнюю. </para>
   </sect2>
 
   <sect2 arch="alpha"><title>Partitioning in Windows NT</title>
@@ -17,15 +17,18 @@ repartition your disk from the AlphaBIOS setup menu).  Otherwise, it
 is not really necessary to partition from Windows; the Linux
 partitioning tools will generally do a better job.  Note that when you
 run NT, the Disk Administrator may offer you to write a ``harmless
-signature'' on non-Windows disks if you have any.  <emphasis>Never</emphasis> let
-it do that, as this signature will destroy the partition information.
+signature'' on non-Windows disks if you have any.  <emphasis>Never</emphasis>
+let it do that, as this signature will destroy the partition
+information.
 
 </para><para>
 
 If you plan to boot Linux from an ARC/AlphaBIOS/ARCSBIOS console, you
 will need a (small) FAT partition for MILO.  5 Mb is quite
 sufficient.  If Windows NT is installed, its 6 Mb bootstrap partition
-can be employed for this purpose.
+can be employed for this purpose.  Debian &releasename; does not support
+installing MILO.  If you already have MILO installed on your system, or
+install MILO from other media, Debian can still be booted from ARC.
 
 </para>
   </sect2>
