@@ -38,8 +38,7 @@ while (@lists) {
 	my $list=pop @lists;
 	if (! -e $list) {
 		print STDERR "warning: missing list, $list, for type $type\n"
-			if $list !~ /local$/ && $list !~
-			m#$deb_host_arch/$sub_arch.cfg$#;
+			if $list !~ /local$/ && $list !~ m#$deb_host_arch/$sub_arch.cfg$#;
 	}
 	else {
 		open (LIST, $list) || die "open $list $!";
@@ -72,14 +71,48 @@ while (@lists) {
 				foreach my $v (@kernel_versions) {
 					my $l=$_;
 					$l=~s/\${kernel:Version}/$v-$kernel_flavour/g;
-					print "$l\n";
+					printpackage($l);
 				}
 				next; # move on to the next line
 			}
-
-			# if nothing else matches print the line untouched
-			print "$_\n";
-		    }
+			printpackage($_);
+		}
 		close LIST;
+	}
+}
+
+# Print a package, possibly expanding dependencies.
+sub printpackage {
+	my $line=shift;
+	if ($line=~/^(.*) \*$/) {
+		# Asterisk at end means include all dependencies of this
+		# package.
+		print "$1\n";
+		printdeps($1);
+	}
+	else {
+		print "$line\n";
+	}
+}
+
+# Recursively print dependencies of package.
+sub printdeps {
+	my $package=shift;
+	my %seendeps;
+	if (@_) {
+		%seendeps=%{shift()}
+	}
+	return if $seendeps{$package};
+	my @deps=`apt-cache \\
+		-o Dir::Etc::sourcelist=./sources.list.udeb \\
+		-o Dir::State=./apt.udeb/state \\
+		-o Dir::Cache=./apt.udeb/cache depends $package`;
+	shift @deps; # package name;
+	foreach my $dep (@deps) {
+		chomp $dep;
+		$dep=~s/^\s*Depends:\s*//;
+		print "$dep\n";
+		$seendeps{$dep}=1;
+		printdeps($dep, \%seendeps);
 	}
 }
