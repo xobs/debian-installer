@@ -53,6 +53,11 @@ DPKGDIR=$(DEST)/var/lib/dpkg
 
 build: demo_clean tree lib_reduce status_reduce stats
 
+# For now, just build a demo tarball. Later, this should build actual bootable
+# images.
+image: build
+	tar czf ../debian-installer.tar.gz $(DEST)
+
 demo:
 	mkdir -p $(DEST)/proc 
 	sudo chroot $(DEST) bin/sh -c "if ! mount | grep ^proc ; then bin/mount proc -t proc /proc; fi"
