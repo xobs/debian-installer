@@ -517,9 +517,9 @@ msgstr ""
 
 # index.docbook:254, index.docbook:866, index.docbook:1402, index.docbook:1886, index.docbook:1969, index.docbook:2240, index.docbook:2348
 #. Tag: title
-#: boot-installer.xml:274 boot-installer.xml:877 boot-installer.xml:1417
-#: boot-installer.xml:1910 boot-installer.xml:1993 boot-installer.xml:2333
-#: boot-installer.xml:2429
+#: boot-installer.xml:274 boot-installer.xml:883 boot-installer.xml:1423
+#: boot-installer.xml:1916 boot-installer.xml:1999 boot-installer.xml:2339
+#: boot-installer.xml:2435
 #, no-c-format
 msgid "Booting with TFTP"
 msgstr "Загрузка по TFTP"
@@ -793,8 +793,8 @@ msgstr "Загрузка по TFTP"
 
 # index.docbook:427, index.docbook:872, index.docbook:1420, index.docbook:1892, index.docbook:2246, index.docbook:2354
 #. Tag: para
-#: boot-installer.xml:432 boot-installer.xml:883 boot-installer.xml:1435
-#: boot-installer.xml:1916 boot-installer.xml:2339 boot-installer.xml:2435
+#: boot-installer.xml:432 boot-installer.xml:889 boot-installer.xml:1441
+#: boot-installer.xml:1922 boot-installer.xml:2345 boot-installer.xml:2441
 #, no-c-format
 msgid ""
 "Booting from the network requires that you have a network connection and a "
@@ -805,8 +805,8 @@ msgstr ""
 
 # index.docbook:432, index.docbook:877, index.docbook:1425, index.docbook:1897, index.docbook:2251, index.docbook:2359
 #. Tag: para
-#: boot-installer.xml:437 boot-installer.xml:888 boot-installer.xml:1440
-#: boot-installer.xml:1921 boot-installer.xml:2344 boot-installer.xml:2440
+#: boot-installer.xml:437 boot-installer.xml:894 boot-installer.xml:1446
+#: boot-installer.xml:1927 boot-installer.xml:2350 boot-installer.xml:2446
 #, no-c-format
 msgid ""
 "Older systems such as the 715 might require the use of an RBOOT server "
@@ -817,8 +817,8 @@ msgstr ""
 
 # index.docbook:437, index.docbook:882, index.docbook:1430, index.docbook:1902, index.docbook:2256, index.docbook:2364
 #. Tag: para
-#: boot-installer.xml:442 boot-installer.xml:893 boot-installer.xml:1445
-#: boot-installer.xml:1926 boot-installer.xml:2349 boot-installer.xml:2445
+#: boot-installer.xml:442 boot-installer.xml:899 boot-installer.xml:1451
+#: boot-installer.xml:1932 boot-installer.xml:2355 boot-installer.xml:2451
 #, no-c-format
 msgid ""
 "The installation method to support network booting is described in <xref "
@@ -877,7 +877,7 @@ msgstr "nettrom-2.3.3.bin.md5sum"
 
 #. Tag: para
 #: boot-installer.xml:482
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "After rebooting and interrupting the boot process during the countdown, you "
 "must first configure the network either with a static address: "
@@ -891,18 +891,23 @@ msgid ""
 "local subnet. The rest of the config is pretty standard (the save-all step "
 "is optional): <informalexample><screen>\n"
 "    NeTTrom command-&gt; setenv kerntftpserver 192.168.0.1\n"
-"    NeTTrom command-&gt; setenv kerntftpfile tftpboot.img\n"
+"    NeTTrom command-&gt; setenv kerntftpfile boot.img\n"
 "    NeTTrom command-&gt; save-all\n"
 "    NeTTrom command-&gt; setenv netconfig_eth0 flash\n"
 "    NeTTrom command-&gt; setenv kernconfig tftp\n"
+"    NeTTrom command-&gt; setenv rootdev /dev/ram\n"
+"    NeTTrom command-&gt; setenv cmdappend root=/dev/ram\n"
 "</screen></informalexample> Only the last two of these interfere with normal "
 "disk booting, so it is safe to <command>save-all</command> right before it, "
 "which will store the network settings in case you need to boot from the "
-"network again. Use the <command>printenv</command> command to review your "
-"environment settings. Finally, if your <envar>cmdappend</envar> NeTTrom "
-"variable has the <option>noinitrd</option> option (which is necessary to "
-"boot 2.4 kernels), you must remove it so the downloaded kernel can boot with "
-"its attached ramdisk."
+"network again. If you want to use the serial console to install your "
+"NetWinder, you also need the following setting: <informalexample><screen>\n"
+"    NeTTrom command-&gt; setenv cmdappend root=/dev/ram "
+"console=ttyS0,115200\n"
+"</screen></informalexample> Use the <command>printenv</command> command to "
+"review your environment settings. Finally, if your <envar>cmdappend</envar> "
+"NeTTrom variable has the <option>noinitrd</option> option, you must remove "
+"it so the downloaded kernel can boot with its attached ramdisk."
 msgstr ""
 "После перезагрузки и прерывании процесса загрузки во время обратного "
 "отсчёта, вы должны сначала настроить сеть или статически: "
@@ -930,13 +935,13 @@ msgstr ""
 "чтобы загружаемое ядро загрузило прикреплённый ramdisk."
 
 #. Tag: title
-#: boot-installer.xml:512
+#: boot-installer.xml:518
 #, no-c-format
 msgid "Booting from TFTP on CATS"
 msgstr "Загрузка по TFTP на CATS"
 
 #. Tag: para
-#: boot-installer.xml:514
+#: boot-installer.xml:520
 #, no-c-format
 msgid ""
 "On CATS machines, use <command>boot de0:</command> or similar at the Cyclone "
@@ -946,15 +951,15 @@ msgstr ""
 "или нечто подобное."
 
 #. Tag: title
-#: boot-installer.xml:525
+#: boot-installer.xml:531
 #, no-c-format
 msgid "Booting from CD-ROM"
 msgstr "Загрузка с CD-ROM"
 
 # index.docbook:526, index.docbook:578, index.docbook:1043, index.docbook:1849, index.docbook:2090, index.docbook:2394
 #. Tag: para
-#: boot-installer.xml:531 boot-installer.xml:584 boot-installer.xml:1054
-#: boot-installer.xml:1873 boot-installer.xml:2121 boot-installer.xml:2475
+#: boot-installer.xml:537 boot-installer.xml:590 boot-installer.xml:1060
+#: boot-installer.xml:1879 boot-installer.xml:2127 boot-installer.xml:2481
 #, no-c-format
 msgid ""
 "The easiest route for most people will be to use a set of Debian CDs. If you "
@@ -972,8 +977,8 @@ msgstr ""
 
 # index.docbook:537, index.docbook:589, index.docbook:1054, index.docbook:1860, index.docbook:2101, index.docbook:2405
 #. Tag: para
-#: boot-installer.xml:542 boot-installer.xml:595 boot-installer.xml:1065
-#: boot-installer.xml:1884 boot-installer.xml:2132 boot-installer.xml:2486
+#: boot-installer.xml:548 boot-installer.xml:601 boot-installer.xml:1071
+#: boot-installer.xml:1890 boot-installer.xml:2138 boot-installer.xml:2492
 #, no-c-format
 msgid ""
 "Note that certain CD drives may require special drivers, and thus be "
@@ -990,8 +995,8 @@ msgstr ""
 
 # index.docbook:545, index.docbook:597, index.docbook:1062, index.docbook:1868, index.docbook:2109, index.docbook:2413
 #. Tag: para
-#: boot-installer.xml:550 boot-installer.xml:603 boot-installer.xml:1073
-#: boot-installer.xml:1892 boot-installer.xml:2140 boot-installer.xml:2494
+#: boot-installer.xml:556 boot-installer.xml:609 boot-installer.xml:1079
+#: boot-installer.xml:1898 boot-installer.xml:2146 boot-installer.xml:2500
 #, no-c-format
 msgid ""
 "Even if you cannot boot from CD-ROM, you can probably install the Debian "
@@ -1008,8 +1013,8 @@ msgstr ""
 
 # index.docbook:553, index.docbook:605, index.docbook:1070, index.docbook:1876, index.docbook:2117, index.docbook:2421
 #. Tag: para
-#: boot-installer.xml:558 boot-installer.xml:611 boot-installer.xml:1081
-#: boot-installer.xml:1900 boot-installer.xml:2148 boot-installer.xml:2502
+#: boot-installer.xml:564 boot-installer.xml:617 boot-installer.xml:1087
+#: boot-installer.xml:1906 boot-installer.xml:2154 boot-installer.xml:2508
 #, no-c-format
 msgid ""
 "If you have problems booting, see <xref linkend=\"boot-troubleshooting\"/>."
@@ -1018,7 +1023,7 @@ msgstr ""
 "troubleshooting\"/>."
 
 #. Tag: para
-#: boot-installer.xml:565
+#: boot-installer.xml:571
 #, no-c-format
 msgid ""
 "To boot a CD-ROM from the Cyclone console prompt, use the command "
@@ -1029,14 +1034,14 @@ msgstr ""
 
 # index.docbook:572, index.docbook:1037, index.docbook:1837, index.docbook:2084, index.docbook:2388
 #. Tag: title
-#: boot-installer.xml:578 boot-installer.xml:1048 boot-installer.xml:1861
-#: boot-installer.xml:2115 boot-installer.xml:2469
+#: boot-installer.xml:584 boot-installer.xml:1054 boot-installer.xml:1867
+#: boot-installer.xml:2121 boot-installer.xml:2475
 #, no-c-format
 msgid "Booting from a CD-ROM"
 msgstr "Загрузка с CD-ROM"
 
 #. Tag: title
-#: boot-installer.xml:716
+#: boot-installer.xml:722
 #, no-c-format
 msgid ""
 "Booting from linux using <command>LILO</command> or <command>GRUB</command>"
@@ -1046,7 +1051,7 @@ msgstr ""
 
 # index.docbook:1670, index.docbook:2168
 #. Tag: para
-#: boot-installer.xml:719
+#: boot-installer.xml:725
 #, no-c-format
 msgid ""
 "To boot the installer from hard disk, you must first download and place the "
@@ -1057,7 +1062,7 @@ msgstr ""
 "<xref linkend=\"boot-drive-files\"/>)."
 
 #. Tag: para
-#: boot-installer.xml:724
+#: boot-installer.xml:730
 #, no-c-format
 msgid ""
 "If you intend to use the hard drive only for booting and then download "
@@ -1073,7 +1078,7 @@ msgstr ""
 "должны делать это осторожно."
 
 #. Tag: para
-#: boot-installer.xml:733
+#: boot-installer.xml:739
 #, no-c-format
 msgid ""
 "Alternatively, if you intend to keep an existing partition on the hard drive "
@@ -1090,7 +1095,7 @@ msgstr ""
 "загрузить с диска и установить из образа CD без использования сети."
 
 #. Tag: para
-#: boot-installer.xml:742
+#: boot-installer.xml:748
 #, no-c-format
 msgid ""
 "For <command>LILO</command>, you will need to configure two essential things "
@@ -1108,7 +1113,7 @@ msgstr ""
 "<filename>/etc/lilo.conf</filename>:"
 
 #. Tag: screen
-#: boot-installer.xml:763
+#: boot-installer.xml:769
 #, no-c-format
 msgid ""
 "image=/boot/newinstall/vmlinuz\n"
@@ -1124,7 +1129,7 @@ msgstr ""
 "       append=\"devfs=mount,dall ramdisk_size=12000\""
 
 #. Tag: para
-#: boot-installer.xml:763
+#: boot-installer.xml:769
 #, no-c-format
 msgid ""
 "For more details, refer to the <citerefentry><refentrytitle>initrd</"
@@ -1140,7 +1145,7 @@ msgstr ""
 "<userinput>lilo</userinput> и перезагрузите машину."
 
 #. Tag: para
-#: boot-installer.xml:772
+#: boot-installer.xml:778
 #, no-c-format
 msgid ""
 "The procedure for <command>GRUB</command> is quite similar. Locate your "
@@ -1166,7 +1171,7 @@ msgstr ""
 "userinput> в строку <quote>kernel</quote>."
 
 #. Tag: para
-#: boot-installer.xml:784
+#: boot-installer.xml:790
 #, no-c-format
 msgid ""
 "Note that the value of the <userinput>ramdisk_size</userinput> may need to "
@@ -1178,13 +1183,13 @@ msgstr ""
 "разницы в использовании <command>GRUB</command> или <command>LILO</command>."
 
 #. Tag: title
-#: boot-installer.xml:795 boot-installer.xml:2273
+#: boot-installer.xml:801 boot-installer.xml:2279
 #, no-c-format
 msgid "Booting from USB memory stick"
 msgstr "Загрузка с карты памяти USB"
 
 #. Tag: para
-#: boot-installer.xml:796
+#: boot-installer.xml:802
 #, no-c-format
 msgid ""
 "Let's assume you have prepared everything from <xref linkend=\"boot-dev-"
@@ -1201,7 +1206,7 @@ msgstr ""
 "&enterkey;."
 
 #. Tag: para
-#: boot-installer.xml:805
+#: boot-installer.xml:811
 #, no-c-format
 msgid ""
 "In case your computer doesn't support booting from USB memory devices, you "
@@ -1219,15 +1224,15 @@ msgstr ""
 
 # index.docbook:807, index.docbook:1949, index.docbook:2282, index.docbook:2442
 #. Tag: title
-#: boot-installer.xml:818 boot-installer.xml:1973 boot-installer.xml:2375
-#: boot-installer.xml:2523
+#: boot-installer.xml:824 boot-installer.xml:1979 boot-installer.xml:2381
+#: boot-installer.xml:2529
 #, no-c-format
 msgid "Booting from Floppies"
 msgstr "Загрузка с дискет"
 
 # index.docbook:808, index.docbook:2290
 #. Tag: para
-#: boot-installer.xml:819 boot-installer.xml:2383
+#: boot-installer.xml:825 boot-installer.xml:2389
 #, no-c-format
 msgid ""
 "You will have already downloaded the floppy images you needed and created "
@@ -1237,7 +1242,7 @@ msgstr ""
 "загрузочные дискеты как описано в <xref linkend=\"create-floppy\"/>."
 
 #. Tag: para
-#: boot-installer.xml:826
+#: boot-installer.xml:832
 #, no-c-format
 msgid ""
 "To boot from the installer boot floppy, place it in the primary floppy "
@@ -1247,7 +1252,7 @@ msgstr ""
 "дисковод, выключите систему как обычно и включите питание."
 
 #. Tag: para
-#: boot-installer.xml:832
+#: boot-installer.xml:838
 #, no-c-format
 msgid ""
 "For installing from a LS-120 drive (ATAPI version) with a set of floppies, "
@@ -1267,7 +1272,7 @@ msgstr ""
 "поддерживается только для ядер версии 2.4 и выше."
 
 #. Tag: para
-#: boot-installer.xml:843
+#: boot-installer.xml:849
 #, no-c-format
 msgid ""
 "Note that on some machines, <keycombo><keycap>Control</keycap> <keycap>Alt</"
@@ -1284,7 +1289,7 @@ msgstr ""
 "Иначе, выполните аппаратную перезагрузку перед загрузкой."
 
 #. Tag: para
-#: boot-installer.xml:852
+#: boot-installer.xml:858
 #, no-c-format
 msgid ""
 "The floppy disk will be accessed, and you should then see a screen that "
@@ -1295,7 +1300,7 @@ msgstr ""
 "<prompt>boot:</prompt>."
 
 #. Tag: para
-#: boot-installer.xml:858
+#: boot-installer.xml:864
 #, no-c-format
 msgid ""
 "Once you press &enterkey;, you should see the message "
@@ -1312,7 +1317,7 @@ msgstr ""
 "этапе процесса загрузки можно найти в <xref linkend=\"kernel-msgs\"/>."
 
 #. Tag: para
-#: boot-installer.xml:867
+#: boot-installer.xml:873
 #, no-c-format
 msgid ""
 "After booting from the boot floppy, the root floppy is requested. Insert the "
@@ -1326,19 +1331,19 @@ msgstr ""
 "установки <command>debian-installer</command>."
 
 #. Tag: para
-#: boot-installer.xml:901
+#: boot-installer.xml:907
 #, no-c-format
 msgid "There are various ways to do a TFTP boot on i386."
 msgstr "Есть несколько возможностей выполнить загрузку по TFTP на i386."
 
 #. Tag: title
-#: boot-installer.xml:907
+#: boot-installer.xml:913
 #, no-c-format
 msgid "NIC or Motherboard that support PXE"
 msgstr "Сетевая карта или материнская плата с поддержкой PXE"
 
 #. Tag: para
-#: boot-installer.xml:908
+#: boot-installer.xml:914
 #, no-c-format
 msgid ""
 "It could be that your Network Interface Card or Motherboard provides PXE "
@@ -1352,13 +1357,13 @@ msgstr ""
 "можете настроить BIOS на загрузку по сети."
 
 #. Tag: title
-#: boot-installer.xml:919
+#: boot-installer.xml:925
 #, no-c-format
 msgid "NIC with network bootROM"
 msgstr "Сетевая карта с сетевым bootROM"
 
 #. Tag: para
-#: boot-installer.xml:920
+#: boot-installer.xml:926
 #, no-c-format
 msgid ""
 "It could be that your Network Interface Card provides TFTP boot "
@@ -1367,7 +1372,7 @@ msgstr ""
 "Возможно, что сетевая карта (NIC) предоставляет возможность загрузки по TFTP."
 
 #. Tag: para
-#: boot-installer.xml:925
+#: boot-installer.xml:931
 #, no-c-format
 msgid ""
 "Let us (<email>&email-debian-boot-list;</email>) know how did you manage it. "
@@ -1377,13 +1382,13 @@ msgstr ""
 "сделать это. Пожалуйста, упомяните в заголовке этот документ."
 
 #. Tag: title
-#: boot-installer.xml:933
+#: boot-installer.xml:939
 #, no-c-format
 msgid "Etherboot"
 msgstr "Etherboot"
 
 #. Tag: para
-#: boot-installer.xml:934
+#: boot-installer.xml:940
 #, no-c-format
 msgid ""
 "The <ulink url=\"http://www.etherboot.org\">etherboot project</ulink> "
@@ -1394,13 +1399,13 @@ msgstr ""
 
 # index.docbook:2012, index.docbook:2491
 #. Tag: title
-#: boot-installer.xml:943
+#: boot-installer.xml:949
 #, no-c-format
 msgid "i386 Boot Parameters"
 msgstr "Параметры загрузки i386"
 
 #. Tag: para
-#: boot-installer.xml:944
+#: boot-installer.xml:950
 #, no-c-format
 msgid ""
 "When the installer boots, you will be presented with the boot prompt, "
@@ -1416,7 +1421,7 @@ msgstr ""
 "полезной информации, или нажать <keycap>Enter</keycap> для загрузки системы."
 
 #. Tag: para
-#: boot-installer.xml:952
+#: boot-installer.xml:958
 #, no-c-format
 msgid ""
 "Information on boot parameters which might be useful can be found by "
@@ -1436,7 +1441,7 @@ msgstr ""
 "без дополнительных параметров."
 
 #. Tag: para
-#: boot-installer.xml:963
+#: boot-installer.xml:969
 #, no-c-format
 msgid ""
 "Some systems have floppies with ``inverted DCLs''. If you receive errors "
@@ -1448,7 +1453,7 @@ msgstr ""
 "попробуйте задать параметр <userinput>floppy=thinkpad</userinput>."
 
 #. Tag: para
-#: boot-installer.xml:969
+#: boot-installer.xml:975
 #, no-c-format
 msgid ""
 "On some systems, such as the IBM PS/1 or ValuePoint (which have ST-506 disk "
@@ -1469,7 +1474,7 @@ msgstr ""
 "секторов</replaceable></userinput>."
 
 #. Tag: para
-#: boot-installer.xml:978
+#: boot-installer.xml:984
 #, no-c-format
 msgid ""
 "If you have a very old machine, and the kernel hangs after saying "
@@ -1483,7 +1488,7 @@ msgstr ""
 "выключает этот тест."
 
 #. Tag: para
-#: boot-installer.xml:985
+#: boot-installer.xml:991
 #, no-c-format
 msgid ""
 "If your screen begins to show a weird picture while the kernel boots, eg. "
@@ -1505,13 +1510,13 @@ msgstr ""
 "английском языке. Подробней смотрите в <xref linkend=\"boot-parms\"/>."
 
 #. Tag: title
-#: boot-installer.xml:1002
+#: boot-installer.xml:1008
 #, no-c-format
 msgid "System freeze during the PCMCIA configuration phase"
 msgstr "Если система подвисает во время настройки PCMCIA"
 
 #. Tag: para
-#: boot-installer.xml:1004
+#: boot-installer.xml:1010
 #, no-c-format
 msgid ""
 "Some laptop models produced by Dell are known to crash when PCMCIA device "
@@ -1532,7 +1537,7 @@ msgstr ""
 "проблемы."
 
 #. Tag: para
-#: boot-installer.xml:1014
+#: boot-installer.xml:1020
 #, no-c-format
 msgid ""
 "Alternatively, you can boot the installer in expert mode. You will then be "
@@ -1555,13 +1560,13 @@ msgstr ""
 "они есть."
 
 #. Tag: title
-#: boot-installer.xml:1031
+#: boot-installer.xml:1037
 #, no-c-format
 msgid "System freeze while loading the USB modules"
 msgstr "Если система подвисает во время загрузки USB модулей"
 
 #. Tag: para
-#: boot-installer.xml:1032
+#: boot-installer.xml:1038
 #, no-c-format
 msgid ""
 "The kernel normally tries to install USB modules and the USB keyboard driver "
@@ -1581,13 +1586,13 @@ msgstr ""
 "приглашении загрузки, который запрещает загрузку модулей."
 
 #. Tag: title
-#: boot-installer.xml:1089
+#: boot-installer.xml:1095
 #, no-c-format
 msgid "CD Contents"
 msgstr "Содержимое компакт-диска"
 
 #. Tag: para
-#: boot-installer.xml:1091
+#: boot-installer.xml:1097
 #, no-c-format
 msgid ""
 "There are three basic variations of Debian Install CDs. The "
@@ -1611,7 +1616,7 @@ msgstr ""
 "полноценную систему с большим выбором пакетов безо всякого доступа к сети."
 
 #. Tag: para
-#: boot-installer.xml:1107
+#: boot-installer.xml:1113
 #, no-c-format
 msgid ""
 "The IA-64 architecture uses the next generation Extensible Firmware "
@@ -1637,7 +1642,7 @@ msgstr ""
 "вместо простой MBR или загрузочного сектора на обычных системах."
 
 #. Tag: para
-#: boot-installer.xml:1123
+#: boot-installer.xml:1129
 #, no-c-format
 msgid ""
 "The Debian Installer CD contains a small EFI partition where the "
@@ -1654,7 +1659,7 @@ msgstr ""
 "EFI Shell, как описано ниже."
 
 #. Tag: para
-#: boot-installer.xml:1132
+#: boot-installer.xml:1138
 #, no-c-format
 msgid ""
 "Most of the details of how <command>ELILO</command> actually loads and "
@@ -1677,7 +1682,7 @@ msgstr ""
 "разрешить установке продолжиться."
 
 #. Tag: para
-#: boot-installer.xml:1144
+#: boot-installer.xml:1150
 #, no-c-format
 msgid ""
 "The EFI Boot Manager is presented as the last step of the firmware "
@@ -1700,13 +1705,13 @@ msgstr ""
 "используйте второй."
 
 #. Tag: title
-#: boot-installer.xml:1163
+#: boot-installer.xml:1169
 #, no-c-format
 msgid "IMPORTANT"
 msgstr "ВАЖНО"
 
 #. Tag: para
-#: boot-installer.xml:1164
+#: boot-installer.xml:1170
 #, no-c-format
 msgid ""
 "The EFI Boot Manager will select a default boot action, typically the first "
@@ -1725,13 +1730,13 @@ msgstr ""
 "загрузчик выполнив <command>exit</command> из командной строки."
 
 #. Tag: title
-#: boot-installer.xml:1176
+#: boot-installer.xml:1182
 #, no-c-format
 msgid "Option 1: Booting from the Boot Option Maintenance Menu"
 msgstr "Вариант 1: Загрузка из Boot Option Maintenance Menu"
 
 #. Tag: para
-#: boot-installer.xml:1183
+#: boot-installer.xml:1189
 #, no-c-format
 msgid ""
 "Insert the CD in the DVD/CD drive and reboot the machine. The firmware will "
@@ -1743,7 +1748,7 @@ msgstr ""
 "меню."
 
 #. Tag: para
-#: boot-installer.xml:1189
+#: boot-installer.xml:1195
 #, no-c-format
 msgid ""
 "Select <command>Boot Maintenance Menu</command> from the menu with the arrow "
@@ -1754,7 +1759,7 @@ msgstr ""
 "следующее меню."
 
 #. Tag: para
-#: boot-installer.xml:1195
+#: boot-installer.xml:1201
 #, no-c-format
 msgid ""
 "Select <command>Boot From a File</command> from the menu with the arrow keys "
@@ -1773,7 +1778,7 @@ msgstr ""
 "будет одинаковой."
 
 #. Tag: para
-#: boot-installer.xml:1206
+#: boot-installer.xml:1212
 #, no-c-format
 msgid ""
 "You can choose either of the entries that refer to the CD/DVD drive. Select "
@@ -1792,7 +1797,7 @@ msgstr ""
 "шаг."
 
 #. Tag: para
-#: boot-installer.xml:1217
+#: boot-installer.xml:1223
 #, no-c-format
 msgid ""
 "You will only need this step if you chose <command>Debian Inst [Acpi ...</"
@@ -1808,7 +1813,7 @@ msgstr ""
 "загрузки."
 
 #. Tag: para
-#: boot-installer.xml:1229
+#: boot-installer.xml:1235
 #, no-c-format
 msgid ""
 "These steps start the Debian boot loader which will display a menu page for "
@@ -1820,13 +1825,13 @@ msgstr ""
 "параметры."
 
 #. Tag: title
-#: boot-installer.xml:1239
+#: boot-installer.xml:1245
 #, no-c-format
 msgid "Option 2: Booting from the EFI Shell"
 msgstr "Вариант 2: Загрузка из EFI Shell"
 
 #. Tag: para
-#: boot-installer.xml:1240
+#: boot-installer.xml:1246
 #, no-c-format
 msgid ""
 "If, for some reason, option 1 is not successful, reboot the machine and when "
@@ -1840,7 +1845,7 @@ msgstr ""
 "Debian с CD с помощью следующих шагов:"
 
 #. Tag: para
-#: boot-installer.xml:1251
+#: boot-installer.xml:1257
 #, no-c-format
 msgid ""
 "Insert the CD in the DVD/CD drive and reboot the machine. The firmware will "
@@ -1852,7 +1857,7 @@ msgstr ""
 "меню."
 
 #. Tag: para
-#: boot-installer.xml:1257
+#: boot-installer.xml:1263
 #, no-c-format
 msgid ""
 "Select <command>EFI Shell</command> from the menu with the arrow keys and "
@@ -1875,7 +1880,7 @@ msgstr ""
 "дополнительных секунд для инициализации привода компакт-дисков."
 
 #. Tag: para
-#: boot-installer.xml:1271
+#: boot-installer.xml:1277
 #, no-c-format
 msgid ""
 "Examine the output from the shell looking for the CDROM drive. It is most "
@@ -1889,7 +1894,7 @@ msgstr ""
 "<filename>fs<replaceable>n</replaceable></filename>."
 
 #. Tag: para
-#: boot-installer.xml:1278
+#: boot-installer.xml:1284
 #, no-c-format
 msgid ""
 "Enter <command>fs<replaceable>n</replaceable>:</command> and press "
@@ -1903,7 +1908,7 @@ msgstr ""
 "своём приглашении."
 
 #. Tag: para
-#: boot-installer.xml:1285
+#: boot-installer.xml:1291
 #, no-c-format
 msgid ""
 "Enter <command>elilo</command> and press <command>ENTER</command>. This will "
@@ -1913,7 +1918,7 @@ msgstr ""
 "запустит процедуру начальной загрузки."
 
 #. Tag: para
-#: boot-installer.xml:1292
+#: boot-installer.xml:1298
 #, no-c-format
 msgid ""
 "As with option 1, these steps start the Debian boot loader which will "
@@ -1929,13 +1934,13 @@ msgstr ""
 "параметры."
 
 #. Tag: title
-#: boot-installer.xml:1306
+#: boot-installer.xml:1312
 #, no-c-format
 msgid "Installing using a Serial Console"
 msgstr "Установка с консоли на последовательном порту"
 
 #. Tag: para
-#: boot-installer.xml:1308
+#: boot-installer.xml:1314
 #, no-c-format
 msgid ""
 "You may choose to perform an install using a monitor and keyboard or using a "
@@ -1956,7 +1961,7 @@ msgstr ""
 "меню."
 
 #. Tag: para
-#: boot-installer.xml:1319
+#: boot-installer.xml:1325
 #, no-c-format
 msgid ""
 "In most circumstances, you will want the installer to use the same baud rate "
@@ -1970,7 +1975,7 @@ msgstr ""
 "shell."
 
 #. Tag: para
-#: boot-installer.xml:1326
+#: boot-installer.xml:1332
 #, no-c-format
 msgid ""
 "If there is not an option available that is configured for the serial device "
@@ -1986,7 +1991,7 @@ msgstr ""
 "command> в текстовом окне с приглашением <classname>Boot:</classname>."
 
 #. Tag: para
-#: boot-installer.xml:1337
+#: boot-installer.xml:1343
 #, no-c-format
 msgid ""
 "Most IA-64 boxes ship with a default console setting of 9600 baud. This "
@@ -2004,7 +2009,7 @@ msgstr ""
 "инструкции по запуску программы установки в текстовом режиме."
 
 #. Tag: para
-#: boot-installer.xml:1346
+#: boot-installer.xml:1352
 #, no-c-format
 msgid ""
 "If you select the wrong console type, you will be able to select the kernel "
@@ -2017,13 +2022,13 @@ msgstr ""
 "невозможно работать и потребуется перезапуск перед началом установки."
 
 #. Tag: title
-#: boot-installer.xml:1355
+#: boot-installer.xml:1361
 #, no-c-format
 msgid "Selecting the Boot Kernel and Options"
 msgstr "Выбор загружаемого ядра и параметров"
 
 #. Tag: para
-#: boot-installer.xml:1357
+#: boot-installer.xml:1363
 #, no-c-format
 msgid ""
 "The boot loader will display a form with a menu list and a text window with "
@@ -2043,7 +2048,7 @@ msgstr ""
 "об общих параметрах командной строки."
 
 #. Tag: para
-#: boot-installer.xml:1369
+#: boot-installer.xml:1375
 #, no-c-format
 msgid ""
 "Consult the <classname>General</classname> help screen for the description "
@@ -2066,7 +2071,7 @@ msgstr ""
 "системе. В следующих двух шагах выбирается и запускается установка:"
 
 #. Tag: para
-#: boot-installer.xml:1387
+#: boot-installer.xml:1393
 #, no-c-format
 msgid ""
 "Select the kernel version and installation mode most appropriate to your "
@@ -2076,7 +2081,7 @@ msgstr ""
 "ядра и режим установки."
 
 #. Tag: para
-#: boot-installer.xml:1392
+#: boot-installer.xml:1398
 #, no-c-format
 msgid ""
 "Enter any boot parameters by typing at the keyboard. The text will be "
@@ -2088,7 +2093,7 @@ msgstr ""
 "на последовательном порту)."
 
 #. Tag: para
-#: boot-installer.xml:1399
+#: boot-installer.xml:1405
 #, no-c-format
 msgid ""
 "Press <command>ENTER</command>. This will load and start the kernel. The "
@@ -2100,7 +2105,7 @@ msgstr ""
 "установки Debian."
 
 #. Tag: para
-#: boot-installer.xml:1408
+#: boot-installer.xml:1414
 #, no-c-format
 msgid ""
 "Proceed to the next chapter to continue the installation where you will set "
@@ -2110,7 +2115,7 @@ msgstr ""
 "настроите язык, сеть и дисковые разделы."
 
 #. Tag: para
-#: boot-installer.xml:1419
+#: boot-installer.xml:1425
 #, no-c-format
 msgid ""
 "Booting an IA64 system from the network is similar to a CD boot. The only "
@@ -2127,7 +2132,7 @@ msgstr ""
 "того что пакеты базовой установки будут получены по сети, а не с привода CD."
 
 #. Tag: para
-#: boot-installer.xml:1453
+#: boot-installer.xml:1459
 #, no-c-format
 msgid ""
 "Network booting an ia64 system requires two architecture-specific actions. "
@@ -2141,13 +2146,13 @@ msgstr ""
 "менеджере загрузки EFI, чтобы включить загрузку по сети."
 
 #. Tag: title
-#: boot-installer.xml:1464
+#: boot-installer.xml:1470
 #, no-c-format
 msgid "Configuring the Server"
 msgstr "Настройка сервера"
 
 #. Tag: para
-#: boot-installer.xml:1465
+#: boot-installer.xml:1471
 #, no-c-format
 msgid ""
 "A suitable TFTP entry for network booting an ia64 system looks something "
@@ -2171,7 +2176,7 @@ msgstr ""
 "<command>elilo.efi</command> на клиенте."
 
 #. Tag: para
-#: boot-installer.xml:1475
+#: boot-installer.xml:1481
 #, no-c-format
 msgid ""
 "Extract the <filename>netboot.tar.gz</filename> file into the directory used "
@@ -2187,7 +2192,7 @@ msgstr ""
 "файлы для системы IA-64."
 
 #. Tag: screen
-#: boot-installer.xml:1485
+#: boot-installer.xml:1491
 #, no-c-format
 msgid ""
 "# cd /var/lib/tftp\n"
@@ -2205,7 +2210,7 @@ msgstr ""
 "[...]"
 
 #. Tag: para
-#: boot-installer.xml:1485
+#: boot-installer.xml:1491
 #, no-c-format
 msgid ""
 "The <filename>netboot.tar.gz</filename> contains an <filename>elilo.conf</"
@@ -2226,13 +2231,13 @@ msgstr ""
 "Подробней смотрите документацию в пакете <classname>elilo</classname>."
 
 #. Tag: title
-#: boot-installer.xml:1502
+#: boot-installer.xml:1508
 #, no-c-format
 msgid "Configuring the Client"
 msgstr "Настройка клиента"
 
 #. Tag: para
-#: boot-installer.xml:1503
+#: boot-installer.xml:1509
 #, no-c-format
 msgid ""
 "To configure the client to support TFTP booting, start by booting to EFI and "
@@ -2262,7 +2267,7 @@ msgstr ""
 "<filename>elilo.efi</filename> с сервера."
 
 #. Tag: para
-#: boot-installer.xml:1535
+#: boot-installer.xml:1541
 #, no-c-format
 msgid ""
 "The boot loader will display its prompt after it has downloaded and "
@@ -2277,7 +2282,7 @@ msgstr ""
 "полностью установится из сети, запустится программа установки Debian."
 
 #. Tag: para
-#: boot-installer.xml:1544
+#: boot-installer.xml:1550
 #, no-c-format
 msgid ""
 "Proceed to the next chapter to continue the installation where you will set "
@@ -2287,13 +2292,13 @@ msgstr ""
 "узнаете как настроить язык, сеть и дисковые разделы."
 
 #. Tag: title
-#: boot-installer.xml:1557
+#: boot-installer.xml:1563
 #, no-c-format
 msgid "Choosing an Installation Method"
 msgstr "Выбор способа установки"
 
 #. Tag: para
-#: boot-installer.xml:1559
+#: boot-installer.xml:1565
 #, no-c-format
 msgid ""
 "Some &arch-title; subarchs have the option of booting using either a 2.4.x "
@@ -2309,7 +2314,7 @@ msgstr ""
 "требует ramdisk фиксированного размера, а 2.4.x использует tmpfs."
 
 #. Tag: para
-#: boot-installer.xml:1567
+#: boot-installer.xml:1573
 #, no-c-format
 msgid ""
 "If you are using a 2.2.x linux kernel, then you must make sure you are using "
@@ -2325,7 +2330,7 @@ msgstr ""
 "использоватьinitrd22.gz ramdisk из соответствующего каталога."
 
 #. Tag: para
-#: boot-installer.xml:1575
+#: boot-installer.xml:1581
 #, no-c-format
 msgid ""
 "Make sure <userinput>root=/dev/ram</userinput> is one of your kernel "
@@ -2335,7 +2340,7 @@ msgstr ""
 "ram</userinput>."
 
 #. Tag: para
-#: boot-installer.xml:1580
+#: boot-installer.xml:1586
 #, no-c-format
 msgid ""
 "If you're having trouble, check <ulink url=\"&url-m68k-cts-faq;\">cts's "
@@ -2345,13 +2350,13 @@ msgstr ""
 "\">cts's &arch-title; debian-installer FAQ</ulink>."
 
 #. Tag: title
-#: boot-installer.xml:1597
+#: boot-installer.xml:1603
 #, no-c-format
 msgid "Amiga"
 msgstr "Amiga"
 
 #. Tag: para
-#: boot-installer.xml:1598
+#: boot-installer.xml:1604
 #, no-c-format
 msgid ""
 "The only method of installation available to amiga is the hard drive (see "
@@ -2363,7 +2368,7 @@ msgstr ""
 "диска загрузиться не удастся.</emphasis>"
 
 #. Tag: para
-#: boot-installer.xml:1604
+#: boot-installer.xml:1610
 #, no-c-format
 msgid ""
 "Amiga does not currently work with bogl, so if you are seeing bogl errors, "
@@ -2375,13 +2380,13 @@ msgstr ""
 "userinput>."
 
 #. Tag: title
-#: boot-installer.xml:1613
+#: boot-installer.xml:1619
 #, no-c-format
 msgid "Atari"
 msgstr "Atari"
 
 #. Tag: para
-#: boot-installer.xml:1614
+#: boot-installer.xml:1620
 #, no-c-format
 msgid ""
 "The installer for atari may be started from either the hard drive (see <xref "
@@ -2394,7 +2399,7 @@ msgstr ""
 "загрузиться не удастся.</emphasis>"
 
 #. Tag: para
-#: boot-installer.xml:1621
+#: boot-installer.xml:1627
 #, no-c-format
 msgid ""
 "Atari does not currently work with bogl, so if you are seeing bogl errors, "
@@ -2406,13 +2411,13 @@ msgstr ""
 "userinput>."
 
 #. Tag: title
-#: boot-installer.xml:1630
+#: boot-installer.xml:1636
 #, no-c-format
 msgid "BVME6000"
 msgstr "BVME6000"
 
 #. Tag: para
-#: boot-installer.xml:1631
+#: boot-installer.xml:1637
 #, no-c-format
 msgid ""
 "The installer for BVME6000 may be started from a cdrom (see <xref linkend="
@@ -2425,13 +2430,13 @@ msgstr ""
 "tftp\"/>)."
 
 #. Tag: title
-#: boot-installer.xml:1641
+#: boot-installer.xml:1647
 #, no-c-format
 msgid "Macintosh"
 msgstr "Macintosh"
 
 #. Tag: para
-#: boot-installer.xml:1642
+#: boot-installer.xml:1648
 #, no-c-format
 msgid ""
 "The only method of installation available to mac is from the hard drive (see "
@@ -2443,7 +2448,7 @@ msgstr ""
 "загрузиться не удастся.</emphasis> Для mac нет работоспособного ядра 2.4.x."
 
 #. Tag: para
-#: boot-installer.xml:1649
+#: boot-installer.xml:1655
 #, no-c-format
 msgid ""
 "If your hardware uses a 53c9x-based scsi bus, then you may need to include "
@@ -2457,13 +2462,13 @@ msgstr ""
 "шинами, например Quadra 950, нужно указать <userinput>mac53c9x=2</userinput>."
 
 #. Tag: title
-#: boot-installer.xml:1659
+#: boot-installer.xml:1665
 #, no-c-format
 msgid "MVME147 and MVME16x"
 msgstr "MVME147 и MVME16x"
 
 #. Tag: para
-#: boot-installer.xml:1660
+#: boot-installer.xml:1666
 #, no-c-format
 msgid ""
 "The installer for MVME147 and MVME16x may be started from either floppies "
@@ -2477,13 +2482,13 @@ msgstr ""
 "загрузиться не удастся.</emphasis>"
 
 #. Tag: title
-#: boot-installer.xml:1670
+#: boot-installer.xml:1676
 #, no-c-format
 msgid "Q40/Q60"
 msgstr "Q40/Q60"
 
 #. Tag: para
-#: boot-installer.xml:1671
+#: boot-installer.xml:1677
 #, no-c-format
 msgid ""
 "The only method of installation available to Q40/Q60 is from the hard drive "
@@ -2495,14 +2500,14 @@ msgstr ""
 "диска загрузиться не удастся.</emphasis>"
 
 #. Tag: title
-#: boot-installer.xml:1682
+#: boot-installer.xml:1688
 #, no-c-format
 msgid "Booting from a Hard Disk"
 msgstr "Загрузка с жёсткого диска"
 
 # index.docbook:1664, index.docbook:2162
 #. Tag: para
-#: boot-installer.xml:1688 boot-installer.xml:2194
+#: boot-installer.xml:1694 boot-installer.xml:2200
 #, no-c-format
 msgid ""
 "Booting from an existing operating system is often a convenient option; for "
@@ -2513,7 +2518,7 @@ msgstr ""
 
 # index.docbook:1670, index.docbook:2168
 #. Tag: para
-#: boot-installer.xml:1694 boot-installer.xml:2200
+#: boot-installer.xml:1700 boot-installer.xml:2206
 #, no-c-format
 msgid ""
 "To boot the installer from hard disk, you will have already completed "
@@ -2525,7 +2530,7 @@ msgstr ""
 "linkend=\"boot-drive-files\"/>."
 
 #. Tag: para
-#: boot-installer.xml:1703
+#: boot-installer.xml:1709
 #, no-c-format
 msgid ""
 "At least six different ramdisks may be used to boot from the hard drive, "
@@ -2539,7 +2544,7 @@ msgstr ""
 "&architecture;/current/images/MANIFEST\">MANIFEST</ulink>)."
 
 #. Tag: para
-#: boot-installer.xml:1711
+#: boot-installer.xml:1717
 #, no-c-format
 msgid ""
 "The three different types of ramdisks are <filename>cdrom</filename>, "
@@ -2559,13 +2564,13 @@ msgstr ""
 "пакетов."
 
 #. Tag: title
-#: boot-installer.xml:1732
+#: boot-installer.xml:1738
 #, no-c-format
 msgid "Booting from AmigaOS"
 msgstr "Загрузка из AmigaOS"
 
 #. Tag: para
-#: boot-installer.xml:1733
+#: boot-installer.xml:1739
 #, no-c-format
 msgid ""
 "In the <command>Workbench</command>, start the Linux installation process by "
@@ -2577,7 +2582,7 @@ msgstr ""
 "<filename>debian</filename>."
 
 #. Tag: para
-#: boot-installer.xml:1739
+#: boot-installer.xml:1745
 #, no-c-format
 msgid ""
 "You may have to press the &enterkey; key twice after the Amiga installer "
@@ -2599,13 +2604,13 @@ msgstr ""
 "\"d-i-intro\"/>."
 
 #. Tag: title
-#: boot-installer.xml:1754
+#: boot-installer.xml:1760
 #, no-c-format
 msgid "Booting from Atari TOS"
 msgstr "Загрузка из Atari TOS"
 
 #. Tag: para
-#: boot-installer.xml:1755
+#: boot-installer.xml:1761
 #, no-c-format
 msgid ""
 "At the GEM desktop, start the Linux installation process by double-clicking "
@@ -2619,7 +2624,7 @@ msgstr ""
 "параметров."
 
 #. Tag: para
-#: boot-installer.xml:1762
+#: boot-installer.xml:1768
 #, no-c-format
 msgid ""
 "You may have to press the &enterkey; key after the Atari bootstrap program "
@@ -2640,13 +2645,13 @@ msgstr ""
 "\"d-i-intro\"/>."
 
 #. Tag: title
-#: boot-installer.xml:1777
+#: boot-installer.xml:1783
 #, no-c-format
 msgid "Booting from MacOS"
 msgstr "Загрузка из MacOS"
 
 #. Tag: para
-#: boot-installer.xml:1778
+#: boot-installer.xml:1784
 #, no-c-format
 msgid ""
 "You must retain the original Mac system and boot from it. It is "
@@ -2666,7 +2671,7 @@ msgstr ""
 "вызовет проблемы запуска ядра linux."
 
 #. Tag: para
-#: boot-installer.xml:1789
+#: boot-installer.xml:1795
 #, no-c-format
 msgid ""
 "Macs require the <command>Penguin</command> bootloader. If you do not have "
@@ -2681,7 +2686,7 @@ msgstr ""
 "скопировать этот образ на дискету."
 
 #. Tag: para
-#: boot-installer.xml:1798
+#: boot-installer.xml:1804
 #, no-c-format
 msgid ""
 "At the MacOS desktop, start the Linux installation process by double-"
@@ -2705,7 +2710,7 @@ msgstr ""
 "диалогового окна выбора файлов."
 
 #. Tag: para
-#: boot-installer.xml:1813
+#: boot-installer.xml:1819
 #, no-c-format
 msgid ""
 "To set the boot parameters in Penguin, choose <guimenu>File</guimenu> -&gt; "
@@ -2723,7 +2728,7 @@ msgstr ""
 "guimenuitem>."
 
 #. Tag: para
-#: boot-installer.xml:1822
+#: boot-installer.xml:1828
 #, no-c-format
 msgid ""
 "Close the <guilabel>Settings</guilabel> dialog, save the settings and start "
@@ -2735,7 +2740,7 @@ msgstr ""
 "guimenuitem>из меню <guimenu>File</guimenu>."
 
 #. Tag: para
-#: boot-installer.xml:1829
+#: boot-installer.xml:1835
 #, no-c-format
 msgid ""
 "The <command>Penguin</command> booter will output some debugging information "
@@ -2755,19 +2760,19 @@ msgstr ""
 "\"d-i-intro\"/>."
 
 #. Tag: title
-#: boot-installer.xml:1844
+#: boot-installer.xml:1850
 #, no-c-format
 msgid "Booting from Q40/Q60"
 msgstr "Загрузка из Q40/Q60"
 
 #. Tag: para
-#: boot-installer.xml:1846
+#: boot-installer.xml:1852
 #, no-c-format
 msgid "FIXME"
 msgstr "FIXME"
 
 #. Tag: para
-#: boot-installer.xml:1850
+#: boot-installer.xml:1856
 #, no-c-format
 msgid ""
 "The installation program should start automatically, so you can continue "
@@ -2777,7 +2782,7 @@ msgstr ""
 "читать с <xref linkend=\"d-i-intro\"/>."
 
 #. Tag: para
-#: boot-installer.xml:1862
+#: boot-installer.xml:1868
 #, no-c-format
 msgid ""
 "Currently, the only &arch-title; subarchitecture that supports CD-ROM "
@@ -2787,7 +2792,7 @@ msgstr ""
 "поддерживающей загрузку с CD-ROM является BVME6000."
 
 #. Tag: para
-#: boot-installer.xml:1934
+#: boot-installer.xml:1940
 #, no-c-format
 msgid ""
 "After booting the VMEbus systems you will be presented with the LILO "
@@ -2801,25 +2806,25 @@ msgstr ""
 "введите одно из:"
 
 #. Tag: para
-#: boot-installer.xml:1945
+#: boot-installer.xml:1951
 #, no-c-format
 msgid "type <screen>i6000 &enterkey;</screen> to install a BVME4000/6000"
 msgstr "<screen>i6000 &enterkey;</screen> для установки на BVME4000/6000"
 
 #. Tag: para
-#: boot-installer.xml:1950
+#: boot-installer.xml:1956
 #, no-c-format
 msgid "type <screen>i162 &enterkey;</screen> to install an MVME162"
 msgstr "<screen>i162 &enterkey;</screen> для установки на MVME162"
 
 #. Tag: para
-#: boot-installer.xml:1955
+#: boot-installer.xml:1961
 #, no-c-format
 msgid "type <screen>i167 &enterkey;</screen> to install an MVME166/167"
 msgstr "<screen>i167 &enterkey;</screen> для установки на MVME166/167"
 
 #. Tag: para
-#: boot-installer.xml:1962
+#: boot-installer.xml:1968
 #, no-c-format
 msgid ""
 "You may additionally append the string <screen>TERM=vt100</screen> to use "
@@ -2830,7 +2835,7 @@ msgstr ""
 "&enterkey;</screen>."
 
 #. Tag: para
-#: boot-installer.xml:1974
+#: boot-installer.xml:1980
 #, no-c-format
 msgid ""
 "For most &arch-title; architectures, booting from a local filesystem is the "
@@ -2840,7 +2845,7 @@ msgstr ""
 "файловой системы."
 
 #. Tag: para
-#: boot-installer.xml:1979
+#: boot-installer.xml:1985
 #, no-c-format
 msgid ""
 "Booting from the boot floppy is supported only for Atari and VME (with a "
@@ -2851,13 +2856,13 @@ msgstr ""
 
 # index.docbook:1972, index.docbook:2015
 #. Tag: title
-#: boot-installer.xml:1996 boot-installer.xml:2043
+#: boot-installer.xml:2002 boot-installer.xml:2049
 #, no-c-format
 msgid "SGI Indys TFTP Booting"
 msgstr "Загрузка SGI Indys с сервера TFTP"
 
 #. Tag: para
-#: boot-installer.xml:1997
+#: boot-installer.xml:2003
 #, no-c-format
 msgid ""
 "After entering the command monitor use <informalexample><screen>\n"
@@ -2880,13 +2885,13 @@ msgstr ""
 
 # index.docbook:1988, index.docbook:2035
 #. Tag: title
-#: boot-installer.xml:2016 boot-installer.xml:2065
+#: boot-installer.xml:2022 boot-installer.xml:2071
 #, no-c-format
 msgid "Broadcom BCM91250A TFTP Booting"
 msgstr "Загрузка Broadcom BCM91250A с сервера TFTP"
 
 #. Tag: para
-#: boot-installer.xml:2017
+#: boot-installer.xml:2023
 #, no-c-format
 msgid ""
 "On the Broadcom BCM91250A evaluation board, you have to load the SiByl boot "
@@ -2918,13 +2923,13 @@ msgstr ""
 
 # index.docbook:2012, index.docbook:2491
 #. Tag: title
-#: boot-installer.xml:2040 boot-installer.xml:2574
+#: boot-installer.xml:2046 boot-installer.xml:2580
 #, no-c-format
 msgid "Boot Parameters"
 msgstr "Параметры загрузки"
 
 #. Tag: para
-#: boot-installer.xml:2044
+#: boot-installer.xml:2050
 #, no-c-format
 msgid ""
 "On SGI Indys you can append boot parameters to the <command>bootp():</"
@@ -2934,7 +2939,7 @@ msgstr ""
 "command> в мониторе команд."
 
 #. Tag: para
-#: boot-installer.xml:2049
+#: boot-installer.xml:2055
 #, no-c-format
 msgid ""
 "Following the <command>bootp():</command> command you can give the path and "
@@ -2952,13 +2957,13 @@ msgstr ""
 "через <command>append</command>:"
 
 #. Tag: screen
-#: boot-installer.xml:2059
+#: boot-installer.xml:2065
 #, no-c-format
 msgid "bootp(): append=\"root=/dev/sda1\""
 msgstr "bootp(): append=\"root=/dev/sda1\""
 
 #. Tag: para
-#: boot-installer.xml:2066
+#: boot-installer.xml:2072
 #, no-c-format
 msgid ""
 "You cannot pass any boot parameters directly from the CFE prompt. Instead, "
@@ -2972,13 +2977,13 @@ msgstr ""
 "replaceable>."
 
 #. Tag: title
-#: boot-installer.xml:2083
+#: boot-installer.xml:2089
 #, no-c-format
 msgid "s390 Limitations"
 msgstr "Ограничения s390"
 
 #. Tag: para
-#: boot-installer.xml:2084
+#: boot-installer.xml:2090
 #, no-c-format
 msgid ""
 "In order to run the installation system a working network setup and ssh "
@@ -2988,7 +2993,7 @@ msgstr ""
 "и ssh-сессия."
 
 #. Tag: para
-#: boot-installer.xml:2089
+#: boot-installer.xml:2095
 #, no-c-format
 msgid ""
 "The booting process starts with a network setup that prompts you for several "
@@ -3001,13 +3006,13 @@ msgstr ""
 
 # index.docbook:2012, index.docbook:2491
 #. Tag: title
-#: boot-installer.xml:2100
+#: boot-installer.xml:2106
 #, no-c-format
 msgid "s390 Boot Parameters"
 msgstr "Параметры загрузки s390"
 
 #. Tag: para
-#: boot-installer.xml:2101
+#: boot-installer.xml:2107
 #, no-c-format
 msgid ""
 "On S/390 you can append boot parameters in the parm file. This file can "
@@ -3021,7 +3026,7 @@ msgstr ""
 "Drivers and Installation Commands</ulink>."
 
 #. Tag: para
-#: boot-installer.xml:2155
+#: boot-installer.xml:2161
 #, no-c-format
 msgid ""
 "Currently, the only &arch-title; subarchitectures that support CD-ROM "
@@ -3037,7 +3042,7 @@ msgstr ""
 "вместе во время загрузки для того, чтобы загрузиться с компакт-диска."
 
 #. Tag: para
-#: boot-installer.xml:2164
+#: boot-installer.xml:2170
 #, no-c-format
 msgid ""
 "OldWorld PowerMacs will not boot a Debian CD, because OldWorld computers "
@@ -3054,7 +3059,7 @@ msgstr ""
 "диск с нужными файлами."
 
 #. Tag: para
-#: boot-installer.xml:2173
+#: boot-installer.xml:2179
 #, no-c-format
 msgid ""
 "If your system doesn't boot directly from CD-ROM, you can still use the CD-"
@@ -3071,38 +3076,38 @@ msgstr ""
 "command> на компакт-диске в подсказке OF, такой как"
 
 #. Tag: screen
-#: boot-installer.xml:2182
+#: boot-installer.xml:2188
 #, no-c-format
 msgid "0 &gt; boot cd:,\\install\\yaboot"
 msgstr "0 &gt; boot cd:,\\install\\yaboot"
 
 #. Tag: title
-#: boot-installer.xml:2188
+#: boot-installer.xml:2194
 #, no-c-format
 msgid "Booting from Hard Disk"
 msgstr "Загрузка с жёсткого диска"
 
 # index.docbook:807, index.docbook:1949, index.docbook:2282, index.docbook:2442
 #. Tag: title
-#: boot-installer.xml:2209
+#: boot-installer.xml:2215
 #, no-c-format
 msgid "Booting CHRP from OpenFirmware"
 msgstr "Загрузка CHRP из OpenFirmware"
 
 #. Tag: emphasis
-#: boot-installer.xml:2213
+#: boot-installer.xml:2219
 #, no-c-format
 msgid "Not yet written."
 msgstr "Ещё не написано."
 
 #. Tag: title
-#: boot-installer.xml:2218
+#: boot-installer.xml:2224
 #, no-c-format
 msgid "Booting OldWorld PowerMacs from MacOS"
 msgstr "Загрузка OldWorld PowerMac из MacOS"
 
 #. Tag: para
-#: boot-installer.xml:2219
+#: boot-installer.xml:2225
 #, no-c-format
 msgid ""
 "If you set up BootX in <xref linkend=\"files-oldworld\"/>, you can use it to "
@@ -3125,13 +3130,13 @@ msgstr ""
 "установки."
 
 #. Tag: title
-#: boot-installer.xml:2237
+#: boot-installer.xml:2243
 #, no-c-format
 msgid "Booting NewWorld Macs from OpenFirmware"
 msgstr "Загрузка NewWorld Mac из OpenFirmware"
 
 #. Tag: para
-#: boot-installer.xml:2238
+#: boot-installer.xml:2244
 #, no-c-format
 msgid ""
 "You will have already placed the <filename>vmlinux</filename>, "
@@ -3179,14 +3184,14 @@ msgstr ""
 "сработает. После должна запуститься программа установки Debian."
 
 #. Tag: para
-#: boot-installer.xml:2274
+#: boot-installer.xml:2280
 #, no-c-format
 msgid "Currently, NewWorld PowerMac systems are known to support USB booting."
 msgstr ""
 "В настоящий момент системы NewWorld PowerMac можно загружать с USB устройств."
 
 #. Tag: para
-#: boot-installer.xml:2280
+#: boot-installer.xml:2286
 #, no-c-format
 msgid ""
 "Make sure you have prepared everything from <xref linkend=\"boot-usb-files\"/"
@@ -3207,7 +3212,7 @@ msgstr ""
 "openfirmware\"/>)."
 
 #. Tag: para
-#: boot-installer.xml:2292
+#: boot-installer.xml:2298
 #, no-c-format
 msgid ""
 "You will need to work out where the USB storage device appears in the device "
@@ -3230,7 +3235,7 @@ msgstr ""
 "pci@f2000000/usb@1b,1/hub@1/disk@1</filename>."
 
 #. Tag: para
-#: boot-installer.xml:2304
+#: boot-installer.xml:2310
 #, no-c-format
 msgid ""
 "Having worked out the device path, use a command like this to boot the "
@@ -3255,7 +3260,7 @@ msgstr ""
 "из каталога ранее установленного с помощью <command>hattrib -b</command>."
 
 #. Tag: para
-#: boot-installer.xml:2318
+#: boot-installer.xml:2324
 #, no-c-format
 msgid ""
 "The system should now boot up, and you should be presented with the "
@@ -3267,7 +3272,7 @@ msgstr ""
 "просто нажать &enterkey;."
 
 #. Tag: para
-#: boot-installer.xml:2324
+#: boot-installer.xml:2330
 #, no-c-format
 msgid ""
 "This boot method is new, and may be difficult to get to work on some "
@@ -3279,7 +3284,7 @@ msgstr ""
 "отчёт об установке, как описано в <xref linkend=\"submit-bug\"/>."
 
 #. Tag: para
-#: boot-installer.xml:2357
+#: boot-installer.xml:2363
 #, no-c-format
 msgid "Currently, PReP and New World PowerMac systems support netbooting."
 msgstr ""
@@ -3287,7 +3292,7 @@ msgstr ""
 "загрузка по сети."
 
 #. Tag: para
-#: boot-installer.xml:2361
+#: boot-installer.xml:2367
 #, no-c-format
 msgid ""
 "On machines with Open Firmware, such as NewWorld Power Macs, enter the boot "
@@ -3306,7 +3311,7 @@ msgstr ""
 "userinput>."
 
 #. Tag: para
-#: boot-installer.xml:2376
+#: boot-installer.xml:2382
 #, no-c-format
 msgid ""
 "Booting from floppies is supported for &arch-title;, although it is "
@@ -3319,7 +3324,7 @@ msgstr ""
 "а с подключённых по USB приводов гибких дисков загрузка не поддерживается."
 
 #. Tag: para
-#: boot-installer.xml:2388
+#: boot-installer.xml:2394
 #, no-c-format
 msgid ""
 "To boot from the <filename>boot-floppy-hfs.img</filename> floppy, place it "
@@ -3330,7 +3335,7 @@ msgstr ""
 "вставьте её в дисковод после выключения системы и перед включением питания."
 
 #. Tag: para
-#: boot-installer.xml:2394
+#: boot-installer.xml:2400
 #, no-c-format
 msgid ""
 "For those not familiar with Macintosh floppy operations: a floppy placed in "
@@ -3344,7 +3349,7 @@ msgstr ""
 "проверит на заружаемость разделы жёсткого диска."
 
 #. Tag: para
-#: boot-installer.xml:2401
+#: boot-installer.xml:2407
 #, no-c-format
 msgid ""
 "After booting, the <filename>root.bin</filename> floppy is requested. Insert "
@@ -3357,13 +3362,13 @@ msgstr ""
 
 # index.docbook:2012, index.docbook:2491
 #. Tag: title
-#: boot-installer.xml:2412
+#: boot-installer.xml:2418
 #, no-c-format
 msgid "PowerPC Boot Parameters"
 msgstr "Параметры загрузки PowerPC"
 
 #. Tag: para
-#: boot-installer.xml:2413
+#: boot-installer.xml:2419
 #, no-c-format
 msgid ""
 "Many older Apple monitors used a 640x480 67Hz mode. If your video appears "
@@ -3379,7 +3384,7 @@ msgstr ""
 "нужно использовать параметр <userinput>video=aty128fb:vmode:6</userinput>."
 
 #. Tag: para
-#: boot-installer.xml:2453
+#: boot-installer.xml:2459
 #, no-c-format
 msgid ""
 "On machines with OpenBoot, simply enter the boot monitor on the machine "
@@ -3400,7 +3405,7 @@ msgstr ""
 "поддержка BOOTP и DHCP."
 
 #. Tag: para
-#: boot-installer.xml:2509
+#: boot-installer.xml:2515
 #, no-c-format
 msgid ""
 "Most OpenBoot versions support the <userinput>boot cdrom</userinput> command "
@@ -3418,7 +3423,7 @@ msgstr ""
 "системах Sun4m (например, Sparc 10s и Sparc 20s) иногда возникают проблемы."
 
 #. Tag: para
-#: boot-installer.xml:2524
+#: boot-installer.xml:2530
 #, no-c-format
 msgid ""
 "To boot from floppy on a Sparc, use <informalexample><screen>\n"
@@ -3440,7 +3445,7 @@ msgstr ""
 "поддерживается."
 
 #. Tag: para
-#: boot-installer.xml:2536
+#: boot-installer.xml:2542
 #, no-c-format
 msgid ""
 "Several Sparcs (e.g. Ultra 10) have an OBP bug that prevents them from "
@@ -3454,7 +3459,7 @@ msgstr ""
 "sunsolve.sun.com\"></ulink>."
 
 #. Tag: para
-#: boot-installer.xml:2543
+#: boot-installer.xml:2549
 #, no-c-format
 msgid ""
 "If you are booting from the floppy, and you see messages such as "
@@ -3472,13 +3477,13 @@ msgstr ""
 "поддерживается на этой машине."
 
 #. Tag: title
-#: boot-installer.xml:2555
+#: boot-installer.xml:2561
 #, no-c-format
 msgid "IDPROM Messages"
 msgstr "Сообщения IDPROM"
 
 #. Tag: para
-#: boot-installer.xml:2556
+#: boot-installer.xml:2562
 #, no-c-format
 msgid ""
 "If you cannot boot because you get messages about a problem with ``IDPROM'', "
@@ -3492,7 +3497,7 @@ msgstr ""
 "\"&url-sun-nvram-faq;\">Sun NVRAM FAQ</ulink>."
 
 #. Tag: para
-#: boot-installer.xml:2575
+#: boot-installer.xml:2581
 #, no-c-format
 msgid ""
 "Boot parameters are Linux kernel parameters which are generally used to make "
@@ -3506,7 +3511,7 @@ msgstr ""
 "автоматически. Однако, иногда вы должны немного помочь ядру."
 
 #. Tag: para
-#: boot-installer.xml:2582
+#: boot-installer.xml:2588
 #, no-c-format
 msgid ""
 "If this is the first time you're booting the system, try the default boot "
@@ -3521,7 +3526,7 @@ msgstr ""
 "определить аппаратуру вашего компьютера."
 
 #. Tag: para
-#: boot-installer.xml:2589
+#: boot-installer.xml:2595
 #, no-c-format
 msgid ""
 "Information on many boot parameters can be found in the <ulink url=\"http://"
@@ -3538,7 +3543,7 @@ msgstr ""
 "troubleshooting\"/>."
 
 #. Tag: para
-#: boot-installer.xml:2598
+#: boot-installer.xml:2604
 #, no-c-format
 msgid ""
 "When the kernel boots, a message <informalexample><screen>\n"
@@ -3567,7 +3572,7 @@ msgstr ""
 "означают 64МБ ОЗУ."
 
 #. Tag: para
-#: boot-installer.xml:2614
+#: boot-installer.xml:2620
 #, no-c-format
 msgid ""
 "If you are booting with a serial console, generally the kernel will "
@@ -3587,7 +3592,7 @@ msgstr ""
 "последовательного порта, обычно <filename>ttyS0</filename>."
 
 #. Tag: para
-#: boot-installer.xml:2627
+#: boot-installer.xml:2633
 #, no-c-format
 msgid ""
 "For &arch-title; the serial devices are <filename>ttya</filename> or "
@@ -3601,13 +3606,13 @@ msgstr ""
 "<filename>ttya</filename>."
 
 #. Tag: title
-#: boot-installer.xml:2638
+#: boot-installer.xml:2644
 #, no-c-format
 msgid "Debian Installer Parameters"
 msgstr "Параметры программы установки Debian"
 
 #. Tag: para
-#: boot-installer.xml:2639
+#: boot-installer.xml:2645
 #, no-c-format
 msgid ""
 "The installation system recognizes a few additional boot "
@@ -3625,19 +3630,19 @@ msgstr ""
 "остановятся с ошибкой </para> </footnote>, что может быть полезно."
 
 #. Tag: term
-#: boot-installer.xml:2658
+#: boot-installer.xml:2664
 #, no-c-format
 msgid "debconf/priority"
 msgstr "debconf/priority"
 
 #. Tag: para
-#: boot-installer.xml:2659
+#: boot-installer.xml:2665
 #, no-c-format
 msgid "This parameter sets the lowest priority of messages to be displayed."
 msgstr "Этот параметр задаёт низший приоритет отображаемых сообщений."
 
 #. Tag: para
-#: boot-installer.xml:2663
+#: boot-installer.xml:2669
 #, no-c-format
 msgid ""
 "The default installation uses <userinput>debconf/priority=high</userinput>. "
@@ -3652,7 +3657,7 @@ msgstr ""
 "приоритета."
 
 #. Tag: para
-#: boot-installer.xml:2670
+#: boot-installer.xml:2676
 #, no-c-format
 msgid ""
 "If you add <userinput>debconf/priority=medium</userinput> as boot parameter, "
@@ -3672,13 +3677,13 @@ msgstr ""
 "критические сообщения и попробует всё сделать правильно самостоятельно."
 
 #. Tag: term
-#: boot-installer.xml:2684
+#: boot-installer.xml:2690
 #, no-c-format
 msgid "DEBIAN_FRONTEND"
 msgstr "DEBIAN_FRONTEND"
 
 #. Tag: para
-#: boot-installer.xml:2685
+#: boot-installer.xml:2691
 #, no-c-format
 msgid ""
 "This boot parameter controls the type of user interface used for the "
@@ -3719,13 +3724,13 @@ msgstr ""
 "userinput>."
 
 #. Tag: term
-#: boot-installer.xml:2721
+#: boot-installer.xml:2727
 #, no-c-format
 msgid "BOOT_DEBUG"
 msgstr "BOOT_DEBUG"
 
 #. Tag: para
-#: boot-installer.xml:2722
+#: boot-installer.xml:2728
 #, no-c-format
 msgid ""
 "Passing this boot parameter will cause the boot to be more verbosely logged."
@@ -3734,49 +3739,49 @@ msgstr ""
 "загрузки."
 
 #. Tag: userinput
-#: boot-installer.xml:2729
+#: boot-installer.xml:2735
 #, no-c-format
 msgid "BOOT_DEBUG=0"
 msgstr "BOOT_DEBUG=0"
 
 #. Tag: para
-#: boot-installer.xml:2730
+#: boot-installer.xml:2736
 #, no-c-format
 msgid "This is the default."
 msgstr "Значение по умолчанию."
 
 #. Tag: userinput
-#: boot-installer.xml:2734
+#: boot-installer.xml:2740
 #, no-c-format
 msgid "BOOT_DEBUG=1"
 msgstr "BOOT_DEBUG=1"
 
 #. Tag: para
-#: boot-installer.xml:2735
+#: boot-installer.xml:2741
 #, no-c-format
 msgid "More verbose than usual."
 msgstr "Подробней чем обычно."
 
 #. Tag: userinput
-#: boot-installer.xml:2739
+#: boot-installer.xml:2745
 #, no-c-format
 msgid "BOOT_DEBUG=2"
 msgstr "BOOT_DEBUG=2"
 
 #. Tag: para
-#: boot-installer.xml:2740
+#: boot-installer.xml:2746
 #, no-c-format
 msgid "Lots of debugging information."
 msgstr "Много отладочной информации."
 
 #. Tag: userinput
-#: boot-installer.xml:2744
+#: boot-installer.xml:2750
 #, no-c-format
 msgid "BOOT_DEBUG=3"
 msgstr "BOOT_DEBUG=3"
 
 #. Tag: para
-#: boot-installer.xml:2745
+#: boot-installer.xml:2751
 #, no-c-format
 msgid ""
 "Shells are run at various points in the boot process to allow detailed "
@@ -3787,13 +3792,13 @@ msgstr ""
 "загрузка продолжится."
 
 #. Tag: term
-#: boot-installer.xml:2759
+#: boot-installer.xml:2765
 #, no-c-format
 msgid "INSTALL_MEDIA_DEV"
 msgstr "INSTALL_MEDIA_DEV"
 
 #. Tag: para
-#: boot-installer.xml:2760
+#: boot-installer.xml:2766
 #, no-c-format
 msgid ""
 "The value of the parameter is the path to the device to load the Debian "
@@ -3805,7 +3810,7 @@ msgstr ""
 "floppy/0</userinput>"
 
 #. Tag: para
-#: boot-installer.xml:2766
+#: boot-installer.xml:2772
 #, no-c-format
 msgid ""
 "The boot floppy, which normally scans all floppies and USB storage devices "
@@ -3817,13 +3822,13 @@ msgstr ""
 "корневую дискету только на избранном устройстве."
 
 #. Tag: term
-#: boot-installer.xml:2776
+#: boot-installer.xml:2782
 #, no-c-format
 msgid "debian-installer/framebuffer"
 msgstr "debian-installer/framebuffer"
 
 #. Tag: para
-#: boot-installer.xml:2777
+#: boot-installer.xml:2783
 #, no-c-format
 msgid ""
 "Some architectures use the kernel framebuffer to offer installation in a "
@@ -3841,7 +3846,7 @@ msgstr ""
 "начале установки."
 
 #. Tag: para
-#: boot-installer.xml:2786
+#: boot-installer.xml:2792
 #, no-c-format
 msgid ""
 "The <userinput>video=vga16:off</userinput> argument may also be used to "
@@ -3853,25 +3858,25 @@ msgstr ""
 "картой Mobile Radeon."
 
 #. Tag: para
-#: boot-installer.xml:2792
+#: boot-installer.xml:2798
 #, no-c-format
 msgid "Such problems have been reported on the Amiga 1200 and SE/30."
 msgstr "Подобные проблемы замечены на Amiga 1200 и SE/30."
 
 #. Tag: para
-#: boot-installer.xml:2796
+#: boot-installer.xml:2802
 #, no-c-format
 msgid "Such problems have been reported on hppa."
 msgstr "Подобные проблемы замечены на hppa."
 
 #. Tag: term
-#: boot-installer.xml:2804
+#: boot-installer.xml:2810
 #, no-c-format
 msgid "debian-installer/probe/usb"
 msgstr "debian-installer/probe/usb"
 
 #. Tag: para
-#: boot-installer.xml:2805
+#: boot-installer.xml:2811
 #, no-c-format
 msgid ""
 "Set to <userinput>false</userinput> to prevent probing for USB on boot, if "
@@ -3881,13 +3886,13 @@ msgstr ""
 "загрузке, если это вызывает проблемы."
 
 #. Tag: term
-#: boot-installer.xml:2814
+#: boot-installer.xml:2820
 #, no-c-format
 msgid "netcfg/disable_dhcp"
 msgstr "netcfg/disable_dhcp"
 
 #. Tag: para
-#: boot-installer.xml:2815
+#: boot-installer.xml:2821
 #, no-c-format
 msgid ""
 "By default, the &d-i; automatically probes for network configuration via "
@@ -3901,7 +3906,7 @@ msgstr ""
 "случае ошибок при работе с DHCP."
 
 #. Tag: para
-#: boot-installer.xml:2822
+#: boot-installer.xml:2828
 #, no-c-format
 msgid ""
 "If you have a DHCP server on your local network, but want to avoid it "
@@ -3915,13 +3920,13 @@ msgstr ""
 "отключить настройку сети по DHCP и ввести информацию вручную."
 
 #. Tag: term
-#: boot-installer.xml:2833
+#: boot-installer.xml:2839
 #, no-c-format
 msgid "hw-detect/start_pcmcia"
 msgstr "hw-detect/start_pcmcia"
 
 #. Tag: para
-#: boot-installer.xml:2834
+#: boot-installer.xml:2840
 #, no-c-format
 msgid ""
 "Set to <userinput>false</userinput> to prevent starting PCMCIA services, if "
@@ -3932,13 +3937,13 @@ msgstr ""
 "ноутбуков."
 
 #. Tag: term
-#: boot-installer.xml:2844
+#: boot-installer.xml:2850
 #, no-c-format
 msgid "preseed/url"
 msgstr "preseed/url"
 
 #. Tag: para
-#: boot-installer.xml:2845
+#: boot-installer.xml:2851
 #, no-c-format
 msgid ""
 "Specify the url to a preconfiguration file to download and use in automating "
@@ -3948,13 +3953,13 @@ msgstr ""
 "установки. Смотрите <xref linkend=\"automatic-install\"/>."
 
 #. Tag: term
-#: boot-installer.xml:2854
+#: boot-installer.xml:2860
 #, no-c-format
 msgid "preseed/file"
 msgstr "preseed/file"
 
 #. Tag: para
-#: boot-installer.xml:2855
+#: boot-installer.xml:2861
 #, no-c-format
 msgid ""
 "Specify the url to a preconfiguration file to load to automating the "
@@ -3964,32 +3969,32 @@ msgstr ""
 "<xref linkend=\"automatic-install\"/>."
 
 #. Tag: term
-#: boot-installer.xml:2864
+#: boot-installer.xml:2870
 #, no-c-format
 msgid "ramdisk_size"
 msgstr "ramdisk_size"
 
 #. Tag: para
-#: boot-installer.xml:2865
+#: boot-installer.xml:2871
 #, no-c-format
 msgid "If you are using a 2.2.x kernel, you may need to set &ramdisksize;."
 msgstr ""
 "Если вы используете ядро 2.2.x, может потребоваться установить &ramdisksize;."
 
 #. Tag: title
-#: boot-installer.xml:2882
+#: boot-installer.xml:2888
 #, no-c-format
 msgid "Troubleshooting the Install Process"
 msgstr "Диагностика проблем процесса установки"
 
 #. Tag: title
-#: boot-installer.xml:2887
+#: boot-installer.xml:2893
 #, no-c-format
 msgid "Floppy Disk Reliability"
 msgstr "Надёжность дискет"
 
 #. Tag: para
-#: boot-installer.xml:2889
+#: boot-installer.xml:2895
 #, no-c-format
 msgid ""
 "The biggest problem for people installing Debian for the first time seems to "
@@ -3999,7 +4004,7 @@ msgstr ""
 "впервые устанавливающих Debian."
 
 #. Tag: para
-#: boot-installer.xml:2894
+#: boot-installer.xml:2900
 #, no-c-format
 msgid ""
 "The boot floppy is the floppy with the worst problems, because it is read by "
@@ -4017,7 +4022,7 @@ msgstr ""
 "сообщений об ошибках ввода-вывода (disk I/O error)."
 
 #. Tag: para
-#: boot-installer.xml:2903
+#: boot-installer.xml:2909
 #, no-c-format
 msgid ""
 "If you are having the installation stall at a particular floppy, the first "
@@ -4034,7 +4039,7 @@ msgstr ""
 "ошибок. Иногда полезно попробовать записать дискету на другой системе."
 
 #. Tag: para
-#: boot-installer.xml:2913
+#: boot-installer.xml:2919
 #, no-c-format
 msgid ""
 "One user reports he had to write the images to floppy <emphasis>three</"
@@ -4045,7 +4050,7 @@ msgstr ""
 "emphasis> раза, прежде чем она заработала, и затем всё пошло нормально."
 
 #. Tag: para
-#: boot-installer.xml:2919
+#: boot-installer.xml:2925
 #, no-c-format
 msgid ""
 "Other users have reported that simply rebooting a few times with the same "
@@ -4057,13 +4062,13 @@ msgstr ""
 "случается из-за плохо работающих дисководов и их микропрограмм."
 
 #. Tag: title
-#: boot-installer.xml:2928
+#: boot-installer.xml:2934
 #, no-c-format
 msgid "Boot Configuration"
 msgstr "Настройка загрузки"
 
 #. Tag: para
-#: boot-installer.xml:2930
+#: boot-installer.xml:2936
 #, no-c-format
 msgid ""
 "If you have problems and the kernel hangs during the boot process, doesn't "
@@ -4076,7 +4081,7 @@ msgstr ""
 "параметры загрузки, как это обсуждается в <xref linkend=\"boot-parms\"/>."
 
 #. Tag: para
-#: boot-installer.xml:2937
+#: boot-installer.xml:2943
 #, no-c-format
 msgid ""
 "If you are booting with your own kernel instead of the one supplied with the "
@@ -4089,7 +4094,7 @@ msgstr ""
 "<userinput>CONFIG_DEVFS</userinput>."
 
 #. Tag: para
-#: boot-installer.xml:2944
+#: boot-installer.xml:2950
 #, no-c-format
 msgid ""
 "Often, problems can be solved by removing add-ons and peripherals, and then "
@@ -4102,7 +4107,7 @@ msgstr ""
 "</phrase>"
 
 #. Tag: para
-#: boot-installer.xml:2950
+#: boot-installer.xml:2956
 #, no-c-format
 msgid ""
 "If you have a large amount of memory installed in your machine, more than "
@@ -4116,13 +4121,13 @@ msgstr ""
 "&mdash; <userinput>mem=512m</userinput>."
 
 #. Tag: title
-#: boot-installer.xml:2961
+#: boot-installer.xml:2967
 #, no-c-format
 msgid "Interpreting the Kernel Startup Messages"
 msgstr "Интерпретация загрузочных сообщений ядра"
 
 #. Tag: para
-#: boot-installer.xml:2963
+#: boot-installer.xml:2969
 #, no-c-format
 msgid ""
 "During the boot sequence, you may see many messages in the form "
@@ -4158,13 +4163,13 @@ msgstr ""
 "собственное ядро (смотрите <xref linkend=\"kernel-baking\"/>)."
 
 #. Tag: title
-#: boot-installer.xml:2988
+#: boot-installer.xml:2994
 #, no-c-format
 msgid "Bug Reporter"
 msgstr "Отчёт об ошибках"
 
 #. Tag: para
-#: boot-installer.xml:2989
+#: boot-installer.xml:2995
 #, no-c-format
 msgid ""
 "If you get through the initial boot phase but cannot complete the install, "
@@ -4181,7 +4186,7 @@ msgstr ""
 "отчёту."
 
 #. Tag: para
-#: boot-installer.xml:2998
+#: boot-installer.xml:3004
 #, no-c-format
 msgid ""
 "Other pertinent installation messages may be found in <filename>/var/log/</"
@@ -4194,13 +4199,13 @@ msgstr ""
 "систему."
 
 #. Tag: title
-#: boot-installer.xml:3009
+#: boot-installer.xml:3015
 #, no-c-format
 msgid "Submitting Installation Reports"
 msgstr "Отправка отчётов об ошибках установки"
 
 #. Tag: para
-#: boot-installer.xml:3010
+#: boot-installer.xml:3016
 #, no-c-format
 msgid ""
 "If you still have problems, please submit an installation report. We also "
