@@ -60,6 +60,9 @@ TEMP=$(BASE_TMP)$(TYPE)
 # Build tree location.
 TREE=$(TEMP)/tree
 
+# CD Image tree location
+CD_IMAGE_TREE=$(TEMP)/cd_image_tree
+
 DPKGDIR=$(TREE)/var/lib/dpkg
 TMP_MNT:=$(shell pwd)/mnt
 
