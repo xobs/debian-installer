@@ -1074,9 +1074,11 @@
 			&no_var;
 		</doc:variables>
 	</doc:template>
+
 	<xsl:template match="tbody">
 		<xsl:apply-templates/>
 	</xsl:template>
+
 
 	<doc:template basename="row" xmlns="">
 		<refpurpose>Process a <doc:db>tbody</doc:db>'s <doc:db>row</doc:db> elements</refpurpose>
@@ -1087,7 +1089,8 @@
 	<xsl:template match="tbody/row">
 		<xsl:apply-templates/>
 		<xsl:text> \tabularnewline&#10;</xsl:text>
-		<xsl:call-template name="generate.table.row.separator"/>
+		<xsl:call-template name="generate.table.row.separator">
+		</xsl:call-template>
 	</xsl:template>
 
 	<doc:template basename="row" xmlns="">
@@ -1109,7 +1112,9 @@
 		</doc:variables>
 	</doc:template>
 	<xsl:template match="tfoot/row">
-		<xsl:call-template name="generate.table.row.separator"/>
+		<xsl:call-template name="generate.table.row.separator">
+			<xsl:with-param name="cline-string" select="$cline-string" />
+		</xsl:call-template>
 		<xsl:apply-templates/>
 		<xsl:text> \tabularnewline&#10;</xsl:text>
 	</xsl:template>
@@ -1118,6 +1123,7 @@
 	Frame attribute of the enclosing Table or InformalTable and the RowSep 
 	of the last row is ignored. If unspecified, this attribute is 
 	inherited from enclosing elements, rowsep=1 by default. -->
+
     <xsl:template name="generate.table.row.separator">
 		<xsl:param name="rowsep">
 			<xsl:choose>
@@ -1133,13 +1139,110 @@
 		<xsl:variable name="parent_position" select="count(../preceding-sibling::node())+1"/>
 		<xsl:variable name="grandparent_children" select="count(../../child::node())"/>
 		<xsl:if test="$rowsep=1 and (position() != last() or $parent_position &lt; $grandparent_children)">
-		<xsl:call-template name="table.row.separator"/>
+			<xsl:call-template name="table.row.separator">
+				<xsl:with-param name="start">0</xsl:with-param>
+				<xsl:with-param name="test">
+					<xsl:call-template name="generate.cline-string"/> 
+				</xsl:with-param>
+			</xsl:call-template>
+		</xsl:if>
+		<xsl:text>&#10;</xsl:text>
+	</xsl:template>
+
+	<xsl:template name="generate.cline-string">
+		<xsl:variable name="ar">
+		<xsl:call-template name="initializeArray">
+			<xsl:with-param name="number" select="ancestor::tgroup/@cols"/>
+		</xsl:call-template>
+		</xsl:variable>
+		
+		<xsl:variable name="ar2">
+		<xsl:call-template name="increaseOne">
+			<xsl:with-param name="start" select="0"/>
+			<xsl:with-param name="array" select="$ar"/>
+			<xsl:with-param name="pos" select="1"/>
+			<xsl:with-param name="by" select="3"/>
+		</xsl:call-template>
+		</xsl:variable>
+
+		<xsl:call-template name="increaseOne">
+			<xsl:with-param name="start" select="0"/>
+			<xsl:with-param name="array" select="$ar2"/>
+			<xsl:with-param name="pos" select="4"/>
+			<xsl:with-param name="by" select="-1"/>
+		</xsl:call-template>
+	</xsl:template>
+	
+	<xsl:template name="initializeArray">
+			<xsl:if test="$number &gt; 0">
+				<xsl:text>0 </xsl:text>
+				<xsl:call-template name="initializeArray">
+					<xsl:with-param name="number" select="$number - 1"/>
+				</xsl:call-template>
+			</xsl:if>
+	</xsl:template>
+
+	<xsl:template name="increaseOne">
+		<xsl:if test="$start &gt; 0">
+			<xsl:choose>
+			<xsl:when test="$start = $pos">
+				<xsl:value-of select="string($i + $by)"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="string($i)"/>
+			</xsl:otherwise>
+			</xsl:choose>
+			<xsl:text> </xsl:text>
+		</xsl:if>
+		<xsl:if test="string-length($array) &gt; 0">
+			<xsl:call-template name="increaseOne">
+			<xsl:with-param name="start" select="$start+1"/>
+			<xsl:with-param name="i" select="number(substring-before($array, ' '))" />
+			<xsl:with-param name="array" select="substring-after($array, ' ')" />
+			<xsl:with-param name="pos" select="$pos"/>
+			<xsl:with-param name="by" select="$by"/>
+			</xsl:call-template>
 		</xsl:if>
 	</xsl:template>
 
+<!--
+
+Some morerows logic notes (with pseudo-code):
+
+1. we keep everything in a space-separated "array"-string.
+2. When tbody starts, it should be initialized to 0 (function initialize!)
+	initialize = 
+	if (restcols = 0) "0" else concat ("0 ", initialize (restcols-1))
+
+	we assume that thead and tfoot don't have any morerows'
+3. with each row, decreaseAllByOne
+4. if we have morerows, increaseOneBy
+
+-->
+
 	<xsl:template name="table.row.separator">
-		<xsl:text> \hline &#10;</xsl:text>
+		<xsl:text>&#10;%</xsl:text>
+		<xsl:value-of select="$test"/>
+		<xsl:text>&#10;</xsl:text>
+		<xsl:if test="$start &gt; 0">
+			<xsl:if test="$i = 0">
+				<xsl:text>\cline{</xsl:text>
+				<xsl:value-of select="$start"/>
+				<xsl:text>-</xsl:text>
+				<xsl:value-of select="$start"/>
+				<xsl:text>}</xsl:text>
+			</xsl:if>
+		</xsl:if>
+		<xsl:if test="string-length($test) &gt; 0">
+			<xsl:call-template name="table.row.separator">
+			<xsl:with-param name="start" select="$start+1"/>
+			<xsl:with-param name="i" select="number(substring-before($test, ' '))" />
+			<xsl:with-param name="test" select="substring-after($test, ' ')" />
+			</xsl:call-template>
+		</xsl:if>
 	</xsl:template>
+
+	<!-- HACK -->
 
     <xsl:template match="tbody/row/entry">
 	<xsl:call-template name="latex.entry.prealign"/>
@@ -1202,10 +1305,17 @@
 	</xsl:if>
 	<xsl:text>{</xsl:text>
 	<!-- use this as a hook for some general warnings -->
-	<xsl:if test="@morerows!=''"><xsl:message>The morerows attribute is not supported.</xsl:message></xsl:if>
+	<xsl:if test="@morerows!=''">
+<!--		<xsl:message>The morerows attribute is not
+supported.</xsl:message> -->
+		<xsl:text>\multirow{</xsl:text>
+		<xsl:value-of select="@morerows+1"/>
+		<xsl:text>}*{</xsl:text>
+	</xsl:if>
 	</xsl:template>
 
 	<xsl:template name="latex.entry.postalign">
+	<xsl:if test="@morerows!=''">}</xsl:if>
 	<xsl:text>}}</xsl:text>
 	<!-- this is used when the entry's align spec wants to override the column default -->
 	<xsl:if test="@namest='' and @spanspec=''"><!-- TODO improve -->

@@ -92,7 +92,7 @@ create_HTML () {
 
 	RET=$?; [ $RET -ne 0 ] && return $RET
 
-	output_files="$output_files $tempdir/$cur_lang.$cur_arch.html/*"
+	output_files="$output_files $tempdir/$cur_lang.$cur_arch.html/"
 
 	return 0
 }
@@ -179,7 +179,7 @@ create_JadeTeX () {
         -o $tempdir/install.${cur_lang}.tex \
         -d $stylesheet_dsssl \
         -V tex-backend \
-        $tempdir/install.${cur_lang}.profiled.xml
+        $tempdir/install.${cur_lang}.profiled.xml > /dev/null 2>&1
     RET=$?
     return $RET
 
