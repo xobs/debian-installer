@@ -67,7 +67,7 @@ create_html () {
     create_profiled
     $xsltprocessor \
         --xinclude \
-        --stringparam base.dir ./$destination/${language}.${arch}/html/ \
+        --stringparam base.dir ./$basedir/html/ \
         $stylesheet_html \
         $tempdir/install.${language}.profiled.xml
     checkresult $?
@@ -100,18 +100,18 @@ create_pdf() {
     
     create_profiled
     create_dvi
-    mkdir -p $destination/${language}.${arch}/pdf
+    mkdir -p $basedir/pdf
     dvipdf $tempdir/install.${language}.dvi
-    mv install.${language}.pdf $destination/${language}.${arch}/pdf
+    mv install.${language}.pdf $basedir/pdf
 }
 
 create_ps() {
     
     create_profiled
     create_dvi
-    mkdir -p $destination/${language}.${arch}/ps
+    mkdir -p $basedir/ps
     dvips $tempdir/install.${language}.dvi
-    mv install.${language}.ps $destination/${language}.${arch}/ps
+    mv install.${language}.ps $basedir/ps
 }
 
 stylesheet_dir="stylesheets"
@@ -119,19 +119,18 @@ stylesheet_profile="$stylesheet_dir/style-profile.xsl"
 stylesheet_html="$stylesheet_dir/style-html.xsl"
 stylesheet_fo="$stylesheet_dir/style-fo.xsl"
 stylesheet_dsssl="$stylesheet_dir/style-print.dsl"
-xml_decl="/usr/share/sgml/declaration/xml.dcl"
 
 xsltprocessor=/usr/bin/xsltproc
 
 
 if [ -z $destination ]; then
-    destination="results"
+    destination="results/unofficial-manual"
 fi
 
 tempdir=${language}.temp
 mkdir -p $tempdir
 
-
+basedir=$destination/${language}/${arch}
 
 ## Create the profiled XML file...
 
