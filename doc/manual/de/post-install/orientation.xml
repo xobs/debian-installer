@@ -1,36 +1,36 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 16557 untranslated -->
+<!-- original version: 16557 -->
 
 
- <sect1 id="debian-orientation"><title>Orienting Yourself to Debian</title>
+ <sect1 id="debian-orientation"><title>Sich nach Debian orientieren</title>
 <para>
 
-Debian is a little different from other distributions.  Even if you're
-familiar with Linux in other distributions, there are things you
-should know about Debian to help you to keep your system in a good,
-clean state.  This chapter contains material to help you get oriented;
-it is not intended to be a tutorial for how to use Debian, but just a
-very brief glimpse of the system for the very rushed.
+Debian ist etwas anders als andere Distributionen. Auch wenn Sie sich mit
+Linux in anderen Distributionen auskennen, gibt es einige Dinge, die Sie
+über Debian wissen sollten, um Ihr System in einem guten, sauberen Zustand
+zu halten. Dieses Kapitel enthält Material, das Ihnen helfen soll, sich
+nach Debian zu orientieren; es soll keine Anleitung sein, wie man Debian
+benutzt, sondern nur einen kurzen Einblick geben für alle, die es eilig haben.
 
 </para>
 
-  <sect2><title>Debian Packaging System</title>
+  <sect2><title>Das Debian-Paketsystem</title>
 <para>
 
-The most important concept to grasp is the Debian packaging system.
-In essence, large parts of your system should be considered under the
-control of the packaging system.  These include:
+Das wichtigste Konzept, das Sie verstehen sollten, ist das des Debian-Paketsystems.
+Im Wesentlichen sollten große Teile des Systems unter der Kontrolle des
+Paketsystems stehen, inklusive:
 
 <itemizedlist>
 <listitem><para>
 
-<filename>/usr</filename> (excluding <filename>/usr/local</filename>)
+<filename>/usr</filename> (ausgenommen <filename>/usr/local</filename>)
 
 </para></listitem>
 <listitem><para>
 
-<filename>/var</filename> (you could make
-<filename>/var/local</filename> and be safe in there)
+<filename>/var</filename> (Sie könnten
+<filename>/var/local</filename> erstellen, wo Sie auch unbehelligt vom Paketsystem sind)
 
 </para></listitem>
 <listitem><para>
@@ -50,58 +50,60 @@ control of the packaging system.  These include:
 </para></listitem>
 </itemizedlist>
 
-For instance, if you replace <filename>/usr/bin/perl</filename>, that
-will work, but then if you upgrade your <classname>perl</classname>
-package, the file you put there will be replaced.  Experts can get
-around this by putting packages on ``hold'' in
-<command>aptitude</command>.
+Wenn Sie zum Beispiel die Datei <filename>/usr/bin/perl</filename>
+durch eine andere Version ersetzen, wird dies funktionieren, aber wenn
+dann einmal das <classname>perl</classname>-Paket aktualisiert wird,
+wird Ihre Version überschrieben. Experten könnten dies aber vermeiden,
+indem Sie das Paket in <command>aptitude</command> auf ``hold'' setzen.
 
 </para><para>
 
-One of the best installation methods is apt. You can use the command
-line version <command>apt-get</command> or full-screen text version
-<application>aptitude</application>.  Note apt will also let you merge
-main, contrib, and non-free so you can have export-restricted packages
-as well as standard versions.
+APT ist eine der besten Installationsmethoden. Sie können die
+Kommandozeilenversion <command>apt-get</command> benutzen oder die
+Vollbild-Textversion <application>aptitude</application>. Beachten Sie,
+dass apt es Ihnen gestattet, »main«, »contrib« und »non-free« zu mischen,
+sodass Sie sowohl export-eingeschränkte Pakete wie auch Standardpakete
+gleichzeitig nutzen können.
 
 </para>
   </sect2>
 
-  <sect2><title>Application Version Management</title>
+  <sect2><title>Programmversions-Management</title>
 <para>
 
- 
-Alternative versions of applications are managed by update-alternatives. If
-you are maintaining multiple versions of your applications, read the
-update-alternatives man page.
+Alternative Versionen von Programmen werden von update-alternatives
+verwaltet. Wenn Sie mehrere verschiedene Versionen Ihrer Anwendungen
+installiert haben, lesen Sie die Handbuchseite von update-alternatives.
 
 </para>
   </sect2>
 
-  <sect2><title>Cron Job Management</title>
+  <sect2><title>Cron-Job-Management (zeitgesteuerte Aufgaben)</title>
 <para>
 
-Any jobs under the purview of the system administrator should be in
-<filename>/etc</filename>, since they are configuration files.  If you
-have a root cron job for daily, weekly, or nightly runs, put them in
-<filename>/etc/cron.{daily,weekly,monthly}</filename>.  These are
-invoked from <filename>/etc/crontab</filename>, and will run in
-alphabetic order, which serializes them.
+Alle Aufgaben aus dem Bereich des Systemadministrators sollten unter
+<filename>/etc</filename> liegen, da es Konfigurationsdateien sind.
+Wenn Sie einen root-Cron-Job haben, der täglich, wöchentlich oder
+monatlich läuft, legen Sie Ihn unter
+<filename>/etc/cron.{daily,weekly,monthly}</filename> ab. Sie werden
+dann von <filename>/etc/crontab</filename> gestartet und in
+alphabetischer Reihenfolge abgearbeitet, also alle nacheinander.
 
 </para><para>
 
-On the other hand, if you have a cron job that (a) needs to run as a
-special user, or (b) needs to run at a special time or frequency, you
-can use either <filename>/etc/crontab</filename>, or, better yet,
-<filename>/etc/cron.d/whatever</filename>.  These particular files
-also have an extra field that allows you to stipulate the user under
-which the cron job runs.
+Wenn sie auf der anderen Seite einen Cron-Job haben, der (a) unter
+einem bestimmten Benutzernamen laufen muss oder (b) zu einer bestimmten
+Zeit oder in einem bestimmten Takt, können Sie entweder
+<filename>/etc/crontab</filename> verwenden oder besser
+<filename>/etc/cron.d/whatever</filename>. Diese besonderen Dateien
+haben ein zusätzliches Eingabefeld, das es erlaubt, den Benutzer festzulegen,
+unter dessen Namen der Job läuft.
 
 </para><para>
 
-In either case, you just edit the files and cron will notice them
-automatically. There is no need to run a special command. For more
-information see cron(8), crontab(5), and
+Auf jeden Fall brauchen Sie nur die Dateien zu editieren und cron wird
+sie automatisch erkennen. Sie müssen keinen besonderen Befehl o.ä. ausführen.
+Mehr Informationen finden Sie in cron(8), crontab(5) und
 <filename>/usr/share/doc/cron/README.Debian</filename>.
 
 </para>
