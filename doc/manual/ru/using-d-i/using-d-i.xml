@@ -1,321 +1,114 @@
+
 <!-- retain these comments for translator revision tracking -->
 <!-- $Id: using-d-i.xml 19074 2004-08-15 12:59:43Z fjpop-guest $ -->
 
 
- <chapter id="d-i-intro"
-><title
->Использование программы установки Debian</title>
+ <chapter id="d-i-intro"><title>Использование программы установки Debian</title>
 
- <sect1
-><title
->Как работает программа установки</title>
-<para
->The Debian Installer consists of a number of special-purpose components to perform each installation task. Each component performs its task, asking the user questions as necessary to do its job. The questions themselves are given priorities, and the priority of questions to be asked is set when the installer is started. </para
-><para
->When a default installation is performed, only essential (high priority) questions will be asked. This results in a highly automated installation process with little user interaction. Components are automatically run in sequence; which components are run depends mainly on the installation method you use and on your hardware. The installer will use default values for questions that are not asked. </para
-><para
->If there is a problem, the user will see an error screen, and the installer menu may be shown in order to select some alternative action. If there are no problems, the user will never see the installer menu, but will simply answer questions for each component in turn. Serious error notifications are set to priority 'critical' so the user will always be notified. </para
-><para
->Some of the defaults that the installer uses can be influenced by passing boot arguments when &d-i; is started. If, for example, you wish to force static network configuration (DHCP is used by default if available), you could add the boot parameter <userinput
->netcfg/disable_dhcp=true</userinput
->. See <xref linkend="installer-args"/> for available options. </para
-><para
->Power users may be more comfortable with a menu-driven interface, where each step is controlled by the user rather than the installer performing each step automatically in sequence. To use the installer in a manual, menu-driven way, add the boot argument <userinput
->debconf/priority=medium</userinput
->. </para
-><para
->If your hardware requires you to pass options to kernel modules as they are installed, you will need to start the installer in <quote
->expert</quote
-> mode. This can be done by either using the <command
->expert</command
-> command to start the installer or by adding the boot argument <userinput
->debconf/priority=low</userinput
->. Expert mode gives you full control over &d-i;. </para
-><para
->The normal installer display is character-based (as opposed to the now more familiar graphical interface). The mouse is not operational in this environment. Here are the keys you can use to navigate within the various dialogs. The <keycap
->Tab</keycap
-> or <keycap
->right</keycap
-> arrow keys move `forward', and the <keycombo
-> <keycap
->Shift</keycap
-> <keycap
->Tab</keycap
-> </keycombo
-> or <keycap
->left</keycap
-> arrow keys move `backward' between displayed buttons and selections. The <keycap
->up</keycap
-> and <keycap
->down</keycap
-> arrow select different items within a scrollable list, and also scroll the list itself. In addition, in long lists, you can type a letter to cause the list to scroll directly to the section with items starting with the letter you typed and use <keycap
->Pg-Up</keycap
-> and <keycap
->Pg-Down</keycap
-> to scroll the list in sections. The <keycap
->space bar</keycap
-> selects an item such as a checkbox. Use &enterkey; to activate choices. </para
-><para arch="s390"
->S/390 does not support virtual consoles. You may open a second and third ssh session to view the logs described below. </para
-><para
->Error messages are redirected to the third console. You can access this console by pressing <keycombo
-><keycap
->Left Alt</keycap
-><keycap
->F3</keycap
-></keycombo
-> (hold the left <keycap
->Alt</keycap
-> key while pressing the <keycap
->F3</keycap
-> function key); get back to the main installer process with <keycombo
-><keycap
->Left Alt</keycap
-><keycap
->F1</keycap
-></keycombo
->. </para
-><para
->These messages can also be found in <filename
->/var/log/messages</filename
->. After installation, this log is copied to <filename
->/var/log/debian-installer/messages</filename
-> on your new system. Other installation messages may be found in <filename
->/var/log/</filename
-> during the installation, and <filename
->/var/log/debian-installer/</filename
-> after the computer has been booted into the installed system. </para>
+ <sect1><title>Как работает программа установки</title>
+<para>Программа установки Debian состоит из нескольких специальных компонентов, предназначенных для выполнения соответствующих задач установки. Каждый компонент выполняет свою задачу, задавая пользователю вопросы, если это необходимо для выполнения его работы. Самим вопросам задан приоритет, и можно задать приоритет задаваемых вопросов при старте программы установки.  </para><para>Когда используется установка по умолчанию, задаются только жизненно важные (высокоприоритетные) вопросы. Результатом будет полностью автоматизированный процесс установки с небольшим вмешательством пользователя. Компоненты автоматически запускаются в заданной последовательсти; какой компонет будет запущен, зависит в основном от выбранного вами метода установки и от вашего оборудования. Программа установки будет использовать значения по умолчанию для вопросов, которые не задавались. </para><para>В случае проблем, пользователь увидит экран ошибки и меню программы установки возможно покажет выбор нескольких альтернативных действий. Если же проблем нет, пользователь никогда не увидит меню программы установки, а просто ответы на вопросы каждого компонента. Извещениям о серьезных ошибках установлен приоритет 'критический', так что пользователь всегда будет оповещен. </para><para>На некоторые умолчания, используемые программой установки, можно повлиять путем передачи параметров загрузки при старте &d-i;. Если, например, вы хотите принудительно использовать статическую настройку сети (по умолчанию будет использован DHCP, если получится), можете добавить параметр загрузки <userinput>netcfg/disable_dhcp=true</userinput>. Доступные опции можно посмотреть в <xref linkend="installer-args"/>. </para><para>Опытным пользователям возможно будет более удобен интерфейс управления через меню, где каждый шаг контролируется пользователем, вместо автоматического выполнения каждого шага последовательности програмой установки. Для использования программы установки в ручном режиме, управляемом через меню, добавьте параметр загрузки <userinput>debconf/priority=medium</userinput>. </para><para>Если ваше оборудование требует передачи параметров модулям ядра при их установке, вам надо будет запустить программу установки в режиме <quote>expert</quote>. Это можно сделать либо использовав команду <command>expert</command> для запуска программы установки, либо передав параметр загрузки <userinput>debconf/priority=low</userinput>. Режим эксперта дает вам полный контроль над &d-i;. </para><para>Нормальный вид программы установки -- текстовый (в отличие от более распространенных теперь графических интерфейсов). Мышка здесь не работает. Вот кнопки, с помощью которых вы можете перемещаться внутри различных диалогов. Клавиша <keycap>Tab</keycap> или <keycap>правая</keycap> стрелка перемещают `вперед', а <keycombo> <keycap>Shift</keycap> <keycap>Tab</keycap> </keycombo> или <keycap>левая</keycap> стрелка  перещают `назад' между отображаемыми кнопками или выборами. Стрелки <keycap>вверх</keycap> и <keycap>вниз</keycap>  выбирают различные пункты в прокручиваемом списке, а также прокручивают сам список. Дополнительно, в длинных списках, вы можете набрать букву чтобы список прокрутился прямо к секции с пунктом, начинающимся на букву, которую вы набрали, а также использовать <keycap>Pg-Up</keycap> и <keycap>Pg-Down</keycap> для прокручивания списка по секциям. <keycap>Пробел</keycap> выбирает пункты, такие как checkbox. Используйте &enterkey; для активации выбора. </para><para arch="s390">S/390 не поддерживает виртуальные консоли. Вы можете открыть вторую или третью ssh-сессию для просмотра лог-файлов, описанных ниже. </para><para>Сообщения об ошибках перенаправляются на третью консоль. Вы можете получить доступ к этой консоли, нажав <keycombo><keycap>Левый Alt</keycap><keycap>F3</keycap></keycombo> (удерживайте клавишу <keycap>Alt</keycap> нажатой во время нажатия функциональной клавиши <keycap>F3</keycap>); вернуться к основному процессу установки через <keycombo><keycap>Левый Alt</keycap><keycap>F1</keycap></keycombo>. </para><para>Также эти сообщения можно найти в <filename>/var/log/messages</filename>. После установки этот файл копируется в <filename>/var/log/debian-installer/messages</filename> в вашей новой системе. Остальные установочные сообщения можно найти в <filename>/var/log/</filename> во время установки, и в <filename>/var/log/debian-installer/</filename> после того, как компьютер перезагрузится в установленную систему. </para>
  </sect1>
 
 
-  <sect1 id="modules-list"
-><title
->Введение в компоненты</title>
-<para
->Вот список компонентов программы установки с кратким описанием назначения каждого компонента. Детали об использовании каждого компонента, которые вы возможно должны знать, находятся в  <xref linkend="module-details"/>. </para>
+  <sect1 id="modules-list"><title>Введение в компоненты</title>
+<para>Вот список компонентов программы установки с кратким описанием назначения каждого компонента. Детали об использовании каждого компонента, которые вы возможно должны знать, находятся в  <xref linkend="module-details"/>. </para>
 
 <variablelist>
 <varlistentry>
 
-<term
->main-menu</term
-><listitem
-><para
->Shows the list of components to the user during installer operation, and starts a component when it is selected. Main-menu's questions are set to priority medium, so if your priority is set to high or critical (high is the default), you will not see the menu. On the other hand, if there is an error which requires your intervention, the question priority may be downgraded temporarily to allow you to resolve the problem, and in that case the menu may appear. </para
-><para
->You can get to the main menu by selecting the "Back" button repeatedly to back all the way out of the currently running component. </para
-></listitem>
+<term>main-menu</term><listitem><para>Показывает список компонентов пользователю во время работы программы установки, и запускает компонент, когда он выбран. Вопросам main-menu установлен средний приоритет, так что если ваш приоритет установлен в высокий или критический(по умолчанию высокий), вы не увидите меню. С другой стороны, если есть ошибка, которая требует вашего вмешательства, приоритет вопросов может быть временно понижен, чтобы позволить вам разрешить проблему, и в этом случае меню может появиться. </para><para>Вы можете добраться до главного меню, многократно выбирая кнопку "Назад ", чтобы пройти весь путь обратно из текущего выполняемого компонета.  </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->languagechooser</term
-><listitem
-><para
->Показывает список языков и варианты языка. Программа установки будет отображать сообщения на выбранном языке, если перевод на этот язык закончен. Когда перевод не закончен, будут показываться английские сообщения. </para
-></listitem>
+<term>languagechooser</term><listitem><para>Показывает список языков и варианты языка. Программа установки будет отображать сообщения на выбранном языке, если перевод на этот язык закончен. Когда перевод не закончен, будут показываться английские сообщения. </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->countrychooser</term
-><listitem
-><para
->Shows a list of countries. The user may choose the country he lives in. </para
-></listitem>
+<term>countrychooser</term><listitem><para>Показывает список стран. Пользователь может выбрать страну, в которой живет. </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->kbd-chooser</term
-><listitem
-><para
->Показывает список клавиатур, из которого пользователь выбирает модель, которая ему подходит. </para
-></listitem>
+<term>kbd-chooser</term><listitem><para>Показывает список клавиатур, из которого пользователь выбирает модель, которая ему подходит. </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->hw-detect</term
-><listitem
-><para
->Automatically detects most of the system's hardware, including network cards, disk drives, and PCMCIA. </para
-></listitem>
+<term>hw-detect</term><listitem><para>Автоматически определяет основную аппаратуру системы, включая сетевые карты, приводы дисков и PCMCIA. </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->cdrom-detect</term
-><listitem
-><para
->Looks for and mounts a Debian installation CD. </para
-></listitem>
+<term>cdrom-detect</term><listitem><para>Ищет и монтирует компакт-диск с программой установки Debian. </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->netcfg</term
-><listitem
-><para
->Настраивает сетевые подключения компьютера, чтобы он мог общаться через интернет. </para
-></listitem>
+<term>netcfg</term><listitem><para>Настраивает сетевые подключения компьютера, чтобы он мог общаться через интернет. </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->iso-scan</term
-><listitem
-><para
->Ищет файловые системы ISO, которые могут располагаться на компакт-дисках или на жестком диске. </para
-></listitem>
+<term>iso-scan</term><listitem><para>Ищет файловые системы ISO, которые могут располагаться на компакт-дисках или на жестком диске. </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->choose-mirror</term
-><listitem
-><para
->Presents a list of Debian archive mirrors. The user may choose the source of his installation packages. </para
-></listitem>
+<term>choose-mirror</term><listitem><para>Предоставляет список зеркал архивов Debian. Пользователь может выбрать источник, с которого будут ставиться его пакеты. </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->cdrom-checker</term
-><listitem
-><para
->Checks integrity of a CD-ROM. This way the user may assure him/herself that the installation CD-ROM was not corrupted. </para
-></listitem>
+<term>cdrom-checker</term><listitem><para>Проверяет целостность компакт-диска. Таким образом пользователь может гарантировать себе, что установочный компакт-диск не поврежден. </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->lowmem</term
-><listitem
-><para
->Lowmem tries to detect systems with low memory and then does various tricks to remove unnecessary parts of &d-i; from the memory (at the cost of some features). </para
-></listitem>
+<term>lowmem</term><listitem><para>Lowmem пытается распознать системы с малым объемом памяти и затем выполняет различные трюки, чтобы удалить ненужные части &d-i; из памяти (ценой некоторых возможностей). </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->anna</term
-><listitem
-><para
->Anna's Not Nearly APT. Installs packages which have been retrieved from the chosen mirror or CD. </para
-></listitem>
+<term>anna</term><listitem><para>Anna Не Настоящий APT. Устанавливает пакеты, которые были получены с выбранного зеркала или компакт-диска. </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->partman</term
-><listitem
-><para
->Allows the user to partition disks attached to the system, create file systems on the selected partitions, and attach them to the mountpoints. Included are also interesting features like a fully automatic mode or LVM support. This is the preferred partitioning tool in Debian. </para
-></listitem>
+<term>partman</term><listitem><para>Позволяет пользователю разбить на разделы подключенные к системе диски, создать файловые системы на выбранных разделах и назначить им точки монтирования. Также включает интересные возможности, такие как полностью автоматизированный режим или поддержка LVM. Это предпочитаемая утилита работы с разделами в Debian. </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->autopartkit</term
-><listitem
-><para
->Автоматически размечает весь диск на разделы, согласно заданным пользователем установкам </para
-></listitem>
+<term>autopartkit</term><listitem><para>Автоматически размечает весь диск на разделы, согласно заданным пользователем установкам </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->partitioner</term
-><listitem
-><para
->Позволяет пользователю разметить на разделы диски, подключенные к системе. Выбирается программа разметки, соответствующая архитектуре вашего компьютера. </para
-></listitem>
+<term>partitioner</term><listitem><para>Позволяет пользователю разметить на разделы диски, подключенные к системе. Выбирается программа разметки, соответствующая архитектуре вашего компьютера. </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->partconf</term
-><listitem
-><para
->Отображает список разделов и создает файловые системы на выбранных разделах, согласно пользовательским инструкциям. </para
-></listitem>
+<term>partconf</term><listitem><para>Отображает список разделов и создает файловые системы на выбранных разделах, согласно пользовательским инструкциям. </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->lvmcfg</term
-><listitem
-><para
->Helps the user with the configuration of the <firstterm
->LVM</firstterm
-> (Logical Volume Manager). </para
-></listitem>
+<term>lvmcfg</term><listitem><para>Помогает пользователю с настройкой <firstterm>LVM</firstterm> (менеджера логических томов). </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->mdcfg</term
-><listitem
-><para
->Allows the user to setup Software <firstterm
->RAID</firstterm
-> (Redundant Array of Inexpensive Disks). This Software RAID is usually superior to the cheap IDE (pseudo hardware) RAID controllers found on newer motherboards. </para
-></listitem>
+<term>mdcfg</term><listitem><para>Позволяет пользователю установить Программный <firstterm>RAID</firstterm> (Redundant Array of Inexpensive Disks). Этот Программный RAID обычно лучше, чем дешевые IDE (псевдо-аппаратные) RAID-контроллеры в новых материнских платах. </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->base-installer</term
-><listitem
-><para
->Устанавливает самый минимальный набор пакетов, который позволит компьютеру работать под Linux после перезагрузки. </para
-></listitem>
+<term>base-installer</term><listitem><para>Устанавливает самый минимальный набор пакетов, который позволит компьютеру работать под Linux после перезагрузки. </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->os-prober</term
-><listitem
-><para
->Detects currently installed operating systems on the computer and passes this information to the bootloader-installer, which may offer you an ability to add discovered operating systems to the bootloader's start menu. This way the user could easily choose at the boot time which operating system to start. </para
-></listitem>
+<term>os-prober</term><listitem><para>Определяет уже установленные на компьютере операционные системы и передает эту информацию в bootloader-installer, который может предложить вам возможность добавить найденные операционные системы в стартовое меню системного загрузчика. Таким образом пользователь легко может выбрать в момент загрузки, какую операционную систему надо запустить. </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->bootloader-installer</term
-><listitem
-><para
->Устанавливает на жесткий диск программу системного загрузчика, которая необходима для того, чтобы компьютер заработал под Linux без использования дискеты или компакт-диска. Многие системные загрузчики позволяют пользователю выбрать альтернативную операционную систему каждый раз при загрузке компьютера. </para
-></listitem>
+<term>bootloader-installer</term><listitem><para>Устанавливает на жесткий диск программу системного загрузчика, которая необходима для того, чтобы компьютер заработал под Linux без использования дискеты или компакт-диска. Многие системные загрузчики позволяют пользователю выбрать альтернативную операционную систему каждый раз при загрузке компьютера. </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->base-config</term
-><listitem
-><para
->Обеспечивает диалоги для настройки базовых системных пакетов, согласно установкам пользователя. В норме это происходит после перезагрузки компьютера; это 'первый запуск' новой системы Debian. </para
-></listitem>
+<term>base-config</term><listitem><para>Обеспечивает диалоги для настройки базовых системных пакетов, согласно установкам пользователя. В норме это происходит после перезагрузки компьютера; это 'первый запуск' новой системы Debian. </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->shell</term
-><listitem
-><para
->Позволяет пользователю вызвать командную оболочку из меню или на второй консоли </para
-></listitem>
+<term>shell</term><listitem><para>Позволяет пользователю вызвать командную оболочку из меню или на второй консоли </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term
->bugreporter</term
-><listitem
-><para
->Обеспечивает пользователю возможность записать информацию на дискету в случае возникновения затруднений, для того, чтобы позже отправить разработчикам Debian точный отчет о проблеме в программе установки. </para
-></listitem>
+<term>bugreporter</term><listitem><para>Обеспечивает пользователю возможность записать информацию на дискету в случае возникновения затруднений, для того, чтобы позже отправить разработчикам Debian точный отчет о проблеме в программе установки. </para></listitem>
 </varlistentry>
 
 </variablelist>

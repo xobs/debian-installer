@@ -1,313 +1,97 @@
+
 <!-- retain these comments for translator revision tracking -->
 <!-- $Id: parameters.xml 20054 2004-08-26 18:22:53Z joeyh $ -->
 
- <sect1 id="boot-parms"
-><title
->Параметры загрузки</title>
-<para
->Параметры загрузки это параметры ядра Linux, которые обычно используются для того, чтобы быть уверенным, что периферийные устройства правильно работают. В большинстве случаев ядро может определить информацию о вашей периферии автоматически. Однако, иногда вы должны немножко помочь ядру. </para
-><para
->If this is the first time you're booting the system, try the default boot parameters (i.e., don't try setting parameters) and see if it works correctly. It probably will. If not, you can reboot later and look for any special parameters that inform the system about your hardware. </para
-><para
->Информацию а многих параметрах загрузки можно найти в <ulink url="http://www.tldp.org/HOWTO/BootPrompt-HOWTO.html"
-> Linux BootPrompt HOWTO</ulink
->, включая советы по неопознанному оборудованию. В этом разделе содержатся только краткие сведения о наиболее заметных параметрах. Некоторые распространенные ловушки включены ниже в <xref linkend="boot-troubleshooting"/>. </para
-><para
->Когда загружается ядро, в начале процесса должно появиться сообщение <informalexample
-><screen>
+ <sect1 id="boot-parms"><title>Параметры загрузки</title>
+<para>Параметры загрузки это параметры ядра Linux, которые обычно используются для того, чтобы быть уверенным, что периферийные устройства правильно работают. В большинстве случаев ядро может определить информацию о вашей периферии автоматически. Однако, иногда вы должны немножко помочь ядру. </para><para>Если вы в первый раз загружаете систему, попробуйте параметры загрузки по умолчанию (т.е. не пытайтесь их установить) и посмотрите, корректно ли все работает. Возможно, все так и будет. Если нет, можете позже перезагрузиться и поискать специальные параметры, которые известят вашу систему о вашей аппаратуре. </para><para>Информацию а многих параметрах загрузки можно найти в <ulink url="http://www.tldp.org/HOWTO/BootPrompt-HOWTO.html"> Linux BootPrompt HOWTO</ulink>, включая советы по неопознанному оборудованию. В этом разделе содержатся только краткие сведения о наиболее заметных параметрах. Некоторые распространенные ловушки включены ниже в <xref linkend="boot-troubleshooting"/>. </para><para>Когда загружается ядро, в начале процесса должно появиться сообщение <informalexample><screen>
 
-Memory:<replaceable
->доступно</replaceable
->k/<replaceable
->всего</replaceable
->k available 
+Memory:<replaceable>доступно</replaceable>k/<replaceable>всего</replaceable>k available 
 
-</screen
-></informalexample
->. Где <replaceable
->всего</replaceable
-> должно совпадать с общим количеством ОЗУ, в килобайтах. Если это не соответствует действительному установленному объему ОЗУ, вам надо использовать параметр <userinput
->mem=<replaceable
->озу</replaceable
-></userinput
->, где <replaceable
->озу</replaceable
-> равно объему памяти, дополненному буквой ``k'', если объем задан в килобайтах или ``m'', если в мегабайтах. Например, и <userinput
->mem=65536k</userinput
-> , и <userinput
->mem=64m</userinput
-> означают 64MB ОЗУ. </para
-><para condition="supports-serial-console"
->Если вы загружаетесь через последовательную консоль, в общем случае ядро автоматически обнаружит это <phrase arch="mipsel"
->(но не на DEC-станциях)</phrase
-> Если у вас есть видеокарта (framebuffer) и  клавиатура, подключенные к компьютеру, который вы хотите загрузить через последовательную консоль, вам надо передать ядру аргумент <userinput
->console=<replaceable
->устройство</replaceable
-></userinput
->, где <replaceable
->устройство</replaceable
-> это ваше последовательно устройство, обычно это нечто вроде <filename
->ttyS0</filename
->. </para
-><para arch="sparc"
->Для &arch-title; последовательными устройствами являются <filename
->ttya</filename
-> или <filename
->ttyb</filename
->. Или установите переменные OpenPROM <envar
->input-device</envar
-> и <envar
->output-device</envar
-> равными <filename
->ttya</filename
->. </para>
+</screen></informalexample>. Где <replaceable>всего</replaceable> должно совпадать с общим количеством ОЗУ, в килобайтах. Если это не соответствует действительному установленному объему ОЗУ, вам надо использовать параметр <userinput>mem=<replaceable>озу</replaceable></userinput>, где <replaceable>озу</replaceable> равно объему памяти, дополненному буквой ``k'', если объем задан в килобайтах или ``m'', если в мегабайтах. Например, и <userinput>mem=65536k</userinput> , и <userinput>mem=64m</userinput> означают 64MB ОЗУ. </para><para condition="supports-serial-console">Если вы загружаетесь через последовательную консоль, в общем случае ядро автоматически обнаружит это <phrase arch="mipsel">(но не на DEC-станциях)</phrase> Если у вас есть видеокарта (framebuffer) и  клавиатура, подключенные к компьютеру, который вы хотите загрузить через последовательную консоль, вам надо передать ядру аргумент <userinput>console=<replaceable>устройство</replaceable></userinput>, где <replaceable>устройство</replaceable> это ваше последовательно устройство, обычно это нечто вроде <filename>ttyS0</filename>. </para><para arch="sparc">Для &arch-title; последовательными устройствами являются <filename>ttya</filename> или <filename>ttyb</filename>. Или установите переменные OpenPROM <envar>input-device</envar> и <envar>output-device</envar> равными <filename>ttya</filename>. </para>
 
 
-  <sect2 id="installer-args"
-><title
->Debian Installer Parameters</title>
-<para
->The installation system recognizes a few additional boot parameters which may be useful. </para>
+  <sect2 id="installer-args"><title>Параметры программы установки Debian</title>
+<para>Установочная система распознает несколько параметров загрузки, которые могут пригодиться. </para>
 
 <variablelist>
 <varlistentry>
-<term
->debconf/priority</term>
-<listitem
-><para
->This parameter settings will set the highest priority of messages to be displayed. </para
-><para
->The default installation uses <userinput
->debconf/priority=high</userinput
->. This means that both high and critical priority messages are shown, but medium and low priority messages are skipped. If problems are encountered, the installer adjusts the priority as needed. </para
-><para
->If you add <userinput
->debconf/priority=medium</userinput
-> as boot parameter, you will be shown the installation menu and gain more control over the installation. When <userinput
->debconf/priority=low</userinput
-> is used, all messages are shown (this is equivalent to the <emphasis
->expert</emphasis
-> boot method). With <userinput
->debconf/priority=critical</userinput
->, the installation system will display only critical messages and try to do the right thing without fuss. </para
-></listitem>
+<term>debconf/priority</term>
+<listitem><para>Установка этого параметра задаст наивысший приоритет отображаемых сообщений. </para><para>Установка по умолчанию использует <userinput>debconf/priority=high</userinput>. Это означает, что будут показаны сообщения с высоким приоритетом и с критическим приоритетом, но сообщения со средним и низким приоритетом будут пропущены. В случае возникновения проблем, программа установки меняет приоритет на необходимый. </para><para>Если вы добавили <userinput>debconf/priority=medium</userinput> в качестве параметра загрузки, вы увидите меню программы установки и получите больший контроль над установкой. Когда использован <userinput>debconf/priority=low</userinput>, показываются все сообщения (это эквивалентно методу загрузки <emphasis>expert</emphasis>). С <userinput>debconf/priority=critical</userinput> система установки будет показывать только критические сообщания и попробует все сделать правильно без суеты. </para></listitem>
 </varlistentry>
 
 
 <varlistentry>
-<term
->debconf/frontend</term>
-<listitem
-><para
->This boot parameter controls the type of user interface used for the installer. The current possible parameter settings are: <itemizedlist
-> <listitem
-> <para
-><userinput
->debconf/frontend=noninteractive</userinput
-></para
-> </listitem
-><listitem
-> <para
-><userinput
->debconf/frontend=text</userinput
-></para
-> </listitem
-><listitem
-> <para
-><userinput
->debconf/frontend=newt</userinput
-></para
-> </listitem
-><listitem
-> <para
-><userinput
->debconf/frontend=slang</userinput
-></para
-> </listitem
-><listitem
-> <para
-><userinput
->debconf/frontend=ncurses</userinput
-></para
-> </listitem
-><listitem
-> <para
-><userinput
->debconf/frontend=bogl</userinput
-></para
-> </listitem
-><listitem
-> <para
-><userinput
->debconf/frontend=gtk</userinput
-></para
-> </listitem
-><listitem
-> <para
-><userinput
->debconf/frontend=corba</userinput
-></para
-> </listitem
-> </itemizedlist
-> The default front end is <userinput
->debconf/frontend=newt</userinput
->. <userinput
->debconf/frontend=text</userinput
-> may be preferable for serial console installs. Generally only the <userinput
->newt</userinput
-> frontend is available on default install media, so this is not very useful right now. </para
-></listitem>
+<term>debconf/frontend</term>
+<listitem><para>Этот параметр загрузки контролирует тип пользовательского интерфейса, используемого программой установки. Возможные на текущий момент значения параметра: <itemizedlist> <listitem> <para><userinput>debconf/frontend=noninteractive</userinput></para> </listitem><listitem> <para><userinput>debconf/frontend=text</userinput></para> </listitem><listitem> <para><userinput>debconf/frontend=newt</userinput></para> </listitem><listitem> <para><userinput>debconf/frontend=slang</userinput></para> </listitem><listitem> <para><userinput>debconf/frontend=ncurses</userinput></para> </listitem><listitem> <para><userinput>debconf/frontend=bogl</userinput></para> </listitem><listitem> <para><userinput>debconf/frontend=gtk</userinput></para> </listitem><listitem> <para><userinput>debconf/frontend=corba</userinput></para> </listitem> </itemizedlist> По умолчанию выбран тип <userinput>debconf/frontend=newt</userinput>. Для установок через последовательную консоль возможно наиболее предпочтителен <userinput>debconf/frontend=text</userinput> . В основном только интерфейс <userinput>newt</userinput> доступен на носителях установки по умолчанию, так что это не особо полезно сейчас. </para></listitem>
 </varlistentry>
 
 
 <varlistentry>
-<term
->BOOT_DEBUG</term>
-<listitem
-><para
->Передача этого параметра вызовет более подробное протоколирование загрузки. <variablelist>
+<term>BOOT_DEBUG</term>
+<listitem><para>Передача этого параметра вызовет более подробное протоколирование загрузки. <variablelist>
 <varlistentry>
-<term
-><userinput
->BOOT_DEBUG=0</userinput
-></term>
-<listitem
-><para
->Значение по умолчанию.</para
-></listitem>
+<term><userinput>BOOT_DEBUG=0</userinput></term>
+<listitem><para>Значение по умолчанию.</para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term
-><userinput
->BOOT_DEBUG=1</userinput
-></term>
-<listitem
-><para
->Подробней, чем обычно.</para
-></listitem>
+<term><userinput>BOOT_DEBUG=1</userinput></term>
+<listitem><para>Подробней, чем обычно.</para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term
-><userinput
->BOOT_DEBUG=2</userinput
-></term>
-<listitem
-><para
->Много отладочной информации.</para
-></listitem>
+<term><userinput>BOOT_DEBUG=2</userinput></term>
+<listitem><para>Много отладочной информации.</para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term
-><userinput
->BOOT_DEBUG=3</userinput
-></term>
-<listitem
-><para
->В различных точках процесса загрузки будут вызваны командные оболочки, чтобы разрешить детальную отладку. Выход из оболочки продолжит загрузку. </para
-></listitem>
+<term><userinput>BOOT_DEBUG=3</userinput></term>
+<listitem><para>В различных точках процесса загрузки будут вызваны командные оболочки, чтобы разрешить детальную отладку. Выход из оболочки продолжит загрузку. </para></listitem>
 </varlistentry>
 </variablelist>
 
-</para
-></listitem>
+</para></listitem>
 </varlistentry>
 
 
 <varlistentry>
-<term
->INSTALL_MEDIA_DEV</term>
-<listitem
-><para
->Значением этого параметра является путь к устройству, с которого загружается программа установки Debian. Например , <userinput
->INSTALL_MEDIA_DEV=/dev/floppy/0</userinput
-> </para
-><para
->В норме, загрузочная дискета в поисках корневой дискеты сканирует все дискеты и USB-устройства хранения, которые сможет. Этим параметром можно заставить ее искать только на избранном устройстве. </para
-></listitem>
+<term>INSTALL_MEDIA_DEV</term>
+<listitem><para>Значением этого параметра является путь к устройству, с которого загружается программа установки Debian. Например , <userinput>INSTALL_MEDIA_DEV=/dev/floppy/0</userinput> </para><para>В норме, загрузочная дискета в поисках корневой дискеты сканирует все дискеты и USB-устройства хранения, которые сможет. Этим параметром можно заставить ее искать только на избранном устройстве. </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term
->debian-installer/framebuffer</term>
-<listitem
-><para
->Some architectures use the kernel framebuffer to offer installation in a number of languages. If framebuffer causes a problem on your system you can disable the feature by the parameter <userinput
->debian-installer/framebuffer=false</userinput
->. Problem symptoms are error messages about bterm or bogl, a blank screen, or a freeze within a few minutes after starting the install. </para
-><para arch="i386"
->Аргумент <userinput
->video=vga16:off</userinput
-> также может быть использован для запрета framebuffer. Подобные проблемы замечены на Dell Inspiron с картой Mobile Radeon. </para
-><para arch="m68k"
->Подобные проблемы замечены на Amiga 1200 и SE/30. </para
-><para arch="hppa"
->Подобные проблемы замечены на hppa. </para
-></listitem>
+<term>debian-installer/framebuffer</term>
+<listitem><para>Некоторые архитектуры используют framebuffer ядра, чтобы предложить установку на нескольких языках. Если framebuffer вызывает проблемы на вашей системе, вы можете запретить данную особенность параметром <userinput>debian-installer/framebuffer=false</userinput>. Сиптомы проблемы -- сообщения об ошибках bterm или bogl, пустой экран или заморозка на несколько минут после начала установки. </para><para arch="i386">Аргумент <userinput>video=vga16:off</userinput> также может быть использован для запрета framebuffer. Подобные проблемы замечены на Dell Inspiron с картой Mobile Radeon. </para><para arch="m68k">Подобные проблемы замечены на Amiga 1200 и SE/30. </para><para arch="hppa">Подобные проблемы замечены на hppa. </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term
->debian-installer/probe/usb</term>
-<listitem
-><para
->Set to <userinput
->false</userinput
-> to prevent probing for USB on boot, if that causes problems. </para
-></listitem>
+<term>debian-installer/probe/usb</term>
+<listitem><para>Установите в <userinput>false</userinput>, чтобы избежать проверки USB при загрузке, если это вызывает проблемы. </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term
->netcfg/disable_dhcp</term>
-<listitem
-><para
->By default, the &d-i; automatically probes for network configuration via DHCP. If the probe succeeds, you won't have a chance to review and chage the obtained settings. You can get to the manual network setup only in case the DHCP probe fails. </para
-><para
->If you have a DHCP server on your local network, but want to avoid it because e.g. it gives wrong answers, you can use the parameter <userinput
->netcfg/disable_dhcp=true</userinput
-> to prevent configuring the network with DHCP and to enter the information manually. </para
-></listitem>
+<term>netcfg/disable_dhcp</term>
+<listitem><para>По умолчанию, &d-i; автоматически распознает конфигурацию сети через DHCP. Если распознавание прошло успешно, у вас не будет шанса пересмотреть и изменить полученные настройки. Вы сможете настроить сеть вручную только в случае ошибок при распознавании по DHCP. </para><para>Если в вашей локальной сети есть DHCP-сервер, но вы не хотите его использовать, потому что он, например, дает неправильные ответы, можете указать параметр <userinput>netcfg/disable_dhcp=true</userinput>, чтобы отключить настройку сети по DHCP, и ввести информацию вручную. </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term
->hw-detect/start_pcmcia</term>
-<listitem
-><para
->Set to <userinput
->false</userinput
-> to prevent starting PCMCIA services, if that causes problems. Some laptops are well known for this misbehaviour. </para
-></listitem>
+<term>hw-detect/start_pcmcia</term>
+<listitem><para>Установите в <userinput>false</userinput>, чтобы избежать запуска PCMCIA-сервисов, если это вызывает проблемы. Некоторые ноутбуки славятся таким поведением. </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term
->preseed/url</term>
-<listitem
-><para
->Specify the url to a preconfiguration file to download and use in automating the install. See <xref linkend="automatic-install"/>. </para
-></listitem>
+<term>preseed/url</term>
+<listitem><para>Задает url для скачивания файла с настройками и использования автоматической установки. Смотрите <xref linkend="automatic-install"/>. </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term
->preseed/file</term>
-<listitem
-><para
->Specify the url to a preconfiguration file to load to automating the install. See <xref linkend="automatic-install"/>. </para
-></listitem>
+<term>preseed/file</term>
+<listitem><para>Задает url для загрузки файла с настройками и использования автоматической установки. Смотрите <xref linkend="automatic-install"/>. </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term
->ramdisk_size</term>
-<listitem
-><para
->If you are using a 2.2.x kernel, you may need to set &ramdisksize;. </para
-></listitem>
+<term>ramdisk_size</term>
+<listitem><para>Если вы используете ядро 2.2.x, может потребоваться установить &ramdisksize;. </para></listitem>
 </varlistentry>
 
 </variablelist>

@@ -1,443 +1,214 @@
+
 <!-- retain these comments for translator revision tracking -->
 <!-- $Id: alpha.xml 19466 2004-08-19 04:48:50Z vorlon $ -->
 
  <sect2 arch="alpha" id="alpha-firmware">
- <title
->Прошивка консоли Alpha</title>
-<para
->Прошивка консоли хранится во флэш-ПЗУ и выполняется, когда система Alpha включается или перезагружается. На системах Alpha используется две различные спецификации консоли, и, следовательно, доступно два класса прошивок консоли: </para>
+ <title>Прошивка консоли Alpha</title>
+<para>Прошивка консоли хранится во флэш-ПЗУ и выполняется, когда система Alpha включается или перезагружается. На системах Alpha используется две различные спецификации консоли, и, следовательно, доступно два класса прошивок консоли: </para>
 
 <itemizedlist>
-<listitem
-><para
-><emphasis
->Консоль SRM</emphasis
->, основанная на спецификации Alpha Console Subsystem, которая обеспечивает рабочую среду для операционных систем OpenVMS, Tru64 UNIX и Linux. </para
-></listitem>
-<listitem
-><para
-><emphasis
->Консоль ARC, AlphaBIOS или ARCSBIOS</emphasis
->, основанная на спецификации Advanced RISC Computing (ARC), которая обеспечивает рабочую среду для Windows NT. </para
-></listitem>
+<listitem><para><emphasis>Консоль SRM</emphasis>, основанная на спецификации Alpha Console Subsystem, которая обеспечивает рабочую среду для операционных систем OpenVMS, Tru64 UNIX и Linux. </para></listitem>
+<listitem><para><emphasis>Консоль ARC, AlphaBIOS или ARCSBIOS</emphasis>, основанная на спецификации Advanced RISC Computing (ARC), которая обеспечивает рабочую среду для Windows NT. </para></listitem>
 </itemizedlist>
 
-<para
->С точки зрения пользователя, наиболее важная разница между SRM и ARC это то, что выбор консоли ограничивает возможные схемы разметки жестого диска,с которого вы собираетесь загружаться. </para
-><para
->ARC требует, чтобы вы использовали таблицу разделов MS-DOS (которая создается с помощью <command
->cfdisk</command
->) для загрузочного диска. Таким образом, формат разделов MS-DOS для таблицы разделов является ``родным'', когда загрузка происходит из ARC. А еще, поскольку AlphaBIOS содержит утилиту разметки дисков, вы возможно предпочтете разметить ваши диски из меню прошивки перед установкой Linux. </para
-><para
->И наоборот, SRM <emphasis
->несовместима</emphasis
-> с таблицами разделов MS-DOS. <footnote
-><para
->Точнее, формат загрузочного сектора, требуемый спецификацией Console Subsystem, конфликтует с расположенем таблицы разделов DOS.</para
-></footnote
-> Поскольку Tru64 Unix использует BSD-формат метки диска, это ``родной'' формат разделов для установок SRM. </para
-><para
->Поскольку операционная система GNU/Linux на Alpha может грузиться из обоих типов консоли, выбор будет зависеть от того, какие прочие системы вы захотите запускать на этой же машине. Все остальные Unix-подобные операционные системы (Tru64 Unix, FreeBSD, OpenBSD и NetBSD) и OpenVMS могут загружаться только из SRM, в то время как Windows NT может загружаться только из ARC. </para
-><para
->Следующая таблица объединяет доступные и поддерживаемые комбинации типов системы/консоли (смотрите имена типов систем в <xref linkend="alpha-cpus"/> ). Ниже слово `ARC' означает любые ARC-совместимые консоли. </para
-><para>
+<para>С точки зрения пользователя, наиболее важная разница между SRM и ARC это то, что выбор консоли ограничивает возможные схемы разметки жестого диска,с которого вы собираетесь загружаться. </para><para>ARC требует, чтобы вы использовали таблицу разделов MS-DOS (которая создается с помощью <command>cfdisk</command>) для загрузочного диска. Таким образом, формат разделов MS-DOS для таблицы разделов является ``родным'', когда загрузка происходит из ARC. А еще, поскольку AlphaBIOS содержит утилиту разметки дисков, вы возможно предпочтете разметить ваши диски из меню прошивки перед установкой Linux. </para><para>И наоборот, SRM <emphasis>несовместима</emphasis> с таблицами разделов MS-DOS. <footnote><para>Точнее, формат загрузочного сектора, требуемый спецификацией Console Subsystem, конфликтует с расположенем таблицы разделов DOS.</para></footnote> Поскольку Tru64 Unix использует BSD-формат метки диска, это ``родной'' формат разделов для установок SRM. </para><para>Поскольку операционная система GNU/Linux на Alpha может грузиться из обоих типов консоли, выбор будет зависеть от того, какие прочие системы вы захотите запускать на этой же машине. Все остальные Unix-подобные операционные системы (Tru64 Unix, FreeBSD, OpenBSD и NetBSD) и OpenVMS могут загружаться только из SRM, в то время как Windows NT может загружаться только из ARC. </para><para>Следующая таблица объединяет доступные и поддерживаемые комбинации типов системы/консоли (смотрите имена типов систем в <xref linkend="alpha-cpus"/> ). Ниже слово `ARC' означает любые ARC-совместимые консоли. </para><para>
 
-<informaltable
-><tgroup cols="2">
+<informaltable><tgroup cols="2">
 <thead>
 <row>
-  <entry
->Типы систем</entry>
-  <entry
->Поддерживаемые типы консоли</entry>
+  <entry>Типы систем</entry>
+  <entry>Поддерживаемые типы консоли</entry>
 </row>
 </thead>
 
 <tbody>
 <row>
-  <entry
->alcor</entry>
-  <entry
->ARC или SRM</entry>
-</row
-><row>
-  <entry
->avanti</entry>
-  <entry
->ARC или SRM</entry>
-</row
-><row>
-  <entry
->book1</entry>
-  <entry
->Только SRM</entry>
-</row
-><row>
-  <entry
->cabriolet</entry>
-  <entry
->ARC или SRM</entry>
-</row
-><row>
-  <entry
->dp264</entry>
-  <entry
->Только SRM</entry>
-</row
-><row>
-  <entry
->eb164</entry>
-  <entry
->ARC или SRM</entry>
-</row
-><row>
-  <entry
->eb64p</entry>
-  <entry
->ARC или SRM</entry>
-</row
-><row>
-  <entry
->eb66</entry>
-  <entry
->ARC или SRM</entry>
-</row
-><row>
-  <entry
->eb66p</entry>
-  <entry
->ARC или SRM</entry>
-</row
-><row>
-  <entry
->jensen</entry>
-  <entry
->Только SRM</entry>
-</row
-><row>
-  <entry
->lx164</entry>
-  <entry
->ARC или SRM</entry>
-</row
-><row>
-  <entry
->miata</entry>
-  <entry
->ARC или SRM</entry>
-</row
-><row>
-  <entry
->mikasa</entry>
-  <entry
->ARC или SRM</entry>
-</row
-><row>
-  <entry
->mikasa-p</entry>
-  <entry
->Только SRM</entry>
-</row
-><row>
-  <entry
->nautilus</entry>
-  <entry
->Только ARC (смотрите руководство к материнской плате)</entry>
-</row
-><row>
-  <entry
->noname</entry>
-  <entry
->ARC или SRM</entry>
-</row
-><row>
-  <entry
->noritake</entry>
-  <entry
->Только SRM</entry>
-</row
-><row>
-  <entry
->noritake-p</entry>
-  <entry
->Только SRM</entry>
-</row
-><row>
-  <entry
->pc164</entry>
-  <entry
->ARC или SRM</entry>
-</row
-><row>
-  <entry
->rawhide</entry>
-  <entry
->Только SRM</entry>
-</row
-><row>
-  <entry
->ruffian</entry>
-  <entry
->Только ARC</entry>
-</row
-><row>
-  <entry
->sable</entry>
-  <entry
->Только SRM</entry>
-</row
-><row>
-  <entry
->sable-g</entry>
-  <entry
->Только SRM</entry>
-</row
-><row>
-  <entry
->sx164</entry>
-  <entry
->ARC или SRM</entry>
-</row
-><row>
-  <entry
->takara</entry>
-  <entry
->ARC или SRM</entry>
-</row
-><row>
-  <entry
->xl</entry>
-  <entry
->Только ARC</entry>
-</row
-><row>
-  <entry
->xlt</entry>
-  <entry
->ARC или SRM</entry>
+  <entry>alcor</entry>
+  <entry>ARC или SRM</entry>
+</row><row>
+  <entry>avanti</entry>
+  <entry>ARC или SRM</entry>
+</row><row>
+  <entry>book1</entry>
+  <entry>Только SRM</entry>
+</row><row>
+  <entry>cabriolet</entry>
+  <entry>ARC или SRM</entry>
+</row><row>
+  <entry>dp264</entry>
+  <entry>Только SRM</entry>
+</row><row>
+  <entry>eb164</entry>
+  <entry>ARC или SRM</entry>
+</row><row>
+  <entry>eb64p</entry>
+  <entry>ARC или SRM</entry>
+</row><row>
+  <entry>eb66</entry>
+  <entry>ARC или SRM</entry>
+</row><row>
+  <entry>eb66p</entry>
+  <entry>ARC или SRM</entry>
+</row><row>
+  <entry>jensen</entry>
+  <entry>Только SRM</entry>
+</row><row>
+  <entry>lx164</entry>
+  <entry>ARC или SRM</entry>
+</row><row>
+  <entry>miata</entry>
+  <entry>ARC или SRM</entry>
+</row><row>
+  <entry>mikasa</entry>
+  <entry>ARC или SRM</entry>
+</row><row>
+  <entry>mikasa-p</entry>
+  <entry>Только SRM</entry>
+</row><row>
+  <entry>nautilus</entry>
+  <entry>Только ARC (смотрите руководство к материнской плате)</entry>
+</row><row>
+  <entry>noname</entry>
+  <entry>ARC или SRM</entry>
+</row><row>
+  <entry>noritake</entry>
+  <entry>Только SRM</entry>
+</row><row>
+  <entry>noritake-p</entry>
+  <entry>Только SRM</entry>
+</row><row>
+  <entry>pc164</entry>
+  <entry>ARC или SRM</entry>
+</row><row>
+  <entry>rawhide</entry>
+  <entry>Только SRM</entry>
+</row><row>
+  <entry>ruffian</entry>
+  <entry>Только ARC</entry>
+</row><row>
+  <entry>sable</entry>
+  <entry>Только SRM</entry>
+</row><row>
+  <entry>sable-g</entry>
+  <entry>Только SRM</entry>
+</row><row>
+  <entry>sx164</entry>
+  <entry>ARC или SRM</entry>
+</row><row>
+  <entry>takara</entry>
+  <entry>ARC или SRM</entry>
+</row><row>
+  <entry>xl</entry>
+  <entry>Только ARC</entry>
+</row><row>
+  <entry>xlt</entry>
+  <entry>ARC или SRM</entry>
 </row>
 
 </tbody>
 </tgroup>
 </informaltable>
 
-</para
-><para
->Вообще-то, ни одна из этих консолей не сможет напрямую загрузить Linux, так что требуется содействие промежуточного системного загрузчика. Существует два основных загрузчика Linux: <command
->MILO</command
-> и <command
->aboot</command
->. </para
-><para
-><command
->MILO</command
-> сам по себе является консолью, которая заменяет ARC или SRM в памяти. <command
->MILO</command
-> может быть загружен и из ARC, и из SRM, и является единственным способом загрузить Linux из консоли ARC. <command
->MILO</command
-> платформо-зависим (разный <command
->MILO</command
-> требуется для каждого типа системы) и существует только для тех систем, для которых указана поддержка ARC в вышеприведенной таблице. Смотрите также (к сожалению, устаревшее) <ulink url="&url-milo-howto;"
->MILO HOWTO</ulink
->. </para
-><para
-><command
->aboot</command
-> это маленький, платформо-независимый системный загрузчик, который запускается только из SRM. Смотрите также (тоже, к сожалению, устаревшее) <ulink url="&url-srm-howto;"
->SRM HOWTO</ulink
-> для более полной информации про <command
->aboot</command
->. </para
-><para
->Таким образом, всего возможно три сценария, в зависимости от прошивки системной консоли и доступности или недоступности <command
->MILO</command
->: <informalexample
-><screen
->SRM -> aboot
+</para><para>Вообще-то, ни одна из этих консолей не сможет напрямую загрузить Linux, так что требуется содействие промежуточного системного загрузчика. Существует два основных загрузчика Linux: <command>MILO</command> и <command>aboot</command>. </para><para><command>MILO</command> сам по себе является консолью, которая заменяет ARC или SRM в памяти. <command>MILO</command> может быть загружен и из ARC, и из SRM, и является единственным способом загрузить Linux из консоли ARC. <command>MILO</command> платформо-зависим (разный <command>MILO</command> требуется для каждого типа системы) и существует только для тех систем, для которых указана поддержка ARC в вышеприведенной таблице. Смотрите также (к сожалению, устаревшее) <ulink url="&url-milo-howto;">MILO HOWTO</ulink>. </para><para><command>aboot</command> это маленький, платформо-независимый системный загрузчик, который запускается только из SRM. Смотрите также (тоже, к сожалению, устаревшее) <ulink url="&url-srm-howto;">SRM HOWTO</ulink> для более полной информации про <command>aboot</command>. </para><para>Таким образом, всего возможно три сценария, в зависимости от прошивки системной консоли и доступности или недоступности <command>MILO</command>: <informalexample><screen>SRM -> aboot
 SRM -> MILO
 ARC -> MILO
 
-</screen
-></informalexample>
+</screen></informalexample>
 
-</para
-><para
->Материнская плата UP1000 (имя суб-архитектуры`nautilus') от Alpha Processor, Inc. отличается от всех остальных тем, что она использует API-зависимый системный загрузчик, который запускается под прошивкой AlphaBIOS. </para
-><para
->Поскольку <command
->MILO</command
-> не доступен для всех типов систем Alpha, которые сейчас выпускаются (по состоянию на февраль 2000), и поскольку теперь не требуется покупать лицензию OpenVMS или Tru64 Unix чтобы получить прошивку SRM на вашей старой Alpha, рекомендуется использовать SRM и <command
->aboot</command
-> в новых установках GNU/Linux, если вам не нужна двойная загрузка с Windows NT. </para
-><para
->Большинство AlphaServers и все нынешние сервера и рабочие станции содержат и SRM, и AlphaBIOS в своей прошивке. Для "half-flash" машин, тиаких как различные ограниченные платы, существует возможность переключиться от одной версии к другой путем перепрожига прошивки. К тому же, как только установлена SRM, можно запустить ARC/AlphaBIOS с дискеты (используя команду <command
->arc</command
->). По причинам, указанным выше, мы рекомендуем переключиться на SRM перед установкой &debian;. </para
-><para
->Как и на других архитектурах, вы должны установить самую свежую из доступных ревизий прошивки <footnote
-><para
->За исключением Jensen, где Linux не поддерживается на версиях прошивки новее 1.7 - смотрите <ulink url="&url-jensen-howto;"
-></ulink
-> для более полной информации</para
-></footnote
-> перед установкой &debian;. Для Alpha, обновления прошивки можно получить с <ulink url="&url-alpha-firmware;"
->Alpha Firmware Updates</ulink
->. </para>
+</para><para>Материнская плата UP1000 (имя суб-архитектуры`nautilus') от Alpha Processor, Inc. отличается от всех остальных тем, что она использует API-зависимый системный загрузчик, который запускается под прошивкой AlphaBIOS. </para><para>Поскольку <command>MILO</command> не доступен для всех типов систем Alpha, которые сейчас выпускаются (по состоянию на февраль 2000), и поскольку теперь не требуется покупать лицензию OpenVMS или Tru64 Unix чтобы получить прошивку SRM на вашей старой Alpha, рекомендуется использовать SRM и <command>aboot</command> в новых установках GNU/Linux, если вам не нужна двойная загрузка с Windows NT. </para><para>Большинство AlphaServers и все нынешние сервера и рабочие станции содержат и SRM, и AlphaBIOS в своей прошивке. Для "half-flash" машин, тиаких как различные ограниченные платы, существует возможность переключиться от одной версии к другой путем перепрожига прошивки. К тому же, как только установлена SRM, можно запустить ARC/AlphaBIOS с дискеты (используя команду <command>arc</command>). По причинам, указанным выше, мы рекомендуем переключиться на SRM перед установкой &debian;. </para><para>Как и на других архитектурах, вы должны установить самую свежую из доступных ревизий прошивки <footnote><para>За исключением Jensen, где Linux не поддерживается на версиях прошивки новее 1.7 - смотрите <ulink url="&url-jensen-howto;"></ulink> для более полной информации</para></footnote> перед установкой &debian;. Для Alpha, обновления прошивки можно получить с <ulink url="&url-alpha-firmware;">Alpha Firmware Updates</ulink>. </para>
  </sect2>
 
 
-  <sect2 arch="alpha"
-><title
->Booting with TFTP</title>
+  <sect2 arch="alpha"><title>Booting with TFTP</title>
 <para>
 
-In SRM, Ethernet interfaces are named with the <userinput
->ewa</userinput>
-prefix, and will be listed in the output of the <userinput
->show dev</userinput
-> command,
+In SRM, Ethernet interfaces are named with the <userinput>ewa</userinput>
+prefix, and will be listed in the output of the <userinput>show dev</userinput> command,
 like this (edited slightly):
 
-<informalexample
-><screen
->
-
+<informalexample><screen>
 >>> show dev
 ewa0.0.0.9.0               EWA0              08-00-2B-86-98-65
 ewb0.0.0.11.0              EWB0              08-00-2B-86-98-54
 ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
 
-</screen
-></informalexample>
+</screen></informalexample>
 
 You first need to set the boot protocol:
-<informalexample
-><screen
->
-
+<informalexample><screen>
 >>> set ewa0_protocol bootp
 
-</screen
-></informalexample>
+</screen></informalexample>
 
 Then check the medium type is correct:
 
-<informalexample
-><screen
->
-
+<informalexample><screen>
 >>> set ewa0_mode <replaceable>mode</replaceable>
 
-</screen
-></informalexample>
+</screen></informalexample>
 
-You can get a listing of valid modes with <userinput
->
->
->
->set ewa0_mode</userinput
->.
+You can get a listing of valid modes with <userinput>>>>set ewa0_mode</userinput>.
 
-</para
-><para>
+</para><para>
 
 Then, to boot from the first Ethernet interface, you would type:
 
-<informalexample
-><screen
->
-
+<informalexample><screen>
 >>> boot ewa0 -flags ""
 
-</screen
-></informalexample>
+</screen></informalexample>
 
-</para
-><para>
+</para><para>
 
 This will boot using the default kernel parameters as included in the
 netboot image.
 
-</para
-><para>
+</para><para>
 
-If you wish to use a serial console, you <emphasis
->must</emphasis>
-pass the <userinput
->console=</userinput
-> parameter to the kernel.
-This can be done using the <userinput
->-flags</userinput
-> argument to
-the SRM <userinput
->boot</userinput
-> command.  The serial ports are
+If you wish to use a serial console, you <emphasis>must</emphasis>
+pass the <userinput>console=</userinput> parameter to the kernel.
+This can be done using the <userinput>-flags</userinput> argument to
+the SRM <userinput>boot</userinput> command.  The serial ports are
 named the same as their corresponding files in
-<userinput
->/dev</userinput
->.  For example, to boot from
-<userinput
->ewa0</userinput
-> and use a console on the first serial
+<userinput>/dev</userinput>.  For example, to boot from
+<userinput>ewa0</userinput> and use a console on the first serial
 port, you would type: 
 
-<informalexample
-><screen
->
-
+<informalexample><screen>
 >>> boot ewa0 -flags console=ttyS0
 
-</screen
-></informalexample>
+</screen></informalexample>
 
 </para>
   </sect2>
 
-  <sect2 arch="alpha"
-><title
->Booting from CD-ROM with the SRM Console</title>
+  <sect2 arch="alpha"><title>Booting from CD-ROM with the SRM Console</title>
 <para>
 
 Type
 
-<informalexample
-><screen
->
+<informalexample><screen>
 
 &gt;&gt;&gt; boot xxxx -flags 0
 
-</screen
-></informalexample>
+</screen></informalexample>
 
-where <replaceable
->xxxx</replaceable
-> is your CD-ROM drive in SRM notation.
+where <replaceable>xxxx</replaceable> is your CD-ROM drive in SRM notation.
 
 </para>
   </sect2>
 
   <sect2 arch="alpha">
-  <title
->Booting from CD-ROM with the ARC or AlphaBIOS Console</title>
+  <title>Booting from CD-ROM with the ARC or AlphaBIOS Console</title>
 <para>
 
 To boot a CD-ROM from the ARC console, find your sub-architecture code
 name (see <xref linkend="alpha-cpus"/>), then enter
-<filename
->\milo\linload.exe</filename
-> as the boot loader and
-<filename
->\milo\<replaceable
->subarch</replaceable
-></filename
-> (where
-<replaceable
->subarch</replaceable
-> is the proper subarchitecture name)
+<filename>\milo\linload.exe</filename> as the boot loader and
+<filename>\milo\<replaceable>subarch</replaceable></filename> (where
+<replaceable>subarch</replaceable> is the proper subarchitecture name)
 as the OS Path in the `OS Selection Setup' menu. Ruffians make an
-exception: You need to use <filename
->\milo\ldmilo.exe</filename
-> as
+exception: You need to use <filename>\milo\ldmilo.exe</filename> as
 boot loader.
 
 </para>
@@ -445,161 +216,107 @@ boot loader.
 
 
   <sect2 arch="alpha">
-  <title
->Booting from Floppies with the SRM Console</title>
+  <title>Booting from Floppies with the SRM Console</title>
 <para>
 
-At the SRM prompt (<prompt
->&gt;&gt;&gt;</prompt
->), issue the following
+At the SRM prompt (<prompt>&gt;&gt;&gt;</prompt>), issue the following
 command:
 
-<informalexample
-><screen
->
+<informalexample><screen>
 
 &gt;&gt;&gt; boot dva0 -flags 0
         
-</screen
-></informalexample>
+</screen></informalexample>
 
-possibly replacing <filename
->dva0</filename
-> with the actual device
-name.  Usually, <filename
->dva0</filename
-> is the floppy; type
+possibly replacing <filename>dva0</filename> with the actual device
+name.  Usually, <filename>dva0</filename> is the floppy; type
 
-<informalexample
-><screen
->
+<informalexample><screen>
 
 &gt;&gt;&gt; show dev
         
-</screen
-></informalexample>
+</screen></informalexample>
 
 to see the list of devices (e.g., if you want to boot from a CD).
-Note that if you are booting via MILO, <command
->-flags</command
-> argument
-is ignored, so you can just type <command
->boot dva0</command
->.
+Note that if you are booting via MILO, <command>-flags</command> argument
+is ignored, so you can just type <command>boot dva0</command>.
 If everything works OK, you will eventually see the Linux kernel boot.
 
-</para
-><para>
+</para><para>
 
 If you want to specify kernel parameters when booting via
-<command
->aboot</command
->, use the following command:
-<informalexample
-><screen
->
+<command>aboot</command>, use the following command:
+<informalexample><screen>
 
 &gt;&gt;&gt; boot dva0 -file linux.bin.gz -flags "root=/dev/fd0 load_ramdisk=1 arguments"
         
-</screen
-></informalexample>
+</screen></informalexample>
 (typed on one line), substituting, if necessary, the actual SRM boot
-device name for <filename
->dva0</filename
->, the Linux boot device name for
-<filename
->fd0</filename
->, and the desired kernel parameters for
-<filename
->arguments</filename
->.
+device name for <filename>dva0</filename>, the Linux boot device name for
+<filename>fd0</filename>, and the desired kernel parameters for
+<filename>arguments</filename>.
 
-</para
-><para>
+</para><para>
 
 If you want to specify kernel parameters when booting via
-<command
->MILO</command
->, you will have to interrupt bootstrap once you get
+<command>MILO</command>, you will have to interrupt bootstrap once you get
 into MILO.  See <xref linkend="booting-from-milo"/>.
 </para>
   </sect2>
 
 
   <sect2 arch="alpha">
-  <title
->Booting from Floppies with the ARC or AlphaBIOS Console</title>
+  <title>Booting from Floppies with the ARC or AlphaBIOS Console</title>
 
 <para>
 
-In the OS Selection menu, set <command
->linload.exe</command
-> as the boot
-loader, and <command
->milo</command
-> as the OS Path.  Bootstrap using the
+In the OS Selection menu, set <command>linload.exe</command> as the boot
+loader, and <command>milo</command> as the OS Path.  Bootstrap using the
 newly created entry.
 
 </para>
   </sect2>
 
   <sect2 arch="alpha">
-  <title
->Booting from Floppies with the APB Boot Loader (UP1000)</title>
+  <title>Booting from Floppies with the APB Boot Loader (UP1000)</title>
 
 <para>
 
-To boot on this platform, run <command
->\apb\apb.exe</command
-> from the
+To boot on this platform, run <command>\apb\apb.exe</command> from the
 `Utility/Run Maintenance Program' menu, and type
-      <informalexample
-><screen
->
+      <informalexample><screen>
 
 boot debian_install
       
-</screen
-></informalexample>
+</screen></informalexample>
  at the APB prompt.
 
 </para>
   </sect2>
 
- <sect2 arch="alpha" id="booting-from-milo"
-><title
->Booting with MILO</title>
+ <sect2 arch="alpha" id="booting-from-milo"><title>Booting with MILO</title>
 <para>
 
 MILO contained on the bootstrap media is configured to proceed straight
 to Linux automatically.  Should you wish to intervene, all you need is to
 press space during MILO countdown.
 
-</para
-><para>
+</para><para>
 
 If you want to specify all the bits explicitly (for example, to supply
 additional parameters), you can use a command like this:
 
-<informalexample
-><screen
->
+<informalexample><screen>
 
 MILO&gt; boot fd0:linux.bin.gz root=/dev/fd0 load_ramdisk=1 <!-- arguments -->
         
-</screen
-></informalexample>
+</screen></informalexample>
 
-</para
-><para>
+</para><para>
 
 If you are booting from something other than a floppy, substitute
-<filename
->fd0</filename
-> in the above example with the appropriate device name
-in Linux notation.  The <command
->help</command
-> command would give you a brief
+<filename>fd0</filename> in the above example with the appropriate device name
+in Linux notation.  The <command>help</command> command would give you a brief
 MILO command reference.
 
 </para>
