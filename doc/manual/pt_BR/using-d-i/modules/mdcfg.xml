@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 21918 -->
+
+   <sect3 id="mdcfg">
+   <title>Configurando o Dispositivo Multi-Discos (RAID via Software)</title>
+<para>
+
+Caso tenha mais de um disco rígido<footnote><para>
+
+Para ser honesto, você pode contruir dispositivos MD até mesmo dentro de 
+partições residindo dentro de uma únidade física simples, mas não lhe trará 
+nada útil.
+
+</para></footnote> em seu computador, você poderá usar o 
+<command>mdcfg</command> para configurar suas unidades para 
+aumentar a performance e/ou melhorar a confiabilidade em seus dados. O 
+resultado é chamado <firstterm>Dispositivo Muldi-Discos</firstterm> (ou 
+após isto, sua variante mais famosa: <firstterm>RAID via software</firstterm>).
+
+</para><para>
+
+Um dispositivo MD é basicamente um grupo de partições localizados em 
+diferentes discos e combinadas para formar um dispositivo <emphasis>lógico</emphasis>.
+Este dispositivo pode então ser usado como uma partição ordinária  (i.e. você 
+poderá formata-la no <command>partman</command>, especificar um ponto de montagem, 
+etc.).
+
+</para><para>
+
+Os benefícios que ganhará dependem do tipo de dispositivo MD que está criadno. 
+Os tipos suportados atualmente são:
+
+<variablelist>
+<varlistentry>
+
+<term>RAID0</term><listitem><para>
+
+Tem como objetivo principal a performance. O RAID0 divide todos os dados
+de entrada em <firstterm>stripes</firstterm> e os distribui igualmente através
+de cada disco do conjunto. Isto aumenta a performance das operações de 
+leitura/gravação, mas quando um dos discos falham, você perderá 
+<emphasis>TUDO</emphasis> (parte da informação ainda está no
+disco saudável e a outra parte <emphasis>estava</emphasis> no disco que ocorreu
+a falha).
+
+</para><para>
+
+Um uso tópico de uso para o RAID0 é uma partição para edição de vídeos.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>RAID1</term><listitem><para>
+
+É recomendável para configurações aonde a confiança é o objetivo
+principal. Ele consiste em diversas partições (geralmente duas) onde
+cada partição contém exatamente os mesmos dados. Isto essencialmente
+significa duas coisas. Primeiro, se um dos seus discos falham, você ainda
+terá os dados armazenado nos discos restantes. Segundo, você poderá 
+usa somente uma fração da capacidade disponível (mais precisamente, ele 
+será o tamanho da menor partição da RAID). Terceiro, o processo de 
+leitura utiliza somente um disco, e se este disco estiver realmente 
+ocupado, o sistema utilizará o outro disco (o disco livre) para obter os dados
+(enquanto o outro disco termina seu trabalho de leitura). Isto resulta em mais
+performance em servidores que utilizam mais operações de leitura que gravação
+(e.g. como um servidor de arquivos).
+
+</para><para>
+
+Opcionalmente você pode ter um disco spare na array que tomará o lugar do 
+disco problemático em caso de falha.
+
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+Para configurar:
+
+<informaltable>
+<tgroup cols="5">
+<thead>
+<row>
+  <entry>Tipo</entry>
+  <entry>Dispositivos Mínimos</entry>
+  <entry>Dispositivo Spare</entry>
+  <entry>Sobrevive a falha de disco?</entry>
+  <entry>Espaço Disponível</entry>
+</row>
+</thead>
+
+<tbody>
+<row>
+  <entry>RAID0</entry>
+  <entry>2</entry>
+  <entry>não</entry>
+  <entry>não</entry>
+  <entry>Tamanho da partição mais pequena multiplicada pelo número de dispositivos na RAID</entry>
+</row>
+
+<row>
+  <entry>RAID1</entry>
+  <entry>2</entry>
+  <entry>opcional</entry>
+  <entry>sim</entry>
+  <entry>Tamanho da partição mais pequena dentro da RAID</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+
+</para><para>
+
+Se você quiser saber toda a verdade sobre o RAID via software, de uma 
+olhada no <ulink url="&url-software-raid-howto;">Software RAID HOWTO</ulink>.
+
+</para><para>
+
+Para criar um dispositivo MD, você precisará ter as partições especificadas
+marcadas para serem usadas como dispositiovs RAID. (Isto é feito no 
+<command>partman</command> no ítem de menu <guimenu>Configurações da 
+Partição</guimenu> onde deverá selecionar <menuchoice>
+<guimenu>Usada como:</guimenu> <guimenuitem>Utilizar a partição como dispositivo 
+RAID</guimenuitem> </menuchoice>.)
+
+</para><warning><para>
+
+Atualmente você não pode usar MD como partição raíz (<filename>/</filename>).
+
+</para></warning><para>
+
+Como próximo passo, você deverá selecionar <guimenuitem>Configurar o RAID via 
+software</guimenuitem> através do menu principal do <command>partman</command>.
+Na primeira tela do <command>mdcfg</command> selecione o item 
+<guimenuitem>Criar um dispositivo MD</guimenuitem>. Você será presenteado com
+uma lista de tipos suportados de dispositivos MD, no qual poderá escolher um 
+(e.g. RAID1). O que segue, depende do tipo de MD que selecionou.
+</para>
+
+<itemizedlist>
+<listitem><para>
+
+O RAID0 é simples &mdash; você será perguntado pela lista de partições RAID 
+disponíveis e sua única tarefa será selecionar as partições que formarão o MD.
+
+</para></listitem>
+<listitem><para>
+
+O RAID1 é um pouco mais detalhista. Primeiro, o sistema lhe perguntará
+para entrar com o número de dispositivos ativos e o número de dispositivos
+spare que formarão o MD. Após isto, você precisará selecionar através de uma 
+lista de dispositivos RAID as que se tornarão ativas e então escolher as que 
+serão spare. O número de partições selecionadas deverá ser igual ao número
+especificado anteriormente. Não se preocupe se cometer algum erro e 
+selecionar um número de partiçòes diferente, o &d-i; não lhe permitirá continuar
+até que corrija o problema.
+
+</para></listitem>
+</itemizedlist>
+
+<para>
+
+É perfeitamente possível ter diversos tipos de MD de uma só vez. Por 
+exemplo se tiver três discos rígidos de 200GB dedicados ao MD, cada 
+contendo duas partições de 100GB, você poderá combinar as primeiras
+partições em todos os três discos no RAID0 (uma partição rápida
+de 300GB para edição de vídeos) e usar as outras três partições 
+(2 ativas e 1 spare) para o RAID1 (uma partição mais confiável de 
+100GB para armazenar o sistema de arquivos <filename>/home</filename>).
+
+</para><para>
+
+Após configurar os dispositivos MD conforme suas necessidades, você poderá
+selecionar <guimenuitem>Finalizar</guimenuitem> <command>mdcfg</command> para
+retornar ao <command>partman</command> e criar sistemas de arquivos em seus 
+novos dispositivos MD e especificar opções como pontos demontagem.
+
+</para>
+   </sect3>
