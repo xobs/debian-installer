@@ -5,6 +5,11 @@ arch-image: $(IMAGE)
 # 2. copy over kernel, initrd
 # 3. install syslinux
 $(IMAGE): $(INITRD) tmp_mount
+	if [ "$(UPX)" ] ; then \
+		$(foreach NAME,$(KERNELNAME), \
+			$(UPX) -9 $(TEMP)/$(NAME); ) \
+	fi
+
 	dd if=/dev/zero of=$@.new bs=1k count=$(FLOPPY_SIZE)
 	mkfs.msdos -i deb00001 -n 'Debian Installer' -C $@.new $(FLOPPY_SIZE)
 

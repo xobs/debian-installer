@@ -73,7 +73,8 @@ TREE=$(TEMP)/tree
 CD_IMAGE_TREE=$(TEMP)/cd_image_tree
 
 DPKGDIR=$(TREE)/var/lib/dpkg
-FULLDPKGDIR=$(TEMP)/full/var/lib/dpkg
+DRIVEREXTRASDIR=$(TREE)/tmp-drivers
+DRIVEREXTRASDPKGDIR=$(DRIVEREXTRASDIR)/var/lib/dpkg
 
 TMP_MNT:=$(shell pwd)/mnt
 
@@ -151,7 +152,7 @@ clean: demo_clean tmp_mount debian/control
 	        umount "$(USER_MOUNT_HACK)";\
 	    fi ; \
 	fi
-	rm -rf $(TREE) 2>/dev/null $(TEMP)/full $(DRIVER1) || sudo rm -rf $(TREE) $(TEMP)/full $(DRIVER1)
+	rm -rf $(TREE) 2>/dev/null $(TEMP)/modules $(DRIVER1) || sudo rm -rf $(TREE) $(TEMP)/modules $(DRIVER1)
 	dh_clean
 	rm -f *-stamp
 	rm -rf $(UDEBDIR) $(EXTRAUDEBDIR) $(TMP_MNT) debian/build
@@ -274,7 +275,7 @@ $(TYPE)-tree-stamp: $(TYPE)-get_udebs-stamp debian/control
 	dpkg-checkbuilddeps
 
 	# This build cannot be restarted, because dpkg gets confused.
-	rm -rf $(TREE) $(TEMP)/full
+	rm -rf $(TREE) $(TEMP)/modules
 	# Set up the basic files [u]dpkg needs.
 	mkdir -p $(DPKGDIR)/info
 	touch $(DPKGDIR)/status
@@ -284,19 +285,12 @@ $(TYPE)-tree-stamp: $(TYPE)-get_udebs-stamp debian/control
 	mkdir -p $(DPKGDIR)/updates/
 	touch $(DPKGDIR)/available
 
-	# Create a full tree with everything in it, to run mklibs in
-	mkdir -p $(TEMP)/full 
-	mkdir -p $(TEMP)/full/tmp
-	mkdir -p $(FULLDPKGDIR)/info $(FULLDPKGDIR)/updates
-	touch $(FULLDPKGDIR)/status $(FULLDPKGDIR)/available
-
 	# Unpack the udebs with dpkg. This command must run as root
 	# or fakeroot.
 	echo -n > diskusage-$(TYPE).txt
 	oldsize=0; oldblocks=0; oldcount=0; for udeb in $(UDEBDIR)/*.udeb ; do \
 		pkg=`basename $$udeb` ; \
 		dpkg --force-overwrite --root=$(TREE) --unpack $$udeb ; \
-		dpkg --force-overwrite --root=$(TEMP)/full --unpack $$udeb; \
 		newsize=`du -bs $(TREE) | awk '{print $$1}'` ; \
 		newblocks=`du -s $(TREE) | awk '{print $$1}'` ; \
 		newcount=`find $(TREE) -type f | wc -l | awk '{print $$1}'` ; \
@@ -309,27 +303,6 @@ $(TYPE)-tree-stamp: $(TYPE)-get_udebs-stamp debian/control
 		oldblocks=$$newblocks ; \
 		oldcount=$$newcount ; \
 	done
-ifeq ($(TYPE),floppy)
-	echo -n > diskusage-extra.txt
-	oldsize=0; oldblocks=0; oldcount=0; \
-	for udeb in $(EXTRAUDEBDIR)/*.udeb ; do \
-		pkg=`basename $$udeb`; \
-		dpkg --force-overwrite --root=$(TEMP)/full --unpack $$udeb; \
-		newsize=`du -bs $(TEMP)/full | awk '{print $$1}'` ; \
-                newblocks=`du -s $(TEMP)/full | awk '{print $$1}'` ; \
-                newcount=`find $(TEMP)/full -type f | wc -l | awk '{print $$1}'` ; \
-                usedsize=`echo $$newsize - $$oldsize | bc`; \
-                usedblocks=`echo $$newblocks - $$oldblocks | bc`; \
-                usedcount=`echo $$newcount - $$oldcount | bc`; \
-                version=`dpkg-deb --info $$udeb | grep Version: | awk '{print $$2}'` ; \
-                echo " $$usedsize B - $$usedblocks blocks - $$usedcount files used by pkg $$pkg (version $$version )" >> diskusage-extra.txt; \
-		 oldsize=$$newsize ; \
-                 oldblocks=$$newblocks ; \
-                 oldcount=$$newcount ; \
-	done
-	sort -n < diskusage-extra.txt > diskusage-extra.txt.new && \
-		mv diskusage-extra.txt.new diskusage-extra.txt
-endif
 	sort -n < diskusage-$(TYPE).txt > diskusage-$(TYPE).txt.new && \
 		mv diskusage-$(TYPE).txt.new diskusage-$(TYPE).txt
 
@@ -366,11 +339,6 @@ endif
 		mv -f $(TREE)/boot/$(NAME) $(TEMP); )
 	-rmdir $(TREE)/boot/
 
-	if [ "$(UPX)" ] ; then \
-		$(foreach NAME,$(KERNELNAME), \
-			$(UPX) -9 $(TEMP)/$(NAME); ) \
-	fi
-
 	# Copy terminfo files for slang frontend
 	# TODO: terminfo.udeb?
 	for file in /etc/terminfo/a/ansi /etc/terminfo/l/linux \
@@ -392,9 +360,20 @@ ifdef EXTRALIBS
 	cp -a $(EXTRALIBS) $(TREE)/lib/
 endif
 
+ifeq ($(TYPE),floppy)
+	# Unpack additional driver disks, so mklibs runs on them too.
+	rm -rf $(DRIVEREXTRASDIR)
+	mkdir -p $(DRIVEREXTRASDIR)
+	mkdir -p $(DRIVEREXTRASDPKGDIR)/info $(DRIVEREXTRASDPKGDIR)/updates
+	touch $(DRIVEREXTRASDPKGDIR)/status $(DRIVEREXTRASDPKGDIR)/available
+	for udeb in $(EXTRAUDEBDIR)/*.udeb ; do \
+		dpkg --force-overwrite --root=$(DRIVEREXTRASDIR) --unpack $$udeb; \
+	done
+endif
+
 	# Library reduction.
 	mkdir -p $(TREE)/lib
-	$(MKLIBS) -v -d $(TREE)/lib --root=$(TEMP)/full `find $(TEMP)/full -type f -perm +0111 -o -name '*.so'`
+	$(MKLIBS) -v -d $(TREE)/lib --root=$(TREE) `find $(TEMP) -type f -perm +0111 -o -name '*.so'`
 
 	# Add missing symlinks for libraries
 	# (Needed for mklibs.py)
@@ -439,17 +418,23 @@ endif
 
 	touch $(TYPE)-tree-stamp
 
-# Collect the used UTF-8 strings, to know which glyphs to include in
-# the font.  Using strings is not the best way, but no better suggestion
-# has been made yet.
-all-$(TYPE).utf: $(TYPE)-tree-stamp
+	# Collect the used UTF-8 strings, to know which glyphs to include in
+	# the font.  Using strings is not the best way, but no better suggestion
+	# has been made yet.
 	cp graphic.utf all-$(TYPE).utf
 ifeq ($(TYPE),floppy)
-	cat $(TEMP)/full/var/lib/dpkg/info/*.templates >> all-floppy.utf
-else
-	cat $(TREE)/var/lib/dpkg/info/*.templates >> all-$(TYPE).utf
+	cat $(DPKGDIR)/info/*.templates >> all-$(TYPE).utf
 endif
+	cat $(DRIVEREXTRASDPKGDIR)/info/*.templates >> all-$(TYPE).utf
 	find $(TREE) -type f | xargs strings >> all-$(TYPE).utf
+
+ifeq ($(TYPE),floppy)
+	# Remove additional driver disk contents now that we're done with
+	# them.
+	rm -rf $(DRIVEREXTRASDIR)
+endif
+	# Tree target ends here. Whew!
+
 
 unifont-reduced-$(TYPE).bdf: all-$(TYPE).utf
 	# Need to use an UTF-8 based locale to get reduce-font working.
