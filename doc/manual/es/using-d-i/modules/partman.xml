@@ -1,4 +1,5 @@
-<!-- original version: 21579 -->
+<!-- original version: 22935 -->
+<!-- Revisado por Rudy Godoy -->
 
    <sect3 id="partman">
    <title>Particionando sus discos</title>
@@ -9,19 +10,19 @@ simplemente quiere conocer más detalles, lea <xref linkend="partitioning"/>.
 
 </para><para>
 
-Primero se le dará la oportunidad de particionar automáticamente un disco
-entero. A esto también se le llama particionado <quote>guiado</quote>. Si no
+Primero se le dará la oportunidad de particionar automáticamente todo el
+disco. A esto también se le llama particionado <quote>guiado</quote>. Si no
 quiere autoparticionar, elija <guimenuitem>Editar manualmente la tabla de
 particiones</guimenuitem> en el menú.
 
 </para><para>
 
 Si elije el particionado guiado, podrá elegir entre los distintos esquemas
-que se muestran en la tabla de debajo. Todos los esquemas tienen sus pros y sus
-contras, algunos se discuten en <xref linkend="partitioning"/>. Si no está
-seguro, escoja el primero. Tenga en mente, que el particionado guiado
-necesita un cierto espacio libre mínimo para operar. Si no le da al menos un 1GB
-de espacio (depende del esquema seleccionado), el particionado guiado
+que se muestran en la tabla siguiente. Todos los esquemas tienen sus pros y sus
+contras, algunos de éstos se discuten en <xref linkend="partitioning"/>. Si 
+no está seguro, escoja el primero. Tenga en mente, que el particionado guiado
+necesita un cierto espacio libre mínimo para operar. Si no le da al menos 
+un 1GB de espacio (depende del esquema seleccionado), el particionado guiado
 fallará.
 
 </para>
@@ -40,12 +41,12 @@ fallará.
 <row>
   <entry>Todos los ficheros en una partición</entry>
   <entry>600MB</entry>
-  <entry><filename>/</filename>, swap</entry>
+  <entry><filename>/</filename>, intercambio (swap)</entry>
 </row><row>
   <entry>Ordenador de escritorio</entry>
   <entry>500MB</entry>
   <entry>
-    <filename>/</filename>, <filename>/home</filename>, swap
+    <filename>/</filename>, <filename>/home</filename>, intercambio (swap)
   </entry>
 </row><row>
   <entry>Estación de trabajo multiusuario</entry>
@@ -53,7 +54,7 @@ fallará.
   <entry>
     <filename>/</filename>, <filename>/home</filename>,
     <filename>/usr</filename>, <filename>/var</filename>,
-    <filename>/tmp</filename>, swap
+    <filename>/tmp</filename>, intercambio (swap)
   </entry>
 </row>
 
@@ -63,9 +64,9 @@ fallará.
 
 Si escoge el particionado automático para su sistema IA64, habrá una
 partición adicional, con un sistema de ficheros FAT16 arrancable, para el
-gestor de arranque EFI. Además hay una opción adicional en el menú que permite
-dar formato a los discos para establecer manualmente una partición como una
-partición de arranque EFI.
+gestor de arranque EFI. Además hay una opción adicional en el menú que le
+permite dar formato a los discos para establecer manualmente una partición 
+como una partición de arranque EFI.
 
 </para><para>
 
@@ -97,30 +98,31 @@ La lista de particiones podría ser como la siguiente:
 </screen></informalexample>
 
 Este ejemplo muestra dos discos duros IDE dividos en diversas particiones, el
-primer disco tiene algo de espacio libre. Cada línea de partición consiste de el
-número de partición, su tipo, tamaño, banderas opcionales, sistema de ficheros y
-punto de montaje (si fuese el caso).
+primer disco tiene algo de espacio libre. Cada línea de partición está 
+conformada de el número de partición, su tipo, tamaño, banderas opcionales, 
+sistema de ficheros y punto de montaje (si fuese el caso).
 
 </para><para>
 
-Esto termina el particionado guiado. Si está satisfecho con la tabla de
+Esto finaliza con el particionado guiado. Si está satisfecho con la tabla de
 particiones generada, puede elegir <guimenuitem>Finalizar el particionado y
-escribir los cambios en el disco</guimenuitem> desde el menú para implementar la
-nueva tabla de particiones (como se describe al final de esta sección). Si no le
-gusta, puede elegir <guimenuitem>Deshacer los cambios realizados a las
-particiones</guimenuitem>, para ejecutar el particionamiento guiado de nuevo o
-modificar los cambios propuestos de forma manual tal y como se describe debajo.
+escribir los cambios en el disco</guimenuitem> desde el menú para implementar
+la nueva tabla de particiones (como se describe al final de esta sección). Si
+no le gusta, puede elegir <guimenuitem>Deshacer los cambios realizados a las
+particiones</guimenuitem>, para ejecutar nuevamente el particionado guiado o
+modificar los cambios propuestos de forma manual tal y como se describe a
+continuación.
 
 </para><para>
 
-Una pantalla similar a la mostrada justo arriba se mostrará si elige particionar
-manualmente excepto que se mostrará su partición actual sin los puntos de
-montaje. Cómo configurar manualmente sus particiones y el uso de estas en su
-sistema Debian nuevo se explica al final de esta sección.
+Una pantalla similar a la mostrada anteriormente se mostrará si elige 
+particionar manualmente excepto que se mostrará su partición actual sin los 
+puntos de montaje. Cómo configurar manualmente sus particiones y el uso de 
+éstas en su sistema Debian nuevo se explica al final de esta sección.
 
 </para><para>
 
-Si elije un disco nuevo que no tiene ni particiones o espacio libre en
+Si elige un disco nuevo que no tiene ni particiones o espacio libre en
 él, se le podría ofrecer a crear una nueva tabla de particiones (esto
 es necesario para que pueda crear nuevas particiones). Después de esto
 una nueva línea titulada <quote>ESPACIO LIBRE</quote> deberá aparecer
@@ -154,7 +156,7 @@ que podría no ser muy obvia a primera impresión es que puede
 redimensionar el tamaño de la partición seleccionando el elemento
 que muestra el tamaño de ésta. Los sistemas de ficheros que
 se conoce que funcionan con esta opción son por lo menos fat16, fat32,
-ext2, ext3 y swap. Este menú también le permite eliminar una partición.
+ext2, ext3 y «swap». Este menú también le permite eliminar una partición.
 
 </para><para>
 
@@ -162,7 +164,7 @@ Asegúrese de crear al menos dos particiones: una para el sistema de ficheros
 <emphasis>raíz</emphasis> (que debe montarse en <filename>/</filename>) y otra
 para el <emphasis>espacio de intercambio</emphasis> (swap). Si
 olvida montar el sistema de ficheros raíz, <command>partman</command> no le
-dejará continuar hasta que corrija el problema.
+dejará continuar hasta que corrija esto.
 
 </para><para arch="ia64">
 
@@ -180,10 +182,11 @@ cargado todos los módulos necesarios (ejm. <filename>partman-ext3</filename>,
 
 </para><para>
 
-Cuando esté satisfecho con el particionado, seleccione <guimenuitem>Finalizar el
-particionado y escribir los cambios en el disco</guimenuitem> del menú de
+Cuando esté satisfecho con el particionado, seleccione <guimenuitem>Finalizar
+el particionado y escribir los cambios en el disco</guimenuitem> del menú de
 particionado. Se le presentará un resumen de los cambios realizados en los
-discos y se le pedirá confirmación para crear los sistemas de ficheros pedidos.
+discos y se le pedirá confirmación para crear los sistemas de ficheros 
+solicitados.
 
 </para>
    </sect3>
