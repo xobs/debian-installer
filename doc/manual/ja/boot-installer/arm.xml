@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 24663 -->
+<!-- original version: 26371 -->
 
   <sect2 arch="arm" id="boot-tftp"><title>TFTP からの起動</title>
 
@@ -85,30 +85,45 @@ standard (the save-all step is optional):
 
 <informalexample><screen>
     NeTTrom command-&gt; setenv kerntftpserver 192.168.0.1
-    NeTTrom command-&gt; setenv kerntftpfile tftpboot.img
+    NeTTrom command-&gt; setenv kerntftpfile boot.img
     NeTTrom command-&gt; save-all
     NeTTrom command-&gt; setenv netconfig_eth0 flash
     NeTTrom command-&gt; setenv kernconfig tftp
+    NeTTrom command-&gt; setenv rootdev /dev/ram
+    NeTTrom command-&gt; setenv cmdappend root=/dev/ram
 </screen></informalexample>
 
 <!--
-Only the last two of these interfere with normal disk booting, so it is 
-safe to <command>save-all</command> right before it, which will
+Only the last four of these interfere with normal disk booting, so it is
+safe to issue <command>save-all</command> right before them, which will
 store the network settings in case you need to boot from the network
-again. Use the <command>printenv</command> command to review your
-environment settings. Finally, if your <envar>cmdappend</envar>
-NeTTrom variable has the <option>noinitrd</option> option (which is  
-necessary to boot 2.4 kernels), you must remove it so the downloaded 
-kernel can boot with its attached ramdisk.
+again.
 -->
-通常のディスクからの起動と衝突するのは最後の 2 つだけなので、
+通常のディスクで起動するインターフェースは最後の 4 つだけなので、
 その直前で <command>save-all</command> しておくと安全です。
 こうするとネットワークの設定が保存され、
 再びネットワークから起動するときに設定を再利用できます。
+
+<!--
+If you want to use the serial console to install your NetWinder, you also
+need the following setting:
+-->
+NetWinder にインストールするのに、シリアルコンソールを使用する場合は、
+以下の設定も必要です。
+
+<informalexample><screen>
+    NeTTrom command-&gt; setenv cmdappend root=/dev/ram console=ttyS0,115200
+</screen></informalexample>
+
+<!--
+Use the <command>printenv</command> command to review your
+environment settings. Finally, if your <envar>cmdappend</envar>
+NeTTrom variable has the <option>noinitrd</option> option, you must
+remove it so the downloaded kernel can boot with its attached ramdisk.
+-->
 行った設定を見直すには、<command>printenv</command> コマンドを使います。
 最後に、NeTTrom 変数 <envar>cmdappend</envar> に <option>noinitrd</option> 
-オプションが設定されていたら (これは 2.4 カーネルの起動に必要です)、
-これを削除しなければなりません。
+オプションが設定されていたら、これを削除しなければなりません。
 そうしないとダウンロードしたカーネルから、同じくダウンロードした
 ram ディスクを用いて起動することができません。
 
