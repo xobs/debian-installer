@@ -217,6 +217,17 @@ create_LaTeX () {
 	
 	RET=$?
 
+#	Japanese is different :(
+
+	if [ "$cur_lang" == "ja" ]; then
+		cat $tempdir/install.${cur_lang}.new.tex | \
+			sed 's/\\begin{document}/\\begin{document}\\begin{CJK*}\[dnp\]{JIS}{min}/g' | \
+			sed 's/\\end{document}/\\end{CJK*}\\end{document}/g' \
+			> $tempdir/install.${cur_lang}.new.tex.tmp
+		mv $tempdir/install.${cur_lang}.new.tex.tmp $tempdir/install.${cur_lang}.new.tex
+		recode -f UTF-8..EUC-JP $tempdir/install.${cur_lang}.new.tex
+	fi
+	
     output_files="$output_files $tempdir/install.${cur_lang}.new.tex"
 
 	return $RET
