@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 22842 -->
+<!-- original version: 23389 -->
 
  <sect1 id="example-preseed">
  <title>Příklad předkonfiguračního souboru</title>
@@ -32,8 +32,8 @@ odkomentovat některé řádky.
 # 
 # Když už upravujete soubor zavaděče, přidejte na stejné místo i parametr
 # debconf/priority=critical, který odchytí většinu případných otázek, které
-# zde zapomente nastavit.
-# Dále můžete v syslinux.cfg nastavit paramter timeout na 1, abyste nemuseli
+# zde zapomenete nastavit.
+# Dále můžete v syslinux.cfg nastavit parametr timeout na 1, abyste nemuseli
 # pro zavedení instalačního systému stisknout enter.
 #
 # Výběr jazyka, země a klávesnice nemůže být nastaven v souboru
@@ -44,6 +44,13 @@ odkomentovat některé řádky.
 #    languagechooser/language-name=English
 #    countrychooser/shortlist=US
 #    console-keymaps-at/keymap=us
+#
+# Jádro akceptuje nejvýše 8 parametrů a 8 proměnných prostředí (včetně
+# standardních voleb pro instalační program). Pokud tento limit
+# překročíte, jádra řady 2.4 přebývající parametry zahodí, jádra 2.6
+# zpanikaří. Pro většinu instalací můžete celkem bez problémů
+# odstranit implicitní volby 'vga=normal' a 'devfs=mount', což vám
+# umožní přidat další volby pro přednastavení.
 
 #### Shellové příkazy.
 
@@ -218,22 +225,21 @@ base-config	tzconfig/choose_country_zone_single boolean true
 
 # Chcete-li přeskočit vytváření běžného uživatelského účtu.
 #passwd		passwd/make-user		boolean false
-# Alternativně můžete přednastavit jméno uživatele. Jeho přihlašovací
-# jméno bude odvozeno z první části jména (malými písmeny).
+# Alternativně můžete přednastavit jméno uživatele.
 #passwd		passwd/user-fullname		string Uzivatel Debianu
-#passwd		passwd/username			string 
+#passwd		passwd/username			string franta
 # Uživatelovo heslo, opět buďte opatrní!
 #passwd		passwd/user-password		password nebezpecne
 #passwd		passwd/user-password-again	password nebezpecne
 
 ###### Nastavení APTu.
 
-# Tato otázka určuje, odkud se budou instalovat balíky v druhé fázi
+# Tato otázka určuje, odkud se budou instalovat balíky ve druhé fázi
 # instalace. Možnosti jsou cdrom, http, ftp, filesystem, edit sources
 # list by hand.
 base-config	apt-setup/uri_type	select http
 
-# Zvolíte-li ftp nebo http, muzíte zadat zemi a zrcadlo.
+# Zvolíte-li ftp nebo http, musíte zadat zemi a zrcadlo.
 base-config	apt-setup/country	select enter information manually
 base-config	apt-setup/hostname	string http.cz.debian.org
 base-config	apt-setup/directory	string /debian
@@ -252,10 +258,9 @@ base-config	apt-setup/security-updates	boolean true
 # Můžete zvolit libovolnou kombinaci dostupných úloh.
 # V době psaní to zahrnuje: Desktop environment, Web server,
 # Print server, DNS server, File server, Mail server, SQL database,
-# manual package selection. Poslední možnost soustí aptitude.
+# manual package selection. Poslední možnost spustí aptitude.
 # Také můžete instalaci úloh vynechat a instalovat balíku nějakou
 # jinou cestou. 
-# XXX: Toto nebude fungovat s balíkem tasksel nižší než 2.12.
 tasksel		tasksel/first	multiselect Desktop environment
 #tasksel	tasksel/first	multiselect Web server, Mail server, DNS server
 
@@ -281,7 +286,7 @@ exim4-config	exim4/dc_postmaster		string
 
 # Pokud se automatické rozpoznání myši nezdaří, dostanete se do
 # nekonečné smyčky, protože nástroj se bude ptát znovu a znovu
-# a pokaždé (ne)nalezne stejnou nefunční myš.
+# a pokaždé (ne)nalezne stejnou nefunkční myš.
 #xserver-xfree86	xserver-xfree86/autodetect_mouse	boolean true
 
 # Automatické rozpoznání monitoru je doporučeno.
@@ -312,7 +317,7 @@ xserver-xfree86	xserver-xfree86/config/monitor/mode-list	select 1024x768 @ 60 Hz
 # soubor. 
 # Mnohem pružnější je použití shellového příkazu, který vrátí názvy
 # souborů, jež se mají nahrát. V našem příkladě se příkaz rozhoduje
-# mezi soubory podle konkrétního USB zařízení (vestavěné čtečky
+# mezi soubory podle konkrétního USB zařízení (zde vestavěné čtečky
 # karet):
 #d-i	preseed/include_command	string if $(grep -q "GUID: 0aec3050aec305000001a003"  /proc/scsi/usb-storage-*/*); then echo kraken.cfg; else echo otherusb.cfg; fi
 </screen></informalexample>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 22232 -->
+<!-- original version: 23213 -->
 
  <sect1 condition="supports-tftp" id="install-tftp">
  <title>Příprava souborů pro zavedení ze sítě pomocí TFTP</title>
@@ -195,28 +195,22 @@ jméno souboru pro zavedení zasílal
 Na počítačích DECstation existují pro každou podarchitekturu speciální
 tftp obrazy, které v jednom souboru obsahují jak jádro, tak instalační
 program. Jména těchto souborů jsou
-tftpimage-<replaceable>podarchitektura</replaceable> nebo
-tftpimage-<replaceable>podarchitektura</replaceable>.gz. Pokud je
-obraz zabalený (má příponu .gz), musíte jej před použitím rozbalit
-(např. <userinput>gunzip
-tftpimage-<replaceable>podarchitektura</replaceable>.gz</userinput>),
-protože DECstation neumí zavádět komprimované obrazy skrze TFTP.
-Jestliže jste si nastavili BOOTP/DHCP podle našich příkladů,
-nakopírujte tftp obraz do souboru
-<filename>/tftpboot/tftpboot.img</filename>.
+<replaceable>podarchitektura</replaceable>/netboot-boot.img.  Jestliže
+jste si nastavili BOOTP/DHCP podle našich příkladů, nakopírujte tftp
+obraz do souboru <filename>/tftpboot/tftpboot.img</filename>.
 
 </para><para>
 
 Z DECstation firmwaru zavedete systém přes TFTP příkazem
 <userinput>boot <replaceable>#</replaceable>/tftp</userinput>, kde
 <replaceable>#</replaceable> je číslo zařízení TurboChannel, ze
-kterého se má zavádět. Většinou to bývá ,,3''. Pokud vám BOOTP/DHCP
-server nenabídne správný obraz, nebo pokud chcete zadat speciální
-parametry, můžete použít následující syntaxi:
+kterého se má zavádět. Většinou to bývá <quote>3</quote>. Pokud vám
+BOOTP/DHCP server nenabídne správný obraz, nebo pokud chcete zadat
+speciální parametry, můžete použít následující syntaxi:
 
 </para><para>
 
-<userinput>boot #/tftp/filename param1=value1 param2=value2 ...</userinput>
+<userinput>boot #/tftp/obraz param1=hodnota1 param2=hodnota2 ...</userinput>
 
 </para><para>
 
@@ -275,13 +269,21 @@ popsaných metod.
    <title>TFTP zavádění na počítačích SPARC</title>
 <para>
 
-Počítače SPARC používají jména podarchitektur jako třeba ,,SUN4M''
-nebo ,,SUN4C''; v některých případech se jméno architektury nechává
-prázdné, takže jméno hledaného souboru je pouze
-<filename>hex-ip-adresa-klienta</filename>.
-Pokud třeba máte počítač s podarchitekturou SUN4C a IP adresa je
-192.168.1.3, pak jméno souboru bude
-<filename>C0A80103.SUN4C</filename>.
+Počítače SPARC používají jména podarchitektur jako třeba
+<quote>SUN4M</quote> nebo <quote>SUN4C</quote>; v některých případech
+se jméno architektury nechává prázdné, takže jméno hledaného souboru
+je pouze <filename>hex-ip-adresa-klienta</filename>.  Pokud třeba máte
+počítač s podarchitekturou SUN4C a IP adresa je 192.168.1.3, pak jméno
+souboru bude <filename>C0A80103.SUN4C</filename>. Převod na
+hexadecimální čísla můžete provést jednoduše v shellu příkazem
+
+<informalexample><screen>
+<userinput>printf '%.2x%.2x%.2x%.2x\n' <replaceable>10 0 0 4</replaceable></userinput>
+</screen></informalexample>
+
+kde čísla <replaceable>10 0 0 4</replaceable> představují IP adresu (v
+tomto případě 10.0.0.4). Výsledek ještě musíte převést na velká
+písmena.
 
 </para><para>
 
@@ -390,8 +392,8 @@ být podobné):
 
 </screen></informalexample>
 
-Poznámka: ,,klient'' je jméno nebo IP adresa instalovaného počítače
-tak, jak ji vidí server, když se klient zavádí.
+Poznámka: <quote>klient</quote> je jméno nebo IP adresa instalovaného
+počítače tak, jak ji vidí server, když se klient zavádí.
 
 </para></listitem>
 <listitem><para>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 22841 -->
+<!-- original version: 22953 -->
 
    <sect3 id="mdcfg">
    <title>Nastavení vícediskových zařízení (Softwarový RAID)</title>
@@ -71,6 +71,34 @@ a v případě výpadku jednoho z disků okamžitě nahradí jeho místo.
 
 </para></listitem>
 </varlistentry>
+<varlistentry>
+
+<term>RAID5</term><listitem><para>
+
+Je rozumným kompromisem mezi rychlostí, spolehlivostí a redundancí
+dat. RAID5, podobně jako RAID0, rozdělí všechna příchozí data na
+proužky a poté je roznoměrně rozmístí na disky v poli. Oproti RAID0 je
+zde však podstatný rozdíl v tom, že se samotná data zapisují pouze na
+<replaceable>n</replaceable> - 1 disků. Zbývající
+<replaceable>n</replaceable>. disk nezahálí, ale zapíše se na něj
+paritní informace. Paritní disk není statický (to by se pak jednalo
+o RAID4), ale pravidelně se posouvá tak, aby byly paritní informace
+rozmístěny rovnoměrně na všech discích v poli. V případě výpadku
+jednoho z disků se může chybějící informace dopočítat ze zbývajích dat
+a jejich parity. RAID5 se musí skládat z alespoň
+<emphasis>tří</emphasis> aktivních zařízení. Volitelně můžete mít
+v poli rezervní disk, který se normálně nevyužívá a v případě výpadku
+jednoho z disků okamžitě nahradí jeho místo.
+
+</para><para>
+
+Jak je vidět, RAID5 nabízí podobný stupeň spolehlivosti jako RAID1,
+ovšem dosahuje menší míry redundance dat. Čtecí operace budou stejně
+rychlé jako na RAID0, ovšem zápis bude mírně pomalejší kvůli počítání
+paritních informací.
+
+</para></listitem>
+</varlistentry>
 </variablelist>
 
 Kdybychom měli shrnout podstatné vlastnosti:
@@ -93,7 +121,7 @@ Kdybychom měli shrnout podstatné vlastnosti:
   <entry>2</entry>
   <entry>ne</entry>
   <entry>ne</entry>
-  <entry>velikost nejmenšího zařízení krát počet zařízení v in RAIDu</entry>
+  <entry>velikost nejmenšího zařízení krát počet aktivních zařízení v in RAIDu</entry>
 </row>
 
 <row>
@@ -102,6 +130,14 @@ Kdybychom měli shrnout podstatné vlastnosti:
   <entry>volitelně</entry>
   <entry>ano</entry>
   <entry>velikost nejmenšího zařízení v RAIDu</entry>
+</row>
+
+<row>
+  <entry>RAID5</entry>
+  <entry>3</entry>
+  <entry>volitelně</entry>
+  <entry>ano</entry>
+  <entry>velikost nejmenšího zařízení krát (počet akt. zařízení v RAIDu - 1)</entry>
 </row>
 
 </tbody></tgroup></informaltable>
@@ -154,6 +190,13 @@ být aktivní a poté ty, které mají být rezervní. Počty vybraných
 oblastí se musí rovnat číslům, která jste zadali před chvílí. Pokud
 uděláte chybu a vyberete jiný počet oblastí, nic se neděje &mdash;
 &d-i; vás nenechá pokračovat, dokud vše nespravíte.
+
+</para></listitem>
+
+<listitem><para>
+
+RAID5 se nastavuje stejně jako RAID1 s drobnou výjimkou &mdash; musíte
+použít nejméně <emphasis>tři</emphasis> aktivní zařízení.
 
 </para></listitem>
 </itemizedlist>
