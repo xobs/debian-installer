@@ -278,6 +278,7 @@ endif
 	# Move the kernel image out of the way, either into a temp directory
 	# for use later, or to dest.
 ifdef DEST_KERNEL
+	install -d $(DEST)
 	$(foreach NAME,$(KERNELNAME), \
 		mv -f $(TREE)/boot/$(NAME) $(DEST)/$(NAME); )
 else
