@@ -1,33 +1,34 @@
-<!-- retain these comments for translator revision tracking -->
-<!-- original version: 14359 untranslated -->
+<!-- original version: 18672 -->
 
- <sect1 id="boot-parms"><title>Boot Parameters</title>
+ <sect1 id="boot-parms"><title>Parámetros de arranque</title>
 <para>
 
-Boot parameters are Linux kernel parameters which are generally used
-to make sure that peripherals are dealt with properly.  For the most
-part, the kernel can auto-detect information about your peripherals.
-However, in some cases you'll have to help the kernel a bit.
+Los parámetros de arranque son parámetros del núcleo Linux que generalmente
+son usados para asegurarse que los dispositivos son tratados adecuadamente.
+Para la mayor parte, el núcleo puede auto-detectar información sobre
+sus dispositivos. Sin embargo en algunos casos tendrá que ayudar
+un poco al núcleo.
 
 </para><para>
 
-If this is the first time you're booting the system, try the default
-boot parameters (i.e., don't try setting arguments) and see if it works
-correctly. It probably will.  If not, you can reboot later and look for
-any special parameters that inform the system about your hardware.
+Si es la primera vez que esta arrancando el sistema, intente los
+parámetros de arranque predeterminados (es decir, no intente definir
+parámetros) y observe si funciona correctamente. Probablemente lo
+hará. Si no lo hace, puede reiniciar después y buscar cualquier
+parámetro especial que informe al sistema sobre su hardware.
 
 </para><para>
 
-Information on many boot parameters can be found in the 
-<ulink url="http://www.tldp.org/HOWTO/BootPrompt-HOWTO.html"> Linux
-BootPrompt HOWTO</ulink>, including tips for obscure hardware.  This
-section contains only a sketch of the most salient parameters.  Some
-common gotchas are included below in 
+Puede encontrar información sobre parámetros de arranque en el
+<ulink url="http://www.tldp.org/HOWTO/BootPrompt-HOWTO.html">COMO
+de BootPrompt</ulink>, incluye consejos para hardware poco común.
+Esta sección solamente contiene un resumen de los parámetros más
+importantes. Algunas trucos se incluyen en
 <xref linkend="boot-troubleshooting"/>.
 
 </para><para>
 
-When the kernel boots, a message 
+Cuando el núcleo arranca, se deberá emitir un mensaje
 
 <informalexample><screen>
 
@@ -35,114 +36,110 @@ Memory:<replaceable>avail</replaceable>k/<replaceable>total</replaceable>k avail
 
 </screen></informalexample>
 
-should be emitted early in the process.
-<replaceable>total</replaceable> should match the total amount of RAM,
-in kilobytes.  If this doesn't match the actual amount of RAM you have
-installed, you need to use the
-<userinput>mem=<replaceable>ram</replaceable></userinput> parameter,
-where <replaceable>ram</replaceable> is set to the amount of memory,
-suffixed with ``k'' for kilobytes, or ``m'' for megabytes.  For
-example, both <userinput>mem=65536k</userinput> and
-<userinput>mem=64m</userinput> mean 64MB of RAM.
-
-</para><para>
-
-If your monitor is only capable of black-and-white, use the
-<userinput>mono</userinput> boot argument.  Otherwise, your
-installation will use color, which is the default.
+en una etapa inicial del proceso.
+<replaceable>total</replaceable> debe corresponder a la cantidad de RAM, en
+kilobytes. Si no corresponde al tamaño real de la RAM que tiene instalada,
+necesita usar el parámetro
+<userinput>mem=<replaceable>ram</replaceable></userinput>,
+donde <replaceable>ram</replaceable> define la cantidad de memoria,
+con un sufijo de 'k' para kilobytes, o 'm' para megabytes. Por
+ejemplo, tanto <userinput>mem=65536k</userinput> como
+<userinput>mem=64m</userinput> significan 64MB de RAM.
 
 </para><para condition="supports-serial-console">
 
-If you are booting with a serial console, generally the kernel will
-autodetect this 
-<phrase arch="mipsel">(although not on DECstations)</phrase>
-If you have a videocard (framebuffer) and a keyboard also attached to
-the computer which you wish to boot via serial console, you may have
-to pass the
-<userinput>console=<replaceable>device</replaceable></userinput>
-argument to the kernel, where <replaceable>device</replaceable> is
-your serial device, which is usually something like
+Si esta arrancando con una consola serie, usualmente el núcleo
+auto-detectará
+<phrase arch="mipsel">(aunque no en DECstations)</phrase>
+Si tiene una tarjeta de vídeo (framebuffer) y un teclado también
+conectado al ordenador en el cual desea arrancar a través de la
+consola serie, podría tener que pasar el argumento
+<userinput>console=<replaceable>dispositivo</replaceable></userinput>
+al núcleo, donde <replaceable>dispositivo</replaceable> es
+su dispositivo serie, que generalmente es algo como
 <filename>ttyS0</filename>.
 
 </para><para arch="sparc">
 
-For &arch-title; the serial devices are <filename>ttya</filename> or
+Para &arch-title; el dispositivo serie son <filename>ttya</filename> o
 <filename>ttyb</filename>.
-Alternatively, set the <envar>input-device</envar> and
-<envar>output-device</envar> OpenPROM variables to
-<filename>ttya</filename>.
+Alternativamente, defina las variables <envar>input-device</envar> y
+<envar>output-device</envar> de OpenPROM <filename>ttya</filename>.
 
 </para>
 
 
-  <sect2 id="installer-args"><title>Debian Installer Arguments</title>
+  <sect2 id="installer-args"><title>Parámetros del instalador de Debian</title>
 <para>
 
-The installation system recognizes a few boot arguments which may be
-useful. 
+El sistema de instalación reconoce algunos parámetros adicionales que 
+pueden ser útiles.
 
 </para>
 
 <variablelist>
 <varlistentry>
-<term>DEBCONF_PRIORITY</term>
+<term>debconf/priority</term>
 <listitem><para>
 
-This parameter settings will set the highest priority of messages
-to be displayed. 
+Los valores de este parámetro definirán prioridad más alta de
+los mensajes a ser mostrados.
 
 </para><para>
 
-The default installation uses <userinput>DEBCONF_PRIORITY=high</userinput>.
-This means that both high and critical priority messages are shown, but medium
-and low priority messages are skipped. 
-If problems are encountered, the installer adjusts the priority as needed.
+La instalación predeterminada usa <userinput>debconf/priority=high</userinput>.
+Esto significa que tanto los mensajes con prioridad high y critical serán
+mostrados, pero los mensajes con prioridad medium y low no lo serán.
+Si se encuentran problemas, el instalador ajusta la prioridad como
+se necesite.
 
 </para><para>
 
-If you add <userinput>DEBCONF_PRIORITY=medium</userinput> as boot parameter, you
-will be shown the installation menu and gain more control over the installation.
-When <userinput>DEBCONF_PRIORITY=low</userinput> is used, all messages are shown
-(this is equivalent to the <emphasis>expert</emphasis> boot method).
-With <userinput>DEBCONF_PRIORITY=critical</userinput>, the installation system
-will display only critical messages and try to do the right thing without fuss.
+Si añade <userinput>debconf/priority=medium</userinput> como parámetro de arranque,
+se le mostrará el menú y tendrá mayor control sobre la instalación.
+Cuando se usa <userinput>debconf/priority=low</userinput>, todos los mensajes
+son mostrados (esto es equivalente al método de arranque
+<emphasis>expert</emphasis>). Con
+<userinput>debconf/priority=critical</userinput>, el sistema de
+instalación mostrará solamente los mensajes críticos e intentará
+hacer lo correcto sin mayor trámite.
 
 </para></listitem>
 </varlistentry>
 
 
 <varlistentry>
-<term>DEBCONF_FRONTEND</term>
+<term>debconf/frontend</term>
 <listitem><para>
 
-This boot parameter controls the type of user interface used for the
-installer. The current possible parameter settings are:
+Este parámetro controla el tipo de interfaz de usuario usado por
+el instalador. Los posibles valores del parámetro son:
 
 <itemizedlist>
 <listitem>
-<para><userinput>DEBCONF_FRONTEND=noninteractive</userinput></para>
+<para><userinput>debconf/frontend=noninteractive</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=text</userinput></para>
+<para><userinput>debconf/frontend=text</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=newt</userinput></para>
+<para><userinput>debconf/frontend=newt</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=slang</userinput></para>
+<para><userinput>debconf/frontend=slang</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=ncurses</userinput></para>
+<para><userinput>debconf/frontend=ncurses</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=bogl</userinput></para>
+<para><userinput>debconf/frontend=bogl</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=gtk</userinput></para>
+<para><userinput>debconf/frontend=gtk</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=corba</userinput></para>
+<para><userinput>debconf/frontend=corba</userinput></para>
 </listitem>
 </itemizedlist>
 
-The default front end is <userinput>DEBCONF_FRONTEND=newt</userinput>.
-<userinput>DEBCONF_FRONTEND=text</userinput> may be preferable for
-serial console installs. Other frontends but
-<userinput>newt</userinput> are not available on default install
-media, so this is not very useful right now.
+La interfaz predeterminada es <userinput>debconf/frontend=newt</userinput>.
+<userinput>debconf/frontend=text</userinput> podría ser preferible para
+instalaciones de consola serie. Generalmente solo la interfaz
+<userinput>newt</userinput> esta disponible en el medio de instalación
+predeterminado, de modo que todavía no es muy útil ahora.
 
 </para></listitem>
 </varlistentry>
@@ -152,31 +149,32 @@ media, so this is not very useful right now.
 <term>BOOT_DEBUG</term>
 <listitem><para>
 
-Passing this boot parameter will cause the boot to be more verbosely 
-logged.
+El pasar este parámetro de arranque causará que el arranque sea registrado
+con mas detalle.
 
 <variablelist>
 <varlistentry>
 <term><userinput>BOOT_DEBUG=0</userinput></term>
-<listitem><para>This is the default.</para></listitem>
+<listitem><para>Este es el predeterminado.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>BOOT_DEBUG=1</userinput></term>
-<listitem><para>More verbose than usual.</para></listitem>
+<listitem><para>Mas detallado que lo habitual.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>BOOT_DEBUG=2</userinput></term>
-<listitem><para>Lots of debugging information.</para></listitem>
+<listitem><para>Mucha información de depuración.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>BOOT_DEBUG=3</userinput></term>
 <listitem><para>
 
-Shells are run at various points in the boot process to allow detailed
-debugging. Exit the shell to continue the boot.
+Se ejecutan shells en diversos puntos en el proceso de arranque para
+permitir depuración detallada. Salga del shell para continuar el
+arranque.
 
 </para></listitem>
 </varlistentry>
@@ -190,15 +188,16 @@ debugging. Exit the shell to continue the boot.
 <term>INSTALL_MEDIA_DEV</term>
 <listitem><para>
 
-The value of the parameter is the path to the device to load the
-Debian installer from. For example,
+El valor del parámetro es la ruta al dispositivo desde donde cargar
+el instalador. Por ejemplo,
 <userinput>INSTALL_MEDIA_DEV=/dev/floppy/0</userinput>
 
 </para><para>
 
-The boot floppy, which normally scans all floppys and USB storage
-devices it can to find the root floppy, can be overridden by this
-parameter to only look at the one device.
+El disquete de arranque, que normalmente escanea todos las unidades
+de disquete y dispositivos de almacenamiento USB en busca de el
+disquete raíz, puede ser modificado con este parámetro para
+que solamente busque en un dispositivo específico.
 
 </para></listitem>
 </varlistentry>
@@ -207,26 +206,28 @@ parameter to only look at the one device.
 <term>debian-installer/framebuffer</term>
 <listitem><para>
 
-Some architectures use the kernel framebuffer to offer installation in
-a number of languages. If framebuffer causes a problem on your system
-you can disable the feature by the parameter
-<userinput>debian-installer/framebuffer=false</userinput>. Problem
-symptoms are error messages about bterm or bogl, a blank screen, or
-a freeze within a few minutes after starting the install.
+Algunas arquitecturas usan el framebuffer del núcleo para ofrecer
+instalación en un número diverso de idiomas. Si framebuffer causa un
+problema en su sistema puede deshabilitar esta característica con
+el parámetro
+<userinput>debian-installer/framebuffer=false</userinput>. Los
+síntomas de problemas son mensajes de error sobre bterm o bogl, una
+pantalla en blanco o un congelamiento después de algunos minutos
+de iniciada la instalación.
 
 </para><para arch="i386">
 
-The <userinput>video=vga16:off</userinput> argument may also be used
-to disable the framebuffer. Such problems have been reported on a Dell
-Inspiron with Mobile Radeon card.
+El argumento <userinput>video=vga16:off</userinput> también puede ser
+usado para deshabilitar framebuffer. Este tipo de problemas ha sido
+reportado en una Dell Inspiron con tarjeta Mobile Radeon.
 
 </para><para arch="m68k">
 
-Such problems have been reported on the Amiga 1200 and SE/30.
+Este tipo de problemas ha sido reportado en la Amiga 1200 y SE/30.
 
 </para><para arch="hppa">
 
-Such problems have been reported on hppa.
+Este tipo de problemas han sido reportados en hppa.
 
 </para></listitem>
 </varlistentry>
@@ -235,8 +236,8 @@ Such problems have been reported on hppa.
 <term>debian-installer/probe/usb</term>
 <listitem><para>
 
-Set to <userinput>false</userinput> to prevent probing for USB on
-boot, if that causes problems.
+Defina a <userinput>false</userinput> para evitar la comprobación
+de USB en el arranque, si esto causa problemas.
 
 </para></listitem>
 </varlistentry>
@@ -245,17 +246,18 @@ boot, if that causes problems.
 <term>netcfg/disable_dhcp</term>
 <listitem><para>
 
-By default, the &d-i; automatically probes for network configuration
-via DHCP. If the probe succeeds, you won't have a chance to review and
-chage the obtained settings. You can get to the manual network setup
-only in case the DHCP probe fails.
+Por omisión, el &d-i; automáticamente prueba la conexión de red a través de
+DHCP. Si la prueba es exitosa, no tendrá oportunidad de revisar y cambiar
+los valores obtenidos. Puede efectuar la configuración de red manual
+solo en caso de que falle la comprobación DHCP.
 
 </para><para>
 
-If you have a DHCP server on your local network, but want to avoid it
-because e.g. it gives wrong answers, you can use the parameter
-<userinput>netcfg/disable_dhcp=true</userinput> to prevent configuring
-the network with DHCP and to enter the information manually.
+Si tiene un servidor DHCP en su red local, pero desea evitar usarlo,
+debido a que por ejemplo da valores incorrectos, puede usar el
+parámetro 
+<userinput>netcfg/disable_dhcp=true</userinput> para evitar la
+configuración de red con DHCP e ingresar la información manualmente.
 
 </para></listitem>
 </varlistentry>
@@ -264,9 +266,18 @@ the network with DHCP and to enter the information manually.
 <term>hw-detect/start_pcmcia</term>
 <listitem><para>
 
-Set to <userinput>false</userinput> to prevent starting PCMCIA
-services, if that causes problems. Some laptops are well known for
-this misbehaviour.
+Defina a <userinput>false</userinput> para evitar que se ejecuten los
+servicios PCMCIA, si esto causa problemas. Algunos ordenadores 
+portátiles son conocidos por este comportamiento errado.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>ramdisk_size</term>
+<listitem><para>
+
+Si esta usando un núcleo 2.2.x, podría necesitar definir &ramdisksize;.
 
 </para></listitem>
 </varlistentry>

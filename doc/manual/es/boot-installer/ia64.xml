@@ -1,34 +1,186 @@
-<!-- retain these comments for translator revision tracking -->
-<!-- original version: 14350 untranslated -->
+<!-- original version: 18660 -->
 
-  <sect2 arch="ia64"><title>Booting from a CD-ROM</title>
+  <sect2 arch="ia64"><title>Arranque desde un CD-ROM</title>
 
 &boot-installer-intro-cd.xml;
 
-  <emphasis condition="FIXME">Not yet written.</emphasis>
+  <note>
+  <title>Contenidos del CD</title>
 
+<para>
+
+Existen tres variaciones básicas de los CDs de instalación de Debian.
+El CD <emphasis>Business Card</emphasis> tiene una instalación 
+mínima que cabe en este pequeño formato de CD.
+Requiere conexión de red a modo de instalar el resto de la
+instalación base y tener un sistema usable.
+El CD <emphasis>Network Install</emphasis> tiene todos los paquetes
+para la instalación base pero requiere una conexión de red a un
+sitio de réplica de Debian a modo de instalar los paquetes 
+adicionales que desee para un sistemas completo.
+El juego de CDs de Debian puede instalar un sistema completo
+desde el amplio rango de paquetes sin necesidad de acceder a
+la red.
+</para>
+  </note>
+
+<para>
+
+IA-64 usa la siguiente generación de Interfaz de firmware extensible (EFI)
+de Intel.
+A diferencia del tradicional BIOS x86 que conoce muy poco sobre el
+dispositivo de arranque, además de la tabla de particiones y el 
+registro principal de arranque (MBR), el EFI puede leer y escribir
+ficheros de particiones de disco formateadas con FAT16 o FAT32.
+Esto simplifica el proceso, a menudo arcaico, de iniciar un sistema.
+El gestor de arranque del sistema y el firmware EFI que lo soporta
+tiene un sistema de ficheros completo para almacenar los ficheros
+necesarios para arrancar la máquina.
+Esto significa que el disco de sistema en un sistema IA-64 tiene una
+partición adicional dedicada a EFI en lugar del simple MBR o bloque
+de arranque en sistemas mas convencionales.
+
+</para><para>
+
+El CD de Debian contiene una pequeña versión de la partición EFI
+donde se ubican <command>elilo</command>, su fichero de configuración, 
+el núcleo del instalador y un sistema de ficheros adicional (initrd).
+El sistema en ejecución también contiene una partición EFI donde residen
+los ficheros necesarios para arrancar el sistema.
+Estos ficheros son leíbles desde el shell EFI como se describe a 
+continuación.
+
+</para><para>
+
+Muchos de los detalles son de como <command>elilo</command> realmente
+carga e inicia un sistema desde la parte mas transparente del 
+instalador. Sin embargo, el instalador debe configurar una partición
+EFI antes de instalar el sistema base. De otra forma, la instalación
+de <command>elilo</command> fallará, lo que resulta en un sistema
+no arrancable. La partición EFI se asigna y formatea en el paso de
+particionado de la instalación, antes de cargar cualquier paquete
+en el disco del sistema. La tarea de particionado también verifica que
+una partición EFI adecuada este presente, antes de permitir que la
+instalación prosiga.
+
+</para>
+
+  <sect3 arch="ia64" id="boot-from-cd">
+  <title>Arrancar desde el shell de EFI</title>
+<para>
+
+El gestor de arranque de EFI se inicia como el último paso de la
+inicialización del firmware. Éste muestra una lista de menú desde
+donde el usuario puede elegir una opción.
+Dependiendo del modelo del sistema y que otro software ha sido
+cargado en el sistema, este menú podría ser diferente de un
+sistema a otro.
+En cualquier evento, debe haber una opción llamada
+<command>EFI Shell [Built-in]</command>.
+Arranque el CD del instalador de Debian con los siguientes pasos:
+
+</para>
+
+<itemizedlist>
+
+<listitem><para>
+Inserte el CD en la unidad DVD/CD.
+</para></listitem>
+
+<listitem><para>
+Elija <command>EFI Shell</command> desde el menú.
+El shell EFI leerá todos los dispositivos arrancables y los
+mostrará en la consola antes de mostrar su cursor de ordenes.
+Las particiones arrancables reconocidas en los dispositivos
+mostrarán un nombre de dispositivo de
+<filename>fs<emphasis>n</emphasis>:</filename>.
+Todas las otras particiones reconocidas serán nombradas
+<filename>blk<emphasis>n</emphasis>:</filename>.
+Si inserta un CD después de ingresar al shell, podría tomar
+algunos segundos adicionales mientras inicializa la unidad de CD.
+</para>
+</listitem>
+
+<listitem><para>
+Examine la salida del shell al buscar la unidad de CDROM.
+Es mas probable que sea el dispositivo <filename>fs0:</filename>,
+aunque otros dispositivos con particiones arrancables 
+también serán mostrados como
+<filename>fs<emphasis>n</emphasis></filename>.
+</para></listitem>
+
+<listitem><para>
+Ingrese <command>fs<emphasis>n</emphasis>:</command> para elegir
+ese dispositivo donde <emphasis>n</emphasis> es el número de partición
+para el CDROM. Este shell le mostrará ahora el número de partición
+como su cursor.
+</para></listitem>
+
+<listitem><para>
+Ingrese <command>elilo</command>.
+Esto iniciará el gestor de arranque.
+<classname>elilo</classname> mostrará su cursor y esperará por un
+nombre de núcleo a cargar.
+Si no recibe ninguna entrada hasta su límite de espera (al rededor
+de 20 segundos) elegirá el núcleo predeterminado.
+</para></listitem>
+
+<listitem><para>
+Elija la opción de arranque, típicamente <classname>linux</classname> o
+<classname>linux26</classname>.
+Simplemente presione <emphasis>Enter</emphasis> o espere que termine
+el tiempo de espera para que elija el predeterminado.
+Le mostrará mensajes conforme descomprime el núcleo, carga y 
+descomprime el sistema de ficheros raíz inicial.
+</para></listitem>
+
+</itemizedlist>
+
+<para> 
+
+Estos pasos inician el núcleo del instalador.
+También puede ingresar la orden corta
+<command>fs<emphasis>n</emphasis>:elilo</command> en el cursor
+del shell.
+Una vez que el núcleo termina su inicialización, junto con los
+mensajes comunes de consola, iniciara el instalador de Debian.
+</para>
+
+  </sect3>
   </sect2>
 
-  <sect2 arch="ia64" id="boot-tftp"><title>Booting with TFTP</title>
+  <sect2 arch="ia64" id="boot-tftp"><title>Arrancar con TFTP</title>
+
+<para>
+Arrancar un sistema IA64 desde la red es similar a hacerlo desde CD.
+La única diferencia es como se carga el núcleo de instalación.
+El gestor de arranque EFI puede cargar e iniciar programas desde
+servidores en la red.
+Una vez que el núcleo es cargado y se inicia, el sistema de instalación
+procederá a través de los mismos pasos que la instalación de CD
+con la excepción de que los paquetes de la instalación base serán
+cargados desde la red en lugar de la unidad de CD.
+
+</para>
 
 &boot-installer-intro-net.xml;
 
 <para>
 
-Network booting an ia64 system requires two architecture-specific actions.
-On the boot server, DHCP and TFTP must be configured to deliver
-<command>elilo</command>.
-On the client a new boot option must be defined in the EFI boot manager
-to enable loading over a network.
+El arranque de red en un sistema ia64 requiere dos acciones específicas
+de arquitectura. En el servidor de arranque. DHCP y TFTP deben ser
+configurados para entregar <command>elilo</command>.
+En el cliente se debe definir una nueva opción de arranque en el
+gestor de arranque EFI, para habilitar la carga a través de la red.
 
 </para>
 
   <sect3 arch="ia64" id="boot-tftp-server">
-  <title>Configuring the Server</title>
+  <title>Configurar el servidor</title>
 <para>
 
-A suitable TFTP entry for network booting an ia64 system looks something
-like this:
+Una entrada apropiada para el arranque a través de red de un sistema
+ia64, es como esta:
 
 <informalexample><screen>
 
@@ -40,76 +192,90 @@ host mcmuffin {
 
 </screen></informalexample>
 
-Note that the goal is to get <command>elilo.efi</command> running on
-the client.
+Note que el objetivo es que <command>elilo.efi</command> se ejecute en
+el cliente.
 
 </para><para>
 
-Create an <filename>ia64/</filename> subdirectory in your tftpboot
-directory, and populate it with the <filename>vmlinuz</filename> and
-<filename>initrd.gz</filename> files from the Debian installer netboot
-directory.
+Cree un sub-directorio <filename>ia64/</filename> en si directorio
+tftpboot, y pueblelo con los ficheros <filename>vmlinuz</filename> y
+<filename>initrd.gz</filename> desde el directorio netboot del instalador
+de Debian.
 
 </para><para>
 
-Copy <filename>elilo.efi</filename> to your tftpboot directory and
-make it world readable.  This file can usually be found in the elilo
-package in IA64 distributions, or in
-<filename>/usr/lib/elilo</filename> or in a subdirectory of
-<filename>/boot/efi</filename>.  A suitable copy is provided in the
-Debian installer netboot directory.
+Copie <filename>elilo.efi</filename> a su directorio tftpboot y hágalo
+accesible para lectura a todos. Generalmente se puede encontrar este
+fichero en el paquete elilo en distribuciones IA64, o en
+<filename>/usr/lib/elilo</filename> o en un sub-directorio de
+<filename>/boot/efi</filename>. Se provee una copia adecuada en el
+directorio netboot del instalador de Debian.
 
 </para><para>
 
-Create an <filename>elilo.conf</filename> file in your tftpboot
-directory.  This will
-be loaded by <command>elilo.efi</command> once it is running on the
-client, and controls what
-happens next, including the choice of kernel, initrd image, etc.  An
-example file is provided in the Debian installer netboot directory, review
-the contents and update as needed for your choice of paths, etc.
+Cree un fichero <filename>elilo.conf</filename> en su directorio tftpboot.
+Éste será cargado por <command>elilo.efi</command> una vez que se ejecute
+en el cliente, y controla lo que ocurre después, incluyendo la elección
+del núcleo, imagen initrd, etc. Un fichero de ejemplo se provee en el
+directorio netboot del instalador de Debian, revise los contenidos y
+actualizelo, de ser necesario para su caso, la elección de rutas, etc.
 
-It is possible to have different config files for different clients by naming
-them using the client's IP address in hex with the suffix
-<filename>.conf</filename> instead of <filename>elilo.conf</filename>.
-See documentation provided in the <classname>elilo</classname> package
-for details.
+Es posible tener diferentes ficheros de configuración para clientes
+distintos al nombrarlos usando la dirección IP de los clientes en hexadecimal
+con el sufijo <filename>.conf</filename> en lugar de 
+<filename>elilo.conf</filename>.
+Vea la documentación que provee el paquete <classname>elilo</classname>
+para detalles.
 
 </para>
   </sect3>
 
   <sect3 arch="ia64" id="boot-tftp-client">
-  <title>Configuring the Client</title>
+  <title>Configurar el cliente</title>
 <para>
 
-To configure the client to support TFTP booting, start by booting to
-EFI and entering the <guimenu>Boot Option Maintenance Menu</guimenu>.
+Para configurar el soporte de arranque TFTP en el cliente, empiece
+arrancando EFI e ingresando a <guimenu>Boot Option Maintenance Menu</guimenu>.
 
 <itemizedlist>
 <listitem><para>
 
-Add a boot option.
+Añada una opción de arranque.
 
 </para></listitem>
 <listitem><para>
 
-Select the line saying <guimenuitem>Load File
-[Acpi()/.../Mac()]</guimenuitem> and press &enterkey;.
+Elija la línea que dice <guimenuitem>Load File
+[Acpi()/.../Mac()]</guimenuitem> y presione &enterkey;.
 
 </para></listitem>
 <listitem><para>
 
-Name the entry <userinput>Netboot</userinput> or something similar,
-save, and exit back to the boot options menu.  
+Nombre la entrada como <userinput>Netboot</userinput> o algo similar,
+guarde y salga al menú de opciones de arranque.
 
 </para></listitem>
 </itemizedlist>
 
-You should see the new boot option you just created, and selecting it
-should initiate a DHCP query, leading to a TFTP load of
-<filename>elilo.efi</filename> from the server.
+Deberá ver la nueva opción de arranque que acaba de crear, y eligiéndola
+deberá iniciar una solicitud DHCP, lo que deriva en una carga TFTP de
+<filename>elilo.efi</filename> desde el servidor.
+
+</para><para>
+
+El gestor de arranque mostrará su cursor después que ha descargado y
+proceso su fichero de configuración. En este punto, la instalación
+se efectúa con los mismos pasos que la instalación desde CD. Elija
+la opción de arranque como se muestra a continuación y cuando el
+núcleo ha terminado de instalarse a través de la red, se iniciará
+el instalador de Debian.
+
+</para><para>
+
+Proceda con el siguiente capítulo para continuar la instalación
+donde configura la locale de idioma, red y las particiones de
+disco.
 
 </para>
-
   </sect3>
   </sect2>
