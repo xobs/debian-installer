@@ -61,7 +61,7 @@ TEMP=$(BASE_TMP)$(TYPE)
 TREE=$(TEMP)/tree
 
 DPKGDIR=$(TREE)/var/lib/dpkg
-TMP_MNT:=$(shell pwd)/mnt/
+TMP_MNT:=$(shell pwd)/mnt
 
 ifdef ERROR_TYPE
 all:
@@ -380,7 +380,6 @@ tmp_mount:
 		echo "Error unmounting $(TMP_MNT)" 2>&1 ; \
 		exit 1; \
 	fi
-
 	mkdir -p $(TMP_MNT)
 
 # Create a compressed image of the root filesystem by way of genext2fs.
@@ -406,6 +405,11 @@ $(DEST)/$(TYPE)-lifimage:
 	palo -f /dev/null $(foreach NAME,$(KERNELNAME),-k $(TEMP)/$(NAME)) -r $(INITRD) -s $(DEST)/$(TYPE)-lifimage \
 		-c "0/linux HOME=/ ramdisk_size=8192 initrd=0/ramdisk rw"
 
+# The floppy image to create.  i386-specific [pere 2003-04-18]
+ifneq (,$(FLOPPY_SIZE))
+FLOPPY_IMAGE=$(DEST)/$(TYPE)-$(FLOPPY_SIZE).img
+endif
+
 # Create a bootable floppy image. i386 specific. FIXME
 # 1. make a dos filesystem image
 # 2. copy over kernel, initrd
@@ -425,7 +429,8 @@ else
 endif
 
 	# syslinux is used to make the floppy bootable.
-	if cp $(KERNEL) $(TMP_MNT)/linux \
+	if $(foreach NAME,$(KERNELNAME), \
+             cp -f $(TEMP)/$(NAME) $(TMP_MNT)/linux) \
 	   && cp $(INITRD) $(TMP_MNT)/initrd.gz \
 	   && cp syslinux.cfg $(TMP_MNT)/ \
 	   && todos $(TMP_MNT)/syslinux.cfg ; \
