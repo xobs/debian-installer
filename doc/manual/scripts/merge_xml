@@ -64,7 +64,9 @@ awk -v WORKDIR="$TEMPDIR" -v LOG=$LOG -v ENTLIST="$TEMPDIR/entlist" \
 
 # Copy the results to their proper location
 TARGET="$WORKDIR/$language"
-rm -r $TARGET
+if [ -d $TARGET ]; then
+    rm -r $TARGET
+fi
 mkdir -p $TARGET
 cp -r $TEMPDIR/out/* $TARGET
 cp $LOG $TARGET
