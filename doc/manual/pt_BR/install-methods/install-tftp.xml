@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 24663 -->
+<!-- original version: 25834 -->
 
  <sect1 condition="supports-tftp" id="install-tftp">
  <title>Preparando os arquivos para inicialização via rede usando TFTP</title>
@@ -77,6 +77,17 @@ servidor, em qualquer plataforma que implementa estes protocolos poderá
 ser usados. Nos exemplos desta seção, nós mostraremos comando para
 o SunOS 4.x, SunOS 5.x (a.k.a. Solaris), e para o GNU/Linux.
 
+<note arch="i386"><para>
+
+Para utilizar o método Pre-boot Execution Environment (PXE) de inicialização 
+através de TFTP, você precisará configurar um servidor TFTP coom suporte a 
+<userinput>tsize</userinput>. Em um servidor &debian; os pacotes 
+<classname>atftpd</classname> e <classname>tftpd-hpa</classname> se 
+qualificam; nós recomendamos o pacote <classname>tftpd-hpa</classname>.
+
+</para></note>
+
+
 </para>
 
 &tftp-rarp.xml;
@@ -114,16 +125,7 @@ reload</userinput>; em outras máquinas,
 encontre o ID do processo do <command>inetd</command> e execute o 
 comando <userinput>kill -HUP <replaceable>inetd-pid</replaceable></userinput>.
 
-</para><note arch="i386"><para>
-
-Para usar o método Pre-boot Execution Environment (PXE) na 
-inicialização TFTP, você somente precisará de um servidor TFTP
-com o suporte a <userinput>tsize</userinput>. 
-Em um servidor &debian;, os pacotes <classname>atftpd</classname> e
-<classname>tftpd-hpa</classname> se qualificam para esta tarefa; nós
-recomendamos o <classname>tftpd-hpa</classname>.
-
-</para></note><para arch="mips">
+</para><para arch="mips">
 
 Se tiver a intenção de instalar a Debian em uma máquina SGI e seu servidor
 TFTP é uma máquina GNU/Linux executando o kernel do Linux 2.4, você precisará
