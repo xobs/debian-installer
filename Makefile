@@ -8,7 +8,7 @@
 # a collection of udebs which it downloads from a Debian archive. See
 # README for details.
 
-architecture    := $(shell dpkg-architecture -qDEB_HOST_ARCH)
+architecture    = $(shell dpkg-architecture -qDEB_HOST_ARCH)
 
 # The version of the kernel to use.
 
@@ -84,7 +84,6 @@ EXTRALIBS=/lib/libnss_dns* /lib/libresolv*
 
 # List here any extra udebs that are not in the list file but that
 # should still be included on the system.
-EXTRAS=
 
 # This variable can be used to copy in additional files from the system
 # that is doing the build. Useful if you need to include strace, or gdb,
@@ -107,7 +106,7 @@ INITRD=$(DEST)/$(TYPE)-initrd.gz
 INITRD_FS=ext2
 
 # How big a floppy image should I make? (in kilobytes)
-ifeq (cdrom,$(TYPE))
+ifeq (cdrom,$(TYPE))  
 FLOPPY_SIZE=2880
 else
 FLOPPY_SIZE=1440
@@ -149,6 +148,9 @@ LOCALUDEBDIR=localudebs
 
 # Directory where debug versions of udebs will be built.
 DEBUGUDEBDIR=debugudebs
+
+# Directory where sources for all udebs may be kept
+SOURCEDIR=sourceudebs
 
 # The beta version of upx can be used to make the kernel a lot smaller
 # it shaved 75k off our kernel. That allows us to put a lot more on
@@ -232,12 +234,49 @@ clean: demo_clean tmp_mount
 	rm -rf $(TREE) 2>/dev/null || sudo rm -rf $(TREE)
 	dh_clean
 	rm -f *-stamp
-	rm -rf $(UDEBDIR) $(TMP_MNT)
+	rm -rf $(UDEBDIR) $(TMP_MNT) debian/build
 	rm -rf $(DEST)/$(TYPE)-* || sudo rm -rf $(DEST)/$(TYPE)-*
 
 reallyclean: clean
-	rm -rf $(APTDIR) $(DEST) $(BASE_TMP)
+	rm -rf $(APTDIR) $(DEST) $(BASE_TMP) wget-cache $(SOURCEDIR)
+	rm -rf diskusage*.txt missing.txt
 
+# prefetch udebs
+# If we are building a correct debian-installer source tree, we will want all the
+# sources. So go fetch.
+fetch-sources: $(SOURCEDIR)/udeb-sources-stamp
+$(SOURCEDIR)/udeb-sources-stamp:
+	mkdir -p $(APTDIR)/state/lists/partial
+	mkdir -p $(APTDIR)/cache/archives/partial
+	$(APT_GET) update
+	$(APT_GET) autoclean
+	needed="$(UDEBS) $(DRIVER1_UDEBS)"; \
+        for file in `find $(LOCALUDEBDIR) -name "*_*" -printf "%f\n" 2>/dev/null`; do \
+		package=`echo $$file | cut -d _ -f 1`; \
+		needed=`echo " $$needed " | sed "s/ $$package */ /"` ; \
+	done; \
+	mkdir -p $(SOURCEDIR); \
+	cd $(SOURCEDIR); \
+	$(APT_GET) source --yes $$needed; \
+	rm -f *.dsc *.gz ; \
+	touch udeb-sources-stamp ; \
+	cd .. 
+
+
+#  From the sources, 
+#  Compile up all the udebs and place them in udebs
+#  This is used by build-installer to avoid downloading from net.
+compile-udebs: compiled-stamp
+compiled-stamp: $(SOURCEDIR)/udeb-sources-stamp
+	mkdir -p $(APTDIR)/cache/archives
+	for d in ` ls $(SOURCEDIR) | grep -v stamp ` ; do  \
+		 ( cd $(SOURCEDIR)/$$d ; dpkg-buildpackage -uc -us || true  ) ; \
+	done 
+	mv $(SOURCEDIR)/*.udeb $(APTDIR)/cache/archives
+	touch compiled-stamp
+	
+
+# 
 # Get all required udebs and put in UDEBDIR.
 get_udebs: $(TYPE)-get_udebs-stamp
 $(TYPE)-get_udebs-stamp:
