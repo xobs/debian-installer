@@ -56,7 +56,7 @@ UDEBS = \
 	) $(EXTRAS)
 
 ifeq ($(TYPE),floppy)
-# List of additional udebs for driver floppy(ies). At the moment there is only one additional driver floppy needed
+# List of additional udebs for driver floppys.
 DRIVERFD_UDEBS = \
 	$(shell for target in $(EXTRA_FLOPPIES) ; do  grep --no-filename -v ^\# \
 		pkg-lists/$$target/common \
@@ -363,6 +363,15 @@ ifeq ($(TYPE),floppy)
 		dpkg --force-overwrite --root=$(DRIVEREXTRASDIR) --unpack $$udeb; \
 	done
 endif
+	# If the image has pcmcia, reduce the config file to list only
+	# entries that there are modules on the image. This saves ~30k.
+	if [ -e $(TREE)/etc/pcmcia/config ]; then \
+		./pcmcia-config-reduce.pl $(TREE)/etc/pcmcia/config \
+			`if [ -d "$(DRIVEREXTRASDIR)" ]; then find $(DRIVEREXTRASDIR)/lib/modules -name \*.o; fi` \
+			`find $(TREE)/lib/modules/ -name \*.o` > \
+			$(TREE)/etc/pcmcia/config.reduced; \
+		mv -f $(TREE)/etc/pcmcia/config.reduced $(TREE)/etc/pcmcia/config; \
+	fi
 
 	# Library reduction.
 	mkdir -p $(TREE)/lib
@@ -410,15 +419,6 @@ endif
 	for module in `find $(TREE)/lib/modules/ -name '*.o'`; do \
 	    strip -R .comment -R .note -g $$module; \
 	done
-
-	# If the image has pcmcia, reduce the config file to list only
-	# entries that there are modules for on the image. This saves ~30k.
-	if [ -e $(TREE)/etc/pcmcia/config ]; then \
-		./pcmcia-config-reduce.pl $(TREE)/etc/pcmcia/config \
-			`find $(TREE)/lib/modules/ -name \*.o` > \
-			$(TREE)/etc/pcmcia/config.reduced; \
-		mv -f $(TREE)/etc/pcmcia/config.reduced $(TREE)/etc/pcmcia/config; \
-	fi
 
 	# Remove some unnecessary dpkg files.
 	for file in `find $(TREE)/var/lib/dpkg/info -name '*.md5sums' -o \
