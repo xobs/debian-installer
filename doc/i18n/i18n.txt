@@ -15,11 +15,11 @@ Dennis Stampfer
 
 Petter Reinholdtsen
 
-   Copyright © 2002-2004 © Christian Perrier
+   Copyright © 2002-2005 © Christian Perrier
 
-   Copyright © 2003-2004 © Dennis Stampfer
+   Copyright © 2003-2005 © Dennis Stampfer
 
-   Copyright © 2001-2004 © Petter Reinholdtsen
+   Copyright © 2001-2005 © Petter Reinholdtsen
 
    This manual is free software; you may redistribute it and/or modify it
    under the terms of the GNU General Public License.
@@ -1027,7 +1027,7 @@ Petter Reinholdtsen
    Getting files for xdebconfigurator 
 
    The xdebconfigurator package is maintained by the Debian-Edu project
-   maintainers. Direct CVS commit/checkout access to Debian-Edu may be
+   maintainers. Direct SVN commit/checkout access to Debian-Edu may be
    requested to the project administrators. Please provide your Alioth
    account name.
 
@@ -1039,7 +1039,7 @@ Petter Reinholdtsen
    Remember that, being a menu entry, its translation must be kept short:
    below 70 columns
 
-   If you can't work with CVS:
+   If you can't work with SVN:
 
    Check whether an incomplete translation exists for your language:
    http://people.debian.org/~seppy/d-i/level3/files/xx/xdebconfigurator_d
@@ -1053,7 +1053,7 @@ Petter Reinholdtsen
    existing xdebconfigurator_debian_po_xx.po.
    Sending/commiting files for xdebconfigurator 
 
-   If you commit your translations directly to CVS, don't forget to
+   If you commit your translations directly to SVN, don't forget to
    update the debian/changelog file accordingly. See other entries in
    this file for reference.
 
@@ -1073,7 +1073,7 @@ Petter Reinholdtsen
    Getting files for localization-config 
 
    The localization-config package is maintained by the Debian-Edu
-   project maintainers. Direct CVS commit/checkout access to Debian-Edu
+   project maintainers. Direct SVN commit/checkout access to Debian-Edu
    may be requested to the project administrators. Please provide your
    Alioth account name.
 
@@ -1085,7 +1085,7 @@ Petter Reinholdtsen
    Remember that, being a menu entry, its translation must be kept short:
    below 70 columns
 
-   If you can't work with CVS:
+   If you can't work with SVN:
 
    Check whether an incomplete translation exists for your language:
    http://people.debian.org/~seppy/d-i/level3/files/xx/localization-confi
@@ -1099,7 +1099,7 @@ Petter Reinholdtsen
    existing localization-config_debian_po_xx.po.
    Sending/commiting files for localization-config 
 
-   If you commit your translations directly to CVS, don't forget to
+   If you commit your translations directly to SVN, don't forget to
    update the debian/changelog file accordingly. See other entries in
    this file for reference.
 
@@ -1347,9 +1347,8 @@ Petter Reinholdtsen
    Getting files for dpkg 
 
    This package is a regular Debian package. The package maintainer team
-   use a CVS repository, with a quite complicated branching system. Using
-   your own CVS checkout copy is discouraged unless you are very aware of
-   dpkg development process.
+   uses arch to maintain it. Up-to-date files may be provided by the d-i
+   l10n coordinator.
 
    This package's l10n material followed by D-I statistics tools is in
    one single file:
@@ -1395,9 +1394,8 @@ Petter Reinholdtsen
    Getting files for apt 
 
    This package is a regular Debian package. The package maintainer team
-   use a CVS repository but commits are handled by the development team.
-   You are thus encouraged to use the files grabbed by the D-I i18n
-   coordinator.
+   uses arch to maintain it. Up-to-date files may be provided by the d-i
+   l10n coordinator.
 
    This package's l10n material followed by D-I statistics tools is in
    one single file:
@@ -1479,8 +1477,44 @@ Petter Reinholdtsen
    Below is a list of packages with debconf templates that should be
    translated first (as of this writing):
 
-   debconf man-db console-common netbase ifupdown console-data adduser
-   setserial bsdmainutils lilo
+   man-db netbase ifupdown adduser setserial bsdmainutils lilo
+
+3.1.2.6.1.  Menu
+
+   The menu Debian package provides all window managers, in graphical
+   environments, a standard menu to organize the applications launch
+   shortcuts.
+
+   The menu section names have been internationalized and are grouped
+   into a file named menu-sections.pot.
+
+   The program itself is internationalized is internationalized as well
+   and its messages are kept in a file named menu.pot.
+   Getting files for menu (level 5) 
+
+   This package is a regular Debian package. The package maintainer
+   currently uses a CVS repository.
+
+   This package's l10n material for the fifth level is in two files:
+     * po-sections/menu-sections.pot : menu sections names
+     * po/menu.pot : program messages
+
+   Check whether an incomplete translation exists for your language:
+     * http://people.debian.org/~seppy/d-i/level5/files/xx/menu_po-sectio
+       ns_xx.po
+     * http://people.debian.org/~seppy/d-i/level5/files/xx/menu_po_xx.po
+
+   If it doesn't exist, get the POT file at:
+   http://people.debian.org/~seppy/d-i/level5/POT/menu_po-sections.pot
+   and http://people.debian.org/~seppy/d-i/level5/POT/menu_po.pot
+   Sending files for menu 
+
+   The translation file must be reported as a bug against the menu
+   package. Mention that the file is either the menu sections or programs
+   translation.
+
+   Please see the Reporting bugs against Debian packages section of this
+   document.
 
 3.1.2.7.  Level 6 of translations
 
@@ -2102,6 +2136,12 @@ handling
        automatically trigger individual PO files update when packages
        will be built (see changes to packages build process)
 
+   A script named switch-language has been written for handling this
+   switch to the master file. Using it absolutely needs that no action
+   happens simultaneously on the switched language files. Translators are
+   requested to NOT USE it and rather ask one of the coordinators to do
+   it for themselves.
+
 5.2.3.  Later synchronisations
 
    On a regular basis, the l10n-sync script will run under the account of
@@ -2120,43 +2160,33 @@ handling
    commiting changes to English templates).
 
    The general process is:
-    1. for each D-I package:
+    1. Synchronize the whole repository
+    2. for each D-I package:
          a. synchronize the local copy with the D-I SVN
          b. run debconf-updatepo
          c. commit back the files in debian/po
-    2. Update the general template.pot file:
+    3. Update the general template.pot file:
          a. merge all templates.pot files to packages/po/template.pot
          b. commit this file
-    3. For each PO file:
+    4. For each PO file:
          a. synchronize with D-I SVN
          b. update with packages/po/template.pot
          c. commit back the changed file to D-I SVN
-    4. for each D-I package:
+    5. for each D-I package:
          a. synchronize the local copy with the D-I SVN (in case some
             update occurred in the meantime)
          b. update debian/po/*.po files with files in packages/po/
          c. commit back the changes to D-I SVN
 
-   A few "conflicts windows" exist :
-     * during 1) if changes are made by an upstream maintainer to
-       templates file and (s)he runs debconf-updatepo then commits the
-       changes between 1a and 1c
-     * between 3a and 3c if a translator commits an update to his/her
-       translation before the l10n synchronisation script commits the
-       update
-     * between 4a and 4c if an upstream maintainer updates his templates
-       file and runs debconf-updatepo before the l10n synchronisation
-       script commits back the updated files
-
-   For these reasons, maintainers should not use debconf-updatepo and
-   commit back the updated files during the D-I l10n synchronisation
-   windows. For the same reasons, translators should avoid commiting
-   updates during the D-I l10n synchronisation windows.
+   This system minimizes race conditions which could trigger conflicts.
 
    The conflict windows have been minimised as much as possible in the
-   l10n-sync script. This explains the high number of commit actions made
-   by this script (as soon as a file is modified, it is committed to
-   SVN).
+   l10n-sync script. However, in order to limit the number of commits
+   made by the script, files are not commited as soon as they are
+   modified. So, the script is sometimes likely to trigger conflicts. For
+   that reason, it will stop working on a SVN copy where SVN conflict
+   files are present. This explains why this script must always been
+   monitored even when it is scehduled to execute on a regular basis.
 
 5.3.  l10n synchronisation script
 
@@ -2166,33 +2196,52 @@ handling
    This is a shell script (which may contain some bashisms until a
    skilled shell programmer cleans it out).
 
-   A few environment variables affect the script's behaviour:
-     * defining DEBUG=Y will trigger more output by the script.
-       Otherwise, the script reports about its actions but commands
-       output (such as svn, debconf-updatepo, msgmerge) will be
-       redirected to /dev/null.
-     * the ONLINE variable is very important:
-          + defining ONLINE=Y will trigger "svn update" commands before
-            working on files
-          + defining ONLINE="YES_I_KNOW_WHAT_I_DO" will allow the script
-            to COMMIT files back to the D-I repository Of course, this is
-            quite risky and must be done only on controlled environments
-            because this will update a lot of files in D-I repository
-          + other values will make the script work only locally
-     * the svn variable defines the command for calling the svn utility
+   The script uses some command-line switches which may affect its
+   behaviour:
+     * "--debug" will trigger more output by the script. Otherwise, the
+       script reports about its actions but commands output (such as svn,
+       debconf-updatepo, msgmerge) will be redirected to /dev/null.
+     * "--online" triggers "svn update" commands before working on files
+       and allows the script to COMMIT files back to the D-I repository
+       Of course, this is quite risky and must be done only on controlled
+       environments because this will update a lot of files in D-I
+       repository
+     * the "--atomic" switch instructs l10n-sync to commit files as soon
+       as they are modified. This makes the script very slow andmay
+       trigger dozens of commits. As D-I commits are sent to the
+       #debian-boot IRC channel, this will probably make D-I developers
+       very angry. This switch should not be used except in very rare
+       occasions
+     * the "--atomic-updates" switch instructs l10n-sync to issue a "svn
+       update" command before working on each package. This may be very
+       CPU, network- and time-consuming and should only be used when one
+       needs to limit possible conflicts.
+     * the "--keep-revision" switch needs an argument which must be a
+       language code (one only). It will force l10n-sync to restore the
+       "PO-Revision-Date" field of this language on each modified file.
+       This switch is aimed for being used when ones switches a language
+       to the master file and do not want to have all PO-Revion-Date
+       entries updated while no real change was made. It should NOT be
+       used in other occasions.
+     * the "--svn" switch defines the command for calling the svn utility
        It is used in the script just in case some special behaviour is
        needed
-     * the debconfupdatepo utility serves the same purpose the the
+     * the "--debconf-updatepo" switch serves the same purpose the the
        debconf-updatepo command. It allows using a specially crafted
        debconf-updatepo command, for just updating templates.pot files
        and save a lot of time
+     * the "--sort-order" switch allows giving at the command line the
+       order the packages should be dealt with. This allows to put a
+       crafted order in the generated templates.pot file so that the
+       translators begin to work on the most important packages.
 
-   The script needs the location of the local copy of the D-I repository
-   to be passed as an argument. It makes some simple checks about the
-   copy.
+   The script needs to be passed the location of the local copy of the
+   D-I repository to be passed as an argument. It makes some simple
+   checks about the copy.
 
    When using this script with commits, the D-I copy must be as clean as
-   possible. It should not be used for development tasks.
+   possible. It should not be used for development tasks. The script
+   checks for possible SVN conflict files and aborts if it finds some.
 
    Prospective languages are not touched: Is a language listed in
    packages/po/PROSPECTIVE, the translations are not spreaded into the
@@ -2200,20 +2249,21 @@ handling
 
 5.4.  About prospective languages
 
-   Since September 2004, the number of languages supported by
-   debian-installer for sarge is frozen. All languages which started
-   translating after September 2004 are called "prospective languages".
-   These languages won't make it into sarge.
+   During some periods in the development of Debian Installer, the
+   develoment team may decide to "freeze" the number of supported
+   languages. All languages which start after the freeze date are called
+   "prospective languages". These languages won't go in the prepared
+   release but rather in the next release of the installer.
 
-   Another reason for keeping a language out of the installer is when the
-   basis is done, but it's lacking a translator.
+   Another reason for keeping a language out of the installer is a too
+   incomplete translation.
 
    Prospective languages are kept in the file packages/po/PROSPECTIVE
    along with the master po files. Translators can continue translating,
    but the translations will be kept back and not spreaded into packages
    by l10n synchronisation script.
 
-   Status of prospective languages can be fetched at
+   The status of prospective languages can be fetched at
    http://people.debian.org/~seppy/d-i/translation-status.html like for
    every other language. The only difference is rank.txt. A prospective
    language is not listed in rank.txt and not calculated into the graph.
@@ -2280,10 +2330,16 @@ handling
        different translation sets exist for Debian packages though both
        teams work closely together (there is for instance only one
        mailing list)
+     * pa_IN/pa_PK  : the Punjabi language has only one spoken for, but
+       two written forms : one using Indic-style glyphs, mostly used in
+       India (Punjab state), and another one, using an Arabic script,
+       mostly used in Pakistan.
 
    FAQ about variants:
      * there are no en_GB/en_US variants in Debian. The use of either
        British or American spelling is not highly standardised in Debian.
+       The installer team has however decided to refer to US-style
+       spelling.
      * the spanish team has chosen to keep only one variant even though
        some differences exist in the way Spanish is spoken in Spain and
        Latin America, for instance.

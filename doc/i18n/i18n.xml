@@ -2280,9 +2280,7 @@ Getting files for dpkg
 
 <para>
 This package is a <emphasis>regular</emphasis> Debian package. The package maintainer
-team use a CVS repository, with a quite complicated branching
-system. Using your own CVS checkout copy is discouraged unless you are
-very aware of dpkg development process.
+team uses arch to maintain it. Up-to-date files may be provided by the d-i l10n coordinator.
 </para>
 
 <para>This package's l10n material followed by D-I statistics tools is in
@@ -2359,9 +2357,7 @@ Getting files for apt
 
 <para>
 This package is a <emphasis>regular</emphasis> Debian package. The package maintainer
-team use a CVS repository but commits are handled by the development
-team. You are thus encouraged to use the files grabbed by the D-I i18n
-coordinator.
+team uses arch to maintain it. Up-to-date files may be provided by the d-i l10n coordinator.
 </para>
 
 <para>This package's l10n material followed by D-I statistics tools is in
@@ -2498,14 +2494,90 @@ packages. The files will be grouped there according to the <emphasis>levels</emp
 defined here.
 </para>
 
+
+
 <para>Below is a list of packages with debconf templates that should be
 translated first (as of this writing):
 </para>
 
-<para> debconf man-db console-common netbase ifupdown console-data adduser
- setserial bsdmainutils lilo
+<para> man-db netbase ifupdown adduser setserial bsdmainutils lilo
 </para>
 
+<sect5>
+<title>
+Menu
+</title>
+<para>
+The <emphasis>menu</emphasis> Debian package provides all window managers, in graphical environments, a standard menu to organize the applications launch shortcuts.
+</para>
+
+<para>The menu section names have been internationalized and are grouped into a file named <filename>menu-sections.pot</filename>.
+</para>
+
+<para>The program itself is internationalized is internationalized as well and its messages are kept in a file named <filename>menu.pot</filename>.
+</para>
+
+<emphasis>
+Getting files for menu (level 5)
+</emphasis>
+
+<para>
+This package is a <emphasis>regular</emphasis> Debian package. The package
+maintainer currently uses a CVS repository.
+</para>
+
+<para>This package's l10n material for the fifth level is in two files:
+</para>
+
+<itemizedlist>
+<listitem>
+<para>
+<filename>po-sections/menu-sections.pot</filename> : menu sections names
+</para>
+</listitem>
+<listitem>
+<para>
+<filename>po/menu.pot</filename> : program messages
+</para>
+</listitem>
+</itemizedlist>
+
+<para>Check whether an incomplete translation exists for your language:
+
+<itemizedlist>
+<listitem>
+<para>
+   <ulink url="http://people.debian.org/~seppy/d-i/level5/files/xx/menu_po-sections_xx.po">http://people.debian.org/~seppy/d-i/level5/files/xx/menu_po-sections_xx.po</ulink>
+</para>
+</listitem>
+<listitem>
+<para>
+   <ulink url="http://people.debian.org/~seppy/d-i/level5/files/xx/menu_po_xx.po">http://people.debian.org/~seppy/d-i/level5/files/xx/menu_po_xx.po</ulink>
+</para>
+</listitem>
+</itemizedlist>
+
+</para>
+
+<para>If it doesn't exist, get the POT file at:
+   <ulink url="http://people.debian.org/~seppy/d-i/level5/POT/menu_po-sections.pot">http://people.debian.org/~seppy/d-i/level5/POT/menu_po-sections.pot</ulink> and    <ulink url="http://people.debian.org/~seppy/d-i/level5/POT/menu_po.pot">http://people.debian.org/~seppy/d-i/level5/POT/menu_po.pot</ulink>
+</para>
+
+<emphasis>
+Sending files for menu
+</emphasis>
+
+<para>
+The translation file must be reported as a bug against the <emphasis>menu</emphasis>
+package. Mention that the file is either the <emphasis>menu sections</emphasis> or <emphasis>programs</emphasis> translation.
+</para>
+<para>
+Please see the <ulink url="#reporting_bugs">Reporting bugs against Debian packages</ulink> section of
+this document.
+</para>
+
+
+</sect5>
 
 </sect4>
 <sect4>
@@ -3544,6 +3616,14 @@ commit back the new <filename>xx.po</filename> file to <filename>packages/po</fi
 </listitem>
 </itemizedlist>
 
+<para>
+A script named <emphasis>switch-language</emphasis> has been written
+for handling this switch to the master file. Using it absolutely needs
+that no action happens simultaneously on the switched language
+files. Translators are requested to NOT USE it and rather ask one of
+the coordinators to do it for themselves.
+</para>
+
 </sect3>
 
 <sect3>
@@ -3577,6 +3657,9 @@ The general process is:
 </para>
 
 	  <orderedlist>
+	    <listitem>
+	      <para>Synchronize the whole repository</para>
+	    </listitem>
 	    <listitem>
 	      <para>
 		for each D-I package:
@@ -3664,41 +3747,18 @@ The general process is:
 	  </orderedlist>
 
 <para>
-A few "conflicts windows" exist :
-</para>
-	    <itemizedlist>
-	      <listitem>
-		<para>
-		  during 1) if changes are made by an upstream maintainer to templates file
-		  and (s)he runs debconf-updatepo then commits the changes between 1a and 1c
-		</para>
-	      </listitem>
-	      <listitem>
-		<para>
-		  between 3a and 3c if a translator commits an update to his/her translation
-		  before the l10n synchronisation script commits the update
-		</para>
-	      </listitem>
-	      <listitem>
-		<para>
-		  between 4a and 4c if an upstream maintainer updates his templates file
-		  and runs debconf-updatepo before the l10n synchronisation script commits back
-		  the updated files
-		  </para>
-		</listitem>
-	    </itemizedlist>
-
-<para>
-For these reasons, maintainers <emphasis>should not use</emphasis> <command>debconf-updatepo</command> and
-commit back the updated files during the D-I l10n synchronisation
-windows. For the same reasons, translators should avoid commiting
-updates during the D-I l10n synchronisation windows.
+This system minimizes race conditions which could trigger conflicts.
 </para>
 
 <para>
 The conflict windows have been minimised as much as possible in the
-<command>l10n-sync</command> script. This explains the high number of commit actions made
-by this script (as soon as a file is modified, it is committed to SVN).
+<command>l10n-sync</command> script. However, in order to limit the
+number of commits made by the script, files are not commited as soon
+as they are modified. So, the script is sometimes likely to trigger
+conflicts. For that reason, it will stop working on a SVN copy where
+SVN conflict files are present. This explains why this script must
+always been monitored even when it is scehduled to execute on a
+regular basis.
 </para>
 
 </sect3>
@@ -3720,7 +3780,10 @@ skilled shell programmer cleans it out).
 </para>
 
 <para>
-The script uses some command-line switches which may affetc its behaviour:
+</para>
+
+<para>
+The script uses some command-line switches which may affect its behaviour:
 </para>
 
 
@@ -3738,50 +3801,62 @@ The script uses some command-line switches which may affetc its behaviour:
 	    </listitem>
 	    <listitem>
 	      <para>
-		the "--online" switch is very important:
-	      </para>
-	      <itemizedlist>
-		<listitem>
-		  <para>
-		    it triggers "svn update" commands before
-		    working on files
-		  </para>
-		</listitem>
-		<listitem>
-		  <para>
-		    it allows the script
+		"--online" triggers "svn update" commands before
+		    working on files and allows the script
 		    to COMMIT files back to the D-I repository
 		    Of course, this is quite risky and must be done only on
 		    controlled environments because this will update a lot of files
 		    in D-I repository
 		  </para>
-		</listitem>
-	      </itemizedlist>
 	    </listitem>
 	    <listitem>
 	      <para>
-		the <command>svn</command> switch defines the command for calling the <command>svn</command> utility
+		the "--atomic" switch instructs l10n-sync to commit files
+                as soon as they are modified. This makes the script very slow
+                andmay trigger dozens of commits. As D-I commits are sent to the #debian-boot IRC channel, this will probably make D-I developers very angry. This switch should not be used except in very rare occasions
+</para>
+	    </listitem>
+	    <listitem>
+	      <para>
+		the "--atomic-updates" switch instructs l10n-sync to issue a "svn update" command before working on each package. This may be very CPU, network- and time-consuming and should only be used when one needs to limit possible conflicts.
+</para>
+	    </listitem>
+	    <listitem>
+	      <para>
+		the "--keep-revision" switch needs an argument which must be a language code (one only). It will force l10n-sync to restore the "PO-Revision-Date" field of this language on each modified file. This switch is aimed for being used when ones switches a language to the master file and do not want to have all PO-Revion-Date entries updated while no real change was made. It should NOT be used in other occasions.
+</para>
+	    </listitem>
+	    <listitem>
+	      <para>
+		the "--svn" switch defines the command for calling the <command>svn</command> utility
 		It is used in the script just in case some special behaviour is needed
 	      </para>
 	    </listitem>
 	    <listitem>
 	      <para>
-		the <command>debconfupdatepo</command> switch serves the same purpose the the
+		the "--debconf-updatepo" switch serves the same purpose the the
 		<command>debconf-updatepo</command> command. It allows using a specially crafted
 		<command>debconf-updatepo</command> command, for just updating <filename>templates.pot</filename> files
 		and save a lot of time
 	      </para>
 	    </listitem>
+	    <listitem>
+	      <para>
+		the "--sort-order" switch allows giving at the command line the order the packages should be dealt with. This allows to put a crafted order in the generated templates.pot file so that the translators begin to work on the most important packages.
+	      </para>
+	    </listitem>
 	  </itemizedlist>
 
 <para>
-The script needs the location of the local copy of the D-I repository
-to be passed as an argument. It makes some simple checks about the copy.
+The script needs to be passed the location of the local copy of the
+D-I repository to be passed as an argument. It makes some simple
+checks about the copy.
 </para>
 
 <para>
-When using this script with commits, the D-I copy must be as clean
-as possible. It should not be used for development tasks. The scripts checks for possible SVN conflict files and aborts if it finds some.
+When using this script with commits, the D-I copy must be as clean as
+possible. It should not be used for development tasks. The script
+checks for possible SVN conflict files and aborts if it finds some.
 </para>
 
 <para>
@@ -3799,30 +3874,34 @@ About prospective languages
 </title>
 
 <para>
-Since September 2004, the number of languages supported by debian-installer for sarge is frozen.
-All languages which started translating after September 2004 are called "prospective languages".
-These languages won't go into sarge but rather in the next release of the distribution.
+During some periods in the development of Debian Installer, the
+develoment team may decide to "freeze" the number of supported
+languages.  All languages which start after the freeze date are called
+"prospective languages".  These languages won't go in the prepared
+release but rather in the next release of the installer.
 </para>
 
 <para>
-Another reason for keeping a language out of the installer is when the basis is done, but it's
-lacking a translator.
+Another reason for keeping a language out of the installer is a too incomplete translation.
 </para>
 
 <para>
-Prospective languages are kept in the file <filename>packages/po/PROSPECTIVE</filename> along
-with the master po files. Translators can continue translating, but the translations will be 
-kept back and not spreaded into packages by 
-<ulink url="#l10n_synchronisation_script">l10n synchronisation script</ulink>.
+Prospective languages are kept in the file
+<filename>packages/po/PROSPECTIVE</filename> along with the master po
+files. Translators can continue translating, but the translations will
+be kept back and not spreaded into packages by <ulink
+url="#l10n_synchronisation_script">l10n synchronisation
+script</ulink>.
 </para>
 
 <para>
-Status of prospective languages can be fetched at 
-<ulink url="http://people.debian.org/~seppy/d-i/translation-status.html">http://people.debian.org/~seppy/d-i/translation-status.html</ulink>
-like for every other language. The only difference is rank.txt. A prospective language is not listed 
-in rank.txt and not calculated into the graph. See 
-<ulink url="#status_pages">Translation status pages and statistics</ulink> for information
-about the status and statistics pages.
+The status of prospective languages can be fetched at <ulink
+url="http://people.debian.org/~seppy/d-i/translation-status.html">http://people.debian.org/~seppy/d-i/translation-status.html</ulink>
+like for every other language. The only difference is rank.txt. A
+prospective language is not listed in rank.txt and not calculated into
+the graph. See <ulink url="#status_pages">Translation status pages and
+statistics</ulink> for information about the status and statistics
+pages.
 </para>
 
 </sect2>
