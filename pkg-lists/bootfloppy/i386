@@ -1,10 +1,13 @@
-# Note: This module must have loop.o in it.
 floppy-modules-${kernel:Version}-udeb
 busybox-cvs-floppy-udeb
-# Include support for USB floppy drives.
-#usb-modules-${kernel:Version}-udeb
-#usb-storage-modules-${kernel:Version}-udeb
-#usb-discover
-# Argh. This is here for *one symbol*!! And it makes the floppy 55k too
-# big. Herbert promises to fix it.
-#ide-modules-${kernel:Version}-udeb
+# Include support for USB floppy drives, and other storage media.
+usb-discover
+usb-modules-${kernel:Version}-udeb
+usb-storage-modules-${kernel:Version}-udeb
+# Only the scsi modules needed for USB storage.
+scsi-core-modules-${kernel:Version}-udeb
+# This is here for just one symbol that the usb-storage module needs.
+# In theory, that symbol could be moved out to its own module, but we have
+# not been tight enough on space yet to need to do that.
+#XXX commented out until this udeb appears in the archive
+#ide-core-modules-${kernel:Version}-udeb
