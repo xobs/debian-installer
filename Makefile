@@ -203,7 +203,7 @@ tmp_mount:
 #
 # TODO: get rid of this damned fuzz factor!
 $(INITRD): initrd
-initrd: FUZZ=127
+initrd: FUZZ=150
 initrd: TMP_FILE=$(TEMP)/image.tmp
 initrd: tmp_mount reduced_tree
 	dh_testroot
