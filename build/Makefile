@@ -352,9 +352,11 @@ ifdef KERNELVERSION
 
 	# These files are used to build special kernel images for some
 	# subarchitectures. Move them out of the way.
-	if [ -d $(TREE)/usr/lib/kernel-image-$(KERNELVERSION) ]; then \
-		mv $(TREE)/usr/lib/kernel-image-$(KERNELVERSION) $(TEMP)/lib; \
-	fi
+	$(foreach VERSION,$(KERNELVERSION), \
+		if [ -d $(TREE)/usr/lib/kernel-image-$(VERSION) ]; then \
+			mv $(TREE)/usr/lib/kernel-image-$(VERSION) \
+				$(TEMP)/lib; \
+		fi;)
 endif
 
 ifdef KERNELNAME
@@ -727,11 +729,14 @@ pkg-lists/standard-udebs:
 # Get a list of all kernel modules matching the kernel version.
 pkg-lists/kernel-module-udebs:
 	get-packages udeb update
-	grep-dctrl -P -e '.*-modules-$(KERNELVERSION)-$(KERNEL_FLAVOUR)' \
-		-sPackage apt.udeb/state/lists/*_Packages* | \
-		cut -d " " -f 2 > $@
+	> $@
+	$(foreach VERSION,$(KERNELVERSION), \
+		grep-dctrl -P -e '.*-modules-$(VERSION)-$(KERNEL_FLAVOUR)' \
+			-sPackage apt.udeb/state/lists/*_Packages* | \
+			cut -d " " -f 2 >> $@;)
 	# Add any local kernel modules to the list.
-	find localudebs/*-modules-$(KERNELVERSION)-$(KERNEL_FLAVOUR)_*.udeb -printf '%f\n' | sed 's/_.*//' >> $@
+	$(foreach VERSION,$(KERNELVERSION), \
+		find localudebs/*-modules-$(KERNELVERSION)-$(KERNEL_FLAVOUR)_*.udeb -printf '%f\n' | sed 's/_.*//' >> $@;)
 # The kernel version changes from build to build, so always regen the file.
 .PHONY: pkg-lists/kernel-module-udebs
 
