@@ -109,7 +109,7 @@ endif
 clean: demo_clean tmp_mount debian/control
 	rm -rf $(TEMP) || sudo rm -rf $(TEMP)
 	dh_clean
-	rm -f *-stamp
+	rm -f $(TYPE)-*-stamp
 	rm -rf $(UDEBDIR) $(EXTRAUDEBDIR) $(TMP_MNT) debian/build
 	rm -rf $(DEST)/$(TYPE)-* $(EXTRA_IMAGES) || sudo rm -rf $(DEST)/$(TYPE)-* $(EXTRA_IMAGES)
 	rm -f unifont-reduced-$(TYPE).bdf
@@ -119,7 +119,7 @@ else
 	$(foreach NAME,$(KERNELNAME),rm -f $(TEMP)/$(NAME);)
 endif
 
-reallyclean: clean
+reallyclean: all_clean
 	rm -rf $(APTDIR) $(APTDIR).udeb $(APTDIR).deb $(DEST) $(BASE_TMP) $(SOURCEDIR) $(DEBUGUDEBDIR)
 	rm -f diskusage*.txt all-*.utf *.bdf
 	rm -f sources.list sources.list.udeb sources.list.deb
