@@ -2,7 +2,7 @@
 # reduces the config file given as the first parameter, to contain only
 # entries for the modules listd as the rest of the parameters.
 my $file = shift;
-my %modules = map { s/.*\///; s/\.o$//; $_ => 1} @ARGV;
+my %modules = map { s/.*\///; s/\.k?o$//; $_ => 1} @ARGV;
 open (IN, $file) || die "open $file: $!";
 $/="\n\n";
 my %devices;

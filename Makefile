@@ -298,7 +298,7 @@ endif
 	# and alters their names to end in -reduced to indicate that
 	# they have been modified.
 	set -e; \
-	for package in $$(dpkg -S `find $(TREE)/lib -type f -not -name '*.o' -not -name '*.dep' -not -name 'S[0-9][0-9]*' | \
+	for package in $$(dpkg -S `find $(TREE)/lib -type f -not -name '*.o' -not -name '*.ko' -not -name '*.dep' -not -name 'S[0-9][0-9]*' | \
 			sed s:$(TREE)/::` | cut -d : -f 1 | \
 			sort | uniq); do \
 		dpkg -s $$package | sed "s/$$package/$$package-reduced/g" \
@@ -326,15 +326,15 @@ endif
 	set -e; \
 	if [ -e $(TREE)/etc/pcmcia/config ]; then \
 		./pcmcia-config-reduce.pl $(TREE)/etc/pcmcia/config \
-			`if [ -d "$(DRIVEREXTRASDIR)" ]; then find $(DRIVEREXTRASDIR)/lib/modules -name \*.o; fi` \
-			`find $(TREE)/lib/modules/ -name \*.o` > \
+			`if [ -d "$(DRIVEREXTRASDIR)" ]; then find $(DRIVEREXTRASDIR)/lib/modules -name \*.o -name \*.ko; fi` \
+			`find $(TREE)/lib/modules/ -name \*.o -name \*.ko` > \
 			$(TREE)/etc/pcmcia/config.reduced; \
 		mv -f $(TREE)/etc/pcmcia/config.reduced $(TREE)/etc/pcmcia/config; \
 	fi
 
 	# Strip all kernel modules, just in case they haven't already been
 	set -e; \
-	for module in `find $(TREE)/lib/modules/ -name '*.o'`; do \
+	for module in `find $(TREE)/lib/modules/ -name '*.o' -name '*.ko'`; do \
 	    strip -R .comment -R .note -g $$module; \
 	done
 
