@@ -1,32 +1,33 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23682 untranslated -->
+<!-- original version: 23682 -->
 
    <sect3 id="partman">
-   <title>Partitioning Your Disks</title>
+   <title>Particionant els discs</title>
 
 <para>
 
-Now it is time to partition your disks. If you are uncomfortable with
-partitioning, or just want to know more details, see <xref
-linkend="partitioning"/>.
+Ha arribat el moment de particionar els discs. Si no esteu convençuts
+de com particionar o simplement voleu obtenir més informació, vegeu
+<xref linkend="partitioning"/>.
 
 </para><para>
 
-First you will be given the opportunity to automatically partition
-either an entire drive, or free space on a drive. This is also called
-<quote>guided</quote> partitioning. If you do not want to
-autopartition, choose <guimenuitem>Manually edit partition
-table</guimenuitem> from the menu.
+Primer podreu particionar automàticament la unitat sencera
+o l'espai lliure corresponent. Aquesta opció s'anomena
+partició <quote>guiada</quote>. Si no voleu la partició
+automàtica escolliu l'opció del menú
+<guimenuitem>Editar manualment la taula de particions</guimenuitem>.
 
 </para><para>
 
-If you choose guided partitioning, you will be able to choose from the
-schemes listed in the table below. All schemes have their pros and cons,
-some of which are discussed in <xref linkend="partitioning"/>. If you are
-unsure, choose the first one. Bear in mind, that guided partitioning
-needs certain minimal amount of free space to operate with. If you don't
-give it at least about 1GB of space (depends on chosen scheme), guided
-partitioning will fail.
+Si escolliu la partició guiada podreu escollir entre els esquemes
+que es llisten a la taula següent. Tots els esquemes tenen els seus
+avantatges els seus inconvenients, alguns dels quals es discuteixen a
+<xref linkend="partitioning"/>. Si no n'esteu segurs, escolliu
+la primera opció. Heu de tenir present que la partició guiada precisa
+d'un mínim d'espai lliure amb el qual treballar. Si no li assigneu
+un mínim de 1GB d'espai (en funció de l'esquema escollit), es
+produirà un error en la partició guiada.
 
 </para>
 
@@ -34,25 +35,25 @@ partitioning will fail.
 <tgroup cols="3">
 <thead>
 <row>
-  <entry>Partitioning scheme</entry>
-  <entry>Minimum space</entry>
-  <entry>Created partitions</entry>
+  <entry>Esquema de partició</entry>
+  <entry>Espai mínim</entry>
+  <entry>Particions creades</entry>
 </row>
 </thead>
 
 <tbody>
 <row>
-  <entry>All files in one partition</entry>
+  <entry>Tots els fitxers en una partició</entry>
   <entry>600MB</entry>
   <entry><filename>/</filename>, swap</entry>
 </row><row>
-  <entry>Desktop machine</entry>
+  <entry>Màquina d'escriptori</entry>
   <entry>500MB</entry>
   <entry>
     <filename>/</filename>, <filename>/home</filename>, swap
   </entry>
 </row><row>
-  <entry>Multi-user workstation</entry>
+  <entry>Estació de treball multiusuari</entry>
   <entry>1GB</entry>
   <entry>
     <filename>/</filename>, <filename>/home</filename>,
@@ -65,27 +66,27 @@ partitioning will fail.
 
 <para arch="ia64">
 
-If you chose an automatic partitioning for your IA64 system, there
-will be an additional partition, formatted as a FAT16 bootable filesystem,
-for the EFI boot loader.
-There is also an additional menu item in the formatting menu to manually
-set up a partition as an EFI boot partition.
+Si escolliu la partició automàtica per un sistema IA64 hi haurà
+una partició addicional formatejda com un sistemes de fitxers
+arrencable FAT16, pel carregador de l'arrencada EFI.
+També hi ha un opció addicional del menú de formatat per
+configurar manualment una partició com a partició d'arrencada EFI.
 
 </para><para arch="alpha">
 
-If you chose an automatic partitioning for your Alpha system, an
-additional, unformatted partition will be allocated at the beginning of
-your disk to reserve this space for the aboot boot loader.
+Si escolliu la partició automàtica per un sistema Alpha, s'assignaà
+una partició no formatada addicional a l'inci del disc per reservar
+espai pel carregador de l'arrencada aboot.
 
 </para><para>
 
-After selecting a scheme, the next screen will show your new partition
-table, including information on whether and how partitions will be
-formatted and where they will be mounted.
+Després de la selecció d'un esquema, la pantalla següent mostrarà
+la nova taula de particions, on s'inclourà informació respecte a si
+i com es formataran les partiacions i on es muntaran.
 
 </para><para>
 
-The list of partitions might look like this:
+La llista de particions hauria de ser similar a:
 
 <!-- TODO: show some flags here (lightning, skull, smiley) -->
 <informalexample><screen>
@@ -106,94 +107,103 @@ The list of partitions might look like this:
         #9 logical   65.8 GB     ext2
 </screen></informalexample>
 
-This example shows two IDE harddrives divided into several partitions;
-the first disk has some free space. Each partition line consists of the
-partition number, its type, size, optional flags, file system, and
-mountpoint (if any).
+L'exemple mostra dos discs dur IDE dividits en múltiples particions;
+el primer disc disposa d'espai lliure. Cada línia de partició disposa
+del número de partició, el tipus, mida, senyaladors opcionals, sistema
+de fitxers i punt de muntatge (si n'hi ha).
 
 </para><para>
 
-This concludes the guided partitioning. If you are satisfied with the
-generated partition table, you can choose <guimenuitem>Finish
-partitioning and write changes to disk</guimenuitem> from the menu to
-implement the new partition table (as described at the end of this
-section). If you are not happy, you can choose to <guimenuitem>Undo
-changes to partitions</guimenuitem>, to run guided partitioning again
-or modify the proposed changes as described below for manual partitioning.
+En aquest punt finalitza la partició guiada. Si la taula de particions
+generada satisfà les vostres necessitats podeu escollir l'opció
+de menú
+<guimenuitem>Finalitza la partició i escriu els canvis al disc</guimenuitem>
+per desar la nova taula de particions (tal i com es descriu
+al final d'aquesta secció). Si no satisfà les vostres necessitats podeu
+escollir l'opció <guimenuitem>Desfés els canvis de les particions</guimenuitem>
+per tornar a executar la partició guiada o modifica els canvis proposats
+tal i com es descriu posteriorment en la partició manual.
 
 </para><para>
 
-A similar screen to the one shown just above will be displayed if you
-choose manual partitioning except that your existing partition table will
-be shown and without the mount points. How to manually setup your partition
-table and the usage of partitions by your new Debian system will be covered
-in the remainder of this section.
+En cas d'escollir la partició manual us apareixerà una pantalla
+similar a la mostrada anteriorment, exceptuant que es mostrarà
+la taula de particions actual i sense els punts de muntatges.
+El mètode per configurar manualment la taula de particions i
+la utilització de les particions per part de Debian es descriurà
+al llarg de la resta de la secció.
 
 </para><para>
 
-If you select a pristine disk which doesn't have neither partitions
-nor free space on it, you will be offered to create a new partition
-table (this is needed so you can create new partitions). After this
-a new line entitled <quote>FREE SPACE</quote> should appear under the
-selected disk.
+Si escolliu un disc nou sense particions o espai lliure, se us oferirà
+la possibilitat de crear una nova taula de particions (és necessària
+per crear noves particions). Posteriorment hauria d'aparèixer
+una nova línia sota el disc seleccionat 
+amb el títol <quote>ESPAI LLIURE</quote>.
 
 </para><para>
 
-If you select some free space, you will be offered to create new
-partition. You will have to answer a quick series of questions about
-its size, type (primary or logical), and location (beginning or end of
-the free space). After this, you will be presented with detailed
-overview of your new partition. There are options like mountpoint,
-mount options, bootable flag, or way of usage. If you don't like the
-preselected defaults, feel free to change them to your liking. E.g. by
-selecting the option <guimenuitem>Use as:</guimenuitem>, you can
-choose different filesystem for this partition including the
-possibility to use the partition for swap, software RAID, LVM, or not
-use it at all. Other nice feature is the possibility to copy data from
-existing partition onto this one.
-When you are satisfied with your new partition, select
-<guimenuitem>Finished with partition</guimenuitem> and you will be
-thrown back to the <command>partman</command>'s main screen.
+Si seleccioneu l'espai lliure se us oferirà la possibilitat de crear
+una nova partició. Haureu de contestar a una sèrie de qüestions
+ràpides referents a la mida, tipus (primària o lògica) i la ubicació
+(al principi o al final de l'espai lliure). Posteriorment se us
+presentarà la informació referent a la nova partició. Hi ha opcions
+com el punt de muntatges, opcions de muntatge, senyaladors d'arrencada
+o el mètode d'utilització. Podeu modificar lliurements els valors
+predeterminats en funció de les vostres necessitats. Ex.
+seleccionant l'opció <guimenuitem>Utilitza com:</guimenuitem>,
+podeu seleccionar si utilitzar la partició per a swap, RAID per
+software, LVM o cap utilitat específica. Una altra característica
+interessant és la possibilitat de copiar les dades des de
+particions existents a la nova.
+Un cop la nova partició satisfaci les vostres necessitats seleccioneu
+l'opció <guimenuitem>S'ha finalitat la partició</guimenuitem> i
+retorneu a la pantalla principal del <command>partman</command>.
 
 </para><para>
 
-If you decide you want to change something about your partition,
-simply select the partition, which will bring you to the partition
-configuration menu. Because this is the same screen like when creating
-a new partition, you can change the same set of options. One thing
-which might not be very obvious at a first glance is that you can
-resize the partition by selecting the item displaying the size of the
-partition. Filesystems known to work are at least fat16, fat32, ext2,
-ext3 and swap. This menu also allows you to delete a partition.
+Si voleu modificar alguna característica de la partició seleccioneu-la
+i accedireu al menú de configuració de la partició. Com que és la mateixa
+pantalla que la utilitzada en la creació de noves particions, podreu
+modificar-ne les mateixes característiques. Una característica que
+probablement no sigui evident en un primer moment és la possibilitat
+de modificar la mida de la partició seleccionant l'element
+que mostra la mida de la partició. Els sistemes de fitxers que s'han
+comprovat que funcionen són, com a mínim, fat16, fat32, ext2, ext3
+i swap. Aquest menú també us permet suprimir una partició.
 
 </para><para>
 
-Be sure to create at least two partitions: one for the
-<emphasis>root</emphasis> filesystem (which must be mounted as
-<filename>/</filename>) and one for <emphasis>swap</emphasis>. If you
-forget to mount the root filesystem, <command>partman</command> won't
-let you continue until you correct this issue.
+Assegureu-vos de crear un mínim de dues particions: una pel
+sistema de fitxers
+<emphasis>root</emphasis> (que s'ha de muntar com a
+<filename>/</filename>) i una pel <emphasis>swap</emphasis>.
+Si us oblideu de muntar el sistema de fitxers root, el
+<command>partman</command> no us deixarà continuar fins
+que no solucioneu el problema.
 
 </para><para arch="ia64">
 
-If you forget to select and format an EFI boot partition
-<command>partman</command> will detect this and will not let you continue
-until you allocate one.
+Si us heu oblidat de seleccionar i formatar una partició d'arrencada
+EFI, el <command>partman</command> ho detectarà us deixarà continuar
+fins que no n'assigneu una.
 
 </para><para>
 
-Capabilities of <command>partman</command> can be extended with installer
-modules, but are dependent on your system's architecture. So if you can't
-see all promised goodies, check if you have loaded all required modules
-(e.g. <filename>partman-ext3</filename>, <filename>partman-xfs</filename>,
-or <filename>partman-lvm</filename>).
+Les possibilitats del <command>partman</command> es poden ampliar a través
+dels mòduls de l'instal·lador, però dependran de l'arquitectura del sistema.
+Si no teniu accés a totes les possibilitats que esperaveu comproveu que heu
+carregat tots els mòduls necessaris
+(ex. <filename>partman-ext3</filename>, <filename>partman-xfs</filename>,
+o <filename>partman-lvm</filename>).
 
 </para><para>
 
-After you are satisfied with partitioning, select <guimenuitem>Finish
-partitioning and write changes to disk</guimenuitem> from the partitioning
-menu. You will be presented with a summary of changes made to the disks
-and asked to confirm that the filesystems should be created as requested.
+Un cop la partició satisfaci les vostres necessaits, seleccioneu
+l'opció de partició <guimenuitem>Finalitza la partició i escriu
+els canvis al disc</guimenuitem>. Se us presentarà un resum dels canvis
+realitzats als disc i se us demanarà que confirmeu la creació
+dels sistemes de fitxers tal i com els heu sol·licitat.
 
 </para>
    </sect3>
