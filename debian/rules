@@ -11,7 +11,7 @@ ifeq (${DISTRIBUTION},UNRELEASED)
 DISTRIBUTION=unstable
 endif
 
-ARCHIVEDIR=installer-$(ARCH)
+ARCHIVEDIR=debian/tmp/installer-$(ARCH)
 DESTDIR=$(ARCHIVEDIR)/$(DATE)
 IMAGEDIR=$(DESTDIR)/images
 MANDIR=$(DESTDIR)/doc/manual
@@ -35,7 +35,7 @@ build: build-stamp
 build-stamp:
 	rm -f $@
 	-rm -rf $(MANTMP)
-	cd doc/manual/build && \
+	set -e && cd doc/manual/build && \
 	        official_build=1 destination=$(MANTMP) \
 		architectures=$(ARCH) noarchdir=1 ./build.sh
 
@@ -49,15 +49,15 @@ install: build
 	dh_clean -k
 	dh_installdirs
 	
-	install -d debian/tmp/$(MANDIR)
-	cp -a $(MANTMP)/* debian/tmp/$(MANDIR)
+	install -d $(MANDIR)
+	cp -a $(MANTMP)/* $(MANDIR)
 	
 	debian/rules build-images
 
-	install -d debian/tmp/$(IMAGEDIR)
-	cp -a build/dest/* debian/tmp/$(IMAGEDIR)
-	cd debian/tmp/$(IMAGEDIR) && md5sum `find . -type f` > MD5SUMS
-	ln -s $(DATE) debian/tmp/$(ARCHIVEDIR)/current
+	install -d $(IMAGEDIR)
+	cp -a build/dest/* $(IMAGEDIR)
+	cd $(IMAGEDIR) && md5sum `find . -type f` > MD5SUMS
+	ln -s $(DATE) $(ARCHIVEDIR)/current
 
 binary-arch: install  
 	dh_testdir
@@ -75,4 +75,4 @@ binary-arch: install
 binary-indep:
 
 binary: binary-indep binary-arch 
-.PHONY: build clean binary-indep binary-arch binary install 
+.PHONY: build build-images clean binary-indep binary-arch binary install 
