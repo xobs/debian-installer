@@ -1,0 +1,37 @@
+#!/bin/sh
+
+#
+# Script to workaround files that are currently missing in the archive.
+#
+
+ARCH=${architecture:-$(dpkg --print-architecture)}
+FILES="debian/debian-installer-$ARCH.install debian/debian-installer-$ARCH.docs"
+
+case $1 in
+
+touch)
+	rm -f missing.txt
+	for f in `awk '{print $1}' <  debian/debian-installer-$ARCH.install  ` ; do
+		if [ ! -f $f ] ; then
+			touch $f
+			dir=`grep $f debian/debian-installer-$ARCH.install | awk '{print $2}' `
+		 	base=`basename $f`	
+			echo $dir/$base >> missing.txt
+		fi
+	done
+	for f in `cat debian/debian-installer-$ARCH.docs ` ; do
+		if [ ! -f $f ] ; then
+			touch $f
+			echo usr/share/doc/debian-installer-$ARCH/$f >> missing.txt
+		fi
+	done
+	;;
+remove)
+	for f in `cat missing.txt `; do
+		echo DELETING debian/debian-installer-$ARCH/$f
+		rm -f debian/debian-installer-$ARCH/$f
+	done
+	;;
+esac
+
+exit 0
