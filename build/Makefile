@@ -201,6 +201,7 @@ list:
 	@echo
 	@echo "list"
 	@echo "all_build"
+	@echo "all_rebuild"
 	@echo "stats"
 	@echo "all_clean"
 	@echo "reallyclean"
@@ -264,10 +265,14 @@ _build:
 	@[ -n "$(SUBARCH) $(MEDIUM) $(FLAVOUR)" ] || { echo "invalid target"; false; }
 	@$(submake) tree_umount $(EXTRATARGETS) $(TARGET)
 
-# Convenience rule to clean and build.
+# Convenience rules to clean and build.
 .PHONY: rebuild_%
 rebuild_%:
 	@$(submake) clean_$(subst rebuild_,,$@) build_$(subst rebuild_,,$@)
+
+.PHONY: _rebuild
+_rebuild:
+	@$(submake) _clean _build
 
 #
 # The general tree target.
