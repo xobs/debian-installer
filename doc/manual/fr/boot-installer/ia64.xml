@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 18973 untranslated -->
+<!-- original version: 21882 -->
 
   <sect2 arch="ia64"><title>Amorcer à partir d'un cédérom</title>
 
@@ -9,80 +9,95 @@
 <title>Contenus du cédérom</title>
  
 <para>
-Trois variantes des cédéroms d'installation existent.
+Trois variantes des cédéroms d'installation Debian existent.
 Le cédérom <emphasis>Business Card</emphasis> offre une installation
 minimale qui tient sur ce support de petite taille. Il exige une connexion
 au réseau pour installer le reste du système de base et rendre le système
 utilisable. Le cédérom <emphasis>Network Install</emphasis> possède tous les
 paquets du système de base, mais il exige une connexion au réseau pour 
-installer des paquets supplémentaires nécessaires à un système complet.
+installer les paquets supplémentaires nécessaires à un système complet.
 L'ensemble des cédéroms Debian peut installer un système complet sans avoir 
 besoin du réseau.
 </para>
 </note>
+
 <para>
 
-he IA-64 uses the next generation Extensible Firmware Interface (EFI)
-from Intel.
-Unlike the traditional x86 BIOS which knows little about the boot
-device other than the partition table and Master Boot Record (MBR),
-the EFI can read and write files from FAT16 or FAT32 formatted disk
-partitions.
-This simplifies the often arcane process of starting a system.
-The system boot loader and the EFI firmware that supports it have
-a full filesystem to store the files necessary for booting the
-machine.
-This means that the system disk on an IA-64 system has an additional
-disk partition dedicated to the EFI instead of the simple MBR or boot
-block on more conventional systems.
+L'architecture IA-64 utilise la nouvelle interface
+<quote>Extensible Firmware Interface</quote> (EFI) d'Intel. Contrairement au
+    traditionnel BIOS x86 qui ne connaît rien du périphérique de démarrage
+sinon la table des partitions et le secteur principal d'amorçage (MBR), le 
+programme EFI peut lire et écrire des fichiers provenant d'une partition FAT16
+    ou FAT32. Cela simplifie le processus souvent mystérieux de l'
+    amorçage du système. Le programme d'amorçage du système et le
+    firmware EFI possèdent un système de fichiers
+    complet pour stocker les fichiers nécessaires au démarrage
+    du système. Cela signifie que le disque système sur un système
+    IA-64 possède une partition additionnelle dédiée à EFI à la
+    place du simple MBR ou du bloc de démarrage sur les systèmes plus
+    conventionnels.
+
 
 </para><para>
-The Debian CD contains a small version of the EFI partition where
-<command>elilo</command>, its configuration file, the installer's kernel,
- and initial filesystem (initrd) are located.
-The running system also contains an EFI partition where the necessary
-files for booting the system reside.
-These files are readable from the EFI Shell as described below.
+
+Le cédérom Debian contient une petite partition EFI sur laquelle
+    résident le programme d'amorçage <command>ELILO</command>, son
+    fichier de configuration, le noyau de l'installateur ainsi qu'un système de fichiers initial
+    (initrd). Le système en marche contient aussi une partition EFI
+    sur laquelle réside les fichiers nécessaires au démarrage du
+    système. Ces fichiers sont lisibles depuis le Shell EFI comme
+    décrit plus bas.
+
 
 </para><para>
-Most of the details of how the <command>elilo</command> actually loads and
-starts a system for the most part transparent to the system installer.
-However, the installer must set up an EFI partition prior to installing
-he base system.  Otherwise, the installation of <command>elilo</command>
-will fail, rendering the system un-bootable.
-The EFI partition is allocated and formatted in the partitioning step
-of the installation prior to loading any packages on the system disk.
-The partitioning task also verifies that a suitable EFI partition is
-present before allowing the installation to proceed.
+
+La plupart des détails sur la manière dont <command>ELILO</command> se
+    charge et démarre le système sont transparents pour l'installateur
+    du système. Toutefois, celui-ci doit d'abord mettre en place une
+    partition EFI avant d'installer le système de base. Autrement,
+    l'installation de <command>ELILO</command> échouera rendant le
+    système non amorçable. La partition EFI est allouée et formatée
+    lors de l'étape partitionnement de l'installation, avant le chargement des paquets
+    sur le disque système. La tâche de partitionnement vérifie aussi
+    qu'une partition EFI convenable est présente avant de permettre
+    l'installation. 
+
 
 </para><para>
-The EFI Boot Manager is started as the last step of the firmware
-initialization.
-It displays a menu list from which the user can select
-an option.
-Depending on the model of system and what other software has been
-loaded on the system, this menu may be different from one system
-to another.
-There should be two menu items displayed,
-<command>Boot Option Maintenance Menu</command> and
-<command>EFI Shell (Built-in)</command>.
-Using the first option is preferred, however, if that
-option is not available or the CD for some reason does not
-boot with it, use the second option.
+
+Le gestionnaire de démarrage EFI est la dernière étape de
+    l'initialisation du firmware. Il montre un menu où
+    l'utilisateur peut choisir une option. Dépendant du modèle du
+    système ainsi que des autres programmes chargés, ce menu peut être
+    différent d'un système à l'autre. Il devrait y avoir au moins deux
+    menus affichés, <command>Boot Option Maintenance Menu</command> et
+    <command>EFI Shell (Built-in)</command>. L'utilisation de la
+    première option est conseillée&nbsp;; néanmoins si cette option n'est pas
+    disponible, ou que le cédérom ne peut pas s'amorcer, utilisez la
+    seconde option.
+
 </para>
+
   <warning>
   <title>IMPORTANT</title>
 <para>
-The EFI Boot Manager will select a default boot action, typically
-the first menu choice, within a pre-set number of seconds.
-This is indicated by a countdown at the bottom of the screen.
-Once the timer expires and the systems starts the default action,
-you will have to reboot the machine in order to continue the installation.
+
+Le gestionnaire de démarrage EFI choisira une action de démarrage par
+      défaut, typiquement le premier choix du menu, après un nombre prédéfini
+      de secondes. C'est indiqué par un compte à
+      rebours situé au bas de l'écran. Une fois ce temps expiré et
+      l'action par défaut lancée, vous aurez peut-être
+      besoin de redémarrer la machine afin de continuer
+      l'installation. Si l'action par défaut est le Shell EFI, vous
+      pouvez retourner au gestionnaire d'amorçage en tapant
+      <command>exit</command> à l'invite du shell.
+
+
 </para>
   </warning>
 
  <sect3 arch="ia64" id="bootable-cd">
-  <title>Option 1: Booting from the Boot Option Maintenance Menu</title>
+  <title>Option 1: Amorcer à partir du menu <quote>Boot Option Maintenance</quote></title>
 <para>
 
 </para>
@@ -90,311 +105,427 @@ you will have to reboot the machine in order to continue the installation.
 <itemizedlist>
 
 <listitem><para>
-Insert the CD in the DVD/CD drive and reboot the machine.
-The firmware will display the EFI Boot Manager page and menu after
-it completes its system initialization.
+
+Insérez le cédérom dans le lecteur DVD/CD et réamorcez la machine. Le
+	  firmware affichera la page du gestionnaire d'amorçage EFI
+	  ainsi que le menu après avoir terminé l'initialisation du système.
 
 </para></listitem>
 
 <listitem><para>
-Select <command>Boot Maintenance Menu</command> from the menu
-with the arrow keys and press <command>ENTER</command>.
-This will display a new menu.
+
+Sélectionnez <command>Boot Maintenance Menu</command> du menu avec les
+	  touches flèches et appuyez sur
+	  <command>ENTER</command>. Un nouveau menu s'affichera.
+
 </para></listitem>
+
+
+
 <listitem><para>
-Select <command>Boot From a File</command> from the menu
-with the arrow keys and press <command>ENTER</command>.
-This will display a list of devices probed by the firmware.
-You should see two menu lines containing either the label
-<command>Debian Inst [Acpi ...</command> or
-<command>Removable Media Boot</command>.
-If you examine the rest of the menu line, you will notice that
-the device and controller information should be the same.
+
+Sélectionnez <command>Amorcer depuis un fichier</command> depuis le
+	  menu avec les touches flèches et appuyer sur
+	  <command>ENTER</command>. Une liste des
+  périphériques testés par le firmware s'affichera. Vous devriez voir deux
+	  lignes de menu contenant soit l'étiquette <command>Debian
+	    Inst [Acpi ...</command> soit <command>Removable Media
+	    Boot</command>. Si vous examinez le reste de la ligne de
+	  menu, vous noterez que les informations sur le périphérique et sur
+	  le contrôleur sont les mêmes. 
+
 </para></listitem>
 
 <listitem><para>
-You can choose either of the entries that refer to the CD/DVD
-drive.
-Select your choice with the arrow keys and press <command>ENTER</command>.
-If you choose <command>Removable Media Boot</command> the machine
-will immediately start the boot load sequence.
-If you choose <command>Debian Inst [Acpi ...</command> instead, it
-will display a directory listing of the bootable portion of the
-CD, requiring you to proceed to the next (additional) step.
+
+Vous pouvez choisir n'importe quelle entrée qui se réfère au lecteur
+	  DVD/CD. Faites votre choix à l'aide des touches flèches et
+	  appuyez sur <command>ENTER</command>. Si vous choisissez
+	  <command>Removable Media Boot</command>, la machine débutera
+	  immédiatement la séquence de démarrage. Si vous choisissez
+	  plutôt <command>Debian Inst [Acpi ...</command>, il
+	  affichera le contenu de la partie amorçable du
+	  cédérom, vous demandant de passer à la prochaine étape.
+
 </para></listitem>
 
 <listitem><para>
-You will only need this step if you chose
-<command>Debian Inst [Acpi ...</command>.
-The directory listing will also show
-<command>[Treat like Removable Media Boot]</command> on the next to
-the last line.
-Select this line with the arrow keys and press <command>ENTER</command>.
-This will start the boot load sequence.
+
+Vous n'aurez besoin de cette étape que si vous choisissez
+	  <command>Debian Inst [Acpi ...</command>. L'affichage du contenu du
+	  répertoire montrera également <command>[Treat like Removable
+	    Media Boot]</command> sur l'avant dernière <!-- je suppose que
+tu as vérifié... sinon je mettrais : la dernière ligne --> 
+	  ligne. Sélectionnez cette ligne avec les touches flèches et
+	  appuyez sur <command>ENTER</command>. Cela lancera la
+	  séquence d'amorçage.
+
 </para></listitem>
 
 </itemizedlist>
 <para>
-These steps start the Debian boot loader which will display a
-menu page for you to select a boot kernel and options.
-Proceed to selecting the boot kernel and options.
+
+Ces étapes lancent le programme d'amorçage de Debian qui affichera une
+      page de menu vous permettant de sélectionner un noyau et des
+      options. Poursuivez en choisissant le noyau et les options.
 
 </para>
 </sect3>
 
 
-
-
   <sect3 arch="ia64" id="boot-with-efi">
-  <title>Option 2: Booting from the EFI Shell</title>
+  <title>Option 2: Amorcer depuis le Shell EFI</title>
 <para>
 
-If, for some reason, option 1 is not successful, reboot the machine
-and when the EFI Boot Manager screen appears there should be
-one option called <command>EFI Shell [Built-in]</command>.
-Boot the Debian Installer CD with the following steps:
+
+Si pour une raison ou pour une autre, l'option 1 n'est pas couronnée de
+      succès, relancez la machine et lorsque l'écran du gestionnaire
+      d'amorçage EFI apparaît, il devrait y avoir une option appelée
+      <command>EFI Shell [Built-in]</command>. Amorcez le cédérom
+      d'installation de Debian en suivant ces étapes&nbsp;: 
 
 </para>
 
 <itemizedlist>
 
 <listitem><para>
-Insert the CD in the DVD/CD drive and reboot the machine.
-The firmware will display the EFI Boot Manager page and menu after
-it completes system initialization.
+
+Insérez le cédérom dans le lecteur DVD/CD et réamorcez la machine. Le
+	  firmware affichera la page et le menu du gestionnaire
+	  d'amorçage EFI après avoir terminé l'initialisation du système.
+
 </para></listitem>
 
 <listitem><para>
-Select <command>EFI Shell</command> from the menu with the arrow keys
-and press <command>ENTER</command>.
-The EFI Shell will scan all of the bootable devices and display
-them to the console before displaying its command prompt.
-The recognized bootable partitions on devices will show a device name of
+
+Sélectionnez <command>EFI Shell</command> depuis le menu avec les touches
+	  flèches et appuyez sur <command>ENTER</command>. Le shell EFI
+	  va examiner tous les périphériques amorçables et les
+	  affichera sur le terminal avant d'afficher son invite.
+	  Les partitions amorçables reconnues sur les
+	  périphériques auront un nom comme &nbsp;:
 <filename>fs<emphasis>n</emphasis>:</filename>.
-f you inserted the CD just before entering the shell, this may
-take a few extra seconds as it initializes the CD drive.
+Toutes les autres partitions seront nommées comme &nbsp;:
+<filename>blk<emphasis>n</emphasis>:</filename>.
+Si vous avez inséré le cédérom juste avant d'entrer dans le Shell,
+	cet examen pourrait prendre quelques secondes de plus car il
+	  initialise le lecteur CD.
+
 </para>
 </listitem>
 
 <listitem><para>
-Examine the output from the shell looking for the CDROM drive.
-It is most likely the <filename>fs0:</filename> device although
-other devices with bootable partitions will also show up as
-<filename>fs<emphasis>n</emphasis></filename>.
+
+Examinez la sortie du shell en cherchant le lecteur de cédérom. C'est
+	  très probablement le périphérique <filename>fs0:</filename>
+	  bien que que d'autres périphériques ayant une partition
+	  amorçable seront affichées comme
+	  <filename>fs<emphasis>n</emphasis><(filename>.
+ 
 </para></listitem>
 
 <listitem><para>
-Enter <command>fs<emphasis>n</emphasis>:</command> and press
-<command>ENTER</command> to select that
-device where <emphasis>n</emphasis> is the partition number for the
-CDROM.  The shell will now display the partition number as its prompt.
+
+Entrez <command>fs<emphasis>n</emphasis>:</command> et appuyez sur
+	  <command>ENTER</command> afin de sélectionner le
+	  périphérique ayant <emphasis>n</emphasis> comme numéro de
+	  partition pour le cédérom. Le Shell affichera maintenant le numéro de
+	  partition dans son invite.
+
 </para></listitem>
 
 <listitem><para>
-Enter <command>elilo</command> and press <command>ENTER</command>.
-This will start the boot load sequence.
+
+Entrez <command>elilo</command> et appuyez sur
+	  <command>ENTER</command>. Cela lancera la séquence d'amorçage.
+
 </para></listitem>
 
 </itemizedlist>
 
 <para>
 
-As with option 1, these steps start the Debian boot loader which will
-display a menu page for you to select a boot kernel and options.
-You can also enter the shorter
-<command>fs<emphasis>n</emphasis>:elilo</command> command at
-the shell prompt.
-Proceed to selecting the boot kernel and options.
+Comme avec l'option 1, ces étapes démarrent le programme d'amorçage
+      Debian qui affichera une page de menu vous permettant de
+      sélectionner un noyau et des options. Vous pouvez également
+      entrer la commande plus courte
+      <command>fs<emphasis>n</emphasis>:elilo</command> à l'invite du
+      Shell. Poursuivez en choisissant le noyau et les options.
 
 </para>
 </sect3>
 
 <sect3 arch="ia64" id="kernel-option-menu">
-  <title>Selecting the Boot Kernel and Options</title>
+  <title>Sélection du noyau et des options</title>
 
 <para>
 
-The boot loader will display a form with a menu list and a text
-window with a <classname>Boot:</classname> prompt.
-The arrow keys select an item from the menu and any text typed
-at the keyboard will appear in the text window.
-There are also help screens which can be displayed by pressing
-the appropriate function key.
-The <classname>General</classname> help screen explains the menu
-choices and the <classname>Params</classname> screen explains
-the common command line options.
+Le programme d'amorçage affichera un formulaire avec une liste et une
+      fenêtre de texte avec une invite
+      <classname>Boot:</classname>. Les touches flèches sélectionnent
+      un article du menu et tout texte entré au clavier apparaîtra
+      dans la fenêtre de texte. Il y a aussi des écrans d'aide qui
+      peuvent être affichés en appuyant sur la touche de fonction
+      appropriée. L'écran d'aide <classname>General</classname>
+      explique les choix du menu et l'écran
+      <classname>Params</classname> expliquent les options communes de
+      la ligne de commande.
+
 </para>
-   <warning>
-   <title>Serial Console</title>
+ 
+   <title>Terminal série</title>
 <para>
 
-Some IA64 platforms have both a serial console and a keyboard and
-video card which can be configured in the EFI firmware to be
-the system console.
-The EFI console is capable of displaying and accepting input from
-both the keyboard and video and the serial port.
-The Linux kernel will take the keyboard and video devices as its
-default console if it detects a keyboard during its initialization.
-You will have to enable the serial console in the EFI boot
-manager and enter
-<command>console=ttyS0,9600n8</command> into
-the <classname>Boot:</classname> text window to install via
-the serial console.
-If you are using a serial console and forget to set it in the
-command line, you
-will be able to select the kernel and enter parameters but both
-the display and your input will go dead as soon as the kernel starts,
-requiring you to either reboot if your system does not have a keyboard
-and video display installed.
+Pour faire l'installation, vous pouvez choisir d'utiliser un écran et un 
+clavier ou
+      d'utiliser une connexion série. Pour choisir une installation
+      écran/clavier, sélectionnez une option contenant la chaîne de
+      caractère [VGA console]. Pour installer via une connexion
+      série, choisissez une option contenant la chaîne de caractère
+      [<replaceable>BAUD</replaceable> baud serial console], où
+      <replaceable>BAUD</replaceable> est la vitesse de votre terminal
+      série. Les articles du menu pour les réglages les plus typiques
+      des taux sur le périphérique ttyS0 sont préconfigurés. 
+</para>
+
+<para>
+Dans la plupart des cas, vous voudrez que l'installateur
+      utilise le même taux que celui de votre connexion au terminal
+      EFI. Si vous n'êtes pas sûr de ce réglage, vous pouvez l'obtenir
+      grâce à la commande <command>baud</command> entrée dans le shell
+      EFI.
+</para>
+<para>
+Si aucune des options disponibles n'est appropriée à votre périphérique série 
+ou à
+      votre taux baud, vous pouvez passer outre les réglages de la console
+      pour une des options existantes du menu. Par exemple, pour utiliser
+      une console avec un taux de 57600 bauds sur le périphérique ttyS1, entrez
+      <command>console=ttyS1,57600n8</command> dans la fenêtre
+      <classname>Boot:</classname>.
+</para>
+
+<note><para>
+
+La plupart des machines IA-64 sont livrées avec une console réglée sur
+	9600 bauds. Ce réglage est plutôt lent, et le processus normal
+	d'installation prendra un temps relativement long pour
+	afficher chaque écran. Vous devriez augmenter le taux
+	baud utilisé pour l'installation, ou alors
+	utiliser une installation en mode texte. Voyez le menu d'aide
+	<classname>Params</classname> pour des instructions sur
+	comment lancer l'installateur en mode texte.
+</para></note>
+
+<warning><para>
+Si vous choisissez le mauvais type de console, vous aurez la
+	possibilité de choisir le noyau et d'entrer les paramètres,
+	mais tant le terminal que vos choix seront perdus dès que le noyau
+	se chargera, vous obligeant à réamorcer la machine avant de
+	pouvoir débuter l'installation.
 </para></warning>
 
 <para>
 
-Consult the <classname>General</classname> help screen for the
-description of the kernels and install modes most appropriate
-for your installation.
-You should also consult <xref linkend="boot-parms"/> below for any additional
-parameters that you may want to set in the <classname>Boot:</classname>
-text window.
-The kernel version you choose selects the kernel version that will be
-used for both the installation process and the installed system.
-If you encounter kernel problems with the installation, you may also
-have those same problems with the system you install.
-The following two steps will select and start the install:
+Consultez l'écran d'aide <classname>General</classname> pour la
+      description des noyaux et des modes d'installation les plus
+      appropriés pour votre installation. Vous devriez aussi consulter
+      <xref linkend="boot-parms"/> plus bas pour tous les paramètres
+      additionnels que vous voudriez régler dans la fenêtre de texte
+      <classname>Boot:</classname>. La version du noyau que vous
+      choisissez sélectionne la version du noyau qui sera utilisée
+      tant pour le processus d'installation que pour le système
+      installé. Les deux prochaines étapes sélectionneront et lanceront
+      l'installation: 
 
 </para>
 
 <itemizedlist>
+
 <listitem><para>
-Select the kernel version and installation mode most
-appropriate to your needs with the arrow keys.
+Sélectionnez avec les touches flèches la version du noyau et le mode
+	  d'installation le plus approprié à vos besoins.
 </para></listitem>
 
 <listitem><para>
-Enter any boot parameters by typing at the keyboard.
-The text will be displayed directly in the text window.
-This is where the serial console is set.
+Entrez les paramètres de démarrage au clavier. Le texte sera affiché
+	  directement dans la fenêtre de texte. C'est là que les
+	  paramètres du noyau sont spécifiés (tels que les réglages de
+	  la console série).
 </para></listitem>
 
 <listitem><para>
-Press <command>ENTER</command>.  This will load and start the
-kernel.
-The kernel will display its usual initialization messages followed
-by the first screen of the Debian Installer.
+Appuyez sur <command>ENTER</command>. Le noyau sera chargé. 
+Il affichera les messages d'initialisation usuels
+	  suivis par le premier écran de l'installateur Debian.
 </para></listitem>
 
 </itemizedlist>
-</sect3>
+
+    </sect3>
 
 <para>
 
-Proceed to the next chapter to continue the installation where you will
-set up the language locale, network, and disk partitions.
+Passez au prochain chapitre pour continuer l'installation. Là vous
+    pourrez régler la localisation, le réseau et les partitions des
+    disques.
 
 </para>
-</sect2>
+  </sect2>
 
-  <sect2 arch="ia64" id="boot-tftp"><title>Démarrer avec TFTP</title>
+<sect2 arch="ia64" id="boot-tftp"><title>Amorcer avec TFTP</title>
 
 <para>
 
-Démarrer un système ia64 à partir du réseau demande deux actions spécifiquement
-liées à l'architecture. Sur le serveur de démarrage, DHCP et TFTP doivent être
-configurés pour lancer <command>elilo</command>. Sur le client, une option 
-doit être déclarée dans le gestionnaire de démarrage EFI pour permettre 
-l'utilisation du réseau.
-
+Amorcer un système IA64 depuis le réseau est similaire à amorcer
+    depuis un cédérom. La seule différence est la manière dont le
+    noyau est chargé. Le gestionnaire d'amorçage EFI peut charger et
+    lancer des programmes depuis un serveur sur le réseau. Une fois
+    que le noyau d'installation est chargé et démarré, l'installation
+    du système suivra les mêmes étapes que l'installation depuis un
+    cédérom avec pour seule exception que les paquets seront chargés
+    depuis le réseau plutôt que depuis le cédérom.
 
 </para>
-  <sect3 arch="ia64" id="boot-tftp-server"><title>Configuration du serveur</title>
+
+&boot-installer-intro-net.xml;
+
 <para>
 
-Une entrée TFTP pour démarrer par le réseau un système ia64 ressemble à 
-celle-ci&nbsp;:
+Amorcer un système ia64 depuis le réseau demande deux actions
+    spécifiques à l'architecture. Sur le serveur d'amorçage, DHCP et
+    TFTP doivent être configurés afin de distribuer
+    <command>elilo</command>. Sur le client, une nouvelle option
+    d'amorçage doit être définie dans le gestionnaire d'amorçage EFI
+    afin de permettre le chargement via le réseau.
+
+</para>
+
+  <sect3 arch="ia64" id="boot-tftp-server">
+    <title>Configuration du serveur</title>
+
+<para>
+
+Une entrée TFTP convenable pour l'amorçage via le réseau ressemble à
+      ceci&nbsp;:
 
 <informalexample><screen>
 
 host mcmuffin {
         hardware ethernet 00:30:6e:1e:0e:83;
         fixed-address 10.0.0.21;
-        filename "elilo.efi";
+        filename "debian-installer/ia64/elilo.efi";
 }
 
 </screen></informalexample>
 
-Remarquez que le but est de faire marcher <command>elilo.efi</command> sur 
-le client.
+Notez que le but est d'obtenir que <command>elilo.efi</command> soit
+      lancé sur le client.
 
 </para><para>
 
-Créez un sous-répertoire <filename>ia64/</filename> dans le répertoire
-tftpboot et remplissez-le avec les fichiers <filename>vmlinuz</filename> et
-<filename>initrd.gz</filename> qui sont sur le répertoire netboot de 
-l'installateur Debian.
+Extrayez le fichier <filename>netboot.tar.gz</filename> dans le
+      répertoire racine de votre serveur tftp. Typiquement, les
+      répertoires racine du serveur tftp incluent
+      <filename>/var/lib/tftp</filename> et
+      <filename>/tftpboot</filename>. Cela créera un répertoire
+      <filename>debian-installer</filename> contenant les fichiers de
+      démarrage pour un système IA-64.
 
 </para><para>
 
-Copiez <filename>elilo.efi</filename> dans le répertoire tftpboot et autorisez
-sa lecture à tout le monde. On peut trouver ce fichier dans le paquet
-elilo des distributions IA64, ou dans  <filename>/usr/lib/elilo</filename> ou 
-dans un sous-répertoire  de <filename>/boot/efi</filename>. Une copie valable
-se trouve dans le répertoire netboot de l'installateur Debian.
 
-</para><para>
+<informalexample><screen>
+# cd /var/lib/tftp
+# tar xvfz /home/user/netboot.tar.gz
+./
+./debian-installer/
+./debian-installer/ia64/
+[...]
+</screen></informalexample>
 
-Créez un fichier <filename>elilo.conf</filename> dans le répertoire tftpboot.
-Il sera chargé par <command>elilo.efi</command> quand celui-ci s'exécute sur 
-le client. Ce fichier contrôle ce qui se passe ensuite, comme le choix du 
-noyau, l'image initrd, etc. Un exemple est donné dans le répertoire netboot 
-de l'installateur Debian. Vérifiez son contenu et modifiez-le selon vos 
-besoins.
-    </para>
+Le fichier <filename>netboot.tar.gz</filename> contient un fichier
+      <filename>elilo.conf</filename> qui devrait fonctionner avec la
+      plupart des configurations. Toutefois, si vous êtes amené à
+      modifier ce fichier, vous pouvez le trouver dans le répertoire
+      <filename>debian-installer/ia64/</filename>. 
+
+Il est possible d'avoir des fichiers de configurations différents pour
+      différents clients en les nommant selon l'adresse IP du client
+      en hexadécimal, avec un suffixe <filename>.conf</filename>, à la place
+du fichier <filename>elilo.conf</filename>. Pour plus de détails, voyez la
+      documentation fournie dans le paquet
+      <classname>elilo</classname>.
+
+</para>
+    </sect3>
+
+<sect3 arch="ia64" id="boot-tftp-client">
+    <title>Configuration du client</title>
+
 <para>
 
-Il est possible d'avoir plusieurs fichiers de configuration pour plusieurs
-clients. Nommez-les en utilisant l'adresse IP en notation hexadécimale du 
-client, et avec l'extension <filename>.conf</filename> au lieu de 
-<filename>elilo.conf</filename>.
-Voyez la documentation disponible dans le paquet <classname>elilo</classname>
-pour des précisions.
-    </para>
-
-  </sect3>
-
-  <sect3 arch="ia64" id="boot-tftp-client">
-<title>Configuration du client</title>
-<para>
-
-Pour un démarrage par TFTP, commencez par démarrez avec EFI et entrez dans
-le menu sur la <guimenu>maintenance des options de démarrage</guimenu>.
+Pour configurer le client et permettre le démarrage par TFTP,
+      commencez par amorcer EFI et entrez dans le menu <guimenu>Boot
+	Option Maintenance Menu</guimenu>.
 
 <itemizedlist>
 <listitem><para>
 
 Ajoutez une option de démarrage.
 
-	  </para></listitem>
-
+</para></listitem>
 <listitem><para>
 
-Choisissez la ligne <guimenuitem> Load File [Acpi()/.../Mac()]</guimenuitem>
-ou quelque chose d'approchant et appuyez sur la touche &enterkey;
+Vous devriez voir une ou plusieurs lignes contenant le texte
+	    <guimenuitem>Load File
+	      [Acpi()/.../Mac()]</guimenuitem>. Si plus d'une de ces
+	    entrées existent, choisissez celle contenant l'adresse MAC
+	    de l'interface depuis laquelle vous allez
+	    amorcer. Utilisez les touches flèches pour mettre en
+	    évidence votre choix, et ensuite appuyez sur entrée.
 
-	  </para></listitem>
-
+</para></listitem>
 <listitem><para>
 
-Choisissez <userinput>Netboot</userinput>, ou quelque chose d'approchant,
-sauvegardez et revenez au menu sur les options de démarrage.
+Nommez l'entrée <userinput>Netboot</userinput> ou quelque chose de
+	    semblable, sauvegardez, et retournez au menu des options de
+	    démarrage. 
 
-	  </para></listitem>
-      </itemizedlist>
+</para></listitem>
+</itemizedlist>
 
-Vous devriez voir l'option que vous venez de créer. La sélectionner lancera
-une requête DHCP , ce qui chargera <filename>elilo.efi</filename> qui se 
-sur le serveur.
+
+Vous devriez voir la nouvelle option de démarrage que vous venez de
+      créer, et en la sélectionnant, cela devrait amorcer une requête
+      DHCP, menant au chargement depuis le serveur via TFTP du fichier
+      <filename>elilo.efi</filename>.
+
+</para><para>
+
+Le programme d'amorçage affichera son invite dès qu'il aura téléchargé
+      et traité son fichier de configuration. À ce stade,
+      l'installation commence avec les mêmes étapes qu'une
+      installation via cédérom. Sélectionnez une option de démarrage
+      comme ci-dessus et lorsque le noyau aura terminé de s'installer
+      depuis le réseau, il lancera l'installateur Debian.
+
+</para><para>
+
+Allez au prochain chapitre pour poursuivre l'installation. Là vous
+      pourrez régler la localisation, le réseau et les partitions des
+      disques. 
 
 </para>
-
   </sect3>
   </sect2>
+
+
+
+
+
+
+
+
+
+
