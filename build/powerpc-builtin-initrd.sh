@@ -43,7 +43,7 @@ kvers=$6
 
 # Set this to the images to build : only all or chrp-rs6k are currently supported
 if [ $# = 6 ]; then 
-	imagetypes="chrp chrp-rs6k prep"
+	imagetypes="chrp-rs6k prep"
 else case $7 in
 	chrp-rs6k)
 		imagetypes="chrp-rs6k"
@@ -96,8 +96,16 @@ make -C $builddir/kernel-build-$kvers/arch/ppc/boot	\
 
 # Copying build directories to destdir.
 for subarch in $imagetypes; do
-	cp $builddir/kernel-build-$kvers/arch/ppc/boot/images/zImage.initrd.$subarch \
-		$destdir/vmlinuz-$subarch.initrd
+	case $subarch in
+		chrp-rs6k)
+			cp $builddir/kernel-build-$kvers/arch/ppc/boot/images/zImage.initrd.chrp-rs6k \
+				$destdir/vmlinuz-chrp.initrd
+		;;
+		*)
+			cp $builddir/kernel-build-$kvers/arch/ppc/boot/images/zImage.initrd.$subarch \
+				$destdir/vmlinuz-$subarch.initrd
+		;;
+	esac
 done
 
 exit 0
