@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 11648 -->
+<!-- original version: 16990 -->
 
  <sect1 id="kernel-baking"><title>Compiler un nouveau noyau</title>
 <para>
@@ -38,8 +38,8 @@ accélérer le démarrage de la machine&nbsp;;
 </para></listitem>
 <listitem><para>
 
-utiliser des options du noyau qui ne sont pas supportées par le
-noyau par défaut, telles que les pare-feux&nbsp;;
+utiliser des options du noyau qui ne sont pas reconnues par le
+noyau par défaut, gestion des pare-feux par exemple&nbsp;;
 
 </para></listitem>
 <listitem><para>
@@ -71,36 +71,33 @@ paquets suivants&nbsp;:
 récente lors de la rédaction de ce document), 
 <classname>fakeroot</classname>
 et quelques autres qui sont probablement déjà installés sur votre machine 
-(pour la liste complète, voir
+(pour la liste complète, voyez
 <filename>/usr/share/doc/kernel-package/README.gz</filename>).
 
 </para><para>
 
-Cette méthode va créer un .deb à partir des sources de votre noyau, et si
-vous utilisez des modules non standard, va aussi incorporer ces dépendances
+Cette méthode crée un .deb à partir des sources du noyau, et si
+vous utilisez des modules non standard, incorpore aussi ces dépendances
 dans le .deb. C'est une bonne solution pour gérer les images du noyau&nbsp;;
-le répertoire <filename>/boot</filename> va contenir le noyau, le System.map, 
+le répertoire <filename>/boot</filename> contiendra le noyau, le System.map 
 et une sauvegarde du fichier de configuration utilisé pour ce paquet.
 
 </para><para>
 
 Il faut remarquer qu'il n'est pas <emphasis>obligatoire</emphasis> de 
-compiler votre noyau «&nbsp;à la Debian&nbsp;»; mais vous vous rendrez compte 
+compiler votre noyau «&nbsp;façon Debian&nbsp;»; mais vous vous rendrez compte 
 qu'utiliser le système de gestion des paquets pour
 gérer les noyaux rend leur installation plus simple et plus sûre.
 En fait, vous pouvez utiliser directement les sources de Linus et ne
 pas utiliser <classname>kernel-source-&kernelversion;</classname>, tout en 
 utilisant la méthode de compilation <classname>kernel-package</classname>.
-Bien que le noyau &kernelversion; soit toujours utilisé pour l'installation de
-Woody, des noyaux de la série 2.4 plus récente sont disponibles sous la forme
-de paquets kernel-images.
 
 </para><para>
 
 Notez que vous trouverez une documentation complète sur l'utilisation de
 <classname>kernel-package</classname> dans le répertoire
 <filename>/usr/share/doc/kernel-package</filename>. Cette section ne 
-contient qu'un bref didactitiel.
+contient qu'un bref didacticiel.
 
 </para><para arch="sparc">
 
@@ -113,20 +110,20 @@ vous rencontrez un problème de noyau, il vous sera probablement demandé de
 recompiler en utilisant <classname>egcs64</classname> afin de vérifier si le 
 problème persiste. Après avoir installé <classname>egcs64</classname>, vous 
 devez exécuter 
-<userinput>update-alternatives --config sparc64-linux-gcc/</userinput> en 
-tant que super-utilisateur, assurez-vous aussi que 
+<userinput>update-alternatives --config sparc64-linux-gcc</userinput> en 
+tant que superutilisateur, assurez-vous aussi que 
 <classname>egcs64</classname> est bien utilisé par ce programme.
 
 </para><para>
 
 Dans ce qui suit, nous supposerons que les sources de votre noyau sont
 situées dans <filename>/usr/local/src/</filename> et qu'il s'agit du noyau 
-version &kernelversion;. En tant que super-utilisateur, créez un répertoire 
+version &kernelversion;. En tant que superutilisateur, créez un répertoire 
 dans <filename>/usr/local/src</filename> et changez le propriétaire de ce 
-répertoire en votre compte utilisateur non-root habituel.
+répertoire en votre compte utilisateur habituel.
 En utilisant ce compte, allez dans le répertoire où vous voulez désarchiver 
 les sources (<userinput>cd /usr/local/src</userinput>) et désarchivez-les
-(<userinput>tar xIf /usr/src/kernel-source-&kernelversion;.tar.bz2</userinput>
+(<userinput>tar xjf /usr/src/kernel-source-&kernelversion;.tar.bz2</userinput>
 ), et déplacez-vous dans ce répertoire 
 (<userinput>cd kernel-source-&kernelversion;/</userinput>).
 
@@ -144,10 +141,11 @@ Faites attention&nbsp;: les autres options, non spécifiques au matériel,
 doivent être laissées à leur valeur par défaut si vous ne les comprenez pas.
 N'oubliez pas de sélectionner «&nbsp;Kernel module loader&nbsp;» dans la 
 section «&nbsp;Loadable module support&nbsp;»
+
 <phrase arch="alpha"> et «&nbsp;Enhanced Real Time Clock Support&nbsp;» 
 dans «&nbsp;Character devices&nbsp;» (elles ne sont pas sélectionnées
       </phrase>
-(elle n'est pas sélectionnée par déefaut). 
+(elle n'est pas sélectionnée par défaut). 
 sinon votre système Debian risque d'avoir des problèmes.
 
 </para><para>
@@ -171,16 +169,16 @@ de votre machine.
 
 Si vous avez besoin du PCMCIA, vous devrez installer le
 paquet <classname>pcmcia-source</classname>. Désarchivez le fichier
-tar comprimé, en tant que super-utilisateur, dans le répertoire 
+tar comprimé, en tant que superutilisateur, dans le répertoire 
 <filename>/usr/src</filename> (il est important que les modules soient à 
 l'endroit où ils sont supposés être, c'est-à-dire dans 
-<filename>/usr/src/modules</filename>). Ensuite, en étant super-utilisateur, 
+<filename>/usr/src/modules</filename>). Ensuite, en étant superutilisateur, 
 tapez <userinput>make-kpkg modules_image</userinput>. 
 
 </para><para>
 
 Une fois la compilation terminée, vous pouvez installer votre noyau
-personnalisé comme n'importe quel autre paquet. En étant super-utilisateur,
+personnalisé comme n'importe quel autre paquet. En étant superutilisateur,
 tapez <userinput>dpkg -i ../kernel-image-&kernelversion;-<replaceable>subarchitecture</replaceable>_custom.1.0_&architecture;.deb</userinput>.
 La partie <replaceable>subarchitecture</replaceable> est une 
 sous-architecture optionnelle,
@@ -193,16 +191,16 @@ correctement (très utile pour le débogage des problèmes de noyau) et un
 fichier <filename>/boot/config-&kernelversion;</filename> sera installé, qui 
 contiendra votre configuration noyau.
 Votre nouveau paquet <classname>kernel-image-&kernelversion;</classname> est 
-tellement malin qu'il utilise automatiquement le chargeur de boot de votre 
+tellement malin qu'il utilise automatiquement le programme d'amorçage de votre 
 plateforme pour mettre à jour l'information sur l'image de noyau utilisée 
-pendant le démarrage, sans qu'il soit nécessaire de re-exécuter le chargeur 
-de boot. Si vous avez créé un paquet pour les modules, par exemple PCMCIA, 
-vous devrez installer celui-ci également.
+pendant le démarrage, sans qu'il soit nécessaire de réexécuter le programme 
+d'amorçage. Si vous avez créé un paquet pour les modules, par exemple si vous 
+avez PCMCIA, vous devrez installer ce paquet également.
 
 </para><para>
 
 Vous devez maintenant redémarrer votre système&nbsp;: lisez attentivement les 
-éventuels avertissements durant les étapes précédentes, puis tapez
+éventuels avertissements produits par les étapes précédentes, puis exécutez
 <userinput>shutdown -r now</userinput>.
 
 </para><para>
