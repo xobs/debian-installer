@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 -->
+<!-- original version: 16990 -->
 
- <sect1 id="kernel-baking"><title>Compilación de un nuevo núcleo</title>
+ <sect1 id="kernel-baking"><title>Compilar un nuevo núcleo</title>
 <para>
 
-¿Por qué querría alguien compilarse un nuevo núcleo? La mayoría de las
+¿Por qué querría alguien compilar un nuevo núcleo? La mayoría de las
 veces no será necesario puesto que el núcleo estándar entregado
 con Debian maneja la mayoría de configuraciones. En cualquier caso
 es útil compilar un nuevo núcleo para:
@@ -39,7 +38,7 @@ el tiempo de arranque
 <listitem><para>
 
 usar opciones del núcleo que no estén soportadas por el núcleo
-estándar (como el sistema de contrafuegos para red)
+estándar (como el sistema de cortafuegos para red)
 
 </para></listitem>
 <listitem><para>
@@ -63,7 +62,7 @@ No tenga temor de intentar compilar el núcleo. Es divertido y fructífero.
 
 </para><para>
 
-Para compilar un núcleo en el método de Debian, necesita algunos paquetes:
+Para compilar un núcleo a la manera de Debian, necesita algunos paquetes:
 <classname>kernel-package</classname>,
 <classname>kernel-source-&kernelversion;</classname> (la versión mas reciente
 al momento de editar este documento), <classname>fakeroot</classname> y 
@@ -73,24 +72,24 @@ lista completa.
 
 </para><para>
 
-Este método creara un .deb para su núcleo fuente  y, si usted tiene
-módulos no-estándares, haré un .deb con dependencia sincronizada de
-los mismos. Es una forma mejor de gestionar imágenes del núcleo;
+Este método creara un .deb para su núcleo fuente y, si tiene módulos 
+no-estándares, haga también un .deb con dependencia sincronizada de los
+mismos. Es la mejor forma de gestionar imágenes del núcleo;
 <filename>/boot</filename> albergara el núcleo, el fichero System.map y
 el fichero de registro del fichero config activo para la construcción.
 
 </para><para>
 
-Observe que no <emphasis>tiene</emphasis> que compilar su núcleo ``al estilo
-Debian''; pero creemos que usar el sistema de paquetes para
+Observe que no <emphasis>tiene</emphasis> que compilar su núcleo "al estilo
+Debian"; pero creemos que usar el sistema de paquetes para
 gestionar su núcleo es realmente más seguro y sencillo. De hecho, puede
 obtener las fuentes de su núcleo directamente de Linus en lugar de
-<classname>kernel-source-&kernelversion;</classname>, y aún asé usar el método
+<classname>kernel-source-&kernelversion;</classname>, y aún así usar el método
 de compilación <classname>kernel-package</classname>.
 
 </para><para>
 
-Nótese que encontrará completa sobre el uso de 
+Note que puede encontrar documentación completa sobre el uso de 
 <classname>kernel-package</classname> en 
 <filename>/usr/doc/kernel-package</filename>. Esta sección sólo contiene un
 breve tutorial.
@@ -99,13 +98,14 @@ breve tutorial.
 
 Si está compilando un núcleo para UltraSPARC necesitará asegurase de
 tener instalado el paquete <classname>egcs64</classname>. Este es el 
-compilador preferido para núcleos de SPARC de 64bit. El compilador por defecto
-<command>gcc</command> también compilará núcleos de 64bit, pero no tan
-estables. Además, si no usa  <classname>egcs64</classname> y se encuentra
-con problemas en el núcleo es bastante probable que se le pida recompilar
-éste con <classname>egcs64</classname> para asegurarse de que el problema
-persiste. Después de instalar  <classname>egcs64</classname> asegúrese de
-ejecutar <userinput>update-alternatives --config sparc64-linux-gcc</userinput>
+compilador preferido para núcleos SPARC de 64bits. El compilador 
+predeterminado <command>gcc</command> también compilará núcleos de 64bit, 
+pero no tan estables. Además, si no usa  <classname>egcs64</classname> y 
+se encuentra con problemas en el núcleo es bastante probable que se le pida
+recompilar éste con <classname>egcs64</classname> para asegurarse de que el
+problema persiste. Después de instalar  <classname>egcs64</classname> 
+asegúrese de ejecutar 
+<userinput>update-alternatives --config sparc64-linux-gcc</userinput>
 como superusuario, y asegúrese de utilizar <package>egcs64</package> 
 para esto.
 
@@ -115,8 +115,8 @@ A partir de ahora, asumiremos que las fuentes de su núcleo se
 encontrarán en <filename>/usr/local/src</filename> y que la versión de su
 núcleo es &kernelversion;. Como superusuario, cree un directorio
 dentro de <filename>/usr/local/src</filename> y cambie el propietario del
-mismo a su cuenta de usuario normal. Como su cuenta de usuario normal (no
-superusuario), cambie al directorio donde desee desempaquetar las fuentes del
+mismo a su cuenta de usuario común. Como su cuenta de usuario común, 
+ubiquese en el directorio donde desee desempaquetar las fuentes del
 núcleo (<userinput>cd /usr/local/src</userinput>), extraiga las fuentes del
 mismo (<userinput>tar xzf /usr/src/kernel-source-&kernelversion;.tar.bz2
 </userinput>), y cámbiese a este directorio (<userinput>cd
@@ -127,18 +127,18 @@ kernel-source-&kernelversion;/</userinput>).
 Ahora puede configurar su núcleo. Ejecute  
 <userinput>make xconfig</userinput> si tiene X11 instalado,
 configurado y ejecutándose, <userinput>make menuconfig</userinput> en 
-otro caso (necesitara instalar <classname>ncurses-dev</classname>. Tómese 
-su tiempo para leer la ayuda en línea y escoja
-cuidadosamente. Cuando tenga duda, frecuentemente es mejor incluir el
-controlador de dispositivo (el software que maneja el hardware
-periférico, como tarjetas Ethernet, controladoras SCSI, etc.)  del que
-no está seguro. Tenga cuidado: otras opciones no relacionadas con un
-hardware específico deberían dejarse en su valor predeterminado si no
-las comprende. No olvide seleccionar ``Kernel module loader'' (para la
-autocarga de módulos) en ``Loadable module support''
+otro caso (necesitara instalar <classname>ncurses-dev</classname>). Tómese 
+su tiempo para leer la ayuda en línea y escoja cuidadosamente. Cuando 
+tenga duda, frecuentemente es mejor incluir el controlador de dispositivo
+(el software que maneja el hardware periférico, como tarjetas Ethernet, 
+controladoras SCSI, etc.) del que no está seguro. Tenga cuidado: otras 
+opciones no relacionadas con un hardware específico deberían dejarse en 
+su valor predeterminado si no las comprende. No olvide seleccionar 
+"Kernel module loader" (para la autocarga de módulos) en  
+"Loadable module support"
 
-<phrase arch="alpha"> y ``Enhanced Real Time
-Clock Support'' en ``Character devices'' (estos no son </phrase>
+<phrase arch="alpha"> y 'Enhanced Real Time
+Clock Support' en 'Character devices' (estos no son </phrase>
 <phrase arch="not-alpha"> (este no es </phrase>
 
 elegidos por omisión).  Si no son incluidos, su instalación Debian
@@ -152,30 +152,31 @@ Limpie el árbol de fuentes y reinicie los parámetros de
 
 </para><para>
 
-Ahora compile el núcleo: <userinput>fakeroot /usr/sbin/make-kpkg
+Ahora, compile el núcleo: <userinput>fakeroot /usr/sbin/make-kpkg
 --revision=custom.1.0 kernel_image</userinput>. Por supuesto, el número de la
-versión ``1.0'' puede cambiarse por el que quiera; éste
-sólo es el número de versión que usará para seguir la pista a los
-núcleos que haya construido. La compilación del núcleo puede tomar un buen
+versión "1.0" puede cambiarse por el que quiera; éste sólo es el número 
+de versión que usará para seguir la pista a los núcleos que haya 
+construido. La compilación del núcleo puede tomar un buen
 tiempo, dependiendo de la potencia de su máquina.
 
 </para><para condition="supports-pcmcia">
 
 Si necesita soporte PCMCIA, también necesitará instalar el paquete
 <classname>pcmcia-source</classname>. Desempaquete el fichero tar comprimido
-con gzip como superusuario en el directorio <filename>/usr/src</filename> 
+con gzip, como superusuario en el directorio <filename>/usr/src</filename> 
 (es importante que los módulos se encuentren donde se espera que estén, a 
-saber, <filename>/usr/src/modules</filename>). Luego, como superusuario, ejecute 
-<userinput>make-kpkg modules_image</userinput>.
+saber, <filename>/usr/src/modules</filename>). Luego, como superusuario, 
+ejecute <userinput>make-kpkg modules_image</userinput>.
 
 </para><para>
 
-Una vez completada la compilación, puede instalar su núcleo
+Una vez finalizada la compilación, puede instalar su núcleo
 personalizado como cualquier paquete. Como superusuario, ejecute 
-<userinput>dpkg -i ../kernel-image-&kernelversion;-<replaceable>subarchitecture</replaceable>_config.1.0_&architecture;.deb</userinput>.
-La parte <replaceable>subarchitecture</replaceable> es una sub-arquitectura opcional, 
-<phrase arch="i386"> como ``i586'', </phrase> dependiendo de las opciones 
-que haya establecido en el núcleo. <userinput>dpkg -i kernel-image...</userinput> 
+<userinput>dpkg -i ../kernel-image-&kernelversion;-<replaceable>subarquitectura</replaceable>_custom.1.0_&architecture;.deb</userinput>.
+La parte <replaceable>subarquitectura</replaceable> es una sub-arquitectura opcional, 
+<phrase arch="i386"> como "i586", </phrase> dependiendo de las opciones 
+que haya establecido en el núcleo. 
+<userinput>dpkg -i kernel-image...</userinput> 
 instalará el núcleo, junto con otros ficheros de soporte. Por ejemplo, 
 <filename>System.map</filename> será adecuadamente instalado (de gran ayuda
 para depuración de problemas con el núcleo), y también se instalará
@@ -184,8 +185,8 @@ configuración. Su nuevo paquete
 <classname>kernel-image-&kernelversion;</classname> es también lo
 suficientemente listo como para usar automáticamente usar el gestor de
 de arranque de su plataforma y actualizar así la información de la imagen 
-del núcleo la cual le permita arrancar sin necesidad de ejecutarlo nuevamente. 
-Si ha creado un paquete de módulos, ej. si usted tiene PCMCIA, necesitará 
+del núcleo, la cual le permita arrancar sin necesidad de ejecutarlo nuevamente.
+Si ha creado un paquete de módulos, por ejm. si tiene PCMCIA, necesitará 
 instalar también dicho paquete.
 
 </para><para>
