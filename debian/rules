@@ -32,13 +32,20 @@ build-stamp:
 	fakeroot $(MAKE) all_images all_stats SUITE=$(DISTRIBUTION)
 	touch build-stamp
 
+	# This is a gross, gross hack. The docs really should be
+	# included in this package, but CVS makes that a messy reorg.
+	if [ -e ../doc/INSTALLATION-HOWTO ]; then \
+		cp ../doc/INSTALLATION-HOWTO debian/; \
+	fi
+
 install: build
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_install
-	install -d debian/tmp/$(IMAGEDIR)
+	install -d debian/tmp/$(IMAGEDIR)/doc
 	cp -p dest/* debian/tmp/$(IMAGEDIR)
+	cp debian/*.html debian/INSTALLATION-HOWTO debian/tmp/$(IMAGEDIR)/doc
 	cd debian/tmp/$(IMAGEDIR) && md5sum * > MD5SUMS
 	ln -s $(DATE) debian/tmp/$(ARCHIVEDIR)/current
 
