@@ -86,9 +86,9 @@ ifdef ERROR_TYPE
 	@exit 1
 endif
 
-build: tree_umount tree  $(EXTRA_TARGETS) stats
+build: tree_umount tree $(TREE)/unifont.bgf $(EXTRA_TARGETS) stats
 
-image: $(TREE)/unifont.bgf arch-image $(EXTRA_IMAGES) 
+image: arch-image $(EXTRA_IMAGES) 
 
 # Include arch targets
 -include make/arch/$(DEB_HOST_GNU_SYSTEM)
