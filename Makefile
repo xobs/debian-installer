@@ -555,7 +555,7 @@ $(INITRD): $(TEMP_INITRD)
 
 $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 	# Only build the font if we have rootskel-locale
-	if [ -d "$(LOCALE_PATH)/C.UTF-8" ] && [ -e $(TREE)/unifont.bgf ]; then \
+	if [ -d "$(LOCALE_PATH)/C.UTF-8" ]; then \
 		$(submake) $(TREE)/unifont.bgf; \
 	fi
 	install -d $(TEMP)
