@@ -318,7 +318,7 @@ endif
 	done
 
 	# Reduce status file to contain only the elements we care about.
-	egrep -i '^((Status|Provides|Depends|Package|Description|installer-menu-item|Description-..):|$$)' \
+	egrep -i '^((Status|Provides|Depends|Package|Version|Description|installer-menu-item|Description-..):|$$)' \
 		$(DPKGDIR)/status > $(DPKGDIR)/status.udeb
 	rm -f $(DPKGDIR)/status
 	ln -sf status.udeb $(DPKGDIR)/status
