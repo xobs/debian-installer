@@ -1,101 +1,124 @@
-<!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 untranslated -->
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 23845  -->
+<!-- Piarres Beobidek 1004-ko Azaroaren 25-ean egina -->
 
  <sect2 id="configure-apt">
- <title>Configuring APT</title>
+ <title>APT Konfiguratzen</title>
 
 <para>
 
-The main means that people use to install packages on their system is
-via a program called <command>apt-get</command>, from the
-<classname>apt</classname> package.<footnote>
+Sisteman paketeak instalatzeko gehien erabiltzen den sistema
+<classname>apt</classname> paketeko <command>apt-get</command>
+programa da.<footnote>
 
 <para>
 
-Note that the actual program that installs packages is called
-<command>dpkg</command>.  However, this package is more of a low-level
-tool.  <command>apt-get</command> will invoke <command>dpkg</command>
-as appropriate; it is a higher-level too, however, because it knows to
-install other packages which are required for the package you're
-trying to install, as well as how to retrieve the package from your
-CD, the network, or wherever.
+Kontutan izan momentu honetan paketak instalatzen dituen programa
+<command>dpkg</command> dela. Hala ere pakete hau maila baxuan lan
+egiteko da. <command>apt-get</command> programank <command>dpkg</command>
+behar bezala erabiliko du instalatu nahi den paketearen dependentzi
+beharrak eta paketeak CD, sare edo edonondik deskargatzeko modua
+ezagutzen bait ditu.
 
 </para>
 </footnote>
 
-APT must be configured, however, so that it knows where to retrieve
-packages from.  The helper application which assists in this task is
-called <command>apt-setup</command>.
+Beste pakete kudeaketa interfaze batzuk, <command>aptitude</command> edo
+<command>synaptic</command> antzekoak edo zaharrago den 
+<command>dselect</command>-ek apt-get behar eta erabili egiten dute.
+Interfaze hauek erabiltzaile berrientzat dira gomendaturik erabiltzaile 
+interfaze beretan beste ezaugarri batzuek dituzte eta (egoera egiaztapen 
+eta pakete bilaketa).
 
 </para><para>
 
-The next step in your configuration process is to tell APT where other
-Debian packages can be found.  Note that you can re-run this tool at
-any point after installation by running <command>apt-setup</command>,
-or by manually editing <filename>/etc/apt/sources.list</filename>.
+APT paketeak nondik deskargatu jakiteko konfiguratu behar da.
+Lan honetan laguntzen duen aplikazioa
+<command>apt-setup</command> da.
 
 </para><para>
 
-If you are booting from an official CD-ROM, then that CD-ROM should
-automatically be configured as an apt source without prompting.  You
-will notice this because you will see the CD-ROM being scanned, and
-then asked if you want to configure another CD-ROM.  If you have
-a multiple CD-ROM set &mdash; and most people will &mdash; then you
-should go ahead and scan each of them one by one.
+Konfigurazioko hurrengo pausua APT-ri debian paketeak non aurki
+ditzakeen ezartzea da. Kontutan izan aukera hau instalazioa amaitzean
+edozein momentutan berregin dezakezu la <command>apt-setup</command>
+abiaraziaz edo <filename>/etc/apt/sources.list</filename> eskuz
+editatzen.
 
 </para><para>
 
-For users without an official CD-ROM, you will be offered an array of
-choices for how Debian packages are accessed: FTP, HTTP, CD-ROM, or
-a local file system.  For CD-ROM users, you can get to this step by
-specifically asking to add another source.
+Pausu honetan CD-ROM ofizial bat unitatean izan ezkero, CD-ROM hori 
+jatorrietara gehituko da galderarik gabe. CD-ROM unitatea irakurtzen delako
+konturatu zaitezke.
+
 
 </para><para>
 
-You should know that it's perfectly acceptable to have a number of
-different APT sources, even for the same Debian archive.
-<command>apt-get</command> will automatically pick the package with
-the highest version number given all the available versions.  Or, for
-instance, if you have both an HTTP and a CD-ROM APT source,
-<command>apt-get</command> should automatically use the local CD-ROM
-when possible, and only resort to HTTP if a newer version is available
-there.  However, it is not a good idea to add unnecessary APT sources,
-since this will tend to slow down the process of checking the network
-archives for new versions.
+CD-ROM ofizialik ez duten erabiltzaileentzat Debian paketeak
+jasotzeko erabili daitezke modu ezberdinak erakutsiko dira :
+FTP, HTTP, CD-ROM, edo fitxategi sistema lokala.
+
+
+</para><para>
+
+Jakin behar duzula APT jatorri ezberdinak konfiguratu daitezkeela
+nahiz Debian fitxategi berdinarentzat izan.
+<command>apt-get</command> eskatutako paketearen bertsio berriena
+duen fitxategia aukeratuko du automatikoki. Edo bestela bai CD eta
+HTTP bidezko jatorriak izan ezkero <command>apt-get</command>-ek
+CD-ROm-ean dauden fitxategia erabiliko ditu lehentsi bezala eta 
+pakete bertsio berriagorik eskuragarri ez dagoen bitartean ez du
+HTTP konexioa erabiliko. Hala ere ez da oso ideia ona behar ez diren
+APT jatorriak gehitzea honek pakete berrien bila sarea arakatzeko
+denbora luzatu bait dezake.
 
 </para>
 
   <sect3 id="configure-apt-net">
-  <title>Configuring Network Package Sources</title>
+  <title>Sare Pakete Jatorriak Konfiguratzen</title>
 
 <para>
 
-If you plan on installing the rest of your system via the network, the
-most common option is to select the <userinput>http</userinput>
-source.  The <userinput>ftp</userinput> source is also acceptable, but
-tends to be a little slower making connections.
+Sistemaren beste guztia sare bidez instalatu nahi ezkero,
+aukera arruntean <userinput>http</userinput> jatorria 
+aukeratzea da. <userinput>ftp</userinput> ere onargarria da 
+baina piska bat geldoagoa da konexioak egiteko garaian.
+
 
 </para><para>
 
-The next step during the configuration of network packages sources is
-to tell <command>apt-setup</command> which country you live in.  This
-configures which of the official Debian Internet mirror network you
-connect to.  Depending on which country you select, you will be given
-a list of possible machines.  Its generally fine to pick the one on
-the top of the list, but any of them should work.
+Sare pakete Jatorriak konfiguratzeko hurrengo pausua 
+<command>apt-setup</command>-i bizi zaren estatua ezartzea da.
+Honek zein Debian Intenet Ispilutara konekata zaitezkeen ezarriko 
+du. Aukeratutako estatuaren arabera zerbitzari posibleen zerrenda 
+bat aurkeztuko da. Normalean aukera ona da zerrendako lehen
+eskaintza aukeratzea, baina besteak ere funtzionatu beharko lukete.
+Kontutan eduki ispilu zerrenda Debian bertsio hau kaleratu zen 
+egunean sotu zela beraz agian zerbitzari bat ez dago funtzionametuan
+dagoeneko.
 
 </para><para>
 
-If you are installing via HTTP, you will be asked to configure your
-proxy server.  This is sometimes required by people behind firewalls,
-on corporate networks, etc.
+Ispilu bat aukeratu ondoren, proxy zerbitzaririk erabili behar den
+galdetuko da. Proxy zerbiztaria interneko HTTP eta FTP eskariak
+zuri berbideratzen dituen zerbitzari bat da eta Internet konexioa
+obe aprobetxatzeko enpresa eta talde askok ipintzen dituzte.
+Zenbait saretan proxy zerbitzaria bakarrik du Interneta konektatzeko
+aukera. Agian proxy erabiltzaile izena eta pasahitza ezarri
+behar dituzu. Etxe erabiltzaile gehienek ez dute proxy zerbitzaririk
+ezarri beharrik, nahiz eta zenbait Internet Horniztailek proxy
+zerbitzarien bidez hornitzen dituzte beren bezeroeak.
+
 
 </para><para>
 
-Finally, your new network package source will be tested.  If all goes
-well, you will be prompted whether you want to do it all over again
-with another network source.
-
+Ispilu bat aukeratu ondorena, zure sare jatorriak arakatu egingo dira.
+Denak behar bezala funtzionatu ezkero beste pakete jatorririk gehitu 
+nahi den galdetuko da. Zuk aukeratutako pakte jatorriarekin arazorik
+izan ezkeri aukera beste ispilu bat (bai zure estatuko zerrendatik
+edo zerrenda osotik), edo beste sare pakete jatorri bat erabiltzen 
+saiatu.
 </para>
   </sect3>
  </sect2>
+
+

@@ -1,114 +1,150 @@
-<!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 untranslated -->
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 23660 -->
+<!-- Piarres Beobidek egina 2004-ko Azaroaren 25-eam -->
 
  <sect2 arch="not-s390" id="PPP">
- <title>Setting Up PPP</title>
+ <title>PPP konfiguratzen</title>
 
 <para>
 
-You will next be asked whether you wish to install the rest of the
-system using PPP.  If you are installing from CD-ROM and/or are
-connected directly to the network, you can safely say &MSG-NO; and
-skip this section.
+Isntalazioaren lehen atalean ez bada saretzerik konfiguratu instalazioaren 
+falta dena ppp bidez konfiguratu nahi den galdetuko du. PPP modem bidez
+egindako konexioak sortzen dituen protokolo bat da, instalazio sistemak
+seguridade eguneraketa edo pakete gehigarria behar bait ditzake 
+instalazioaren hurrengo pausuetan.
+Ordenagailuan ez badago modemik edo konfigurazio hori beranduago egoin 
+nahi izan ezkero atal hau utz dezakzu.
 
 </para><para>
 
-If you do choose to configure PPP at this point, a program named
-<command>pppconfig</command> will be run.  This program helps you
-configure your PPP connection.  <emphasis>Make sure, when it asks you
-for the name of your dialup connection, that you name it
-<userinput>provider</userinput>.</emphasis>
+PPP konexioa zuzen konfiguratzeko, zure internet hornitzailearen datu
+batzuzuek beharrezkoak dira, telefono zenbakia, erabiltzaile izena, 
+pasahitza eta DNS zerbitzariak (aukerakoa). Zenbait hornitzailek
+Linuxerako instalazio gidaliburuak dituzte. Zuk informazio hau erabili
+dezakzu nahiz beriek ez debianeraok denik esan konfiguraizo aldagai 
+(eta software) gehiena berdinak bait dira Linux banaketa gehienetean.
 
 </para><para>
 
-Hopefully, the <command>pppconfig</command> program will walk you
-through a pain-free PPP connection setup.  However, if it does not
-work for you, see below for detailed instructions.
+PPP momentu honetan konfiguratzea aukeratu ezkero,
+<command>pppconfig</command> izeneko programa bat abiaraziko da,
+programa honek PPP kofgurazio ezarpenak egiten lagunuduko du.
+<emphasis>ziurtatu zaitez, programak markatze konexiorako izen
+eskatzen dizunean <userinput>provider</userinput> erabiltzen 
+duzula.</emphasis>
 
 </para><para>
 
-In order to setup PPP, you'll need to know the basics of file viewing
-and editing in GNU/Linux.  To view files, you should use
-<command>more</command>, and <command>zmore</command> for compressed
-files with a <userinput>.gz</userinput> extension.  For example, to
-view <filename>README.debian.gz</filename>, type <userinput>zmore
-README.debian.gz</userinput>.  The base system comes with an editor
-named <command>nano</command>, which is very simple to use, but does
-not have a lot of features. You will probably want to install more
-full-featured editors and viewers later, such as
+<command>pppconfig</command> programak arazo gabeko PPP konexio
+ezarpen bat egiteakoan gidatuko zaitu. Hala ere honek zure kasuan
+ez funtzionatu ezkero begiratu argibide zehatzagoak aurrerago.
+
+</para><para>
+
+PPP konfiguratu ahal izateko GNU/Linux-pean fitxategia ikusi eta 
+editatzeari buruzko oinarrizko gauza batzuk jakin behar dira.
+Fitxaegiak ikusteko <command>more</command> erabil dezakezu,
+<command>zmore</command> <userinput>.gz</userinput> extensio
+erabiliaz konprimitutarikoentzat. Adibidez, 
+<filename>README.debian.gz</filename> fitxategia ikusteko,
+<userinput>zmore README.debian.gz</userinput> idatzi. Sistema
+oinarriak <command>nano</command> nano izeneko editore 
+oso simplea baina aukea askotako dakar. Ziurrenik beranduago
+editore ahaltsuago batenbat instalatuko duzu, 
 <command>jed</command>, <command>nvi</command>,
-<command>less</command>, and <command>emacs</command>.
+<command>less</command>, edo <command>emacs</command> belakoa.
 
 </para><para>
 
-Edit <filename>/etc/ppp/peers/provider</filename> and replace
-<userinput>/dev/modem</userinput> with
-<userinput>/dev/ttyS<replaceable>&num;</replaceable></userinput> where
-<replaceable>&num;</replaceable> stands for the number of your serial
-port. In Linux, serial ports are counted from 0; your first serial
-port <phrase arch="i386">(i.e., <userinput>COM1</userinput>)</phrase>
-is <filename>/dev/ttyS0</filename> under Linux.
 
-<phrase arch="powerpc;m68k">On Macintoshes with serial ports, the
-modem port is <filename>/dev/ttyS0</filename> and the printer port is
+<filename>/etc/ppp/peers/provider</filename> fitxategia editatu etae
+<userinput>/dev/modem</userinput> lerroaz
+<userinput>/dev/ttyS<replaceable>&num;</replaceable></userinput> 
+aldatu non <replaceable>&num;</replaceable> erabili nahi den 
+serial atakaren zenbakia da. Linuxpean serial atakak 0-tik 
+kontatzen hasten dira.
+
+<phrase arch="powerpc;m68k">OSeria taka dituen Macintosh-etan modem
+ataka <filename>/dev/ttyS0</filename> da eta inprimagailuaren 
 <filename>/dev/ttyS1</filename>.</phrase>
 
-The next step is to edit
-<filename>/etc/chatscripts/provider</filename> and insert your
-provider's phone number, your user-name and password. Please do not
-delete the <quote>\q</quote> that precedes the password. It hides the
-password from appearing in your log files.
+Hurrengo pausua 
+<filename>/etc/chatscripts/provider</filename> editatu eta 
+hornitzailearen telefono zenbakia, erabiltzaile izena eta
+pasahitza  ipintzea da. Mesedez ez ezabatu pasahitzak aurretik
+duen <quote>\q</quote> honek sistema erregistrotan zure pasahitza
+ager ez dadin balio du eta.
+
 
 </para><para>
 
-Many providers use PAP or CHAP for login sequence instead of text mode
-authentication.  Others use both.  If your provider requires PAP or
-CHAP, you'll need to follow a different procedure.  Comment out
-everything below the dialing string (the one that starts with
-<quote>ATDT</quote>) in
-<filename>/etc/chatscripts/provider</filename>, modify
-<filename>/etc/ppp/peers/provider</filename> as described above, and
-add <userinput>user <replaceable>name</replaceable></userinput> where
-<replaceable>name</replaceable> stands for your user-name for the
-provider you are trying to connect to.  Next, edit
-<filename>/etc/ppp/pap-secrets</filename> or
-<filename>/etc/ppp/chap-secrets</filename> and enter your password
-there.
+Zenbait honitzailek testu lauaren ordezPAP edo CHAP sarrera sekuentziak 
+erabiltzen dituzte. Beste batzuek biak. Zure hornitzaileak PAP edo
+CHAP erabili ezkero, hurrengo pausuak egin beharko dituzu.
+Iradokitu ezazu (aurretik '#' ipniaz) markatze kateeen ondoren
+dagoen guztia (<quote>ATDT</quote> hasten dena)
+<filename>/etc/chatscripts/provider</filename> fitxategian, aldatu
+<filename>/etc/ppp/peers/provider</filename> fitxategia beherago 
+esplikatzen den bezala eta gehitu 
+<userinput>user <replaceable>izena</replaceable></userinput> non
+<replaceable>izena</replaceable> konekatu nahi den hornitzailearen 
+izen da. Gero editatu <filename>/etc/ppp/pap-secrets</filename> edo
+<filename>/etc/ppp/chap-secrets</filename> fitxategia eta pasahitza
+ezarri.
+
 
 </para><para>
 
-You will also need to edit <filename>/etc/resolv.conf</filename> and
-add your provider's name server (DNS) IP addresses.  The lines in
-<filename>/etc/resolv.conf</filename> are in the following format:
+Gero <filename>/etc/resolv.conf</filename> fitxategia ediatu
+eta gehitu zure hornitzailearen izen zerbitzarien (DNS) IP 
+helbideak. <filename>/etc/resolv.conf</filename> fitxategia
+formatu honetan da:
 <userinput>nameserver
-<replaceable>xxx.xxx.xxx.xxx</replaceable></userinput> where the
-<replaceable>x</replaceable>s stand for numbers in your IP
-address. Optionally, you could add the
-<userinput>usepeerdns</userinput> option to the
-<filename>/etc/ppp/peers/provider</filename> file, which will enable
-automatic choosing of appropriate DNS servers, using settings the
-remote host usually provides.
+<replaceable>xxx.xxx.xxx.xxx</replaceable></userinput> non
+<replaceable>x</replaceable> IP helbideko zenbakiak diren.
+NAhi izan ezkero <userinput>usepeerdns</userinput> aukera 
+gehitu dezakezu <filename>/etc/ppp/peers/provider</filename>
+fitxategian normalean urrutiko ekipoak ematen dituen DNS 
+zerbitzariak erabiltzeko.
 
 </para><para>
 
-Unless your provider has a login sequence different from the majority
-of ISPs, you are done! Start the PPP connection by typing
-<command>pon</command> as root, and monitor the process using
-<command>plog</command> command. To disconnect, use
-<command>poff</command>, again, as root.
+Hornitzaileak ez badu gehiengoarendik ezberdindutako sarrera
+sekuentziarik erabiltzen,dena prest dago! PPP konexioa abiarazi
+<command>pon</command> root bezala, eta erabilitako prozesua
+<command>plog</command> komandoa erabiliaz begiratu. Deskonektatzeko
+<command>poff</command>, erabili, berriz root bezala
 
 </para><para>
 
-Read <filename>/usr/share/doc/ppp/README.Debian.gz</filename> file for
-more information on using PPP on Debian.
+Irakurri <filename>/usr/share/doc/ppp/README.Debian.gz</filename> 
+fitxategia Debianen PPP erabilerari buruz gehiago jakiteko.
+
+
 
 </para><para>
 
-For static SLIP connections, you will need to add the
-<userinput>slattach</userinput> command (from the
-<classname>net-tools</classname> package) into
-<filename>/etc/init.d/network</filename>. Dynamic SLIP will require
-the <classname>gnudip</classname> package.
+SLIP konexio estatikoentzat, 
+<userinput>slattach</userinput> koomandoa (
+<classname>net-tools</classname> paketekoa) erabili beharko duzu
+<filename>/etc/init.d/network</filename> fitxategian. SLIP dinamikoak
+<classname>gnudip</classname> paketea behar du.
 
 </para>
+
+  <sect3 id="PPPOE">
+  <title>PPP Ethernet gainetik (PPPOE) konfiguratzen </title>
+
+<para>
+
+
+PPPOE zenbait banda zabaleko hornitzailek erabiltzen duten  PPP 
+protokoloa. Oraindik ez dago onarpenik oinarri konfigurazioan
+hau konfiguratzen laguntzeko. Hala behar den softwarea gehitu
+egin da beraz zuk PPPOE eskuz momentu honetan konfigura dezakezu
+VT2-ra aldatzen (Alt+F2) eta <command>pppoeconf</command> abiarazten.
+
+</para>
+
+  </sect3>
  </sect2>
