@@ -107,9 +107,6 @@ else
 	-@sudo chroot $(TREE) /usr/bin/update-dev
 endif
 
-
-
-
 tree_umount:
 ifndef USERDEVFS
 	-@if [ -d $(TREE)/dev ] ; then sudo /bin/umount $(TREE)/dev 2>/dev/null ; fi
@@ -580,6 +577,26 @@ ifneq (,$(FLOPPY_SIZE))
 endif
 	@echo "Disk usage per package:"
 	@ls -l $(TEMP)/$*/*.udeb
+
+# These tagets build all available types.
+all_build:
+	set -e; for type in $(TYPES_SUPPORTED); do \
+		$(MAKE) build TYPE=$$type; \
+	done
+all_images:
+	set -e; for type in $(TYPES_SUPPORTED); do \
+		$(MAKE) image TYPE=$$type; \
+	done
+# Suitable for a cron job, you'll only see the stats unless a build fails.
+all_stats:
+	@echo "Image size stats"
+	@echo
+	@(set -e; $(MAKE) all_build >tmp/log 2>&1 || \
+	  (echo "build failure!"; cat tmp/log; false))
+	@rm -f tmp/log
+	@for type in $(TYPES_SUPPORTED); do \
+		$(MAKE) -s stats TYPE=$$type; \
+	done
 
 # Upload a daily build to peope.debian.org. If you're not Joey Hess,
 # you probably don't want to use this grungy code, at least not without
