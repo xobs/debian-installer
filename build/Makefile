@@ -320,10 +320,10 @@ ifdef VERSIONED_SYSTEM_MAP
 	$(foreach VERSION,$(KERNELVERSION), \
 		mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
 		if [ -e $(TREE)/boot/System.map-$(VERSION) ]; then \
-			depmod -F $(TREE)/boot/System.map-$(VERSION) -q -a -b $(TREE)/ $(VERSION); \
+			`./choose-subarch-env $(VERSION)` depmod -F $(TREE)/boot/System.map-$(VERSION) -q -a -b $(TREE)/ $(VERSION); \
 			mv $(TREE)/boot/System.map-$(VERSION) $(TEMP); \
 		else \
-			depmod -q -a -b $(TREE)/ $(VERSION); \
+			`./choose-subarch-env $(VERSION)` depmod -q -a -b $(TREE)/ $(VERSION); \
 		fi;)
 else
 	set -e; \
