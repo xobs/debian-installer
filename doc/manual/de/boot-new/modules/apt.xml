@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23066 untranslated -->
+<!-- original version: 23498 untranslated -->
 
  <sect2 id="configure-apt">
  <title>Configuring APT</title>
@@ -22,6 +22,11 @@ CD, the network, or wherever.
 
 </para>
 </footnote>
+Other package maintenance front-ends, like <command>dselect</command>,
+<command>aptitude</command> and <command>synaptic</command> also use
+and depend on <command>apt</command>. These front-ends are recommended
+for new users, since they integrate some other features (package
+searching and status checks) in a nice user interface.
 
 APT must be configured, however, so that it knows where to retrieve
 packages from.  The helper application which assists in this task is
@@ -78,19 +83,43 @@ to tell <command>apt-setup</command> which country you live in.  This
 configures which of the official Debian Internet mirror network you
 connect to.  Depending on which country you select, you will be given
 a list of possible machines.  It's generally fine to pick the one at
-the top of the list, but any of them should work.
+the top of the list, but any of them should work. It will be tested
+afterwards, however, and you should select a different one if you see
+any issue. Notice that the mirror list provided by the installation
+was generated when this Debian version was released and some mirrors
+might not be available if some time (a few months) has elapsed between
+the release and your installation.
 
 </para><para>
 
 If you are installing via HTTP, you will be asked to configure your
-proxy server.  This is sometimes required by people behind firewalls,
-on corporate networks, etc.
+proxy server. A proxy server is a server that will forward all your
+HTTP requests to the Internet and is used when you have limited
+connectivity to the Internet.  This is sometimes required by people
+behind firewalls (only the proxy server can access the Internet), on
+corporate networks, etc. Most home users will not need to setup a
+proxy server, although some ISPs might provide proxy servers for their
+users.
+
+</para><para>
+
+Notice that if you are planning the installation of many different
+Debian systems, a proxy server might be helpful to reduce the traffic
+load when all those systems try to connect to the Internet to retrieve
+new packages (or security patches). You might want to consider setting
+up a system and carefully installing a proxy server with a cache, and
+then install other systems pointing to the proxy server so they all
+benefit from the cached content.
+
+</para><para>
 
 </para><para>
 
 Finally, your new network package source will be tested.  If all goes
 well, you will be prompted whether you want to do it all over again
-with another network source.
+with another network source. If you have any issue with your source
+package try using a different mirror site (from your country list or
+from your global list) or try using a different network package source.
 
 </para>
   </sect3>
