@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 18383 -->
+<!-- original version: 22026 -->
 
    <sect3 id="mdcfg">
    <title>マルチディスクデバイス (ソフトウェア RAID) の設定</title>
@@ -91,22 +91,27 @@ RAID0 の典型的な使用法は映像編集用のパーティションです。
 <term>RAID1</term><listitem><para>
 
 <!--
-Is suitable for setups where reliability is on the first place.  It
+Is suitable for setups where reliability is the first concern.  It
 consists of several (usualy two) equaly sized partitions where every
-partition contains exactly the same data. This essentialy means two
+partition contains exactly the same data. This essentialy means three
 things.  First, if one of your disks fails, you still have the data
 mirrored on the remaining disks. Second, you can use only a fraction
-of the available capacity. (Exactly it is the size of the smallest
-partition in the RAID).
+of the available capacity (more precisely, it is the size of the
+smallest partition in the RAID). Third, file reads are load balanced amoung
+the disks, which can improve performance on a server, such as a file
+server, that tends to be loaded with more disk reads than writes.
 -->
 信頼性第一である場合、RAID1 を構成するとよいでしょう。
 全パーティションが正確に同じデータを含むような、
 いくつかの (たいてい) 等しいサイズのパーティションから成ります。
-これは本質的にに 2 つのことを意味します。
+これは本質的にに 3 つのことを意味します。
 まずディスクの 1 つが破損した場合、残ったディスクにデータミラーが残ります。
 次に利用可能領域の断片だけの使用もできます。
-(確かに RAID で構成する最小のパーティションサイズとなります)
-
+(もっと正確には、RAID で構成する最小のパーティションサイズとなります)
+第 3 に、ディスクからのファイルの読み込みをロードバランスする事ができます。
+これにより、ファイルサーバのような、
+書き込みより読み込みの方が負荷が高くなる傾向のあるサーバの
+パフォーマンスを改善できます。
 </para><para>
 
 <!--
@@ -142,7 +147,7 @@ To sum it up:
   <entry>2</entry>
   <entry>なし</entry>
   <entry>不可</entry>
-  <entry>RAID にある最小デバイスのサイズ×デバイス数</entry>
+  <entry>RAID にある最小パーティションのサイズ×デバイス数</entry>
 </row>
 
 <row>
@@ -150,7 +155,7 @@ To sum it up:
   <entry>2</entry>
   <entry>任意</entry>
   <entry>可</entry>
-  <entry>RAID にある最小デバイスのサイズ</entry>
+  <entry>RAID にある最小パーティションのサイズ</entry>
 </row>
 
 </tbody></tgroup></informaltable>
@@ -192,21 +197,20 @@ partition.
 </para></warning><para>
 
 <!--
+Next, you should choose <guimenuitem>Configure software
+RAID</guimenuitem> from the main <command>partman</command> menu.
 On the first screen of <command>mdcfg</command> simply select
-<guimenu>Create MD device</guimenu>. You will be presented a list of
-supported types of MD devices, from which you should choose one
-(e.g. RAID1). What will follow depends on a type of selected MD.
-Generally speaking, you will have to provide some parameters and
-choose the partitions from which the MD shoud consist.
+<guimenuitem>Create MD device</guimenuitem>. You will be presented with
+a list of supported types of MD devices, from which you should choose
+one (e.g. RAID1). What follows depends on the type of MD you selected.
 -->
+次にメインの <command>partman</command> メニューから 
+<guimenuitem>Configure software RAID</guimenuitem> を選んでください。
 <command>mdcfg</command> の最初の画面では、
-単純に <guimenu>Create MD device</guimenu> を選択してください。
+単に <guimenu>Create MD device</guimenu> を選択してください。
 サポートされる MD デバイスのリストも提供されます。
-これから 1 つ (例: RAID1) を選択してください。
+この中から 1 つ (例: RAID1) を選択してください。
 その後は選択した MD デバイスに依存します。
-概して、いくつかパラメータを提示し、
-MD とするパーティションを選ばなければならないでしょう。
-
 </para>
 
 <itemizedlist>
@@ -254,7 +258,7 @@ example if you have three 200 GB hard drives dedicated to MD, each
 containing two 100 GB partitions, you can combine first partitions on
 all three disk into the RAID0 (fast 300 GB video editing partition)
 and use the other three partitions (2 active and 1 spare) for RAID1
-(quite reliable 100 GB partition for /home).
+(quite reliable 100 GB partition for <filename>/home</filename>).
 -->
 同時に数種の MD を持つことは完全に可能です。
 例えば、3 つの 200GB の MD 専用ドライブがあって、
@@ -262,7 +266,7 @@ and use the other three partitions (2 active and 1 spare) for RAID1
 3 つのドライブすべての最初のパーティションを RAID0 
 (高速な 300GB のビデオ編集パーティション) で結合でき、
 その他の 3 つのパーティション (アクティブ 2 基、スペア 1 基) を RAID1 
-(/home 用に信頼できる 100GB のパーティション) で結合できます。
+(<filename>/home</filename> 用に信頼できる 100GB のパーティション) で結合できます。
 
 </para><para>
 

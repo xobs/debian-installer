@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 18974 -->
+<!-- original version: 21882 -->
 
   <sect2 arch="ia64"><title>CD-ROM からの起動</title>
 
@@ -41,21 +41,22 @@ Debian CD セットは、ネットワークへのアクセスを必要とせずに、
 <para>
 
 <!--
-The IA-64 uses the next generation Extensible Firmware Interface (EFI)
-from Intel.
+The IA-64 architecture uses the next generation Extensible Firmware Interface
+(EFI) from Intel.
 Unlike the traditional x86 BIOS which knows little about the boot
 device other than the partition table and Master Boot Record (MBR),
-the EFI can read and write files from FAT16 or FAT32 formatted disk
+EFI can read and write files from FAT16 or FAT32 formatted disk
 partitions.
 This simplifies the often arcane process of starting a system.
 The system boot loader and the EFI firmware that supports it have
 a full filesystem to store the files necessary for booting the
 machine.
 This means that the system disk on an IA-64 system has an additional
-disk partition dedicated to the EFI instead of the simple MBR or boot
+disk partition dedicated to EFI instead of the simple MBR or boot
 block on more conventional systems. 
 -->
-IA-64 では、Intel の Extensible Firmware Interface (EFI) を使用しています。
+IA-64 アーキテクチャでは、
+Intel の Extensible Firmware Interface (EFI) を使用しています。
 パーティションテーブルやマスターブートレコード (MBR) 以外に起動デバイスのことを
 ほとんど知らない従来の x86 BIOS と異なり、
 EFI は FAT16 や FAT32 でフォーマットしたディスクパーティションから、
@@ -71,14 +72,15 @@ EFI は FAT16 や FAT32 でフォーマットしたディスクパーティションから、
 </para><para>
 
 <!--
-The Debian CD contains a small version of the EFI partition where
-<command>elilo</command>, its configuration file, the installer's kernel,
- and initial filesystem (initrd) are located.
+The Debian Installer CD contains a small EFI partition where the
+<command>ELILO</command> bootloader, its configuration file, the installer's
+kernel, and initial filesystem (initrd) are located.
 The running system also contains an EFI partition where the necessary
 files for booting the system reside.
 These files are readable from the EFI Shell as described below.
 -->
-Debian CD には、<command>elilo</command> やその設定ファイル、
+Debian インストーラ CD には、
+<command>ELILO</command> ブートローダやその設定ファイル、
 インストーラーのカーネルや初期ファイルシステム (initrd) が存在する、
 小さな EFI パーティションを含んでいます。
 稼働中のシステムは、システムを起動するのに必要なファイルが存在する、
@@ -88,22 +90,22 @@ EFI パーティションを含んでいます。
 </para><para>
 
 <!--
-Most of the details of how the <command>elilo</command> actually loads and
-starts a system for the most part transparent to the system installer.
+Most of the details of how <command>ELILO</command> actually loads and
+starts a system are transparent to the system installer.
 However, the installer must set up an EFI partition prior to installing
-the base system.  Otherwise, the installation of <command>elilo</command>
+the base system.  Otherwise, the installation of <command>ELILO</command>
 will fail, rendering the system un-bootable.
 The EFI partition is allocated and formatted in the partitioning step
 of the installation prior to loading any packages on the system disk.
 The partitioning task also verifies that a suitable EFI partition is
 present before allowing the installation to proceed.
 -->
-システムインストーラに透過的な部分の大半は、
-ほとんどがどのように <command>elilo</command> が実際にロードし、
+システムインストーラに透過的な部分は、
+ほとんどがどのように <command>ELILO</command> が実際にロードし、
 システムを起動するかといったものの詳細です。
 しかしインストーラは、基本システムをインストールするに先立ち、
 EFI パーティションをセットアップする必要があります。
-そうでなければ、<command>elilo</command>のインストールが失敗し、
+そうでなければ、<command>ELILO</command> のインストールが失敗し、
 システムが起動不可能になります。
 EFI パーティションは、システムディスクにパッケージをロードする前に、
 インストーラのパーティション分割時に割当・フォーマットが行われます。
@@ -113,26 +115,27 @@ EFI パーティションは、システムディスクにパッケージをロードする前に、
 </para><para>
 
 <!--
-The EFI Boot Manager is started as the last step of the firmware
+The EFI Boot Manager is presented as the last step of the firmware
 initialization.
 It displays a menu list from which the user can select
 an option.
 Depending on the model of system and what other software has been
 loaded on the system, this menu may be different from one system
 to another.
-There should be two menu items displayed,
+There should be at least two menu items displayed,
 <command>Boot Option Maintenance Menu</command> and
 <command>EFI Shell (Built-in)</command>.
 Using the first option is preferred, however, if that
 option is not available or the CD for some reason does not
 boot with it, use the second option.
 -->
-ファームウェアの最終ステップとして、EFI Boot Manager が起動されます。
+ファームウェア初期化の最終ステップとして、EFI Boot Manager が起動されます。
 ここでは、オプションを選択できるようにメニューリストが表示されます。 
 システムの型番や、システムに他のソフトウェアが読み込まれるかによりますが、
 このメニューは他のシステムとは異なっているかもしれません。
 ここでは <command>Boot Option Maintenance Menu</command> と
-<command>EFI Shell (Built-in)</command> の 2 つのメニュー項目が表示されます。
+<command>EFI Shell (Built-in)</command> の、
+少なくとも 2 つのメニュー項目が表示されます。
 前者の使用をお奨めしますが、これが有効でなかったり、
 何らかの理由で CD から起動できない場合は、後者を使用してください。
 
@@ -146,13 +149,18 @@ The EFI Boot Manager will select a default boot action, typically
 the first menu choice, within a pre-set number of seconds.
 This is indicated by a countdown at the bottom of the screen.
 Once the timer expires and the systems starts the default action,
-you will have to reboot the machine in order to continue the installation.
+you may have to reboot the machine in order to continue the installation.
+If the default action is th EFI Shell, you can return to the Boot Manager
+by running <command>exit</command> at the shell prompt.
 -->
 EFI ブートマネージャは、規定の秒数が経過するとデフォルトの起動 
 (一般的にメニューの先頭) を行います。
 これは画面の下段にカウントダウンで表示されています。
 タイマーが終了すると、システムはデフォルトの動作を行います。
 インストールを続けるためには、マシンを再起動しなければなりません。
+デフォルトの動作が EFI シェルの場合、
+シェルプロンプトで <command>exit</command> として、
+ブートマネージャに戻ることができます。
 </para>
   </warning>
 
@@ -405,46 +413,87 @@ the common command line options.
 
 </para>
 
-   <warning>
    <title>シリアルコンソール</title>
 <para>
-
 <!--
-Some IA64 platforms have both a serial console and a keyboard and
-video card which can be configured in the EFI firmware to be
-the system console.
-The EFI console is capable of displaying and accepting input from
-both the keyboard and video and the serial port.
-The Linux kernel will take the keyboard and video devices as its
-default console if it detects a keyboard during its initialization.
-You will have to enable the serial console in the EFI boot
-manager and enter
-<command>console=ttyS0,9600n8</command> into
-the <classname>Boot:</classname> text window to install via
-the serial console.
-If you are using a serial console and forget to set it in the
-command line, you
+You may choose to perform an install using a monitor and keyboard
+or using a serial connection.  To use a monitor/keyboard setup,
+select an option containing the string [VGA console].  To install
+over a serial connection, choose an option containing the string
+[<replaceable>BAUD</replaceable> baud serial console], where
+<replaceable>BAUD</replaceable> is the speed of your serial console.
+Menu items for the most typical baud rate settings on the ttyS0
+device are preconfigured.
+-->
+インストールを行うにあたり、モニターとキーボードを使用するか、
+シリアル接続を使用するかを選択できます。
+モニター・キーボードセットアップを使用するなら、
+[VGA console] という文字列が入っているオプションを選択してください。
+シリアル接続でインストールするには、
+[<replaceable>BAUD</replaceable> baud serial console] 
+という文字列が入っているオプションを選択してください。
+ここで <replaceable>BAUD</replaceable> にはシリアルコンソールの通信速度です。
+メニュー項目には、
+ttyS0 デバイスの一般的なボーレート (通信速度) があらかじめ設定されています。
+</para>
+<para>
+<!--
+In most circumstances, you will want the installer to use the same
+baud rate as your connection to the EFI console.  If you aren't
+sure what this setting is, you can obtain it using the command
+<command>baud</command> at the EFI shell.
+-->
+ほとんどの環境では、EFI コンソールに接続するボーレートと同じボーレートで、
+インストーラを動かすことになります。
+この設定がよくわからなければ、
+EFI シェルで <command>baud</command> コマンドを使って取得できます。
+</para>
+<para>
+<!--
+If there is not an option available that is configured for the serial
+device or baud rate you would like to use, you may override the console setting
+for one of the existing menu options.  For example, to use a
+57600 baud console over the ttyS1 device, enter
+<command>console=ttyS1,57600n8</command> into
+the <classname>Boot:</classname> text window.
+-->
+使用したいシリアルデバイスやボーレートがオプションで有効でなければ、
+既存のメニューオプションのコンソール設定を、上書きしてもかまいません。
+例えば、ttyS1 デバイスを 57600 ボーのコンソールとして使用する場合、
+<classname>Boot:</classname> テキストウィンドウに 
+<command>console=ttyS1,57600n8</command> と入力してください。
+</para>
+
+<note><para>
+<!--
+Most IA-64 boxes ship with a default console setting of 9600 baud.
+This setting is rather slow, and the normal installation process
+will take a significant time to draw each screen.  You should consider
+either increasing the baud rate used for performing the installation,
+or performing a Text Mode installation.  See the <classname>Params</classname>
+help menu for instructions on starting the installer in Text Mode.
+-->
+ほとんどの IA-64 ボックスは、
+デフォルトのコンソールを 9600 ボーに設定して出荷されています。
+この設定は現在かなり遅く、通常のインストールプロセス中、
+各画面を描画するのにかなり時間がかかります。
+インストールするにあたり、使用するボーレートを増加するか、
+テキストモードインストールを検討するべきです。
+テキストモードでインストールを開始するには、
+<classname>Params</classname> ヘルプメニューの説明をご覧ください。
+</para></note>
+
+<warning><para>
+<!--
+If you select the wrong console type, you
 will be able to select the kernel and enter parameters but both
 the display and your input will go dead as soon as the kernel starts,
-requiring you to either reboot if your system does not have a keyboard
-and video display installed.
+requiring you to reboot before you can begin the installation.
 -->
-IA64 プラットフォームでは、
-システムコンソールで EFI ファームウェアの設定をするのに、
-シリアルコンソール、もしくはキーボードとビデオカードが
-使えるものがあります。
-EFI コンソールは、キーボードとビデオ、もしくはシリアルポートから、
-表示や入力の受付を行えます。
-Linux カーネルは、初期化時にキーボードを検出すると、
-キーボードとビデオデバイスをデフォルトコンソールとして使用します。
-シリアルコンソールでインストールを行うには、
-EFI ブートマネージャでシリアルコンソールを有効にしなければならず、
-<classname>Boot:</classname> テキストウィンドウで
-<command>console=ttyS0,9600n8</command> と入力してください。
-シリアルコンソールを使用していて、コマンドラインで入力し忘れると、
+間違ったコンソールタイプを選択すると、
 カーネルの選択やパラメータの入力はできますが、
 カーネルが起動すると同時に入出力が死んでしまいます。
-システムにキーボードやビデオがなければ、再起動する必要があるでしょう。
+インストールを始める前に、再起動する必要があるでしょう。
 </para></warning>
 
 <para>
@@ -489,11 +538,12 @@ appropriate to your needs with the arrow keys.
 <!--
 Enter any boot parameters by typing at the keyboard.
 The text will be displayed directly in the text window.
-This is where the serial console is set.
+This is where kernel parameters (such as serial console
+settings) are specified.
 -->
 起動パラメータをキーボードから入力する。
 このテキストはテキストウィンドウに直接表示される。
-ここでシリアルコンソールの設定を行う。
+ここでカーネルパラメータ (シリアルコンソールの設定など) の指定を行う。
 </para></listitem>
 
 <listitem><para>
@@ -530,7 +580,7 @@ set up the language locale, network, and disk partitions.
 <!--
 Booting an IA64 system from the network is similar to a CD boot.
 The only difference is how the installation kernel is loaded.
-The EFI Boot Manager can load and start programs from servers on
+The EFI Boot Manager can load and start programs from a server on
 the network.
 Once the installation kernel is loaded and starts, the system install
 will proceed thru the same steps as the CD install with the exception
@@ -581,7 +631,7 @@ IA64 システムのネットワークブート用の適切な TFTP エントリは、
 host mcmuffin {
         hardware ethernet 00:30:6e:1e:0e:83;
         fixed-address 10.0.0.21;
-        filename "elilo.efi";
+        filename "debian-installer/ia64/elilo.efi";
 }
 
 </screen></informalexample>
@@ -596,49 +646,40 @@ the client.
 </para><para>
 
 <!--
-Create an <filename>ia64/</filename> subdirectory in your tftpboot
-directory, and populate it with the <filename>vmlinuz</filename> and
-<filename>initrd.gz</filename> files from the Debian installer netboot
-directory.
+Extract the <filename>netboot.tar.gz</filename> file into the directory used
+as the root for your tftp server.  Typical tftp root directories include
+<filename>/var/lib/tftp</filename> and <filename>/tftpboot</filename>.
+This will create a <filename>debian-installer</filename> directory
+tree containing the boot files for an IA-64 system.
 -->
-tftpboot ディレクトリに <filename>ia64/</filename> サブディレクトリを作成し、
-Debian インストーラ の netboot ディレクトリから、
-<filename>vmlinuz</filename> ファイルと 
-<filename>initrd.gz</filename> ファイルを移してください。
-
+<filename>netboot.tar.gz</filename> ファイルを、
+tftp サーバのルートで使用するディレクトリに展開してください。
+典型的な tftp ルートディレクトリは <filename>/var/lib/tftp</filename> や
+<filename>/tftpboot</filename> を含んでいます。
+これにより、IA-64 システムの起動ファイルを含む、
+<filename>debian-installer</filename> ディレクトリを作成します。
 
 </para><para>
 
-<!--
-Copy <filename>elilo.efi</filename> to your tftpboot directory and
-make it world readable.  This file can usually be found in the elilo
-package in IA64 distributions, or in
-<filename>/usr/lib/elilo</filename> or in a subdirectory of
-<filename>/boot/efi</filename>.  A suitable copy is provided in the
-Debian installer netboot directory.
--->
-<filename>elilo.efi</filename> を tftpboot ディレクトリにコピーし、
-誰でも読めるようにしてください。
-たいていこのファイルは、IA64 版の elilo パッケージの中か、
-<filename>/usr/lib/elilo</filename> ないし <filename>/boot/efi</filename> 
-のサブディレクトリにあります。
-適切なコピーは Debian インストーラの netboot ディレクトリの中にあります。
-
-</para><para>
+<informalexample><screen>
+# cd /var/lib/tftp
+# tar xvfz /home/user/netboot.tar.gz
+./
+./debian-installer/
+./debian-installer/ia64/
+[...]
+</screen></informalexample>
 
 <!--
-Create an <filename>elilo.conf</filename> file in your tftpboot
-directory.  This will
-be loaded by <command>elilo.efi</command> once it is running on the
-client, and controls what
-happens next, including the choice of kernel, initrd image, etc.  An
-example file is provided in the Debian installer netboot directory, review
-the contents and update as needed for your choice of paths, etc.
+The <filename>netboot.tar.gz</filename> contains an
+<filename>elilo.conf</filename> file that should work for most configurations.
+However, should you need to make changes to this file, you can find it in the
+<filename>debian-installer/ia64/</filename> directory.
 -->
-tftpboot ディレクトリに <filename>elilo.conf</filename> ファイルを作成してください。
-これは、クライアントで起動するときに <command>elilo.efi</command> に一度読み込まれ、
-次になにが起きるか (カーネル・ initrd イメージの選択など) を制御するものです。
-シリアルコンソールで起動する手頃な例として、以下のようにするといいでしょう。
+<filename>netboot.tar.gz</filename> には、
+ほとんど設定済みの <filename>elilo.conf</filename> ファイルが格納されています。
+しかし、万一このファイルを変更するなら、
+<filename>debian-installer/ia64/</filename> ディレクトリにあります。
 
 <!--
 It is possible to have different config files for different clients by naming
@@ -681,12 +722,16 @@ Add a boot option.
 <listitem><para>
 
 <!--
-Select the line saying <guimenuitem>Load File
-[Acpi()/.../Mac()]</guimenuitem> and press &enterkey;.
+You should see one or more lines with the text
+<guimenuitem>Load File [Acpi()/.../Mac()]</guimenuitem>.  If more
+than one of these entries exist, choose the one containing the
+MAC address of the interface from which you'll be booting.
+Use the arrow keys to highlight your choice, then press enter.
 -->
-<guimenuitem>Load File [Acpi()/.../Mac()]</guimenuitem> という行を選択し、
-&enterkey; を押す。
-
+<guimenuitem>Load File [Acpi()/.../Mac()]</guimenuitem> というテキストがある
+1 つ以上の行を見るべきである。複数行存在する場合、
+起動したいインターフェースの MAC アドレスを含むものを選択する。
+矢印キーで選択肢を反転し、enter を押す。
 </para></listitem>
 <listitem><para>
 
