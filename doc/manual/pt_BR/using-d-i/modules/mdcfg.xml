@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 22784 -->
+<!-- original version: 24840 -->
 
    <sect3 id="mdcfg">
    <title>Configurando o Dispositivo Multi-Discos (RAID via Software)</title>
@@ -73,6 +73,34 @@ disco problemático em caso de falha.
 
 </para></listitem>
 </varlistentry>
+
+<varlistentry>
+
+<term>RAID5</term><listitem><para>
+
+É um meio termo entre a velocidade, confiança e redundância de 
+dados. O RAID5 divide todos os dados de entrada em pedaços e os 
+distribui igualmente em todos os discos exceto um (parecido com o 
+RAID0). Ao contrário do RAID0, o RAID5 também utiliza informações
+de <firstterm>paridade</firstterm>, que são gravadas no disco 
+restante. O fisco de paridade não é estático (senão seria chamado
+de RAID4), mas é alterada periodicamente, assim as informações de 
+partidade são distribuidas igualmente em todos os discos. Quando 
+um dos discos falha, a parte faltante dos dados pode 
+ser computado dos dados restantes junto com sua paridade. O RAID5 deve
+consistir de no mínimo três partições ativas. Opcionalmente você 
+poderá ter um disco reserva na array que tomará lugar do disco defeituoso
+em caso de falha.
+
+</para><para>
+
+Como você pode notar, o RAID5 tem um grau parecido de confiança como
+o RAID1 enquanto mantém menos redundância. Por outro lado as operações
+de gravação são um pouco mais lentas que o RAID0 devido a computação
+das informações de paridade.
+
+</para></listitem>
+</varlistentry>
 </variablelist>
 
 Para configurar:
@@ -104,6 +132,17 @@ Para configurar:
   <entry>opcional</entry>
   <entry>sim</entry>
   <entry>Tamanho da partição mais pequena dentro da RAID</entry>
+</row>
+
+<row>
+  <entry>RAID5</entry>
+  <entry>3</entry>
+  <entry>optional</entry>
+  <entry>sim</entry>
+  <entry>
+    Tamanho da menos partição multiplicada pelo número de dispositivos no
+raid menos 1.
+  </entry>
 </row>
 
 </tbody></tgroup></informaltable>
@@ -161,6 +200,14 @@ selecionar um número de partições diferente, o &d-i; não lhe permitirá continuar
 até que corrija o problema.
 
 </para></listitem>
+<listitem><para>
+
+O RAID5 tem um procedimento parecido de configuração com o RAID1 com as 
+excessão que precisará utilizar pelo menos <emphasis>três</emphasis> 
+partições ativas.
+
+</para></listitem>
+
 </itemizedlist>
 
 <para>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 22469 -->
+<!-- original version: 25291 -->
 
    <sect3 id="lvmcfg">
    <title>Configurando o Gerenciador de Volumes Lógicos (LVM)</title>
@@ -48,6 +48,45 @@ os volumes físicos ao grupo de volume sob o ítem de menu <guimenuitem>Modificar
 Grupos de Volume (VG)</guimenuitem>. Após isto, você deverá novamente criar 
 volumes lógicos no tipo do grupo de volume a partir do menu
 <guimenuitem>Modificar volumes lógicos (LV)</guimenuitem>.
+
+<note arch="powerpc"><para> 
+
+Não existe um padrão aceitavel globalmente para identificar partições
+contendo dados LVM em um hardware Apple Power Macintosh. Neste hardware
+em particular, o procedimento acima para a criação de volumes físicos 
+e grupos de volume não funcionará. Existe uma bom modo de contornar 
+esta limitação desde que esteja familiarizado com a base de ferramentas 
+do LVM.
+
+</para><para>
+
+Para fazer a instalação usando volumes lógicos no hardware do 
+Power Macintosh, você deverá criar todas as partições de disco
+para seus volumes lógicos como sempre fez. No menu 
+<guimenu>Configurações da Partição</guimenu> você deverá 
+selecionar <menuchoice><guimenu>Usada como:</guimenu> <guimenuitem>
+Não utilizar</guimenuitem></menuchoice> para estas partições (você 
+não verá a opção de utilizar a partição como um volume físico). Quando
+terminar a criação das partições, você deverá iniciar o gerenciador
+de volumes lógicos como sempre fez. No entanto, como não foram criados
+volumes físicos você deverá acessar o interpretador de comandos disponível
+no segundo terminal virtual (veja <xref linkend="shell"/>) e cria-las
+manualmente.
+
+</para><para>
+
+Use o comando <command>pvcreate</command> para criar o volume físico de 
+cada uma de suas partições escolhidas. Então use o comando
+<command>vgcreate</command> para criar cada grupo de volume que 
+desejar. Você pode seguramente ignorar quaisquer erros sobre 
+a área de metadados, checksum de cabeçalhos e falhas de fsync enquanto
+esta tarefa estiver sendo feita. Quando terminar a criação do seu 
+grupo de volumes, vocÊ deverá voltar para o primeiro terminal virtual e 
+ir diretamente até o item de menu <command>lvmcfg</command> para 
+iniciar o gerenciamento de volume lógico. Você verá seus grupos de volume
+e poderá criar os volumes lógicos a partir daqui.
+
+</para></note>
 
 </para><para>
 
