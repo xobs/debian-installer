@@ -14,6 +14,7 @@ fi
 language=${1:-pl}
 
 PODIR="./po"
+RET=0
 
 [ -d "$PODIR" ] || exit 1
 
@@ -27,9 +28,14 @@ for POT in `find $PODIR -name "*.pot"` ; do
     if [ -f $PO ] ; then
         echo "- $DISP"
         msgmerge -q -U --backup=simple $PO $POT
+        RC=$?
+        if [ $RC -ne 0 ] ; then
+            RET=$RC
+            echo "* $DISP: error $RC while executing msgmerge"
+        fi
     else
         echo "* No .po file found for '$DISP'."
     fi
 done
 
-exit 0
+exit $RET

@@ -13,28 +13,39 @@ language=${1:-pl}
 WORKDIR="./integrated"
 SOURCEDIR="$WORKDIR/en"
 PODIR="./po"
-LANGDIR="./$language.new"
+if [ -d "./$language/.svn" ] ; then
+    LANGDIR="./$language.new"
+else
+    LANGDIR="./$language"
+fi
+RET=0
 
 [ -d "$SOURCE" -o -d "$PODIR" ] || exit 1
 
-[ -d "$LANGDIR" ] && rm $LANGDIR/*.xml
+[ -d "$LANGDIR" ] && rm -r $LANGDIR
 
-echo "Creating .xml files for language $language"
+echo "Creating .xml files for language '$language':"
 for ORIGXML in `find $SOURCEDIR -name "*.xml"` ; do
-    SUBDIR=$(dirname $ORIGXML | sed "s:$SOURCEDIR::" | sed "s:^/::")
+    BASEDIR=$(dirname $ORIGXML | sed "s:$SOURCEDIR::" | sed "s:^/::")
     BASENAME=$(basename $ORIGXML .xml)
-    PO=$PODIR/$SUBDIR/$BASENAME.$language.po
-    XML=$LANGDIR/$SUBDIR/$BASENAME.xml
+    PO=$PODIR/$BASEDIR/$BASENAME.$language.po
+    XML=$LANGDIR/$BASEDIR/$BASENAME.xml
+    DISP="$(echo $BASEDIR/$BASENAME | sed "s:^/::")"
 
-    mkdir -p $LANGDIR/$SUBDIR
+    mkdir -p $LANGDIR/$BASEDIR
 
     if [ -f $PO ] ; then
-        echo "- $SUBDIR/$BASENAME: creating translated .xml"
+        echo "- $DISP: creating translated .xml"
         po2xml $ORIGXML $PO > $XML
+        RC=$?
+        if [ $RC -ne 0 ] ; then
+            RET=$RC
+            echo "* $DISP: error $RC while executing po2xml"
+        fi
     else
-        echo "* $SUBDIR/$BASENAME: no .po file found; copying English original"
-        cp $ORIGXML $LANGDIR/$SUBDIR
+        echo "* $DISP: no .po file found; copying English original"
+        cp $ORIGXML $LANGDIR/$BASEDIR
     fi
 done
 
-exit 0
+exit $RET

@@ -13,6 +13,7 @@ fi
 WORKDIR="./integrated"
 SOURCEDIR="$WORKDIR/en"
 PODIR="./po"
+RET=0
 
 [ -d $SOURCE ] || exit 1
 
@@ -31,6 +32,11 @@ for XML in `find $SOURCEDIR -name "*.xml"` ; do
     mkdir -p $PODIR/$SUBDIR
 
     xml2pot $XML >$PODIR/$SUBDIR/$POT
+    RC=$?
+    if [ $RC -ne 0 ] ; then
+        RET=$RC
+        echo "* $XML: error $RC while executing xml2pot"
+    fi
 done
 
-exit 0
+exit $RET
