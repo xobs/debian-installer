@@ -16,22 +16,20 @@ TARNAME=debian-installer-images_$(VERSION)_$(ARCH).tar.gz
 # Work out the name(s) of the kernel that the demo deb should depend on.
 DEB_HOST_GNU_CPU = $(shell dpkg-architecture -qDEB_HOST_GNU_CPU)
 DEB_HOST_GNU_SYSTEM = $(shell dpkg-architecture -qDEB_HOST_GNU_SYSTEM)
-include config/main
-include config/arch/$(DEB_HOST_GNU_SYSTEM)
-include config/arch/$(DEB_HOST_GNU_SYSTEM)-$(DEB_HOST_GNU_CPU)
 KERNELPACKAGE=$(shell perl -e 'print join(" | ", @ARGV)' \
               $(foreach KVERS,${KERNELVERSION},kernel-image-$(KVERS)))
 
 clean:
 	dh_testdir
 	dh_testroot
-	$(MAKE) reallyclean
 	dh_clean build-stamp
+	$(MAKE) reallyclean
 
 build: build-stamp
 build-stamp:
-	fakeroot $(MAKE) all_images all_stats SUITE=$(DISTRIBUTION)
-	touch build-stamp
+	rm -f $@
+	fakeroot $(MAKE) all_build all_stats SUITE=$(DISTRIBUTION)
+	touch $@
 
 	# This is a gross, gross hack. The docs really should be
 	# included in this package, but CVS makes that a messy reorg.
@@ -47,7 +45,7 @@ install: build
 	install -d debian/tmp/$(DESTDIR)/doc
 	cp debian/*.html debian/INSTALLATION-HOWTO debian/tmp/$(DESTDIR)/doc
 	install -d debian/tmp/$(IMAGEDIR)
-	cp -p dest/* debian/tmp/$(IMAGEDIR)
+	cp -a dest/* debian/tmp/$(IMAGEDIR)
 	cd debian/tmp/$(IMAGEDIR) && md5sum `find . -type f` > MD5SUMS
 	ln -s $(DATE) debian/tmp/$(ARCHIVEDIR)/current
 
