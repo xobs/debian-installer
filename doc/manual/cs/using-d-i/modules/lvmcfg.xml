@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 22935 -->
+<!-- original version: 25496 -->
 
    <sect3 id="lvmcfg">
    <title>Nastavení manažera logických svazků (LVM)</title>
@@ -105,6 +105,36 @@ se běžně použilo např. <filename>/dev/hda3</filename> se nyní použije
 <filename>/dev/mapper/jmskupiny/jmsvazku</filename>. (Pěkně to bude
 vidět v souboru <filename>/etc/fstab</filename> nebo na výstupu
 příkazů <command>mount</command> a <command>df</command>.)
+
+</para></note><note arch="powerpc"><para>
+
+Na Power Macintoshích neexistuje obecný způsob, jak identifikovat, že
+oblast obsahuje LVM data a díky tomu na nich nebude fungovat výše
+popsaný způsob vytváření fyzických svazků a skupin svazků. Pokud jste
+však obeznámeni s nízkoúrovňovými LVM nástroji, můžete toto omezení
+snadno obejít.
+
+</para><para>
+
+Nejprve byste měli vytvořit diskové oblasti pro LVM jako obvykle,
+ovšem v menu <guimenu>Nastavení oblasti</guimenu> vyberte
+<menuchoice><guimenu>Použít jako:</guimenu>
+<guimenuitem>nepoužívat</guimenuitem></menuchoice>, protože možnost
+<menuchoice><guimenu>fyzický svazek</guimenu></menuchoice> nebude
+dostupná. Nyní se musíte přepnout do shellu na druhé virtuální konzoli
+(viz <xref linkend="shell"/>) a ručně vytvořit fyzické svazky
+a skupiny svazků.
+
+</para><para>
+
+Příkazem <command>pvcreate</command> vytvořte na každé LVM oblasti
+fyzický svazek a následně z těchto svazků vytvořte příkazem
+<command>vgcreate</command> požadované skupiny svazků. Během vytváření
+můžete ignorovat veškeré chybové hlášky ohledně chybných kontrolních
+součtů hlaviček metadat a chyb fsync(). Po vytvoření skupin svazků se
+vraťte na první virtuální terminál a přeskočte rovnou na menu
+komponenty <command>lvmcfg</command>, kde již uvidíte své skupiny
+svazků, na kterých můžete vytvořit logické svazky jako obvykle.
 
 </para></note><para>
 

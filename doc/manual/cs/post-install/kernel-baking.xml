@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 23678 -->
+<!-- original version: 25152 -->
 
  <sect1 id="kernel-baking"><title>Kompilace nového jádra</title>
 <para>
@@ -22,14 +22,6 @@ Ve standardním jádře postrádáte podporu zařízení nebo nějakou službu
 (např. Advanced power management nebo SMP). 
 
 </para></listitem>
-
-<listitem arch="i386"><para>
- 
-Varianty jádra compact a idepci neobsahují podporu zvuku. A i když
-vanilla jádro zvukové karty podporuje, nemusí podpora zvuku z
-nejrůznějších příčin fungovat.
-
-</para></listitem>
 <listitem><para>
 
 Chcete menší jádro bez ovladačů, které nepoužíváte. Urychlíte start
@@ -38,7 +30,7 @@ systému a ušetříte paměť.
 </para></listitem>
 <listitem><para>
 
-Chcete jádro rozšířit o nějakou funkci (např. firewall).
+Chcete jádro rozšířit o nějakou funkci (např. podporu vysoké paměti).
 
 </para></listitem>
 <listitem><para>
@@ -94,12 +86,18 @@ V následujících odstavcích najdete jen stručný úvod k jeho použití.
 </para><para>
 
 V dalším budeme předpokládat, že zdrojové texty jádra verze
-&kernelversion; uložíte do <filename>/usr/local/src</filename>. Jako
-uživatel root vytvořte adresář <filename>/usr/local/src</filename> a
-změňte jeho vlastníka na váš normální účet. Přihlaste se na svůj účet
-a přejděte do adresáře, kde chcete mít zdrojové texty jádra
-(<userinput>cd /usr/local/src</userinput>), rozbalte archív
-(<userinput>tar xjf
+&kernelversion; uložíte někam do svého domovského adresáře.<footnote>
+
+<para>
+
+Existují i jiná místa, kam můžete zdrojové texty jádra rozbalit, ale
+použitá možnost je nejjednodušší a nevyžaduje žádná speciální práva.
+
+</para></footnote>
+
+Přejděte do adresáře, kde chcete mít zdrojové texty jádra
+(<userinput>cd <replaceable>~/build</replaceable></userinput>),
+rozbalte archiv (<userinput>tar xjf
 /usr/src/kernel-source-&kernelversion;.tar.bz2</userinput>) a vejděte
 do vzniklého adresáře (<userinput>cd
 kernel-source-&kernelversion;/</userinput>).
@@ -137,7 +135,7 @@ výpočetním výkonu vašeho počítače.
 Pokud využíváte zařízení PCMCIA, nainstalujte také balík
 <classname>pcmcia-source</classname>, který do
 <filename>/usr/src</filename> nakopíruje komprimovaný soubor se
-zdrojovnými texty. Tento archív rozbalte v adresáři
+zdrojovnými texty. Tento archiv rozbalte v adresáři
 <filename>/usr/src</filename>, protože programy předpokládají, že
 najdou moduly v adresáři <filename>/usr/src/modules</filename>. Balík 
 s PCMCIA moduly připravíte příkazem <userinput>make-kpkg
@@ -150,7 +148,7 @@ root napište <userinput>dpkg -i
 ../kernel-image-&kernelversion;-<replaceable>podarchitektura</replaceable>_jadro.1.0_&architecture;.deb</userinput>. 
 <replaceable>podarchitektura</replaceable> je volitelné upřesnění
 architektury,
-<phrase arch="i386"> např. ,,i586'', </phrase> které jste zadali při
+<phrase arch="i386"> např. <quote>i586</quote>, </phrase> které jste zadali při
 konfiguraci jádra. <userinput>dpkg -i kernel-image...</userinput>
 nainstaluje jádro spolu s doprovodnými soubory. Jedná se třeba
 o soubory 
