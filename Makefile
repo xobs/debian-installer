@@ -87,7 +87,7 @@ endif
 demo: tree
 	$(MAKE) tree_mount
 	-@[ -f questions.dat ] && cp -f questions.dat $(TREE)/var/lib/cdebconf/
-	-@sudo chroot $(TREE) bin/sh -c "export DEBCONF_DEBUG=5; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; exec /usr/share/debconf/frontend /usr/bin/main-menu"
+	-@sudo chroot $(TREE) bin/sh -c "export DEBCONF_DEBUG=5 LANG=C.UTF-8 LC_ALL=C.UTF-8 ; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; exec /usr/share/debconf/frontend /usr/bin/main-menu"
 	$(MAKE) tree_umount
 
 shell: tree
@@ -320,7 +320,7 @@ ifeq ($(TYPE),floppy)
 		fi; \
 	done
 endif
-
+	
 	# Library reduction.
 	mkdir -p $(TREE)/lib
 	$(MKLIBS) -v -d $(TREE)/lib --root=$(TREE) `find $(TEMP) -type f -perm +0111 -o -name '*.so'`
