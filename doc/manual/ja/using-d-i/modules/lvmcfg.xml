@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 22935 -->
+<!-- original version: 25496 -->
 
    <sect3 id="lvmcfg">
    <title>論理ボリュームマネージャ (LVM) の設定</title>
@@ -45,7 +45,7 @@ Now when you realize you need more space for your old 160GB
 <filename>/home</filename> partition, you can simply add a new 300GB
 disc to the computer, join it with your existing volume group and then
 resize the logical volume which holds your <filename>/home</filename>
-filesystem and voila - your users have some room again on their
+filesystem and voila &mdash; your users have some room again on their
 renewed 460GB partition.  This example is of course a bit
 oversimplified. If you haven't read it yet, you should consult the
 <ulink url="&url-lvm-howto;">LVM HOWTO</ulink>.
@@ -91,6 +91,73 @@ LVM</guimenuitem> </menuchoice> を選ぶことで行います)
 物理ボリュームをボリュームグループに結合します。
 その後、<guimenuitem>Modify logical volumes (LV)</guimenuitem> から
 ボリュームグループの先頭に論理ボリュームを作成してください。
+
+<note arch="powerpc"><para> 
+
+<!--
+There is no widely accepted standard to identify partitions containing
+LVM data on Apple Power Macintosh hardware. On this particular
+hardware, the above procedure for creating physical volumes and volume
+groups will not work. There is a good workaround for this limitation,
+provided you are familiar with the underlying LVM tools.
+-->
+Apple Power Macintosh のハードウェアで、
+LVM データのあるパーティションを特定する一般的な標準はありません。
+この特定のハードウェアでは、
+物理ボリュームやボリュームグループを作成する上の手順は動作しません。
+もし基本的な LVM ツールに詳しければ、この制限の回避策があります。
+
+</para><para>
+ 
+<!--
+To install using logical volumes on Power Macintosh hardware you
+should create all the disk partitions for your logical volumes as
+usual. In the <guimenu>Partition settings</guimenu> menu you should
+choose <menuchoice><guimenu>Use as:</guimenu> <guimenuitem>Do Not
+Use</guimenuitem></menuchoice> for these partitions (you will not be
+offered the option to use the partition as a physical volume). When
+you are done with creating all your partitions, you should start the
+logical volume manager as usual. However, since no physical volumes
+have been created you must now access the command shell available on
+the second virtual terminal (see <xref linkend="shell"/>) and create
+them manually.
+-->
+Power Macintosh ハードウェア上の論理ボリュームにインストールするには、
+すべてのディスクパーティションを通常の論理ボリュームで作成してください。
+このパーティションは <guimenu>Partition settings</guimenu> メニューで、
+<menuchoice><guimenu>Use as:</guimenu> <guimenuitem>Do Not
+Use</guimenuitem></menuchoice> を選択してください。
+(物理ボリュームとしてパーティションを作成する方法はありません)
+すべてのパーティション作成が終わったら、通常通り論理ボリュームマネージャを
+起動してください。しかし物理ボリュームの作成をしていないため、
+今度は別の仮想端末上のコマンドシェルにアクセスし 
+(<xref linkend="shell"/> 参照)、手動で作成しなければなりません。
+
+</para><para>
+
+<!--
+Use the <command>pvcreate</command> command at the shell command prompt
+to create a physical volume on each of your chosen partitions. Then use
+the <command>vgcreate</command> command to create each volume group
+you want. You can safely ignore any errors about incorrect metadata
+area header checksums and fsync failures while doing this. When you
+have finished creating all your volume groups, you should go back to
+the first virtual terminal and skip directly the the
+<command>lvmcfg</command> menu items for logical volume
+management. You will see your volume groups and you can create the
+logical volumes you need as usual.
+-->
+シェルコマンドプロンプトで <command>pvcreate</command> コマンドを使用し、
+選択したパーティションに物理ボリュームを作成してください。
+その後、<command>vgcreate</command> コマンドで必要なボリュームグループを
+作成してください。その間、「メタデータエリアヘッダチェックサムが不正」や
+「fsync エラー」といったエラーは安全に無視できます。
+ボリュームグループを作成し終えたら、最初の仮想端末に戻り、
+<command>lvmcfg</command> の論理ボリューム管理の項目を直接選択してください。
+そこにボリュームグループがありますので、
+後は通常通り論理ボリュームを作成してください。
+
+</para></note>
 
 </para><para>
 
