@@ -125,5 +125,6 @@ stats:
 	@echo ------------
 	@echo Installed udebs: $(UDEBS)
 	@echo Total system size: $(shell du -h -s $(DEST) | cut -f 1)
+	@echo Gzips to: $(shell expr $(shell tar cz $(DEST) | wc -c) / 1024)k
 # Add your interesting stats here.
 
