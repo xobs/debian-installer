@@ -170,7 +170,7 @@ clean: demo_clean tmp_mount debian/control
 
 reallyclean: clean
 	rm -rf $(APTDIR) $(DEST) $(BASE_TMP) wget-cache $(SOURCEDIR)
-	rm -rf diskusage*.txt missing.txt
+	rm -rf diskusage*.txt missing.txt all-*.utf
 
 # prefetch udebs
 # If we are building a correct debian-installer source tree, we will want all the
@@ -341,7 +341,7 @@ endif
 	# These files depmod makes are used by hotplug, and we shouldn't
 	# need them, yet anyway.
 	find $(TREE)/lib/modules/ -name 'modules*' \
-		-not -name modules.dep | xargs rm -f
+		-not -name modules.dep -not -type d | xargs rm -f
 	# Create a dev tree
 	mkdir -p $(TREE)/dev
 
