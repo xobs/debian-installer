@@ -102,7 +102,9 @@ uml: $(INITRD)
 	-linux initrd=$(INITRD) root=/dev/rd/0 ramdisk_size=8192 con=fd:0,fd:1 devfs=mount
 
 demo_clean:
+ifneq (,$(filter demo,$(TYPES_SUPPORTED)))
 	@$(MAKE) --no-print-directory TYPE=demo tree_umount
+endif
 
 clean: demo_clean tmp_mount debian/control
 	rm -rf $(TEMP) || sudo rm -rf $(TEMP)
