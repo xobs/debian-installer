@@ -59,7 +59,7 @@ for lang in $languages; do
 	    if [ "$format" = html ]; then
 		mv ./build.out/html/*.html "$destination/$destsuffix"
 	    else
-	        # Do not fail because of missing PDF support for Japanese
+		# Do not fail because of missing PDF support for Japanese
 		mv ./build.out/install.$lang.$format "$destination/$destsuffix" || true
 	    fi
 	done
