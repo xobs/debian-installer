@@ -1,45 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 14033 -->
+<!-- original version: 16340 -->
 
 <chapter id="boot-new">
  <title>Zavedení vašeho nového systému</title>
-
- <sect1><title>Nastavení zavádění systému</title>
-<para>
-
-Zavádění více operačních systémů na jednom počítači je stále něco jako
-černá magie. Tento dokument se ani nesnaží pokrýt všechny možné
-zavaděče, které se liší na jednotlivých architekturách a dokonce i na
-jejich podarchitekturách. Měli byste si dobře prostudovat dokumentaci
-vašeho zavaděče a pamatujete: třikrát měř a jednou řež.
-
-</para>
-
-&bootloader-i386.xml;
-&bootloader-m68k.xml;
-&bootloader-alpha.xml;
-&bootloader-sparc.xml;
-&bootloader-powerpc.xml;
-&bootloader-hppa.xml;
-&bootloader-s390.xml;
-&bootloader-arm.xml;
-&bootloader-mipsel.xml;
-
-  <sect2 condition="supports-nfsroot">
-  <title>Bezdiskové stanice</title>
-<para>
-
-Pokud instalujete bezdiskovou stanici, zavádění systému z lokálního
-disku evidentně nebude nejsmysluplnější volba - tento krok přeskočte.
-<phrase arch="sparc"> Možná budete chtít nastavit OpenBoot tak, aby
-standardně zaváděl systém ze sítě, viz
-<xref linkend="boot-dev-select-sun"/>.</phrase>
-
-</para>
-
-  </sect2>
-</sect1>
 
  <sect1 id="base-boot">
  <title>Okamžik pravdy</title>
@@ -49,28 +13,25 @@ Teď přichází chvíle <emphasis>zahoření</emphasis> systému.
 
 </para><para arch="s390">
 
-Z menu zvolte položku <quote>Restartovat počítač</quote>, což v tomto
-případě zastaví systém, protože takovéto restartování není na
+Z menu zvolte položku <guimenuitem>Dokončit instalaci</guimenuitem>,
+což v tomto případě zastaví systém, protože restartování není na
 &arch-title; podporováno.  Poté musíte zavést (IPL) GNU/Linux z DASD,
 které jste na začátku instalace vybrali pro kořenový systém.
 
 </para><para>
 
 Jestliže Debian z disku nenaběhne, zkuste to znovu z původního
-instalačního média (například ze záchranné diskety), nebo založte do
-mechaniky svou vlastní zaváděcí disketu (pokud jste ji vytvořili)
-a restartujte počítač.  Pokud <emphasis>nepoužíváte</emphasis> svou
-debianí zaváděcí disketu, pravděpodobně budete muset při startu přidat
-nějaké parametry.  Například při použití záchranné diskety musíte
-specifikovat
-<userinput>rescue root=<replaceable>kořen</replaceable></userinput>,
-kde <replaceable>kořen</replaceable> je vaše kořenová oblast
+instalačního média, nebo založte do mechaniky svou vlastní zaváděcí
+disketu (pokud nějakou máte) a restartujte počítač. Při startu budete
+pravděpodobně muset zadat nějaké parametry, například
+<userinput>root=<replaceable>kořen</replaceable></userinput>, kde
+<replaceable>kořen</replaceable> je vaše kořenová oblast
 (např. <filename>/dev/sda1</filename>).
 
 </para>
 
   <sect2 arch="m68k">
-  <title>Zavádění VME6000</title>
+  <title>Zavádění BVME6000</title>
 <para>
 
 Jestliže provádíte bezdiskovou instalaci na systémech BVM nebo
@@ -81,7 +42,7 @@ Motorola VMEbus, měli byste po natažení programu
 <itemizedlist>
 <listitem><para>
 
-<userinput>b6000</userinput> &enterkey; pro start BVME4000/6000
+<userinput>b6000</userinput> &enterkey; pro start BVME 4000/6000
 
 </para></listitem><listitem><para>
 
@@ -95,7 +56,6 @@ Motorola VMEbus, měli byste po natažení programu
 </itemizedlist>
 
 </para>
-
    </sect2>
 
   <sect2 arch="m68k">
@@ -140,8 +100,92 @@ Při zavádění systému by se měly objevit stejné zprávy jako při
 zavedení instalačního systému následované nějakými novými zprávami.
 
 </para>
-
    </sect2>
+
+  <sect2 arch="powerpc">
+  <title><quote>OldWorld</quote> PowerMacy</title>
+<para>
+
+Pokud se při prvním startu po instalaci zastaví zavádění na výzvě
+<prompt>boot:</prompt>, zkuste napsat <userinput>Linux</userinput>
+a stisknout &enterkey;.  (Standardní konfigurace v souboru
+<filename>quik.conf</filename> se nazývá Linux. Všechny názvy
+definované v tomto souboru můžete zobrazit klávesou
+<keycap>Tab</keycap>.) Také můžete zkusit znovu zavést instalátor
+a ručně upravit soubor <filename>/target/etc/quik.conf</filename>
+(vytvořený krokem <quote>Nainstalovat <command>quick</command> na
+pevný disk</quote>). Chytré nápady pro práci
+s <command>quik</command>em jsou v <ulink
+url="&url-powerpc-quik-faq;"></ulink>.
+
+</para><para>
+
+Abyste se dostali zpět do MacOS bez resetování nvram, napište do
+promptu OpenFirmwaru <userinput>bye</userinput>. (Za předpokladu, že
+jste si MacOS ponechali).  Prompt OpenFirmwaru získáte podržením
+kláves <keycombo> <keycap>command</keycap> <keycap>option</keycap>
+<keycap>o</keycap> <keycap>f</keycap> </keycombo> během studeného
+startu počítače.  Pokud byste pro přechod do MacOS museli resetovat
+nvram k původním hodnotám, zmáčkněte během studeného startu počítače
+kombinaci <keycombo> <keycap>command</keycap> <keycap>option</keycap>
+<keycap>p</keycap> <keycap>r</keycap> </keycombo>.
+
+</para><para>
+
+Pokud chcete pro zavedení Debianu použít <command>BootX</command>,
+vyberte si ve složce <filename>Linux Kernels</filename> oblíbené
+jádro, odvyberte volbu s ramdiskem a přidejte kořenové zařízení
+odpovídající vaší instalaci (například
+<userinput>/dev/hda8</userinput>).
+
+</para>
+  </sect2>
+
+  <sect2 arch="powerpc">
+  <title><quote>NewWorld</quote> PowerMacy</title>
+<para>
+
+Na počítačích G4 a iBook se můžete podržením <keycap>option</keycap>
+klávesy dostat do grafické obrazovky s tlačítkem pro každý zaveditelný
+operační systém. &debian; bude mít ikonu s tučňákem.
+
+</para><para>
+
+Jestliže jste si nechali nainstalovaný MacOS, může se stát, že vám
+v OpenFirmwaru změní proměnnou <envar>boot-device</envar> (zařízení,
+ze kterého se zavádí systém).  V takovém případě resetujte
+OpenFirmware na standardní hodnoty, což provedete držením kláves
+<keycombo> <keycap>command</keycap> <keycap>option</keycap>
+<keycap>p</keycap> <keycap>r</keycap> </keycombo> během studeného
+startu.
+
+</para><para>
+
+Všechna návěští definovaná v souboru <filename>yaboot.conf</filename>
+můžete zobrazit, pokud ve výzvě <prompt>boot:</prompt> stisknete
+klávesu <keycap>Tab</keycap>.
+
+</para><para>
+
+Resetování OpenFirmwaru na počítačích G3 nebo G4 způsobí, že se
+implicitně bude spouštět &debian;.  (Pokud jste správně rozdělili disk
+a první oblast je <quote>Apple_Bootstrap</quote>).
+Toto nemusí fungovat pokud máte &debian; na SCSI disku a MacOS na
+disku IDE. Potom musíte vstoupit do OpenFirmwaru a nastavit proměnnou
+<envar>boot-device</envar> sami (<command>ybin</command> to dělá
+automaticky).
+
+</para><para>
+
+Po prvním úspěšném zavedení Debianu byste měli do souboru
+<filename>/etc/yaboot.conf</filename> přidat další parametry &mdash;
+jako třeba duální zavádění. Aby se změny přenesly do zaváděcí oblasti,
+musíte po každé změně tohoto souboru spustit program
+<command>ybin</command>.  Více informací najdete
+v <ulink url="&url-powerpc-yaboot-faq;">yaboot HOWTO</ulink>.
+
+</para>
+  </sect2>
  </sect1>
 
  <sect1 id="base-config">

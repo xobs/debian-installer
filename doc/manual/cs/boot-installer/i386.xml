@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 14337 -->
+<!-- original version: 16313 -->
 
   <sect2 arch="i386"><title>Zavedení z CD-ROM</title>
 
@@ -304,7 +304,7 @@ jednotky a normálně systém vypněte a znovu zapněte.
 </para><para>
 
 Instalace z mechaniky LS-120 (ATAPI verze) je podporovaná pouze
-jádry 2.4 a novějšími. Navíc musíte jádru zadat virtuální umístění
+jádry 2.4 a novějšími. Navíc musíte jádru zadat umístění virtuální
 disketové mechaniky. Docílíte toho zaváděcím parametrem
 <emphasis>root=</emphasis>, kterému zadáte zařízení, na které
 ovladač ide-floppy připojí mechaniku LS-120. Například pokud ji
@@ -332,7 +332,7 @@ rovnou spustit zavádění systému.
 </para><para>
 
 Užitečné informace o zaváděcích parametrech jsou dostupné pod
-klávesami <keycap>F4</keycap> a <keycap>F5</keycap>. Jestliže chcete
+klávesami <keycap>F4</keycap> až <keycap>F5</keycap>. Jestliže chcete
 zadat nějaké parametry, nezapomeňte před nimi uvést název zaváděcí
 metody (například <userinput>linux floppy=thinkpad</userinput>). Pokud
 pouze zmáčknete &enterkey;, je to jako byste napsali
@@ -448,6 +448,7 @@ Jestliže je obraz na obrazovce během zavádění jádra
 zobrazuje barevné <quote>smetí</quote>, máte problematickou grafickou
 kartu, která se neumí správně přepnout do grafického režimu. V takovém
 případě pomůže zaváděcí parametr
+<userinput>debian-installer/framebuffer=false</userinput> nebo
 <userinput>video=vga16:off</userinput>, kterým vypnete grafickou
 konzolu. Během instalace se však nezobrazí výzva pro výběr jazyka a
 celá instalace proběhne pouze v angličtině. Zaváděcí parametry
@@ -462,36 +463,26 @@ popisuje <xref linkend="boot-parms"/>.
 
 <para>
 
-Některé modely notebooků firmy DELL jsou známé tím, že se zhroutí,
+Některé modely notebooků firmy Dell jsou známé tím, že se zhroutí,
 když automatické rozpoznávání PCMCIA zařízení přistoupí na určité
-hardwarové adresy. Pokud se u vás tento problém projevuje, můžete
-zkusit následující okliku:
+hardwarové adresy. Toto chování mohou vykazovat i některé notebooky
+jiných výrobců. Pokud se u vás tento problém projevuje a pro instalaci
+podporu PCMCIA nepotřebujete, můžete ji vypnout zaváděcím parametrem
+<userinput>hw-detect/start_pcmcia=false</userinput>. Služby PCMCIA
+můžete zprovoznit později po instalaci.
 
-<itemizedlist>
-<listitem><para>
+</para><para>
 
-připravte kořenový souborový systém a nainstalujte jádro s moduly, ale
-ještě nespouštějte konfiguraci PCMCIA zařízení.
-
-</para></listitem>
-<listitem><para>
-
-přepněte se do příkazového řádku (viz <xref linkend="shell"/>)
-
-</para></listitem>
-<listitem><para>
-
-spusťte příkaz:
-<userinput>echo exclude port 0x810-0x81f >>
-/target/etc/pcmcia/config.opts</userinput>
-
-</para></listitem>
-<listitem><para>
-
-vraťte se do hlavního menu a pokračujte konfigurací PCMCIA
-
-</para></listitem>
-</itemizedlist>
+Alternativně můžete instalační program zavést v expertním režimu. Pak
+budete mimo jiné dotázáni na rozsah zdrojů, které váš hardware
+vyžaduje. Například pokud máte jeden z výše zmíněných Dellů, měli
+byste zde zadat <userinput>exclude port
+0x800-0x8ff</userinput>. Seznam obvyklých rozsahů se nachází například
+v <ulink
+url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-2.html#ss2.5">System
+resource settings section of the PCMCIA HOWTO</ulink>.
+Při zadávání rozsahů do instalačního programu vynechejte všechny
+čárky (pokud se v rozsazích nachází).
 
 </para>
   </sect2>
@@ -501,18 +492,13 @@ vraťte se do hlavního menu a pokračujte konfigurací PCMCIA
 <para>
 
 Jádro se standardně snaží nahrát ovladače pro USB a konkrétně pro USB
-klávesnice, aby umožnilo
-instalaci uživatelům s nestandardními USB klávesnicemi. Bohužel
-existují porouchané USB systémy, na kterých se ovladač při nahrávání
-zasekne. Obejít je můžete tím, že problémový USB řadič deaktivujete v
-BIOSu základní desky. Jinou možností je zaváděcí parametr
-<userinput>nousb</userinput>, který zabrání zavedení USB modulů,
-i když je příslušný hardware nalezen.
+klávesnice, aby umožnilo instalaci uživatelům s nestandardními USB
+klávesnicemi. Bohužel existují porouchané USB systémy, na kterých se
+ovladač při nahrávání zasekne. Obejít je můžete tím, že problémový USB
+řadič deaktivujete v BIOSu základní desky. Jinou možností je zaváděcí
+parametr <userinput>debian-installer/probe/usb=false</userinput>,
+který zabrání zavedení USB modulů, i když je příslušný hardware
+nalezen.
 
 </para>
   </sect2>
-
-
-
-
-
