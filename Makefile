@@ -221,7 +221,7 @@ $(TYPE)-tree-stamp: $(TYPE)-get_udebs-stamp debian/control
 	echo -n > diskusage-$(TYPE).txt
 	oldsize=0; oldblocks=0; oldcount=0; for udeb in $(UDEBDIR)/*.udeb ; do \
 		pkg=`basename $$udeb` ; \
-		dpkg --force-overwrite --root=$(TREE) --unpack $$udeb ; \
+		dpkg $(DPKG_UNPACK_OPTIONS) --root=$(TREE) --unpack $$udeb ; \
 		newsize=`du -bs $(TREE) | awk '{print $$1}'` ; \
 		newblocks=`du -s $(TREE) | awk '{print $$1}'` ; \
 		newcount=`find $(TREE) -type f | wc -l | awk '{print $$1}'` ; \
@@ -305,7 +305,7 @@ ifeq ($(TYPE),floppy)
 	mkdir -p $(DRIVEREXTRASDPKGDIR)/info $(DRIVEREXTRASDPKGDIR)/updates
 	touch $(DRIVEREXTRASDPKGDIR)/status $(DRIVEREXTRASDPKGDIR)/available
 	for udeb in $(EXTRAUDEBDIR)/*.udeb ; do \
-		dpkg --force-overwrite --root=$(DRIVEREXTRASDIR) --unpack $$udeb; \
+		dpkg $(DPKG_UNPACK_OPTIONS) --root=$(DRIVEREXTRASDIR) --unpack $$udeb; \
 	done
 endif
 
