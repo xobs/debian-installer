@@ -314,14 +314,16 @@ boot_floppy_check: floppy_image
 COMPRESSED_SZ=$(shell expr $(shell tar cz $(TREE) | wc -c) / 1024)
 stats: tree
 	@echo
-	@echo System stats
-	@echo ------------
-	@echo Installed udebs: $(UDEBS)
-	@echo Total system size: $(shell du -h -s $(TREE) | cut -f 1)
-	@echo Compresses to: $(COMPRESSED_SZ)k
-	@echo Single Floppy kernel must be less than: ~$(shell expr $(FLOPPY_SIZE) - $(COMPRESSED_SZ) )k
+	@echo "System stats"
+	@echo "------------"
+	@echo "Installed udebs: $(UDEBS)"
+	@echo "Total system size: $(shell du -h -s $(TREE) | cut -f 1)"
+	@echo "             libs: $(shell du -h --exclude=modules -s $(TREE)/lib | cut -f 1)"
+	@echo "   kernel modules: $(shell du -h -s $(TREE)/lib/modules | cut -f 1)"
+	@echo "Compresses to: $(COMPRESSED_SZ)k"
+	@echo "Single Floppy kernel must be less than: ~$(shell expr $(FLOPPY_SIZE) - $(COMPRESSED_SZ) )k"
 	@if [ -e $(TEMP)/.floppy_free_stat ]; then \
-		echo Single net floppy currently has `cat $(TEMP)/.floppy_free_stat` free!; \
+		echo "Single net floppy currently has `cat $(TEMP)/.floppy_free_stat` free!"; \
 	fi
 # Add your interesting stats here.
 
