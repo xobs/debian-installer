@@ -14,9 +14,7 @@ command, and create a new partition of type Apple_Bootstrap using the
 always be the partition map itself.) Then type
 
 <informalexample><screen>
-
-hformat /dev/<replaceable>sda2</replaceable>
-
+$ hformat /dev/<replaceable>sda2</replaceable>
 </screen></informalexample>
 
 Take care that you use the correct device name for your USB stick. The
@@ -40,13 +38,11 @@ so you will have to install <command>yaboot</command> by hand using the
 <classname>hfsutils</classname> tools. Type
 
 <informalexample><screen>
-
-hmount /dev/sda2
-hcopy -r /usr/lib/yaboot/yaboot :
-hattrib -c UNIX -t tbxi :yaboot
-hattrib -b :
-humount
-
+$ hmount /dev/sda2
+$ hcopy -r /usr/lib/yaboot/yaboot :
+$ hattrib -c UNIX -t tbxi :yaboot
+$ hattrib -b :
+$ humount
 </screen></informalexample>
 
 Again, take care that you use the correct device name. The partition
@@ -95,7 +91,6 @@ The <filename>yaboot.conf</filename> configuration file should
 contain the following lines:
 
 <informalexample><screen>
-
 default=install
 root=/dev/ram
 
@@ -107,7 +102,6 @@ image=/vmlinux
         initrd-size=10000
         append="devfs=mount,dall --"
         read-only
-
 </screen></informalexample>
 
 Please note that the <userinput>initrd-size</userinput> parameter

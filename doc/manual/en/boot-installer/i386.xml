@@ -87,9 +87,7 @@ moment (and optionally select the `safe mode command prompt only'
 option).  Enter the subdirectory for the flavor you chose, e.g.,
 
 <informalexample><screen>
-
 cd c:\install
-
 </screen></informalexample>.  
 
 Next, execute <command>install.bat</command>.
@@ -156,13 +154,11 @@ Here is a <filename>/etc/lilo.conf</filename> example:
 </para><para>
 
 <informalexample><screen>
-
 image=/boot/newinstall/vmlinuz
        label=newinstall
        initrd=/boot/newinstall/initrd.gz
        root=/dev/ram0
-       append="devfs=mount,dall ramdisk_size=17000"
-
+       append="devfs=mount,dall ramdisk_size=12000"
 </screen></informalexample>
 
 For more details, refer to the
@@ -180,16 +176,19 @@ directory (sometimes in the <filename>/boot/boot/grub/</filename>),
 add the following lines:
 
 <informalexample><screen>
-
 title  New Install
-kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram0 devfs=mount,dall ramdisk_size=17000
+kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram0 ramdisk_size=12000
 initrd (hd0,0)/boot/newinstall/initrd.gz
-
 </screen></informalexample>
 
-and reboot. Note that the value of the <userinput>ramdisksize</userinput>
-may need to be adjusted for the size of the initrd image. 
-From now on, there should be no difference between <command>GRUB</command>
+and reboot. If the boot fails, you can try adding
+<userinput>devfs=mount,dall</userinput> to the <quote>kernel</quote> line.
+
+</para><para>
+
+Note that the value of the <userinput>ramdisk_size</userinput> may need to be
+adjusted for the size of the initrd image.
+From here on, there should be no difference between <command>GRUB</command>
 or <command>LILO</command>.
 
 </para>

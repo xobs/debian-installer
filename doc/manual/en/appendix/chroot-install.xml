@@ -43,9 +43,7 @@ ext3 file system on partition <filename>/dev/hda6</filename> (that's
 our example root partition):
 
 <informalexample><screen>
-
- $ mke2fs -j /dev/hda6
-
+# mke2fs -j /dev/hda6
 </screen></informalexample>
 
 To create an ext2 file system instead, omit <userinput>-j</userinput>.
@@ -56,14 +54,10 @@ Initialize and activate swap (substitute the partition number for
 your intended Debian swap partition):
 
 <informalexample><screen>
-
- $ mkswap /dev/hda5
- $ sync; sync; sync
- $ swapon /dev/hda5
-
+# mkswap /dev/hda5
+# sync; sync; sync
+# swapon /dev/hda5
 </screen></informalexample>
-
-</para><para>
 
 Mount one partition as <filename>/mnt/debinst</filename> (the
 installation point, to be the root (<filename>/</filename>) filesystem
@@ -71,10 +65,8 @@ on your new system). The mount point name is strictly arbitrary, it is
 referenced later below.
 
 <informalexample><screen>
-
- $ mkdir /mnt/debinst
- $ mount /dev/hda6 /mnt/debinst
-
+# mkdir /mnt/debinst
+# mount /dev/hda6 /mnt/debinst
 </screen></informalexample>
 
 </para>
@@ -103,12 +95,9 @@ Or, you can use the following procedure to install it
 manually. Make a work folder for extracting the .deb into:
 
 <informalexample><screen>
-
- $ mkdir work
- $ cd work
-
+# mkdir work
+# cd work
 </screen></informalexample>
-</para><para>
 
 The <command>debootstrap</command> binary is located in the Debian
 archive (be sure to select the proper file for your
@@ -119,11 +108,9 @@ binary files from it. You will need to have root privileges to install
 the binaries.
 
 <informalexample><screen>
-
- $ ar -xf debootstrap_0.X.X_arch.deb
- $ cd /
- $ zcat &#60; /full-path-to-work/work/data.tar.gz | tar xv
-
+# tar -xf debootstrap_0.X.X_arch.deb
+# cd /
+# gzip -dc /full-path-to-work/work/data.tar.gz | tar xv
 </screen></informalexample>
 
 </para>
@@ -164,29 +151,24 @@ in the <command>debootstrap</command> command:
 <userinput>sparc</userinput>.
 
 <informalexample><screen>
-
- $ /usr/sbin/debootstrap --arch ARCH &releasename; \
+# /usr/sbin/debootstrap --arch ARCH &releasename; \
      /mnt/debinst http://http.us.debian.org/debian
-
 </screen></informalexample>
 
 </para>
-
   </sect2>
 
   <sect2>
   <title>Configure The Base System</title>
-
 <para>
 
 Now you've got a real Debian system, though rather lean, on disk.
 <command>Chroot</command> into it:
 
 <informalexample><screen>
-
- $ chroot /mnt/debinst /bin/bash
-
+# chroot /mnt/debinst /bin/bash
 </screen></informalexample>
+
 </para>
 
    <sect3>
@@ -196,17 +178,12 @@ Now you've got a real Debian system, though rather lean, on disk.
 You need to create <filename>/etc/fstab</filename>.
 
 <informalexample><screen>
-
- # editor /etc/fstab
-
+# editor /etc/fstab
 </screen></informalexample>
-
-</para><para>
 
 Here is a sample you can modify to suit:
 
 <informalexample><screen>
-
 # /etc/fstab: static file system information.
 #
 # file system    mount point   type    options                  dump pass
@@ -223,22 +200,15 @@ proc             /proc         proc    defaults                 0    0
 /dev/XXX         /var          ext2    rw,nosuid,nodev          0    2
 /dev/XXX         /usr          ext2    rw,nodev                 0    2
 /dev/XXX         /home         ext2    rw,nosuid,nodev          0    2
-
 </screen></informalexample>
-
-</para><para>
 
 Use <userinput>mount -a</userinput> to mount all the file systems you
 have specified in your <filename>/etc/fstab</filename>, or to mount
 file systems individually use:
 
 <informalexample><screen>
-
- # mount /path  # e.g.:  mount /usr
-
+# mount /path   # e.g.: mount /usr
 </screen></informalexample>
-
-</para><para>
 
 You can mount the proc file system multiple times and to arbitrary
 locations, though /proc is customary. If you didn't use
@@ -246,26 +216,20 @@ locations, though /proc is customary. If you didn't use
 continuing:
 
 <informalexample><screen>
-
- # mount -t proc proc /proc
-
+# mount -t proc proc /proc
 </screen></informalexample>
 
 </para>
-
    </sect3>
 
    <sect3>
    <title>Configure Keyboard</title>
-
 <para>
 
 To configure your keyboard:
 
 <informalexample><screen>
-
- # dpkg-reconfigure console-data
-
+# dpkg-reconfigure console-data
 </screen></informalexample>
 
 </para>
@@ -281,12 +245,8 @@ To configure networking, edit
 <filename>/etc/hostname</filename>.
 
 <informalexample><screen>
-
- # editor /etc/network/interfaces 
-
+# editor /etc/network/interfaces 
 </screen></informalexample>
-
-</para><para>
 
 Here are some simple examples from
 <filename>/usr/share/doc/ifupdown/examples</filename>:
@@ -319,40 +279,26 @@ iface lo inet loopback
 #     gateway 192.168.0.1
 </screen></informalexample>
 
-</para><para>
-
 Enter your nameserver(s) and search directives in
 <filename>/etc/resolv.conf</filename>:
 
 <informalexample><screen>
-
- # editor /etc/resolv.conf
-
+# editor /etc/resolv.conf
 </screen></informalexample>
-
-</para><para>
 
 A simple <filename>/etc/resolv.conf</filename>:
 
 <informalexample><screen>
-
-# search hqdom.local\000
-# nameserver 10.1.1.36
-# nameserver 192.168.9.100
-
+search hqdom.local\000
+nameserver 10.1.1.36
+nameserver 192.168.9.100
 </screen></informalexample>
-
-</para><para>
 
 Enter your system's host name (2 to 63 characters):
 
 <informalexample><screen>
-
- # echo DebianHostName &#62; /etc/hostname
-
+# echo DebianHostName &gt; /etc/hostname
 </screen></informalexample>
-
-</para><para>
 
 If you have multiple network cards, you should arrange the names of
 driver modules in the <filename>/etc/modules</filename> file into the
@@ -364,17 +310,15 @@ interface name (eth0, eth1, etc.) that you expect.
 
    <sect3>
    <title>Configure Timezone, Users, and APT</title>
-
 <para>
 
 Set your timezone, add a normal user, and choose your <command>apt</command>
 sources by running
 
 <informalexample><screen>
-
- # /usr/sbin/base-config new
-
+# /usr/sbin/base-config new
 </screen></informalexample>
+
 </para>
    </sect3>
 
@@ -386,10 +330,8 @@ To configure your locale settings to use a language other than
 English, install the locales support package and configure it:
 
 <informalexample><screen>
-
- # apt-get install locales
- # dpkg-reconfigure locales
-
+# apt-get install locales
+# dpkg-reconfigure locales
 </screen></informalexample>
 
 NOTE: Apt must be configured before, ie. during the base-config phase.
@@ -402,26 +344,19 @@ please consult the appropriate localization HOWTO.
 
   <sect2>
   <title>Install a Kernel</title>
-
 <para>
 
 If you intend to boot this system, you probably want a Linux kernel
 and a boot loader. Identify available pre-packaged kernels with
 
 <informalexample><screen>
-
- # apt-cache search kernel-image
-
+# apt-cache search kernel-image
 </screen></informalexample>
-
-</para><para>
 
 Then install your choice using its package name.
 
 <informalexample><screen>
-
- # apt-get install kernel-image-2.X.X-arch-etc
-
+# apt-get install kernel-image-<replaceable>2.X.X-arch-etc</replaceable>
 </screen></informalexample>
 
 </para>
@@ -452,7 +387,6 @@ edit it there. After you are done editing, call lilo (remember it will use
 Here is a basic <filename>/etc/lilo.conf</filename> as an example:
 
 <informalexample><screen>
-
 boot=/dev/hda6
 root=/dev/hda6
 install=/boot/boot-menu.b
@@ -460,7 +394,6 @@ delay=20
 lba32
 image=/vmlinuz
 label=Debian
-
 </screen></informalexample>
 
 </para><para arch="powerpc">
@@ -478,7 +411,6 @@ use <filename>yaboot.conf</filename> relative to the system you call it from).
 Here is a basic <filename>/etc/yaboot.conf</filename> as an example:
 
 <informalexample><screen>
-
 boot=/dev/hda2
 device=hd:
 partition=6
@@ -487,7 +419,6 @@ magicboot=/usr/lib/yaboot/ofboot
 timeout=50
 image=/vmlinux
 label=Debian
-
 </screen></informalexample>
 
 On some machines, you may need to use <userinput>ide0:</userinput> 
