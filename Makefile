@@ -113,7 +113,7 @@ APT_GET=apt-get --assume-yes \
 	-o Dir::Cache=$(CWD)$(APTDIR)/cache
 
 # Get the list of udebs to install. Comments are allowed in the lists.
-UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE) `if [ -d lists/$(architecture) ]; then echo lists/$(architecture); fi` | sed 's/$${kernel:Version}/$(KVERS)/g' | sed 's/$${kernel:Flavour}/$(FLAVOUR)/g') $(EXTRAS)
+UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE) `if [ -d lists/$(architecture) ]; then echo lists/$(architecture)/$(TYPE); fi` | sed 's/$${kernel:Version}/$(KVERS)/g' | sed 's/$${kernel:Flavour}/$(FLAVOUR)/g') $(EXTRAS)
 
 DPKGDIR=$(TREE)/var/lib/dpkg
 TEMP=./tmp
