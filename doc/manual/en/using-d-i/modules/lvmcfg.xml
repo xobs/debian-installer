@@ -47,6 +47,43 @@ volume groups (VG)</guimenuitem> menu. After that, you should create
 logical volumes on the top of volume groups from the menu
 <guimenuitem>Modify logical volumes (LV)</guimenuitem>.
 
+<note arch="powerpc"><para> 
+
+There is no widely accepted standard to identify partitions containing
+LVM data on Apple Power Macintosh hardware. On this particular
+hardware, the above procedure for creating physical volumes and volume
+groups will not work. There is a good workaround for this limitation,
+provided you are familiar with the underlying LVM tools.
+
+</para><para>
+ 
+To install using logical volumes on Power Macintosh hardware you
+should create all the disk partitions for your logical volumes as
+usual. In the <guimenu>Partition settings</guimenu> menu you should
+choose <menuchoice><guimenu>Use as:</guimenu> <guimenuitem>Do Not
+Use</guimenuitem></menuchoice> for these partitions (you will not be
+offered the option to use the partition as a physical volume). When
+you are done with creating all your partitions, you should start the
+logical volume manager as usual. However, since no physical volumes
+have been created you must now access the command shell available on
+the second virtual terminal (see <xref linkend="shell"/>) and create
+them manually.
+
+</para><para>
+
+Use the <command>pvcreate</command> command at the shell command prompt
+to create a physical volume on each of your chosen partitions. Then use
+the <command>vgcreate</command> command to create each volume group
+you want. You can safely ignore any errors about incorrect metadata
+area header checksums and fsync failures while doing this. When you
+have finished creating all your volume groups, you should go back to
+the first virtual terminal and skip directly the the
+<command>lvmcfg</command> menu items for logical volume
+management. You will see your volume groups and you can create the
+logical volumes you need as usual.
+
+</para></note>
+
 </para><para>
 
 After returning from <command>lvmcfg</command> back to
