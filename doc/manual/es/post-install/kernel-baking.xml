@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 23678 -->
+<!-- original version: 25152 -->
 <!-- Revisado por Steve Langasek -->
 
  <sect1 id="kernel-baking"><title>Compilar un nuevo núcleo</title>
@@ -14,42 +14,36 @@ es útil compilar un nuevo núcleo para:
 <listitem><para>
 
 tratar necesidades especiales de hardware, o conflictos de los mismos con
-núcleos predeterminados
+núcleos predeterminados.
 
 </para></listitem>
 <listitem><para>
 
 tratar hardware u opciones no incluidas en el núcleo predeterminado, como
-APM o SMP
+por ejemplo APM ó SMP.
 
 </para></listitem>
 
-<listitem arch="i386"><para>
-
-Las variantes «compact» y «idepci» no proveen sonido. Mientras que los núcleos
-«vanilla» lo hacen, sin embargo este podría no funcionar por otros motivos.
-
-</para></listitem>
 <listitem><para>
 
 optimizar el núcleo eliminando controladores no usados para acelerar
-el tiempo de arranque
+el tiempo de arranque.
 
 </para></listitem>
 <listitem><para>
 
 usar opciones del núcleo que no estén soportadas por el núcleo
-estándar (como el sistema de cortafuegos para red)
+estándar (como el soporte de valores superiores de memoria).
 
 </para></listitem>
 <listitem><para>
 
-ejecutar un núcleo actualizado o de desarrollo
+ejecutar un núcleo actualizado o de desarrollo.
 
 </para></listitem>
 <listitem><para>
 
-impresionar a sus amigos, probar nuevas cosas
+impresionar a sus amigos, probar nuevas cosas.
 
 </para></listitem>
 </itemizedlist>
@@ -63,10 +57,12 @@ No tenga temor de intentar compilar el núcleo. Es divertido y fructífero.
 
 </para><para>
 
-Para compilar un núcleo a la manera de Debian, necesita algunos paquetes:
+Para compilar un núcleo al <quote>estilo Debian</quote>, 
+necesita algunos paquetes:
 <classname>kernel-package</classname>,
-<classname>kernel-source-&kernelversion;</classname> (la versión mas reciente
-al momento de editar este documento), <classname>fakeroot</classname> y 
+<classname>kernel-source-&kernelversion;</classname> 
+(la versión mas reciente en el momento de editar este documento),
+<classname>fakeroot</classname> y 
 algunos otros que probablemente ya estén instalados (vea 
 <filename>/usr/share/doc/kernel-package/README.gz</filename> para una
 lista completa.
@@ -81,8 +77,8 @@ el fichero de registro del fichero «config» activo para la construcción.
 
 </para><para>
 
-Observe que no <emphasis>tiene</emphasis> que compilar su núcleo «al estilo
-Debian»; pero creemos que usar el sistema de paquetes para
+Observe que no <emphasis>tiene</emphasis> que compilar su núcleo 
+<quote>al estilo Debian</quote>; pero creemos que usar el sistema de paquetes para
 gestionar su núcleo es realmente más seguro y sencillo. De hecho, puede
 obtener las fuentes de su núcleo directamente de Linus en lugar de
 <classname>kernel-source-&kernelversion;</classname>, y aún así usar el método
@@ -97,32 +93,42 @@ breve tutorial.
 
 </para><para>
 
-A partir de ahora, asumiremos que las fuentes de su núcleo se
-encuentran en <filename>/usr/local/src</filename> y que la versión de su
-núcleo es &kernelversion;. Como superusuario, cree un directorio
-dentro de <filename>/usr/local/src</filename> y cambie el propietario del
-mismo a su cuenta de usuario común. Usando su cuenta de usuario común, 
-ubiquese en el directorio donde desee desempaquetar las fuentes del
-núcleo (<userinput>cd /usr/local/src</userinput>), extraiga las fuentes del
-mismo (<userinput>tar xzf /usr/src/kernel-source-&kernelversion;.tar.bz2
-</userinput>), y cámbiese a este directorio (<userinput>cd
-kernel-source-&kernelversion;/</userinput>).  
+A partir de ahora, asumiremos que tiene acceso completo al sistema
+y que va a extraer las fuentes del núcleo en algún lugar de su
+directorio personal<footnote>
+
+<para>
+
+Hay otras ubicaciones donde puede extraer las fuentes del núcleo y
+construir su núcleo a medida, pero ésta es la forma más sencilla ya
+que no require de permisos adicionales.
+
+</para>
+
+</footnote>.  También daremos por supuesto que la versión de su
+núcleo es &kernelversion;. Ubíquese en el directorio 
+donde desee desempaquetar las fuentes del
+núcleo, extraiga las fuentes del
+mismo usando 
+<userinput>tar xjf /usr/src/kernel-source-&kernelversion;.tar.bz2</userinput>
+, y cámbiese al directorio <filename>kernel-source-&kernelversion;</filename>
+que se habrá creado.
 
 </para><para>
 
 Ahora puede configurar su núcleo. Ejecute  
 <userinput>make xconfig</userinput> si tiene X11 instalado,
 configurado y ejecutándose, <userinput>make menuconfig</userinput> en 
-otro caso (necesitará instalar <classname>ncurses-dev</classname>). Tómese 
+otro caso (necesitará instalar <classname>libncurses5-dev</classname>). Tómese 
 su tiempo para leer la ayuda en línea y escoja cuidadosamente. Cuando 
 tenga duda, a menudo es mejor incluir el controlador de dispositivo
 (el software que maneja el hardware periférico, como tarjetas Ethernet, 
 controladoras SCSI, etc.) del que no está seguro. Tenga cuidado: Otras 
 opciones no relacionadas con un hardware específico deberían dejarse en 
 su valor predeterminado si no las comprende. No olvide seleccionar 
-«Kernel module loader» (para la autocarga de módulos) en  
-«Loadable module support» (éste no es elegido por omisión).  Si no es 
-incluido, su instalación Debian experimentará problemas.
+<quote>Kernel module loader</quote> (para la autocarga de módulos) en  
+<quote>Loadable module support</quote> (éste no es elegido por omisión). 
+Su instalación Debian experimentará problemas si no incluye éste.
 
 </para><para>
 
@@ -133,10 +139,13 @@ Limpie el árbol de fuentes y reinicie los parámetros de
 </para><para>
 
 Ahora, compile el núcleo: <userinput>fakeroot /usr/sbin/make-kpkg
---revision=custom.1.0 kernel_image</userinput>. Por supuesto, el número de la
-versión «1.0» puede cambiarse por el que quiera; éste sólo es el número 
+--revision=custom.1.0 kernel_image</userinput>. Por supuesto, puede 
+cambiar el número de la versión <quote>1.0</quote>
+por cualquier otro valor; éste sólo es el número 
 de versión que usará para seguir la pista a los núcleos que haya 
-construido. La compilación del núcleo puede tomar un buen
+construido. Igualmente puede sustituir <quote>custom</quote> por
+cualquier otra palabra (por ejemplo, un nombre de máquina).
+La compilación del núcleo puede tomar un buen
 tiempo, dependiendo de la potencia de su máquina.
 
 </para><para condition="supports-pcmcia">
@@ -155,7 +164,7 @@ personalizado como cualquier paquete. Como superusuario, ejecute
 <userinput>dpkg -i ../kernel-image-&kernelversion;-<replaceable>subarquitectura</replaceable>_custom.1.0_&architecture;.deb</userinput>.
 La parte <replaceable>subarquitectura</replaceable> es una sub-arquitectura 
 opcional, 
-<phrase arch="i386"> como "i586", </phrase> dependiendo de las opciones 
+<phrase arch="i386"> como <quote>i586</quote>, </phrase> dependiendo de las opciones 
 que haya establecido en el núcleo. 
 <userinput>dpkg -i kernel-image...</userinput> 
 instalará el núcleo, junto con otros ficheros de soporte. Por ejemplo, 
@@ -182,5 +191,6 @@ la excelente documentación en
 <filename>/usr/share/doc/kernel-package</filename>.
 
 </para>
-  </sect2>
- </sect1>
+
+</sect2>
+</sect1>
