@@ -20,7 +20,11 @@ cd $build_path
 
 stylesheet_dir="$build_path/stylesheets"
 stylesheet_profile="$stylesheet_dir/style-profile.xsl"
-stylesheet_html="$stylesheet_dir/style-html.xsl"
+if [ ! "$web_build" ]; then
+    stylesheet_html="$stylesheet_dir/style-html.xsl"
+else
+    stylesheet_html="$stylesheet_dir/style-html-web.xsl"
+fi
 stylesheet_html_single="$stylesheet_dir/style-html-single.xsl"
 stylesheet_fo="$stylesheet_dir/style-fo.xsl"
 stylesheet_dsssl="$stylesheet_dir/style-print.dsl"
@@ -40,6 +44,13 @@ create_profiled () {
     [ -x /usr/bin/xsltproc ] || return 9
 
     echo "Info: creating temporary profiled .xml file..."
+
+    entity_l10n="$entities_path/l10n/$language.ent"
+    entity_master="$entities_path/l10n/master.ent"
+    [ -f "$entity_master" ] || {
+        echo "Error: file '$entity_master' is missing"
+        return 1
+    }
 
     if [ ! "$official_build" ]; then
         unofficial_build="FIXME;unofficial-build"
@@ -64,6 +75,10 @@ create_profiled () {
     echo "<!ENTITY kernelversion \"${kernelversion}\">" >> $dynamic
     echo "<!ENTITY altkernelversion \"${altkernelversion}\">" >> $dynamic
     sed "s:##SRCPATH##:$source_path:" templates/docstruct.ent >> $dynamic
+    # Add translated and language specific entities, if a file for them exists
+    [ -f "$entity_lang" ] && cat $entity_lang >> $dynamic
+    # Add default (English) translatable entities
+    cat $entity_master >> $dynamic
 
     sed "s:##LANG##:$language:g" templates/install.xml.template | \
         sed "s:##TEMPDIR##:$tempdir:g" | \
