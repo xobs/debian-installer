@@ -1,6 +1,9 @@
 #!/bin/sh
 
-languages="en" # cs fr pt_BR ...
+if [ -z "$languages" ]; then
+	# Please add languages only if they build properly.
+	languages="en cs ja" # pt_BR es fr
+fi
 
 if [ -z "$architectures" ]; then
 	architectures="alpha arm hppa i386 ia64 m68k mips mipsel powerpc s390 sparc"
@@ -14,7 +17,7 @@ fi
 
 for lang in $languages; do
     for arch in $architectures; do
-	if [ -z "$noarchdir" ]; then
+	if [ -n "$noarchdir" ]; then
 		destsuffix="$lang"
 	else
 		destsuffix="${lang}.${arch}"
