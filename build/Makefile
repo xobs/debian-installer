@@ -795,7 +795,7 @@ shell_%:
 	$(submake) _shell
 
 .PHONY: _shell
-_shell: $(TARGET)
+_shell:
 	@$(submake) tree_mount; \
 	sudo chroot $(TREE) bin/sh; \
 	$(submake) tree_umount
