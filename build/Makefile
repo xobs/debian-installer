@@ -328,7 +328,7 @@ ifdef KERNELVERSION
 			mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
 			$(shell ./choose-subarch-env $(VERSION)) depmod $$sysmap_opt -q -a -b $(TREE)/ $(VERSION); \
 		fi; \
-		[ -z "$$sysmap_name" ] || mv $$sysmap_name $(TEMP))
+		[ -z "$$sysmap_name" ] || mv $$sysmap_name $(TEMP);)
 
 	# These files depmod makes are used by hotplug, and we shouldn't
 	# need them, yet anyway.
