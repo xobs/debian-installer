@@ -4,8 +4,8 @@
  7f³70 This is the Debian installation system, built on ${BUILD_DATE}.                 ³10
  7f³70                                                                            ³10
  7f³70 Use the arrow keys to select a menu item and then Enter to select it.      ³10
- 7f³70 Use the function keys for help.                                            ³10
- 7f³70                                                                            ³10
+ 7f³70 Use the function keys for help. On a serial console, use Ctrl-F and the    ³10
+ 7f³70 function key number instead.                                               ³10
  7f³70                                                                            ³10
  7f³70 7eBeware that this is an OS installer, and misuse can result in the loss of  70³10
  7f³70 7eany data currently on your disks.                                          70³10
