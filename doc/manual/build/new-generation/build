@@ -1,0 +1,93 @@
+#!/bin/sh
+
+if [ "$1" = "--help" ]; then
+    echo "$0: Generate the HTML version of the Debian Installer Manual"
+    echo "Usage: $0 [arch] [lang] [format]"
+    exit 1
+fi
+
+arch=${1:-i386}
+language=${2:-en}
+format=${3:-html}
+
+## Function to check result of executed programs and exit on error
+checkresult () {
+    if [ ! "$1" = "0" ]; then
+	exit $1
+    fi
+}
+
+create_profiled () {
+
+    if [ ! "$official_build" ]; then
+	unofficial_build="FIXME;unofficial-build"
+    else
+	unofficial_build=""
+    fi
+
+    if [ ! -f arch-options/${arch} ]
+    then
+        echo "Unknown architecture ${arch}! Please elaborate."
+        exit 1 ;
+    fi
+
+    . arch-options/${arch}
+
+    cond="$fdisk;$network;$boot;$smp;$other;$goodies;$unofficial_build"
+
+    echo "<!-- arch- and lang-specific non-profilable entities -->" > $dynamic
+    echo "<!ENTITY langext \".${language}\">" >> $dynamic
+    echo "<!ENTITY architecture \"${arch}\">" >> $dynamic
+    echo "<!ENTITY kernelversion \"${kernelversion}\">" >> $dynamic
+    echo "<!ENTITY altkernelversion \"${altkernelversion}\">" >> $dynamic
+
+    sed "s/\"en/\"..\/..\/..\/${language}/" entities/docstruct.ent >> $dynamic
+
+    sed "s/##LANG##/${language}/" templates/install.xml.template > $tempdir/install.${language}.xml
+
+    $xsltprocessor \
+    --xinclude \
+    --stringparam profile.arch "$archspec" \
+    --stringparam profile.condition "$cond" \
+    --output $tempdir/install.${language}.profiled.xml \
+    $stylesheet_profile \
+    $tempdir/install.${language}.xml
+
+    checkresult $?
+
+}
+
+create_html () {
+
+    $xsltprocessor \
+	--xinclude \
+	--stringparam chunker.output.encoding "UTF-8" \
+	--stringparam base.dir ./${language}.${arch}.html/ \
+	$stylesheet_html \
+	$tempdir/install.${language}.xml
+    checkresult $?
+
+}
+
+## First we define some paths to various xsl stylesheets
+
+stylesheet_dir="stylesheets"
+stylesheet_profile="$stylesheet_dir/style-profile.xsl"
+stylesheet_html="$stylesheet_dir/style-html.xsl"
+stylesheet_fo="$stylesheet_dir/style-fo.xsl"
+
+xsltprocessor=/usr/bin/xsltproc
+
+tempdir=${language}.temp
+mkdir -p $tempdir
+
+dynamic="${tempdir}/dynamic.ent"
+
+create_profiled
+
+case ${format} in
+
+    html) create_html;;
+    *) echo "Format unknown or not supported yet!";;
+
+esac
