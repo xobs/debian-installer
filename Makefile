@@ -36,6 +36,9 @@ FLOPPY_SIZE=1440
 # The floppy image to create.
 FLOPPY_IMAGE=$(DEST)/$(TYPE)-$(FLOPPY_SIZE).img
 
+# May be needed in rare cases.
+#SYSLINUX_OPTS=-s
+
 # Directory apt uses for stuff.
 APTDIR=apt
 
@@ -272,7 +275,7 @@ $(FLOPPY_IMAGE):
 # This number is used later for stats. There's gotta be a better way.
 	df -h $(TMP_MNT) | tail -1 | sed 's/[^ ]* //' | awk 'END { print $$3 }' > $(TEMP)/.floppy_free_stat
 	umount $(TMP_MNT)
-	syslinux $(FLOPPY_IMAGE)
+	syslinux $(SYSLINUX_OPTS) $(FLOPPY_IMAGE)
 
 # Write image to floppy
 boot_floppy: floppy_image
@@ -281,7 +284,7 @@ boot_floppy: floppy_image
 
 # If you're paranoid, you can check the floppy to make sure it wrote
 # properly.
-boot_floppy_check:
+boot_floppy_check: floppy_image
 	cmp /dev/fd0 $(FLOPPY_IMAGE)
 
 COMPRESSED_SZ=$(shell expr $(shell tar cz $(TREE) | wc -c) / 1024)
@@ -309,6 +312,5 @@ daily_build:
 	scp -q -B $(DEST)/log $(UPLOAD_DIR)
 	scp -q -B $(DEST)/$(TYPE)-debian-installer.tar.gz \
 		$(UPLOAD_DIR)/$(TYPE)-debian-installer-$(shell date +%Y%m%d).tar.gz
-	rm -f log
 
 .PHONY: tree
