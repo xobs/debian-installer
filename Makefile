@@ -573,7 +573,7 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 
 $(TEMP_BOOT): $(TEMP_INITRD) arch_boot
 
-$(TEMP_DEBIAN_CD_INFO): arch_debian_cd_info
+$(TEMP_BOOT_SCREENS): arch_boot_screens
 
 # raw kernel images
 $(KERNEL): $(STAMPS)tree-$(targetstring)-stamp
@@ -588,12 +588,12 @@ $(ROOT): $(TEMP_INITRD) arch_root
 	install -m 644 -D $(TEMP_ROOT)$(GZIPPED) $@
 
 # miniature ISOs with only a boot image
-$(MINIISO): $(TEMP_BOOT) arch_miniiso
+$(MINIISO): $(TEMP_INITRD) arch_miniiso
 	install -m 644 -D $(TEMP_MINIISO) $@
 
 # various kinds of information, for use on debian-cd isos.
-$(DEBIAN_CD_INFO): $(TEMP_DEBIAN_CD_INFO)
-	(cd $(TEMP_DEBIAN_CD_INFO); tar cz .) > $@
+$(DEBIAN_CD_INFO): $(TEMP_BOOT_SCREENS)
+	(cd $(TEMP_BOOT_SCREENS); tar cz .) > $@
 
 # Other images, e.g. driver floppies. Those are simply handled as flavours
 $(EXTRA): $(TEMP_EXTRA)
@@ -713,7 +713,6 @@ endif
 endif
 	@echo "Disk usage per package:"
 	@sed 's/^/  /' < $(TEMP)/diskusage.txt
-
 
 #
 # demo target handling.
