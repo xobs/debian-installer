@@ -1,0 +1,227 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: network-cards.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+
+ <sect1 id="network-cards">
+ <title>Network Connectivity Hardware</title>
+
+<para arch="i386">
+
+<!-- last updated for kernel-image_2.0.36-2 -->
+
+Some network interface cards (NICs) are not supported by most Debian
+installation disks, such as AX.25 cards and protocols; 3Com EtherLink
+Plus (3c505) and EtherLink16 (3c507); NI5210 cards; generic NE2100
+cards; NI6510 and NI16510 EtherBlaster cards; SEEQ 8005 cards;
+Schneider &amp; Koch G16 cards; Ansel Communications EISA 3200;
+Winbond-840 based cards (eg. Realtek-100A), some new Tulip based cards
+and the Zenith Z-Note built-in network card. These network cards are
+supported by the "bf2.4" flavor: Winbond-840 based cards, newer Tulip
+based cards, National Semiconductor DP8381x/DP8382x series and
+Sundance ST201 "Alta".  Microchannel (MCA) network cards are not
+supported by the standard installation system, but see 
+<ulink url="&url-linux-mca;">Linux on MCA</ulink> for some (old)
+instructions, and the 
+<ulink url="&url-linux-mca-discussion;">Linux MCA discussion archives</ulink>.
+FDDI networks are also not supported by the installation disks, both
+cards and protocols. You can create a custom kernel which supports an
+otherwise unsupported card and then substitute in the installer (see
+<xref linkend="rescue-replace-kernel"/>).
+
+</para><para arch="i386">
+
+As for ISDN, the D-channel protocol for the (old) German 1TR6 is not 
+supported; Spellcaster BRI ISDN boards are also not supported by the
+&d-i;.
+
+</para><para arch="i386">
+
+Sound devices are not supported by default. But as already mentioned above:
+if you want to use your own kernel please go to 
+<xref linkend="kernel-baking"/> for further information.
+
+</para>
+
+<para arch="m68k">
+
+Any network interface card (NIC) supported by the Linux kernel should
+also be supported by the boot disks.  You may need to load your
+network driver as a module.  Again, see 
+<ulink url="&url-m68k-faq;"></ulink> for complete details. 
+
+</para>
+
+<para arch="sparc">
+
+The following network interface cards (NICs) are supported from the bootable
+kernel directly:
+
+<itemizedlist>
+ <listitem><para>
+
+Sun LANCE
+ 
+
+</para></listitem>
+ <listitem><para>
+
+Sun Happy Meal
+ 
+
+</para></listitem>
+</itemizedlist>
+
+</para><para arch="sparc">
+
+The following network interface cards are supported as modules.  They
+can be enabled once the drivers are installed during the setup.
+However, due to the magic of OpenPROM, you still should be able to
+boot from these devices:
+
+<itemizedlist>
+ <listitem><para>
+
+Sun BigMAC
+ 
+
+</para></listitem>
+ <listitem><para>
+
+Sun QuadEthernet
+
+</para></listitem>
+ <listitem><para>
+
+MyriCOM Gigabit Ethernet
+
+</para></listitem>
+</itemizedlist>
+
+</para><para arch="alpha">
+
+Any network interface card (NIC) supported by the Linux kernel should
+also be supported by the boot disks.  Support for the built-in DECChip
+(Tulip) Ethernet on many Alpha models is compiled directly into the
+kernel. For other cards, you may need to load your network driver as a
+module.
+
+</para><para arch="powerpc"> 
+
+Any network interface card (NIC) supported by the Linux kernel should
+also be supported by the boot disks.  You may need to load your
+network driver as a module.
+
+</para><para arch="hppa">
+
+Any network interface card (NIC) supported by the Linux kernel should
+also be supported by the boot disks.  You may need to load your
+network driver as a module.
+
+</para><para arch="mips">
+
+Any network interface card (NIC) supported by the Linux kernel should
+also be supported by the boot disks.  You may need to load your
+network driver as a module.
+
+</para><para arch="mipsel">
+
+Due to kernel limitations only the onboard network interfaces on
+DECstations are supported, TurboChannel option network cards currently
+do not work.
+
+</para><para arch="s390">
+
+Any network interface card (NIC) supported by the Linux kernel are
+also be supported by the boot disks.  All network drivers are compiled
+as modules so you need to load one first during the initial network
+setup. The list of supported network devices is:
+
+<itemizedlist>
+ <listitem><para>
+
+Channel to Channel (CTC) or ESCON connection (real or emulated)
+ 
+
+</para></listitem>
+ <listitem><para>
+
+lcs: OSA-2 Token Ring/Ethernet or OSA-Express Fast Ethernet
+          (non-QDIO)
+
+</para></listitem>
+<listitem><para>
+
+Inter-User Communication Vehicle (IUCV) - available for VM
+          guests only
+
+</para></listitem>
+<listitem><para>
+
+qeth: OSA-Express in QDIO mode / HiperSockets - this requires
+a second initrd with the OCO modules from 
+<ulink url="http://oss.software.ibm.com/developerworks/opensource/linux390/index.shtml">developerWorks</ulink>. 
+Please read <xref linkend="ipl-tape"/> for information how to get or
+create such a second initrd.
+
+</para></listitem>
+</itemizedlist>
+
+</para>
+
+<para arch="arm">
+
+The following network interface cards are supported directly by the
+boot disks on NetWinder and CATS machines:
+
+<itemizedlist>
+ <listitem><para>
+
+    PCI-based NE2000
+ 
+
+</para></listitem>
+ <listitem><para>
+
+    DECchip Tulip
+
+</para></listitem>
+</itemizedlist>
+
+</para><para arch="arm">
+
+The following network interface cards are supported directly by the
+boot disks on RiscPCs:
+
+<itemizedlist>
+ <listitem><para>
+
+    Ether1
+
+</para></listitem>
+ <listitem><para>
+
+    Ether3
+
+</para></listitem>
+ <listitem><para>
+
+    EtherH
+
+</para></listitem>
+</itemizedlist>
+
+</para><para arch="arm">
+
+If your card is mentioned in the lists above, the complete installation
+can be carried out from the network with no need for CD-ROMs or floppy 
+disks.
+
+</para><para arch="arm">
+
+Any other network interface card (NIC) supported by the Linux kernel
+should also be supported by the boot disks.  You may need to load your
+network driver as a module; this means that you will have to install
+the operating system kernel and modules using some other media.  
+
+</para>
+
+ </sect1>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- $Id$ -->
+<!-- original version: 1.3 -->
+
+ <sect1 id="directory-tree">
+ <title>A Árvore de Diretório</title>
+<para>
+
+A &debian; adere ao padrão 
+<ulink url="http://www.pathname.com/fhs/">Filesystem Hierarchy Standard</ulink>
+para nomes de arquivos e diretórios. Este padrão permite que 
+usuários e programas de software saberem a localização de arquivos e 
+diretórios. O diretório do nível raíz é simplesmente representado por 
+uma barra <filename>/</filename>. No nível raíz, 
+todos os sistemas Debian incluem estes diretórios:
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+  <entry>Diretório</entry><entry>Conteúdo</entry>
+</row>
+</thead>
+
+<tbody>
+<row>
+  <entry><filename>bin</filename></entry>
+  <entry>Binários de comandos essenciais</entry>
+</row><row>
+  <entry><filename>boot</filename></entry>
+  <entry>Arquivos estáticos do gerenciador de partida</entry>
+</row><row>
+  <entry><filename>dev</filename></entry>
+  <entry>Arquivos de dispositivos</entry>
+</row><row>
+  <entry><filename>etc</filename></entry>
+  <entry>Configurações de sistema específicas da máquina</entry>
+</row><row>
+  <entry><filename>home</filename></entry>
+  <entry>Diretórios home de usuários</entry>
+</row><row>
+  <entry><filename>lib</filename></entry>
+  <entry>Bibliotecas compartilhadas essenciais e módulos do kernel</entry>
+</row><row>
+  <entry><filename>mnt</filename></entry>
+  <entry>Ponto de montagem para montagem temporária de um sistema de arquivos</entry>
+</row><row>
+  <entry><filename>proc</filename></entry>
+  <entry>Diretório virtual para informações do sistema</entry>
+</row><row>
+  <entry><filename>root</filename></entry>
+  <entry>Diretório Home do usuário root</entry>
+</row><row>
+  <entry><filename>sbin</filename></entry>
+  <entry>Binários essenciais do sistema</entry>
+</row><row>
+  <entry><filename>tmp</filename></entry>
+  <entry>Arquivos temporários</entry>
+</row><row>
+  <entry><filename>usr</filename></entry>
+  <entry>Hierarquia secundária</entry>
+</row><row>
+  <entry><filename>var</filename></entry>
+  <entry>Dados variáveis</entry>
+</row><row>
+  <entry><filename>opt</filename></entry>
+  <entry>Pacotes de aplicativos e programas adicionais</entry>
+</row>
+</tbody></tgroup></informaltable>
+</para>
+
+<para>
+
+O que segue é uma lista de considerações importantes sobre os 
+diretórios e partições.
+
+</para>
+<itemizedlist>
+<listitem><para>
+
+A partição <filename>/</filename> deve sempre fisicamente conter 
+<filename>/etc</filename>, <filename>/bin</filename>,
+<filename>/sbin</filename>, <filename>/lib</filename> e
+<filename>/dev</filename>, caso contrário você não será capaz
+cd inicializar. Tipicamente são necessários 100MB para a partição 
+raíz, mas isso pode variar.
+
+</para></listitem>
+<listitem><para>
+
+<filename>/usr</filename>: todos programas de usuários
+(<filename>/usr/bin</filename>), bibliotecas
+(<filename>/usr/lib</filename>), documentação
+(<filename>/usr/share/doc</filename>), etc., estão neste diretório.
+Esta parte do sistema de arquivos precisa de mais espaço. Você deverá 
+fornecer pelo menos 500MB de espaço em disco. Se desejar instalar 
+mais pacotes, você deverá aumentar a quantidade de espaço neste 
+diretório.
+
+</para></listitem>
+<listitem><para>
+
+<filename>/home</filename>: cada usuário deverá colocar seus dados em um 
+subdiretório dentro deste diretório. O tamanho deste diretório depende
+de quantos usuários estarão usando o sistema e que tipo de arquivos serão
+armazenados em seus diretórios. Dependendo do seu planejamento de uso, 
+deverá ser reservado em média 100MB para cada usuário, mas adapte este
+valor a suas necessidades.
+
+</para></listitem>
+<listitem><para>
+
+<filename>/var</filename>: todos dados variáveis como artigos news,
+e-mails, sites web, o cache do sistema de empacotamento, etc. serão
+colocados sob este diretório. seu tamanho depende mais do 
+uso do seu computador, mas para a maioria das pessoas ele será dedicado
+ao sistema de gerenciamento de pacotes. Se estiver fazendo uma 
+instalação completa ou apenas tudo que a Debian tem a oferecer em uma 
+só seção, algo em torno de 2 ou 3 GB de espaço para
+<filename>/var</filename> deverá ser suficiente. se estiver instalando
+em partes (isto é, instalar serviços e utilitários, seguidos de 
+materiais em texto, então o X, ...), você poderá deixar em torno
+de 300 a 500 MB em <filename>/var</filename>. Caso o espaço em disco 
+rígido seja um premio e não planeja fazer muitas atualizações de 
+sistema, a máquina poderá funcionar com o mínimo de 30 ou 40 megabytes 
+em <filename>/var</filename>.
+
+</para></listitem>
+<listitem><para>
+
+<filename>/tmp</filename>: caso um programa crie dados temporários ele 
+provavelmente irá para <filename>/tmp</filename>. 20 a 50 MB deverá ser 
+o suficiente.
+
+</para></listitem>
+</itemizedlist>
+
+ </sect1>

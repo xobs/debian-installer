@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+<!-- $Id$ -->
+<!-- original version: 1.6 -->
+
+  <sect2 arch="mipsel">
+  <title>Procesory, základní desky a grafické karty</title>
+<para>
+
+Kompletní informace o podporovaných počítačích mips/mipsel najdete
+v <ulink url="&url-mips-howto;">Linux MIPS HOWTO</ulink>.
+V této  sekci popíšeme systémy podporované instalačním systémem.
+
+</para>
+
+   <sect3><title>Procesory/typy počítačů</title>
+
+<para>
+
+Na MIPS s adresováním ,,little endian'' podporuje instalační systém
+Debianu pouze počítače DECstation s procesory R3000 a R4000/R4400,
+viz následující tabulka.
+
+</para><para>
+
+<informaltable>
+<tgroup cols="4">
+<thead>
+<row>
+  <entry>Systém</entry><entry>CPU</entry><entry>označení</entry>
+  <entry>podarchitektura</entry>
+</row>
+</thead>
+
+<tbody>
+<row>
+  <entry>DECstation 5000/1xx</entry>
+  <entry>R3000</entry>
+  <entry>3MIN</entry>
+  <entry>r3k-kn02</entry>
+</row><row>
+  <entry>DECstation 5000/150</entry>
+  <entry>R4000</entry>
+  <entry>3MIN</entry>
+  <entry>r4k-kn04</entry>
+</row><row>
+  <entry>DECstation 5000/240</entry>
+  <entry>R3000</entry>
+  <entry>3MAX+</entry>
+  <entry>r3k-kn02</entry>
+</row><row>
+  <entry>DECstation 5000/260</entry>
+  <entry>R4400</entry>
+  <entry>3MAX+</entry>
+  <entry>r4k-kn04</entry>
+</row><row>
+  <entry>Personal DECstation 5000/xx</entry>
+  <entry>R3000</entry>
+  <entry>Maxine</entry>
+  <entry>r3k-kn02</entry>
+</row><row>
+  <entry>Personal DECstation 5000/50</entry>
+  <entry>R4000</entry>
+  <entry>Maxine</entry>
+  <entry>r4k-kn04</entry>
+</row>
+</tbody></tgroup></informaltable>
+
+</para><para>
+
+Linux/MIPS také funguje na DECstation 5000/200, ale tento model
+zatím není podporován instalačním systémem.
+
+</para>
+   </sect3>
+
+   <sect3><title>Podporované parametry konzoly</title>
+<para>
+
+Sériová konzole je dostupná na všech podporovaných stanicích
+DECstation (9600 bps, 8N1). Abyste sériovou konzoli mohli využít,
+musíte zavést instalační systém s parametrem jádra ,,console=ttySx'',
+kde ,,x'' je číslo sériového portu, ke kterému máte připojený terminál
+(obvykle ,,2'', ale pro Personal DECstation se používá ,,0'').
+Na 3MIN a 3MAX+ (DECstation 5000/1xx, 5000/240 a 5000/260) je lokální
+konzola dostupná přes grafické volby PMAG-BA a PMAGB-B.
+
+</para><para>
+
+Jestliže chcete mít podporu pro další podarchitektury, kontaktujte,
+prosím, diskuzní list
+<ulink url="&url-list-subscribe;">debian-mips mailing list</ulink>.
+
+</para><para>
+
+Pokud máte linuxový systém a chcete jej použít jako sériový terminál,
+můžete zkusit příkaz cu (součást balíku <classname>uucp</classname>).
+Příklad:
+
+<informalexample><screen>
+
+cu -l /dev/ttyS1 -s 9600
+
+</screen></informalexample>
+
+</para><para>
+
+kde parametrem ,,-l'' vyberete požadovaný sériový port a parametrem
+,,-s'' nastavíte rychlost spojení (9600 bitů za sekundu).
+
+</para>
+   </sect3>
+  </sect2>
+
+
+

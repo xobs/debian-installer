@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- $Id$ -->
+<!-- original version: 1.12 -->
+
+  <sect2 arch="i386"><title>Inicializando através de um CD-ROM</title>
+
+&boot-installer-intro-cd.xml;
+
+<para>
+
+Você poderá precisar configurar seu hardware como indicado em
+<xref linkend="boot-dev-select"/>. Então coloque o CD-ROM na 
+unidade de CD e reinicie. O sistema deverá ser iniciado e você verá 
+uma tela com o aviso <prompt>boot:</prompt>. Aqui você poderá
+entrar com argumentos de inicialização ou simplesmente pressionar
+&enterkey;.
+
+</para><para>
+
+<!-- Nós comentaremos a seguinte seção até saber o tamanho exato do conjunto -->
+<!-- 
+
+O CD #1 do conjunto oficial de CD's da Debian para &arch-title; 
+mostrará a linha <prompt>boot:</prompt> na maioria dos hardwares. 
+Pressione <keycap>F3</keycap> para ver a lista de opções do kernel
+disponíveis que poderá usar na inicialização. Você pode apenas digitar
+o nome do tipo de imagem (idepci, vanilla, compact, bf24) no
+aviso de <prompt>boot:</prompt> seguido da tecla &enterkey;.
+
+-->
+
+</para><para>
+
+Caso seu hardware não suporte a inicialização através de múltiplas
+imagens, coloque alguns dos outros CDs da Debian na unidade. Parece
+que a maioria das unidades de CD-ROM SCSI não suportam a inicialização
+através de múltiplas imagens do <command>isolinux</command>, desta forma
+os usuários com seus CD-ROMs scsi deverão tentar o CD2 (vanilla) ou CD3 
+(compact), ou o CD5 (bf2.4). 
+
+</para><para>
+
+Os CDs do 2 ao 5 inicializarão com um "sabor" diferente dependendo
+de qual CD for inserido. Veja <xref linkend="kernel-choice"/> 
+sobre uma discussão sobre os diferentes sabores. Aqui estão a 
+lista de tipos de imagem que cada CD contém:
+
+<variablelist>
+<varlistentry>
+<term>CD 1</term><listitem><para>
+
+Permite a seleção de imagens do kernel para inicialização (o tipo 
+idepci é o padrão caso nenhuma seleção seja feita).
+
+</para></listitem></varlistentry>
+<varlistentry>
+<term>CD 2</term><listitem><para>
+
+Inicializa com o tipo "vanilla".
+
+</para></listitem></varlistentry>
+<varlistentry>
+<term>CD 3</term><listitem><para>
+
+Inicializa com o tipo "compact".
+
+</para></listitem></varlistentry>
+<varlistentry>
+<term>CD 4</term><listitem><para>
+
+Inicializa com o tipo "idepci".
+
+</para></listitem></varlistentry>
+<varlistentry>
+<term>CD 5</term><listitem><para>
+
+Inicializa com o tipo "bf2.4".
+
+</para></listitem></varlistentry>
+
+ </variablelist>
+
+</para><para>
+
+Caso seu sistema não inicialize diretamente a partir do CD-ROM, ou 
+você simplesmente não consegue faze-lo funcionar, não se desespere; 
+você poderá executar o comando 
+<command>E:\install\boot.bat</command> sob or DOS (substitua
+<userinput>E:</userinput> com a letra de unidade que o DOS associa
+com a sua unidade de CD-ROM) para iniciar o processo de instalação. Então,
+vá até <xref linkend="init-config"/>.
+
+</para><para>
+
+Também, se estiver fazendo uma instalação através de uma partição 
+FAT (DOS), você terá a opção de iniciar a instalação através do 
+disco rígido. Veja <xref linkend="install-from-dos"/> para mais detalhes
+sobre a instalação usando este método.
+
+</para>
+  </sect2>
+
+
+
+  <sect2 arch="i386" id="install-from-dos">
+  <title>Inicializando a partir de uma partição DOS</title>
+
+&boot-installer-intro-hd.xml;
+
+<para>
+
+Inicializa no DOS (não no Windows) sem qualquer controlador sendo 
+carregado. Para fazer isto, você terá que pressionar <keycap>F8
+</keycap> no momento certo (e opcionalmente selecionar a opção "Somente
+prompt de comando"). Entre com o subdiretório do tipo de seu sabor 
+que escolheu., e.g.,
+
+<informalexample><screen>
+
+cd c:\current\compact
+
+</screen></informalexample>.  
+
+Então, execute o comando <command>install.bat</command>.
+O kernel irá carregar e iniciar o sistema de instalação.
+
+</para><para>
+
+Note que atualmente existe um problema com o loadlin (#142421) que
+impede que o  <filename>install.bat</filename> seja usado com o 
+tipo de imagem bf2.4. O sintoma deste problema é um erro
+<computeroutput>invalid compressed format</computeroutput>.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="i386" id="boot-initrd">
+  <title>Inicializando através do Linux usando o <command>LILO</command> ou 
+<command>GRUB</command></title>
+<para>
+
+A linha <emphasis>initrd=</emphasis> no
+<filename>/etc/lilo.conf</filename> é o bastante para configurar duas
+coisas essenciais:
+<itemizedlist>
+<listitem><para>
+
+dizer ao <command>LILO</command> para carregar o arquivo 
+de instalação <filename>initrd.gz</filename> como unidade residente
+na memória RAM no momento da inicialização.
+
+</para></listitem>
+<listitem><para>
+
+dizer ao kernel <filename>vmlinuz</filename> para usar este disco 
+RAM como partição raíz.
+
+</para></listitem>
+</itemizedlist>
+
+Aqui está um exemplo do <filename>/etc/lilo.conf</filename>:
+
+</para><para>
+
+<informalexample><screen>
+
+image=/boot/newinstall/vmlinuz
+       label=newinstall
+       initrd=/boot/newinstall/initrd.gz
+
+</screen></informalexample>
+
+As opções <emphasis>root=/dev/hdXYZ</emphasis> no
+<filename>lilo.conf</filename> neste caso serão ignoradas.
+Para mais detalhes, veja as páginas de manual do 
+<citerefentry><refentrytitle>initrd</refentrytitle>
+<manvolnum>4</manvolnum></citerefentry> e do
+<citerefentry><refentrytitle>lilo.conf</refentrytitle>
+<manvolnum>5</manvolnum></citerefentry>. Agora
+execute o <userinput>lilo</userinput> e reinicie.
+
+</para><para>
+O procedimento para fazer o mesmo com o <command>GRUB</command> é parecido. 
+Localize o arquivo <filename>menu.lst</filename> no diretório <filename>/boot/grub/</filename> (algumas vezes em <filename>/boot/boot/grub/</filename>),
+e adicione as seguintes linhas:
+
+<informalexample><screen>
+
+title  Nova Instalação
+kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram ramdisk_size=8192 devfs=mount,dall
+initrd (hd0,0)/boot/newinstall/initrd.gz
+
+</screen></informalexample>
+
+e reinicie. A partir de agora, não deverá haver diferenças entre o
+<command>GRUB</command> ou o <command>LILO</command>.
+
+</para><para>
+
+Você poderá encontrar o mágico <filename>initrd</filename> em funcionamento
+diversas vezes durante a inicialização.
+
+<itemizedlist>
+<listitem><para>
+
+Até mesmo antes do kernel ser carregado, o <command>LILO</command>
+mostrará uma linha muito grande <computeroutput>Loading
+<replaceable>imagelabel</replaceable>......</computeroutput> com muitos
+mais pontos que o normal, mostrando o progresso da carga da imagem
+de disco na memória RAM.
+
+</para></listitem>
+<listitem><para>
+
+Você deverá ver a linha <computeroutput>Controlador de disco na RAM
+inicializado</computeroutput>, perto da inicialização do 
+real time clock, mostrando que o seu kernel suporte a característica
+de disco na memória RAM.
+
+</para></listitem>
+<listitem><para>
+
+Finalmente, caso não veja <computeroutput>RAMDISK: ext2 filesystem
+found at block 0</computeroutput> imediatamente após as checagens
+de partições, será a causa provável do esquecimento da característica
+<filename>initrd</filename> no seu kernel.
+
+</para></listitem>
+</itemizedlist>
+
+</para><para condition="FIXME">
+
+Você agora deverá ver o debian installer sendo executado. Caso
+não utilize nenhuma mídia removível, você precisará checar checar
+se sua conexão de rede está funcionando e deverá faze-lo <emphasis>antes</emphasis>
+de particionar seu disco rígido. Assim talvez você precisará executar o 
+<userinput>insmod</userinput> com alguns módulos adicionais do kernel
+para fazer isto, por exemplo para sua placa de rede. Nesse momento,
+<emphasis>não</emphasis> siga a ordem dos passos sugeridos pelo
+<command>debian-installer</command>. Vá diretamente até <userinput>Montar
+uma Partição já Inicializada</userinput>, e monte a partição
+onde irá armazenar os módulos que descompactou de
+<filename>drivers.tgz</filename> (<xref linkend="files-lilo"></xref>).
+
+</para>
+
+<!-- O ideal é configurar o suporte aos controladores de dispositivos
+em seguida (insmod-ing a partir do disco hard-disk) e não somente 
+a partir de um disquete. Isso evitaria a necessidade de abrir um 
+shell. -->
+
+<para>
+
+Então mude para outro terminal virtual e use um shell (veja 
+<xref linkend="shell"/>) para localizar controladores 
+que montou no diretório <filename>/target</filename>. 
+O <userinput>insmod</userinput> será o comando que você precisa.
+
+</para><para>
+
+Vá até o menu de instalação do Debian Installer <xref linkend="netcfg"/> 
+e execute pelo menos o comando <userinput>ping</userinput> no seu mirror favorito do 
+Debian.
+Parabéns!
+
+</para><para>
+
+Use a opção <userinput>Desmontar uma Partição</userinput> caso tiver 
+montado uma partição no parágrafo anterior, volte com confiança até 
+os passos de particionamento no inicio do 
+<command>debian-installer</command> e siga o procedimento 
+regular, desta vez incluindo sua rede funcional. Neste estágio, 
+é até mesmo possível (com certo risco) remover todas as partições
+do seu disco rígido para realizar uma instalação totalmente limpa.
+O único risco é que seu disco não se torne inicializável por um 
+curto período de tempo.
+
+</para>
+  </sect2>
+
+  <sect2 arch="i386" id="usb-boot">
+  <title>Inicialização Através da Memory Stick USB</title>
+<para>
+
+Nós iremos assumir que preparou tudo de <xref
+linkend="boot-dev-select"/> e <xref linkend="boot-usb-files"/>.  Agora
+apens ligue sua memory stick USB em algum conector USB livre e reinicie
+o computador. O sistema deverá inicializar e você verá o aviso de 
+<prompt>boot:</prompt>. Lá você poderá entrar com argumentos 
+opcionais de partida ou apenas teclar &enterkey;.
+
+</para><para>
+
+Caso seu computador não suporte a inicialização através de dispositivos de 
+memória USB, ainda será possível usar um disquete simples para a partida
+inicial e então usar o USB. Avance até <xref linkend="floppy-boot"/>; o
+kernel em seu disquete de partida deverá detectar sua memória USB stick 
+automaticamente. Então quando perguntado pelo disquete raíz, simplesmente
+tecle &enterkey;. Você deverá ver o &d-i; iniciando.
+</para>
+  </sect2>
+
+
+  <sect2 arch="i386" id="floppy-boot">
+  <title>Inicialização Através de Disquetes</title>
+<para>
+
+Você terá que copiar as imagens de disquetes que precisa e as criadas
+como é mostrado em <xref linkend="create-floppy"/>.
+Caso precise, também poderá modificar o disquete de 
+recuperação/inicialização; veja <xref linkend="rescue-replace-kernel"/>.
+
+</para><para>
+
+Para inicializar a partir de um disquete de instalação, coloque o 
+disquete na unidade de disquetes primária, desligue o seu sistema
+(da forma que deve ser feita) então ligue-o.
+
+</para><para>
+
+Para fazer a instalação a partir de uma unidade LS-120 (versão ATAPI), 
+com um conjunto de disquetes, você precisará especificar uma 
+localização virtual para o dispositivo de disquetes. Isto é feito com 
+o argumento de inicialização <emphasis>root=</emphasis>, apontando
+para o dispositivo ide que será mapeado. Por exemplo, caso tenha
+conectado seu primeiro dispositivo IDE no segundo cabo, você 
+deverá entrar com  <userinput>linux.bin root=/dev/hdc</userinput> no 
+aviso de boot. A instalação a partir do LS120 somente é suportada pelo
+kernel 2.4 e kernels mais novos.
+
+</para><para>
+
+Note que em algumas máquinas, as teclas <keycombo><keycap>Control</keycap>
+<keycap>Alt</keycap> <keycap>Delete</keycap></keycombo> não reiniciam
+de forma adequada sua máquina, desta forma é recomendável um 
+"hard" reboot. Caso estiver instalando a partir de um sistema 
+operacional existente (e.g. de um sistema DOS) você não terá 
+escolha. Caso contrário, faça uma reinicialização rígida quando
+inicializar (reset).
+
+</para><para>
+
+A unidade de disquetes será acessada, e você verá uma tela que 
+é uma introdução ao disquete de recuperação e finaliza com a 
+linha  <prompt>boot:</prompt>.
+
+</para><para>
+
+Você terá que fazer duas coisas no aviso de <prompt>boot:</prompt>. 
+Você pode pressionar as teclas de função <keycap>F1</keycap> até
+<keycap>F10</keycap> para ver algumas páginas de informações úteis
+ou inicializar no sistema.
+
+</para><para>
+
+Informações sobre os parâmetros de inicializações que podem ser úteis
+podem ser encontrados pressionando-se as teclas <keycap>F4</keycap> e <keycap>F5</keycap>. 
+Se adicionar qualquer outro parâmetro a linha de comando boot, tenha
+certeza de digitar o método de inicialização (o padrão é
+<userinput>linux</userinput>) e um espaço antes do primeiro parâmetro (e.g.,
+<userinput>linux floppy=thinkpad</userinput>). Caso você somente pressione enter &enterkey;,
+será a mesma coisa do que digitar <userinput>linux</userinput> 
+sem qualquer parâmetro especial.
+
+</para><para>
+
+Assim que pressionar a tecla &enterkey;, você deverá ver a mensagem
+<computeroutput>Loading...</computeroutput>, seguido de
+<computeroutput>Uncompressing Linux...</computeroutput>, e
+então uma tela cheia de informações sobre o hardware encontrado
+em seu sistema. Mais informações sobre esta fase do processo
+de inicialização pode ser encontrada mais abaixo em 
+<xref linkend="kernel-msgs"/>.
+
+</para><para>
+
+Após inicializar a partir do disquete de inicialização, o disquete 
+raíz será solicitado. Insira o disquete raíz e pressione
+a tecla &enterkey;, e seu conteúdo será carregado para a memória. 
+O programa de instalação <command>debian-installer</command> será 
+automaticamente carregado.
+
+</para>
+  </sect2>
+
+  <sect2 arch="i386" id="boot-tftp"><title>Inicialização com o TFTP</title>
+ 
+&boot-installer-intro-net.xml;
+ 
+<para>
+Existem vários métodos de inicializar através de TFTP na plataforma i386
+</para>
+
+<sect3><title>etherboot</title>
+<para>
+O <ulink url="http://www.etherboot.org">projeto etherboot</ulink>
+oferece disquete de partida e até mesmo roms de inicialização que 
+fazem inicialização via TFTP.
+oferece disquetes de partida e até mesmo memórias rom de inicialização que fazem 
+inicialização via TFTP.
+</para>
+</sect3>
+
+<sect3><title>Placa de Interface de Rede com o bootROM de rede</title>
+<para>
+Pode ser que sua placa de rede tenha a funcionalidad ede 
+inicialização via TFTP.
+</para><para condition="FIXME">
+Conte-nos na <email>&email-debian-boot-list;</email> (em ingles) como fez para 
+gerencia-lo. Leia este documento para mais informações.
+</para>
+</sect3>
+
+<sect3><title>Placas de Rede e Placas mãe que suportam PXE</title>
+<para>
+Pode ser que sua placa de rede ou placa mãe tenham a funcionaliade 
+de PXE.
+Que é uma reimplamentação da <trademark class="trade">Intel</trademark> do
+protocolo TFTP.
+</para><para condition="FIXME">
+Conte-nos na <email>&email-debian-boot-list;</email> (em ingles) como fez isto.
+Leia mais sobre como fazer isto neste documento.
+
+<!-- from #debian-boot 2004-03-13
+06:37 -!- SuperQ [ben@trogdor.likes.to.burninate.net] has joined #debian-boot
+06:38 < SuperQ> anyone done much with d-i on pxe boot?
+06:39 < SuperQ> I got it all setup, daily build from sjogren's files
+06:39 < joshk> yes, it works
+06:39 < SuperQ> "Warning: unable to open an initial console."
+06:39 < SuperQ> Kernel panic: Attempted to kill init!
+06:39 < joshk> pass devfs=mount to the kernel
+06:40 < joshk> in pxelinux.cfg/whatever
+06:40 < SuperQ> oh.. that's changed since the bug tracking post
+06:40 < SuperQ> http://lists.debian.org/debian-testing/2003/debian-testing-200311/msg00098.html
+06:40 < SuperQ> that says to devfs=nomount
+06:41 < SuperQ> should probably copy the bulk of that message into
+debian/dists/sarge/main/installer-i386/current/doc/INSTALLATION-HOWTO
+06:41 < SuperQ> :) )
+06:41 < joshk> that's from months ago
+06:41 < joshk> :P
+06:41 < SuperQ> I know
+06:42 < SuperQ> but it's still referanced in the howto
+06:42 < SuperQ> yay! it works now
+06:42  * SuperQ gives his new ThinkPad X31 some sarge love
+06:42 < SuperQ> I'll have to write up a page on Sarge/D-I and things for
+                linux-laptops.net
+06:45 < SuperQ> thanks joshk
+-->
+</para>
+</sect3>
+</sect2>
+
+
+  <sect2 arch="i386"><title>Parâmetros de inicialização para i386</title>
+<para>
+
+Se estiver inicializando a partir do disquete de partida ou 
+CD-ROM lhe será mostrado o aviso de boot, <prompt>boot:</prompt>. 
+Detalhes de como usar os parâmetros de inicialização com 
+o disquete de partida poderão ser encontrados em 
+<xref linkend="floppy-boot"/>. Se estiver inicializando a partir
+de um sistema operacional existente, você terá que usar outros 
+meios de ajustar os parâmetros de inicialização. Por exemplo, se estiver
+instalando a partir do DOS, você poderá editar o arquivo 
+<filename>install.bat</filename> com qualquer editor de textos.
+
+</para><para>
+
+Alguns sistemas tem os disquetes com "DCLs invertidas". Caso 
+obter erros de leitura a partir do disquete, até mesmo sabendo
+que o disquete está em bom estado, tente o parâmetro 
+<userinput>floppy=thinkpad</userinput>.
+
+</para><para>
+
+Em alguns sistemas, tal como o IBM PS/1 ou ValuePoint (que tem 
+controladores de disco ST-506), a unidade IDE poderá não ser 
+corretamente reconhecida. Novamente, tente primeiro a 
+inicialização sem parâmetros e veja se a unidade IDE é 
+reconhecida adequadamente. Caso não seja, determine a geometria
+de sua unidade (cilindros, cabeças e setores), e use o parâmetro
+<userinput>hd=<replaceable>cilindros</replaceable>,<replaceable>cabeças</replaceable>,<replaceable>setores</replaceable></userinput>.
+
+</para><para>
+
+Caso tenha uma máquina muito antiga e o kernel trava após mostrar
+a mensagem <computeroutput>Checking 'hlt' instruction...</computeroutput>, então
+você deverá tentar usar o argumento de inicialização <userinput>no-hlt</userinput>,
+que desativa este teste.
+
+</para><para>
+
+Caso sua tela comece a mostrar uma foto distorcida enquanto o 
+kernel inicia, eg. totalmente branca, totalmente preta ou 
+alguma bagunça colorida, seu sistema poderá ter uma placa
+de video problemática que não muda para o modo frame buffer de 
+forma adequada. Então você poderá usar o argumento de inicialização
+<userinput>video=vga16:off</userinput> para desativar o console
+frame buffer. O language chooser não será mostrado; somente o 
+idioma inglês estará disponível devido a características
+limitadas do console. Veja <xref linkend="boot-parms"/> para detalhes.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="i386">
+  <title>O sistema trava durante a fase de configuração do PCMCIA</title>
+
+<para>
+
+Alguns modelos de notebooks produzidos pela DELL são conhecidos por 
+travar quando a detecção do dispositivo PCMCIA tenta acessar algum 
+endereço de hardware. Caso tenha experimentado tal problema, tente
+a seguinte correção:
+<itemizedlist>
+<listitem><para>
+
+Prepare o sistema de arquivos raíz e instale o kernel e módulos, mas
+não inicie a configuração do PCMCIA imediatamente
+
+</para></listitem>
+<listitem><para>
+
+entre no shell do sistema (veja <xref linkend="shell"/> para detalhes)
+
+</para></listitem>
+<listitem><para>
+
+execute este comando: 
+<userinput>echo exclude port 0x810-0x81f >>
+/target/etc/pcmcia/config.opts</userinput>
+
+</para></listitem>
+<listitem><para>
+
+agora retorne para o menu principal e execute a parte de configuração
+do PCMCIA
+
+</para></listitem>
+</itemizedlist>
+
+</para>
+  </sect2>
+
+  <sect2 arch="i386">
+  <title>O sistema trava durante a carga dos módulos USB</title>
+<para>
+
+O kernel normalmente tenta instalar o USB e controlador de teclado USB
+para permitir a instalação para usuários que usam alguns tipos de teclado
+não padrões. No entanto, existem alguns sistemas USB quebrados onde o 
+controlador trava durante sua inicialização. Uma correção possível
+pode ser desativar o controlador USB no menu de setup da sua placa mãe. Outra
+forma é passando o argumento <userinput>nousb</userinput>
+ao aviso de boot, que evitará que os módulos sejam carregados até mesmo
+que hardwares USB sejam detectados.
+
+</para>
+  </sect2>
+
+
+
+
+

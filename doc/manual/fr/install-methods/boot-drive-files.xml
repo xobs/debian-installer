@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id$ -->
+
+ <sect1 condition="bootable-disk" id="boot-drive-files">
+ <title>Préparer les fichiers pour amorcer depuis un disque dur</title>
+<para>
+
+L'installateur peut être amorcé depuis les fichiers d'amorçage
+        placés sur une partition existante de votre disque dur, ou bien
+        lancé depuis un autre système d'exploitation ou en invoquant
+        un chargeur d'amorçage depuis le BIOS.
+
+</para><para>
+
+Une installation complète via le réseau
+        («&nbsp;pure network&nbsp;») peut s'effectuer en utilisant cette
+        technique. Cela évite les manipulations pénibles des supports
+        amovibles, comme trouver puis graver des images de cédérom ou
+        manipuler un nombre faramineux de
+        disquettes <xref linkend="unreliable-floppies"/> peu fiables.
+
+</para><para arch="i386">
+
+L'installateur ne peut amorcer depuis ces fichiers à partir
+        d'un système de fichiers NTFS.
+
+</para><para arch="powerpc"> 
+
+L'installateur ne peut amorcer depuis ces fichiers à partir
+        d'un système de fichiers HFS+. Ce système de fichiers peut
+        être utilisé par le système MacOS 8.1 et suivants&nbsp;; les
+        PowerMac NewWolrd utilisent tous HFS+. Pour savoir quel type
+        de système de fichiers est présent sur votre système,
+sélectionnez <userinput>Get Info</userinput> sur le volume en
+        question. Les systèmes de fichiers HFS apparaissent alors
+comme <userinput>Mac OS Standard</userinput> tandis que ceux en HFS+
+renvoient <userinput>Mac OS Extended</userinput>. Vous devez avoir une
+        partition HFS pour échanger des fichiers entre MacOS et Linux,
+        en particulier les fichiers d'installation que vous avez
+        téléchargés.
+
+</para><para arch="powerpc"> 
+
+On utilise différents programmes pour l'installation sur
+        disque dur suivant que votre système est un modèle
+        «&nbsp;NewWorld&nbsp;» ou un modèle «&nbsp;OldWorld&nbsp;».
+
+</para>
+
+  <sect2 arch="i386" id="files-lilo">
+  <title>Démarrage du programme d'installation à partir du disque dur en utilisant <command>LILO</command></title>
+<para>
+
+Cette section explique comment ajouter ou remplacer une partition
+        linux existante en utilisant <command>LILO</command>.
+
+</para><para>
+
+Lors du démarrage, <command>LILO</command> permet de charger en mémoire
+        non seulement le noyau, mais également une image de disque. Cette
+        image en mémoire peut être utilisée en tant que système de fichier
+racine (<emphasis>root file-system</emphasis>) par le noyau. Choisissez la
+        variante du <xref linkend="kernel-choice"/> qui correspond le mieux
+        à vos besoins, et tout devrait bien se passer.
+
+</para><para>
+
+Copiez les deux ou trois fichiers suivants depuis l'archive Debian
+        quelque part sur votre disque dur, par exemple
+        dans <filename>/boot/newinstall/</filename>.
+
+<itemizedlist>
+<listitem><para>
+
+<filename>linux.bin</filename> (kernel binary)
+
+</para></listitem>
+<listitem><para>
+
+<filename>root.bin</filename> (root image)
+
+</para></listitem>
+<listitem><para>
+
+<filename>drivers.tgz</filename> (optional kernel modules) 
+
+</para></listitem>
+</itemizedlist>
+
+Décompressez récursivement l'ensemble <emphasis>maintenant</emphasis> 
+(c'est plus facile que de le faire plus tard). Gardez en mémoire sur quelle 
+partition physique (p. ex. <filename>/dev/hda4</filename>) sont installés les 
+pilotes <filename>.o</filename> que vous venez juste de décompresser depuis 
+<filename>drivers.tgz</filename>.
+
+</para><para>
+
+Vous pouvez également remplacer les fichiers <filename>linux.bin</filename>
+        et <filename>drivers.tgz</filename> par votre propre noyau et les
+        pilotes soigneusement choisis qui
+        sont nécessaires pour installer votre système, par exemple,
+        un module pour votre exotique et non reconnue interface réseau.
+        N'oubliez pas que votre
+        noyau maison doit au moins posséder les fonctions
+<filename>RAMDISK</filename> et <filename>initrd</filename> intégrées au noyau.
+Lisez le tout début de <xref linkend="rescue-replace-kernel"/> pour
+        obtenir la liste des autres fonctionnalités que le noyau
+        doit avoir en son sein pour amorcer et lancer le programme
+        d'installation. Ne poursuivez pas plus en avant la lecture,
+        avec la partie traitant des disquettes, qui n'a aucun rapport
+        avec notre sujet.
+
+</para><para>
+
+En fin, pour configurer <command>LILO</command> continuez avec 
+<xref linkend="boot-initrd"/>.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="powerpc" id="files-oldworld">
+  <title>Amorçage de l'installateur sur disque dur pour les Mac OldWorld</title>
+<para>
+
+La disquette <filename>boot-floppy-hfs</filename> utilise le programme
+<application>miBoot</application> pour lancer l'installation de Linux
+           mais on ne peut pas l'utiliser facilement pour amorcer
+depuis le disque dur. Le programme <application>BootX</application> 
+lancé depuis MacOS accepte
+           l'amorçage depuis des fichiers situés sur un disque dur. On
+           peut aussi utiliser <application>BootX</application> pour charger au
+           choix MacOS et Linux après que votre installation de Debian
+           a été terminée. Pour le Performa 6360, il semble que
+<command>quik</command> ne parvienne pas à rendre le disque dur
+amorçable. Vous devrez donc utiliser <application>BootX</application> pour ce 
+modèle.
+
+</para><para>
+
+Téléchargez et décompactez la distribution <application>BootX</application> que
+vous pouvez obtenir à partir de <ulink url="&url-powerpc-bootx;"></ulink>,
+ou bien dans le répertoire
+<filename>dists/woody/main/disks-powerpc/current/powermac</filename>
+           sur un des miroirs http/ftp ou sur les cédéroms officiels
+de Debian. Utilisez <application>Stuffit Expander</application> pour l'extraire
+           de son archive. À l'intérieur de ce paquet, vous trouverez
+un dossier vide appelé <filename>Linux Kernels</filename>. Téléchargez
+<filename>linux.bin</filename> et <filename>ramdisk.image.gz</filename> 
+depuis le dossier <filename>disks-powerpc/current/powermac</filename> et
+placez-les dans le dossier <filename>Linux Kernels</filename>. Placez
+ensuite le dossier <filename>Linux Kernels</filename> dans le dossier
+           système actif.
+
+</para>
+  </sect2>
+
+  <sect2 arch="powerpc" id="files-newworld">
+  <title>Amorçage de l'installateur sur disque dur pour les Mac NewWorld.</title>
+<para>
+
+Les PowerMac NewWolrd acceptent l'amorçage depuis le réseau
+           ou bien depuis un cédérom ISO9660 aussi bien que depuis le
+           chargement de binaires au format ELF depuis le disque
+           dur. Ces machines amorceront Linux directement depuis
+<command>yaboot</command> qui accepte le chargement du noyau et
+           du ramsdik directement depuis une partition ext2 aussi bien
+           qu'un amorçage multiple avec MacOS. La possibilité de
+           démarrer l'installateur depuis un disque dur est
+           particulièrement approprié pour les nouvelles machines
+dépourvues de lecteur de disquettes.<command>BootX</command>
+           n'est pas reconnu et ne doit pas être utilisé pour les
+           PowerMac NewWorld.
+
+</para><para>
+
+<emphasis>Copiez</emphasis> (et non pas déplacez) les quatre fichiers
+           que vous avez téléchargés depuis les archives
+           Debian à la racine de votre disque dur (ceci peut se faire
+           par glisser de chaque fichier sur l'icône du disque
+           dur)&nbsp;:
+
+<itemizedlist>
+<listitem><para>
+
+<filename>linux.bin</filename>
+
+</para></listitem>
+<listitem><para>
+
+<filename>root.bin</filename> (from inside the images-1.44 folder)
+
+</para></listitem>
+<listitem><para>
+
+<filename>yaboot</filename>
+
+</para></listitem>
+<listitem><para>
+
+<filename>yaboot.conf</filename>
+
+</para></listitem>
+</itemizedlist>
+
+</para><para>
+
+Notez quelque part le numéro de partition MacOS sur
+           laquelle vous avez placé ces fichiers. Si vous possédez le
+           programme MacOS <command>pdisk</command>, vous pouvez utiliser la
+           commande L pour vérifier le numéro de partition. Vous aurez
+           besoin de taper ce numéro à l'invite de Open Firmware
+           lorsque vous amorcerez l'installateur.
+
+</para><para>
+
+Pour amorcer l'installateur, procédez comme suit <xref linkend="boot-newworld"/>.
+
+</para>
+  </sect2>
+ </sect1>

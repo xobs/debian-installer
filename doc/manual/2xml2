@@ -1,0 +1,90 @@
+# a very limited debiandoc to xml converter
+# can also be used by itself on entity files,
+# for those uncomment next line:
+s/<item>/|/gi
+# ENTITY must upper case
+s|<!entity|<!ENTITY|gi
+# start links on a new line
+s|<URL ID=\"\([^\"]*\)\" NAME=\"\([^\"]*\)\">|\
+<ulink url="\1">\2</ulink>|gi
+# pick up halves of those that got wrapped to different lines
+s|<URL ID=\"\([^\"]*\)\"|\
+<ulink url="\1">|gi
+s|<URL|<ulink|gi
+s|^ID=\"\([^\"]*\)\" NAME=\"\([^\"]*\)\">|url="\1">\2</ulink>|gi
+s|^NAME=\"\([^\"]*\)\">|\1</ulink>|gi
+# ID= at the start of a line can also be an orphan ref
+s|^ID=\"\(\&url[^\"]*\)\"|url="\1"></ulink>|gi
+s|<REF ID=\"\([^\"]*\)\">|<xref linkend="\1"></xref>|gi
+s|<^ID=\"\([^\"]*\)\">|linkend="\1"></xref>|gi
+s|<REF|<xref|gi
+s|<P>|<para>|gi
+s|</P>|</para>|gi
+s|HEADING>|title>|gi
+# An extra line is helpful when replacing with 2 tags
+s|<ITEM>|<listitem><para>\
+|gi
+s|</ITEM>|\
+</para></listitem>|gi
+s|<EM>\([^<]*\)</EM>|<emphasis>\1</emphasis>|gi
+s|<EM>|<emphasis>|gi
+s|</EM>|</emphasis>|gi
+s|ENUMLIST>|orderedlist>|gi
+s|TAGLIST>|variablelist>|gi
+s|<TAG>|<varentry><term>\
+|gi
+s|</TAG>|</term>|gi
+s|<LIST COMPACT>|<itemizedlist>|gi
+s|<LIST>|<itemizedlist>|gi
+s|</LIST>|</itemizedlist>|gi
+s|FILE>|filename>|gi
+s|CHAPT>|chapter>|gi
+s|CHAPT ID=|chapter id=|gi
+# xml has no plain <sect>, must be numbered
+# so move each one up a level
+s|SECT3>|sect4>|gi
+s|SECT2>|sect3>|gi
+s|SECT1>|sect2>|gi
+s|SECT>|sect1>|gi
+s|SECT3 ID=|sect4 id=|gi
+s|SECT2 ID=|sect3 id=|gi
+s|SECT1 ID=|sect2 id=|gi
+s|SECT ID=|sect1 id=|gi
+# locate sect's with text immediately following, insert <title>
+s|\(<sect[^>]*>\)\([^<>]\+$\)|\1<title>\2</title>|i
+# prgn could be <application>, but use <command> as default
+s|PRGN>|command>|gi
+# our <example>s don't have headings, use <informalexample>
+s|<EXAMPLE>|<informalexample><screen>\
+|gi
+s|</EXAMPLE>|\
+</screen></informalexample>|gi
+s|VAR>|replaceable>|gi
+# <tt> has been used for many purposes, but it _should_ be <userinput>
+s|TT>|userinput>|gi
+# no <package> allowed, substitute <classname> for now
+s|PACKAGE>|classname>|g
+# just change the case
+s|FOOTNOTE>|footnote>|gi
+#
+# formatting stuff
+s|&#13;|\
+\
+|g
+# all <para> to left margin on next line
+s|^ *\(<para>.*\)|\
+\1|
+s|^ *\(</para>.*\)|\1|
+# sect's on next line, appropriate indent
+s|^ *\(</*sect1.*\)|\
+ \1|
+s|^ *\(</*sect2.*\)|\
+  \1|
+s|^ *\(</*sect3.*\)|\
+   \1|
+s|^ *\(</*sect4.*\)|\
+    \1|
+
+
+
+

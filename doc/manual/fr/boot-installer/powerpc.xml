@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<!-- original version: 1.6 -->
+
+
+  <sect2 arch="powerpc"><title>Amorcer depuis un cédérom</title>
+
+&boot-installer-intro-cd.xml;
+
+<para>
+
+Aujourd'hui, les seules sous-architectures &arch-title; qui
+      supportent l'amorçage depuis le cédérom sont les PReP et les
+      PowerMac NewWorld. Sur les PowerMac, appuyez sur la touche
+<keycap>c</keycap>, ou bien la combinaison des touches
+<keycap>Command</keycap>, <keycap>Option</keycap>,
+<keycap>Shift</keycap>, and <keycap>Delete</keycap>
+lors de l'amorçage pour amorcer sur le cédérom. 
+
+</para><para>
+
+Les Powermacs «&nbsp;OldWorld&nbsp;» ne s'amorceront pas depuis
+      un cédérom Debian, car les ordinateurs «&nbsp;OldWorld&nbsp;»
+      ont besoin d'un pilote de cédérom MacOSROM sur le cédérom, et
+      une version libre de ce pilote n'est pas disponible. Tous les
+      systèmes «&nbsp;OldWorld&nbsp;» possèdent un lecteur de disquettes,
+      vous devrez par conséquent l'utiliser pour lancer le programme
+      d'installation, et ensuite indiquer à ce programme d'utiliser
+      le cédérom.
+
+</para><para>
+
+Si votre système ne s'amorce pas à partir d'un cédérom, vous
+      pouvez quand même l'utiliser pour installer votre système. Sur
+      les machines «&nbsp;NewWorld&nbsp;» Vous pouvez aussi utiliser une
+      commande du microprogramme pour amorcer le cédérom manuellement.
+      Suivez les instructions de <xref linkend="boot-newworld"/> pour amorcer
+      depuis le disque dur à l'exception de l'utilisation du chemin vers
+<command>yaboot</command> sur le cédérom à l'invite de OF, comme&nbsp;:
+
+<informalexample><screen>
+
+0 > boot cd:,\install\powermac\yaboot
+
+</screen></informalexample>
+</para>
+  </sect2>
+
+  <sect2 arch="powerpc" id="install-drive">
+  <title>Amorcer à partir d'un disque dur</title>
+
+&boot-installer-intro-hd.xml;
+
+  <sect3><title>Amorcer CHRP à partir d'OpenFirmware (OF)</title>
+
+<para>
+
+  <emphasis>Pas encore écrit</emphasis>
+
+</para>
+   </sect3>
+
+   <sect3><title>Amorcer les PowerMAC OldWorld à partir de MacOS</title>
+<para>
+
+Si vous configurez BootX dans <xref linkend="files-oldworld"/>,
+          vous pouvez l'utiliser pour amorcer le système
+          d'installation. Double-cliquez sur l'icône de l'application
+<guiicon>BootX</guiicon>. Cliquez sur le bouton de l'option
+<guibutton>Options</guibutton> et sélectionnez 
+<guilabel>Utiliser le disque virtuel spécifié</guilabel>. Cela vous laissera 
+la possibilité de sélectionner le fichier 
+<filename>ramdisk.image.gz</filename>. 
+Il se peut que, suivant votre matériel, vous ayez à sélectionner 
+l'option <guilabel>No Video Driver</guilabel>. Ensuite, cliquez sur le bouton
+<guibutton>Linux</guibutton> pour éteindre MacOS et lancer
+          l'installateur.
+
+</para>
+   </sect3>
+
+
+  <sect3 id="boot-newworld">
+  <title>Amorcer les Mac NewWorld depuis Open Firmware</title>
+<para>
+
+Vous devez déjà avoir placé les fichiers <filename>linux.bin, yaboot,
+          yaboot.conf</filename> et <filename>root.bin</filename> de 
+<xref linkend="files-newworld"/> à la racine de votre partition HFS.
+          Redémarrer votre ordinateur et immédiatement après le carillon,
+appuyez simultanément sur les touches <keycap>Option</keycap>,
+<keycap>Command (touche trèfle/Apple)</keycap>, <keycap>o</keycap> et
+<keycap>f</keycap>. Vous aurez l'invite du microprogramme Open
+          Firmware au bout de quelques secondes&nbsp;:
+
+<informalexample><screen>
+
+0 > boot hd:<replaceable>x</replaceable>,yaboot
+
+</screen></informalexample>
+
+en remplaçant <replaceable>x</replaceable> par la numéro de la partition HFS 
+où se trouvent le noyau et les fichiers de yaboot, le tout suivi
+          par &enterkey;. Sur quelques machines, vous devrez utiliser
+<userinput>ide0:</userinput> à la place de <userinput>hd:</userinput>. Après 
+quelques secondes,
+          vous devriez voir apparaître l'invite de yaboot.
+
+<informalexample><screen>
+
+boot:
+
+</screen></informalexample>
+
+À l'invite <prompt>boot:</prompt> de yaboot, tapez soit 
+<userinput>install</userinput> soit <userinput>install-safe</userinput>
+suivi d'un retour chariot. L'option
+«&nbsp;safe&nbsp;» utilise l'argument <userinput>video=ofonly</userinput> pour
+          une compatibilité maximale&nbsp;; vous pouvez l'essayer si
+          l'argument <userinput>install</userinput> échoue.
+
+</para>
+   </sect3>
+  </sect2>
+
+  <sect2 arch="powerpc"><title>Amorcer avec TFTP</title>
+
+&boot-installer-intro-net.xml;
+
+<para>
+
+Aujourd'hui, les systèmes PReP et PowerMac
+        NewWorld supportent l'amorçage depuis le réseau. 
+
+</para><para>
+
+Sur les machines avec Open Firmware, comme les
+        Macs NewWorld Power, entrez simplement dans le moniteur
+        d'amorçage (voir <xref linkend="invoking-openfirmware"/>) et
+        utilisez la commande <command>boot enet:0</command>. Les boîtes PReP et
+        CHRP peuvent avoir une façon différente d'adresser le réseau.
+Sur une machine PReP, vous pouvez essayer 
+<userinput>boot <replaceable>server_ipaddr</replaceable>, 
+<replaceable>file</replaceable>,<replaceable>client_ipaddr</replaceable></userinput>.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="powerpc">
+  <title>Booting from Floppies</title>
+<para>
+
+Amorcer depuis des disquettes est supporté pour &arch-title;,
+       bien que cela ne soit généralement appliqué que pour les
+       systèmes OldWorld. Les systèmes NewWorld ne sont habituellement
+       pas équipés de lecteurs de disquettes.
+
+</para><para>
+
+Vous aurez besoin d'avoir déjà téléchargé les images de
+       disquettes dont vous aurez besoin à partir des images présentes
+       dans <xref linkend="create-floppy"/>.
+
+</para><para>
+
+Pour amorcer à partir de la disquette <filename>boot-floppy-hfs.img</filename>,
+       placez-la dans le lecteur de disquettes après avoir arrêté le
+       système et avant d'avoir pressé le bouton de mise en route. 
+
+</para><note><para>
+Pour les personnes qui ne seraient pas habituées à manipuler des
+       disquettes Macintosh&nbsp;: une disquette présente dans la machine
+       avant le démarrage sera considérée comme prioritaire lors du lancement
+       du système. Une disquette sans système de démarrage valide sera éjectée,
+       et la machine recherchera alors les partitions amorçables du disque dur.
+
+</para></note><para>
+
+Après l'amorçage, la disquette <filename>root.bin</filename> est requise.
+       Insérez la disquette Root et pressez &enterkey;. Le programme
+       d'installation <prgn>dbootstrap</prgn> est automatiquement
+       lancé à la suite du chargement en mémoire du système de root.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="powerpc"><title>PowerPC Boot Parameters</title>
+<para>
+
+De nombreux moniteurs Apple utilisent un mode 640x480 67Hz. Si
+      l'affichage est oblique sur un vieux moniteur Apple, essayez
+d'utiliser l'argument d'amorçage <userinput>video=atyfb:vmode:6</userinput>,
+      qui choisira ce mode pour la plus part des cartes vidéo Mach64
+      et Rage. Pour les cartes à base de Rage 128, il s'agit de
+<userinput>video=aty128fb:vmode:6</userinput>.
+
+</para>
+  </sect2>

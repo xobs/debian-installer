@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+<!-- $Id$ -->
+<!-- original version: 1.7 -->
+
+ <sect1 id="boot-parms"><title>Zaváděcí parametry</title>
+<para>
+
+Parametry pro zavádění jsou vlastně parametry pro jádro Linuxu,
+které se používají v případech, kdy chceme zajistit, aby jádro
+korektně pracovalo s neposlušnými zařízeními. Ve většinou je jádro
+schopno rozpoznat všechna zařízení automaticky, ale v některých 
+speciálních případech mu musíte trochu pomoci.
+
+</para><para>
+
+Při prvním zavádění systému zkuste, zdali systém rozpozná všechna
+potřebná zařízení jen s implicitními parametry (tj. nenastavujte
+pro začátek žádné vlastní hodnoty). Systém obvykle naběhne.
+V případě, že se tak nestane, můžete systém zavést později poté,
+co zjistíte, jaké parametry je potřeba zadat, aby jádro korektně
+rozpoznalo váš hardware.
+
+</para><para>
+
+Poznatky o nejrůznějších zaváděcích parametrech a podivných zařízeních
+jsou k nalezení v
+<ulink url="http://www.tldp.org/HOWTO/BootPrompt-HOWTO.html">Linux
+BootPrompt HOWTO</ulink>.
+Následující text obsahuje popis jen stěžejních parametrů. Vybrané
+problémy popisuje <xref linkend="boot-troubleshooting"/>.
+
+</para><para>
+
+Brzy po zavedení jádra můžete zpozorovat hlášení
+
+<informalexample><screen>
+
+Memory:<replaceable>dostupná</replaceable>k/<replaceable>celkem</replaceable>k available 
+
+</screen></informalexample>
+
+Hodnota <replaceable>celkem</replaceable> by měla ukazovat celkovou
+fyzickou paměť RAM (v kilobajtech), která je systému dostupná.
+Pokud tato hodnota neodpovídá aktuálnímu stavu instalované paměti,
+potom byste měli použít zaváděcí parametr
+<userinput>mem=<replaceable>ram</replaceable></userinput>,
+kde <replaceable>ram</replaceable> je vámi udaná velikost paměti
+zakončená znakem ,,k'' pro kilobajty nebo ,,m'' pro megabajty.
+Například, obě hodnoty <userinput>mem=65536k</userinput> a
+<userinput>mem=64m</userinput> znamenají 64MB RAM.
+
+</para><para>
+
+Pokud váš monitor umožňuje zobrazovat pouze černou a bílou barvu,
+zadejte zaváděcí parametr <userinput>mono</userinput>. Pokud tak
+neučiníte, instalační proces bude (standardně) používat barvy.
+
+</para><para condition="supports-serial-console">
+
+Jádro <phrase arch="mipsel">(kromě počítačů DECstation)</phrase> by
+mělo být schopno rozpoznat, že zavádíte systém ze sériové konzoly.
+Pokud máte v zaváděném počítači rovněž grafickou kartu (framebuffer)
+a připojenou klávesnici, měli byste při zavádění zadat parametr
+<userinput>console=<replaceable>zařízení</replaceable></userinput>,
+kde <replaceable>zařízení</replaceable> je vaše sériové zařízení, což
+je obvykle něco jako <filename>ttyS0</filename>.
+
+</para><para arch="sparc">
+
+Pro &arch-title; jsou sériová zařízení <filename>ttya</filename> nebo
+<filename>ttyb</filename>. Eventuálně můžete nastavit proměnné pro
+OpenPROM <envar>input-device</envar> a <envar>output-device</envar> na
+hodnotu <filename>ttya</filename>.
+
+</para>
+
+
+  <sect2 id="installer-args"><title>Parametry instalačního programu</title>
+<para>
+
+Instalační systém rozpoznává několik užitečných parametrů.
+
+</para>
+
+<variablelist>
+<varlistentry>
+<term>DEBCONF_PRIORITY</term>
+<listitem><para>
+
+Nastavením tohoto parametru můžete změnit prioritu zobrazených
+otázek.
+
+</para><para>
+
+Hodnotou <userinput>DEBCONF_PRIORITY=critical</userinput> se potlačí
+všechny zprávy a otázky se stupněm důležitosti menším než kritickým.
+Pro tyto potlačené otázky se použijí přednastavené hodnoty. Jestliže
+se vyskytne problém, instalátor upraví priority otázek podle potřeb.
+
+</para><para>
+
+Standardní nastavení <userinput>DEBCONF_PRIORITY=high</userinput>
+zobrazí jak kritické, tak důležité hlášky, ale normální a nevýznamné
+zprávy jsou přeskočeny. Když použijete
+<userinput>DEBCONF_PRIORITY=low</userinput>, nic se nepřeskakuje a
+zobrazí se všechny hlášky instalačního programu.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>DEBCONF_FRONTEND</term>
+<listitem><para>
+
+Ovlivňuje uživatelské rozhraní, ve kterém bude instalace
+probíhat. Dostupné volby jsou:
+
+<itemizedlist>
+<listitem>
+<para><userinput>DEBCONF_FRONTEND=noninteractive</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBCONF_FRONTEND=text</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBCONF_FRONTEND=newt</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBCONF_FRONTEND=slang</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBCONF_FRONTEND=ncurses</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBCONF_FRONTEND=bogl</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBCONF_FRONTEND=gtk</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBCONF_FRONTEND=corba</userinput></para>
+</listitem>
+</itemizedlist>
+
+Standardní rozhraní je <userinput>DEBCONF_FRONTEND=newt</userinput>.
+Pro instalaci přes sériovou konzolu může být vhodnější
+<userinput>DEBCONF_FRONTEND=text</userinput>.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>BOOT_DEBUG</term>
+<listitem><para>
+
+Tímto parametrem můžete kontrolovat množství zpráv, které se
+zapíší do instalačního logu.
+
+<variablelist>
+<varlistentry>
+<term><userinput>BOOT_DEBUG=0</userinput></term>
+<listitem><para>Toto je standardní hodnota.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>BOOT_DEBUG=1</userinput></term>
+<listitem><para>Upovídanější než obvykle.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>BOOT_DEBUG=2</userinput></term>
+<listitem><para>Spousty ladících informací.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>BOOT_DEBUG=3</userinput></term>
+<listitem><para>
+
+Pro opravdu detailní ladění se během zavádění několikrát spustí shell,
+ve kterém můžete kontrolovat a ovlivňovat náběh systému. Když shell
+ukončíte, bude zavádění pokračovat.
+
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>INSTALL_MEDIA_DEV</term>
+<listitem><para>
+
+Hodnota tohoto parametru zadává cestu k zařízení, ze kterého se má
+nahrát instalační systém, například
+<userinput>INSTALL_MEDIA_DEV=/dev/floppy/0</userinput>
+
+</para><para>
+
+Normálně se totiž zaváděcí disketa snaží najít kořenovou disketu na
+všech dostupných disketových mechanikách a USB discích. Tímto
+parametrem jí sdělíte, že se má podívat jenom na zadané zařízení.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>debian-installer/framebuffer</term>
+<listitem><para>
+
+Některé architektury využívají pro instalaci v různých jazycích
+jaderný framebuffer (grafická konzole). Pokud na svém systému
+zaznamenáte symptomy jako chybové hlášky o btermu a boglu, černou
+obrazovku nebo zamrznutí instalace po několika minutách od spuštění,
+můžete framebuffer vypnout parametrem
+<userinput>debian-installer/framebuffer=false</userinput>.
+
+</para><para arch="i386">
+
+K vypnutí framebufferu též můžete použít parametr
+<userinput>video=vga16:off</userinput>. Tyto problémy byly hlášeny na
+počítači Dell Inspiron s grafickou kartou Mobile Radeon.
+
+</para><para arch="m68k">
+
+Tyto problémy byly hlášeny na Amize 1200 a SE/30.
+
+</para><para arch="hppa">
+
+Tyto problémy byly hlášeny na hppa.
+
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+  </sect2>
+ </sect1>
+

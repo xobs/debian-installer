@@ -1,0 +1,692 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id$ -->
+
+ <sect1 id="downloading-files">
+ <title>Downloading Files from Debian Mirrors</title>
+
+<para>
+
+When downloading files from a Debian mirror, be sure to download the
+files in <emphasis>binary</emphasis> mode, not text or automatic
+mode. It's important to replicate the directory structure you find on
+the mirror to create a local `sub-mirror'.
+
+<phrase arch="not-s390">
+
+It isn't really necessary to do this
+if you place all the installation files on floppies; but it still
+makes it easier to find the files when you need them.
+
+</phrase>
+
+You should start your local directory structure at the level under
+<filename>disks-&architecture;</filename>, for example:
+
+<informalexample><screen>
+current/<replaceable>subarchitecture</replaceable>/images-1.44<replaceable arch="i386">/flavor</replaceable>/rescue.bin
+</screen></informalexample>
+
+You don't need to download every file under that level, just those
+that apply to you (you'll find out which ones apply as you read on).
+Just name the directories the same as the mirror's, and keep the files
+in their proper directories.
+
+</para><para>
+
+If your machine is set up to automatically decompress/decode files you
+download, you must turn that feature off when downloading the
+installation system files. They will be decompressed just-in-time by
+the installer. Decompressing in your current system will waste space
+and time, and if the original compressed archives are deleted by the
+decompression program, they won't be there later when the installer
+needs them.
+
+</para><para arch="powerpc;m68k">
+
+This is particularly true on the Macintosh, where <filename>.bin</filename>
+files are interpreted to be MacBinary, and the decoder's attempts to
+convert them will fail noisily. 
+
+</para><para arch="powerpc"> 
+
+Also, many of the binary files such as <filename>yaboot</filename>
+will be automatically interpreted as text since they have no file
+extensions unless you specifically select binary transfer mode. These
+files will be <emphasis>unusable</emphasis> if they are transferred in
+text mode.
+
+</para>
+
+  <sect2 arch="m68k">
+  <title>Installation Options</title>
+<para> 
+
+For m68k (except VME), the installation system files
+(<filename>rescue.bin, linux.bin, root.bin, and
+drivers.tgz</filename>) have been compiled into one tarball. You may
+also need the base system installation file
+<filename>basedebs.tar</filename>.
+
+</para><para> 
+
+If you have a working Ethernet connection on the computer, and your
+Ethernet card is of one of the types compiled into the installation
+kernel, you may only need the install system tarball.
+
+</para><para> 
+
+If you are installing on a system without a working network
+connection, or if your network connection is via PPP (using a modem)
+rather than Ethernet, you will also need to download
+<filename>basedebs.tar</filename> before starting the installation.  
+
+</para>
+</sect2>
+
+  <sect2 arch="not-m68k">
+  <title>Installation Options</title>
+<para>
+
+Files you may need fall into three categories: 
+
+</para>
+<orderedlist>
+<listitem><para>
+
+Files needed to boot into the installation system (for example,
+<phrase arch="not-s390"> 
+<filename>rescue.bin</filename>, 
+<filename>linux.bin</filename>, and 
+<filename>root.bin</filename>)
+</phrase>
+
+<phrase arch="s390">
+<filename>kernel.debian</filename>, 
+<filename>parmfile.debian</filename>, and 
+<filename>initrd.debian</filename>)
+</phrase>
+
+</para></listitem>
+<listitem><para>
+
+Files the installation system will need access to
+after it has been booted in order to install the operating system
+kernel and peripheral drivers (for example, 
+<filename>rescue.bin</filename> and 
+<filename>drivers.tgz</filename>)
+
+</para></listitem>
+
+<listitem><para>
+
+Base system installation files (for example, 
+<filename>basedebs.tar</filename>)
+
+</para></listitem>
+</orderedlist>
+<para>
+
+If you have a working Ethernet connection on the computer, and your
+Ethernet card is of one of the types compiled into the installation
+kernel, you may only need the install system boot files. The
+installer is capable of installing the kernel and drivers over
+the network for many common Ethernet cards.
+
+</para><para>
+
+If you have an Ethernet connection for which the installer doesn't
+have built-in support, you may need both the install system boot files
+and the kernel and peripheral driver installation files. 
+
+</para><para>
+
+If you are installing on a system without a working network
+connection, or if your network connection is via PPP (using a modem)
+rather than Ethernet, you will need to obtain all three types of files
+before starting the installation.
+
+</para><para>
+
+If you're not sure which files you need, just start with the install
+system boot files. If your first attempt to configure the network
+within the installer fails, you can just quit, get the extra files you
+need, and re-start the installation.
+
+</para><para>
+
+The base system installation file 
+<filename>basedebs.tar</filename> is currently
+about 27M. If you are able to use a CD, or configure your network
+before installing the base system, it is better to do so; in that case
+you won't need this file. The network location is listed in the
+appendix (<xref linkend="base-images"/>). 
+
+</para>
+  </sect2>
+
+  <sect2 arch="i386" id="kernel-choice">
+  <title>Choosing the Right Installation Set</title>
+<para>
+
+Installation files include kernel images, which are available in
+various <firstterm>flavors</firstterm>.  Each flavor supports a
+different set of hardware. The flavors available for &arch-title; are:
+
+<variablelist>
+ <varlistentry>
+  <term>`vanilla'</term>
+<listitem><para>
+
+The standard kernel package available in Debian. This includes almost
+all drivers supported by Linux built as modules, which includes
+drivers for network devices, SCSI devices, sound cards, Video4Linux
+devices, etc. The `vanilla' flavor includes one rescue floppy, one
+root and four driver floppies.
+
+</para></listitem>
+ </varlistentry>
+
+<varlistentry>
+ <term>`compact'</term>
+<listitem><para>
+
+Like `vanilla', but with many of the less-frequently-use drivers
+removed (sound, v4l, etc). In addition, it has built in support for
+several popular PCI Ethernet devices &mdash; NE2000, 3com 3c905,
+Tulip, Via-Rhine and Intel EtherExpress Pro100. These built in drivers
+allow you to take full advantage of the Debian installer's net install
+feature to install the driver floppies over the network so that only
+the root and rescue floppy disks need to be made. Finally, `compact'
+also supports several common RAID controllers: DAC960, and Compaq's
+SMART2 RAID controllers. The `compact' flavor includes one
+rescue floppy, one root and two driver disks.
+
+</para></listitem>
+ </varlistentry>
+
+<varlistentry>
+ <term>`idepci'</term>
+<listitem><para>
+
+Kernel that supports only IDE and PCI devices (and a very small number
+of ISA devices). This kernel should be used if the SCSI drivers in the
+other flavors cause your system to hang on startup (probably because
+of resource conflicts, or a misbehaving driver/card in your system.)
+The `idepci' flavor also has a built-in ide-floppy driver so that you
+can install from LS120 or ZIP devices.
+
+</para></listitem>
+ </varlistentry>
+
+<varlistentry>
+ <term>`bf2.4'</term>
+<listitem><para>
+
+This is an experimental flavor which uses a special version of the
+kernel-image-2.4 package. It provides support for newer hardware
+components which is absent in the other (more stable) flavors. It
+supports more USB hardware, USB keyboards/mice, modern IDE
+controllers, some new network cards, and Ext3 and Reiser file systems.
+Compared to the driver set of our main kernel-image-2.4.x-yz packages,
+some non-essential drivers have been removed in order to keep the
+number of needed floppy disks in a sane range. If you have
+unexplainable problems with kernel 2.4, you should use other flavors.
+If you need more new drivers or optimisations for your CPU type, feel
+free to install an "official" kernel-image-2.4.x-yz package. This
+flavor comes with one rescue floppy, one root and four driver
+floppies.
+
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+</para><para>
+
+Although we have described above how many 1.44MB diskettes the
+different sets occupy, you may still choose different methods of
+installation.
+
+</para><para>
+
+The kernel config files for these flavors can be found in their
+respective directories in a file named <filename>kernel-config</filename>. 
+
+</para>
+</sect2>
+
+  <sect2 arch="not-i386">
+  <title>Choosing the Right Installation Set</title>
+<para>
+
+Installation files include kernel images, which are available for
+various <firstterm>subarchitectures</firstterm>. Each subarchitecture
+supports a different set of hardware.  The kernel config files for
+these subarchitectures can be found in their respective directories in
+a file named <filename>kernel-config</filename>.  The subarchitectures
+available for &arch-title; are:
+
+</para>
+
+<variablelist arch="sparc">
+<varlistentry>
+ <term>`sun4cmd'</term>
+<listitem><para>
+
+This is the kernel required for older SPARC hardware.  For specific
+models supported, see <xref linkend="sparc-cpus"/>.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+ <term>`sun4u'</term>
+<listitem><para>
+
+UltraSPARC machines.
+
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+<para arch="sparc">
+
+The kernel config files for these subarchitectures can be found in their
+respective directories in a file named <filename>kernel-config</filename>. 
+
+</para>
+
+    <variablelist arch="mipsel">
+    <varlistentry>
+<term>`r4k-kn04'</term>
+    <listitem><para>
+
+This is the kernel required for the R4000 based DECstation 5000/150 and
+similar machines, such as the R4400 based DECstation 5000/260.
+    
+</para></listitem>
+    </varlistentry>
+
+    <varlistentry>
+<term>`r3k-kn02'</term>
+    <listitem><para>
+
+This is the kernel required for R3000 based DECstations with KN02 (or
+compatible) main board, such as the DECstation 5000/1xx series with
+xx=20,25,33 and the DECstation 5000/240.
+    
+</para></listitem>
+    </varlistentry>
+    </variablelist>
+
+<para arch="mipsel">
+
+The kernel config files for these subarchitectures can be found in their
+respective directories in a file named <filename>kernel-config</filename>. 
+
+</para>
+
+    <variablelist arch="mips">
+    <varlistentry>
+<term>`r4k-ip22'</term>
+    <listitem><para>
+
+This is the kernel required for SGI Indy, Indigo 2 and Challenge S machines.
+The kernel includes almost all drivers supported by Linux built as modules,
+which includes drivers for network devices, SCSI devices, etc.  There are no
+other flavors for &arch-title; available currently.
+    
+</para></listitem>
+    </varlistentry>
+    </variablelist>
+
+<para arch="mips">
+
+The kernel config files for these subarchitectures can be found in their
+respective directories in a file named <filename>kernel-config</filename>. 
+
+</para>
+
+    <variablelist arch="hppa">
+    <varlistentry>
+<term>`32'</term>
+    <listitem><para>
+
+This is the kernel to use on all 32 bit processors.  On processors
+that support 32 and 64 bit modes, this is probably also the best
+kernel to use for installation.
+    
+
+</para></listitem>
+    </varlistentry>
+
+    <varlistentry>
+<term>`64'</term>
+    <listitem><para>
+
+This is the kernel to use on all 64 bit processors.  On processors
+that support 32 and 64 bit modes, the 32 bit kernel is probably the
+best kernel to use for installation.    
+
+</para></listitem>
+    </varlistentry>
+    </variablelist>
+
+<para arch="hppa">
+
+These kernels include almost all drivers supported by Linux built as
+modules, which includes drivers for network devices, SCSI devices,
+etc.  Support for standard hardware is compiled in to the kernel,
+so it is unlikely that you will need to configure any modules during
+installation.
+
+</para><para arch="hppa">
+
+The kernel config files for these subarchitectures can be found in their
+respective directories in a file named <filename>kernel-config</filename>. 
+
+</para>
+
+
+<variablelist arch="s390">
+<varlistentry>
+<term>`tape'</term>
+<listitem><para>
+
+Includes a kernel image which supports booting (IPL) from a tape
+(emulated or real) and a DASD (Direct Access Storage Device). You need
+these files if you want to install &debian; native or in an
+LPAR (logical partition) but they can also be used to install under VM
+with a tape (real or emulated).
+
+</para><para arch="s390"><phrase condition="FIXME">
+
+<emphasis>FIXME: what about the nolabel kernel?</emphasis>
+
+</phrase></para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>`vmrdr'</term>
+<listitem><para>
+
+Includes a kernel image which supports booting (IPL) from the VM
+reader and a DASD, These files can only be used if you want to install
+&debian; in a VM guest.
+
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+<para arch="s390">
+
+Both of these kernels include almost all drivers supported by Linux
+built as modules.  Support for standard hardware is compiled into the
+kernel, so it is unlikely that you will need to configure any modules
+during installation.
+
+</para><para arch="s390">
+
+Both kernels were also built to directly support IBM's OCO modules.  You
+can simply download then from IBM's 
+<ulink url="http://oss.software.ibm.com/developerworks/opensource/linux390/index.shtml">
+developerWorks web site</ulink> and load them into the running kernel.
+Please make sure that you pick the modules for the standard kernel,
+i.e. not the ones for a kernel with the ``on-demand'' timer patch.
+
+</para><para arch="s390">
+
+The kernel config files for these subarchitectures can be found in their
+respective directories in a file named <filename>kernel-config</filename>. 
+
+</para>
+
+
+    <variablelist arch="powerpc">
+    <varlistentry>
+<term>`powermac'</term>
+    <listitem><para>
+
+This is the kernel to use for most Power Macintosh computers; it uses
+version 2.2 of the Linux kernel.
+
+</para></listitem>
+</varlistentry>
+
+    <varlistentry>
+<term>`new-powermac'</term>
+    <listitem><para>
+
+Use this kernel for very new Power Macintosh computers; it is based on
+version 2.4 of the Linux kernel. If you want to install the
+new-powermac version on an OldWorld machine, you are limited to using
+BootX to boot the installer; the kernel doesn't fit on a floppy and
+Debian CDs are not bootable on OldWorlds. You could also switch to the
+&kernelversion; kernel after you finish the powermac flavor install.
+
+</para></listitem>
+</varlistentry>
+
+    <varlistentry>
+<term>`apus'</term>
+    <listitem><para>
+
+Use this kernel for Amiga Power-UP Systems (APUS); it is based on
+version 2.2 of the Linux kernel.
+
+</para></listitem>
+</varlistentry>
+    <varlistentry>
+<term>`chrp'</term>
+    <listitem><para>
+
+Use this kernel for embedded CHRP computers; it is based on
+version 2.2 of the Linux kernel.
+
+</para></listitem>
+</varlistentry>
+    <varlistentry>
+<term>`prep'</term>
+    <listitem><para>
+
+Use this kernel for Motorola and IBM RS/6000 PReP computers; it is based on
+version 2.2 of the Linux kernel.
+
+</para></listitem>
+</varlistentry>
+    </variablelist>
+
+<para arch="powerpc">
+
+The kernel config files for these subarchitectures can be found in their
+respective directories in a file named <filename>config.gz</filename>. 
+
+</para><para arch="arm">
+
+There is only one installation kernel available for each supported ARM
+machine family.
+
+</para><para arch="m68k;ia64">
+
+There is only one install kernel available for &arch-title;, which
+should include sufficient functionality to install on all systems.  It
+is unlikely to be optimised for your particular hardware, and you
+might consider replacing it once installation is complete.  In
+particular, this kernel does not support SMP.  
+
+</para><para arch="m68k;ia64">
+
+The kernel config files for these kernels can be found in their
+respective directories in a file named <filename>config.gz</filename>. 
+
+</para>
+  </sect2>
+
+
+  <sect2 id="where-files">
+  <title>Where to Find Installation Files</title>
+
+<para arch="m68k"> 
+
+For Amiga, Atari, and 68k Mac, the install system files have been
+compiled into one tarball. You will download the appropriate tarball
+listed in 
+<xref linkend="amiga-install-files"/>, 
+<xref linkend="atari-install-files"/>, or 
+<xref linkend="mac-install-files"/>. Only
+VME machines will need the separate rescue, root, kernel and drivers
+files.  
+
+</para><para>
+
+The network locations of installation files for each &architecture;
+flavor are listed in the Appendix. These include:
+
+</para>
+
+<variablelist>
+<varlistentry>
+<term>rescue image</term>
+<listitem>
+<itemizedlist>
+&list-rescue-images;
+</itemizedlist>
+</listitem>
+</varlistentry>
+
+<varlistentry condition="rescue-needs-root-disk">
+<term>root image(s) or tarball</term>
+<listitem>
+<itemizedlist>
+&list-root-images;
+</itemizedlist>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>kernel binary</term>
+<listitem><para>
+
+<xref linkend="kernel-images"/>
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>driver images or tarball</term>
+<listitem><para>
+
+<xref linkend="driver-images"/>
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>base system images or tarball</term>
+<listitem><para>
+
+<xref linkend="base-images"/>
+
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+<para arch="not-powerpc">
+
+The rescue image contains a compressed Linux boot
+kernel. It is used for 
+<phrase arch="not-s390">both floppy disk booting (when transferred to a
+floppy) and as the source for </phrase>
+the Linux kernel when the kernel is
+being installed on your machine. The kernel binary 
+<filename>linux.bin</filename>
+is an uncompressed binary kernel.  It is used when booting the
+installer from 
+<phrase arch="not-s390">
+
+the hard disk or CD-ROM, and is not needed for floppy installer booting.
+
+</phrase><phrase arch="s390">
+
+tape, emulated tape or the VM reader.
+
+</phrase></para>
+
+<para arch="mipsel">
+
+Besides the file <filename>linux.bin</filename>, which is a kernel image in
+ELF format, the file <filename>linux.ecoff</filename> contains the same
+kernel in ECOFF format, which is required for net booting DECstations.
+
+</para><para arch="powerpc"> 
+
+Both the <filename>boot-floppy-hfs</filename> floppy image and the
+<filename>rescue.bin</filename> image contain a compressed Linux boot
+kernel. The <filename>boot-floppy-hfs</filename> floppy is used to
+boot the installation system, while <filename>rescue.bin</filename>
+serves as the source for the Linux kernel when the kernel is being
+installed on your machine. A <filename>rescue.bin</filename> floppy
+cannot be booted on &arch-title;. A third uncompressed kernel image,
+simply named <filename>linux.bin</filename>, is used when booting the
+installer from the hard disk or CD-ROM.  It is not needed for floppy
+installer booting.
+
+</para><para arch="powerpc"> 
+
+There are two versions of the hfs boot floppy image. The standard one,
+<filename>boot-floppy-hfs.img</filename>, may work best on older
+machines such as the 7200 and 8500 with no added video cards. If the
+standard image gives a black screen when booting, try the image with
+video=ofonly added to the boot arguments:
+<filename>boot-video-ofonly.img</filename>.
+
+</para><para arch="not-s390">
+
+Refer to <xref linkend="create-floppy"/> 
+for important information on properly
+creating floppy disks from floppy images.
+
+</para><para condition="rescue-needs-root-disk">
+
+The root floppy image <filename>root.bin</filename> contains a
+compressed RAMdisk filesystem which gets loaded into memory after you
+boot the installer.
+
+</para><para>
+
+The peripheral drivers may be downloaded as a series of floppy images
+or as a tarball (<filename>drivers.tgz</filename>). The installer
+system will need access to the drivers file during installation. If
+you have a hard drive partition or connected computer which will be
+accessible to the installer (see below), the tarball will be more
+convenient to handle. The floppy image files are needed only if you
+must install the drivers from floppies.
+
+</para><para>
+
+When downloading files, you should also pay attention to the type of
+file system you are downloading them <emphasis>to</emphasis>, unless
+you will use floppies for the kernel and drivers. The installer can
+read files from many kinds of file systems, including FAT, HFS,
+ext2fs, and Minix.  When downloading files to a *nix file system,
+choose the largest possible files from the archive.
+
+</para><para>
+
+During the installation, you will erase the partition(s) on which you
+are installing Debian before beginning the installation. All
+downloaded files must be placed on partitions
+<emphasis>other</emphasis> than those on which you are planning to
+install the system.
+
+</para>
+
+&download-alpha.xml;
+&download-arm.xml;
+&download-powerpc.xml;
+&download-m68k.xml;
+
+  </sect2>
+
+ </sect1>

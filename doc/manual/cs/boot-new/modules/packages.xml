@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+<!-- $Id$ -->
+<!-- original version: 1.1 -->
+
+ <sect2 id="install-packages">
+ <title>Instalace balíčků: základní nebo pokročilá</title>
+
+<para>
+
+Nyní vám bude nabídnut seznam programů, které můžete použít pro výběr
+balíků. Můžete si vybrat mezi jednodušší, nebo detailnější cestou.
+Doporučujeme vám začít jednodušším způsobem, protože k detailnímu
+nastavení se můžete po skončení instalace kdykoliv vrátit.
+
+</para><para>
+
+Protože je <command>base-config</command> velmi líný, tak si na pomoc
+zavolá jiné aplikace.  Pro začátečnickou instalaci spustí program
+<command>tasksel</command>, pro pokročilou program
+<command>dselect</command> nebo <command>aptitude</command>.  Všechny
+nástroje můžete spustit samostatně kdykoliv po instalaci
+a (od)instalovat si tak další balíčky.  Pokud potřebujete po skončení
+instalace doinstalovat konkrétní balíček, jednoduše spusťte příkaz
+<userinput>apt-get install
+<replaceable>balik</replaceable></userinput>, kde
+<replaceable>balik</replaceable> je jméno balíčku, který chcete
+nainstalovat.
+
+</para>
+
+  <sect3 id="tasksel">
+  <title>Jednoduchá cesta &mdash; instalace úloh</title>
+
+<para>
+
+Jestliže jste zvolili jednodušší instalaci, ocitnete se v programu
+<command>tasksel</command>.  Program vám předloží nabídku připravených
+softwarových úloh.  Vždy samozřejmě můžete přejít k programu
+<command>dselect</command> a balík po balíku určit, co se má
+instalovat. Ovšem projít všechny balíky vám pravděpodobně zabere hodně
+času, protože budete vybírat z &num-of-distrib-pkgs; dostupných
+balíků!
+
+</para><para>
+
+Z tohoto důvodu vám raději nabízíme <emphasis>úlohy</emphasis>
+(zadání).  <emphasis>Zadáním</emphasis> se myslí funkce, kterou systém
+bude schopen plnit. Můžete volit z několika připravených zadání jako
+třeba <quote>vývoj v jazyce C</quote>, <quote>souborový
+server</quote>, <quote>vědecké aplikace</quote> nebo <quote>Debian
+Jr.</quote>.
+
+</para><para>
+
+U každé úlohy si můžete tlačítkem <guibutton>Informace
+o úloze</guibutton> nechat zobrazit podrobnější informace o vybrané
+úloze, jako třeba seznam balíčků v ní obsažených. <xref
+linkend="tasksel-size-list"/> obsahuje tabulku několika úloh a jejich
+přibližné velikosti.
+
+</para><para>
+
+Až skončíte s výběrem, vyberte <guibutton>Finish</guibutton>.  Tím se
+spustí <command>apt-get</command>, který nainstaluje vybrané balíčky.
+I když nevyberete žádné úlohy, doinstalují se všechny chybějící balíky
+s prioritou standardní, požadované a důležité. (To je ekvivalentní
+spuštění příkazu <userinput>tasksel -s</userinput> a v současné době
+to znamená asi 37 megabajtů balíčků).  Před samotnou instalací se
+ještě zobrazí počet instalovaných balíků a celková velikost balíků,
+které se musí stáhnout ze sítě.
+
+</para><para>
+
+Zde musíme zmínit, že v připravených úlohách je zahrnuta pouze malá
+část ze všech &num-of-distrib-pkgs; dostupných balíčků.  Informace
+o dalších balících získáte příkazem <userinput>apt-cache search
+<replaceable>hledany-retezec</replaceable></userinput> (viz manuálová
+stránka <citerefentry> <refentrytitle>apt-cache</refentrytitle>
+<manvolnum>8</manvolnum> </citerefentry>), nebo si podle popisu níže
+spusťte program <command>dselect</command> nebo
+<command>aptitude</command>.
+
+</para>
+  </sect3>
+
+  <sect3 id="dselect">
+  <title>Pokročilá správa balíků programem <command>dselect</command></title>
+
+<para>
+
+Pokud jste konzervativní uživatel, pravděpodobně zvolíte program
+<command>dselect</command>.  Před spuštěním programu byste si rozhodně
+měli přečíst <ulink url="&url-dselect-beginner;">dselect
+Tutorial</ulink>. <command>dselect</command> slouží k výběru
+jednotlivých <emphasis>balíků</emphasis>, které se nainstalují na váš
+počítač.  Program <command>dselect</command> je nutné spustit jako
+superuživatel (root).
+
+</para>
+ </sect3>
+
+  <sect3 id="aptitude">
+  <title>Pokročilá správa balíků programem <command>aptitude</command></title>
+
+<para>
+
+<command>Aptitude</command> moderní program pro správu balíků. Její
+vzhled a ovládání připomínají proslulý <command>dselect</command>, ale
+oproti němu se snaží být přívětivější k začátečníkům. (Musíte zkusit
+přibalené hledání min!) <command>Aptitude</command> umožňuje vybírat
+jednotlivé balíky (jako <command>dselect</command>), množiny balíků
+vyhovující zadanýcm kritériím (pro pokrročilé uživatele), nebo celé
+úlohy (jako <command>tasksel</command>).
+
+</para><para>
+
+Nejdůležitější klávesové zkratky jsou:
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+  <entry>Klávesa</entry><entry>Akce</entry>
+</row>
+</thead>
+
+<tbody>
+<row>
+  <entry><keycap>nahoru</keycap>, <keycap>dolů</keycap></entry>
+  <entry>Posune se na předchozí resp. následující řádek.</entry>
+</row><row>
+  <entry>&enterkey;</entry>
+  <entry>Otevře/sbalí/aktivuje položku.</entry>
+</row><row>
+  <entry><keycap>+</keycap></entry>
+  <entry>Označí balík pro instalaci.</entry>
+</row><row>
+  <entry><keycap>-</keycap></entry>
+  <entry>Označí balík pro odstranění.</entry>
+</row><row>
+  <entry><keycap>d</keycap></entry>
+  <entry>Zobrazí závislosti balíku.</entry>
+</row><row>
+  <entry><keycap>g</keycap></entry>
+  <entry>Provede stažení/instalaci/odstranění balíků.</entry>
+</row><row>
+  <entry><keycap>q</keycap></entry>
+  <entry>Zavře aktuální pohled.</entry>
+</row><row>
+  <entry><keycap>F10</keycap></entry>
+  <entry>Přepne se do menu.</entry>
+</row>
+</tbody></tgroup></informaltable>
+
+Více příkazů naleznete v nápovědě pod klávesou <keycap>?</keycap>.
+
+</para><para>
+
+Přestože byla <command>aptitude</command> navržená tak, aby se chovala
+podobně jako <command>dselect</command>, můžete si ji upravit dle
+svých potřeb (vlastní klávesové zkratky, vlastní barvy, vlastní
+pohledy). Vyčerpávající uživatelskou příručku naleznete po instalaci
+<command>aptitude</command> v souboru
+<filename>/usr/share/doc/aptitude/README</filename>.
+
+</para>
+  </sect3>
+ </sect2>

@@ -1,0 +1,112 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: shadow.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+
+ <sect2 id="base-config-users">
+ <title>Setting Up Users And Passwords</title>
+
+  <sect3 id="base-config-shadow">
+  <title>Shadow Passwords</title>
+
+<para>
+
+Depending on a given priority, the system may ask whether you want to
+enable shadow passwords.  This is a system in which your GNU/Linux
+system is made to be a bit more secure.  In a system without shadow
+passwords, passwords are stored (encrypted) in a world-readable file,
+<filename>/etc/passwd</filename>.  This file has to be readable to
+anyone who can log in because it contains vital user information, for
+instance, how to map between numeric user identifiers and login names.
+Therefore, someone could conceivably grab your
+<filename>/etc/passwd</filename> file and run a brute force attack
+(i.e. run an automated test of all possible password combinations)
+against it to try to determine passwords.
+
+</para><para>
+
+If you have shadow passwords enabled, passwords are instead stored in
+<filename>/etc/shadow</filename>, which is readable and writable only
+by root, and readable by group shadow. Therefore, we recommend that
+you enable shadow passwords.
+
+</para><para>
+
+Reconfiguration of the shadow password system can be done at any time
+with the <command>shadowconfig</command> program.  After installation,
+see <filename>/usr/share/doc/passwd/README.debian.gz</filename> for
+more information.
+
+</para>
+  </sect3>
+
+  <sect3 id="base-config-root">
+  <title>Set the Root Password</title>
+
+<para>
+
+The <emphasis>root</emphasis> account is also called the
+<emphasis>super-user</emphasis>; it is a login that bypasses all
+security protection on your system. The root account should only be
+used to perform system administration, and only used for as short
+a time as possible.
+
+</para><para>
+
+Any password you create should contain at least 6 characters, and
+should contain both upper- and lower-case characters, as well as
+punctuation characters.  Take extra care when setting your root
+password, since it is such a powerful account.  Avoid dictionary
+words or use of any personal information which could be guessed.
+
+</para><para>
+
+If anyone ever tells you they need your root password, be extremely
+wary. You should normally never give your root account out, unless you
+are administering a machine with more than one system administrator.
+
+</para>
+  </sect3>
+
+  <sect3 id="make-normal-user">
+  <title>Create an Ordinary User</title>
+
+<para>
+
+The system will ask you whether you wish to create an ordinary user
+account at this point.  This account should be your main personal
+log-in.  You should <emphasis>not</emphasis> use the root account for
+daily use or as your personal login.
+
+</para><para>
+
+Why not?  Well, one reason to avoid using root's privileges is that it
+is very easy to do irreparable damage as root.  Another reason is that
+you might be tricked into running a <emphasis>Trojan-horse</emphasis>
+program &mdash; that is a program that takes advantage of your
+super-user powers to compromise the security of your system behind
+your back. Any good book on Unix system administration will cover this
+topic in more detail &mdash; consider reading one if it is new to you.
+
+</para><para>
+
+Name the user account anything you like.  If your name is John Smith,
+you might use <userinput>smith</userinput>,
+<userinput>john</userinput>, <userinput>jsmith</userinput> or
+<userinput>js</userinput>.  You will also be prompted for the full
+name of the user, and, like before, a password.
+
+</para><para>
+
+If at any point after installation you would like to create another
+account, use the <command>adduser</command> command.
+
+</para><para arch="s390">
+
+You need to create a user account on &arch-title; if you want to login
+over the network using telnet. The telnet server does not allow root
+logins in Debian's default configuration. However, you can use ssh
+(Secure SHell) to remotely login as root but this is not
+recommended.
+
+</para>
+  </sect3>
+ </sect2>

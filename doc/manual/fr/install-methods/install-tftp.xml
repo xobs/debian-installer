@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id$ -->
+
+ <sect1 condition="supports-tftp" id="install-tftp">
+ <title>Préparer les fichiers pour amorcer depuis le réseau en TFTP</title>
+<para>
+
+Si votre machine est connectée à un réseau local, vous pouvez
+        l'amorcer directement à travers le réseau à partir d'une autre
+        machine en utilisant TFTP. Si vous décidez de le faire, les
+        fichiers d'amorçage doivent être placés à un endroit
+        spécifique sur cette machine et elle doit être configurée pour
+        supporter l'amorçage de votre propre machine.
+
+</para><para>
+
+Vous devez configurer un serveur TFTP et, pour les machines CATS, un serveur 
+BOOTP <phrase condition="supports-rarp">, ou un serveur RARP </phrase>
+<phrase condition="supports-dhcp">, ou un serveur DHCP</phrase>.
+
+</para><para>
+
+<phrase condition="supports-rarp">Le protocole de recherche des adresses 
+inverses (<emphasis>Reverse address Resolution Protocol</emphasis> ou RARP)
+        est une solution pour indiquer à votre client l'adresse IP
+        qu'il doit utiliser pour lui-même. Une autre solution est
+        d'utiliser le protocole BOOTP.</phrase>
+
+<phrase condition="supports-bootp">BOOTP est un protocole IP qui indique à un 
+ordinateur quelle est son adresse IP et lui dit où obtenir sur le réseau une 
+image d'amorçage.</phrase>
+
+<phrase arch="m68k">Il existe désormais une autre solution pour les systèmes
+        VMEbus&nbsp;: l'adresse IP peut être configurée manuellement
+        dans la ROM d'amorçage.</phrase>
+
+<phrase condition="supports-dhcp">Le protocole DHCP 
+(«&nbsp;Dynamic Host Configuration Protocole&nbsp;» ou Protocole de 
+configuration dynamique des hôtes, NdT) est une extension bien plus flexible 
+de BOOTP (mais respectant la compatibilité ascendante). Certains systèmes ne 
+peuvent être configurés que via DHCP.</phrase>
+
+</para><para arch="powerpc">
+
+Pour les PowerPC, si vous avez une machine Power Macintosh
+        NewWorld, il vaut mieux utiliser DHCP plutôt que
+        BOOTP. Certaines de ces dernières sont incapables d'amorcer en
+        utilisant BOOTP.
+
+</para><para arch="alpha"> 
+
+À la différence du microprogramme Open Firmware que l'on
+        trouve sur les machines SPARC et PowerPC, la console SRM
+n'utilisera <emphasis>pas</emphasis> RARP pour obtenir les adresses
+        IP&nbsp;; vous devrez ainsi utiliser BOOTP pour amorcer votre
+        Alpha depuis le réseau. Vous pouvez aussi entrer directement
+        depuis la console VRM la configuration IP des interfaces
+        réseau
+
+<footnote>
+<para>
+
+Les systèmes Alpha peuvent aussi s'amorcer depuis le réseau en
+        utilisant MOP DECNet («&nbsp;Maintenance Operations
+        Protocol&nbsp;», Protocole des opérations de Maintenance)
+        mais ce n'est pas couvert ici. Il est vraisemblable que
+        votre opérateur local OpenVMS sera ravi de vous assister si
+        vous ne pouvez résister à l'envie d'utiliser MOP pour amorcer
+        Linux sur votre Alpha.
+
+</para>
+</footnote>.</para><para arch="hppa"> 
+
+Quelques vieilles machines HPPA (p. ex. 715/75) utilisent
+        RBOOTD plutôt que BOOTP. Un paquet RBOOTD est disponible sur
+        le site web de parisc-linux.
+
+</para><para>
+
+Le protocole de transfert de fichiers trivial («&nbsp;Trivial
+        Transfert File Protocol&nbsp;» ou TFTP, NdT) est utilisé pour
+        transférer l'image d'amorçage au client. Théoriquement,
+        n'importe quel serveur sur n'importe quelle plate-forme qui
+        implémente ces protocoles peut être utilisé. Dans les
+        exemples qui vont suivre dans cette partie, on donnera les
+        commandes pour SunOS 4.x, SunOS 5.x (mieux connu sous le nom
+        de Solaris) et GNU/Linux.
+
+</para>
+
+&tftp-rarp.xml;
+&tftp-bootp.xml;
+&tftp-dhcp.xml;
+
+  <sect2 id="tftpd">
+  <title>Activer le serveur TFTP</title>
+<para>
+
+Pour s'assurer du bon fonctionnement du serveur TFTP, vous
+devez vous assurer au préalable que <command>tftpd</command> est
+        activé. Ce dernier est généralement activé grâce à la ligne
+suivante dans <filename>/etc/inetd.conf</filename>&nbsp;:
+
+<informalexample><screen>
+
+tftp dgram udp wait root /usr/sbin/tcpd in.tftpd /tftpboot
+
+</screen></informalexample>
+
+Jetez un oeil dans ce fichier et rappelez-vous le répertoire
+passé en argument de <command>in.tftpd</command>&nbsp;; vous en
+aurez besoin ultérieurement. L'option <userinput>-l</userinput> autorise
+certaines versions de <command>in.tftpd</command> à journaliser
+        toutes les requêtes vers le journal du système&nbsp;; c'est
+        extrêmement pratique en cas d'erreur d'amorçage. Si vous devez
+changer <filename>/etc/inetd.conf</filename>, vous devrez le signaler
+au processus <command>inetd</command>. Sur une machine Debian,
+lancez <userinput>/etc/init.d/inetd reload</userinput> (pour une Potato
+2.2 et système plus récent, utilisez 
+<userinput>/etc/init.d/netbase reload</userinput>)&nbsp;; sur les autres 
+machines, retrouvez le numéro de processus de <command>inetd</command> et 
+tuez-le avec la commande 
+<userinput>kill -HUP <replaceable>inetd-pid</replaceable></userinput>.
+
+</para><para arch="i386">
+
+Pour utiliser la méthode de démarrage par l'exécution d'un
+        environnement de pré-amorçage (PXE) de TFTP, vous avez besoin
+d'un serveur TFTP avec <userinput>tsize</userinput>. Sur
+un serveur &debian;, <command>tftp-hpa</command> vous dira si c'est le cas.
+
+</para><para arch="mips">
+
+Si votre serveur TFTP est une machine utilisant Linux 2.4.x, il vous
+        faudra effectuer la manoeuvre suivante sur votre
+        serveur&nbsp;:
+
+<informalexample><screen>
+
+echo 1 > /proc/sys/net/ipv4/ip_no_pmtu_disc
+
+</screen></informalexample>
+
+de façon à détourner la détection du MTU sinon la PROM de
+         l'Indy ne pourra pas télécharger le nouveau noyau. En outre,
+         assurez-vous que les paquets TFTP transitent par un port
+         source inférieur à 32767 ou bien le téléchargement s'arrêtera
+         après le premier paquet. Vous pouvez toujours contourner ce
+         bogue de la PROM grâce au noyau 2.4.x en ajustant
+
+<informalexample><screen>
+
+echo "2048 32767" > /proc/sys/net/ipv4/ip_local_port_range
+
+</screen></informalexample>
+
+pour fixer l'intervalle des ports source que le serveur Linux
+         TFTP peut utiliser.
+
+</para>
+  </sect2>
+
+  <sect2 id="tftp-images">
+  <title>Mettre les images TFTP en place</title>
+<para>
+
+Ensuite, placez les images TFTP dont vous avez besoin
+(décrites dans la <xref linkend="file-descs"/>) dans le répertoire
+des images d'amorce de <command>tftpd</command>. Généralement,
+         ce répertoire s'appelle <filename>/tftpboot</filename>. Vous aurez à
+         faire un lien depuis ce fichier vers le fichier que
+<command>tftpd</command> utilisera pour amorcer un client
+         particulier. Malheureusement, le nom du fichier est déterminé
+         par le client TFTP et il n'y a pas vraiment de standard.
+
+</para><para arch="powerpc">
+
+Sur les machines Power Macintosh NewWorld, vous devrez
+configurer le chargeur d'amorçage <command>yaboot</command> comme
+         une image d'amorçage TFTP. Yaboot chargera les images du
+         noyau et du disque virtuel à travers TFTP. Pour amorcer à
+         travers le réseau, utilisez
+         <filename>yaboot-netboot.conf</filename>. Renommez-le simplement en
+         <filename>yaboot.conf</filename> dans le répertoire tftp.
+
+</para><para arch="not-powerpc">
+
+Souvent, le fichier que le client TFTP recherchera est
+<replaceable>client-ip-in-hexclient-architecture</replaceable>. Pour calculer
+<replaceable>client-ip-in-hex</replaceable>, prenez chaque octet de l'adresse
+         IP du client et convertissez-la en hexadécimal. Si vous avez
+         une machine à portée de main avec le programme
+<command>bc</command>, vous pouvez l'utiliser. En premier, utilisez
+la commande <userinput>obase=16</userinput> pour configurer la sortie en
+         hexadécimal, puis entrez les composants individuels du client
+IP un par un. Et pour <replaceable>client-architecture</replaceable>,
+essayez quelques valeurs.
+
+</para><para arch="i386">
+
+Pour le démarrage PXE, vous pouvez utiliser le gestionnaire
+de démarrage inclus avec <classname>syslinux</classname>&nbsp;:
+         <filename>pxelinux.0</filename>. Le gestionnaire de démarrage devra
+         être copié dans le répertoire <filename>/tftpboot</filename>. Créez
+ensuite un sous-répertoire <filename>/tftpboot/pxelinux.cfg</filename>
+dans le répertoire <filename>/tftpboot</filename>, et dans ce répertoire,
+créez un fichier texte <filename>default</filename>. Voici un exemple
+de ce que peut contenir le fichier <filename>default</filename>&nbsp;:
+
+<informalexample><screen>
+
+default lanlinux
+prompt 1
+
+label lanlinux
+  kernel tftpboot.img
+  append load initrd=root.bin devfs=nomount
+
+</screen></informalexample>
+
+<userinput>devfs=nomount</userinput> est important, car sans lui il pourrait
+         y avoir des problèmes de montage du fichier système root.bin
+         une fois que le noyau sera lancé.
+
+</para><para arch="i386">
+
+Enfin, copiez les fichiers <filename>tftpboot.img</filename> et
+<filename>root.bin</filename> de l'archive ftp Debian dans le répertoire
+<filename>/tftpboot</filename>. C'est l'emplacement où le gestionnaire de
+         démarrage s'attend à trouver ces fichiers.
+
+</para>
+
+
+   <sect3 arch="mipsel">
+   <title>DECstation TFTP Images</title>
+<para>
+
+Pour les DECstation, il y a des fichiers tftpimage pour
+         chaque sous-architecture&nbsp;; ils contiennent à la fois un
+         noyau et un installateur en un seul fichier. La convention
+de nommage est tftpimage-<replaceable>subarchitecture</replaceable> ou
+tftpimage-<replaceable>subarchitecture</replaceable>.gz. Si l'image tftp est 
+gzippée (si le nom se termine par .gz), vous devrez la décompresser
+d'abord avec la commande 
+<userinput>gunzip tftpimage-<replaceable>subarchitecture</replaceable>.gz</userinput>
+car les DECstation ne peuvent s'amorcer via TFTP avec un fichier compressé. 
+Copiez l'image tftp que vous allez utiliser dans
+<userinput>/tftpboot/tftpboot.img</userinput> si vous travaillez avec
+         l'exemple de configuration de BOOTP/DHCP décrit plus haut.
+
+</para><para>
+
+Le microprogramme des DECstation autorise l'amorçage via TFTP par
+la commande <userinput>boot <replaceable>#</replaceable>/tftp</userinput> 
+où <replaceable>#</replaceable> est le numéro de
+         périphérique «&nbsp;TurboChannel&nbsp;» sur lequel
+         amorcer. Sur la plupart des DECstation, c'est le numéro
+         «&nbsp;3&nbsp;». Si le serveur BOOTP/DHCP ne fournit pas le
+         nom du fichier ou bien que vous ayez besoin de passer des
+         paramètres supplémentaires, cela peut se faire avec la
+         syntaxe suivante&nbsp;:
+
+</para><para>
+
+<userinput>boot #/tftp/filename param1=value1 param2=value2 ...</userinput>
+
+</para><para>
+
+Plusieurs révisions de microprogramme des DECstation ont un
+          problème avec l'amorçage depuis le réseau&nbsp;: le
+          transfert débute mais après un certain temps, il s'arrête
+avec <computeroutput>a.out err</computeroutput>. Cela peut avoir plusieurs
+          causes&nbsp;:
+
+<orderedlist>
+<listitem><para>
+
+Le microprogramme ne répond pas à une requête ARP durant un
+             transfert TFTP. Cela conduit à une suspension ARP et le
+             transfert s'arrête. La solution est d'ajouter l'adresse
+             MAC de la carte Ethernet de la DECstation statiquement
+             dans la table ARP du serveur TFTP. On peut le faire avec
+<userinput>arp -s <replaceable>IP-address</replaceable>
+<replaceable>MAC-address</replaceable></userinput> en tant que root
+             sur la machine servant de serveur TFTP. On peut lire
+             l'adresse MAC de la DECstation en entrant
+<command>cnfg</command> à l'invite du microprogramme de la DECstation.
+
+</para></listitem>
+<listitem><para>
+
+Le microprogramme impose une limite de taille des fichiers
+             utilisés pour amorcer par TFTP.
+
+</para></listitem>
+</orderedlist>
+
+Il y aussi des révisions de microprogramme qui ne peuvent pas
+          s'amorcer du tout par TFTP, voyez 
+<ulink url="http://www.netbsd.org/Ports/pmax/board-list.html#proms">les pages web de NetBSD</ulink>.
+
+</para>
+   </sect3>
+
+   <sect3 arch="alpha">
+   <title>Alpha TFTP Booting</title>
+<para>
+Sur Alpha, vous devez spécifier le nom de fichier (le chemin étant
+          relatif au répertoire de l'image d'amorçage) en
+utilisant l'argument <userinput>-file</userinput> de la commande
+<userinput>boot</userinput> de SRM ou en configurant la variable
+d'environnement <userinput>BOOT_FILE</userinput>. Vous pouvez aussi passer
+          le nom de fichier via BOOTP (pour dhcpd ISC, utilisez la
+directive <userinput>filename</userinput>). À la différence de Open
+          Firmware, il n'y a pas de <emphasis>nom de fichier par 
+défaut</emphasis> dans SRM donc vous <emphasis>devez</emphasis> utiliser une 
+de ces méthodes pour spécifier un nom de fichier.
+
+</para>
+   </sect3>
+
+   <sect3 arch="sparc">
+   <title>SPARC TFTP Booting</title>
+<para>
+
+Les architectures SPARC par exemple utilisent les noms de
+          sous-architecture, comme «&nbsp;SUN4M&nbsp;» ou
+          «&nbsp;SUN4C&nbsp;»&nbsp;; dans certains cas, l'architecture
+          est laissée en blanc et le fichier que le client recherche
+est simplement <filename>ip-du-client-en-hexa</filename>. Ainsi, si
+          votre sous-architecture système est SUN4C et que son adresse
+          IP est 192.168.1.3, le nom de fichier sera
+          <filename>C0A80103.SUN4C</filename>.
+
+</para><para>
+
+Vous pouvez aussi forcer certains systèmes SPARC à
+          rechercher un nom de fichier spécifique en l'ajoutant à la
+          fin de la commande d'amorçage de OpenPROM comme
+<userinput>boot net my-sparc.image</userinput>. Ce fichier doit bien sûr être 
+présent dans le répertoire que le serveur TFTP parcourt.
+
+</para>
+   </sect3>
+
+   <sect3 arch="m68k">
+   <title>BVM/Motorola TFTP Booting</title>
+<para>
+
+Pour BVM et les systèmes VMEbus Motorola, recopiez les
+          fichiers &bvme6000-tftp-files; dans <filename>/tftpboot/</filename>.
+
+</para><para>
+
+Ensuite, configurez votre ROM d'amorçage et votre serveur
+          BOOTP pour charger en premier les fichiers
+<filename>tftplilo.bvme</filename> ou <filename>tftplilo.mvme</filename> du
+          serveur TFTP. Reportez-vous au fichier
+<filename>tftplilo.txt</filename> de votre sous-architecture pour
+          obtenir des informations supplémentaires de configuration
+          spécifiques à votre système.
+
+</para>
+   </sect3>
+
+   <sect3 arch="mips">
+   <title>SGI Indys TFTP Booting</title>
+<para>
+
+Sur les Indy de SGI, vous pouvez compter sur <command>bootpd</command> pour
+          obtenir le nom du fichier TFTP. Il est donné
+soit par <userinput>bf=</userinput> dans <filename>/etc/bootptab</filename> ou 
+bien par l'option de <userinput>filename=</userinput> dans 
+<filename>/etc/dhcpd.conf</filename>.
+
+</para>
+   </sect3>
+  </sect2>
+
+  <sect2 id="tftp-low-memory">
+  <title>Installation de TFTP sur système avec peu de mémoire</title>
+<para>
+
+Sur certains systèmes, le disque virtuel d'installation
+          standard, combiné avec les exigences en mémoire de l'image
+          d'amorçage TFTP, ne peuvent tenir en mémoire. Dans ce cas,
+          vous pouvez quand même utiliser TFTP mais vous aurez à
+          passer par une étape supplémentaire pour monter votre
+          répertoire racine à travers le réseau. Ce type de
+          configuration est aussi approprié pour les clients sans
+          disque  et les clients sans données.
+
+</para><para>
+
+Commencez par suivre toutes les étapes ci-dessus dans 
+<xref linkend="install-tftp"/>.
+
+<orderedlist>
+<listitem><para>
+
+Copiez l'image du noyau Linux sur votre serveur TFTP en
+utilisant l'image <userinput>a.out</userinput> de l'architecture sur
+           laquelle vous êtes en train d'amorcer.
+
+</para></listitem>
+<listitem><para>
+
+«&nbsp;Détarez&nbsp;» l'archive de root sur votre serveur
+           NFS (qui peut être le même que votre serveur TFTP)&nbsp;:
+
+<informalexample><screen>
+
+# cd /tftpboot
+# tar xvzf root.tar.gz
+
+</screen></informalexample>
+
+Assurez-vous d'utiliser le <command>tar</command> de GNU (les
+           autres programmes, comme celui de SunOS, manipulent
+           incorrectement certains périphériques comme les fichiers
+           ordinaires).
+
+</para></listitem>
+<listitem><para>
+
+Exportez votre répertoire
+<filename>/tftpboot/debian-sparc-root</filename> avec les accès
+           root pour votre client. Vous devez ajouter la ligne
+           suivante à <filename>/etc/exports</filename> (syntaxe GNU/Linux,
+           cela devrait être similaire pour SunOS jusqu'à la version
+           4.1.x)&nbsp;:
+
+<informalexample><screen>
+
+/tftpboot/debian-sparc-root client(rw,no_root_squash)
+
+</screen></informalexample>
+
+Note&nbsp;: «&nbsp;client&nbsp;» est le nom d'hôte ou bien
+           l'adresse IP reconnue par le serveur pour le système que
+           vous allez amorcer.
+
+</para></listitem>
+<listitem><para>
+
+Créez un lien symbolique depuis votre adresse IP cliente
+           sous forme de nombres séparés par des points dans le fichier
+<filename>debian-sparc-root</filename> du répertoire
+           <filename>/tftpboot</filename>. Par exemple, si l'adresse IP client
+           est 192.168.1.3, faites&nbsp;:
+
+<informalexample><screen>
+
+# ln -s debian-sparc-root 192.168.1.3
+
+</screen></informalexample>
+
+</para></listitem>
+</orderedlist>
+
+</para>
+
+  </sect2>
+
+  <sect2>
+  <title>Installation avec une racine TFTP et NFS</title>
+<para>
+
+C'est très proche de l'installation pour système avec peu de
+mémoire <xref linkend="tftp-low-memory"/> parce que vous ne voulez pas 
+charger le disque virtuel mais amorcer depuis le système de fichier nfs-root
+          créé il y a peu. Vous n'avez qu'à remplacer le lien vers
+          l'image tftpboot par un lien vers l'image du noyau
+(p. ex. <filename>linux-a.out</filename>).
+
+</para><para>
+
+RARP/TFTP requires all daemons to be running on the same server (the
+workstation is sending a TFTP request back to the server that replied
+to its previous RARP request).
+
+</para><para>
+
+Pour amorcer la machine cliente, allez à <xref linkend="boot-tftp"/>.
+
+</para>
+
+  </sect2>
+ </sect1>

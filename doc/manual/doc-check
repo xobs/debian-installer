@@ -1,0 +1,82 @@
+#!/usr/bin/perl -w
+
+# This script checks if the translations of the documents are up to date.
+# When called with "-d" option, it also prints what has changed in the
+# original since last translation
+
+# SYNOPSIS:
+#             ./doc-check [-d] [-v] [-V] [lang]
+#
+#	(uses $lang set below if lang is not given on commandline)
+
+use Getopt::Std;
+use File::Find;
+$opt_d = $opt_v = $opt_V = 0;
+getopts('dvV');
+# You may set this to your default language code
+$lang = shift || "pl";
+
+sub checkdiff
+{
+	my ($plfname, $enfname) = (@_);
+	my ($plrev, $enrev) = getrev($plfname, $enfname);
+	$plrev and $enrev or return;
+	if ( "$plrev" ne "$enrev" ) {
+		if ($opt_d) {
+			my $s = "cvs diff -b -u -r $plrev -r $enrev $enfname";
+			warn "running $s:\n" if ($opt_V);
+			system($s);
+		} else {
+			print "$enfname : $plrev -> $enrev\n";
+		}
+	}
+}
+
+sub getrev
+{
+	my ($plfname, $enfname) = (@_);
+	my ($plrev, $enrev) = (0, 0);
+
+	warn "checking $plfname:\n" if $opt_v;
+	open FILE, $plfname or warn "$plfname: $!\n" and return;
+	while (<FILE>) {
+		if (/<!--\s*original version\D*([\d\.]+)\s*-->/) {
+			$plrev = $1;
+			last;
+		}
+		if (/<!--\s*original document: en\/\S+, revision ([\d\.]+)\s*-->/) {
+			$plrev = $1;
+			last;
+		}
+	}
+	warn "checking $enfname:\n" if $opt_v;
+	open FILE, $enfname or warn "$enfname: $!\n" and return;
+	while (<FILE>) {
+		if (/\$Id: \S+ (\d+) /) {
+			$enrev = $1;
+			last;
+		}
+		if (/\$Revision: (\d+) \$/) {
+			$enrev = $1;
+			last;
+		}
+	}
+	close FILE;
+	warn "failed to find revision for $plfname\n" unless $plrev;
+	warn "failed to find revision for $enfname\n" unless $enrev;
+	return ($plrev, $enrev);
+}
+
+sub process
+{
+	my $enfname = $File::Find::name;
+	return unless $enfname =~ m/\.xml$/;
+	my $plfname = $enfname;
+	$plfname =~ s,^en/,$lang/,;
+	checkdiff($plfname, $enfname);
+}
+File::Find::find({ wanted => \&process, no_chdir => 1 }, 'en');
+checkdiff("install.$lang.xml", "install.en.xml");
+#checkdiff("release-notes.$lang.sgml","release-notes.sgml");
+#checkdiff("index.$lang.html.m4","index.en.html.m4");
+#checkdiff("dselect-beginner.$lang.sgml","dselect-beginner.sgml");

@@ -1,0 +1,408 @@
+Debian Installer notes for translation and internationalisation
+---------------------------------------------------------------
+
+(if you happen to modify this file, please don't forget to update the
+ trailing changelog)
+
+Translation order
+-----------------
+
+When starting to translate debian-installer, you should first make
+sure to get your language choice included, then translate the core
+udebs, next translate the common udebs, and finally complete the rest
+of the udebs.  The second stage installer should also be translated,
+but it consists of normal deb-packages, and not udebs.
+
+Suggested translation order:
+
+-languagechooser
+  (read debian-installer/tools/languagechooser/README.trans for details)
+-countrychooser and iso-codes (see APPENDIX)
+-core udebs and console-data (see APPENDIX)
+-common udebs
+-supported architectures udebs
+-second stage
+-future architectures udebs
+-prospective packages (not yet included in d-i)
+
+See the complete packages list at the end of this document.
+
+How to get files to be translated
+---------------------------------
+
+-Go to http://people.debian.org/~barbier/d-i/l10n/xx where xx is your
+ language ISO code (or xx_YY for languages which have country-dependent
+ flavours such as pt_BR or zh_CN).
+
+-Look at the STATUS.utf8.txt file
+
+-For files reported as missing, go pick up the templates.pot file
+ in the debian-installer CVS:
+ http://cvs.alioth.debian.org/cgi-bin/cvsweb.cgi/debian-installer/?cvsroot=d-i.
+ 
+ Example: 
+ "Missing file: debian-installer/retriever/choose-mirror/debian/po/xx.po"
+ --> pick up http://cvs.alioth.debian.org/cgi-bin/cvsweb.cgi/debian-installer/retriever/choose-mirror/debian/po/templates.pot?cvsroot=d-i
+
+ Rename this file to xx.po and start working on it
+
+-For files reported as incomplete, get the file in
+ http://people.debian.org/~barbier/d-i/l10n/xx and complete it. Don't
+ forget to contact the original translator (see PO file header)
+
+ Rename this file to xx.po and start working on it
+
+-Getting 2nd stage files
+ * base-config: the project is also hosted on alioth CVS server. Files
+                are available on pages mentioned above
+ * tasksel    : also hosted on alioth. Uses subversion
+ * others     : use "apt-get source <package>" and report translations
+                as normal bugs against the given packages 
+
+How to translate
+----------------
+This document is not intended to be a tutorial for gettext-related
+stuff. Please look for documentation of PO editing software such as
+KBabel, gtranslator, PoEdit, EMacs PO-mode, etc.
+
+Please use a dedicated PO-editing tool unless you become very familiar
+with translation work.
+
+Don't forget to properly fill up the PO files header, especially the
+Last-Translator field. 
+
+Fill the Project-Id-Version field with the package name, that will help you
+in translation maintenance.
+
+If a translation team exists for your language, WORK WITH THEM. First
+check the debian-l10n-xxxxx mailing list where xxxxx is your language
+name in english (e.g. debian-l10n-polish, debian-l10n-portuguese...).
+
+For general translation issues or for finding other translators for
+your language, you may also use the debian-i18n mailing list (don't
+post translations there, however).
+
+How to remain consistent among packages
+---------------------------------------
+
+Some strings are identical in two or more packages. Please try to
+consistently translate them.
+
+The ranking page (http://people.debian.org/~barbier/d-i/l10n/rank.txt) will
+show you the merged file status when your translation reaches 100%.
+
+If you reach 100% and nothing show up there, then you're fine : all
+identical strings have been translated.
+
+If you see something like: (Merged PO file: 800t16f), then you got
+inconsistencies.
+
+Look at the http://people.debian.org/~barbier/d-i/l10n/xx/xx.po and search
+"fuzzy" markers there. They will show you which strings are inconsistently
+translated. If you've properly used the Project-Id-Version, the package name
+will also appear.
+
+
+How to update existing translations
+-----------------------------------
+
+If you want to update a translation, please always contact the previous
+translator in order to prevent duplication of work.  His mail address can
+be found in the PO file.
+
+How to test your work
+---------------------
+
+When you have finished your translation, always re-read your file at
+least once to correct all meaning-, spelling-, grammar-, typo-, etc-
+mistakes (maybe your po-editor does include a spellchecker or a
+translation helper like acheck).  Running
+  msgfmt --check --statistics <YOUR LANGUAGE CODE>.po
+(from the gettext package) before committing is also a good idea to
+check that your file is valid and will be integrated without trouble.
+
+You may also use the Debian aspell package.
+
+You could also run podebconf-display-po (from po-debconf >= 0.8.3)
+on your file:
+  podebconf-display-po -fdialog debian/po/<YOUR LANGUAGE CODE>.po
+to have a rough idea on how your translation will look like.  But
+as cdebconf and debconf displays slightly differ, and as some scripts
+do heavy use of text substitution, do not fully rely on this program.
+Running debian-installer is the only solution to test translations.
+
+How to get help
+---------------
+
+If you need further assistance, feel free to ask for help on
+debian-boot (for debian-installer related stuff) or debian-i18n (for
+l10n related questions) Debian mailing lists.
+
+How to get your work included in debian-installer
+-------------------------------------------------
+
+Choose either of the methods below. CVS commits are encouraged. Create
+an alioth account and ask in -boot for getting write access.
+
+ CVS commit
+ ----------
+If you have CVS write access, don't forget to update changelogs and
+remember: changelog files use UTF-8!! The debian-installer CVS is hosted on
+alioth.debian.org ("debian-installer" and "base-config" projects).
+
+If the distribution in the first line of debian/changelog is
+UNRELEASED, this means that it has been patched since the last upload.
+In this case all you have to do is to add an entry at the end of this
+revision.  Otherwise distribution is unstable, and you have then to
+bump version number.  You can do it by hand, or by running dch -i but
+in any case remember to replace unstable by UNRELEASED in the
+distribution field.  Then add a comment about your contribution.
+
+The standard form used to record a translation in debian/changelog is
+as follows:
+
+  * Translations:
+    - Your Name Hess
+      - Record here what you changed.
+
+Some changelog files will mention that Translators do not need to update
+them because some "l10n-changes" scripts are now used. In such case, do NOT
+update the debian/changelog at all for translations. This will be
+done automagically when the package will be released. In the future, all
+debian-installer packages will use this scheme.
+
+ File a bug
+ ----------
+You may send your translations as bug reports against the given
+packages.  The packages names are the last part of the lines below
+(for instance, "languagechooser" for tools/languagechooser).
+Some packages have different names which are mentioned when needed.
+
+For bug reports, please use the "d-i" and "l10n" tags.
+
+ Send to debian-boot
+ -------------------
+You may also send the translations to the debian-boot mailing list.
+Please use [INTL:xx] in Subjects where xx is your language code
+(or xx_YY)
+
+PACKAGES LIST
+-------------
+
+ Language choice 
+ ---------------
+
+ tools/languagechooser
+
+ Core udebs
+ ----------
+
+ tools/countrychooser (plus iso-codes, see APPENDIX)
+ tools/cdebconf
+ anna
+ main-menu
+ tools/kbd-chooser (plus console-data, see APPENDIX)
+ tools/base-installer
+ tools/prebaseconfig
+ utils (package: di-utils)
+
+ Common udebs
+ ------------
+
+ tools/ddetect
+ tools/cdrom-detect
+ retriever/cdrom (cdrom-retriever)
+ retriever/floppy (floppy-retriever)
+ tools/netcfg
+ retriever/net (net-retriever)
+ retriever/choose-mirror
+ tools/cdrom-checker
+ tools/iso-scan
+ tools/autopartkit
+ partman/* (several partman-* packages)
+ tools/bugreporter-udeb
+ tools/partconf
+ tools/baseconfig-udeb
+ tools/lvmcfg
+ tools/partitioner
+
+ Architecture-dependent udebs
+ ----------------------------
+
+ 1) Already supported architectures specific tools
+ -------------------------------------------------
+
+  tools/grub-installer
+  tools/lilo-installer
+  tools/mips/arcboot-installer
+  tools/yaboot-installer
+  tools/aboot-installer
+
+ 2) Will be supported soon/in the future
+ ---------------------------------------
+
+  tools/ia64/elilo-installer
+  tools/hppa/palo-installer
+  tools/sparc/silo-installer
+  tools/s390/netdevice
+  tools/s390/dasd
+  tools/mipsel/delo-installer
+
+ Prospective packages
+ --------------------
+ 
+  partman/*
+  
+ Post-reboot installation stage
+ ------------------------------
+
+ (some of these packages do not only need debconf-type translation, but
+ also program translation)
+
+ Translations must be reported as wishlist bugs against these
+ packages.  
+
+ Base-config and tasksel are exceptions because they are maintained by
+ the debian-boot team, so other methods (CVS or SVN commits and -boot
+ filing) may apply for it.  Note that they are both separate projects on
+ alioth (tasksel uses subversion).
+  
+ base-config (debconf)
+ shadow (debconf+programs)
+ console-data (debconf)
+ discover (debconf)
+ aptitude (programs)
+ dselect (programs) -> in dpkg source package
+ apt (programs)
+ dpkg (programs)
+ exim4-config (debconf)
+ popularity-contest (debconf)
+
+ As 2nd stage install uses debconf, you also need to translate the
+ interface widgets used by debconf. On mosts systems, the "dialog" interface
+ is used, which require to translate widgets from the "newt" package.
+
+ Dennis Stampfer has status pages similar to Denis Barbier status
+ pages for these "2nd-stage" package. You may find these statistics
+ at:
+
+ http://people.debian.org/~seppy/d-i/2nd-stage/
+
+ Once you have finished with this, you might want to consider proceeding based
+ on the Package priority. This means that 'important' and 'standard' packages
+ should be translated first. Since 'optional' and 'extra' priorities include
+ quite a number of packages it is sensible to start working with common-used
+ packages. The data from the 'popularity contest' is useful to decide
+ what is commonly used (however, notice it might be biased).
+
+ List of packages with debconf templates that should be translated first
+ (as of this writing):
+
+ Important
+ ---------
+ debconf man-db console-common netbase ifupdown console-data adduser
+ setserial bsdmainutils lilo netkit-inetd
+
+ Standard
+ --------
+ ssh wamerican libssl0.9.7 locales ibritish flex
+ dictionaries-common iamerican
+
+ Optional 
+ --------
+ (only some very commonly installed packages -first 30 in the list-
+ are included here, ordered by popularity)
+ apache-common tetex-bin xserver-common apache 
+ libcupsys2 xserver-xfree86 ntpdate libfontconfig1 samba-common
+ samba-common mozilla-browser libpaper1 fontconfig ntp-simple
+ libpango1.0-common cvs xscreensaver screen powermgmt-base
+ samba dash mysql-server gdm apt-listchanges libdiscover1
+ discover libslp1 libnet-perl cupsys-client cupsys
+
+APPENDIX
+--------
+ Countrychooser/iso-codes
+ ------------------------
+
+The countrychooser package uses country names and codes from the
+iso-codes package. The country name translations are taken from this
+package instead of just sitting in the countrychooser package.
+
+For this reason, you need to translate the iso_3166.tab file in the
+iso-codes package:
+ - apt-get source iso-codes (from unstable)
+ - cd iso-codes-<version>/iso_3166
+ - "make iso_3166.pot"
+ - copy templates.pot file to xx.po and translate country names there or complete
+   the existing translation
+ - send the new file as a bug report against the iso-codes package with
+   the "l10n" and "patch" tag, severity wishlist
+
+If a file already exists for your language, do the following:
+
+ - "make iso_3166.pot"
+ - msgmerge -U xx.po iso_3166.pot
+ - update xx.po
+
+The countrychooser package includes a mechanism for using an interim
+translated file instead of iso-codes package translations. This allows
+you to immediately test your translations. Just drop your file in
+tools/countrychooser/iso-codes.updates and commit it. However, when
+the upstream iso-codes package includes your translation, please
+REMOVE the interim file from debian-installer CVS.
+
+ kbd-chooser/console-data
+ ------------------------
+
+The kbd-chooser package uses keyboard names from the console-data package.
+Thus, in order to get it completely translated, translators need to
+translate console-data debconf templates.
+
+First check on http://people.debian.org/~barbier/intl/l10n/po-debconf/<code>
+(where <code> is your language code) if this file is already translated.
+
+If it is not shown, then you may get the templates.pot file at:
+http://people.debian.org/~barbier/intl/l10n/po-debconf/pot#console-data
+
+Pick up the templates.pot file, modify it and send it back with a
+bugreport to the package "console-data, with the "l10n" and "patch"
+tag, severity wishlist.
+
+--------------------------------------------------------------------------
+
+This guide is supposed to be be a first start for translators.  There
+are probably errors, and some packages we forgot.  Please add them if
+you discover such packages, and fix it if you find errors.
+
+--------------------------------------------------------------------------
+Changelog:
+
+2004/03/10 Christian Perrier
+ - Added mention of Seppy's status page for 2nd-stage
+
+2004/02/16 Christian Perrier
+ - Added instructions for keeping translations consistent among packages
+
+2004/02/14 Christian Perrier
+ - Corrected instructions for iso-codes
+
+2004/01/30 Christian Perrier
+ - give details about kbd-chooser/console-data
+ - mention *core* udebs in translation order
+
+2004/01/22 Christian Perrier
+ - updated packages information (countrychooser and partman-* added)
+ - mentioned aspell in tools
+ - appendix added with iso-codes note
+ - reformatted changelog
+ - new title
+
+2004/01/20 Javier Fernandez-Sanguino
+ - added more packages and mentioned the 'by priority' and 'popular' criteria)
+
+2003/12/20 Christian Perrier
+ - updated packages list and more information
+ - rewamped the file
+
+2003/11/08 Petter Reinholdtsen
+ - file creation

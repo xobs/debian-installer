@@ -1,0 +1,172 @@
+Status for different parts of debian-installer.  The numbers are
+approximate (as in +/- 50%) and may change in any direction, at any
+time.
+
+[0%] Not begun
+---------------------------------------------------------------------
+	- Some kind of a mechanism for udebs to declare what parts of
+	  busybox they need, so we can ensure that all deps are met while
+	  keeping the busybox footprint small.
+          Packages depending on base-installer should use the
+	  utilities in /target so we can keep busybox's size down.
+	  (We will probably ship without this.)
+	- ppp support
+	  Not as important for analog dialup, as for ISDN, pppoe.
+	- some architectures
+		arm
+		hurd-i386
+		sh
+		s/390
+
+[30%] Might need large rewrites. Current implementation might
+      work by accident
+---------------------------------------------------------------------
+        - user documentation
+		Short term we have the INSTALLATION-HOWTO, but the real
+		install manual is still being put together.
+        - GUI frontend to cdebconf.
+		There are some basic implementations. The trick is to make
+		it a GUI that does not suck, while still using debconf
+		underneath.
+	- some architectures
+		hppa
+		mipsel
+		
+[60%] Needs some work, but does its grunt work
+---------------------------------------------------------------------
+	- I18N
+		Mostly done, still filling in minor holes.
+	- translations
+		Varying languages translated to varying degrees.
+		http://people.debian.org/~barbier/debian-installer/l10n/
+	- language-chooser
+		The perennial problem is how to order/present the list of
+		languages. Many complaints, but it works.
+        - boot loader installers (lilo, grub, etc)
+		Work, except for when they don't. See BTS.
+        - base system installer
+		debootstrap is stable, and has quite good support in
+                base-installer
+		Except for when it fails. See BTS.
+	- anna
+		Works, mostly.  Needs support for Release files.
+		Support for signed Release files would be cool, but
+		needs gpgv-udeb.
+		Needs to have load-installer properly split out of the anna
+		binary to save space on root floppy. Or removed, not used
+		anymore.
+        - disk selector, partitioner
+		There are three of them, autopartkit, partkit, and partman.
+		All of them work, except for when they don't. (See BTS.)
+	- wireless support
+		- configurator newly available, needs testing
+ 		- wireless-tools-udeb is available, but is not loaded by default
+		  on netinst CD
+	- post-reboot configuration
+		base-cofig is stable, though stuff may need to be added to
+		it to handle things d-i doesn't bother with. i18n is
+                needed. Some questions repeat questions from d-i.
+	- linda support for udebs, to catch all the common gotchas
+		(lintian support in progress)
+	- web site
+		http://www.debian.org/devel/debian-installer/
+		Could be better laid out, lacking some sections, other
+		parts are quite good.
+	- archive integration
+		Only a few arches (i386, powerpc, ia64) have boot media in
+		the archive.
+		Last kinks in unstable/testing separation for d-i still being
+		worked out.
+	- pcmcia support
+		- may work, may not.. (many failure reports)
+		- Probably need to re-run hw-detect after loading pcmcia from
+		  the net_driver floppy.
+	- low memory support
+		Where "low" is 32-46 mb!
+		Works, but user must be careful to set up swap ASAP.
+		There is no sanity checking, and some bad failure modes.
+	- some architectures
+		i386
+		ia64
+		powerpc (some subarches)
+		mips
+			- problems with partitioning, CD images, arcboot
+			- netboot and basic install works, if you know what
+			  you're doing
+		m68k (some subarches)
+			- mac fully working
+			- amiga building, untested
+		alpha
+			- needs TLC
+		sparc
+
+[90%] Single missing important feature or bug.
+---------------------------------------------------------------------
+	- hw-detect
+		Working but needs to be switched over to discover2
+	- iso-scan
+		Works, but does not flag the disk the iso is mounted from
+		as unusable by the rest of the installer.
+	- kernel-package integration
+		Moving to the new linux-kernel-di system. Not all arches
+		use it yet.
+        - netcfg
+		Working, pending rewrite for IPv6.
+	- bts
+		Still need a non-manual way to tag our bugs.
+        - library reduction
+		Still breaking from time to time.	
+
+[100%] Those shouldn't need to be touched any more 
+       (famous last words)
+---------------------------------------------------------------------
+        - udpkg
+	- cd installs
+ 	- net retriever
+	- cdrom retriever
+        - ethdetect
+        - cdebconf
+	- dhcp
+	- floppy retriever
+        - main-menu
+        - choose-mirror
+        - busybox integration
+        - install media build system
+
+Common problems and transitions
+===============================
+
+This is a list of common mistakes that need to be corrected throughout the
+code base:
+
+  * All debconf commands that INPUT, GO, GET or SET questions should check
+    their return value. This is pure evil:
+
+    debconf->command(debconf, "GET", "mirror/suite", NULL); /* unchecked return code ! */
+    asprintf(&command, "foo %s", debconf->value);
+    system(command);
+
+  * Nothing should send error messages to stderr. If there is an error,
+    use debconf to display a message. stderr messages will overwrite the
+    newt frontend.
+
+  * cdebconf's debconfclient.h has a set of macros for calling debconf
+    (debconf_get() and so on)
+    These should perhaps be used consistently throughout the code for
+    clarity.
+
+  * There needs to be a centralised logging method. Syslog will do, but
+    we currently have a lot of nasty code that appends messages to
+    /var/log/messages directly. All of that would be converted to pipe it
+    to logger. However, this is a problem, because piping a command to
+    logger loses the exit status of the command. Need some way to run a
+    command, logging the ouput to syslog, w/o losing exit status.
+
+  * udebs should not include md5sums files, or postrm, prerm, preinst
+    scripts. This includes ones generated by debhelper.
+
+  * Use the cdebconf error template type for error messages, instead of
+    note.
+  
+  * Most debconf title setting can be replaced with providing the
+    appropriate title template and letting main-menu set it.

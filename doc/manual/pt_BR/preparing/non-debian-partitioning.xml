@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- $Id$ -->
+<!-- original version: 1.11 -->
+
+ <sect1 id="non-debian-partitioning">
+ <title>Pre-Particionamento para Sistemas Multi-Inicialização</title>
+<para>
+
+O particionamento do seu disco simplemsente se refere ao ato de dividir
+seu disco em pedaços. Cada pedaço é independente dos outros. 
+É de grosso modo equivalente a colocar paredes dentro da casa; se 
+adicionar uma parede na casa, ela não afetará qualquer outro comodo.
+
+</para><para arch="s390">
+
+Sempre que estas seção falar sobre "discos" você deverá traduzir para
+DASD ou minidisco VM no mundo &arch-title;. Também uma máquina significa
+uma LPAR ou hospedeiro VM neste caso.
+
+</para><para>
+
+Caso já tenha um sistema operacional no seu sistema
+
+<phrase arch="i386">
+(Windows 9x, Windows NT/2000/XP, OS/2, MacOS, Solaris, FreeBSD, &hellip;)
+</phrase>
+
+<phrase arch="alpha">
+(Tru64 (Digital UNIX), OpenVMS, Windows NT, FreeBSD, &hellip;)
+</phrase>
+
+<phrase arch="s390">
+(VM, z/OS, OS/390, &hellip;)
+</phrase>
+
+E deseja instalar o Linux no mesmo disco, você precisará reparticiona-lo.
+A debian requer sua própria partição de disco. Ela não pdoerá ser 
+instalada em partições Windows ou MacOS. Pode ser possível compartilhar
+algumas partições com outros sitemas Linux, mas isso não será explicado
+aqui. Pelo menos você precisará de uma partição dedicada para o sistema
+de arquivos raíz da Debian.
+
+</para><para>
+
+Você poderá encontrar informações sobre a configuração atual de 
+particionamento usando uma ferramente de particionamento para seu 
+sistema operacional atual
+
+<phrase arch="i386">, talc omo o fdisk ou PartitionMagic</phrase>
+
+<phrase arch="powerpc">, tal como o Drive Setup, HD Toolkit ou MacTools</phrase>
+
+<phrase arch="m68k">, tal como o HD SC Setup, HDToolBox ou SCSITool</phrase>
+
+<phrase arch="s390">, tal como o VM diskmap</phrase>
+
+. Ferramentas de particionamento sempre oferecem um método de mostrar 
+as partições existentes sem fazer mudanças.
+
+</para><para>
+
+Em geral, a alteração de uma partição com um sistema de arquivos
+existentes destruirá qualquer dado localizado lá. Assim você deverá 
+sempre fazer backups atnes de fazer qualquer reparticionaemnto. Usando a 
+analogia da casa, você deverá tirar tudo que estiver dentro dela antes de mover
+a cada sob risco de ocorrer destruições.
+
+<phrase arch="i386"> Felizmente, existe uma alternativa para muitos usuários; veja
+<xref linkend="lossless"/>. </phrase>
+</para>
+
+<para arch="hppa" condition="FIXME">
+
+<emphasis>FIXME: escrever sobre discos HP-UX?</emphasis>
+
+</para><para>
+
+Caso seu computador tenha mais de um disco rígiod, você poderá querer 
+dedicar um de seus discos completamente a Debian. Caso deseje fazer isto, 
+você não precisará particionar aquele disco antes de iniciar o sistema
+de instalação; o prgorama de instalação inclui programas de particionamento
+que poderão fazer da melhor forma este trabalho.
+
+</para><para>
+
+Se sua máquina somente tem um disco rígido, e deseja substituir o 
+sistema tual completamente com o Debian GNU/Linux, você também terá 
+que fazer o particionamento como parte do processo de instalação
+(<xref linkend="partitioning"/>), após iniciar o processo de 
+instalação. No entanto, isto somente funciona se planeja iniciar o 
+programa d einstalação através de tapes, CD-ROM ou arquivos em uma
+máquina conectaa. Considere: se inicializar através de arquivos 
+localizados a partir do disco rígido e então particionar o mesmo
+disco durante a execução do sistema de instalação, você estará
+apagando os arquivos requeridos, e a instalação não será realizada com 
+sucesso. Pelo menos neste caso, você deverá ter métodos alternativos
+para reinstalar sua máquina tal como tapes originais de instalação do 
+sistema ou CDs.
+
+</para><para>
+
+Caso sua máquina tenha múltiplas partições e espaço bastante poderá 
+ser liberado apagando e substituindo uma ou mais delas, então
+você poderá aguardar e usar o programa de particionamento na 
+instalação da Debian. Você ainda deverá ler através do material abaixo,
+porque podem existir circunstâncias especiais como a ordem de 
+partições existentes dentro do mapa de partição, isto lhe forçara a 
+particionar antes de instalar.
+
+</para><para>
+
+Em todos os outros casos, você precisará particionar seu disco 
+rígido antes de iniciar a instalação para criar espaço particionávle
+para a Debian. Caso algumas das partições sejam de outro sistema operacional, 
+você deverá preferir cria-las usando as ferramentas de particionamento
+nativas destes sistemas. Nós recomendamos que <emphasis>não</emphasis> tente 
+criar partições Debian Linux usando outras ferramenas de particionamento.
+Ao invés disso, você deverá criar as partições usando ferramentas nativas
+que deseja ter.
+
+</para><para>
+
+Se estiver tentando instalar mais que um sistema operacional na mesm
+máquina, você deverá instalar todos os outros sitemas antes de 
+seguir com a instalação do Linux. O Windows e outras instalações de 
+SO pdoem destruir sua capacidade de iniciar o Linux ou encorajar você
+a formatar uma partição não-nativa que utiliza.
+
+</para><para>
+
+Você pode ignorar estas ações ou evita-las, mas a instalação do 
+sistema operacional nativo primeiro lhe livrará de problemas.
+
+</para><para arch="powerpc">
+
+Para a OpenFirmware ser iniada auaomaticamente na &debian; as partições
+Linux deverão aparecer antes de todas as partições no disco, 
+especialmente partições de inicialização do MacOS. Isto deverá ser 
+mantido em mente quando pre-particionar; você deverá criar uma partição
+que armazernará o Linux em disco. (As pequenas partições dedicadas a 
+controladores de disco Apple não são inicializáveis). Você poderá 
+apagar o espaço de armazenaemnto mais tarde com as ferramentas de 
+particionamento do Linux durante a instalação e substitui-la com 
+partições do Linux.
+
+</para><para>
+
+Caso já tenha um disco rígido com uma partição (uma configuração 
+comum para computadores desktop) e deseja fazer múltipla inicialização
+com o sistema operacional nativo e a Debina, você precisará fazer:
+
+  <orderedlist>
+<listitem><para>
+
+Backup de tudo no computador.
+
+</para></listitem>
+<listitem><para>
+
+Inicializar através da mídia do sistema operacional nativo, tal como CD-ROM ou
+tapes.
+
+<phrase arch="powerpc">Quando estiver inicializando através do CD do MacOS, pressione
+a tecla <keycap>c</keycap> enquanto forçar o CD para se tornar o sistema
+operacional MacOS nativo.</phrase>
+
+</para></listitem>
+<listitem><para>
+
+Use as ferramentas de particionamento nativo para criar partições do
+sistema. Deixe ou um espaço para a partição que será instalada ou 
+espaço livre para o Debian GNU/Linux.
+
+</para></listitem>
+<listitem><para>
+
+Instalar o sistema operacional nativo em sua própria partição.
+
+</para></listitem>
+<listitem><para>
+
+Volte ao sistema operacional nativo para verificar se tudo está OK, e 
+para baixar os arquivos de inicialização do programa de instalação da
+Debian..
+
+</para></listitem>
+<listitem><para>
+
+Inicie o programa de instalação da Debian para continuar a instalação.
+
+</para></listitem>
+</orderedlist>
+
+</para>
+
+&nondeb-part-alpha.xml; 
+&nondeb-part-i386.xml; 
+&nondeb-part-m68k.xml; 
+&nondeb-part-sparc.xml; 
+&nondeb-part-powerpc.xml;
+
+ </sect1>

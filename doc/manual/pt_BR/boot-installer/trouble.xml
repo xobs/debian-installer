@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- $Id$ -->
+<!-- original version: 1.6 -->
+
+ <sect1 id="boot-troubleshooting">
+ <title>Problemas e Processo de Instalação</title>
+<para>
+</para>
+
+  <sect2 id="unreliable-floppies">
+  <title>Confiança em Disquetes</title>
+
+<para>
+
+O maior problema que as pessoas que estão instalando a Debian 
+pela primária vez passam está relacionado com a confiança nos 
+disquetes.
+
+</para><para>
+
+O disquete de inicialização é o disquete que mais tem problemas, 
+porque ele é lido diretamente pelo hardware, antes da 
+inicialização do Linux. Freqüentemente, o hardware não 
+le de forma tão confiante como o controlador de disquetes do 
+linux e pode parar de ler sem mostrar nenhuma mensagem de 
+erro caso leia dados incorretos. Também podem existir 
+falhas nas unidades de disquetes quando mostram mensagens
+de erros de I/O na tela.
+</para><para>
+
+Se estiver tendo problemas com a instalação com um disquete 
+em particular, a primeira coisa que deve tentar é copiar novamente
+a imagem de disquetes e grava-la para um disquete 
+<emphasis>diferente</emphasis>. A simples reformatação do 
+antigo disquete pode não ser suficiente, até mesmo se ele 
+mostrar que foi gravado sem nenhum erro. Em último caso, é 
+útil gravar o disquete em outro sistema.
+
+</para><para>
+
+Um usuário relatou que teve que gravar as imagens para o 
+disquete <emphasis>três</emphasis> vezes até funcionar e então
+tudo correu bem com o terceiro disquete.
+
+</para><para>
+
+Outros usuários relataram que simplesmente reiniciaram algumas vezes
+com o mesmo disquete na unidade de disquetes até que ele inicializou
+com sucesso. Isso é devido a hardwares problemáticos e firmware da 
+unidade de disquetes.
+
+</para>
+  </sect2>
+
+  <sect2><title>Configuração de Partida</title>
+
+<para>
+
+Se tiver problemas e o kernel travar durante o processo
+de partida, não reconhecer periféricos que você possui 
+ou os controladores não são reconhecidos corretamente, a primeira 
+coisa é verificar os parâmetros de inicialização, como 
+discutidos em <xref linkend="boot-parms"/>.
+
+</para><para>
+
+Se estiver inicializando com seu próprio kernel ao invés de um 
+fornecido com o programa de instalação, tenha certeza que 
+<userinput>CONFIG_DEVFS</userinput> não está ativado em seu
+kernel. O programa de instalação não é compatível com 
+<userinput>CONFIG_DEVFS</userinput>.
+
+</para><para>
+
+Alguns problemas podem ser resolvidos com freqüência removendo 
+coisas adicionais e periféricos e então tentando novamente 
+iniciar. <phrase arch="i386">Modens internos, placas de som 
+e dispositivos Plug-n-Play podem ser especialmente problemáticos.</phrase>
+
+</para><para>
+
+Existe, no entanto, algumas limitações em seu conjunto de disquetes
+de inicialização com respeito a hardwares suportados. Algumas
+plataformas suportadas pelo Linux podem não ser suportadas diretamente
+pelos nossos disquetes de inicialização. Se este é o caso, você 
+terá que criar um disquete de partida personalizado (veja
+<xref linkend="rescue-replace-kernel"/>) ou investigar as 
+instalações da rede.
+
+</para><para>
+
+Se tiver uma larga quantidade de memória instalada em sua máquina, 
+mais que 512M, e o programa de instalação trava quando o kernel
+inicia, você poderá precisar adicionar o argumento d e inicialização
+para limitar a quantidade de memória que o kernel reconhece, tal
+como  <userinput>mem=512m</userinput>.
+
+</para>
+  </sect2>
+
+  <sect2 id="kernel-msgs">
+  <title>Interpretando as Mensagens de Inicialização do Kernel</title>
+
+<para>
+
+Durante a seqüência de inicialização, você poderá ver algumas 
+mensagens na forma
+<computeroutput>can't find <replaceable>something</replaceable></computeroutput>, ou
+<computeroutput><replaceable>something</replaceable> not present</computeroutput>,
+<computeroutput>can't initialize <replaceable>something</replaceable></computeroutput>, 
+ou até mesmo <computeroutput>this driver release depends on <replaceable>something</replaceable></computeroutput>.
+Muitas destas mensagens são ignoráveis. Você as vê porque o kernel
+construído para a instalação é feito para rodar na quantidade mais
+variada de dispositivos e periféricos. Obviamente, nenhum computador
+possui cada dispositivo de periférico possível, assim o sistema
+operacional mostrará algumas mensagens enquanto procura por dispositivos
+que você não possui. Você também poderá ver o sistema pausar por 
+um instante. Isto acontece quando está aguardando por uma resposta do 
+periférico e este dispositivo não está presente em seu sistema. 
+Se nota que o tempo que o sistema demora para iniciar é inaceitavelmente
+longo, você poderá criar um kernel personalizado depois (veja 
+<xref linkend="kernel-baking"/>).
+
+</para>
+  </sect2>
+
+
+  <sect2 id="problem-report">
+  <title>Relatador de Falhas</title>
+<para>
+
+Caso tenha passado da fase inicial de inicialização mas não pode
+completar a instalação, a opção do menu "relatar falha" será 
+útil. Ela copia os logs de erros do sistema e informações
+de configuração para um disquete fornecido para o usuário.
+Esta informação poderá oferecer dicas sobre o que ocorreu de 
+errado e como corrigi-la. Se estiver enviando um relatório de 
+falha, será importante anexar estes detalhes ao seu relatório.
+Este relatório deverá ser enviado em idioma Inglês.
+
+</para><para>
+
+Outras mensagens e instalação importantes podem ser encontradas
+em <filename>/target/var/log/debian-installer/</filename> durante
+a instalação e <filename>/var/log/debian-installer/</filename>
+após o computador inicializar no sistema de instalação.
+
+</para>
+  </sect2>
+
+  <sect2 id="submit-bug">
+  <title>Enviando Relatórios de Falhas</title>
+<para>
+
+Caso ainda tiver problemas, por favor envia um relatório de falha. 
+Envie um e-mail para  <email>submit@bugs.debian.org</email>. Você
+<emphasis>deve</emphasis> incluir o seguinte como primeiras 
+linhas do e-mail:
+
+<informalexample><screen>
+
+Package: install
+Version: <replaceable>versão</replaceable>
+
+</screen></informalexample>
+
+Tenha certeza de preencher <replaceable>versão</replaceable> com a 
+versão do debian-installer que você usou. Caso não saiba o 
+número de versão, preencha com a data que baixou a imagem de CD e 
+inclua a localização de onde o encontrou ou diga a origem do CD 
+que adquiriu.
+
+</para><para>
+
+Você deverá incluir as seguintes informações em seu relatório 
+de falha. Caso use o programa <command>reportbug</command> para
+enviar seu relatório, esta informação será incluída automaticamente.
+
+<informalexample><screen>
+
+<phrase arch="i386">
+flavor:        <replaceable>tipo da imagem que está usando</replaceable>
+</phrase>
+architecture:  &architecture; 
+model:         <replaceable>o nome do fabricante do seu hardware e modelo</replaceable>
+memory:        <replaceable>quantidade de memória RAM</replaceable>
+scsi:          <replaceable>placa adaptadora SCSI, se tiver</replaceable>
+cd-rom:        <replaceable>modelo da unidade de CD-ROM e tipo da interface, e.g., ATAPI</replaceable>
+network card:  <replaceable>placa de rede, se tiver</replaceable>
+pcmcia:        <replaceable>detalhes de qualquer dispositivo PCMCIA</replaceable>
+
+</screen></informalexample>
+
+</para><para>
+
+Dependendo da natureza da falha, pode também ser útil relatar 
+se está instalando para discos IDE ou SCSI, outros periféricos como
+audio, capacidade de disco e modelo da placa de vídeo.
+
+</para><para>
+
+Neste relatório de falha, descreva qual é o seu problema incluindo
+pelo menos as mensagens visíveis do kernel no evento do travamento
+do kernel. Descreva os passos que realizou até o estado defeituoso
+do sistema.
+
+</para>
+
+  </sect2>
+
+ </sect1>

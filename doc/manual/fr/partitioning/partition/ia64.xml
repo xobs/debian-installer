@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 1.4 -->
+
+  <sect2 arch="ia64"><title>Partitioning for &arch-title;</title>
+<para>
+
+Le microprogramme (<emphasis>firmware</emphasis>) EFI pour ia64 supporte deux 
+formats de table de partitions (ou d'étiquette disque), GPT et MS-DOS.
+MS-DOS est le format classique des PC i386, et n'est pas recommandé
+pour les systèmes ia64. Le logiciel d'installation fournit
+deux programmes de partitionnement,
+<ulink url="cfdisk.txt"><command>cfdisk</command></ulink> et 
+<ulink url="parted.txt"><command>parted</command></ulink>.
+<command>parted</command> est capable de gérer à la fois les tables GPT et 
+MS-DOS,
+alors que <command>cfdisk</command> ne connaît que les tables MS-DOS.
+Il est très important de noter que si votre disque est partitionné
+avec une table GPT et que vous vouliez passer à des tables MS-DOS, vous
+devez utiliser <command>parted</command> pour créer la nouvelle partition.
+Ceci car les deux tables utilisent des zones différentes du disque, et
+<command>cfdisk</command> ne sait pas comment enlever une table GPT.
+
+</para><para>
+
+Une différence importante entre <command>cfdisk</command> et 
+<command>parted</command>
+est leur manière d'identifier le type de chaque partition.
+<command>cfdisk</command> utilise un octet de la table de partitions (p. ex.,
+83 pour une partition linux ext2fs) alors que <command>parted</command> 
+identifie
+le type de la partition en examinant les données qui y sont stockées.
+Cela signifie que <command>parted</command> ne considérera une partition
+comme partition d'échange (<emphasis>swap</emphasis>) que lorsque vous l'aurez
+formatée en tant que telle. De même, il ne détectera une partition
+linux ext2fs que lorsque vous aurez créé un système de fichier dessus.
+<command>parted</command> vous permet de créer des systèmes de fichier, et
+de formater des partitions d'échange, et vous devriez le faire depuis
+<command>parted</command> lui-même.
+
+</para><para>
+
+Malheureusement, <command>parted</command> est un programme en ligne de
+commande et n'est pas aussi convivial que <command>cfdisk</command>.
+En supposant que vous désiriez effacer tout votre disque, et créer une
+table GPT et quelques partitions, vous aurez à taper une succession de
+commandes de ce genre&nbsp;:
+
+</para><para>
+<informalexample><screen>
+
+      mklabel gpt
+      mkpartfs primary fat 0 50
+      mkpartfs primary linux-swap 51 1000
+      mkpartfs primary ext2 1001 3000
+      set 1 boot on
+      print
+      quit
+
+</screen></informalexample>
+</para><para>
+
+Ces commandes créent une nouvelle table de partitions, et trois partitions,
+utilisées en tant que partition de boot EFI, partition d'échange, et
+système de fichiers racine. Enfin, on positionne le drapeau de boot
+sur la partition EFI.
+Les partitions sont spécifiées en Mo, avec les décalages de début et
+de fin à partir du début du disque. Ainsi, par exemple, nous avons
+créé ci-dessus un système de fichier ext2fs de 1999&nbsp;Mo, démarrant à
+1001&nbsp;Mo du début du disque.
+Veuillez noter que le formatage de l'espace d'échange avec
+<command>parted</command> peut prendre quelques minutes, car il cherche à
+détecter les mauvais blocs de la partition.
+
+</para>
+  </sect2>
+
+  <sect2 arch="ia64"><title>Boot Loader Partition Requirements</title>
+
+<para>
+
+ELILO, le chargeur de boot pour ia64, nécessite une partition
+contenant un système FAT. Si vous avez utilisé une table de partitions
+GPT, cette partition doit avoir le drapeau <userinput>boot</userinput> 
+positionné.
+Si vous avez utilisé une table de partitions MS-DOS, cette partition
+devrait être de type "EF". La partition doit être assez grande pour
+contenir le chargeur de boot et tous les noyaux et les images des
+disques virtuels que vous voudrez utiliser pour démarrer.
+Une taille minimale serait de
+16&nbsp;Mo, mais si vous voulez faire du développement ou des
+expérimentations avec plusieurs noyaux, vous pouvez monter à
+128&nbsp;Mo.
+
+</para>
+  </sect2>

@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- $Id$ -->
+<!-- original version: 1.7 -->
+
+ <sect1 id="boot-parms"><title>Parâmetros de Inicialização</title>
+<para>
+
+Os parâmetros de inicialização são parâmetros passados ao kernel do
+Linux que são geralmente usados para fazer que os periféricos funcionem
+adequadamente. Para a maior parte, o kernel poderá auto-detectar 
+informações sobre seus periféricos. No entanto, em alguns casos 
+você terá que ajudar um pouco o kernel.
+
+</para><para>
+
+Se esta for a primeira vez que iniciou o sistema, tente os parâmetros
+padrões de inicialização (i.e., não passe argumentos) e veja se o 
+sistema funciona corretamente. Ele provavelmente funcionará. Caso
+não seja esse o caso, reinicie mais tarde e descubra qualquer 
+parâmetro especial que precisa informar ao sistema sobre seu hardware.
+
+</para><para>
+
+Informações sobre muitos parâmetros de inicialização poderão
+ser encontrados no <ulink url="http://www.tldp.org/HOWTO/BootPrompt-HOWTO.html">Linux
+BootPrompt HOWTO</ulink>, o que inclui dicas para hardwares obscuros. Esta seção
+contém somente um resumo para os parâmetros mais usados. Algumas dicas 
+comuns estão incluídas abaixo em
+<xref linkend="boot-troubleshooting"/>.
+
+</para><para>
+
+Quando o kernel inicia, uma mensagem
+
+<informalexample><screen>
+
+Memory:<replaceable>avail</replaceable>k/<replaceable>total</replaceable>k available 
+
+</screen></informalexample>
+
+deverá ser mostrada durante o processo.
+<replaceable>total</replaceable> deverá conferir com a quantidade 
+total de memória RAM, em kilobytes. Caso não conferir com a 
+quantidade total de memória RAM que tem instalado, você precisará usar
+o parâmetro <userinput>mem=<replaceable>ram</replaceable></userinput>,
+onde <replaceable>ram</replaceable> será ajustado para a quantidade de 
+memória, seguindo os sufixos "k" para kilobytes, ou "m" para megabytes.
+<userinput>mem=64m</userinput> significa 64MB de RAM.
+
+</para><para>
+
+Caso seu monitor somente seja capaz de mostra preto e branco, 
+use o argumento de inicialização <userinput>mono</userinput>. 
+Caso contrário, use o color, que é o padrão.
+
+</para><para condition="supports-serial-console">
+
+Caso estiver inicializando a partir de um console serial, 
+o kernel geralmente auto-detectará isto
+<phrase arch="mipsel">(embora isto não ocorra em DECstations)</phrase>
+Caso tenha uma placa de video (framebuffer) e um teclado também 
+conectados ao computador que deseje inicializar via console serial, 
+você poderá ter que passar o argumento
+<userinput>console=<replaceable>device</replaceable></userinput>
+ao kernel, onde <replaceable>device</replaceable> é 
+seu dispositivo serial, que normalmente é algo como
+<filename>ttyS0</filename>.
+
+</para><para arch="sparc">
+
+Para a &arch-title; os dispositivos seriais são <filename>ttya</filename> ou
+<filename>ttyb</filename>.
+Alternativamente, ajuste as variáveis do OpenPROM <envar>input-device</envar> e
+<envar>output-device</envar> apontando para
+<filename>ttya</filename>.
+
+</para>
+
+
+  <sect2 id="installer-args"><title>Parâmetros do Debian Installer</title>
+<para>
+
+O sistema de instalação reconhece alguns argumentos de inicialização
+que podem ser úteis.
+
+</para>
+
+<variablelist>
+<varlistentry>
+<term>DEBCONF_PRIORITY</term>
+<listitem><para>
+
+Estas configurações de parâmetros serão de forma parecida configurados para 
+a maior propriedade das mensagens que serão exibidas.
+
+</para><para>
+
+Usando <userinput>DEBCONF_PRIORITY=critical</userinput>, o sistema de instalação 
+mostrará somente mensagens críticas e tentará fazer a coisa certa sem confusão. 
+Caso sejam encontrados problemas, o programa de instalação ajusta a 
+prioridade se necessário.
+
+</para><para>
+
+Caso esteja configurada para <userinput>DEBCONF_PRIORITY=high</userinput> (a 
+configuração padrão), ambas as mensagens de prioridade high e critical são 
+mostradas, mas mensagens de prioridade medium e low são puladas. Quando 
+<userinput>DEBCONF_PRIORITY=low</userinput> for usado, todas as mensagens 
+são mostradas.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>DEBCONF_FRONTEND</term>
+<listitem><para>
+
+Este parâmetro de inicialização controla o tipo da interface de usuário
+usada para o programa de instalação. Os parâmetros possíveis são:
+
+<itemizedlist>
+<listitem>
+<para><userinput>DEBCONF_FRONTEND=noninteractive</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBCONF_FRONTEND=text</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBCONF_FRONTEND=newt</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBCONF_FRONTEND=slang</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBCONF_FRONTEND=ncurses</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBCONF_FRONTEND=bogl</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBCONF_FRONTEND=gtk</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBCONF_FRONTEND=corba</userinput></para>
+</listitem>
+</itemizedlist>
+
+O front end padrão é <userinput>DEBCONF_FRONTEND=newt</userinput>. O 
+<userinput>DEBCONF_FRONTEND=text</userinput> pode ser o tipo preferido 
+para instalações usando console serial.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>BOOT_DEBUG</term>
+<listitem><para>
+
+A passagem deste parâmetro de inicialização fará a inicialização ser 
+registrada com mais detalhes.
+
+<variablelist>
+<varlistentry>
+<term><userinput>BOOT_DEBUG=0</userinput></term>
+<listitem><para>Este é o padrão.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>BOOT_DEBUG=1</userinput></term>
+<listitem><para>Mais detalhes que o normal.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>BOOT_DEBUG=2</userinput></term>
+<listitem><para>Diversas informações de depuração.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>BOOT_DEBUG=3</userinput></term>
+<listitem><para>
+
+Interpretadores de comandos são executados em vários pontos do 
+processo de inicialização para permitir depuração detalhada. Saia do 
+interpretador de comandos para continuar a inicialização do sistema.
+
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term>INSTALL_MEDIA_DEV</term>
+<listitem><para>
+
+O valor do parâmetro é o caminho para o dispositivo que carregará o 
+Debian installer. Por exemplo,
+<userinput>INSTALL_MEDIA_DEV=/dev/floppy/0</userinput>
+
+</para><para>
+
+Para inicializar via disquete, que normalmente procura por disquetes e 
+dispositivos de armazenamento USB onde pode encontrar o disquete raíz, 
+pode ser alterado com este parâmetro para procurar somente em um 
+dispositivo específico.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>debian-installer/framebuffer</term>
+<listitem><para>
+
+Algumas arquiteturas utilizam o framebuffer do kernel para fornecer a 
+instalação em um grande número de idiomas. Caso o framebuffer cause um 
+problema em seu sistema, a opção <userinput>debian-installer/framebuffer</userinput>
+deverá ser usada para desativar este recurso. Sintomas do problema são mensagens 
+de erro sobre o bterm ou bogl, uma tela preta ou travamento depois de alguns 
+minutos após iniciar a instalação.
+
+</para><para arch="i386">
+
+O argumento <userinput>video=vga16:off</userinput> também pode ser usado para
+desativar o framebuffer. Tais problemas foram reportados em uma 
+Dell Inspiron com uma placa Radeon móvel.
+
+</para><para arch="m68k">
+
+Tais problemas foram relatados no Amiga 1200 e SE/30.
+
+</para><para arch="hppa">
+
+Tais problemas foram relatados no hppa.
+
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+  </sect2>
+ </sect1>
+

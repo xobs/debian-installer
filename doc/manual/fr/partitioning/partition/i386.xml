@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 1.3 -->
+
+  <sect2 arch="i386"><title>Partitioning for &arch-title;</title>
+<para>
+
+Les BIOS des PC ont généralement leurs propres contraintes pour le
+partitionnement des disques. Il y a une limite sur le nombre de
+partitions «&nbsp;primaires&nbsp;» et «&nbsp;logiques&nbsp;» qu'un disque 
+peut contenir.
+De plus, avec les BIOS antérieurs à 1994-98 (selon les constructeurs),
+il y a des limites sur l'emplacement des partitions à
+partir desquelles on peut démarrer le système. Vous trouverez plus
+d'information dans le 
+<ulink url="&url-partition-howto;">HOWTO Linux Partition</ulink> et la 
+<ulink url="&url-phoenix-bios-faq-large-disk;">FAQ Phoenix BIOS</ulink>, mais 
+cette section contient un bref survol pour vous aider à aplanir les difficultés
+les plus courantes.
+
+</para><para>
+
+À l'origine, le système de partitionnement des disques de PC est basé
+sur les partitions «&nbsp;primaires&nbsp;», mais il ne peut y en avoir que quat\re.
+Pour passer outre cette limitation, les partitions «&nbsp;étendues&nbsp;»
+et «&nbsp;logiques&nbsp;» ont été inventées. En configurant une partition 
+primaire
+en partition étendue, vous pouvez subdiviser l'espace alloué à cette
+partition en partitions «&nbsp;logiques&nbsp;». La partition étendue peut
+contenir jusqu'à 60 partitions logiques&nbsp;; en revanche,
+il ne peut y avoir qu'une seule partition étendue par disque.
+
+</para><para>
+
+Linux limite le nombre de partitions à 15 par disque SCSI (3
+partitions primaires utilisables et 12 partitions logiques dans la
+partition étendue) et à 63
+par disque IDE (3 partitions primaires et 60 partitions logiques).
+Cependant, le système &debian; classique fournit seulement 20 périphériques
+pour les partitions, c'est pourquoi vous ne pourrez pas procéder à
+l'installation sur des partitions supérieures à 20, à moins d'avoir
+créé manuellement des périphériques pour ces partitions.
+
+</para><para>
+
+Si vous avez un gros disque IDE, et que vous n'utilisez ni l'adressage
+LBA ni les pilotes en couche (quelquefois fournis par les
+constructeurs de disques), la partition de démarrage (celle qui
+contient l'image noyau) doit être placée dans les 1024 premiers
+cylindres de votre disque dur (habituellement, autour de 524&nbsp;Mo, sans
+la translation du BIOS).
+
+</para><para>
+
+Cette restriction ne s'applique pas si vous avez un BIOS postérieur à
+1995-98 (selon les constructeurs) qui supporte la norme
+«&nbsp;Enhanced Disk Drive Support Specification&nbsp;».
+Lilo, le chargeur Linux, et l'alternative Debian, <command>mbr</command>, ont
+besoin du BIOS pour charger en RAM le noyau lu sur le disque.
+Si les extensions du BIOS int 0x13 pour l'accès aux gros disques sont
+présentes, elles seront utilisées. Sinon, l'interface standard d'accès
+au disque sera utilisée par défaut, et elle ne permettra pas de
+démarrer sur des emplacements situés après le 1023e cylindre du
+disque. Une fois que Linux est démarré, peu importe le BIOS de votre
+ordinateur, ces restrictions ne s'appliquent plus, puisque Linux
+n'utilise pas le BIOS pour les accès disque.
+
+</para><para>
+
+Si vous avez un gros disque, vous devrez peut-être utiliser des
+techniques de translation de cylindres que vous pouvez configurer
+dans le BIOS, comme le mode d'adressage LBA (Linear Block Addressing),
+ou le mode de translation CHS.
+Vous trouverez plus d'informations sur la gestion des gros disques dans le
+<ulink url="&url-large-disk-howto;">HOWTO Large Disk</ulink>.
+Si vous utilisez une méthode de translation de cylindres, et que le
+BIOS ne supporte pas les extensions pour l'accès aux gros disques, votre
+partition de démarrage devra être contenue dans la partie correspondant
+aux 1024 premiers cylindres <emphasis>translatés</emphasis>.
+
+</para><para>
+
+La meilleure façon de régler ce problème est de créer une petite
+partition (5 à 10&nbsp;Mo doivent suffire) en début de disque, qui sera la
+partition de démarrage, puis de créer toutes les autres partitions que
+vous voulez dans l'espace restant. Cette partition de démarrage
+<emphasis>devra</emphasis> être montée sur <filename>/boot</filename>, 
+le répertoire où
+seront stockés les noyaux Linux. Cette configuration marchera sur tous
+les systèmes, quel que soit votre mode d'adressage (LBA) ou de
+translation (CHS), et quel que soit votre BIOS, avec ou sans extensions.
+
+</para>
+  </sect2>

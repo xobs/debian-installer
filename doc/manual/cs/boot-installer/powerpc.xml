@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+<!-- $Id$ -->
+<!-- original version: 1.6 -->
+
+  <sect2 arch="powerpc"><title>Zavedení z CD-ROM</title>
+
+&boot-installer-intro-cd.xml;
+
+<para>
+
+Momentálně jediné podarchitektury &arch-title; podporující zavádění z
+CD-ROM jsou PReP a New World PowerMacy. Abyste na počítačích PowerMac
+zavedli systém z CD, stiskněte během zavádění klávesu
+<keycap>c</keycap> nebo kombinaci kláves
+<keycap>Command</keycap>, <keycap>Option</keycap>,
+<keycap>Shift</keycap> a <keycap>Delete</keycap>.
+
+</para><para>
+
+OldWorld PowerMacy neumí zavést CD s Debianem, protože zavádění
+nechávají na ovladači <application>MacOSROM</application>, který musí
+být přítomen na CD. Protože neexistuje svobodná verze tohoto ovladače,
+musíte ke spuštění instalace použít disketovou mechaniku (tu mají
+všechny OldWorld systémy) a teprve pak využít CD.
+
+</para><para>
+
+I v případě, že váš systém neumožňuje zavedení přímo z CD-ROM, můžete
+stále použít CD-ROM k instalaci. Na NewWorldech také můžete použít
+OpenFirmware a zavést z CD-ROM ručně. Pokračujte stejně jako při
+zavedení z pevného disku (<xref linkend="boot-newworld"/>), pouze v
+promptu OpenFirmwaru použijte cestu k <command>yaboot</command>u na CD.
+
+<informalexample><screen>
+
+0 > boot cd:,\install\powermac\yaboot
+
+</screen></informalexample>
+</para>
+  </sect2>
+
+  <sect2 arch="powerpc" id="install-drive">
+  <title>Zavedení z pevného disku</title>
+
+&boot-installer-intro-hd.xml;
+
+  <sect3><title>Zavedení CHRP z OpenFirmware</title>
+
+<para>
+
+  <emphasis>Not yet written.</emphasis>
+
+</para>
+   </sect3>
+
+   <sect3><title>Zavedení OldWorld PowerMaců z MacOS</title>
+<para>
+
+Pokud jste nastavili program BootX (<xref linkend="files-oldworld"/>),
+můžete ho použít k zavedení instalačního systému. Dvakrát klikněte na
+ikonu <guiicon>BootX</guiicon>, kliknete na tlačítko
+<guibutton>Options</guibutton>, vyberte položku <guilabel>Use
+Specified RAM Disk</guilabel> a vyberte soubor
+<filename>ramdisk.image.gz</filename>. Podle vašeho počítače budete
+možná muset zatrhnout volbu <guilabel>No Video Driver</guilabel>.
+Kliknutím na tlačítko <guibutton>Linux</guibutton> vypnete MacOS a
+spustíte instalaci.
+
+</para>
+   </sect3>
+
+
+  <sect3 id="boot-newworld">
+  <title>Zavedení NewWorld Maců z OpenFirmware</title>
+<para>
+
+Předpokládáme, že již máte soubory <filename>kernel.bin</filename>,
+<filename>yaboot</filename>, <filename>yaboot.conf</filename> a
+<filename>root.bin</filename> v kořenovém adresáři vaší HFS oblasti
+(viz <xref linkend="files-newworld"/>). Restartujte počítač a
+okamžitě, během úvodního zvuku, stiskněte najednou klávesy
+<keycap>Option</keycap>, <keycap>Command</keycap>, <keycap>o</keycap>
+a <keycap>f</keycap>. Po několika sekundách se objeví prompt
+OpenFirmwaru, do kterého napište:
+
+<informalexample><screen>
+
+0 > boot hd:<replaceable>x</replaceable>,yaboot
+
+</screen></informalexample>
+
+kde <replaceable>x</replaceable> nahraďte číslem HFS oblasti, která
+obsahuje soubory jádra a yabootu. Na některých počítačích musíte
+místo <userinput>hd:</userinput> zadat <userinput>ide0:</userinput>.
+Po stisku klávesy &enterkey; uvidíte prompt yabootu 
+
+<informalexample><screen>
+
+boot:
+
+</screen></informalexample>
+
+Do promptu napište <userinput>install</userinput> nebo
+<userinput>install-safe</userinput> a stiskněte &enterkey; &mdash; po
+chvíli by se měl spustit instalační program Debianu.
+Možnost <userinput>install-safe</userinput> používá pro dosažení
+maximální kompatibility parametr <userinput>video=ofonly</userinput>;
+měli byste ji vyzkoušet v případě, že standardní
+<userinput>install</userinput> nefunguje.
+
+</para>
+   </sect3>
+  </sect2>
+
+  <sect2 arch="powerpc"><title>Zavedení z TFTP</title>
+
+&boot-installer-intro-net.xml;
+
+<para>
+
+V současnosti podporují zavádění ze sítě počítače PReP a New World
+PowerMacy.
+
+</para><para>
+
+Na strojích s Open Firmwarem, např. NewWorld Power Macích, vstupte do
+<quote>boot monitoru</quote> (viz <xref linkend="invoking-openfirmware"/>)
+a zadejte příkaz <command>boot enet:0</command>. 
+Stanice PReP a CHRP mohou adresovat síť odlišně. Na PReP zkuste příkaz
+<userinput>boot <replaceable>server_ipaddr</replaceable>,<replaceable>soubor</replaceable>,<replaceable>klient_ipaddr</replaceable></userinput>.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="powerpc">
+  <title>Zavedení z disket</title>
+<para>
+
+Zavádění z disket je na architektuře &arch-title; podporováno, ale
+obvykle pouze pro OldWorld systémy, protože NewWorld systémy nebývají
+vybaveny disketovými mechanikami a zavádění z externích USB mechanik
+zatím není podporováno.
+
+</para><para>
+
+Předpokládáme, že jste si již potřebné obrazy stáhli a podle
+<xref linkend="create-floppy"/> vytvořili příslušné diskety.
+
+</para><para>
+
+Abyste mohli z diskety <filename>boot-floppy-hfs.img</filename> zavést
+systém, vložte ji do mechaniky po vypnutí systému, ale před stiskem
+zapínacího tlačítka.
+
+</para><note><para>
+
+Pokud nejste obeznámeni se zvláštnostmi Macintoshů: Disketa vložená
+před zapnutím počítače má nejvyšší prioritu při zavádění systému. Pokud
+na disketě není zaveditelný systém, disketa bude vysunuta a počítač
+zkusí zavést systém z pevného disku.
+
+</para></note><para>
+
+Po zavedení je požadována disketa <filename>root.bin</filename>.
+Vložte ji do mechaniky a zmáčkněte &enterkey;. Kořenový svazek se
+nahraje do paměti a automaticky se spustí instalační program.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="powerpc"><title>Zaváděcí parametry na PowerPC</title>
+<para>
+
+Mnoho starších monitorů od Apple používá rozlišení 640x480 na
+67Hz. Pokud se vám zdá obraz na takovém monitoru zkosený, zkuste
+použít zaváděcí parametr <userinput>video=atyfb:vmode:6</userinput>,
+kterým nastavíte vhodný režim pro většinu grafických karet s čipy
+Mach64 a Rage. Pro Rage 128 použijte
+<userinput>video=aty128fb:vmode:6</userinput> .
+
+</para>
+  </sect2>

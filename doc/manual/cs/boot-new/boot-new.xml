@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+<!-- $Id$ -->
+<!-- original version: 1.2 -->
+
+<chapter id="boot-new">
+ <title>Zavedení vašeho nového systému</title>
+
+ <sect1><title>Nastavení zavádění systému</title>
+<para>
+
+Zavádění více operačních systémů na jednom počítači je stále něco jako
+černá magie. Tento dokument se ani nesnaží pokrýt všechny možné
+zavaděče, které se liší na jednotlivých architekturách a dokonce i na
+jejich podarchitekturách. Měli byste si dobře prostudovat dokumentaci
+vašeho zavaděče a pamatujete: třikrát měř a jednou řež.
+
+</para>
+
+&bootloader-i386.xml;
+&bootloader-m68k.xml;
+&bootloader-alpha.xml;
+&bootloader-sparc.xml;
+&bootloader-powerpc.xml;
+&bootloader-hppa.xml;
+&bootloader-s390.xml;
+&bootloader-arm.xml;
+&bootloader-mipsel.xml;
+
+  <sect2 condition="supports-nfsroot">
+  <title>Bezdiskové stanice</title>
+<para>
+
+Pokud instalujete bezdiskovou stanici, zavádění systému z lokálního
+disku evidentně nebude nejsmysluplnější volba - tento krok přeskočte.
+<phrase arch="sparc"> Možná budete chtít nastavit OpenBoot tak, aby
+standardně zaváděl systém ze sítě, viz
+<xref linkend="boot-dev-select-sun"/>.</phrase>
+
+</para>
+
+  </sect2>
+</sect1>
+
+ <sect1 id="make-boot-floppy">
+ <title>Vytvoření zaváděcí diskety</title>
+<para>
+
+Zaváděcí disketu byste si měli připravit i v případě, že systém chcete
+startovat z pevného disku. Je totiž možné, že se se zavaděčem na disku
+něco stane a odmítne pracovat (třeba kvůli špatnému nastavení nebo
+fyzické chybě disku). Pro tyto případy se hodí zaváděcí disketa, která
+většinou funguje i v těchto kritických situacích.
+
+</para><para>
+
+Podle pokynů instalačního programu vložte do mechaniky prázdnou
+disketu. Zkontrolujte, zda není chráněná proti zápisu, neboť
+instalační program ji zformátuje a přepíše. Označte si, že se jedná
+o Vaši <quote>zaváděcí disketu</quote> a nastavte na ní ochranu proti
+zápisu.
+
+</para><para>
+
+Tato disketa bude obsahovat jednoduchý souborový systém, jádro
+a příkaz, aby použilo váš nový kořenový souborový systém.
+
+</para><para arch="alpha">
+
+Bohužel, zaváděcí disketa může být vytvořena pouze pro SRM systémy,
+protože se na disketu nevejdou <command>MILO</command> a jádro
+zároveň.
+
+</para>
+ </sect1>
+
+
+ <sect1 id="base-boot">
+ <title>Okamžik pravdy</title>
+<para>
+
+Teď přichází chvíle <emphasis>zahoření</emphasis> systému.
+
+</para><para arch="s390">
+
+Z menu zvolte položku <quote>Restartovat počítač</quote>, což v tomto
+případě zastaví systém, protože takovéto restartování není na
+&arch-title; podporováno.  Poté musíte zavést (IPL) GNU/Linux z DASD,
+které jste na začátku instalace vybrali pro kořenový systém.
+
+</para><para>
+
+Jestliže Debian z disku nenaběhne, zkuste to znovu z původního
+instalačního média (například ze záchranné diskety), nebo založte do
+mechaniky svou vlastní zaváděcí disketu (pokud jste ji vytvořili)
+a restartujte počítač.  Pokud <emphasis>nepoužíváte</emphasis> svou
+debianí zaváděcí disketu, pravděpodobně budete muset při startu přidat
+nějaké parametry.  Například při použití záchranné diskety musíte
+specifikovat
+<userinput>rescue root=<replaceable>kořen</replaceable></userinput>,
+kde <replaceable>kořen</replaceable> je vaše kořenová oblast
+(např. <filename>/dev/sda1</filename>).
+
+</para>
+
+  <sect2 arch="m68k">
+  <title>Zavádění VME6000</title>
+<para>
+
+Jestliže provádíte bezdiskovou instalaci na systémech BVM nebo
+Motorola VMEbus, měli byste po natažení programu
+<command>tftplilo</command> z TFTP serveru zadat v promptu
+<prompt>LILO Boot:</prompt> jedno z následujících:
+
+<itemizedlist>
+<listitem><para>
+
+<userinput>b6000</userinput> &enterkey; pro start BVME4000/6000
+
+</para></listitem><listitem><para>
+
+<userinput>b162</userinput> &enterkey; pro start MVME162
+
+</para></listitem><listitem><para>
+
+<userinput>b167</userinput> &enterkey; pro start MVME166/167
+
+</para></listitem>
+</itemizedlist>
+
+</para>
+
+   </sect2>
+
+  <sect2 arch="m68k">
+  <title>Zavádění na Macintoshích</title>
+
+<para>
+
+Přejděte do adresáře kde jsou instalační soubory a za držení klávesy
+<keycap>command</keycap> spusťte zavaděč <command>Penguin</command>.
+V dialogovém okně <userinput>Settings</userinput> (<keycombo>
+<keycap>command</keycap> <keycap>T</keycap> </keycombo>) najděte řádku
+s volbami jádra, která by měla vypadat nějak takto:
+<userinput>root=/dev/ram video=font:VGA8x16</userinput>.
+
+</para><para>
+
+Tuto řádku změňte na
+<userinput>root=/dev/<replaceable>yyyy</replaceable></userinput>, kde
+<replaceable>yyyy</replaceable> je linuxový název oblasti, kam jste
+nainstalovali systém (např. <filename>/dev/sda1</filename>). Parametr
+<userinput>video=font:VGA8x8</userinput> je vhodný pro uživatele
+s malými obrazovkami. Jádro by sice zvolilo hezčí font (6x11), ale
+ovladač konzole by s ním mohl zaseknout počítač. Proto je bezpečnější
+použít font 8x16 nebo 8x8, což můžete kdykoliv změnit.
+
+</para><para>
+
+Pokud nechcete, aby se GNU/Linux zaváděl při každém startu počítače,
+zrušte zatržení u položky <userinput>Auto Boot</userinput>. Příkazem
+<userinput>Save Settings As Default</userinput> uložíte nové nastavení
+do souboru.
+
+</para><para>
+
+Nyní můžete příkazem <userinput>Boot Now</userinput> (<keycombo>
+<keycap>command</keycap> <keycap>B</keycap> </keycombo>) nastartovat
+svůj čerstvě nainstalovaný systém GNU/Linux.
+
+</para><para>
+
+Při zavádění systému by se měly objevit stejné zprávy jako při
+zavedení instalačního systému následované nějakými novými zprávami.
+
+</para>
+
+   </sect2>
+ </sect1>
+
+ <sect1 id="base-config">
+ <title>Prvotní přizpůsobení Debianu</title>
+
+<para>
+
+Po zavedení systému budete vyzváni k dokončení konfigurace základního
+systému a k výběru balíčků, které chcete nainstalovat.  Aplikace,
+která vás tímto procesem povede, se nazývá
+<classname>base-config</classname>. Její styl používání je stejný jako
+u &d-i; z první fáze instalace.
+
+</para><para>
+
+Jestliže někdy v budoucnu budete chtít
+<classname>base-config</classname> spustit znovu, stačí když jako root
+napíšete <userinput>base-config</userinput>.
+
+</para>
+
+&module-bc-timezone.xml;
+&module-bc-shadow.xml;
+&module-bc-ppp.xml;
+&module-bc-mta.xml;
+&module-bc-apt.xml;
+&module-bc-packages.xml;
+&module-bc-install.xml;
+
+ </sect1>
+
+ <sect1 id="login">
+ <title>Přihlášení do systému</title>
+
+<para>
+
+Po dokončení instalace balíků se setkáte s výzvou k přihlášení do
+systému (tzv. <firstterm>login prompt</firstterm>).  Přihlaste se na
+svůj osobní účet, systém je připraven k používání.
+
+</para><para>
+
+Pokud jste začínající uživatel, asi si budete chtít prohlédnout
+dokumentaci dostupnou v systému. V současné době existuje několik
+dokumentačních systémů, ale pracuje se na jejich sjednocení.
+
+</para><para>
+
+Dokumentace vztahující se k instalovaným programům je v adresáři
+<filename>/usr/share/doc/</filename> v podadresáři se jménem programu.
+Například příručka pro použití programu <command>apt</command> (APT
+User's Guide) je v souboru
+<filename>/usr/share/doc/apt/guide.html/index.html</filename>.
+
+</para><para>
+
+<filename>/usr/share/doc/</filename> navíc obsahuje několik
+speciálních adresářů. Například linuxové návody <quote>jak na
+to</quote> (HOWTO) jsou v adresářích
+<filename>/usr/share/doc/HOWTO/en-txt/</filename> a
+<filename>/usr/share/doc/HOWTO/en-txt/mini/</filename>.
+Nainstalujete-li balík <command>dhelp</command>, získáte soubor
+<filename>/usr/share/doc/HTML/index.html</filename>, který obsahuje
+seznam veškeré instalované dokumentace.
+
+</para><para>
+
+Tyto dokumenty můžete jednoduše prohlížet tak, že vstoupíte do
+adresáře s dokumentací (<userinput>cd /usr/share/doc/</userinput>)
+a napíšete <userinput>lynx .</userinput> (tečka znamená aktuální
+adresář).
+
+</para><para>
+
+Dokumentaci k příkazu můžete získat, když napíšete na příkazovém řádku
+<userinput>info <replaceable>prikaz</replaceable></userinput> nebo
+<userinput>man <replaceable>prikaz</replaceable></userinput>. Zkrácený
+návod k použití příkazu obvykle získáte, když za příkaz přidáte
+parametr <userinput>--help</userinput>. Jestliže je výstup delší než
+obrazovka, napište na konec příkazu ještě
+<userinput>| more</userinput> (výstup se pak zastaví po každé plné 
+obrazovce). Všechny příkazy začínající určitým řetězcem zobrazíte tak,
+že napíšete řetězec a dvakrát stisknete klávesu <keycap>Tab</keycap>.
+Nápovědu k povelům shellu získáte příkazem
+<userinput>help</userinput>.
+
+</para><para>
+
+Obsáhlejší úvod do Debianu a GNU/Linuxu najdete (anglicky) v
+<filename>/usr/share/doc/debian-guide/html/noframes/index.html</filename>.
+
+</para>
+
+ </sect1>
+</chapter>

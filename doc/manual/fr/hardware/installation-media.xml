@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 1.10 -->
+
+ <sect1 id="installation-media">
+<title>Les supports d'installation</title>
+
+<sect2 condition="supports-floppy-boot">
+<title></title>
+
+<para>
+Dans beaucoup de cas, vous devrez effectuer votre premier
+amorçage depuis un lecteur de disquettes, en utilisant la
+disquette de secours («&nbsp;rescue floppy&nbsp;»). En général
+ce dont vous avez besoin est une disquette haute densité (1440
+kilo-octets) de 3,5 pouces.
+</para>
+
+<para arch="i386">
+Des disquettes d'installation 5,25 pouces, double densité
+(1200&nbsp;Ko) sont aussi fournies. 
+</para>
+
+<para arch="m68k">
+Des disquettes d'installation basse densité (720 Ko) sont
+aussi fournies pour les Ataris. 
+</para>
+
+<para arch="powerpc">
+Pour CHRP, l'utilisation de disquette est actuellement impossible.
+</para>
+</sect2>
+
+<sect2><title>CD-ROM</title>
+<para>
+L'installation à partir d'un cédérom est aussi possible avec certaines 
+architectures. Sur les ordinateurs qui acceptent de démarrer sur cédérom 
+(cédérom amorçable), vous devriez pouvoir faire une installation entièrement
+<phrase arch="not-s390">sans disquette</phrase>
+<phrase arch="s390">sans bande</phrase>.
+Même si votre système ne peut pas démarrer à
+partir d'un cédérom, vous pouvez utiliser le cédérom en même
+temps que les autres techniques pour installer votre
+système, une fois que vous avez démarré par d'autres
+moyens&nbsp;; voyez&nbsp;: <xref linkend="boot-installer"/>.
+</para>
+
+<para arch="mips">
+Mips ne peut pas démarrer depuis un cédérom. 
+</para>
+
+<para arch="i386">
+Les cédéroms de type SCSI et IDE/ATAPI sont reconnus. 
+De plus, toutes les interfaces de cédéroms
+non standard reconnues par Linux sont reconnues par les
+disquettes de démarrage (comme les lecteurs Mitsumi et
+Matsushita). Cependant, ces modèles peuvent demander des
+paramètres de démarrage spéciaux ou d'autres méthodes pour
+les faire fonctionner&nbsp;; et démarrer à partir de ces interfaces
+non standard risque de ne pas être possible. Le 
+<ulink url="&url-cd-howto;">HOWTO Linux CD-ROM</ulink> contient des
+informations détaillées sur l'utilisation de cédéroms avec
+Linux. 
+</para>
+
+<para arch="arm">
+Les cédéroms IDE/ATAPI sont reconnus par toutes
+les architectures ARM. Sur les RiscPC, les cédéroms SCSI sont
+aussi reconnus. 
+</para>
+
+<para arch="mipsel">
+Sur les DECstations, l'amorçage depuis le
+cédérom nécessite un lecteur de cédéroms SCSI capable de
+travailler avec une taille de bloc logique de 512 octets.
+Beaucoup de lecteurs de cédéroms SCSI vendus sur le marché
+des PC n'offrent pas cette possibilité. Si votre lecteur de
+cédéroms possède un cavalier dénommé «&nbsp;Unix/PC&nbsp;» ou
+«&nbsp;512/2048&nbsp;», placez-le en position
+«&nbsp;Unix&nbsp;» ou «&nbsp;512&nbsp;».
+</para>
+
+<para arch="mipsel">
+Le cédérom n°&nbsp;1 contient le programme d'installation
+pour la sous-architecture r3k-kn02 (DECstations 5000/1xx
+et 5000/240 basées sur un processeur R3000, ainsi que pour les 
+modèles Personal DECstation basés sur un processeur R3000), 
+et le cédérom n°&nbsp;2 celui pour la sous-architecture r4k-kn04
+(DECstations 5000/150 et 5000/260 basées sur un processeur
+R4x00, ainsi que pour la Personal DECstation 5000/50).
+</para>
+
+<para arch="mipsel">
+Pour amorcer depuis un cédérom, tapez la commande
+<userinput>boot
+<replaceable>#</replaceable>/rz<replaceable>id</replaceable></userinput>
+à l'invite du microprogramme (<emphasis>firmware</emphasis>), où
+<replaceable>#</replaceable> est le numéro de périphérique TurboChannel
+depuis lequel se fait l'amorçage (3 sur la plupart des
+DECstations) et <replaceable>id</replaceable> est l'identifiant SCSI du
+lecteur de cédéroms. Si vous avez besoin de fournir des
+paramètres supplémentaires, ils peuvent être ajoutés en
+suivant cette syntaxe&nbsp;:
+</para>
+
+<para arch="mipsel">
+<userinput>boot
+<replaceable>#</replaceable>/rz<replaceable>id</replaceable>
+param1=valeur1 param2=valeur2 ...</userinput>
+</para>
+
+<para>
+L'installation à partir d'un disque local est possible sur beaucoup 
+d'architectures.
+</para>
+
+<para arch="m68k">
+En fait, l'installation à partir d'un disque
+local est la technique d'installation préférée pour les
+machines &architecture;. 
+</para>
+
+<para arch="sparc">
+Malgré que &arch-title; ne permette pas de
+démarrer à partir de SunOS (Solaris), l'installation à
+partir d'une partition SunOS (par exemple, des tranches UFS)
+est tout à fait possible. 
+</para>
+  </sect2>
+
+<sect2><title>Réseau</title>
+
+<para condition="supports-tftp">
+Vous pouvez aussi <emphasis>démarrer</emphasis> votre système sur le réseau.
+<phrase arch="mips">C'est la méthode d'installation préférée pour Mips.</phrase>
+</para>
+
+<para condition="supports-nfsroot">
+L'installation sans disque, en utilisant le démarrage par réseau et le 
+montage par NFS de tous les systèmes de fichiers locaux, est une autre option
+&mdash; vous aurez probablement besoin, pour cela de 16&nbsp;Mo de mémoire. 
+</para>
+
+<para>
+Après l'installation de votre système de base, vous pouvez
+installer le reste de votre système grâce à toutes sortes de connexion
+réseau (y compris PPP), via FTP, HTTP ou NFS.
+</para>
+</sect2>
+
+<sect2><title>Un*x ou système GNU</title>
+<para>
+Si vous utilisez un système de type Unix, vous pouvez installer &debian; sans
+utiliser le &d-i; qui est décrit dans la suite de ce manuel. Cette manière de
+faire peut servir à des utilisateurs qui possèdent des matériels non reconnus
+ou qui sont sur des machines qui ne peuvent se permettre un temps d'arrêt.
+Si cette technique vous intéresse, reportez-vous à 
+<xref linkend="linux-upgrade"/>.
+  </para>
+   </sect2>
+
+<sect2><title>Systèmes de stockage reconnus</title>
+<para>
+Les disquettes de démarrage Debian contiennent un noyau
+construit pour permettre de faire tourner un maximum de
+systèmes. Malheureusement, sa taille augmente en conséquence, avec beaucoup 
+de pilotes qui ne seront jamais utilisés 
+(voyez&nbsp;: <xref linkend="kernel-baking"/> pour apprendre à
+construire le vôtre). Cependant, le support du plus grand
+nombre de périphériques possible est voulu afin de
+s'assurer que l'on puisse installer Debian sur le plus de
+matériel possible.
+</para>
+
+<para arch="i386">
+En général, le système d'installation Debian reconnaît les disquettes, les 
+disques IDE, les disquettes IDE, les périphériques IDE sur le port parallèle, 
+less contrôleurs et disques SCSI. Les systèmes de fichiers reconnus 
+comprennent MINIX, FAT, les extensions FAT Win-32 (VFAT), parmi d'autres 
+(notez que NTFS n'est pas reconnu&nbsp;; vous pouvez l'ajouter plus tard,
+voyez&nbsp;: <xref linkend="kernel-baking"/>).
+</para>
+
+<para arch="i386">
+Les interfaces disques qui émulent l'interface du disque
+dur «&nbsp;AT&nbsp;», qu'on appelle souvent MFM, RLL, IDE
+ou ATA sont reconnues. Les très vieux contrôleurs de
+disques 8 bits utilisés dans l'ordinateur IBM XT ne sont
+acceptés que par module. Les contrôleurs de disques SCSI
+provenant de beaucoup de constructeurs différents sont
+reconnus. Voyez le 
+<ulink url="&url-hardware-howto;">HOWTO de compatibilité matérielle Linux</ulink> 
+pour plus de détails.
+</para>
+
+<para>
+Les disques SCSI sur IDE et certains contrôleurs SCSI ne
+sont pas reconnus, parmi lesquels&nbsp;:
+<itemizedlist>
+  <listitem><para>
+  Les adaptateurs SCSI conformes au protocole EATA-DMA
+  comme le SmartCache III/IV, les familles de contrôleurs
+  SmartRAID et les contrôleurs DPT PM2011B et PM2012B&nbsp;;
+  </para></listitem>
+  <listitem><para>
+  La famille de contrôleurs SCSI NCR 53c7 (mais les
+  contrôleurs 53c8 et 5380 sont reconnus).
+  </para></listitem></itemizedlist>
+</para>
+
+<para arch="m68k">
+À peu près tous les systèmes de stockage reconnus par le
+noyau Linux sont reconnus par le système d'installation
+Debian. Notez que le noyau Linux courant n'accepte pas du tout les disquettes 
+sur le Macintosh, et le système d'installation Debian ne reconnaît pas les 
+disquettes pour Amiga. Le système HFS de Macintosh est aussi reconnu sur
+les Atari, et l'AFFS en tant que module. Les Macs acceptent le système de 
+fichiers Atari (FAT). Les Amiga acceptent le système de fichiers FAT et celui 
+de HFS en module.
+</para>
+
+<para arch="sparc">
+Tout système de stockage reconnu par le noyau Linux est aussi
+reconnu par le système de démarrage. Les pilotes SCSI
+suivants sont reconnus dans le noyau par défaut&nbsp;:
+<itemizedlist>
+<listitem><para>Sparc ESP</para></listitem>
+<listitem><para>PTI Qlogic,ISP</para></listitem>
+<listitem><para>Adaptec AIC7xxx</para></listitem>
+<listitem><para>NCR and Symbios 53C8XX</para></listitem>
+</itemizedlist>
+
+Les systèmes IDE (tels que UltraSPARC 5) sont aussi
+reconnus. Voyez la <ulink url="&url-sparc-linux-faq;">FAQ Linux pour les processeurs SPARC</ulink> pour plus d'informations
+sur le matériel SPARC reconnu par le noyau Linux. 
+</para>
+
+
+<para arch="alpha">
+Tout système de stockage reconnu par le noyau Linux est reconnu par le 
+système de démarrage. Les pilotes SCSI
+suivants sont reconnus par le noyau par défaut&nbsp;:
+<itemizedlist>
+<listitem><para>Qlogic ISP</para></listitem>
+<listitem><para>NCR and Symbios 53c8xx</para></listitem>
+<listitem><para>Adaptec AIC7xxx</para></listitem>
+</itemizedlist>
+
+Les disques IDE sont aussi reconnus. Il faut cependant
+noter que sur de nombreux systèmes, la console SRM est
+incapable de démarrer à partir des lecteurs IDE, et la
+Jensen est incapable de démarrer à partir des
+disquettes. (voir <ulink url="&url-jensen-howto;">&url-jensen-howto;</ulink> pour plus
+d'informations sur le démarrage de Jensen) 
+
+</para>
+
+<para arch="powerpc">
+Tout système de stockage reconnu par le noyau Linux est
+aussi reconnu par le système de démarrage. Il faut
+remarquer que le noyau Linux actuel n'accepte pas du
+tout les disquettes sur les systèmes CHRP.
+</para>
+
+<para arch="hppa">
+Tout système de stockage reconnu par le noyau Linux est
+aussi reconnu par le système de démarrage. Il faut
+remarquer que le noyau Linux actuel n'accepte pas les
+disquettes.
+</para>
+
+<para arch="mips">
+Tout système de stockage reconnu par le noyau Linux est
+aussi reconnu par le système de démarrage.
+</para>
+
+<para arch="s390">
+Tout système de stockage reconnu par le noyau Linux est
+aussi supporté par le système de démarrage. Cela signifie
+que les DASD FBA et ECKD sont reconnus pour les vieux
+formats de disque Linux (ldl) et le nouveau format de
+disque S/390 plus courant (cdl). 
+</para>
+  </sect2>
+ </sect1>

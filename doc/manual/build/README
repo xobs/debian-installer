@@ -1,0 +1,60 @@
+1. Requirements:
+================
+
+docbook, docbook-xml, docbook-xsl, xsltproc, (fop)
+
+
+2. Included Files:
+==================
+
+install.en.xml: Main xml file used to aggregate various parts into
+                one big whole. This is a bit customized compared to
+                the original (changed SYSTEM entities, hardcode local
+                path to docbook dtd -- broken system xml catalogs?)
+                Feel free to add your local install.xx.xml.
+
+common.ent: Contains various entities like &num-of-distrib-packages;
+            &debian; &arch-title; ...
+
+urls.ent: Contains various urls used through the manual.
+
+docstruct.ent: Describes physical structure of documentation. Not
+               included directly (because of hardcoded en/ path), but
+               in a form of dynamic.ent (after some path replacing by sed).
+
+dynamic.ent: Generated on-the-fly from the shell script buildone.sh.
+             Contains lang and arch specific entities which can't be
+             profiled the usual xml way.
+
+any other .ent: Location of installation files (kernels, boot disks,
+                base tarballs) for various architectures.
+
+buildone.sh: For given architecture and language builds one set of
+             documentation in .html, .fo (and sometimes .pdf).
+
+build.sh: For each language and architecture calls buildone.sh, moves
+          rendered documentation somewhere and cleans after that.
+
+clear.sh: Does the actual cleaning.
+
+style-common.xsl: Common parameters for xsl transformation.
+
+style-html.xsl: HTML-specific parameters for xsl transformation.
+
+style-fo.xsl: FO-specific parameters for xsl transformation.
+
+
+3. Building:
+============
+
+After you customize build*.sh and style-*.xsl to suit your needs
+(esp. various paths), you can run
+
+ ./buildone.sh sparc en
+
+to build documentation for one specific architecture (sparc) and
+language (en). For mass building you can use ./build.sh script.
+
+
+-- 
+27. January 2004 Miroslav Kure 

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- $Id$ -->
+<!-- original version: 1.4 -->
+
+
+  <sect2 arch="ia64"><title>Particionamento para &arch-title;</title>
+<para>
+
+A firmware EFI do ia64 suporta dois formatos de tabelas de partições (ou 
+volumes de disco); GPT e a MS-DOS. O MS-DOS é o formato tipicamente usado
+em PCs i386 e não é mais recomendado para sistemas ia64. O programa de 
+instalação fornece dois programas de particionamento, o
+<ulink url="cfdisk.txt"><command>cfdisk</command></ulink> e
+<ulink url="parted.txt"><command>parted</command></ulink>.
+O <command>parted</command> pode gerenciar ambas as tabelas GPT e a MS-DOS, enquanto
+o <command>cfdisk</command> somente pode gerenciar tabelas MS-DOS. É 
+muito importnate notar que caso seu disco foi particionado anteriormente
+com uma tabela GPT e agora você deseja usar as tabelas MS-DOS, você deverá 
+usar o <command>parted</command> para criar a nova tabela de partição. 
+Isto é necessário porque as duas tabelas usam áreas diferentes do disco
+e o programa <command>cfdisk</command> não sabe como remover uma partição GPT.
+</para><para>
+
+Uma diferença importante entre o <command>cfdisk</command> e o
+<command>parted</command> está na forma que eles identificam um
+"tipo" de partição. O <command>cfdisk</command> utiliza um byte na tabela
+de partição (por exemplo, 83 para a partição ext2 do Linux), 
+enquanto o <command>parted</command> identifica o "tipo" da partição
+examinando os dados dentro dela. Isto significa que o 
+<command>parted</command> não considerará uma partição como sendo 
+swap até que você a formate. De forma idêntica, ele não considerará 
+uma partição como linux ext2 até que crie um sistema de arquivos nela.
+O <command>parted</command> lhe permite criar sistemas de arquivos
+e formatar o espaço para swap e você deverá fazer isto dentro do 
+<command>parted</command>.
+
+</para><para>
+Infelizmente, o <command>parted</command> é um programa guiado via linha
+de comando e não é tão fácil de usar quanto o <command>cfdisk</command>.
+Assumindo que deseja apagar todo o disco e criar uma tabela GPT e algumas
+partições, então algo similar como a sequência dos seguintes comandos
+deverá ser usada:
+
+</para><para>
+<informalexample><screen>
+
+      mklabel gpt
+      mkpartfs primary fat 0 50
+      mkpartfs primary linux-swap 51 1000
+      mkpartfs primary ext2 1001 3000
+      set 1 boot on
+      print
+      quit
+
+</screen></informalexample>
+</para><para>
+
+Isto criar uma nova tabela de partição e três partições para serem usadas
+como uma partição de inicialização EFI, espaço de troca e sistema de 
+arquivos raíz. Finalmente ele ajusta a opção de inicialização para a 
+partição EFI. As partições são especificadas em Megabytes, com o 
+offset de inicio e fim com referência ao inicio do disco. Assim, por exemplo, 
+acima nós criamos um sistema de arquivos ext2 de 1999MB iniciando no 
+offset 1001MB do inicio do disco. Note que a formatação do espaço de 
+troca (swap) com o <command>parted</command> poderá levar alguns minutos
+pois ele procura por blocos defeituosos na partição.
+
+</para>
+  </sect2>
+
+  <sect2 arch="ia64"><title>Requerimentos do Geenciador de Partida da Partição</title>
+
+<para>
+
+O ELILO, o gerenciador de partida do ia64, requer uma partição 
+contendo o sistema de arquivos FAT. Caso usar tabelas de partição
+GPT, então esta partição deverá ter a opção <userinput>boot</userinput> 
+definida; se usar tabelas de partição em formato MS-DOS, então esta 
+partição deverá ser do tipo "EF". Esta partição deverá ser grande o 
+suficiente para armazenar o gerenciador de partida e quaisquer 
+kernels e discos RAM que deverá ter. Um tamanho mínimo deverá estar 
+em torno de 16MB, mas se você estiver fazendo desenvolvimentos ou 
+testes com kernels diferentes, então 128MB será uma melhor escolha.
+
+</para>
+  </sect2>

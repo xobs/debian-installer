@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 1.4 -->
+
+ <sect1>
+ <title>Schéma de partitionnement recommandé</title>
+<para>
+
+Pour les nouveaux utilisateurs, les machines Debian personnelles ou
+familiales, et autres systèmes mono-utilisateurs, une simple partition
+<filename>/</filename> (plus celle d'échange) est sans doute la solution la
+plus simple. ....
+swap) is probably the easiest, simplest way to go.  However, if your
+partition is larger than around 6GB, choose ext3 as your partition
+type.  Ext2 partitions need periodic file system integrity checking,
+and this can cause delays during booting when the partition is large.
+
+</para><para>
+
+Pour les systèmes multi-utilisateurs, ou les systèmes avec
+beaucoup d'espace disque, il vaut mieux placer
+les répertoires <filename>/usr</filename>, <filename>/var</filename>, 
+<filename>/tmp</filename>, et <filename>/home</filename> chacun sur une 
+partition distincte de la partition <filename>/</filename>.
+
+</para><para>
+
+Dans certains cas, vous pourriez avoir besoin d'une partition
+<filename>/usr/local</filename> distincte si vous prévoyez d'installer 
+beaucoup de
+programmes qui ne font pas partie de la distribution Debian.
+Si votre machine est destinée à être un serveur de courrier, vous
+pourriez avoir besoin de mettre <filename>/var/mail</filename> sur
+une partition distincte. Parfois, mettre
+<filename>/tmp</filename> sur sa propre partition, par exemple 20 à 
+50&nbsp;Mo est une
+bonne idée. Si vous mettez sur pied un serveur avec beaucoup de comptes
+utilisateurs, il est généralement intéressant d'avoir une grande partition
+distincte pour <filename>/home</filename>. En général, la méthode de 
+partitionnement
+varie d'un ordinateur à l'autre, en fonction de son usage.
+
+</para><para>
+
+Pour des systèmes très complexes, consultez le 
+
+<ulink url="http://www.tldp.org/HOWTO/Multi-Disk-HOWTO.html">HOWTO Multi Disk</ulink>. Il contient des
+informations très précises qui intéresseront les fournisseurs d'accès à
+Internet et les personnes installant des serveurs.
+
+</para><para>
+
+En ce qui concerne la taille de la partition d'échange (swap),
+les avis sont partagés. Une règle traditionnelle, qui fonctionne bien,
+est d'utiliser autant d'espace d'échange que de RAM.
+Dans la plupart des cas, cette taille ne devrait pas être
+inférieure à 16&nbsp;Mo.
+Bien sûr, il y a des exceptions. Si vous essayez de résoudre 10000
+équations simultanément sur une machine avec 256&nbsp;Mo de RAM, vous
+pourriez avoir besoin d'un giga octet (ou plus) d'échange.
+
+</para><para arch="m68k"> 
+
+D'un autre côté, les Atari Falcons et les Macs semblent
+souffrir quand ils swappent.
+En conséquence, au lieu d'augmenter la partition d'échange, ajoutez
+autant de RAM que possible.
+
+</para><para>
+
+Sur les architectures 32 bits (i386, m68k, SPARC 32 bits et PowerPC),
+la taille maximale d'une partition d'échange est de 2&nbsp;Go (sur les
+Alpha et les Sparc 64, elle est si grande qu'elle est virtuellement
+infinie). Cela devrait suffire pour presque tous les systèmes.
+De toute façon, si vos besoins en espace d'échange sont aussi importants,
+vous devriez probablement essayer de disperser les partitions d'échange
+sur des disques différents (appelés aussi «&nbsp;spindles&nbsp;») et, si
+possible, sur des canaux IDE ou SCSI différents. Le noyau équilibrera
+l'utilisation de l'espace d'échange entre les différentes partitions,
+afin d'obtenir de meilleures performances.
+
+</para><para>
+
+Comme exemple, la machine de l'un des auteurs possède 32&nbsp;Mo de
+RAM et un disque IDE de 1.7&nbsp;Go sur <filename>/dev/hda</filename>.
+Il y a une partition de 500&nbsp;Mo pour un autre système sur
+<filename>/dev/hda1</filename> (qui aurait dû être créée de 200&nbsp;Mo
+puisqu'elle n'est jamais utilisée). Une partition d'échange de 32&nbsp;Mo est
+utilisée sur <filename>/dev/hda3</filename> et le reste (environ 1,2&nbsp;Go 
+sur <filename>/dev/hda2</filename>) est la partition Linux.
+
+</para><para>
+
+Pour d'autres exemples, reportez-vous à un 
+<ulink 
+url="http://www.tldp.org/HOWTO/mini/Partition/partition-5.html#SUBMITTED\">
+exemple de partitionnement</ulink>.
+Pour avoir une idée de la place
+nécessaire pour les tâches que vous pourriez avoir envie de rajouter à
+la fin de votre installation, consultez&nbsp;:
+<xref linkend="tasksel-size-list"/>.
+
+</para>
+
+ </sect1>

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- $Id$ -->
+<!-- original version: 1.7 -->
+
+ <sect1 id="network-cards">
+ <title>Hardwares de Conectividade em Rede</title>
+
+<para arch="i386">
+
+<!-- last updated for kernel-image_2.0.36-2 -->
+
+Algumas placas de rede (NICs) não são suportadas pela maioria dos 
+discos de instalação da Debian, como placas AX.25 e protocolos; 
+3Com Etherlink Plus (3c505) e placas EtherLink16 (3c507); NI5210; 
+placas genéricas NE2100 NI6510 e placas NI16510 EtherBlaster; placas 
+SEEQ 8005; Schneider &amp; placas Koch G16; Ansel Communications EISA 3200;
+placas baseadas no Winbond-840 (eg. Realtek-100A), algumas placas 
+novas baseadas em Tulip e a placa de rede embutida Zenith Z-Note. 
+Estas placas de rede são suportadas pelo sabor "bf2.4": placas baseados 
+no Winbond-840, placas novas baseadas no Tulip, série National Semiconductor 
+DP8381x/DP8382x e Sundance ST201 "Alta". As placas de rede Microchannel (MCA) 
+não são suportadas pelo sistema de instalação padrão, mas veja
+<ulink url="&url-linux-mca;">Linux no MCA</ulink> por algumas (antigas)
+instruções, e os 
+<ulink url="&url-linux-mca-discussion;">Arquivos da discussão do Linux no 
+MCA</ulink>. As redes FDDI também não são suportadas pelos discos de 
+instalação, ambas placas e protocolos. Você poderá criar um kernel 
+personalizado que suportará uma placa não suportada e então substituir
+no sistema de instalação (veja
+<xref linkend="rescue-replace-kernel"/>).
+
+</para><para arch="i386">
+
+Como no ISDN, o protocolo D-channel para a (antiga) Alemã 1TR6 
+não é suportada; as placas Spellcaster BRI ISDN também não é 
+suportada pelo
+&d-i;.
+
+</para><para arch="i386">
+
+Dispositivos de som não são suportados como padrão. Mas como 
+já mencionado acima: se você deseja usar seu próprio kernel, 
+veja <xref linkend="kernel-baking"/> para informações úteis.
+
+</para>
+
+<para arch="m68k">
+
+Qualquer placa de rede (NIC) suportada pelo kernel do Linux
+deverá ser também suportada pelos discos de instalação. 
+Você poderá precisar carregar seu controlador de rede como
+módulo. Novamente, veja
+<ulink url="&url-m68k-faq;"></ulink> para detalhes completos. 
+
+</para>
+
+<para arch="sparc">
+
+As seguintes placas de rede (NICs) são suportadas para inicialização 
+direta pelo kernel:
+
+<itemizedlist>
+ <listitem><para>
+
+Sun LANCE
+ 
+
+</para></listitem>
+ <listitem><para>
+
+Sun Happy Meal
+ 
+
+</para></listitem>
+</itemizedlist>
+
+</para><para arch="sparc">
+
+As seguintes placas de rede (NICs) são suportadas como módulos. 
+Elas podem ser ativadas assim que os controladores estiverem 
+instalados. No entanto, devido a mágica do OpenPROM, você ainda
+poderá ser capaz de iniciar a partir destes dispositivos:
+
+<itemizedlist>
+ <listitem><para>
+
+Sun BigMAC
+ 
+
+</para></listitem>
+ <listitem><para>
+
+Sun QuadEthernet
+
+</para></listitem>
+ <listitem><para>
+
+MyriCOM Gigabit Ethernet
+
+</para></listitem>
+</itemizedlist>
+
+</para><para arch="alpha">
+
+Qualquer placa de rede (NIC) suportada pelo kernel do Linux
+deverá também ser suportada pelos discos de instalação. O 
+suporte para as placas Ethernet DECChip (Tulip) em muitos 
+modelos Alpha são compilados diretamente no kernel. Para outras 
+placas, você poderá ter que carregar seu controlador de rede 
+como um módulo.
+
+</para><para arch="powerpc"> 
+
+Qualquer placa de rede (NIC) suportada pelo kernel do Linux 
+deverá também ser suportada pelos discos de inicialização. 
+Você poderá precisar carregar seu controladora de rede como 
+um módulo.
+
+</para><para arch="hppa">
+
+Qualquer placa de rede (NIC) suportada pelo kernel do Linux 
+deverá também ser suportada pelo discos de instalação. Você 
+precisará carregar seu controlador de rede como um módulo.
+
+</para><para arch="mips">
+
+Qualquer placa de  rede (NIC) suportada pelo kernel do Linux 
+dever também ser suportada pelos discos de inicialização. 
+Você pode precisar carregar seu controlador de rede como um 
+módulo.
+
+</para><para arch="mipsel">
+
+Devido a limitações do kernel, somente placas de rede on-board 
+em DECstations são suportadas, as placas de rede opcionais 
+TurboChannel atualmente não são suportadas.
+
+</para><para arch="s390">
+
+Qualquer placa de rede (NIC) suportada pelo kernel do Linux 
+são também suportadas pelos discos de instalação. Todos os 
+controladores de rede são compilados como módulos, assim você 
+precisará carregar um no momento da configuração inicial da 
+rede. A lista de dispositivos de rede suportados é:
+
+<itemizedlist>
+ <listitem><para>
+
+Canal para Canal (CTC) ou conexão ESCON (real ou emulada)
+ 
+
+</para></listitem>
+ <listitem><para>
+
+lcs: OSA-2 Token Ring/Ethernet ou OSA-Express Fast Ethernet
+          (não-QDIO)
+
+</para></listitem>
+<listitem><para>
+
+Inter-User Communication Vehicle (IUCV) - disponível somente para guests VM
+
+</para></listitem>
+<listitem><para>
+
+qeth: OSA-Express em modo QDIO / HiperSockets - isto requer 
+um segundo initrd com módulos OCO de
+<ulink url="http://oss.software.ibm.com/developerworks/opensource/linux390/index.shtml">developerWorks</ulink>. 
+Por favor leia <xref linkend="ipl-tape"/> para informação de como
+obter ou criar um segundo initrd.
+
+</para></listitem>
+</itemizedlist>
+
+</para>
+
+<para arch="arm">
+
+As seguintes placas de rede são suportadas diretamente pelos 
+disquetes de inicialização em máquinas NetWinder e CATS:
+
+<itemizedlist>
+ <listitem><para>
+
+    PCI-based NE2000
+ 
+
+</para></listitem>
+ <listitem><para>
+
+    DECchip Tulip
+
+</para></listitem>
+</itemizedlist>
+
+</para><para arch="arm">
+
+As seguintes placas de redes são suportadas diretamente pelos 
+discos de instalação em RiscPCs:
+
+<itemizedlist>
+ <listitem><para>
+
+    Ether1
+
+</para></listitem>
+ <listitem><para>
+
+    Ether3
+
+</para></listitem>
+ <listitem><para>
+
+    EtherH
+
+</para></listitem>
+</itemizedlist>
+
+</para><para arch="arm">
+
+Caso sua placa foi mencionada na lista acima, a instalação completa 
+será guiada via rede sem a necessidade de CD-ROMs ou disquetes.
+
+</para><para arch="arm">
+
+Qualquer outra placa de rede (NIC) suportada pelo kernel do Linux
+também deverá ser suportada pelos discos de instalação. Pode 
+ser necessário que você carregue o controlador de rede como módulo; 
+isto significa que terá que instalar o kernel do sistema operacional
+e módulos usando alguma outra mídia.
+
+</para>
+
+ </sect1>

@@ -1,0 +1,255 @@
+<!-- -*- DocBook -*- -->
+<?xml version='1.0'?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" [
+  <!ENTITY arches SYSTEM "arches.ent" >
+  <!ENTITY debianwebsite "http://www.debian.org" >
+  <!ENTITY entities "entities" >
+]>
+
+<book>
+ <title>The Title for the Book</title>
+
+<chapter>
+ <title>The Chapter Title</title>
+
+<!-- note to debiandoc users: there is no sect, start with sect1 -->
+ <sect1 id="sect1-cross-referencable-id">
+ <title>First Level Section</title>
+<para>
+
+A paragraph explaining something In this manual we will make extensive
+use of &entities;, to insert the contents of smaller independent
+files. This should help translators; any changes will be easier to
+find within the files. We will try to keep the files
+<emphasis>small</emphasis>, feel free to create new ones for new
+subjects or subtopics.
+
+</para><para>
+
+This example document contains some of the most useful types
+of xml markup for our purposes. Some quick rules: 
+
+<itemizedlist>
+ <listitem><para>
+
+All tags must be in lower case
+
+ </para></listitem>
+ <listitem><para>
+
+Every tag must have a closing tag also
+
+ </para></listitem>
+ <listitem><para>
+
+No abbreviations in the tags
+
+ </para></listitem>
+</itemizedlist>
+
+and preferences:
+
+<orderedlist>
+ <listitem><para>
+
+Keep starting tags to the left margin as much as possible
+
+ </para></listitem>
+ <listitem><para>
+
+Keep tag pairs intact on one line if it's reasonable to do so
+
+ </para></listitem>
+ <listitem><para>
+
+The right margin will not be even, it doesn't matter
+
+ </para></listitem>
+ <listitem><para>
+
+Use 1-space indentation, but don't sweat it
+
+ </para></listitem>
+ <listitem><para>
+
+Try to leave a blank line between paragraph tags and the
+words in the paragraph (this makes word wrapping much easier)
+
+ </para></listitem>
+</orderedlist>
+</para>
+
+  <sect2 id="cross-referencable-id">
+  <title>Second Level Section</title>
+<para>
+
+I use the docbookide xemacs mode to edit:
+
+<informalexample>
+ <screen>
+
+  <userinput>apt-get install docbookide</userinput>
+  or <command>apt-get install docbookide</command>
+
+ </screen>
+</informalexample>
+
+It displays syntax coloring and closes your tags if you
+are at the end of a line. Here is an internal cross reference: 
+<xref linkend="cross-referencable-id"></xref>
+and here is an external link to 
+<ulink url="http://www.debian.org">the main Debian website</ulink>. 
+Many times we will put common urls in an entity document and use
+something like a link to 
+<ulink url="&debianwebsite;">Debian Website</ulink> 
+instead of using url directly.
+
+</para><para>
+
+If you need to specify text that is only present for a certain
+condition or a given architecture, use attributes arch and 
+condition. For example, 
+
+<code>
+
+<para arch="i386">
+A paragraph only interesting for i386 users
+</para>
+
+<sect3 condition="bootable-from-hard-disk">
+A section pertaining only to computers which
+can boot from their hard disk
+</sect3>
+
+<phrase arch="powerpc">PowerPC-only text within a para</phrase>
+
+</code>
+
+</para>
+<!-- More example tags, all these must occur within a block: -->
+<para>
+
+<prompt>the command prompt text</prompt>
+<replaceable>text to be replaced by user, debiandoc var</replaceable>
+<computeroutput>that's self explanatory!</computeroutput>
+<application>abiword</application>
+<filename>/install/basedebs.tar</filename>
+<medialabel>/dev/hda1</medialabel>
+
+You can exit from GNU Emacs with 
+
+<menuchoice>
+  <shortcut>
+
+    <keycombo><keysym>C-x</keysym><keysym>C-c</keysym></keycombo>
+
+  </shortcut>
+
+  <guimenu>Files</guimenu>
+  <guimenuitem>Exit Emacs</guimenuitem>
+
+</menuchoice>.
+
+<keycombo>
+ <keycap>Ctrl</keycap>
+ <keycap>Alt</keycap>
+ <keycap>F1</keycap>
+</keycombo> selects console 1.
+
+</para>
+
+<!-- This is what used to be a taglist in debiandoc -->
+<variablelist>
+ <varlistentry>
+
+  <term>1st term to be defined</term>
+  <listitem><para>
+
+  A paragraph definition of the term.
+
+  </para></listitem>
+
+ </varlistentry>
+ <varlistentry>
+
+  <term>2nd term to be defined</term>
+
+  <listitem><para>
+
+  A paragraph definition of the 2nd term.
+
+  </para></listitem>
+ </varlistentry>
+</variablelist>
+
+<!-- Admonitions must have paragraph level tags within them -->
+
+<tip><para>making things easier on yourself</para></tip>
+<note><para>something of interest</para></note>
+<important><para>pay attention now</para></important>
+<caution><para>watch out here</para></caution>
+<warning><para>this is really critical to success</para></warning>
+
+<informaltable>
+ <tgroup cols="2"><tbody><row>
+
+  <entry>1st row, 1st column</entry>
+  <entry>1st row, 2nd column</entry>
+
+ </row><row>
+
+  <entry>2nd row, 1st column</entry>
+  <entry>2nd row, 2nd column</entry>
+
+ </row></tbody></tgroup>
+</informaltable>
+
+<table><title>A Formal Table has a Title</title>
+ <tgroup cols="2"><tbody><row>
+
+  <entry>1st row, 1st column</entry>
+  <entry>1st row, 2nd column</entry>
+
+ </row><row>
+
+  <entry>2nd row, 1st column</entry>
+  <entry>2nd row, 2nd column</entry>
+
+ </row></tbody></tgroup>
+</table>
+
+<screenshot>
+ <graphic fileref="some-graphic-reference.jpg"></graphic>
+</screenshot>
+
+<informalfigure>
+ <graphic fileref="some-figure-reference.png"></graphic>
+</informalfigure>
+
+<figure>
+ <title>A Formal Figure has a Title (Caption)</title>
+ <graphic fileref="some-figure-reference.jpg"></graphic>
+</figure>
+
+  </sect2>
+ </sect1>
+</chapter>
+
+<glossary>
+ <glossentry>
+
+ <glossterm>some glossary entry</glossterm>
+ <glossdef><para>
+
+Some appropriate glossary definition goes here.
+
+  </para> </glossdef>
+ </glossentry>
+</glossary>
+
+</book>
+
+
+
+
+

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id$ -->
+
+
+  <sect2 arch="sparc" id="invoking-openboot"><title>Appel d'OpenBoot</title>
+
+<para>
+
+OpenBoot fournit les fonctions de base nécessaires à l'amorçage de
+l'architecture &arch-title;. C'est à peu près similaire en fonctionnalité au
+BIOS de l'architecture x86, mais c'est plus joli. Les PROMs
+d'amorçage Sun possèdent un interpréteur Forth intégré qui permet de
+faire pas mal de choses avec son ordinateur, comme des tests, des scripts
+simples, etc.
+
+</para><para>
+
+Pour obtenir l'invite d'OpenBoot vous devez maintenir la touche
+<keycap>Stop</keycap> (ou la touche <keycap>L1</keycap> sur les vieux 
+claviers Type 4) et appuyer sur la touche <keycap>A</keycap>. Si vous avez un 
+adaptateur de clavier PC, maintenez la touche <keycap>Pause</keycap> (ou 
+<keycap>Break</keycap>) et appuyez sur <keycap>A</keycap>. Cela vous donnera 
+une invite, soit <userinput>ok</userinput> soit <userinput>&gt;</userinput>.
+Il est préférable d'avoir l'invite <userinput>ok</userinput>. Si vous obtenez 
+le vieux modèle d'invite (<userinput>&gt;</userinput>), appuyez
+la touche <keycap>n</keycap> pour obtenir le nouveau modèle d'invite.
+
+</para>
+  </sect2>
+
+  <sect2 arch="sparc" id="boot-dev-select-sun">
+  <title>Sélection du périphérique d'amorçage</title>
+
+<para>
+
+Vous pouvez utiliser OpenBoot pour démarrer à partir de périphériques
+spécifiques, et aussi pour modifier le périphérique de démarrage par défaut.
+Cependant, vous devez connaître certains détails sur la manière dont OpenBoot
+nomme les périphériques&nbsp;; c'est assez différent du nommage de 
+périphériques sous Linux, et décrit dans <xref linkend="device-names"/>. De 
+plus, la commande varie légèrement, selon la version d'OpenBoot que vous 
+avez. Vous trouverez plus d'informations sur OpenBoot dans la 
+<ulink url="&url-openboot;">référence OpenBoot Sun </ulink>.
+
+</para><para>
+
+Typiquement, dans les versions récentes, vous pouvez utiliser les périphériques
+OpenBoot tels que «&nbsp;floppy&nbsp;», «&nbsp;cdrom&nbsp;», «&nbsp;net&nbsp;»,
+«&nbsp;disk&nbsp;» ou «&nbsp;disk2&nbsp;». Ceux-ci ont des significations
+évidentes <footnote>NDT&nbsp;: pour les anglophones</footnote>. Le périphérique
+«&nbsp;net&nbsp;» sert à démarrer par le réseau, «&nbsp;floppy&nbsp;» sert à
+démarrer sur une disquette, «&nbsp;disk&nbsp;» sur le premier disque dur, et
+«&nbsp;disk2&nbsp;» sur le second disque.
+
+<informalexample>
+<screen>
+<replaceable>nom-pilote</replaceable>@
+<replaceable>adresse-unité</replaceable>:
+<replaceable>arguments-périphériques</replaceable>
+</screen></informalexample>.
+
+Avec les anciennes versions d'OpenBoot, le nommage des périphériques est
+légèrement différent. Le lecteur de disquettes s'appelle «&nbsp;/fd&nbsp;», et
+les noms des disques durs SCSI sont de la forme 
+«&nbsp;sd(<replaceable>contrôleur</replaceable>,
+<replaceable>disk-target-id</replaceable>, 
+<replaceable>unité-logique-du-disque</replaceable>)&nbsp;».
+La commande <userinput>show-devs</userinput> dans les nouvelles versions 
+d'OpenBoot est utile pour voir les périphériques actuellement configurés. 
+Pour des informations complètes quelle que soit votre version d'OpenBoot, 
+voyez la
+<ulink url="&url-openboot;">référence OpenBoot Sun</ulink>.
+
+</para><para>
+
+Pour démarrer sur un périphérique spécifique, utilisez la commande 
+<userinput>boot <replaceable>device</replaceable></userinput>. Vous pouvez 
+positionner ce comportement comme valeur par défaut en utilisant la commande 
+<userinput>setenv boot-device <replaceable>device</replaceable></userinput>. 
+Cependant, le nom de la variable à positionner a changé entre les versions 
+d'OpenBoot. Dans OpenBoot 1.x, utilisez la commande 
+<userinput>setenv boot-from <replaceable>device</replaceable></userinput>. Dans
+les versions ultérieures, utilisez la commande 
+<userinput>setenv boot-device <replaceable>device</replaceable></userinput>.
+N.B. On peut faire ce réglage à partir de la commande
+<command>eeprom</command> sous Solaris, ou, sous Linux, en modifiant les 
+fichiers dans <filename>/proc/openprom/options/</filename>. Par exemple sous 
+Linux&nbsp;:
+
+<informalexample><screen>
+
+echo disk1:1 &gt;/proc/openprom/options/boot-device
+
+</screen></informalexample>
+
+et sous Solaris :
+
+<informalexample><screen>
+
+eeprom boot-device=disk1:1
+
+</screen></informalexample>
+
+</para>
+  </sect2>

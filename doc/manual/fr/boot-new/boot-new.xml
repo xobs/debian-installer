@@ -1,0 +1,840 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 1.1 -->
+
+<chapter id="boot-new">
+ <title>Démarrer votre nouveau système Debian</title>
+
+ <sect1><title>Make System Bootable</title>
+<para>
+
+Notez que le démarrage de plusieurs systèmes d'exploitation
+          sur une simple machine relève pour ainsi dire de la magie noire.
+          Ce document ne cherche même pas à documenter les divers
+          gestionnaires de démarrage («&nbsp;boot manager&nbsp;»&mdash;
+          «&nbsp;boot loader&nbsp;»), qui peuvent varier suivant les
+          architectures et même d'une sous-architecture à l'autre. Vous
+          devriez regarder la documentation de votre gestionnaire de
+          démarrage pour de plus amples informations.
+
+</para>
+
+&bootloader-i386.xml;
+&bootloader-m68k.xml;
+&bootloader-alpha.xml;
+&bootloader-sparc.xml;
+&bootloader-powerpc.xml;
+&bootloader-hppa.xml;
+&bootloader-s390.xml;
+&bootloader-arm.xml;
+&bootloader-mipsel.xml;
+
+  <sect2 condition="supports-nfsroot"><title>Diskless Workstations</title>
+<para>
+
+Si vous installez un poste de travail sans disque, démarrer depuis le disque 
+local n'a évidement pas de sens, et cette étape sera sautée.
+<phrase arch="sparc"> Vous pouvez configurer l'OpenBoot pour démarrer
+     depuis le réseau par défaut&nbsp;; voyez
+<xref linkend="boot-dev-select-sun"/>.</phrase>
+
+</para>
+
+  </sect2>
+</sect1>
+
+ <sect1 id="make-boot-floppy"><title>Making a Boot Floppy</title>
+<para>
+
+Même si vous avez l'intention de démarrer votre système
+      depuis le disque dur, il est conseillé de créer une disquette
+      de démarrage. La raison est qu'il est possible que le secteur
+      d'amorçage du disque dur soit mal installé, alors qu'une disquette
+      de démarrage fonctionnera pratiquement tout le temps.
+
+</para><para>
+
+Iinsérez une disquette vierge comme indiqué. Assurez-vous qu'elle n'est pas 
+protégée  contre l'écriture, car le logiciel doit la formater et écrire dessus.
+      Étiquetez la disquette <quote>Démarrage personnalisé</quote> et
+      protégez-la contre l'écriture une fois la création achevée.
+
+</para><para>
+
+Cette disquette contiendra un noyau et un seul système de fichiers,
+      avec une instruction pour utiliser votre nouveau système
+      de fichiers racine.
+
+</para><para arch="alpha">
+
+Malheureusement, on ne peut pas créer de disquette de
+démarrage pour les systèmes SRM, étant donné que <command>MILO</command> et
+      le noyau ne tiennent pas sur une seule disquette.
+
+</para>
+ </sect1>
+
+
+ <sect1 id="base-boot"><title>Le moment de vérité</title>
+<para>
+
+Voici ce que les ingénieurs en électronique appellent le
+<quote>test de la fumée</quote>&nbsp;: c'est ce qui se passe
+           lorsque l'on démarre un nouveau système pour la première fois.
+
+</para><para arch="s390">
+
+Sélectionnez&nbsp;: «&nbsp;MSG-REBOOT&nbsp;» dans le menu,
+           cela va provoquer l'arrêt de la machine car le redémarrage
+           ne fonctionne pas sur les S/390 dans ce cas de figure.
+           Vous devez «&nbsp;IPL&nbsp;» GNU/Linux depuis le lecteur DASD
+           que vous avez sélectionné comme système de fichiers root au cours
+           des premières étapes de l'installation.
+
+</para><para>
+
+Si vous démarrez directement sur Debian, et que le système
+           ne démarre pas, utilisez le support d'installation d'origine
+           (par exemple la disquette de secours), ou insérez la disquette
+           «&nbsp;Démarrage personnalisé&nbsp;» si vous l'avez créée, puis
+relancez votre système. Si vous <emphasis>n'utilisez pas</emphasis> la
+           disquette «&nbsp;Démarrage personnalisé&nbsp;», il est probable
+           que vous deviez ajouter quelques arguments de démarrage&nbsp;: si
+           vous démarrez à partir de la disquette de secours ou que vous
+           utilisez une technique similaire, vous devrez spécifier
+<userinput>rescue root=<replaceable>root</replaceable></userinput>, où 
+<replaceable>root</replaceable> est votre partition racine, 
+par exemple&nbsp;: <filename>/dev/sda1</filename>.
+
+</para>
+
+  <sect2 arch="m68k"><title>Démarrer une VME6000</title>
+<para>
+
+Si vous avez réalisé une installation sans disque sur une
+          machine BVM ou Motorola VMEbus&nbsp;: une fois que le système a
+lancé le programme <command>tftplilo</command> depuis le serveur TFTP,
+          à l'invite <prompt>LILO Boot:</prompt> entrez une des options
+          suivantes&nbsp;:
+
+<itemizedlist>
+<listitem><para>
+
+<userinput>b6000</userinput> suivi par &enterkey;
+pour amorcer une BVME4000/6000
+
+</para></listitem><listitem><para>
+
+<userinput>b162</userinput> suivi par &enterkey;
+pour amorcer une MVME162
+
+</para></listitem><listitem><para>
+
+<userinput>b167</userinput> suivi par &enterkey;
+pour amorcer une MVME166/167
+
+</para></listitem>
+</itemizedlist>
+
+</para>
+
+   </sect2>
+
+  <sect2 arch="m68k"><title>Démarrage d'un Macintosh</title>
+
+<para>
+
+Allez dans le répertoire qui contient les fichiers d'installation et
+démarrez le gestionnaire de démarrage <command>Penguin</command>, en pressant
+la touche <keycap>command</keycap>. Allez sur la boîte de dialogue
+<userinput>Settings</userinput> 
+(<keycombo><keycap>command</keycap> <keycap>T</keycap> </keycombo>), et 
+identifiez la ligne d'options du noyau. Elle devrait ressembler à 
+<userinput>root=/dev/ram video=font:VGA8x16</userinput>.
+
+</para><para>
+
+Vous devez la remplacer par 
+<userinput>root=/dev/<replaceable>yyyy</replaceable></userinput>.
+Remplacez le <replaceable>yyyy</replaceable> par le nom de la partition Linux 
+sur laquelle vous avez installé le système. (par exemple&nbsp;:
+<filename>/dev/sda1</filename>); vous l'avez déjà indiqué précédement.
+<userinput>video=font:VGA8x8</userinput> est plus particulièrement récommandé
+      aux utilisateurs qui possèdent un écran minuscule. Le noyau devrait
+      sélectionner une police plus jolie (6x11) mais les pilotes de la console
+      pour cette police peuvent bloquer la machine, aussi l'emploi des
+      «&nbsp;8x16&nbsp;» et «&nbsp;8x8&nbsp;» est plus sûr à cette étape.
+      Vous pouvez le changer à tout moment.
+
+</para><para>
+
+Si vous ne souhaitez pas automatiquement démarrer GNU/Linux à chaque
+démarrage, désélectionnez l'option <userinput>Auto Boot</userinput>. 
+Enregistrez vos paramètres dans le fichiers de préférence grâce à l'option
+<userinput>Save Settings As Default</userinput>.
+
+</para><para>
+
+Sélectionnez maintenant <userinput>Boot Now</userinput> 
+(<keycombo><keycap>command</keycap> <keycap>B</keycap> </keycombo>) pour 
+démarrer votre système GNU/Linux, fraichement installé, à la place du
+       système d'installation RAMdisk.
+
+</para><para>
+
+Debian devrait démarrer, et vous devriez voir défiler les mêmes
+      messages que lorsque vous avez démarré pour la première fois
+      votre système, suivis de quelques nouveaux messages.
+
+
+</para>
+
+   </sect2>
+ </sect1>
+
+ <sect1 id="base-config">
+ <title>Paramétrage post-démarrage de Debian (Base)</title>
+
+<para>
+
+Après le démarrage, on vous demandera de terminer la
+      configuration de votre système de base, et ensuite de sélectionner
+      les paquets supplémentaires que vous souhaitez installer.
+      L'application qui vous guidera au cours de cette étape est appelée
+<classname>base-config</classname>. Si vous souhaitez relancer le programme
+<classname>base-config</classname> une fois l'installation terminée, lancez
+<userinput>base-config</userinput> en tant qu'utilisateur root.
+
+</para>
+
+ </sect1>
+
+ <sect1 id="base-config-tz">
+ <title>Configuration du fuseau horaire</title>
+
+<para>
+
+On vous demandera en premier lieu de configurer votre fuseau horaire.
+<phrase arch="m68k;powerpc">les horloges matérielles Macintosh sont en
+      principe configurées grâce au fuseau horaire local. Si vous
+souhaitez un démarrage double, sélectionnez local au lieu de GMT.</phrase>
+      Après avoir décidé entre une configuration d'horloge GMT ou locale,
+      vous devrez sélectionner une région puis une ville de cette région
+      qui se trouve dans le même fuseau horaire que vous. Lorsque vous
+      sélectionnez dans la liste, vous pouvez taper simplement la première
+      lettre de la section qui vous intéresse.
+
+</para>
+
+ </sect1>
+
+ <sect1 id="base-config-md5">
+ <title>Mots de pass MD5</title>
+
+<para>
+
+On vous demandera d'abord si vous souhaitez installer les mots de
+      passe MD5. C'est une autre méthode de stockage des mots de
+      passe sur votre système&nbsp;; elle est plus sûre que la méthode
+      standard (appelée <quote>crypt</quote>).
+
+</para><para>
+
+La configuration par défaut est «&nbsp;MSG-NO&nbsp;», mais si vous n'avez pas
+      besoin de NIS et que vous êtes très préoccupé par la
+      sécurité, vous devriez répondre «&nbsp;MSG-YES&nbsp;».
+
+</para>
+
+ </sect1>
+
+ <sect1 id="base-config-shadow">
+ <title>Mots de passe «&nbsp;Shadow&nbsp;»</title>
+
+<para>
+
+À moins que vous ayez répondu «&nbsp;&MSG-YES;&nbsp;» à la section Mots d\e passe
+      MD5, le système vous demandera si vous souhaitez activer les mots
+      de passe «&nbsp;shadow&nbsp;». C'est un système qui rend votre
+      système GNU/Linux plus sûr. Dans un système dépourvu de
+      mots de passe «&nbsp;shadow&nbsp;», les mots de passe sont stockés
+      (chiffrés) dans un fichier lisible par tous les
+utilisateurs&nbsp;:<filename>/etc/passwd</filename>. Ce
+      fichier doit être lisible par toutes les personnes qui
+      peuvent se connecter sur le système, car il contient des informations
+      vitales pour ces utilisateurs, par exemple, comment associer
+      des identifiants numériques d'utilisateurs et des noms d'utilisateurs.
+      Partant de là, quelqu'un pourrait récupérer votre
+      fichier <filename>/etc/passwd/</filename> et lancer une attaque brutale
+      (c'est-à-dire tester systématiquement toutes les combinaisons
+      possibles de mots de passe pour essayer de les retrouver).
+
+</para><para>
+
+Si vous avez activé les mots de passe «&nbsp;shadow&nbsp;», les mots
+de passe seront stockés dans <filename>/etc/shadow</filename>, qui ne peut être
+      lu et modifié que par l'utilisateur root, et n'est lisible que par
+      le groupe shadow. Par conséquent, nous vous
+      recommandons d'activer les mots de passe «&nbsp;shadow&nbsp;».
+
+</para><para>
+
+Une reconfiguration des mots de passe «&nbsp;shadow&nbsp;» peut
+      être effectuée à tout moment à l'aide du programme
+<command>shadowconfig</command>. Après l'installation, lisez le fichier
+<filename>/usr/share/doc/passwd/README.debian.gz</filename> pour de plus amples
+      informations.
+
+</para>
+
+ </sect1>
+
+ <sect1 id="base-config-root">
+ <title>Créer le mot de passe de l'utilisateur root</title>
+
+<para>
+
+Le compte <emphasis>root</emphasis> est aussi appelé 
+<emphasis>super-utilisateur</emphasis>&nbsp;;
+      c'est un compte qui contourne toutes les protections de sécurité
+présentes sur votre système. Le compte <emphasis>root</emphasis> doit être
+      uniquement utilisé pour administrer le système, et
+      pour une durée aussi courte que possible.
+
+</para><para>
+
+Chaque mot de passe que vous créez devrait contenir de 6 à 8
+caractères et devrait aussi combiner des lettres majuscules et des lettres 
+minuscules ainsi que des caractères de ponctuation. Portez une extrême 
+attention au choix de votre mot de passe <emphasis>root</emphasis>,
+      étant donné qu'il s'agit d'un compte puissant. Évitez les mots du
+      dictionnaire ou des informations personnelles qui pourraient être
+      facilement devinées.
+
+</para><para>
+
+Si quelqu'un vous dit qu'il a besoin du mot de passe de 
+<emphasis>root</emphasis>root, soyez extrêmement prudent. Vous ne devriez 
+normalement jamais donner
+      votre mot de passe à quiconque, à moins que vous n'administriez une
+      machine qui a plus d'un administrateur système.
+
+</para>
+
+ </sect1>
+
+ <sect1 id="make-normal-user">
+ <title>Créer un utilisateur ordinairer</title>
+
+<para>
+
+Le système vous demandera si vous souhaitez aussi créer un utilisateur
+      ordinaire. Ce compte devrait être votre principal accès personnel.
+Vous ne devriez <emphasis>pas</emphasis> utiliser le compte <emphasis>root</emphasis> pour une
+      utilisation quotidienne ou comme compte personnel.
+
+</para><para>
+
+Pourquoi&nbsp;? Et bien, une des raisons pour éviter d'utiliser
+      les privilèges de <emphasis>root</emphasis> est qu'il est très facile de causer des
+      dommages irréparables. Une autre raison est que vous pourriez
+lancer, sans le savoir, un programme <emphasis>cheval de Troie</emphasis> &mdash;
+      programme qui tire profit des avantages du super-utilisateur pour
+      compromettre à votre insu la sécurité du système. N'importe
+      quel livre sur l'administration système UNIX traite de ce sujet de
+      manière plus détaillée &mdash; si ce sujet est inconnu pour
+      vous, envisagez d'en lire un.
+
+</para><para>
+
+Appelez le compte utilisateur comme vous voulez. Par exemple, si votre
+      nom est Jean Dupont, vous pouvez utiliser
+<userinput>john</userinput> <userinput>smith</userinput> ou
+<userinput>js</userinput>.
+      On vous demandera aussi le nom de l'utilisateur, et, comme
+      précédemment, un mot de passe.
+
+</para><para>
+
+Si, après l'installation, vous souhaitez créer
+      un nouveau compte utilisateur, utilisez la commande
+<command>adduser</command>.
+
+</para><para>
+
+Vous devez créer un compte utilisateur sur les &arch-title; si vous
+        souhaitez vous connecter par le réseau en utilisant telnet. Le
+        serveur telnet, avec sa configuration par défaut dans Debian,
+        n'autorise pas les connexions en tant qu'utilisateur root.
+        Cependant, vous pouvez utiliser ssh (interpréteur
+        de commandes sécurisé) pour vous connecter à distance en tant
+        qu'utilisateur root&nbsp;; mais c'est déconseillé.
+
+</para>
+
+ </sect1>
+
+ <sect1 arch="not-s390" id="PPP">
+ <title>Paramétrage de PPP</title>
+
+<para>
+
+On vous demandera si vous souhaitez installer le reste du système
+      au moyen de PPP. Si vous faites une installation à partir d'un
+      cédérom ou si vous êtes connectés à un réseau, vous pouvez en toute
+      sécurité répondre «&nbsp;&MSG-NO;&nbsp;» et sauter cette section.
+
+</para><para>
+
+Si vous choisissez de configurer PPP, un programme nommé
+<command>pppconfig</command> sera lancé. Ce programme vous aidera à
+      configurer votre connexion PPP. <emphasis>Assurez-vous, quand on vous
+      demandera le nom de votre connexion, de l'appeler
+<userinput>provider</userinput>.</emphasis>
+
+</para><para>
+
+Le programme <command>pppconfig</command> vous guidera et facilitera
+      la configuration de PPP. Néanmoins, si cela ne marche pas,
+      regardez ci-dessous pour des instructions détaillées.
+
+</para><para>
+
+Pour configurer PPP, vous devez connaître les bases de
+      l'affichage et de l'édition de fichiers sous GNU/Linux. Pour
+      afficher les fichiers, vous pouvez utiliser le programme
+<command>more</command>, et le programme <command>zmore</command> pour les
+fichiers compressés dont l'extension est <userinput>.gz</userinput>. Par 
+exemple, pour afficher le fichier <filename>README.debian.gz</filename>, tapez
+<userinput>zmore README.debian.gz</userinput>. Le système de base est fourni 
+avec un éditeur nommé <prgn>nano</prgn>, très simple d'utilisation mais
+      qui possède peu de fonctions. Vous souhaiterez
+      probablement installer des éditeurs et des afficheurs plus
+complets, comme <command>jed</command>, <command>nvi</command>,
+<command>less</command> et <command>emacs</command>.
+
+</para><para>
+
+Éditez le fichier <filename>/etc/ppp/peers/provider</filename> et remplacez
+<userinput>/dev/modem</userinput> par 
+<userinput>/dev/ttyS<replaceable>&num;</replaceable></userinput> où
+<replaceable>&num;</replaceable> correspond au numéro de votre port série. Sous
+      Linux, les ports série sont dénombrés à partir de 0&nbsp;; votre
+premier port série  <phrase arch="i386">(p. ex. <userinput>COM1</userinput>)
+</phrase> est <filename>/dev/ttyS0</filename> sous Linux. 
+<phrase arch="powerpc;m68k"> Sur les Macintosh équipés de port série, le port 
+du modem est <filename>/dev/ttyS0</filename> et le port de l'imprimante est
+<filename>/dev/ttyS1</filename>.</phrase>
+      L'étape suivante consiste à éditer le fichier
+<filename>/etc/chatscripts/provider</filename> et d'y ajouter le numéro
+      de téléphone de votre fournisseur d'accès, votre identifiant de
+      connexion et votre mot de passe. S'il vous plaît, n'effacez
+pas le <quote>\q</quote>  qui précède le mot de passe. Il
+      évite que le mot de passe n'apparaisse dans les journaux de
+      connexion.
+
+</para><para>
+
+De nombreux fournisseurs d'accès utilisent PAP ou CHAP
+      pour la séquence de connexion, à la place d'une authentification
+      en mode texte. D'autres utilisent les deux. Si votre fournisseur
+      requiert PAP ou CHAP, vous devrez suivre des procédures
+      différentes. Commentez tout ce qui se trouve après la chaîne
+      de numérotation (celle qui débute par «&nbsp;ATDT&nbsp;»)
+dans le fichier <filename>/etc/chatscripts/provider</filename>, modifiez le
+fichier <filename>/etc/ppp/peers/provider</filename> tel que décrit plus haut,
+et ajoutez <userinput>user <replaceable>name</replaceable></userinput> où 
+<replaceable>name</replaceable> correspond à l'identifiant que vous utilisez 
+pour vous connecter à votre fournisseur d'accès. Éditez ensuite
+<filename>/etc/ppp/pap-secrets</filename> ou 
+<filename>/etc/ppp/chap-secrets</filename> et insérez votre mot de passe.
+
+</para><para>
+
+Vous aurez aussi besoin de modifier le fichier
+<filename>/etc/resolv.conf</filename> et d'y ajouter les adresses IP
+      des serveurs de noms (DNS) de votre fournisseur d'accès. Les
+      lignes de <filename>/etc/resolv.conf</filename> sont dans le
+      format suivant&nbsp;:
+<userinput>nameserver <replaceable>xxx.xxx.xxx.xxx</replaceable></userinput>
+où un <replaceable>x</replaceable> est
+      un chiffre de l'adresse IP. Vous pouvez éventuellement ajouter
+l'option <userinput>usepeerdns</userinput> au fichier
+<filename>/etc/ppp/peers/provider</filename>, ce qui permettra de choisir
+      automatiquement les serveurs DNS appropriés et d'utiliser les
+      réglages normalement fournis par la machine distante.
+
+</para><para>
+
+À moins que votre fournisseur d'accès n'utilise une séquence
+      de connexion différente de la majorité des autres FAI, l'affaire est
+      réglée&nbsp;! Lancez la connexion PPP en tapant
+<command>pon</command> en tant que root et suivez l'exécution avec
+      la commande <command>plog</command>. Pour déconnecter,
+      utilisez <command>poff</command>, aussi en tant que root.
+
+</para><para>
+
+Lisez le fichier <filename>/usr/share/doc/ppp/README.Debian.gz</filename>
+      pour de plus amples informations sur l'utilisation de PPP sous Debian.
+
+</para><para>
+
+Pour les connexions SLIP statiques, vous devez ajouter la commande
+<userinput>slattach</userinput> (depuis le paquet 
+<classname>net-tools</classname>) dans
+le fichier <filename>/etc/init.d/network</filename>. Les connexions SLIP
+dynamiques nécessitent l'utilisation du paquet <classname>gnudip</classname>.
+
+</para>
+
+ </sect1>
+
+
+ <sect1 condition="supports-pcmcia">
+ <title>Enlever PCMCIA</title>
+
+<para>
+
+Si vous n'avez pas besoin du PCMCIA, vous pouvez choisir de
+      l'enlever à ce point. Ceci permettra un meilleur démarrage&nbsp;;
+      de plus, il sera plus facile de remplacer votre noyau
+      (PCMCIA nécessite de nombreuses corrélations entre les versions
+      des pilotes PCMCIA, les modules du noyau, et le noyau lui-même).
+
+</para>
+
+ </sect1>
+
+ <sect1 id="configure-apt">
+ <title>Configuration d'APT</title>
+
+<para>
+
+Le principal outil utilisé pour installer des paquets
+sur les systèmes Debian est un programme appelé <command>apt-get</command>,
+      il est inclus dans le paquet <classname>apt</classname>
+<footnote>
+
+<para>
+
+Notez que le programme réellement utilisé pour
+installer les paquets est <command>dpkg</command>. Néanmoins, ce
+paquet est plutôt un outil de premier niveau. <command>apt-get</command>
+utilise <command>dpkg</command> quand il en a besoin&nbsp;;
+          il s'agit d'un outil de haut niveau car il sait aussi bien installer
+          les paquets nécessaires à l'installation du
+          paquet que vous voulez installer, que récupérer le paquet à
+          partir de votre cédérom, du réseau, ou d'ailleurs.
+
+</para>
+</footnote>.
+
+APT doit cependant être configuré, pour qu'il sache où récupérer
+       les paquets. L'application qui vous aidera dans
+       cette tâche s'appelle <command>apt-setup</command>.
+
+</para><para>
+
+L'étape suivante dans le processus d'installation consiste à
+         indiquer où trouver les autres paquets Debian.
+         Remarquez que vous pouvez exécuter à nouveau cet outil à n'importe
+         quel moment une fois que l'installation est finie, en tapant
+<command>apt-setup</command> ou en modifiant manuellement le fichier
+<filename>/etc/apt/sources.list</filename>.
+
+</para><para>
+
+Si vous démarrez depuis un cédérom officiel, alors ce cédérom
+         sera automatiquement défini comme une source APT. Vous le saurez
+         en voyant que ce cédérom est lu&nbsp;; puis on vous demandera
+         si vous avez d'autres cédéroms à déclarer. Si vous possédez un jeu
+         de plusieurs cédéroms &mdash; c'est le cas pour la plupart des
+         gens &mdash; vous devez les faire explorer un par un.
+
+</para><para>
+
+Pour les utilisateurs qui ne disposent pas d'un cédérom officiel,
+         un ensemble de choix sur la manière
+         d'accéder aux paquets Debian leur sera proposé&nbsp;: HTTP,
+         FTP, cédérom, ou système de fichiers local. Les utilisateurs
+         de cédéroms, pourront accéder à cette étape en demandant
+         explicitement l'ajout d'une autre source.
+
+</para><para>
+
+Il faut savoir qu'il est parfaitement acceptable d'avoir
+         plusieurs sources APT, y compris pour une même archive
+Debian. <command>apt-get</command> ira chercher automatiquement le
+         paquet portant le numéro de version le plus élevé parmi les sources
+         disponibles. Ou, par exemple, si vous possédez à la fois
+         une source HTTP et une source cédérom, <command>apt-get</command>
+         utilisera automatiquement le cédérom local lorsque c'est
+         possible, et n'utilisera la source HTTP que si une nouvelle version y
+         est disponible. Néanmoins, il n'est pas judicieux d'ajouter
+         des sources inutiles, dans la mesure
+         où cela aura tendance à ralentir le processus de sélection
+         des nouvelles versions sur le réseau.
+
+</para>
+
+  <sect2 id="configure-apt-net">
+  <title>Configurer les sources réseau des paquets</title>
+
+<para>
+
+Si vous prévoyez d'installer le reste de votre système via le
+        réseau, l'option la plus commune est de sélectionner la source
+<userinput>http</userinput>. La source <userinput>ftp</userinput> est aussi
+        acceptable, mais a tendance à être légèrement plus lente
+        dans l'établissement des connexions.
+
+</para><para>
+
+L'étape suivante, dans la configuration des sources
+réseau, consiste à dire à <command>apt-setup</command> dans quel
+        pays vous vivez. Ceci configure le miroir réseau Debian
+        officiel que vous allez utiliser. En fonction du lieu
+        sélectionné, une liste des machines disponibles vous sera
+        proposée. Il suffit généralement de choisir celle qui se
+        situe en haut de la liste, mais n'importe laquelle devrait
+        fonctionner.
+
+</para><para>
+
+Si vous procédez à une installation via HTTP,
+        on vous demandera de configurer votre serveur mandataire
+        («&nbsp;proxy&nbsp;»). C'est parfois nécessaire pour les personnes
+        qui se trouvent derrière des pare-feux, ou des réseaux d'entreprise,
+        etc.
+
+</para><para>
+
+Enfin, votre nouvelle source de paquets va être testée.
+        Si tout va bien, on vous demandera si vous souhaitez ou non
+        recommencer l'opération pour une autre source.
+
+</para>
+
+  </sect2>
+
+ </sect1>
+
+ <sect1 id="install-packages">
+ <title>Installation de paquets&nbsp;: simple ou avancée</title>
+
+<para>
+
+On vous demandera ensuite si vous voulez ou non installer les
+      paquets par une méthode simple ou par une méthode avancée, plus fine.
+      Nous vous recommandons de commencer par la méthode simple, dans la
+      mesure où vous pourrez toujours recourir à la méthode avancée
+      ultérieurement.
+
+</para><para>
+
+Sachez que pour une installation simple,
+<command>base-config</command> utilise principalement le programme
+<command>tasksel</command>. Pour une installation de paquets avancée,
+      c'est le programme <command>dselect</command> qui sera exécuté.
+      Chacun de ces programmes peut être utilisé, à tout
+      moment une fois l'installation terminée, pour installer
+      davantage de paquets. Une fois que l'installation est finie, si
+      vous voulez un paquet particulier, tapez simplement
+<userinput>apt-get install <replaceable>paquet</replaceable></userinput>, 
+où <replaceable>paquet</replaceable> est le nom du paquet désiré.
+
+</para>
+
+ </sect1>
+
+ <sect1 id="preselections">
+ <title>Sélection simple des paquets &mdash; l'installateur de tâche</title>
+
+<para>
+
+Si vous choisissez une installation <quote>simple</quote>, vous
+serez dirigé sur l'installateur de tâche (<command>tasksel</command>).
+      À travers cette technique, Debian propose un ensemble de configurations
+      logicielles prêtes à l'emploi. En outre, vous pouvez toujours
+      choisir de procéder à une installation de paquet au cas par cas.
+      C'est le rôle du programme <command>dselect</command>, décrit plus
+      bas. Mais, avec près de &num-of-distrib-pkgs; paquets disponibles,
+      cela peut être long&nbsp;!
+
+</para><para>
+
+C'est aussi pour cette raison que vous pouvez d'abord choisir
+      les <emphasis>tâches</emphasis>, et, par la suite ajouter
+      des paquets au cas par cas. Ces tâches représentent,
+      approximativement, les diverses choses qu'on peut faire avec un
+      ordinateur, par exemple, <quote>bureautique</quote>,
+<quote>développement en C</quote> ou <quote>serveur de fichiers</quote>.
+
+</para><para>
+
+Chaque tâche peut être mise en surbrillance et grâce à
+      «&nbsp;Task Info&nbsp;» vous pouvez obtenir plus d'informations.
+      Une description détaillée ainsi que les listes de paquets qui seront
+      installés sont affichées. Un tableau répertoriant la taille
+      approximative de l'ensemble des tâches proposées se trouve dans&nbsp;:
+<xref linkend="tasksel-size-list"/>.
+
+</para><para>
+
+ Une fois que vous avez choisi les tâches, sélectionnez
+      «&nbsp;Finish&nbsp;». À ce moment là,
+<command>apt-get</command> installera les paquets que vous avez sélectionnés.
+      Notez que si vous n'avez sélectionné aucune tâche, tous les paquets
+      standards, importants ou nécessaires qui ne sont pas encore installés
+      seront installés. Cette fonctionnalité est la même que celle qui est
+      réalisée par la commande tasksel -s en ligne de commande, et qui
+      représente pour le moment 37&nbsp;Mo d'archives. On vous montrera
+      le nombre de paquets qui seront installés, ainsi que, si besoin est,
+      la quantité de données en kilo-octets, qui devra être téléchargée.
+
+</para><para>
+
+Des &num-of-distrib-pkgs; paquets disponibles dans Debian,
+      seule une petite minorité est traitée par les tâches proposées
+      dans l'installateur de tâches. Pour obtenir des informations
+sur les paquets supplémentaires, utilisez soit <userinput>apt-cache
+search <replaceable>chaîne-de-recherche</replaceable></userinput> pour une 
+chaîne de caractères donnée (voyez la page de manuel 
+<citerefentry><refentrytitle>apt-cache</refentrytitle> <manvolnum>8</manvolnum>
+      </citerefentry>) ou bien le programme <command>dselect</command> qui est décrit ci-dessous.
+
+</para>
+
+ </sect1>
+
+ <sect1 id="install-advanced">
+ <title>Sélection «&nbsp;avancée&nbsp;» de paquets avec <command>dselect</command></title>
+
+<para>
+
+Si vous avez choisi la sélection <quote>avancée</quote>
+      des paquets, vous allez être dirigé sur le programme
+<command>dselect</command>>. Il est nécessaire d'avoir lu le 
+<ulink url="&url-dselect-beginner;">guide de dselect</ulink>
+avant de lancer <command>dselect</command>. <command>dselect</command>
+permet de sélectionner les <emphasis>paquets</emphasis> à installer sur votre système.
+      Vous devez être le super-utilisateur (<emphasis>root</emphasis>) pour exécuter
+      <command>dselect</command>.
+
+</para>
+
+ </sect1>
+
+ <sect1 id="debconf">
+ <title>Messages lors de l'installation des logiciels</title>
+
+<para>
+
+Chaque paquet que vous avez sélectionné avec <command>tasksel</command>
+      ou <command>dselect</command>est dépaqueté et installé au moyen des
+programmes <command>apt-get</command> et <command>dpkg</command>. Si un 
+programme particulier requiert plus d'informations de l'utilisateur, il vous le
+      demandera. Vous pourrez aussi garder un oeil sur ce qui se passe
+      lors du processus d'installation, pour voir des éventuelles erreurs
+      d'installation (dans ce cas, on vous demandera d'acquiter les erreurs
+      pour éviter l'installation d'un paquet)
+
+</para>
+
+  <sect2 arch="powerpc" id="xserver">
+  <title>Paramètres pour le serveur X</title>
+
+<para>
+
+Sur les iMacs et aussi sur quelques vieux Macintoshs, le logiciel
+       X server ne parvient pas à calculer les paramètres d'affichage
+       adéquats. Vous devrez sélectionner l'option «&nbsp;Avancée&nbsp;»
+       pendant la configuration de vos paramètres vidéo. Pour la fréquence
+       horizontable de votre moniteur  (<emphasis>monitor's horizontal sync
+       range</emphasis>), entrez 59-63. Vous pouvez conserver la fréquence
+       verticale (<emphasis>vertical refresh range</emphasis>) par défaut.
+</para><para>
+
+La souris se trouve sur <userinput>/dev/input/mice</userinput>.
+
+</para>
+
+  </sect2>
+
+ </sect1>
+
+ <sect1 id="login">
+ <title>Se connecter</title>
+
+<para>
+
+Après avoir installé les paquets, vous vous retrouvez
+      face à l'invite de connexion (login). Connectez-vous en utilisant
+      le nom d'utilisateur et le mot de passe que vous avez choisi. Votre
+      système est maintenant prêt à être utilisé.
+
+</para><para>
+
+Si vous êtes un nouvel utilisateur, vous voudrez peut-être
+      parcourir la documentation qui sera installée sur
+      votre système quand vous commencerez à l'exploiter. Il existe
+      plusieurs systèmes de documentation&nbsp;; un travail est actuellement
+      en cours afin de les intégrer dans un tout cohérent. Vous trouverez
+      ci-dessous quelques points de départ.
+
+</para><para>
+
+La documentation qui accompagne les programmes que vous avez installés
+se trouve dans le répertoire <filename>/usr/share/doc/</filename>, dans un
+      sous-répertoire qui porte le nom du programme. Par exemple,
+      le Guide de l'utilisateur d'<command>apt</command>, programme qui 
+installe d'autres programmes sur votre système, se situe dans le fichier
+<filename>/usr/share/doc/apt/guide.html/index.html</filename>.
+
+</para><para>
+
+ 
+De plus, il y a quelques répertoires particuliers dans la
+hiérarchie <filename>/usr/share/doc/</filename>.Les HOWTO Linux sont
+      installés au format .gz dans les répertoires
+      <filename>/usr/share/doc/HOWTO/en-txt/</filename> et
+      <filename>/usr/share/doc/HOWTO/en-txt/mini/</filename>. Le
+      fichier <filename>/usr/share/doc/HTML/index.html</filename>
+      contient des index, que l'on peut parcourir, sur le contenu
+      de la documentation installée par <command>dhelp</command>.
+
+</para><para>
+
+Un moyen facile de consulter ces documents est d'exécuter
+<userinput>cd /usr/share/doc/</userinput>, puis de taper 
+<userinput>lynx</userinput> suivi d'un espace et d'un point 
+(le point représente le répertoire courant).
+
+</para><para>
+
+Vous pouvez aussi taper <userinput>info
+<replaceable>command</replaceable></userinput> ou <userinput>man
+<replaceable>command</replaceable></userinput> 
+pour obtenir des informations sur la plupart des commandes disponibles depuis 
+l'interpréteur de commandes. En tapant <userinput>help</userinput>, vous 
+afficherez l'aide sur les commandes de l'interpréteur de commandes. Et si 
+vous tapez une commande suivie par <userinput>--help</userinput>, un court 
+résumé sur l'usage de cette commande sera affiché. Si le résultat
+d'une commande défile au-delà du haut de l'écran, tapez 
+<userinput>| more</userinput> après la commande de façon à provoquer une 
+pause entre chaque écran.
+      Pour voir une liste de toutes les commandes disponibles qui commencent
+      par une lettre donnée, tapez cette lettre, suivie de deux fois la
+      touche de tabulation.
+
+</para><para>
+
+Pour une introduction plus complète sur Debian et GNU/Linux, voyez
+      <file>/usr/share/doc/debian-guide/html/noframes/index.html</file>.
+      Notez que cette documentation existe aussi en français, dans le paquet
+      doc-debian-fr.
+
+</para>
+
+ </sect1>
+</chapter>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+<!-- $Id$ -->
+<!-- original version: 1.5 -->
+
+ <sect1 id="mount-initialized">
+ <title><quote>Připojit dříve inicializovanou oblast</quote></title>
+<para>
+
+Alternativou k <xref linkend="init-partition"/> je položka
+<quote>Připojit dříve inicializovanou oblast</quote>. Využijete ji při
+obnovení předešlé nedokončené
+instalace, nebo pokud připojujete oblasti, které už byly
+inicializovány, nebo které obsahují data, jež byste chtěli zachovat.
+
+</para><para condition="supports-nfsroot">
+
+Pokud instalujete bezdiskovou stanici, nastal okamžik, kdy
+připojíte kořenovou oblast ze vzdáleného NFS serveru.
+Cestu k serveru zadejte normální NFS syntaxí, konkrétně:
+
+<informalexample><screen>
+<replaceable>jméno-serveru-nebo-IP</replaceable>:<replaceable>sdílená-cesta-na-serveru</replaceable>
+</screen></informalexample>.
+
+Pokud potřebujete připojit další souborové systémy, můžete to
+udělat teď.
+
+</para><para arch="m68k"> 
+
+<replaceable>sdílená-cesta-na-serveru</replaceable> pro systémy BVM a
+Motorola VMEbus by měla být shodná s cestou uvedenou v souboru
+<filename>tftplilo.conf</filename> umístěném na TFTP serveru.
+Cesta obsahuje adresář, který má linuxové jádro při startu připojit.
+Standardní cesta v <filename>tftplilo.conf</filename> je
+<filename>/nfshome/%C</filename>, kde <userinput>%C</userinput> je
+nahrazeno IP adresou klientského počítače.
+
+</para><para condition="supports-nfsroot">
+
+Pokud jste ještě nenastavili síť podle <xref linkend="netcfg"/>, tak
+výběr instalace přes NFS vás k tomu vyzve automaticky.
+
+</para>
+
+  <sect2 condition="supports-nfsroot">
+  <title>Jak obejít chybu v bezdiskové instalaci</title>
+<para>
+<phrase condition="FIXME">FIXME: still applicable in debian-installer?</phrase>
+
+Bohužel <command>boot-floppies</command> momentálně nepodporují
+zamykání souborů na kořenovém NFS svazku. Následující řádky vám
+pomohou tuto chybu obejít.
+
+</para><para>
+
+Připravte si následující sekvenci příkazů, kterou povolíte zamykání na
+NFS, a uložte ji na NFS svazek. (Případně ji můžete vytvořit za běhu
+editorem <command>nano-tiny</command>.)
+
+<informalexample><screen>
+#!/bin/sh
+mount /dev/hdc /instmnt  # za /dev/hdc nahraďte vaši cd mechaniku
+cd /target
+mkdir x
+cd x
+for i in g/glibc/libc6 t/tcp-wrappers/libwrap0 p/portmap/portmap n/nfs-utils/nfs-common
+do
+  ar -x /instmnt/pool/main/$i''_*.deb
+  zcat data.tar.gz | tar x
+done
+umount /instmnt
+mkdir -p /var/lib/nfs
+for i in portmap rpc.statd
+do
+  LD_LIBRARY_PATH=lib sbin/$i
+done
+</screen></informalexample>
+
+</para><para>
+
+Až po rozbalení základního systému (včetně) instalujte obvyklým
+způsobem. Poté však nainstalujte balík
+<classname>nfs-common</classname>:
+
+<informalexample><screen>
+$ umount /instmnt
+$ chroot /target /bin/sh
+$ apt-cdrom add
+$ apt-get install nfs-common
+</screen></informalexample>
+
+</para><para>
+
+Chybové hlášky o chybějícím adresáři <filename>/proc</filename>
+můžete ignorovat, protože <command>portmap</command> a
+<command>statd</command> již běží.
+
+</para><para>
+
+Budete potřebovat jádro se zapnutou volbou
+<userinput>CONFIG_ROOT_NFS</userinput>, což nesplňuje žádné jádro z
+našich CD. Pokud takové jádro nemáte a nemůžete si jej vyrobit na
+jiném počítači, musíte si je připravit rovnou zde v 
+<command>chroot</command>ovaném prostředí:
+
+<informalexample><screen>
+$ apt-get install gcc make libc6-dev kernel-source-2.4.18 less screen links lynx wget ftp # atd.
+</screen></informalexample>
+
+</para><para>
+
+Když máte jádro připravené, nezapomeňte po sobě uklidit:
+
+<informalexample><screen>
+$ exit # z chrootnutého shellu
+$ cd /
+$ killall portmap rpc.statd
+$ umount /target
+</screen></informalexample>
+
+</para><para>
+
+Nyní restartujte počítač. Pokud něco selže, zaveďte z instalačního CD,
+připojte svazek NFS do <filename>/target</filename>, povolne zamykání
+na NFS, přesuňte se do nového prostředí <command>chroot
+/target</command>, proveďte změny, na které jste minule zapoměli,
+ukliďte po sobě a restartujte počítač. Pokud se opět nezadaří, zkuste
+to znovu. Hodně štěstí.
+
+</para>
+  </sect2>
+ </sect1>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id$ -->
+
+
+  <sect2 arch="alpha"><title>Partitionnement sous Tru64 UNIX</title>
+<para>
+
+Tru64 UNIX, anciennement appelé Digital UNIX, lui-même anciennement
+appelé OSF/1, utilise un schéma de partitionnement semblable aux
+«&nbsp;étiquettes de disque&nbsp;» des BSD, ce qui lui permet d'avoir
+jusqu'à huit partitions par disque. Les partitions sont numérotées de 1
+à 8 avec Linux, et «&nbsp;lettrées&nbsp;» de «&nbsp;a&nbsp;» à
+«&nbsp;h&nbsp;» pour UNIX. Les noyaux Linux 2.2 et supérieurs font
+toujours correspondre 1 à «&nbsp;a&nbsp;», 2 à «&nbsp;b&nbsp;», etc.
+Par exemple, <filename>rz0e</filename> pour Tru64 UNIX serait certainement
+<filename>sda5</filename> pour Linux.
+
+</para><para>
+
+Les partitions peuvent se chevaucher. De plus, la partition
+«&nbsp;c&nbsp;» doit recouvrir le disque en entier (et donc chevaucher
+toutes les autres partitions non vides). Sous Linux, cela implique que
+<file>sda3</file> est identique à <filename>sda</filename> 
+(<filename>sdb3</filename> à <filename>sdb</filename> s'il existe, etc). 
+À part dans ce cas précis, vous devriez faire attention à ce que les 
+partitions ne se recouvrent pas.
+
+</para><para>
+
+Une autre contrainte est que, par convention, la partition «&nbsp;a&nbsp;»
+démarre au début du disque, afin qu'elle inclue toujours le bloc
+d'amorçage qui contient les étiquettes. Si vous souhaitez démarrer
+Debian depuis ce disque, il faut qu'elle contienne au moins 2&nbsp;Mo
+pour pouvoir y mettre aboot et peut-être un noyau.
+
+</para><para>
+
+Notez que ces deux partitions ne sont nécessaires que pour des raisons
+de compatibilité&nbsp;; vous ne devez pas mettre de système de fichiers
+dessus, sous peine de détruire des données. Si le disque n'est pas
+partagé avec Tru64 Unix ou un dérivé de 4.4BSD-Lite (FreeBSD, OpenBSD,
+ou NetBSD), vous pouvez ignorer ces contraintes et utiliser l'outil de
+partitionnement disponible dans les disquettes d'installation Debian.
+Voir <xref linkend="partition-programs"/> pour les détails.
+
+</para><para>
+
+Les disques peuvent être partitionnés avec l'outil graphique de
+configuration de disques qui se trouve dans l'<emphasis>Application
+Manager</emphasis>, ou en ligne de commande avec le programme
+<command>disklabel</command>. Le type de partition pour le système de fichiers
+Linux doit être mis à «&nbsp;resrvd8&nbsp;». Ceci ne peut être fait
+qu'avec <command>disklabel</command>, cependant toutes les autres commandes de
+partitionnement peuvent être réalisées avec l'outil graphique.
+
+</para><para>
+
+Il est possible, et d'ailleurs assez raisonnable, de partager une
+partition d'échange entre UNIX et Linux. Dans ce cas, il
+faut lancer <command>mkswap</command> sur cette partition à chaque changement
+de système, car UNIX détruit la signature de la partition. Vous pouvez
+faire exécuter <command>mkswap</command> par les scripts au démarrage de Linux
+avant d'ajouter la zone d'échange avec la commande 
+<command>swapon -a</command>.
+
+</para><para>
+
+Si vous souhaitez monter des partitions UNIX sous Linux, notez que
+Digital UNIX peut utiliser deux systèmes de fichiers différents, UFS et
+AdvFS, et Linux ne reconnait que le premier.
+
+</para>
+  </sect2>
+
+  <sect2 arch="alpha"><title>Partitionnement sous Windows NT</title>
+
+<para>
+
+Windows NT utilise une table de partitions similaire aux PC. Si vous
+manipulez des partitions FAT ou NTFS existantes, il est recommandé
+d'utiliser les outils fournis avec Windows NT (ou le programme de
+partitionnement se trouvant dans le menu de configuration de
+l'AlphaBIOS). Sinon, il n'est pas nécessaire de partitionner depuis
+windows, et les outils de Linux feront souvent un meilleur travail.
+Notez que, lorsque vous lancez NT, l'administrateur de disques 
+(<emphasis>Disk Administrator</emphasis>) peut vous conseiller d'écrire 
+une «&nbsp;signature inoffensive&nbsp;» sur les partitions non Windows, 
+si vous en avez. Ne le laissez <emphasis>jamais</emphasis> faire cela, car la 
+signature détruit les informations sur la partition.
+
+</para><para>
+
+Si vous décidez de démarrer Linux depuis une console
+ARC/AlphaBIOS/ARCSBIOS, vous aurez besoin d'une (petite) partition FAT
+pour MILO, 5&nbsp;Mo est généralement suffisant. Si Windows NT est
+installé, sa partition de démarrage de 6&nbsp;Mo peut très bien faire
+l'affaire.
+
+</para>
+  </sect2>

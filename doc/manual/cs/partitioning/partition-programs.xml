@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+<!-- $Id$ -->
+<!-- original version: 1.6 -->
+
+ <sect1 id="partition-programs">
+ <title>Dělící programy v Debianu</title>
+<para>
+
+K rozdělení disku nabízí každá architektura různé programy.
+Pro váš typ počítače jsou k dispozici:
+
+</para>
+
+<variablelist>
+
+<varlistentry condition="fdisk.txt">
+<term><command>fdisk</command></term>
+<listitem><para>
+
+Původní linuxový program pro správu oddílů, vhodný pro guru; přečtěte
+si <ulink url="fdisk.txt">manuálovou stránku programu fdisk</ulink>.
+
+</para><para>
+
+Obzvláště opatrní musíte být v případě, že máte na disku oblasti
+systému FreeBSD. Instalační jádra sice obsahují podporu pro tyto
+oblasti, ale způsob, jakým je <command>fdisk</command>
+(ne)reprezentuje, může změnit názvy zařízení. Viz
+<ulink url="&url-linux-freebsd;">Linux+FreeBSD HOWTO</ulink>.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry condition="cfdisk.txt">
+<term><command>cfdisk</command></term>
+<listitem><para>
+
+Jednoduchý, celoobrazovkový program pro správu oddílů se
+vyznačuje snadným ovládáním. Popis je v
+<ulink url="cfdisk.txt">manuálové stránce programu cfdisk</ulink>. 
+
+</para><para>
+
+Poznamenejme, že <command>cfdisk</command> oblasti FreeBSD nerozpozná
+vůbec a tím pádem se názvy zařízení mohou změnit.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry condition="atari-fdisk.txt">
+<term><command>atari-fdisk</command></term>
+<listitem><para>
+
+Atari verze programu <command>fdisk</command>; &mdash; viz
+<ulink url="atari-fdisk.txt">manuálová stránka programu
+atari-fdisk</ulink>.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry condition="amiga-fdisk.txt">
+<term><command>amiga-fdisk</command></term>
+<listitem><para>
+
+Amiga verze programu <command>fdisk</command>; &mdash; viz
+<ulink url="amiga-fdisk.txt">manuálová stránka programu
+amiga-fdisk</ulink>.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry condition="mac-fdisk.txt">
+<term><command>mac-fdisk</command></term>
+<listitem><para>
+
+Mac verze programu <command>fdisk</command>; &mdash; viz
+<ulink url="mac-fdisk.txt">manuálová stránka programu
+mac-fdisk</ulink>. 
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry condition="pmac-fdisk.txt">
+<term><command>pmac-fdisk</command></term>
+<listitem><para>
+
+PowerMac verze programu <command>fdisk</command>, používá se i pro
+systémy BVM a Motorola VMEbus. Viz
+<ulink url="pmac-fdisk.txt">manuálová stránka programu
+pmac-fdisk</ulink>. 
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry condition="fdasd.txt">
+<term><command>fdasd</command></term>
+<listitem><para>
+
+&arch-title; verze programu <command>fdisk</command>. Popis je v
+<ulink url="fdasd.txt">manuálové stránce programu fdasd</ulink> nebo
+ve 13. kapitole dokumentu
+<ulink url="http://oss.software.ibm.com/developerworks/opensource/linux390/docu/l390dd08.pdf">
+Device Drivers and Installation Commands</ulink>.
+
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+<para>
+
+Jeden z těchto programů se spustí automaticky, když vyberete krok
+<quote>Připojit pevný disk</quote>. Pokud se vám standardní program
+nezamlouvá, ukončete ho, přepněte se na druhou konzoli
+(<userinput>tty2</userinput>) a ručně spusťte požadovaný program (s
+případnými parametry). V takovém případě krok <quote>Připojit pevný
+disk</quote> přeskočte.
+
+</para><para>
+
+Jesliže budete pracovat s více než dvaceti oblastmi, musíte k
+dvacáté první a všem dalším oblastem vytvořit odpovídající zařízení,
+protože jinak by další krok (inicializace oblastí) selhal.
+Zařízení můžete vytvořit na druhé konzoli <userinput>tty2</userinput>.
+Příkazy pro vytvoření 21. oblasti:
+
+<informalexample><screen>
+cd /dev
+mknod hda21 b 3 21 
+chgrp disk hda21
+chmod 660 hda21
+</screen></informalexample>
+
+Podobně, pokud nebude mít vytvořena příslušná zařízení, selže i
+zavedení systému. Proto po instalaci jádra a modulů spusťte na druhé
+konzoli:
+
+<informalexample><screen>
+cd /target/dev
+mknod hda21 b 3 21 
+chgrp disk hda21
+chmod 660 hda21
+</screen></informalexample>
+
+</para><para arch="i386">
+
+Nezapomeňte označit zaváděcí oddíl jako <quote>aktivní</quote> (bootable).
+
+</para><para condition="mac-fdisk.txt">
+
+Pro informace o vytváření oblastí se podívejte do <ulink
+url="mac-fdisk.txt">manuálové stránky programu mac-fdisk</ulink>.
+Důležité je, že na macintoschích discích je odkládací oblast
+rozpoznána svým jménem: musí být nazvána <quote>swap</quote>.
+Další užitečné čtení je
+<ulink url="&url-mac-fdisk-tutorial;">mac-fdisk Tutorial</ulink>,
+kde je krok za krokem popsán způsob sdílení disku s MacOS.
+
+</para>
+
+&partition-alpha.xml;
+&partition-hppa.xml;
+&partition-i386.xml;
+&partition-ia64.xml;
+&partition-mips.xml;
+&partition-powerpc.xml;
+&partition-sparc.xml;
+
+ </sect1>
+
+
+
+

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 1.3 -->
+
+  <sect2 arch="powerpc"><title>Partitioning Newer PowerMacs</title>
+<para>
+
+Si vous faites l'installation sur un PowerMac NewWorld,
+vous devez créer une partition bootstrap spéciale pour contenir le
+chargeur de démarrage. Sa taille doit être de 800&nbsp;Ko et son type
+de partition, <emphasis>Apple_Bootstrap</emphasis>. Si la partition n'est pas
+créée avec ce type précis, votre machine ne pourra pas démarrer à
+partir du disque dur. Cette partition peut facilement être créée dans
+<command>mac-fdisk</command> avec la commande <userinput>b</userinput>.
+
+</para><para>
+
+Le type spécial de partition Apple_Bootstrap est nécessaire pour
+empêcher MacOS de monter et d'endommager la partition bootstrap, car
+elle contient des modifications spécialement faites pour permettre à
+Open Firmware de la démarrer automatiquement.
+
+</para><para>
+
+Notez que cette partition bootstrap n'est supposée contenir que 3
+petits fichiers&nbsp;: le binaire <command>yaboot</command>, son fichier de
+configuration <filename>yaboot.conf</filename>, et un premier niveau du
+chargeur OpenFirmware, <command>ofboot.b</command>.
+Il est inutile de la monter dans votre système de fichiers (et elle ne doit
+pas l'être), ni d'y copier un noyau ou quoi que ce soit d'autre.
+Les utilitaires <command>ybin</command> et <command>mkofboot</command>
+servent à manipuler cette partition.
+
+</para><para>
+
+Afin qu'Open Firmware démarre automatiquement &debian;, la partition
+bootstrap doit apparaître sur le disque avant toute autre partition,
+et surtout, avant les partitions de démarrage de MacOS.
+Vous devriez créer en premier la partition bootstrap.
+Cependant, si vous ajoutez une partition dbootstrap plus tard, vous
+pouvez utilisez la commande <userinput>r</userinput> de 
+<command>mac-fdisk</command> pour
+ré-ordonner les partitions, de sorte que celle de dbootstrap suive
+immédiatement la table (qui est toujours la première partition).
+C'est l'ordre logique de la table qui compte, pas l'ordre des adresses
+physiques sur le disque.
+
+</para><para>
+
+Les disques Apple ont habituellement plusieurs petites partitions pour
+les pilotes. Si vous envisagez un double boot sur votre machine MacOS
+X, vous devriez garder ces partitions et une petite partition HFS
+(800&nbsp;Ko au minimum). Ceci parce que MacOS X, à chaque démarrage,
+vous propose d'initialiser chaque disque qui n'a pas de partition
+MacOS active ou pas de partition pour les pilotes.
+
+</para>
+  </sect2>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 1.3 -->
+
+ <sect1 id="mount-initialized">
+ <title>«&nbsp;Monter une partition déjà initialisée&nbsp;»</title>
+<para>
+
+Une alternative à <xref linkend="init-partition"/> est l'étape&nbsp;:
+«&nbsp;Monter une partition déjà initialisée&nbsp;». Utilisez celle-ci si 
+vous reprenez une
+installation qui a planté, ou si vous voulez monter des partitions qui
+ont déjà été initialisées, ou qui contiennent des données que vous
+voulez préserver.
+
+</para><para condition="supports-nfsroot">
+
+Si vous installez un poste de travail sans disque, vous devez maintenant
+monter en NFS votre partition racine, à partir du serveur
+NFS. Spécifiez le chemin du serveur NFS en suivant la syntaxe NFS
+standard, c'est-à-dire
+<informalexample><screen>
+<replaceable>nom-ou-IP-du-serveur</replaceable>:<replaceable>répertoire-partagé</replaceable>
+</screen></informalexample>.
+
+Si vous voulez monter des systèmes de fichiers supplémentaires, vous
+pouvez le faire maintenant.
+
+</para><para arch="m68k"> 
+
+Le <replaceable>répertoire-partagé</replaceable> pour les systèmes BVM et
+Motorola VMEbus devrait correspondre au chemin spécifié dans
+<filename>tftplilo.conf</filename> sur le serveur TFTP. Il est utilisé pour
+indiquer au noyau Linux quel répertoire monter au démarrage du système
+à installer. Le chemin par défaut dans <filename>tftplilo.conf</filename> est
+<filename>/nfshome/%C</filename>, où <userinput>%C</userinput> est remplacé 
+par l'adresse IP en notation décimale du système client à démarrer.
+
+</para><para condition="supports-nfsroot">
+
+Si vous n'avez pas encore configuré votre réseau comme décrit dans&nbsp;:
+<xref linkend="configure-network"/>, le choix d'une installation NFS vous le 
+proposera.
+
+</para>
+
+  <sect2 condition="supports-nfsroot">
+  <title>Précautions pour l'installation de la racine NFS</title>
+<para>
+<phrase condition="FIXME">FIXME: still applicable in debian-installer?</phrase>
+
+Malheureusement, la version des <command>boot-floppies</command> contenue dans
+<emphasis>Woody</emphasis> ne tolère pas les verrous du programme 
+<command>dpkg</command> pour
+l'installation de la racine NFS. Pour contourner ce problème, suivez les
+indications qui suivent, après avoir monté votre partage NFS sur
+<filename>/target</filename>. Cet exemple prend en considération 
+l'installation à
+partir d'un cédérom, mais il peut tout aussi être appliqué pour une
+installation à partir de fichiers qui se trouveraient sur un partage NFS,
+monté sur <filename>/instmnt</filename> (qui est l'endroit où le logiciel 
+d'installation
+monte généralement les supports d'installation).
+
+</para><para>
+
+Pour activer le verrouillage NFS, prenez vos pré-dispositions pour que
+cette séquence de commande soit disponible sur le partage NFS, ou bien
+créez-la en utilisant <command>nano-tiny</command>.
+
+<informalexample><screen>
+#!/bin/sh
+mount /dev/hdc /instmnt  # substitute your cdrom device for /dev/hdc
+cd /target
+mkdir x
+cd x
+for i in g/glibc/libc6 t/tcp-wrappers/libwrap0 p/portmap/portmap n/nfs-utils/nfs-common
+do
+  ar -x /instmnt/pool/main/$i''_*.deb
+  zcat data.tar.gz | tar x
+done
+umount /instmnt
+mkdir -p /var/lib/nfs
+for i in portmap rpc.statd
+do
+  LD_LIBRARY_PATH=lib sbin/$i
+done
+</screen></informalexample>
+
+</para><para>
+
+Installez maintenant le système de base comme d'ordinaire. Puis installez le
+paquet <classname>nfs-common</classname>:
+
+<informalexample><screen>
+$ umount /instmnt
+$ chroot /target /bin/sh
+$ apt-cdrom add
+$ apt-get install nfs-common
+</screen></informalexample>
+
+</para><para>
+
+Le message d'avertissement sur l'absence de <filename>/proc</filename> peut 
+être ignoré, étant donné que <command>portmap</command> et 
+<command>statd</command>tournent déjà.
+
+</para><para>
+
+Vous aurez besoin d'un noyau compilé avec 
+<userinput>CONFIG_ROOT_NFS</userinput>. Celui
+qui se trouve sur le cédérom d'installation ne l'est pas. Si vous n'en possédez
+pas et que nous ne pouvez pas le construire sur une autre machine, vous
+devez en construire un maintenant, dans le <command>chroot</command>.
+
+<informalexample><screen>
+$ apt-get install gcc make libc6-dev kernel-source-2.4.18 less screen links lynx wget ftp # etc.
+</screen></informalexample>
+
+</para><para>
+
+Lorsque vous aurez fait ce qu'il faut pour amorcer le nouveau noyau, utilisez
+le partage NFS comme périphérique racine (<emphasis>root device</emphasis>, 
+et quittez correctement&nbsp;:
+
+<informalexample><screen>
+$ exit # from chroot shell
+$ cd /
+$ killall portmap rpc.statd
+$ umount /target
+</screen></informalexample>
+
+</para><para>
+
+Puis redémarrez. Si cela échoue, lancez l'installation à partir du cédérom,
+attachez le partage NFS sur /target, activez le verrouillage NFS,
+exécutez chroot /target, et faites ce que vous avez oublié de faire,
+quittez correctement. Si cela échoue, essayez encore, bonne chance.
+
+</para>
+  </sect2>
+ </sect1>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+<!-- $Id$ -->
+<!-- original version: 1.3 -->
+
+  <sect2 arch="arm" id="boot-tftp"><title>Zavedení z TFTP</title>
+
+&boot-installer-intro-net.xml;
+
+  <sect3 arch="arm"><title>Zavedení z TFTP na počítačích NetWinder</title>
+
+<para>
+
+NetWindery mají dvě síťová rozhraní: NE2000-kompatibilní kartu na
+10Mbps (<filename>eth0</filename>) a 100Mbps kartu Tulip
+(<filename>eth1</filename>).
+
+</para><note><para>
+
+K zavedení instalačního systému potřebujete NeTTrom verze
+2.2.1 a pozdější. Doporučená verze 2.3.3 je dostupná z
+<ulink url="ftp://ftp.netwinder.org/pub/netwinder/firmware/"></ulink>:
+<itemizedlist>
+<listitem><para>
+
+<filename>nettrom-2.3-3.armv4l.rpm</filename>
+
+</para></listitem>
+<listitem><para>
+
+<filename>nettrom-2.3.3.bin</filename>
+
+</para></listitem>
+<listitem><para>
+
+<filename>nettrom-2.3.3.bin.md5sum</filename>
+
+</para></listitem>
+</itemizedlist>
+
+</para></note><para>
+
+Po restartu musíte během odpočítávání přerušit zaváděcí proces a
+nastavit síťovou adresu staticky:
+
+<informalexample><screen>
+
+    NeTTrom command-> setenv eth0_ip 192.168.0.10/24
+
+</screen></informalexample>
+
+kde 24 je počet nastavených bitů v síťové masce, nebo dynamicky:
+
+<informalexample><screen>
+
+    NeTTrom command-> boot diskless
+
+</screen></informalexample>
+
+</para><para>
+
+Pokud TFTP server není na lokální podsíti, budete možná muset upravit
+nastavení <userinput>route1</userinput>. Zbytek je už poměrně
+standardní (krok <command>save-all</command> je nepovinný):
+
+<informalexample><screen>
+
+    NeTTrom command-> setenv kerntftpserver 192.168.0.1
+    NeTTrom command-> setenv kerntftpfile tftpboot.img
+    NeTTrom command-> save-all
+    NeTTrom command-> setenv netconfig_eth0 flash
+    NeTTrom command-> setenv kernconfig tftp
+
+</screen></informalexample>
+
+</para><para>
+
+S normálním zavedením z disku kolidují pouze poslední dva příkazy,
+takže je bezpečné a vhodné si uložit předchozí změny pro případ, že
+byste někdy opět museli zavádět ze sítě. Nastavení proměnných můžete
+zkontrolovat příkazem <command>printenv</command>. 
+Pokud NeTTrom proměnná <envar>cmdappend</envar> obsahuje volbu
+<option>noinitrd</option> (která je nutná pro zavedení 2.4 jader),
+musíte ji odstranit, aby stažené jádro mohlo využít svůj připojený
+ramdisk.
+
+</para>
+  </sect3>
+
+  <sect3 arch="arm"><title>Zavedení z TFTP na počítačích CATS</title>
+
+<para>
+
+Na strojích CATS použijte v Cyclone promptu příkaz
+<command>boot de0:</command> (nebo podobný).
+
+</para>
+   </sect3>
+  </sect2>
+
+
+  <sect2 arch="arm"><title>Zavedení z CD-ROM</title>
+
+&boot-installer-intro-cd.xml;
+
+<para>
+
+Pro zavedení z CD-ROM zadejte v promptu Cyclone konzoly příkaz
+<command>boot cd0:cats.bin</command>
+
+</para>
+  </sect2>

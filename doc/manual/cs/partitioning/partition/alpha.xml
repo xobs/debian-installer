@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+<!-- $Id$ -->
+<!-- original version: 1.4 -->
+
+  <sect2 arch="alpha"><title>Dělení disku na &arch-title;</title>
+<para>
+
+Pokud jste si vybrali zavedení ze SRM konzoly, musíte použít program
+<command>fdisk</command>, protože to je jediný dělící program, který
+umí manipulovat s oblastmi ,,BSD disk label'', požadovanými programem
+<command>aboot</command>. (Zaváděcí blok SRM je nekompatibilní s
+tabulkou oblastí systému MS-DOS - viz
+<xref linkend="alpha-firmware"/>). Pokud jste nestartovali
+pomocí zavaděče <command>MILO</command>,
+<command>debian-installer</command> spustí <command>fdisk</command>
+automaticky.  
+
+</para><para>
+
+Pokud disk vybraný pro rozdělení již obsahuje BSD disk label,
+<command>fdisk</command> se sám přepne do BSD disk label módu.
+V opačném případě musíte pro přepnutí použít příkaz ,,b''.
+
+</para><para>
+
+Pokud nepotřebujete rozdělovaný disk používat z Tru64 Unixu nebo
+některého z volných klonů systému  4.4BSD-Lite (FreeBSD, OpenBSD nebo
+NetBSD), je lepší když <emphasis>nenastavíte</emphasis> třetí oblast
+aby obsahovala celý disk. Program <command>aboot</command> to
+nevyžaduje a ve skutečnosti to může vést k nepříjemnostem, protože
+utilita <command>swriteboot</command>, zvyklá instalovat
+<command>aboot</command> do zaváděcího sektoru, si bude stěžovat na
+oblast překrývající se se zaváděcím blokem. 
+
+</para><para>
+
+Na začátku disku <emphasis>musíte</emphasis> nechat dostatek volného
+místa pro <command>aboot</command>, protože se zapisuje do několika
+prvních sektorů na disku (v současnosti zabírá asi  70 kilobajtů nebo
+150 sektorů). Dříve se doporučovalo pro tyto účely vytvořit na začátku
+disku malou nenaformátovanou oblast, ale nyní si myslíme, že na
+discích používaných jenom GNU/Linuxem to není vhodné. (S ohledem na
+důvody zmíněné výše.)
+
+</para><para>
+
+Pro instalaci z ARC konzoly byste měli udělat na začátku disku malou
+FAT oblast, která bude obsahovat <command>MILO</command> a
+<command>linload.exe</command>.
+Podle <xref linkend="non-debian-partitioning"/> by mělo stačit
+5 megabajtů. Vytvoření této oblasti z menu zatím není podporováno,
+takže ji budete muset vytvořit ručně programem
+<command>mkdosfs</command>. (Samozřejmě ještě před instalací zavaděče.)
+
+</para>
+  </sect2>

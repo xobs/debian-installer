@@ -1,0 +1,136 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id$ -->
+
+  <sect2 arch="powerpc"><title>&arch-title; Boot Loaders</title>
+
+  <sect3><title><quote>OldWorld</quote> PowerMacs</title>
+<para>
+
+The boot loader for OldWorld Power Macintosh machines is
+<command>quik</command>.  You can also use it on CHRP. The installer
+will attempt to set up <command>quik</command> automatically at the
+Make Hard Disk Bootable step. The setup has been
+known to work on 7200, 7300, and 7600 Powermacs, and on some Power
+Computing clones.
+
+</para><para>
+
+For beige G3s, a patched <command>quik</command>
+<filename>first.b</filename> module is available at <ulink
+url="http://www.cpu.lu/~mlan/ftp/quik-first.b-g3"></ulink>.  To apply
+the patched module, follow these steps. After booting back into the
+installer, switch to console 2. Copy that file to your
+<filename>/target/boot</filename> folder, and rename it
+<userinput>first.b</userinput> to supercede the
+<filename>first.b</filename> that's there. Then run:
+<informalexample><screen>
+
+chroot /target /bin/bash
+mount -t proc proc /proc
+quik -v 
+exit
+
+</screen></informalexample>
+
+</para><para>
+      
+If you want to use <command>BootX</command> to boot into the installed
+system, just select your desired kernel in the <filename>Linux
+Kernels</filename> folder, un-choose the ramdisk option, and add
+a root device corresponding to your installation;
+e.g. <userinput>/dev/hda8</userinput>.
+
+</para><para>
+
+A final option for machines where MacOS/<command>BootX</command> is
+not desired and <command>quik</command> is not functional, is to patch
+the floppy disk image in order to make it into a boot disk. Use
+<command>ResEdit</command> in MacOS to edit the System's cmdl
+resource, or use a binary editor such as <command>beav</command> to
+edit the image directly, to remove the ramdisk arguments and
+substitute an appropriate
+<userinput>root=/dev/<replaceable>xxx</replaceable></userinput>
+argument.  A <ulink url="&url-powerpc-patch-floppy;">perl
+script</ulink> is also available for this purpose.
+
+</para><para>
+
+If the machine fails to boot after completing the installation, and
+stops with a <prompt>boot:</prompt> prompt, try typing
+<userinput>Linux</userinput> followed by &enterkey;. (The default boot
+configuration in <filename>quik.conf</filename> is labeled Linux). The
+labels defined in <filename>quik.conf</filename> will be displayed if
+you press the <keycap>Tab</keycap> key at the <prompt>boot:</prompt>
+prompt. You can also try booting back into the installer, and editing
+the <filename>/target/etc/quik.conf</filename> placed there by the
+Make Hard Disk Bootable step. Clues for dealing with
+<command>quik</command> are available at <ulink
+url="&url-powerpc-quik-faq;"></ulink>.
+
+</para><para>
+
+To boot back into MacOS without resetting the nvram, type
+<userinput>bye</userinput> at the
+Open Firmware prompt (assuming MacOS has not been removed from the
+machine). To obtain an OpenFirmware prompt, hold down the <keycombo>
+<keycap>command</keycap> <keycap>option</keycap> <keycap>o</keycap>
+<keycap>f</keycap> </keycombo> keys while cold booting the machine. If
+you need to reset the OpenFirmware nvram changes to the MacOS default
+in order to boot back to MacOS, hold down the <keycombo>
+<keycap>command</keycap> <keycap>option</keycap> <keycap>p</keycap>
+<keycap>r</keycap> </keycombo> keys while cold booting the machine.
+
+</para>
+   </sect3>
+
+   <sect3><title><quote>NewWorld</quote> PowerMacs</title>
+<para>
+
+Newer (mid 1998 and on) PowerMacs use <command>yaboot</command> as
+their boot loader. The installer will set up <command>yaboot</command>
+automatically, so all you should need to do is run the Make Hard Disk
+Bootable step, if that completes successfully then your disk should
+now be bootable and OpenFirmware will be set to boot &debian;.
+
+</para><para>
+
+On G4 machines and iBooks, you can hold down the
+<keycap>option</keycap> key and get a
+graphical screen with a button for each bootable OS, &debian; will be
+a button with a small penguin icon.
+
+</para><para>
+
+If you kept MacOS and at some point it changes the OpenFirmware
+<envar>boot-device</envar> variable you should reset OpenFirmware to
+its default configuration.  To do this hold down the <keycombo>
+<keycap>command</keycap> <keycap>option</keycap> <keycap>p</keycap>
+<keycap>r</keycap> </keycombo> keys while cold booting the machine.
+
+</para><para>
+
+The labels defined in <filename>yaboot.conf</filename> will be
+displayed if you press the <keycap>Tab</keycap> key at the 
+<prompt>boot:</prompt> prompt.
+
+</para><para>
+
+Resetting OpenFirmware on G3 or G4 hardware will cause it to boot
+&debian; by default (if you correctly partitioned and placed the
+Apple_Bootstrap partition first).  If you have &debian; on a SCSI disk
+and MacOS on an IDE disk this may not work and you will have to enter
+OpenFirmware and set the <envar>boot-device</envar> variable,
+<command>ybin</command> normally does this automatically.
+
+</para><para>
+
+After you boot &debian; for the first time you can add any additional
+options you desire (such as dual boot options) to
+<filename>/etc/yaboot.conf</filename> and run <command>ybin</command>
+to update your boot partition with the changed configuration.  Please
+read the <ulink url="&url-powerpc-yaboot-faq;">yaboot HOWTO</ulink>
+for more information.
+
+</para>
+  </sect3>
+</sect2>

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 1.6 -->
+
+ <sect1 id="boot-parms"><title>Boot Parameters</title>
+<para>
+
+Boot parameters are Linux kernel parameters which are generally used
+to make sure that peripherals are dealt with properly.  For the most
+part, the kernel can auto-detect information about your peripherals.
+However, in some cases you'll have to help the kernel a bit.
+
+</para><para>
+
+If this is the first time you're booting the system, try the default
+boot parameters (i.e., don't try setting arguments) and see if it works
+correctly. It probably will.  If not, you can reboot later and look for
+any special parameters that inform the system about your hardware.
+
+</para><para>
+
+Toutes les informations nécessaires sur les paramètres
+      d'amorçage sont disponibles dans le 
+<ulink url="http://www.tldp.org/HOWTO/BootPrompt-HOWTO.html">HOWTO Linux BootPrompt</ulink>&nbsp;;
+      la présente section contient seulement un résumé des paramètres les
+      plus utilisés.
+
+section contains only a sketch of the most salient parameters.  Some
+common gotchas are included below in 
+<xref linkend="boot-troubleshooting"/>.
+
+</para><para>
+
+Lorsque le noyau démarre, un message 
+
+<informalexample><screen>
+
+Memory:<replaceable>avail</replaceable>k/<replaceable>total</replaceable>k available 
+
+</screen></informalexample>
+
+doit être
+affiché assez tôt durant le processus. <replaceable>total</replaceable> doit
+      correspondre à la quantité de mémoire vive (exprimée en
+      kilo-octets) que contient votre machine. Si la quantité de
+      mémoire vive détectée ne correspond pas à la quantité de mémoire
+      contenue dans votre machine, vous devrez utiliser le paramètre
+<userinput>mem=<replaceable>ram</replaceable></userinput>, où 
+<replaceable>ram</replaceable> est la taille
+      mémoire de votre machine, suivie par «&nbsp;k&nbsp;» pour
+      kilo-octets ou «&nbsp;m&nbsp;» pour méga-octets. Par exemple,
+<userinput>mem=65536k</userinput> et <userinput>mem=64m</userinput> sont 
+équivalents pour
+      forcer l'utilisation de 64&nbsp;Mo de mémoire vive.
+
+</para><para>
+
+Si votre moniteur est noir et blanc, utilisez le paramètre
+<userinput>mono</userinput>. Sinon, votre installation se fera en couleur, ce
+      qui est l'option par défaut.
+
+</para><para condition="supports-serial-console">
+
+Si vous démarrez à travers la console série, en général, le noyau la
+détecte automatiquement <phrase arch="mipsel">(sauf pour les
+      DECstations)</phrase>. Si vous avez une carte vidéo
+      («&nbsp;framebuffer&nbsp;») et un clavier également connectés à
+      l'ordinateur que vous voulez démarrer à l'aide de la console
+      série, vous devrez peut-être passer l'option
+<userinput>console=<replaceable>device</replaceable></userinput> au noyau, où
+<replaceable>device</replaceable> est votre interface série, c'est-à-dire 
+quelque chose comme <filename>ttyS0</filename>.
+  </para><para arch="sparc">
+Pour &arch-title;, les interfaces série sont <filename>ttya</filename> ou
+<filename>ttyb</filename>. Alternativement, mettez les
+      variables OpenPROM <envar>input-device</envar> et
+<envar>output-device</envar> à <filename>ttya</filename>.
+</para>
+
+
+  <sect2 id="installer-args"><title>Debian Installer Arguments</title>
+<para>
+
+Le système d'installation reconnaît quelques arguments qui
+      peuvent s'avérer utiles. 
+
+</para>
+
+<variablelist>
+<varlistentry>
+<term>DEBCONF_PRIORITY</term>
+<listitem><para>
+
+These parameter settings will similarly set the highest priority of
+messages to be displayed. 
+
+</para><para>
+
+With <userinput>DEBCONF_PRIORITY=critical</userinput>, the
+installation system will display only critical messages and try to do
+the right thing without fuss.  If problems are encountered, the
+installer adjusts the priority as needed.
+
+</para><para>
+
+If <userinput>DEBCONF_PRIORITY=high</userinput> (the default setting),
+both high and critical priority messages are shown, but medium and low
+priority messages are skipped. When
+<userinput>DEBCONF_PRIORITY=low</userinput> is used, all messages are
+shown.
+
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term>DEBCONF_FRONTEND</term>
+<listitem><para>
+
+This boot parameter controls the type of user interface used for the
+installer. The current possible parameter settings are:
+
+<itemizedlist>
+<listitem>
+<para><userinput>DEBCONF_FRONTEND=noninteractive</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBCONF_FRONTEND=text</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBCONF_FRONTEND=newt</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBCONF_FRONTEND=slang</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBCONF_FRONTEND=ncurses</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBCONF_FRONTEND=bogl</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBCONF_FRONTEND=gtk</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBCONF_FRONTEND=corba</userinput></para>
+</listitem>
+</itemizedlist>
+
+The default front end is <userinput>DEBCONF_FRONTEND=newt</userinput>.
+<userinput>DEBCONF_FRONTEND=text</userinput>
+may be preferable for serial console installs.
+
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term>BOOT_DEBUG</term>
+<listitem><para>
+
+Passing this boot parameter will cause the boot to be more verbosely 
+logged.
+
+<variablelist>
+<varlistentry>
+<term>BOOT_DEBUG=0</term>
+<listitem><para>This is the default.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>BOOT_DEBUG=1</term>
+<listitem><para>More verbose than usual.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>BOOT_DEBUG=2</term>
+<listitem><para>Lots of debugging information.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>BOOT_DEBUG=3</term>
+<listitem><para>
+
+Shells are run at various points in the boot process to allow detailed
+debugging. Exit the shell to continue the boot.
+
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term>INSTALL_MEDIA_DEV</term>
+<listitem><para>
+
+The value of the parameter is the path to the device to load the
+Debian installer from. For example,
+<userinput>INSTALL_MEDIA_DEV=/dev/floppy/0</userinput>
+
+</para><para>
+
+The boot floppy, which normally scans all floppys and USB storage
+devices it can to find the root floppy, can be overridden by this
+parameter to only look at the one device.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>nofb</term>
+<listitem><para>
+
+Certaines architectures utilisent le <emphasis>framebuffer</emphasis>
+             du noyau afin d'offrir l'installation en un certain nombre
+             de langues. Si le <emphasis>framebuffer</emphasis> provoque des
+             problèmes sur votre système, vous pouvez utiliser cette
+             option pour le désactiver. Les symptômes de ce problème
+             sont des messages d'erreur au sujet de bterm ou bogl, un
+             écran noir, ou un blocage quelques minutes après le début de
+             l'installation.
+
+</para><para arch="i386">
+
+l'argument <userinput>video=vga16:off</userinput> peut être utilisé pour
+           désactiver le <emphasis>framebuffer</emphasis>. De tels problèmes 
+ont
+           été rencontrés sur un Dell Inspiron avec la carte graphique
+           Radeon Mobile.
+
+</para><para arch="m68k">
+
+De tels problèmes ont été rencontrés sur l'Amiga
+           1200 et SE/30.
+
+</para><para arch="hppa">
+
+De tels problèmes ont été rencontrés sur les hppa.
+
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+  </sect2>
+ </sect1>

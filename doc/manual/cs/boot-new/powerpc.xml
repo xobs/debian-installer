@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+<!-- $Id$ -->
+<!-- original version: 1.2 -->
+
+  <sect2 arch="powerpc"><title>&arch-title; zavaděče</title>
+
+  <sect3><title><quote>OldWorld</quote> PowerMacy</title>
+<para>
+
+Zavaděč na starších počítačích Power Macintosh se nazývá
+<command>quik</command>. Pokud se vám líbí, můžete ho použít i na
+CHRP.  Při kroku <quote>Nainstalovat zavaděč na disk</quote> se
+instalační program pokusí nastavit <command>quik</command>
+automaticky, což se povede na Powermacích 7200, 7300, 7600 a některých
+klonech.
+
+</para><para>
+
+Pro béžové G3 je dostupný záplatovaný modul <command>quik</command>u
+<filename>first.b</filename> na <ulink
+url="http://www.cpu.lu/~mlan/ftp/quik-first.b-g3"></ulink>.  Pro
+použití tohoto modulu musíte znovu spustit instalační program,
+přepnout se do druhé konzoly a zkopírovat stažený modul do adresáře
+<filename>/target/boot</filename> pod názvem
+<userinput>first.b</userinput>. Poté je nutno spustit:
+
+<informalexample><screen>
+
+chroot /target /bin/bash
+mount -t proc proc /proc
+quik -v
+exit
+
+</screen></informalexample>
+
+</para><para>
+
+Pokud chcete pro zavedení Debianu použít <command>BootX</command>,
+vyberte si ve složce <filename>Linux Kernels</filename> oblíbené
+jádro, odvyberte volbu s ramdiskem a přidejte kořenové zařízení
+odpovídající vaší instalaci (například
+<userinput>/dev/hda8</userinput>).
+
+</para><para>
+
+Poslední možnost pro počítače, na kterých <command>quik</command>
+nefunguje a MacOS/<command>BootX</command> nelze z nějakého důvodu
+použít, je upravit obraz diskety tak, aby se z něj dalo zavádět.
+Je zapotřebí odstranit argumenty ramdisku a přepsat argument root do
+správného tvaru
+<userinput>root=/dev/<replaceable>xxx</replaceable></userinput>.
+V MacOS Můžete použít nástroj <command>ResEdit</command>, binární
+editor (např. <command>beav</command>) nebo
+<ulink url="&url-powerpc-patch-floppy;">perlový skript</ulink>.
+
+</para><para>
+
+Pokud se při prvním startu po instalaci zastaví zavádění na výzvě
+<prompt>boot:</prompt>, zkuste napsat <userinput>Linux</userinput>
+a stisknout &enterkey;.  (Standardní konfigurace v souboru
+<filename>quik.conf</filename> se nazývá Linux. Všechny názvy
+definované v tomto souboru můžete zobrazit klávesou
+<keycap>Tab</keycap>.) Také můžete zkusit znovu zavést instalátor
+a ručně upravit soubor <filename>/target/etc/quik.conf</filename>
+(vytvořený krokem <quote>Nainstalovat zavaděč na disk</quote>). Chytré
+nápady pro práci s <command>quik</command>em jsou v <ulink
+url="&url-powerpc-quik-faq;"></ulink>.
+
+</para><para>
+
+Abyste se dostali zpět do MacOS bez resetování nvram, napište do
+promptu OpenFirmwaru <userinput>bye</userinput>. (Za předpokladu, že
+jste si MacOS ponechali).  Prompt OpenFirmwaru získáte podržením
+kláves <keycombo> <keycap>command</keycap> <keycap>option</keycap>
+<keycap>o</keycap> <keycap>f</keycap> </keycombo> během studeného
+startu počítače.  Pokud byste pro přechod do MacOS museli resetovat
+nvram k původním hodnotám, zmáčkněte během studeného startu počítače
+kombinaci <keycombo> <keycap>command</keycap> <keycap>option</keycap>
+<keycap>p</keycap> <keycap>r</keycap> </keycombo>.
+
+</para>
+   </sect3>
+
+   <sect3><title><quote>NewWorld</quote> PowerMacy</title>
+<para>
+
+Novější (polovina roku 1998+) PowerMacy používají místo
+<command>quik</command>u zavaděč <command>yaboot</command>. Instalační
+program nastaví <command>yaboot</command> automaticky, takže stačí
+spustit krok <quote>Nainstalovat zavaděč na disk</quote> a jestli se
+vše povede, disk bude bootovatelný a OpenFirmware bude nastaven na
+zavádění Debianu.
+
+</para><para>
+
+Na počítačích G4 a iBook se můžete podržením <keycap>option</keycap>
+klávesy dostat do grafické obrazovky s tlačítkem pro každý zaveditelný
+operační systém. &debian; bude mít ikonu s tučňákem.
+
+</para><para>
+
+Jestliže jste si nechali nainstalovaný MacOS, může se stát, že vám
+v OpenFirmwaru změní proměnnou <envar>boot-device</envar> (zařízení,
+ze kterého se zavádí systém).  V takovém případě resetujte
+OpenFirmware na standardní hodnoty, což provedete držením kláves
+<keycombo> <keycap>command</keycap> <keycap>option</keycap>
+<keycap>p</keycap> <keycap>r</keycap> </keycombo> během studeného
+startu.
+
+</para><para>
+
+Všechna návěští definovaná v souboru <filename>yaboot.conf</filename>
+můžete zobrazit, pokud ve výzvě <prompt>boot:</prompt> stisknete
+klávesu <keycap>Tab</keycap>.
+
+</para><para>
+
+Resetování OpenFirmwaru na počítačích G3 nebo G4 způsobí, že se
+implicitně bude spouštět &debian;.  (Pokud jste správně rozdělili disk
+a první oblast je <quote>Apple_Bootstrap</quote>).
+Toto nemusí fungovat pokud máte &debian; na SCSI disku a MacOS na
+disku IDE. Potom musíte vstoupit do OpenFirmwaru a nastavit proměnnou
+<envar>boot-device</envar> sami (<command>ybin</command> to dělá
+automaticky).
+
+</para><para>
+
+Po prvním úspěšném zavedení Debianu byste měli do souboru
+<filename>/etc/yaboot.conf</filename> přidat další parametry &mdash;
+jako třeba duální zavádění. Aby se změny přenesly do zaváděcí oblasti,
+musíte po každé změně tohoto souboru spustit program
+<command>ybin</command>.  Více informací najdete
+v <ulink url="&url-powerpc-yaboot-faq;">yaboot HOWTO</ulink>.
+
+</para>
+  </sect3>
+</sect2>

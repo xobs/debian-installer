@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- $Id$ -->
+<!-- original version: 1.2 -->
+
+ <sect1 condition="bootable-usb" id="boot-usb-files">
+ <title>Preparando os Arquivos para a Inicialização usando o Memory Stick USB</title>
+
+<para>
+
+Para preparar a memória stick USB, será necessário um sistema onde o 
+GNU/Linux já esteja sendo executado e que tenha suporte a USB. Tenha certeza
+que o módulo do kernel <filename>usb-storate</filename> está carregado (
+<userinput>modprobe usb-storage</userinput>) e tente achar o dispositivo
+SCSI que recebeu a associação com a memória stick USB (neste exemplo será usado 
+o dispositivo <filename>/dev/sda</filename>). Para gravar em sua memória
+stick primeiro desative a proteção contra gravação.
+
+</para><para>
+
+Note que a memória stick USB deverá ter pelo menos 128MB de tamanho
+(tamanhos menores são possíveis se seguir os passos em 
+<xref linkend="usb-copy-flexible"/>).
+
+</para>
+
+  <sect2 id="usb-copy-easy">
+  <title>Copiando os arquivos - o método fácil</title>
+<para>
+
+Existe um arquivo <emphasis>tudo em um</emphasis> chamado 
+<filename>hd-media/boot.img.gz</filename> que contém todos os arquivos
+do programa de instalação (incluindo o kernel) também como o 
+<command>SYSLINUX</command> e seu arquivo de configuração. Você terá somente
+que descompacta-lo diretamente para sua memória stick USB:
+
+<informalexample><screen>
+
+gzip -dc boot.img.gz >/dev/<replaceable>sda</replaceable>
+
+</screen></informalexample>
+
+É claro que isto destruirá tudo que já estiver no dispositivo, 
+assim tenha cuidado de usar o nome correto de dispositivo para 
+sua memória stick USB.
+
+</para><para>
+
+Após isto, monte a memória stick USB (<userinput>mount /dev/sda
+/mnt</userinput>), que agora terá um sistema de arquivos FAT armazenado
+nela e copie a imagem ISO Debian netinst ou businesscard para lá. Note que
+o nome de arquivo deverá ser finalizado em <filename>.iso</filename>. 
+Para finalizar, desmonte a memória stick (<userinput>umount /mnt</userinput>).
+
+</para>
+  </sect2>
+
+  <sect2 id="usb-copy-flexible">
+  <title>Copiando os arquivos - o método flexível</title>
+<para>
+
+Se quiser mais flexibilidade ou apenas deseja saber o que está acontecendo, 
+você deverá usar o seguinte método para armazenar os arquivos em sua memória
+stick. Nós mostraremos como configurar a memória stick para usar a primeira
+partição, ao invés de todo o dispositivo.
+
+</para><note><para>
+
+A maioria as memórias sticks USB vem com uma partição FAT16 simples
+já gravada, você provavelmente não terá que reparticionar ou 
+reformatar a memória stick. Se quiser fazer isso assim mesmo, use 
+o comando <command>cfdisk</command> ou outra ferramenta de particionamento
+para criar a partição FAT16, então execute o comando:
+
+<informalexample><screen>
+
+mkdosfs /dev/<replaceable>sda1</replaceable>
+
+</screen></informalexample>
+
+Tenha cuidado de usar o nome de dispositivo correto para representar sua 
+memória stick USB. O comando <command>mkdosfs</command> é encontrado no pacote
+<classname>dosfstools</classname>.
+
+</para></note><para>
+
+Para inicializar o kernel após dar a partida pela memória USB stick, 
+colocaremos um gerenciador de partida nela. Qualquer gerenciador de 
+partida (e.g. <command>LILO</command>) deverá funcionar, é conveniênte
+usar o <command>SYSLINUX</command>, pois ele usa uma partição FAT16 
+e poderá ser reconfigurado apenas editando-se um arquivo texto. Qualquer
+sistema operacional que suporta o sistema de arquivos FAT poderá ser 
+usado para fazer as modificaços no gerenciador de partida.
+
+</para><para>
+
+Para colocar o <command>SYSLINUX</command> em uma partição FAT16 de sua 
+memória stick USB, instale os pacote <classname>syslinux</classname> e
+<classname>mtools</classname> em seu sistema e execute
+
+<informalexample><screen>
+
+syslinux /dev/<replaceable>sda1</replaceable>
+
+</screen></informalexample>
+
+Novamente, tenha cuidado quando usar o nome de dispositivo correto. 
+A partição não deverá ser montada quando iniciar o <command>SYSLINUX</command>. 
+Este processo grava o setor de partida para a partição e cria o arquivo
+<filename>ldlinux.sys</filename> que contém o código do gerenciador de 
+partida.
+
+</para><para>
+
+Monte a partição (<userinput>mount /dev/sda1 /mnt</userinput>) e
+copie os seguintes arquivos dos arquivos da Debian para a memória
+stick:
+
+<itemizedlist>
+<listitem><para>
+
+<filename>vmlinuz</filename> (binário do kernel)
+
+</para></listitem>
+<listitem><para>
+
+<filename>initrd.gz</filename> (imagem inicial do disco ram (ramdisk))
+
+</para></listitem>
+<listitem><para>
+
+<filename>syslinux.cfg</filename> (arquivo de configuração do SYSLINUX)
+
+</para></listitem>
+<listitem><para>
+
+Módulos opcionais do kernel
+
+</para></listitem>
+</itemizedlist>
+
+Se deseja renomear estes arquivos, note que o
+<command>SYSLINUX</command> somente processa nomes de arquivos no
+formato DOS (8.3).
+
+</para><para>
+
+O arquivo de configuração <filename>syslinux.cfg</filename> deve conter as 
+seguintes duas linhas:
+
+<informalexample><screen>
+
+default vmlinuz
+append initrd=initrd.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+
+</screen></informalexample>
+
+Agora você deverá colocar qualquer imagem ISO da Debian (businesscard, netinst
+ou até mesmo uma completa) em sua memória stick (caso couber em seu espaço livre). 
+O nome de arquivo da imagem deverá ser finalizado em <filename>.iso</filename>.
+
+</para><para>
+
+Se quiser instalar através da rede, sem usar uma imagem ISO, 
+você deverá, é claro, pular o passo anterior. Ainda em tempo, voce 
+deverá usar um disco de memória ram inicial do diretório 
+<filename>netboot</filename> ao invés do que se encontra em 
+<filename>hd-media</filename>, porque o <filename>hd-media/initrd.gz</filename> 
+não possui suporte a rede.
+
+</para><para>
+
+Quando terminar, desmonte a memória stick USB (<userinput>umount
+/mnt</userinput>) e ative sua proteção contra gravação.
+
+</para><warning><para>
+
+Caso seu sistema se recusar em inicializar a partir da memória stick, 
+ela poderá conter uma MBR inválida (master boot record). Para corrigir 
+isto, use o comando <command>install-mbr</command> que vem no pacote
+<classname>mbr</classname>:
+
+<informalexample><screen>
+
+install-mbr /dev/<replaceable>sda</replaceable>
+
+</screen></informalexample>
+
+</para></warning>
+  </sect2>
+ </sect1>

@@ -1,0 +1,19 @@
+#!/bin/sh
+
+tmp=`tempfile`
+
+while [ x"$1" != x ]; do
+  echo $1
+  cat $1 \
+   | tr -d '\t' \
+   | sed -f formatparasect \
+   | sed -f para1 \
+   | sed '/<\/para>/{:a;N;/<para>/!ba;s/<\/para>\n*<para>/<\/para><para>/;}' \
+   | cat -s > $tmp
+  cp $tmp $1
+  shift;
+done
+
+rm -f $tmp
+
+#   | sed -f fix \

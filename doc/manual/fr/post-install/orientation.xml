@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 1.3 -->
+
+ <sect1 id="debian-orientation"><title>Orienting Yourself to Debian</title>
+<para>
+
+Debian est un peu différente des autres distributions. Même si vous
+êtes habitué à travailler avec d'autres distributions Linux, il y a
+quelques détails que vous devez connaître à propos de Debian pour garder
+votre système en bon état. Le contenu de ce chapitre vous aidera à
+vous orienter&nbsp;; ce n'est pas un didacticiel sur l'utilisation de Debian,
+mais un bref coup d'oeil sur le système, pour les gens pressés.
+
+</para>
+
+  <sect2><title>Debian Packaging System</title>
+<para>
+
+Le concept le plus important à assimiler est le système de gestion des 
+paquets. La plus grande partie de votre système est sous le contrôle du 
+système de gestion des paquets. Cela inclut&nbsp;:
+
+<itemizedlist>
+<listitem><para>
+
+<filename>/usr</filename> (excluding <filename>/usr/local</filename>)
+
+</para></listitem>
+<listitem><para>
+
+<filename>/var</filename> (you could make
+<filename>/var/local</filename> and be safe in there)
+
+</para></listitem>
+<listitem><para>
+
+<filename>/bin</filename>
+
+</para></listitem>
+<listitem><para>
+
+<filename>/sbin</filename>
+
+</para></listitem>
+<listitem><para>
+
+<filename>/lib</filename>
+
+</para></listitem>
+</itemizedlist>
+
+Par exemple, si vous remplacez <filename>/usr/bin/perl</filename>, cela 
+fonctionnera, mais lors de la prochaine mise à jour du paquet 
+<classname>perl</classname>, le fichier
+que vous avez modifié sera remplacé. Les experts évitent cela en
+marquant le paquet comme suspendu (<emphasis>hold</emphasis>) avec 
+l'application <command>aptitude</command>.
+
+</para><para>
+
+L'une des meilleures méthodes d'installation est la méthode apt. Vous pouvez 
+l'utiliser depuis <command>apt-get</command>, ou en version ligne de commande 
+(lire la documentation sur <command>apt-get</command>). Notez qu'apt vous 
+permet de fusionner plusieurs sources pour les paquets&nbsp;: main,
+contrib et non-free, si bien que vous avez accès aussi bien aux paquets soumis
+à des restrictions d'export qu'aux versions standard.
+
+</para>
+  </sect2>
+
+  <sect2><title>Gestion des versions des applications</title>
+<para>
+
+Les différentes versions des applications sont gérées par
+update-alternatives. Si vous utilisez plusieurs versions
+de vos applications, lisez les pages de manuel de
+update-alternatives.
+
+</para>
+  </sect2>
+
+  <sect2><title>Gestion des tâches récurrentes</title>
+<para>
+
+Les actions répétées à heure ou à date fixe sont appelées en anglais des 
+<emphasis>cron jobs</emphasis>. Celles dont l'administrateur a la 
+responsabilité devraient se trouver dans le répertoire 
+<filename>/etc</filename>, car ce sont des fichiers de
+configuration. Si un travail doit être répété chaque jour, semaine ou mois, 
+mettez simplement
+un script ou une application exécutant cette action respectivement dans
+<filename>/etc/cron.daily</filename>. <filename>/etc/cron.weekly</filename> et
+<filename>/etc/cron.monthly</filename>. Ils seront appelés depuis
+<filename>/etc/crontab</filename>, et lancés consécutivement par ordre 
+alphabétique.
+
+</para><para>
+
+D'un autre côté, si vous avez une tâche qui doit être lancée par un
+utilisateur particulier, ou à une heure ou à une fréquence bien précise,
+vous pouvez utiliser <filename>/etc/crontab</filename>, ou, mieux encore,
+<filename>/etc/cron.d/votre_choix</filename>. Ces fichiers possèdent aussi un
+champ supplémentaire qui permet de spécifier sous quelle identité l'action
+sera exécutée.
+
+</para><para>
+
+Dans tous les cas, vous n'avez qu'à modifier les fichiers, et cron
+le remarquera automatiquement. Vous n'avez pas à lancer de commandes spéciales.
+Pour plus d'informations, lisez cron(8), crontab(5) et
+<filename>/usr/share/doc/cron/README.Debian</filename>.
+
+</para>
+  </sect2>
+ </sect1>

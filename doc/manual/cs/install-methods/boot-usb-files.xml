@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+<!-- $Id$ -->
+<!-- original version: 1.2 -->
+
+ <sect1 condition="bootable-usb" id="boot-usb-files">
+ <title>Příprava souborů pro zavedení z USB zařízení</title>
+
+<para>
+
+Pro přípravu USB zařízení budete potřebovat počítač s nainstalovaným
+GNU/Linuxem a podporou USB. Pokud používáte jaderný modul usb-storage,
+ujistěte se, že je nahraný (<userinput>modprobe
+usb-storage</userinput>) a zkuste zjistit, na které zařízení je
+navázána vaše USB klíčenka (v tomto příkladu používáme
+<filename>/dev/sda</filename>). Pokud klíčenka obsahuje ochranu proti
+zápisu, vypněte ji.
+
+</para><para>
+
+USB klíčenka by měla mít velikost alespoň 128 MB. Menší velikosti jsou
+podporovány pouze při ruční výrobě podle <xref
+linkend="usb-copy-flexible"/>.
+
+</para>
+
+  <sect2 id="usb-copy-easy">
+  <title>Kopírování souborů - jednoduchá cesta</title>
+<para>
+
+K dispozici máte soubor <filename>hd-media/boot.img.gz</filename>,
+který obsahuje všechny instalační soubory (včetně jádra), zavaděč
+<command>SYSLINUX</command> a jeho konfigurační soubor. Jediné co
+musíte udělat, je rozbalit ho na USB zařízení:
+
+<informalexample><screen>
+
+gzip -dc boot.img.gz >/dev/<replaceable>sda</replaceable>
+
+</screen></informalexample>
+
+Tímto zničíte veškerá data na zařízení, takže se raději dvakrát
+přesvědčte, že pro svou klíčenku používáte správné jméno zařízení.
+
+</para><para>
+
+Na klíčence nyní bude jedna velká oblast typu FAT16. Připojte ji
+(<userinput>mount /dev/sda /mnt</userinput>) a nakopírujte na ni
+ISO obraz malého instalačního CD (netinst). Na názvu obrazu nezáleží,
+ale musí končit příponou <filename>.iso</filename>. Nyní stačí
+klíčenku odpojit (<userinput>umount /mnt</userinput>) a je hotovo.
+
+</para>
+  </sect2>
+
+  <sect2 id="usb-copy-flexible">
+  <title>Kopírování souborů - pružná cesta</title>
+<para>
+
+Pokud máte rádi více pružnosti, nebo jen chcete zjistit <quote>co se
+děje za oponou</quote>, můžete použít nástedující metodu, ve které
+mj. ukážeme, jak místo celého USB zařízení použít pouze první oblast.
+
+</para><note><para>
+
+Protože má většina USB klíčenek přednastavenou jednu velkou oblast
+typu FAT16 pavděpodovně nemusíte klíčenku přeformátovávat. Pokud to
+však musíte provést, použijte pro vytvoření této oblasti
+<command>cfdisk</command> nebo podobný nástroj pro dělení disku. Poté
+vytvořte souborobý systém příkazem
+
+<informalexample><screen>
+
+mkdosfs /dev/<replaceable>sda1</replaceable>
+
+</screen></informalexample>
+
+Příkaz <command>mkdosfs</command> je obsažen v balíku
+<classname>dosfstools</classname>. Pozorně se přesvědčete, že
+používáte správný název zařízení!
+
+</para></note><para>
+
+Pro zavedení jádra z klíčenky je zapotřebí zavaděče. Přestože byste
+mohli použít téměř libovolný zavaděč (např. <command>LILO</command>),
+je zvykem používat <command>SYSLINUX</command>, protože používá oblast
+typu FAT16 a jeho nastavení se provádí úpravou jednoduchého textového
+souboru. Díky tomu můžete zavaděč konfigurovat z téměř libovolného
+operačního systému.
+
+</para><para>
+
+Pro instalaci <command>SYSLINUX</command>u na 1. oblast USB klíčenky
+musíte mít nainstalované balíky <classname>syslinux</classname> a
+<classname>mtools</classname> a daná oblast nesmí být připojená. Poté
+zadejte příkaz
+
+<informalexample><screen>
+
+syslinux /dev/<replaceable>sda1</replaceable>
+
+</screen></informalexample>
+
+čímž se na začátek oblasti zapíše zaváděcí sektor a vytvoří se soubor
+<filename>ldlinux.sys</filename>, který obsahuje hlavní část zavaděče.
+
+</para><para>
+
+Připojte oblast (<userinput>mount /dev/sda1 /mnt</userinput>)
+a nakopírujte na ni následující soubory:
+
+<itemizedlist>
+<listitem><para>
+
+<filename>vmlinuz</filename> (jádro)
+
+</para></listitem>
+<listitem><para>
+
+<filename>initrd.gz</filename> (obraz ramdisku)
+
+</para></listitem>
+<listitem><para>
+
+<filename>syslinux.cfg</filename> (konfigurační soubor SYSLINUXu)
+
+</para></listitem>
+<listitem><para>
+
+volitelné jaderné moduly
+
+</para></listitem>
+</itemizedlist>
+
+Pokud si chcete soubory přejmenovat, pamatujte, že
+<command>SYSLINUX</command> umí pracovat pouze s DOSovými (8.3) názvy
+souborů.
+
+</para><para>
+
+Konfigurační soubor <filename>syslinux.cfg</filename> by měl obsahovat
+následující dvě řádky:
+
+<informalexample><screen>
+
+default vmlinuz
+append initrd=initrd.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+
+</screen></informalexample>
+
+Nyní je čas nakopírovat na klíčenku ISO obraz instalačního CD
+(businesscard, netinst nebo, pokud se vejde, dokonce celé první
+CD). Na názvu obrazu nezáleží, ale musí končit příponou
+<filename>.iso</filename>.
+
+</para><para>
+
+Pokud nechcete použít ISO obraz a místo toho budete chtít instalovat
+ze sítě, předchozí krok samozřejmě přeskočte. Kromě toho budete muset
+použít ramdisk (<filename>initrd.gz</filename>) z adresáře
+<filename>netboot</filename>, protože ramdisk v adresáři
+<filename>hd-media</filename> nebsahuje podporu pro instalaci ze sítě.
+
+</para><para>
+
+Jestliže jste hotovi, odpojte klíčenku (<userinput>umount
+/mnt</userinput>) a zapněte ochranu proti zápisu.
+
+</para><warning><para>
+
+Pokud váš systém odmítá zavádění z klíčenky, může to být tím, že je na
+klíčence neplatný hlavní zaváděcí záznam (MBR). Opravit jej můžete
+programem <command>install-mbr</command> z balíku
+<classname>mbr</classname>:
+
+<informalexample><screen>
+
+install-mbr /dev/<replaceable>sda</replaceable>
+
+</screen></informalexample>
+
+</para></warning>
+  </sect2>
+ </sect1>

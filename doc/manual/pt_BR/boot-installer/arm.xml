@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- $Id$ -->
+<!-- original version: 1.4 -->
+
+  <sect2 arch="arm" id="boot-tftp"><title>Inicialização através do TFTP</title>
+
+&boot-installer-intro-net.xml;
+
+  <sect3 arch="arm"><title>Inicialização através do TFTP no NetWinder</title>
+
+<para>
+
+Os NetWinders tam duas placas de rede: A placa 10Mbps NE2000-compatível
+que é <filename>eth0</filename> e a placa Tulip de 100Mbps que é a
+<filename>eth1</filename>.
+
+</para><note><para>
+
+Você precisará do NeTTrom 2.2.1 ou superior para iniciar o programa
+de instalação. O NeTTrom 2.3.3 é recomendado: obtenha estes 
+arquivos de
+<ulink url="ftp://ftp.netwinder.org/pub/netwinder/firmware/"></ulink>:
+<itemizedlist>
+<listitem><para>
+
+<filename>nettrom-2.3-3.armv4l.rpm</filename>
+
+</para></listitem>
+<listitem><para>
+
+<filename>nettrom-2.3.3.bin</filename>
+
+</para></listitem>
+<listitem><para>
+
+<filename>nettrom-2.3.3.bin.md5sum</filename>
+
+</para></listitem>
+</itemizedlist>
+
+</para></note><para>
+
+Após reiniciar e interromper o processo de inicialização durante a 
+contagem regressiva, você deverá primeiro configurar a rede com 
+um endereço estático:
+<informalexample><screen>
+
+    NeTTrom command-> setenv eth0_ip 192.168.0.10/24
+
+</screen></informalexample>
+onde 24 é o número de conjunto de bits de sua netmask, ou um endereço
+dinâmico:
+<informalexample><screen>
+
+    NeTTrom command-> boot diskless
+
+</screen></informalexample>
+
+</para><para>
+
+Você também poderá precisar mexer nas configurações de <userinput>route1</userinput>
+no servidor TFTP caso não esteja na subrede local. O resto da 
+configuração é bastante padrão (o passo salvar-tudo é opcional):
+<informalexample><screen>
+
+    NeTTrom command-> setenv kerntftpserver 192.168.0.1
+    NeTTrom command-> setenv kerntftpfile tftpboot.img
+    NeTTrom command-> save-all
+    NeTTrom command-> setenv netconfig_eth0 flash
+    NeTTrom command-> setenv kernconfig tftp
+
+</screen></informalexample>
+
+</para><para>
+
+Somente as primeiras duas destes interfaces com inicialização
+normal de disco, assim é seguro fazer um <command>save-all</command> 
+antes dele, que armazenará as configurações de rede caso você precise
+novamente inicializar através da rede. Use o comando 
+<command>printenv</command> para revisar suas configurações de ambiente. 
+Finalmente, caso sua variável <envar>cmdappend</envar> do NeTTrom tem
+a opção <option>noinitrd</option> (que é necessária para o boot dos
+kernels 2.4) você deverá remove-lo assim o kernel
+baixado poderá inicializar com seu disco ram anexado.
+
+</para>
+  </sect3>
+
+  <sect3 arch="arm"><title>Inicialização através do TFTP no CATS</title>
+
+<para>
+
+Em sistemas CATS, use <command>boot de0:</command> ou similar no
+aviso de comando Cyclone.
+
+</para>
+   </sect3>
+  </sect2>
+
+
+
+  <sect2 arch="arm"><title>Inicializando através de um CD-ROM</title>
+
+&boot-installer-intro-cd.xml;
+
+<para>
+
+To boot a CD-ROM from the Cyclone console prompt, use the command
+<command>boot cd0:cats.bin</command>
+
+</para>
+  </sect2>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+<!-- $Id$ -->
+<!-- original version: 1.1 -->
+
+ <sect2 id="configure-apt">
+ <title>Nastavení APT</title>
+
+<para>
+
+Uživatelé nejčastěji instalují balíčky programem
+<command>apt-get</command> z balíčku
+<classname>apt</classname>.<footnote>
+
+<para>
+
+Ve skutečnosti balíčky instaluje program na nižší úrovni:
+<command>dpkg</command>.  <command>dpkg</command> je podle potřeby
+volán z nástroje <command>apt-get</command>, který se stará o získání
+potřebných balíčků ze sítě, CD nebo jiného zdroje a také o vyřešení
+závislostí mezi balíčky.
+
+</para>
+</footnote>
+
+Aby APT věděl, odkud má získávat balíčky, musí se nastavit. S tím
+pomůže aplikace <command>apt-setup</command>.
+
+</para><para>
+
+Po skončení instalace můžete kdykoliv změnit nastavení APT spuštěním
+programu <command>apt-setup</command>, nebo ručně upravit soubor
+<filename>/etc/apt/sources.list</filename>.
+
+</para><para>
+
+Jestliže instalujete z oficiálních CD, pak by CD v mechanice mělo být
+automaticky bez ptaní nastaveno jako zdroj pro apt.  Poznáte to podle
+toho, že uvidíte jak je CD zkoumáno a poté budete dotázáni zda chcete
+nastavit další CD.  Jestliže máte sadu několika CD &mdash; a většina
+lidí má &mdash; tak byste měli pokračovat a postupně nechat prozkoumat
+jedno po druhém.
+
+</para><para>
+
+Uživatelům bez oficiálních CD bude nabídnuto několik možností, jak
+získat debianí balíky: FTP, HTTP, CD-ROM nebo lokální souborový
+systém. O tyto možnosti nejsou ochuzeni ani uživatelé s oficiálními CD
+&mdash; stačí zvolit možnost <quote>Přidat další zdroj</quote>.
+
+</para><para>
+
+Všimněte si, že je úplně normální (a dokonce výhodné) mít několik
+různých APT zdrojů i pro jeden a ten samý archív Debianu.
+<command>apt-get</command> automaticky ze všech dostupných verzí
+balíčku vybere tu s nejvyšším číslem verze.  Nebo pokud máte například
+jako zdroje uvedeny HTTP i CD-ROM, <command>apt-get</command> bude
+implicitně využívat CD-ROM a HTTP použije pouze pokud na síti bude
+novější verze daného balíčku.  Na druhé straně není nejlepší nápad
+přidat zbytečně mnoho APT zdrojů, protože to zpomalí proces kontroly
+síťových archívů na nové verze.
+
+</para>
+
+  <sect3 id="configure-apt-net">
+  <title>Nastavení síťových zdrojů s balíčky</title>
+
+<para>
+
+Jestliže plánujete instalovat zbytek sytému po síti, nejvhodnější
+volba je asi zdroj <userinput>http</userinput>. Zdroje dostupné přes
+<userinput>ftp</userinput> nejsou o nic horší, ale navazování spojení
+může trvat déle.
+
+</para><para>
+
+V dalším kroku sdělíte <command>apt-setup</command>u zemi, ve které
+žijete, a podle toho se vybere některé z oficiálních internetových
+zrcadel Debianu. Z nabídnutého seznamu vhodných serverů si některý
+vyberte.
+
+</para><para>
+
+Jestliže instalujete přes HTTP, budete dotázáni na nastavení proxy
+serveru.  To je někdy potřeba pro uživatele za firewallem, na
+podnikových sítích a podobně.
+
+</para><para>
+
+Nakonec bude nově zvolený síťový zdroj balíčků otestován, a jestli vše
+dopadne dobře, budete vám nabídnuta možnost přidat další zdroj.
+
+</para>
+  </sect3>
+ </sect2>

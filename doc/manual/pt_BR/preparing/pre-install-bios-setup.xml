@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- $Id$ -->
+<!-- original version: 1.7 -->
+
+ <sect1 id="pre-install-bios-setup">
+ <title>Pré-Instalação do Hardware e Configuração do Sistema Operacional</title>
+<para>
+
+Esta seção lhe guiará através da configuração e pré-instalação de 
+hardware, se preciso, você precisá faze-lo antes de instalar a Debian. 
+Geralmente isto envolve a checagem e possivelmente a alteração de 
+configurações de firmware para seu sistema. A "firmware" é o software
+central usado pelo hardware; é mais criticamente chamado durante o 
+processo de inicialização (após ligar a força). Os assuntos conhecidos
+de hardwares afetabndo a confiança da &debian; em seu sistema 
+também são destacados.
+
+</para>
+
+&bios-setup-i386.xml; 
+&bios-setup-m68k.xml; 
+&bios-setup-powerpc.xml; 
+&bios-setup-sparc.xml; 
+&bios-setup-s390.xml; 
+
+  <sect2><title>Assuntos Relacionados a Hardware que Poderá Ter</title>
+<para arch="not-s390">
+
+Muitas pessoas tem tentado fazer o sistema funcionar com sua CPU de 
+90Mhz, em 100Mhz, etc. Normalmente funciona, mas sua sensibilidade a 
+temperatora e outros fatores podem danificar o sistema. Um dos autores
+deste deocumento fez o overclock de seu próprio sistema por um ano e então
+o sistema começou a abortar o programa <command>gcc</command> com um sinal
+inexperado durante a compilação do kernel. Voltando a CPu a velocidade normal
+resolveu o problema.
+
+</para><para arch="not-s390">
+
+O compilador <command>gcc</command> é frequentemente a primeira coisa que
+da problema quando tem módulos de memória defeituosos (ou outros problemas
+de hardwares que fazem a modificação de seus dados indiscriminadamente) porque 
+ele constróia amplas estruturas de dados que acessa repetidamente. Um erro 
+nestas estruturas de dados fará que ele execute uma instrução ilegal ou 
+acesso um endereço inexistente. O sintoma disto será o 
+<command>gcc</command> sendo finalizado por causa de um sinal 
+inexperado.
+
+</para><para arch="m68k">
+
+Placas Atari TT RAM são impressionantes por te rpboelmas de RAM 
+sob o Linux; se encontrar problemas estranhos, tente executar pelo
+menos o kernel na ST-RAM. Os usuários do Amiga podem precisar excluir
+memória RAM usando um memfile inicializável.
+
+<phrase condition="FIXME"><emphasis>
+
+FIXME: São necessárias mais descrições sobre isto.
+
+</emphasis></phrase>
+
+</para><para arch="i386">
+
+As melhroes placas mãe suportam paridade na memória RAM e dirão caso
+o seu sistem atenha um erro de um simples bit na RAM. Infelizmente, 
+elas não tem métodos de solucionar o problema, mas geralmente travarão
+imediatamente após detectar a RAm defeituosa. Ainda, é melhor
+ser avisado que tem memória RAM com blocos defeituosos do que te-la 
+silenciosamente inserindo erros em seus dados. Assim, os melhores 
+sistemas tem placas mãe que suportam paridade e módulos de memória
+com paridade verdadeira; veja <xref linkend="Parity-RAM"/>.
+
+</para><para arch="i386">
+
+Se tiver uma memória RAM com paridade verdadeira e sua placa mãe pode 
+manipula-la, tenha certeza de ativar suas configurações de BIOS que fazem
+sua placa mãe interromper caso ocorram erros de paridade na memória.
+
+</para>
+
+   <sect3 arch="i386"><title>A Chave Turbo</title>
+<para>
+
+Muitos sistemas tem uma chave <emphasis>turbo</emphasis> que controlam
+a velocidade da CPU. Selecine a configuraçõa de alta velocidade. Caso 
+sua BIOS lhe permita desativar via software a chave turbo (ou controle
+via software a chave turbo), faça isto para deixar sempre o sistema no
+modo de alta velocidade. Nós temos relatórios de um sistema em particular 
+que desativava a função turbo quando estava procurando por dispositivos
+de hardware.
+
+</para>
+   </sect3>
+
+   <sect3 arch="i386"><title>CPUs Cyrix e Erros em Disquetes</title>
+<para>
+
+Muitos usuários de CPUs Cyrix tem tido que desativar o cache de 
+seus sistemas durante a instalação porque causa erros na leitura
+de disquetes. Se tiver que fazer isso, tenha certeza de reativar 
+seu cache quando finalizar a instalação, pois o sistema é executado
+<emphasis>muito</emphasis> lentamente com o cache desativado.
+
+</para><para>
+
+Nós não achamos que isso necessariamente seja uma falha na CPU Cyrix. 
+Pode ser algo que o Linux pode contornar. Nós continuaremos a observar 
+o problema. Para os curiosamente técnicos, nós suspeitamos de um 
+problema com o cache sendo invalidado após uma mudança do código de 
+16 bits para 32 bits.
+
+</para>
+   </sect3>
+
+   <sect3 arch="i386"><title>Configuração de Periféricos de Hardware</title>
+<para>
+
+Você poderá ter que mudar algumas configurações ou jumpers nas 
+placas controladores de periféricos de seu computador. Algumas 
+placas tem menus de configuração enquanto outras usam jumpers. Este 
+documento não espera oferecer informações completas sobre cada dispositivo
+de hardware; o que ele busca é oferecer dicas importantes.
+
+</para><para>
+
+Se qualquer placa oferecer "memória mapeada" a memória deverá ser 
+mapeada para alguma área entre 0xA0000 e 0xFFFFF (de 640K até a memória 
+abaixo de 1 MB) ou em um endereço pelo menos 1MB maior que o total
+de memória do seu sistema.
+
+</para>
+   </sect3>
+
+   <sect3 arch="i386" id="usb-keyboard-config"><title>Teclados USB</title>
+<para>
+
+Se não tiver um teclado no estilo AT e somente um modelo USB, você 
+poderá precisar ativar a emulação de teclado AT em sua BIOS. Consulte
+o manual de sua placa mãe e procure na BIOS pelas opções "Legacy keyboard emulation"
+ou "USB keyboard support". Ela poderá ser ativada para iniciar o sistema de 
+instalaçõa. Se ativar esta opção e esitver funcionando, você poderá ir
+em frente.
+
+</para><para>
+
+Se não achar esta opção, pode ser que ela sempre esteja ativada como 
+padrão e você poderá continuar. Também pode significar que sua BIOS não
+oferece suporte a emulação (má sorte).
+
+</para><para>
+
+Caso tenha encontrado a opção e a ativado, mas a emulação para 
+de funcionar assim que o kernel iniciar, então você também não
+tem sorte. Você poderá tentar o tipo "bf2.4" onde o disquet raíz
+vem com módulos USB. Se estiver instalando através de disquetes, você 
+precisará do suporte a teclado, antes de carregar os módulos USB. 
+Especificando a opção "keytimer" no aviso de inicialização poderá lhe
+ajudar neste caso.
+
+</para><para>
+
+Algumas vezes, a emulação trava mas ela volta após alguns minutos, assim
+você poderá aguardar algum tempo e tentar continuar. Para corrigir esta
+situação, você deverá carregar os controladores do Linux para teclados
+USB. Para isto, use o "modconf" (no passo "Configurar Módulos dos Controladores de 
+Dispositivos") e carregue o módulo usb-uhci ou usb-ohci.
+
+</para>
+   </sect3>
+
+   <sect3><title>Mais de 64MB de RAM</title>
+<para>
+
+O kernel do Linux nem sempre pode detectar a quantidade de memória RAM 
+que possui. Se este é o seu caso, por favor de uma olhada em 
+<xref linkend="boot-parms"/>.
+
+</para>
+   </sect3>
+  </sect2>
+ </sect1>

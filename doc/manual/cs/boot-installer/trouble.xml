@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+<!-- $Id$ -->
+<!-- original version: 1.6 -->
+
+ <sect1 id="boot-troubleshooting">
+ <title>Problémy s instalačním systémem</title>
+<para>
+</para>
+
+  <sect2 id="unreliable-floppies">
+  <title>Spolehlivost disket</title>
+
+<para>
+
+Pro lidi, kteří instalují Debian poprvé, bývá největším problémem
+spolehlivost disket.
+
+</para><para>
+
+Nejhorší problémy bývají se zaváděcí disketou, poněvadž tuto disketu
+čte BIOS ještě před zavedením Linuxu. BIOS nedokáže číst disketu tak
+spolehlivě jako linuxový ovladač, a pokud dojde k chybnému načtení dat,
+může se čtení <quote>jen tak</quote> zastavit bez vypsání chybového
+hlášení. K chybnému čtení může samozřejmě dojít i u disket s ovladači
+a instalačním systémem, což se, na rozdíl od zaváděcí diskety, projeví
+záplavou hlášení o V/V chybách.
+
+</para><para>
+
+Pokud se vám instalace zasekne vždy na stejné disketě, první věc,
+kterou byste měli udělat, je znovu stáhnout obraz diskety a zapsat
+jej na <emphasis>jinou</emphasis> disketu. Přeformátování původní
+diskety nemusí vést k úspěchu, ani když se po formátování vypíše, že
+operace proběhla bez problémů. Někdy je užitečné zkusit nahrát
+diskety na jiném počítači.
+
+</para><para>
+
+Jeden z uživatelů napsal, že se mu podařilo vytvořit bezchybnou
+zaváděcí disketu až na <emphasis>třetí</emphasis> takový pokus.
+
+</para><para>
+
+Podle dalších uživatelů může systém úspěšně naběhnout až na několikátý
+pokus při čtení ze stejné diskety. Příčinou jsou nespolehlivé
+disketové jednotky nebo chyby ve firmwaru.
+
+</para>
+  </sect2>
+
+  <sect2><title>Zaváděcí konfigurace</title>
+
+<para>
+
+Pokud se jádro zasekne během zavádění, nerozezná připojená zařízení,
+nebo disky nejsou korektně rozpoznány, v prvé řadě zkontrolujte
+parametry jádra, kterými se zabývá <xref linkend="boot-parms"/>.
+
+</para><para>
+
+Jestliže používáte vlastní jádro, ujistěte se, že jste v nastavení
+jádra nepovolili možnost <userinput>CONFIG_DEVFS</userinput>.
+Instalační systém totiž není s touto volbou kompatibilní.
+
+</para><para>
+
+Často pomůže, pokud z počítače vyjmete přídavná zařízení a
+znovu zkusíte zavést systém. <phrase arch="i386">Obzvláště
+problematické mohou být interní modemy, zvukové karty a zařízení
+Plug-n-Play.</phrase>
+
+</para><para>
+
+Naše zaváděcí diskety jsou z kapacitních důvodů omezeny na nejběžnější
+skupinu hardwaru. Proto některé platformy podporované Linuxem nemusí
+být podporovány našimi zaváděcími disketami. Pokud je to váš případ,
+můžete si podle <xref linkend="rescue-replace-kernel"/> vytvořit
+vlastní zaváděcí disketu, nebo prozkoumat možnosti instalace ze
+sítě.
+
+</para><para>
+
+Pokud máte ve svém počítači více než 512MB paměti a instalační systém
+se v průběhu zavádění jádra zasekne, zkuste omezit viditelnou paměť
+zaváděcím parametrem <userinput>mem=512m</userinput>.
+
+</para>
+  </sect2>
+
+  <sect2 id="kernel-msgs">
+  <title>Význam hlášek při zavádění jádra</title>
+
+<para>
+
+Během zavádění systému můžete vidět spoustu hlášení typu
+<computeroutput>can't find ...</computeroutput>,
+<computeroutput>... not present</computeroutput>,
+<computeroutput>can't initialize ...</computeroutput> nebo
+<computeroutput>this driver release depends on ...</computeroutput>.
+Většina těchto hlášení je neškodná.  Vy je vidíte proto, že jádro
+instalačního systému je přeloženo tak, aby mohlo běžet na počítačích s
+odlišnými hardwarovými konfiguracemi a mnoha různými periferními
+zařízeními. Samozřejmě že žádný počítač asi nebude mít všechna
+zařízení, tudíž systém nahlásí několik nenalezených zařízení. Také se
+může stát, že se zavádění na chvíli zastaví. To se stává při čekání na
+odpověď od zařízení, které v systému chybí. Pokud se vám zdá doba, za
+kterou systém naběhne, příliš dlouhá, můžete si později vytvořit
+vlastní jádro (viz <xref linkend="kernel-baking"/>).
+
+</para>
+  </sect2>
+
+
+  <sect2 id="problem-report">
+  <title><command>dbootstrap</command> &mdash; hlášení problému</title>
+<para>
+
+Jestliže se dostanete přes úvodní fázi zavedení systému, ale nemůžete
+instalaci dokončit, můžete použít menu <quote>Report a Problem</quote>
+(nahlášení chyby). Tato volba zkopíruje na disketu chybové hlášky,
+stav systému a jiné užitečné informace, které vám mohou naznačit,
+v čem je problém a jak ho vyřešit. Tyto údaje nám také můžete poslat
+spolu s hlášením o chybě.
+
+</para><para>
+
+Další užitečné informace můžete najít během instalace v adresáři
+<filename>/target/var/log/debian-installer/</filename> a později
+v novém systému ve <filename>/var/log/debian-installer/</filename>.
+
+</para>
+  </sect2>
+
+  <sect2 id="submit-bug">
+  <title>Pošlete nám zprávu o chybách</title>
+<para>
+
+Pokud problém přetrvává, prosíme vás o zaslání popisu chyby na adresu
+<email>submit@bugs.debian.org</email>. Na začátku zprávy
+<emphasis>musíte</emphasis> uvést následující údaje:
+
+<informalexample><screen>
+
+Package: install
+Version: <replaceable>verze</replaceable>
+
+</screen></informalexample>
+
+Ujistěte se, že <replaceable>verze</replaceable> odpovídá verzi
+instalátoru, který jste použili. Neznáte-li verzi, uveďte alespoň
+datum, kdy a odkud jste si stáhli příslušné obrazy (respektive
+koupili CD).
+
+</para><para>
+
+Ve vaší zprávě by se měly objevit i následující informace. Jestliže
+k hlášení chyb používáte program <command>reportbug</command>, jsou
+tyto údaje přiloženy automaticky.
+
+<informalexample><screen>
+
+<phrase arch="i386">
+flavor:        <replaceable>varianta použitého jádra</replaceable>
+</phrase>
+architecture:  &architecture; 
+model:         <replaceable>výrobce a typ počítače</replaceable>
+memory:        <replaceable>velikost paměti RAM</replaceable>
+scsi:          <replaceable>typ SCSI řadiče</replaceable>
+cd-rom:        <replaceable>typ CD-ROM a způsob jejího připojení (ATAPI)</replaceable>
+network card:  <replaceable>typ síťové karty</replaceable>
+pcmcia:        <replaceable>údaje o zařízeních PCMCIA</replaceable>
+
+</screen></informalexample>
+
+</para><para>
+
+V závislosti na povaze chyby by mohlo být užitečné uvést, zda
+instalujete na disk IDE nebo SCSI a další informace jako zvuková
+karta, kapacita disku a typ grafické karty.
+
+</para><para>
+
+V samotné zprávě podrobně popište problém, včetně posledních
+viditelných hlášek jádra v okamžiku zaseknutí počítače.
+Také nezapomeňte popsat kroky, kterými jste se do problémové
+části dostali.
+
+</para>
+
+  </sect2>
+
+ </sect1>

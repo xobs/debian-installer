@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 1.6 -->
+
+ <sect1 id="partition-programs">
+ <title>Programmes de partitionnement de Debian</title>
+<para>
+
+Plusieurs sortes d'utilitaires de partitionnement ont été adaptés par
+les développeurs Debian pour tourner sur différents types de disques
+et d'architectures matérielles.
+Voici les programmes qui sont disponibles sur votre architecture&nbsp;:
+
+</para>
+
+<variablelist>
+
+<varlistentry condition="fdisk.txt">
+<term><command>fdisk</command></term>
+<listitem><para>
+
+Le premier partitionneur de disque pour Linux, bon pour les gourous. Lisez la
+<ulink url="fdisk.txt">page de manuel de fdisk</ulink> .
+
+</para><para>
+
+Faites attention si vous avez des partitions FreeBSD sur votre machine. Les
+noyaux d'installation incluent un support pour ces partitions, mais la façon
+dont <command>fdisk</command> les représente (ou pas) peut faire varier les 
+noms de périphériques. Lisez attentivement le
+<ulink url="&url-linux-freebsd;">Linux+FreeBSD HOWTO</ulink>
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry condition="cfdisk.txt">
+<term><command>cfdisk</command></term>
+<listitem><para>
+
+Un partitionneur simple à utiliser, fonctionnant en mode plein écran, 
+pour nous autres.
+Lisez la <ulink url="cfdisk.txt">page de manuel de cfdisk</ulink>.
+
+</para><para>
+
+Remarquez que <command>cfdisk</command> ne comprend pas du tout
+les partitions FreeBSD et, de nouveau, les noms de périphériques peuvent 
+varier.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry condition="atari-fdisk.txt">
+<term><command>atari-fdisk</command></term>
+<listitem><para>
+
+Version de
+<command>fdisk</command> pour machines Atari. Lisez la 
+<ulink url="atari-fdisk.txt">page de manuel d'atari-fdisk</ulink>
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry condition="amiga-fdisk.txt">
+<term><command>amiga-fdisk</command></term>
+<listitem><para>
+
+Version de
+<command>fdisk</command> pour machines Amiga. Lisez la 
+<ulink url="amiga-fdisk.txt">page de manuel d'amiga-fdisk</ulink>.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry condition="mac-fdisk.txt">
+<term><command>mac-fdisk</command></term>
+<listitem><para>
+
+Version de
+<command>fdisk</command> pour Mac. Lisez la 
+<ulink url="mac-fdisk.txt">page de manuel de mac-fdisk</ulink>.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry condition="pmac-fdisk.txt">
+<term><command>pmac-fdisk</command></term>
+<listitem><para>
+
+Version de
+<command>fdisk</command> pour les PowerMac, et les systèmes BVM et 
+Motorola VMEbus.
+Lisez la <ulink url="pmac-fdisk.txt">page de manuel de pmac-fdisk</ulink>.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry condition="fdasd.txt">
+<term><command>fdasd</command></term>
+<listitem><para>
+
+Version de <command>fdisk</command> pour les &arch-title;.
+Lisez la <ulink url="fdasd.txt">page de manuel de fdasd</ulink> ou le
+chapitre 13 de 
+<ulink url="http://oss.software.ibm.com/developerworks/opensource/linux390/docu\/l390dd08.pdf">Pilotes de périphériques et commandes d'installation</ulink>.
+
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+<para>
+
+L'un de ces programmes sera lancé par défaut quand vous sélectionnerez&nbsp;:
+«&nbsp;MSG-PARTITION-DISK&nbsp;». Si ce n'est pas celui que vous souhaitez 
+utiliser, quittez le programme de partitionnement, allez à la console 2 
+(<userinput>tty2</userinput>) en appuyant simultanément sur les touches 
+<keycap>Alt</keycap> et <keycap>F2</keycap>, et tapez
+manuellement dans le shell le nom du programme que vous voulez utiliser
+(et ses arguments, si nécessaire).
+Ensuite, sautez l'étape&nbsp;: «&nbsp;MSG-PARTITION-DISK&nbsp;» de
+<command>debian-installer</command> et continuez à l'étape suivante.
+
+</para><para>
+
+Si vous souhaitez que cela fonctionne avec plus de 20 partitions sur votre
+disque ide, vous devrez créer manuellement les périphériques pour les
+partitions 21 et supérieures. L'étape suivante d'initialisation de la partition
+échouera sauf si le bon périphérique est présent. Comme exemple, voici
+les commandes que vous pouvez utiliser dans <userinput>tty2</userinput> ou sous
+Exécuter un shell, pour ajouter un périphérique de telle sorte que la 21e
+partition puisse être initialisée&nbsp;:
+
+<informalexample><screen>
+cd /dev
+mknod hda21 b 3 21 
+chgrp disk hda21
+chmod 660 hda21
+</screen></informalexample>
+
+Le démarrage sur le nouveau système échouera sauf si les bons périphériques
+sont présents sur le système en question. Après avoir installé le noyau et les
+modules, exécutez&nbsp;:
+
+<informalexample><screen>
+cd /target/dev
+mknod hda21 b 3 21 
+chgrp disk hda21
+chmod 660 hda21
+</screen></informalexample>
+
+</para><para arch="i386">
+
+Rappelez-vous de marquer votre partition racine «&nbsp;Bootable&nbsp;». 
+
+</para><para condition="mac-fdisk.txt">
+
+Voyez la 
+<ulink url="mac-fdisk.txt">page de manuel de mac-fdisk</ulink>
+pour savoir comment créer des partitions. Un point important est que
+la partition d'échange (<emphasis>swap</emphasis>) est identifiée sur les 
+disques
+de type Mac par son nom&nbsp;: ce doit être «&nbsp;swap&nbsp;». Toutes
+les partitions Mac linux sont identifiées sous le même type de partition,
+Apple_UNIX_SRV2. Veuillez lire le manuel approprié.
+Nous vous suggérons aussi de lire le <ulink url="&url-mac-fdisk-tutorial;">
+guide d'initiation à mac-fdisk"></ulink>, qui décrit les étapes que vous devez
+suivre si vous voulez partager votre disque avec MacOS.
+
+</para>
+
+&partition-alpha.xml;
+&partition-hppa.xml;
+&partition-i386.xml;
+&partition-ia64.xml;
+&partition-mips.xml;
+&partition-powerpc.xml;
+&partition-sparc.xml;
+
+ </sect1>

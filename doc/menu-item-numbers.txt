@@ -1,0 +1,75 @@
+This is a list of the menu-item numbers we have currently assigned.
+If you need a number, don't just grab one, ask on debian-boot@lists.debian.org
+first.
+
+Please do not allocate numbers with too high a granularity. If you have two
+packages, A and B, and A depends on B, then main-menu will always put A
+after B. There is no need to assign different numbers to the two; one
+number will do and will be more flexible, and help avoid BASIC line number
+disease. In other words, having a bunch of menu items with the same number
+is a feature, not a bug. Use different menu items only to break ties and do
+gross positioning in the menu.
+
+(At some point in the future, all numbers 0-100 below should be multiplied
+by 10 to give us more space.)
+
+0 -> 10 Reserved
+
+10 -> 30 Preparation and installer setup
+10 languagechooser
+11 load-floppy
+   countrychooser
+12 kbd-chooser
+13 iso-scan
+   load-iso
+14 cdrom-detect
+   load-cdrom
+15 ethdetect
+   s390-netdevice (s390)
+18 netcfg-dhcp
+20 netcfg-static
+   choose-mirror
+   load-installer
+   download-installer
+
+25 lowmem
+
+30 -> 40 Disk detection & etc
+35 hw-detect-full (!s390)
+37 s390-dasd (s390)
+
+40 -> 50 Disk preparation
+42 partman (as default partitioner)
+43 di-utils-partitioner
+44 lvmcfg
+45 di-utils-mkfs
+46 di-utils-mkswap
+47 evms
+49 partman (as non-default partitioner [arm, mips])
+
+50 -> 60 Mount
+50 autopartkit
+55 di-utils-mount-partitions
+
+60 -> 70 Base install
+65 base-installer
+67 kernel-installer
+
+70 -> 80 Post-base-install
+73 palo-installer (hppa)
+   grub-installer (i386)
+   yaboot-installer (powerpc)
+   elilo-installer (ia64)
+   zipl-installer (s390)
+   arcboot-installer (mips)
+75 lilo-installer (i386)
+77 nobootloader (all)
+78 prebaseconfig
+
+80 -> 90 Reserved
+
+900 -> \infty Neverdefault
+930 cdebconf-priority
+940 cdrom-checker
+940 baseconfig-udeb
+950 di-utils-shell
