@@ -320,20 +320,20 @@ ifdef VERSIONED_SYSTEM_MAP
 	$(foreach VERSION,$(KERNELVERSION), \
 		mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
 		if [ -e $(TREE)/boot/System.map-$(VERSION) ]; then \
-			`./choose-subarch-env $(VERSION)` depmod -F $(TREE)/boot/System.map-$(VERSION) -q -a -b $(TREE)/ $(VERSION); \
+			$(shell ./choose-subarch-env $(VERSION)) depmod -F $(TREE)/boot/System.map-$(VERSION) -q -a -b $(TREE)/ $(VERSION); \
 			mv $(TREE)/boot/System.map-$(VERSION) $(TEMP); \
 		else \
-			`./choose-subarch-env $(VERSION)` depmod -q -a -b $(TREE)/ $(VERSION); \
+			$(shell ./choose-subarch-env $(VERSION)) depmod -q -a -b $(TREE)/ $(VERSION); \
 		fi;)
 else
 	set -e; \
 	$(foreach VERSION,$(KERNELVERSION), \
 		mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
 		if [ -e $(TREE)/boot/System.map ]; then \
-			depmod -F $(TREE)/boot/System.map -q -a -b $(TREE)/ $(VERSION); \
+			$(shell ./choose-subarch-env $(VERSION)) depmod -F $(TREE)/boot/System.map -q -a -b $(TREE)/ $(VERSION); \
 			mv $(TREE)/boot/System.map $(TEMP); \
 		else \
-			depmod -q -a -b $(TREE)/ $(VERSION); \
+			$(shell ./choose-subarch-env $(VERSION)) depmod -q -a -b $(TREE)/ $(VERSION); \
 		fi;)
 endif
 	# These files depmod makes are used by hotplug, and we shouldn't
@@ -588,8 +588,10 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 	gzip -v9f $(TEMP)/initrd
 
 # raw kernel images
-$(KERNEL): $(TEMP_KERNEL)
-	install -m 644 -D $(TEMP)/$(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,') $@
+$(KERNEL): TEMP_REAL_KERNEL = $(TEMP)/$(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,')
+$(KERNEL):
+	@$(MAKE) $(TEMP_REAL_KERNEL)
+	install -m 644 -D $(TEMP_REAL_KERNEL) $@
 	./update-manifest $@ $(MANIFEST-KERNEL)
 
 $(TEMP_KERNEL): $(STAMPS)tree-unpack-$(targetstring)-stamp
