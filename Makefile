@@ -470,14 +470,19 @@ else
 	mount -t vfat -o loop $(FLOPPY_IMAGE).new $(TMP_MNT)
 endif
 
-	cp $(KERNEL) $(TMP_MNT)/linux
-	cp $(INITRD) $(TMP_MNT)/initrd.gz
+	# syslinux is used to make the floppy bootable.
+	if cp $(KERNEL) $(TMP_MNT)/linux \
+	   && cp $(INITRD) $(TMP_MNT)/initrd.gz \
+	   && cp syslinux.cfg $(TMP_MNT)/ \
+	   && todos $(TMP_MNT)/syslinux.cfg ; \
+	then \
+		umount $(TMP_MNT) ; \
+		true ; \
+	else \
+		umount $(TMP_MNT) ; \
+		false ; \
+	fi
 
-	# Make the floppy bootable.
-	cp syslinux.cfg $(TMP_MNT)/
-	todos $(TMP_MNT)/syslinux.cfg
-	umount $(TMP_MNT)
-	
 ifdef USER_MOUNT_HACK
 	syslinux $(SYSLINUX_OPTS) $(USER_MOUNT_HACK)
 	rm -f $(USER_MOUNT_HACK)
