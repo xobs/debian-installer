@@ -9,23 +9,35 @@
 
 The Debian Installer consists of a number of special-purpose
 components to perform each installation task. Each component performs
-its task, asking the user questions as necessary to do its job. If
-there is no problem, the next component in the sequence takes over
-without any user interaction (other than various progress messages).
-When there is a problem, the user will see an error screen, and the
-installer menu may be shown in order to select some alternative
-action. If there are no problems, the user will never see the
-installer menu, but will simply answer questions for each component
-in turn. 
+its task, asking the user questions as necessary to do its job.
+The questions themselves are given priorities, and the priority
+of questions to be asked is set when the installer is started.
 
 </para><para>
 
-The questions themselves are given priorities, and the priority
-of questions to be asked can be set. Thus if the installer knows
-what to do, and the user need not be aware of other choices which
-are available, then the installer will make the choice and not
-display the question. Serious error notifications are set to 
-priority 'critical' so the user will always be notified.
+When a default installation is performed, only essential (high priority)
+questions will be asked. This results in a highly automated installation
+process with little user interaction. Components are automatically run
+in sequence; which components are run depends mainly on the installation
+method you use and on your hardware. The installer will use default values
+for questions that are not asked.
+
+</para><para>
+
+If there is a problem, the user will see an error screen, and the
+installer menu may be shown in order to select some alternative
+action. If there are no problems, the user will never see the
+installer menu, but will simply answer questions for each component
+in turn. Serious error notifications are set to priority 'critical'
+so the user will always be notified.
+
+</para><para>
+
+Some of the defaults that the manual uses can be influenced by passing
+boot arguments when &d-i; is started. If, for example, you wish to
+force static network configuration (DHCP is used by default if available),
+you could add the boot parameter <userinput>netcfg/use_dhcp=false</userinput>.
+See <xref linkend="installer-args"/> for available options.
 
 </para><para>
 
@@ -37,13 +49,28 @@ in a manual, menu-driven way, add the boot argument
 
 </para><para>
 
+If your hardware requires you to pass options to kernel modules as
+they are installed, you will need to start the installer in
+<quote>expert</quote> mode. This can be done by either using the
+<command>expert</command> command to start the installer or by adding
+the boot argument <userinput>DEBCONF_PRIORITY=medium</userinput>.
+Expert mode gives you full control over d-i;.
+
+</para><para condition="FIXME">
+
+<emphasis>
+FIXME: Should we add something here about starting d-i with the 2.6 kernel?
+</emphasis>
+
+</para><para>
+
 The normal installer display is character-based (as opposed to the now
 more familiar graphical interface). The mouse is not operational in
 this environment. Here are the keys you can use to navigate within the
-various dialogs.  The <keycap>right</keycap> arrow or
-<keycap>Tab</keycap> key move `forward', and <keycap>left</keycap>
-arrow or <keycombo> <keycap>Shift</keycap> <keycap>Tab</keycap>
-</keycombo> move `backward' between displayed buttons and selections.
+various dialogs.  The <keycap>Tab</keycap> or <keycap>right</keycap>
+arrow keys move `forward', and the <keycombo> <keycap>Shift</keycap>
+<keycap>Tab</keycap> </keycombo> or <keycap>left</keycap> arrow keys
+move `backward' between displayed buttons and selections.
 The <keycap>up</keycap> and <keycap>down</keycap> arrow select
 different items within a scrollable list, and also scroll the list
 itself. In addition, in long lists, you can type a letter to cause the
@@ -63,7 +90,7 @@ telnet session to view the logs described below.
 Error messages are redirected to the third console (known as
 <userinput>tty3</userinput>).  You can access this console by
 pressing <keycombo><keycap>Left Alt</keycap><keycap>F3</keycap></keycombo>
-(hold the <keycap>Alt</keycap> key while pressing the
+(hold the left <keycap>Alt</keycap> key while pressing the
 <keycap>F3</keycap> function key); get back to
 the main installer process with 
 <keycombo><keycap>Left Alt</keycap><keycap>F1</keycap></keycombo>.
