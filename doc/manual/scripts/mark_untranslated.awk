@@ -25,6 +25,9 @@ BEGIN {
     line = $0
     gsub(/^#: [^:]*:/, "", line)
     TPOS = index(line, ", ")
+    if (STRLINE == "") {
+        STRLINE_FIRST = line
+    }
     STRLINE_PREV = STRLINE
     if (TPOS == 0) {
         STRLINE = line
@@ -91,7 +94,11 @@ BEGIN {
 
 END {
     if (TRANS_STATUS == 0) {
-        print "** Strings look untranslated: " UNTRANS_START " - " STRLINE >"/dev/stderr"
+        if (UNTRANS_START == STRLINE_FIRST) {
+            print "** File looks untranslated (" UNTRANS_START " - " STRLINE ")" >"/dev/stderr"
+        } else {
+            print "** Strings look untranslated: " UNTRANS_START " - " STRLINE >"/dev/stderr"
+        }
     }
 }
 

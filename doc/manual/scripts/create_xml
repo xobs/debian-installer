@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# This script is used for translations using .po files.
+# It creates .xml files from the translated .po files.
+
+if [ "$1" = "--help" ] ; then
+    echo "Usage: $0 <language>"
+    exit 0
+fi
+
+language=${1:-pl}
+
+WORKDIR="./integrated"
+SOURCEDIR="$WORKDIR/en"
+PODIR="./po"
+LANGDIR="./$language.new"
+
+[ -d "$SOURCE" -o -d "$PODIR" ] || exit 1
+
+[ -d "$LANGDIR" ] && rm $LANGDIR/*.xml
+
+echo "Creating .xml files for language $language"
+for ORIGXML in `find $SOURCEDIR -name "*.xml"` ; do
+    SUBDIR=$(dirname $ORIGXML | sed "s:$SOURCEDIR::" | sed "s:^/::")
+    BASENAME=$(basename $ORIGXML .xml)
+    PO=$PODIR/$SUBDIR/$BASENAME.$language.po
+    XML=$LANGDIR/$SUBDIR/$BASENAME.xml
+
+    mkdir -p $LANGDIR/$SUBDIR
+
+    if [ -f $PO ] ; then
+        echo "- $SUBDIR/$BASENAME: creating translated .xml"
+        po2xml $ORIGXML $PO > $XML
+    else
+        echo "* $SUBDIR/$BASENAME: no .po file found; copying English original"
+        cp $ORIGXML $LANGDIR/$SUBDIR
+    fi
+done
+
+exit 0

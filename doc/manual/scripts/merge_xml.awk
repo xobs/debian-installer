@@ -5,8 +5,9 @@
 #   a count of opening and closing of comments
 
 BEGIN {
+    main_count = 1
+    
     # Let's first build an array with all the entities (xml files)
-    main_count = 0
     while (getline <ENTLIST) {
         delim = index($0, ":")
         i = substr($0, 1, delim - 1)
@@ -24,8 +25,18 @@ BEGIN {
 {
     # In the main loop we only want to process entities that are refered to
     line = $0
-    if (match (line, /^[[:space:]]*&.*;[[:space:]]*(<<!.*)*$/) > 0) {
+    if (match (line, /^[[:space:]]*&.*\.xml;[[:space:]]*(<\!--.*-->[[:space:]]*|)*$/) > 0) {
         process_file(line, "main")
+    }
+}
+
+END {
+    print "" >>LOG
+    print "The following defined entities (from docstruct) were NOT processed:" >>LOG
+    for (entname in ent) {
+        if (included [entname] == 0) {
+            print "  " entname >>LOG
+        }
     }
 }
 
@@ -34,26 +45,33 @@ function process_file(entline, level,   fname, tfname) {
         if (entname in ent) {
             fname = ent [entname]
             print "Processing: " fname >>LOG
-            tfname = TARGET "/in/" fname
+            INFILE = WORKDIR "/in/" fname
 
             if (level == "main") {
                 main_count += 1
+
                 # Change at highest level: change to a new output file
-                OUTFILE = tfname
-                gsub(/^.*\//, "", OUTFILE)  # strip path
-                OUTFILE = TARGET "/" OUTFILE
+                OUTFILE = WORKDIR "/out/" fname
+                OUTDIR = OUTFILE
+                gsub(/\/[^\/]*$/, "/", OUTDIR) # strip filename
+                system("mkdir -p " OUTDIR)     # create directory
             } else {
                 print "" >>OUTFILE
             }
 
-            if (level == "sub" && included [i] != 0 && included [i] < main_count) {
+            if (level == "sub" && included [entname] != 0 && included [entname] < main_count) {
                 print "** Warning: entity '" entname "'was also included in another file." >>LOG
             }
-            included [i] = main_count
-            parse_file(tfname, fname)
+            if (level == "main") {
+                included [entname] = 1
+            } else {
+                included [entname] = main_count
+            }
+            parse_file(INFILE, fname)
 
         } else {
-            print "** Entity " entname " does not exist and will be skipped!" >>LOG
+            print "** Entity " entname " not found and will be skipped!" >>LOG
+            print entline >>OUTFILE
         }
 }
 
@@ -75,8 +93,9 @@ function parse_file(PARSEFILE, FNAME,   fname, nwline, comment_count) {
         # Update the count of 'open' comments
         comment_count += count_comments(nwline)
 
-        if (match(nwline, /^[[:space:]]*&.*;[[:space:]]*(<<!.*)*$/) > 0) {
+        if (match(nwline, /^[[:space:]]*&.*\.xml;[[:space:]]*(<\!--.*-->[[:space:]]*|)*$/) > 0) {
             # If we find another entity reference, we process that file recursively
+            # But not if the reference is within a comment
             if (comment_count != 0) {
                 print "** Skipping entity reference '" nwline "' found in comment!" >>LOG
             } else {
@@ -85,6 +104,10 @@ function parse_file(PARSEFILE, FNAME,   fname, nwline, comment_count) {
         } else {
             # Else we just print the line
             if (match(nwline, /<\!--.*<.*>.*<.*>.*-->/) > 0) {
+                # Comments containing "<...> ... <...>" are not handled correctly
+                # by xml2pot and split2po, so we skip lines like that
+                # Note: this is a workaround for a bug in the tools:
+                #       http://bugs.kde.org/show_bug.cgi?id=90294
                 print "** Comment deleted in line '" nwline "'" >>LOG
                 gsub(/<\!--.*<.*>.*<.*>.*-->/, "", nwline)
             }

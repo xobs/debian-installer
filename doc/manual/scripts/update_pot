@@ -1,18 +1,36 @@
 #!/bin/sh
 
-[ ! -d ./en/ ] && exit 1
-[ ! -d ./po/ ] && mkdir po/
+# This script is used for translations using .po files.
+# It updates .pot files after changes in the original English
+# .xml files.
+# The script 'merge_xml' should be run before this script!
 
-TARGET="./integrated"
+if [ "$1" = "--help" ] ; then
+    echo "Usage: $0"
+    exit 0
+fi
 
-cd $TARGET/
+WORKDIR="./integrated"
+SOURCEDIR="$WORKDIR/en"
+PODIR="./po"
 
-[ ! -d "./po/" ] && exit 1
-for XML in `ls en/*.xml` ; do
+[ -d $SOURCE ] || exit 1
+
+if [ -d "$PODIR" ] ; then
+    echo "Deleting old .pot files..."
+    for i in `find $PODIR/ -name "*.pot"` ; do
+        rm $i
+    done
+fi
+
+for XML in `find $SOURCEDIR -name "*.xml"` ; do
     echo "Creating new .pot file for $XML"
-    XML=$(basename $XML)
+    SUBDIR=$(dirname $XML | sed "s:$SOURCEDIR::" | sed "s:^/::")
     POT=$(basename $XML .xml).pot
-    xml2pot en/$XML >po/$DIR/$POT
+
+    mkdir -p $PODIR/$SUBDIR
+
+    xml2pot $XML >$PODIR/$SUBDIR/$POT
 done
 
 exit 0

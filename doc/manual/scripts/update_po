@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# This script is used for translations using .po files.
+# It updates .po files after changes in the original English
+# .xml files.
+# The scripts 'merge_xml' and 'update-pot' should be run before
+# this script!
+
+if [ "$1" = "--help" ] ; then
+    echo "Usage: $0 <language>"
+    exit 0
+fi
+
+language=${1:-pl}
+
+PODIR="./po"
+
+[ -d "$PODIR" ] || exit 1
+
+echo "Updating .po files for language '$language':"
+for POT in `find $PODIR -name "*.pot"` ; do
+    BASENAME="$(basename $POT .pot)"
+    BASEDIR="$(dirname $POT | sed "s:$PODIR::" | sed "s:^/::")"
+    PO=$PODIR/$BASEDIR/$BASENAME.$language.po
+    DISP="$(echo $BASEDIR/$BASENAME | sed "s:^/::")"
+
+    if [ -f $PO ] ; then
+        echo -n "- $DISP: "
+        msgmerge -U --backup=simple $PO $POT
+    else
+        echo "* No .po file found for '$DISP'."
+    fi
+done
+
+exit 0

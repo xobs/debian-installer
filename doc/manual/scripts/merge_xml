@@ -1,27 +1,35 @@
 #!/bin/bash
 
+# This script is used for translations using .po files.
+# It merges .xml files per chapter (or appendix).
+# The reason files are merged is that individual .xml files
+# are often not well-formed xml.
+
 if [ "$1" = "--help" ]; then
     echo "Usage: $0 lang"
     exit 0
 fi
 
-language=${1:-en}
+language=${1:-pl}
 
-basedir="$(pwd)/$(dirname $0)"
-TARGET="./integrated"
+SCRIPTDIR="./scripts"
+BUILDDIR="./build"
+WORKDIR="./integrated"
+LANGDIR="./$language"
 
-cd ./$language || exit 1
+[ -d $LANGDIR ] || exit 1
 
 TEMPDIR=/tmp/merge_xml.$$
 LOG=$TEMPDIR/merge_xml.$language.log
-[[ -d $TEMPDIR ]] || mkdir $TEMPDIR
+[ -d $TEMPDIR ] || mkdir $TEMPDIR
 
 #<!ENTITY bookinfo.xml         SYSTEM "en/bookinfo.xml">
 OLD_IFS=$IFS
 IFS="
 "
 :>$TEMPDIR/entlist
-for ENT in `grep "<!ENTITY" ../build/docstruct.ent` ; do
+echo "Building list of entities..."
+for ENT in `grep "<!ENTITY" $BUILDDIR/docstruct.ent` ; do
     echo -n "$(echo $ENT | sed "s/.*ENTITY\ *//" | sed "s/\ *SYSTEM.*$//")" >>$TEMPDIR/entlist
     echo -n ":" >>$TEMPDIR/entlist
     echo    "$(echo $ENT | sed "s/.*SYSTEM\ *\"en\///" | sed "s/\">//")" >>$TEMPDIR/entlist
@@ -30,35 +38,36 @@ done
 IFS=$OLD_IFS
 
 # Make sure that all files are in UTF-8 first
-# This is only necessary while we're converting translated files
+echo "Converting .xml files to UTF-8..."
 echo "Converting .xml files to UTF-8..." >>$LOG
-for FILE in `find . -name "*.xml"` ; do
-    DNAME=$(dirname $FILE); FNAME=$(basename $FILE)
-    mkdir -p $TEMPDIR/in/$DNAME
+for FILE in `find $LANGDIR -name "*.xml"` ; do
+    SUBDIR=$(dirname $FILE | sed "s:$LANGDIR::");
+    XML=$(basename $FILE)
+    mkdir -p $TEMPDIR/in/$SUBDIR
     REGEXP="^<?.*encoding="
     if egrep -q $REGEXP $FILE ; then
         echo "Encoded    : $FILE" >>$LOG
         ENC=$(egrep $REGEXP $FILE | sed "s/.*xml.*encoding=\"//" | sed "s/\"?>//")
-        iconv -f $ENC -t utf-8 $FILE | egrep -v $REGEXP >$TEMPDIR/in/$DNAME/$FNAME
+        iconv -f $ENC -t utf-8 $FILE | egrep -v $REGEXP >$TEMPDIR/in/$SUBDIR/$XML
     else
         echo "Not encoded: $FILE" >>$LOG
-        cp $FILE $TEMPDIR/in/$DNAME/$FNAME
+        cp $FILE $TEMPDIR/in/$SUBDIR/$XML
     fi
 done
 echo "" >>$LOG
 
 # Include lower level xml-files for all the main level xml-files
+echo "Merging .xml files per 'chapter'..."
 echo "Merging .xml files per 'chapter'..." >>$LOG
-awk -v TARGET="$TEMPDIR" -v LOG=$LOG -v ENTLIST="$TEMPDIR/entlist" \
-    -f $basedir/merge_xml.awk ../build/install.${language}.xml
+awk -v WORKDIR="$TEMPDIR" -v LOG=$LOG -v ENTLIST="$TEMPDIR/entlist" \
+    -f $SCRIPTDIR/merge_xml.awk $BUILDDIR/install.${language}.xml
 
 # Copy the results to their proper location
-cd ..
-TDIR="./integrated/$language"
-[[ -d $TDIR ]] && rm $TDIR/*.xml || mkdir -p $TDIR
-cp $TEMPDIR/*.xml $TARGET/$language
-cp $LOG $TARGET/$language
+TARGET="$WORKDIR/$language"
+rm -r $TARGET
+mkdir -p $TARGET
+cp -r $TEMPDIR/out/* $TARGET
+cp $LOG $TARGET
 
-rm -r $TEMPDIR
+#rm -r $TEMPDIR
 exit 0
-
