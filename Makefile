@@ -164,7 +164,7 @@ lib_reduce:
 	# not listed in the status file. This nasty thing puts them in,
 	# and alters their names to end in -reduced to indicate that
 	# they have been modified.
-	for package in $$(dpkg -S `find debian-installer/lib -type f | \
+	for package in $$(dpkg -S `find debian-installer/lib -type f -not -name '*.o'| \
 			sed s:debian-installer::` | cut -d : -f 1 | \
 			sort | uniq); do \
 		dpkg -s $$package >> $(DPKGDIR)/status; \
