@@ -63,8 +63,10 @@ shell:
 
 
 demo_clean:
-	-sudo chroot $(DEST) bin/sh -c "if mount | grep ^proc ; then bin/umount /proc ; fi" &> /dev/null
-	-sudo chroot $(DEST) bin/sh -c "rm -rf /etc /var"
+	if [ -e $(DEST)/proc/self ]; then \
+		-sudo chroot $(DEST) bin/sh -c "if mount | grep ^proc ; then bin/umount /proc ; fi" &> /dev/null; \
+		-sudo chroot $(DEST) bin/sh -c "rm -rf /etc /var"; \
+	fi
 
 clean:
 	dh_clean
@@ -150,6 +152,6 @@ stats:
 	@echo ------------
 	@echo Installed udebs: $(UDEBS)
 	@echo Total system size: $(shell du -h -s $(DEST) | cut -f 1)
-	@echo Gzips to: $(shell expr $(shell tar cz $(DEST) | wc -c) / 1024)k
+	@echo Compresses to: $(shell expr $(shell tar cz $(DEST) | wc -c) / 1024)k
 # Add your interesting stats here.
 
