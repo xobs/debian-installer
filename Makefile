@@ -23,17 +23,14 @@ EXTRAS=""
 # debug versions of the needed udebs
 DEBUG=n
 
-# Build tree location.
-DEST=debian-installer
-
 # Filename of initrd to create.
-INITRD=initrd.gz
+INITRD=$(TYPE)-initrd.gz
 
 # How big a floppy image should I make? (in kilobytes)
 FLOPPY_SIZE=1440
 
 # The floppy image to create.
-FLOPPY_IMAGE=floppy.img
+FLOPPY_IMAGE=$(TYPE)-$(FLOPPY_SIZE).img
 
 # Directory apt uses for stuff.
 APTDIR=apt
@@ -82,9 +79,12 @@ APT_GET=apt-get --assume-yes \
 # Get the list of udebs to install. Comments are allowed in the lists.
 UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE)) $(EXTRAS)
 
-DPKGDIR=$(DEST)/var/lib/dpkg
+DPKGDIR=$(TREE)/var/lib/dpkg
 TMPDIR=./tmp
-TMP_MNT=./mnt/$(DEST)
+TMP_MNT=./mnt/$(TREE)
+
+# Build tree location.
+TREE=$(TMPDIR)/tree
 
 # This is the kernel image that we will boot from.
 KERNEL=$(TMPDIR)/vmlinuz
@@ -92,26 +92,25 @@ KERNEL=$(TMPDIR)/vmlinuz
 build: demo_clean tree lib_reduce status_reduce stats
 
 demo:
-	sudo chroot $(DEST) bin/sh -c "if ! mount | grep ^proc ; then bin/mount proc -t proc /proc; fi"
-	sudo chroot $(DEST) bin/sh -c "export DEBCONF_FRONTEND=text DEBCONF_DEBUG=5; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; /usr/share/debconf/frontend /usr/bin/main-menu"
+	sudo chroot $(TREE) bin/sh -c "if ! mount | grep ^proc ; then bin/mount proc -t proc /proc; fi"
+	sudo chroot $(TREE) bin/sh -c "export DEBCONF_FRONTEND=text DEBCONF_DEBUG=5; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; /usr/share/debconf/frontend /usr/bin/main-menu"
 	$(MAKE) demo_clean
 
 shell:
-	mkdir -p $(DEST)/proc 
-	sudo chroot $(DEST) bin/sh -c "if ! mount | grep ^proc ; then bin/mount proc -t proc /proc; fi"
-	sudo chroot $(DEST) bin/sh
+	mkdir -p $(TREE)/proc 
+	sudo chroot $(TREE) bin/sh -c "if ! mount | grep ^proc ; then bin/mount proc -t proc /proc; fi"
+	sudo chroot $(TREE) bin/sh
 
 demo_clean:
-	-if [ -e $(DEST)/proc/self ]; then \
-		sudo chroot $(DEST) bin/sh -c "if mount | grep ^proc ; then bin/umount /proc ; fi" &> /dev/null; \
-		sudo chroot $(DEST) bin/sh -c "rm -rf /etc /var"; \
+	-if [ -e $(TREE)/proc/self ]; then \
+		sudo chroot $(TREE) bin/sh -c "if mount | grep ^proc ; then bin/umount /proc ; fi" &> /dev/null; \
+		sudo chroot $(TREE) bin/sh -c "rm -rf /etc /var"; \
 	fi
-
 
 clean:
 	dh_clean
 	rm -f $(FLOPPY_IMAGE) $(INITRD)
-	rm -rf $(DEST) $(APTDIR) $(UDEBDIR) $(TMPDIR)
+	rm -rf $(TREE) $(APTDIR) $(UDEBDIR) $(TMPDIR)
 
 # Get all required udebs and put in UDEBDIR.
 get_udebs:
@@ -159,11 +158,12 @@ get_udebs:
 
 
 # Build the installer tree.
-tree: get_udebs
+tree: $(TREE)
+$(TREE): get_udebs
 	dh_testroot
 
 	# This build cannot be restarted, because dpkg gets confused.
-	rm -rf $(DEST)
+	rm -rf $(TREE)
 	# Set up the basic files [u]dpkg needs.
 	mkdir -p $(DPKGDIR)/info
 	touch $(DPKGDIR)/status
@@ -171,18 +171,18 @@ tree: get_udebs
 	mkdir -p $(DPKGDIR)/updates/
 	touch $(DPKGDIR)/available
 	# Unpack the udebs with dpkg. This command must run as root or fakeroot.
-	dpkg --root=$(DEST) --unpack $(UDEBDIR)/*.udeb
+	dpkg --root=$(TREE) --unpack $(UDEBDIR)/*.udeb
 	# Clean up after dpkg.
 	rm -rf $(DPKGDIR)/updates
 	rm -f $(DPKGDIR)/available $(DPKGDIR)/*-old $(DPKGDIR)/lock
-	mkdir -p $(DEST)/lib/modules/$(KVER)/
-	depmod -q -a -b $(DEST)/ $(KVER)
+	mkdir -p $(TREE)/lib/modules/$(KVER)/
+	depmod -q -a -b $(TREE)/ $(KVER)
 	# Move the kernel image out of the way, into a temp directory
 	# for use later. We don't need it bloating our image!
-	mv -f $(DEST)/boot/vmlinuz $(KERNEL)
+	mv -f $(TREE)/boot/vmlinuz $(KERNEL)
 
 tarball: build
-	tar czf ../debian-installer.tar.gz $(DEST)
+	tar czf $(TYPE)-debian-installer.tar.gz $(TREE)
 
 # Make sure that the temporary mountpoint exists and is not occupied.
 tmp_mount:
@@ -201,16 +201,16 @@ tmp_mount:
 #
 # TODO: get rid of this damned fuzz factor!
 initrd: FUZZ=127
-initrd: TMP_FILE=$(TMPDIR)/$(DEST)
+initrd: TMP_FILE=$(TMPDIR)/$(TREE)
 initrd: tmp_mount
 	dh_testroot
 	rm -f $(TMP_FILE)
 	install -d $(TMPDIR)
-	dd if=/dev/zero of=$(TMP_FILE) bs=1k count=`expr $$(du -s $(DEST) | cut -f 1) + $(FUZZ)`
+	dd if=/dev/zero of=$(TMP_FILE) bs=1k count=`expr $$(du -s $(TREE) | cut -f 1) + $(FUZZ)`
 	# FIXME: 2000 bytes/inode (choose that better?)
 	mke2fs -F -m 0 -i 2000 -O sparse_super $(TMP_FILE)
 	mount -t ext2 -o loop $(TMP_FILE) $(TMP_MNT)
-	cp -a $(DEST)/* $(TMP_MNT)/
+	cp -a $(TREE)/* $(TMP_MNT)/
 	umount $(TMP_MNT)
 	dd if=$(TMP_FILE) bs=1k | gzip -v9 > $(INITRD)
 
@@ -237,8 +237,8 @@ floppy_image: initrd kernel tmp_mount
 
 # Library reduction.
 lib_reduce:
-	mkdir -p $(DEST)/lib
-	mklibs.sh -v -d $(DEST)/lib `find $(DEST) -type f -perm +0111 -o -name '*.so'`
+	mkdir -p $(TREE)/lib
+	mklibs.sh -v -d $(TREE)/lib `find $(TREE) -type f -perm +0111 -o -name '*.so'`
 	# Now we have reduced libraries installed .. but they are
 	# not listed in the status file. This nasty thing puts them in,
 	# and alters their names to end in -reduced to indicate that
@@ -258,13 +258,13 @@ status_reduce:
 		$(DPKGDIR)/status > $(DPKGDIR)/status.new
 	mv -f $(DPKGDIR)/status.new $(DPKGDIR)/status
 
-COMPRESSED_SZ=$(shell expr $(shell tar cz $(DEST) | wc -c) / 1024)
-stats:
+COMPRESSED_SZ=$(shell expr $(shell tar cz $(TREE) | wc -c) / 1024)
+stats: tree
 	@echo
 	@echo System stats
 	@echo ------------
 	@echo Installed udebs: $(UDEBS)
-	@echo Total system size: $(shell du -h -s $(DEST) | cut -f 1)
+	@echo Total system size: $(shell du -h -s $(TREE) | cut -f 1)
 	@echo Compresses to: $(COMPRESSED_SZ)k
 	@echo Single Floppy kernel must be less than: ~$(shell expr $(FLOPPY_SIZE) - $(COMPRESSED_SZ) )k
 	@if [ -e $(TMPDIR)/.floppy_free_stat ]; then \
