@@ -78,14 +78,33 @@ retriever packages [dest-filename]
 	- Package
 	- Version
 	- Filename
+	- Priority
 	Whether other fields are needed is currently undecided. A retriever
         now must support this command, because it is supposed to download and
         parse a Release file if appropriate. This means that the result of
         this command can (and often will be) a concatenation of several
         Packages files from the install medium.
 
-	In the step the retreiver can also retreive udeb_includes and
+	In the step the retriever can also retreive udeb_includes and
 	udeb_excludes files.
+
+retriever error failing_command
+	This command can be called if one of the other commands seems to
+	have failed, perhaps by returning bad data.
+
+        The failing_command field tells the retriever command that
+	previously failed. For example, it might be "packages" is package
+	retrieval failed, or the Packages file cannot be parsed.
+
+	The retriever can take any necessary actions to recover (or ask the
+	user if they want to retry, if the medium is unreliable or absent).
+	If the recovery succeeds, it should exit 0. If recovery failed, it
+	should display an informative error message if necessary, and exit 2.
+
+	Retievers should implement this command, but temporarily for
+	backwards compatability, if a retriever exits 1, it is assumed
+	that it did not support this command, and anna will display its
+	own (ugly) error message.
 
 retriever cleanup
 	Clean up after a retriever round. This is used by e.g. the floppy
@@ -128,13 +147,13 @@ time the question is asked) will be, in turn and if they exist:
                      retriever)
 
 As that is sometimes not flexible enough, it's also possible to create
-udebs that provide menu items that only use a specific retreiver. They do
-do by calling anna, passing it the name of the retreiver to use.
+udebs that provide menu items that only use a specific retriever. They do
+do by calling anna, passing it the name of the retriever to use.
 
 Which modules are needed is an interesting question. Our current
 implementation takes all modules, except those of extra priority.
 Dependencies are taken into account, and there is a special hack to avoid
-loading mismatched kernel packages too. If the retreiver provides them in
+loading mismatched kernel packages too. If the retriever provides them in
 /var/cache/anna/, files udeb_include and udeb_exclude can be used to fine
 tune what packages are installed by default. All packages listed in the
 udebs_include will be installed, but none from udebs_exclude.
