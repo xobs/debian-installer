@@ -9,11 +9,16 @@ $(IMAGE): $(INITRD) tmp_mount
 	dd if=/dev/zero of=$@.new bs=1k count=$(FLOPPY_SIZE)
 	mkfs.msdos -i $(DOS_VOLUME_ID) -n $(DOS_VOLUME_LABEL) -C $@.new $(FLOPPY_SIZE)
 
+	mmd -i$@.new ::/efi
+	mmd -i$@.new ::/efi/boot
 	$(foreach NAME,$(KERNELNAME), \
-             gzip -9c $(TEMP)/$(NAME) | mcopy -i$@.new - ::\linux)
-	mcopy -i$@.new $(INITRD) ::\initrd.gz
-	mcopy -i$@.new /usr/lib/elilo/elilo.efi ::\elilo.efi
-	mcopy -i$@.new boot/ia64/elilo.conf ::\elilo.conf
+             gzip -9c $(TEMP)/$(NAME) | mcopy -i$@.new - ::/linux)
+	mcopy -i$@.new $(INITRD) ::/initrd.gz
+	mcopy -i$@.new /usr/lib/elilo/elilo.efi ::/efi/boot/bootia64.efi
+	mcopy -i$@.new /usr/lib/elilo/elilo.efi ::/elilo.efi
+	mcopy -i$@.new boot/ia64/elilo.conf ::/elilo.conf
+	mcopy -i$@.new boot/ia64/elilo.conf ::/efi/boot/elilo.conf
+	echo "elilo linux" | mcopy -i$@.new - ::/install.nsh
 
 	# Finalize the image.
 	mv $@.new $@
