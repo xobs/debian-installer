@@ -16,7 +16,9 @@ fi
 [ -e "$destination" ] || mkdir -p "$destination"
 
 for lang in $languages; do
+    echo "Language: $lang";
     for arch in $architectures; do
+	echo "Architecture: $arch"
 	if [ -n "$noarchdir" ]; then
 		destsuffix="$lang"
 	else
