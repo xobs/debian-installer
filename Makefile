@@ -325,7 +325,7 @@ endif
 
 	# Strip all kernel modules, just in case they haven't already been
 	for module in `find $(TREE)/lib/modules/ -name '*.o'`; do \
-	    strip -R .comment -R .note -g -x $$module; \
+	    strip -R .comment -R .note -g $$module; \
 	done
 
 	# Remove some unnecessary dpkg files.
