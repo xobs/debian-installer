@@ -1,0 +1,194 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: powerpc.xml 23151 2004-10-16 15:37:49Z cjwatson $ -->
+
+  <sect2 arch="powerpc" id="boot-cd"><title>Εκκίνηση από το CD-ROM</title>
+
+&boot-installer-intro-cd.xml;
+
+<para>
+
+Προς το παρόν, οι μόνες υπο-αρχιτεκτονικές &arch-title; που υποστηρίζουν εκκίνηση
+από CD-ROM είναι οι  PReP και New World PowerMac. Σε έναν  PowerMac, κρατήστε
+κάτω το πλήκτρο <keycap>c</keycap> , ή αλλιώς τον συνδυασμό των πλήκτρων
+<keycap>Command</keycap>, <keycap>Option</keycap>,
+<keycap>Shift</keycap>, και <keycap>Delete</keycap>
+κατά την εκκίνηση του μηχανήματος για να ξεκινήσετε από το CD-ROM.
+
+</para><para>
+
+Οι OldWorld PowerMac δεν θα ξεκινήσουν από ένα Debian CD, γιατί αυτοί οι
+υπολογιστές εξαρτώνται από την παρουσία ενός  MacOS ROM οδηγού για το CD στο CD και
+για τον οποίον δεν υπάρχει προς το παρόν διαθέσιμη μια ελεύθερη έκδοση. Όλα τα
+συστήματα όμως OldWorld έχουν συσκευές δισκέττας οπότε χρησιμοποιήστε τον
+οδηγό της δισκέττας για την εκκίνηση του εγκαταστάτη και στη συνέχεια
+κατευθύνετε τον εγκαταστάτη στο CD για την λήψη των απαραίτητων αρχείων.
+
+</para><para>
+
+Αν το σύστημά σας δεν ξεκινά κατευθείαν από το CD-ROM, μπορείτε ακόμα να
+χρησιμοποιήσετε το CD-ROM για να εγκαταστήσετε το σύστημα. Σε συστήματα 
+NewWorld, μπορείτε να χρησιμοποιήσετε μια εντολή του OpenFirmware
+για να εκκινήσετε από το  CD-ROM χειροκίνητα. Ακολουθήστε τις οδηγίες στο <xref
+linkend="boot-newworld"/> για εκκίνηση από τον σκληρό δίσκο, με τη διαφορά ότι
+πρέπει να δώσετε στο προτρεπτικό του OpenFirmware τη διαδρομή για το 
+<command>yaboot</command> στo CD, για παράδειγμα:
+
+<informalexample><screen>
+
+0 > boot cd:,\install\yaboot
+
+</screen></informalexample>
+</para>
+  </sect2>
+
+  <sect2 arch="powerpc" id="install-drive">
+  <title>Εκκίνηση από τον σκληρό δίσκο</title>
+
+&boot-installer-intro-hd.xml;
+
+  <sect3><title>Εκκίνηση της CHRP από το OpenFirmware</title>
+
+<para>
+
+  <emphasis>Δεν έχει γραφτεί ακόμα.</emphasis>
+
+</para>
+   </sect3>
+
+   <sect3><title>Εκκίνηση OldWorld PowerMac από το MacOS</title>
+<para>
+
+Αν ρυθμίσετε το  BootX όπως στην ενότητα <xref linkend="files-oldworld"/>,
+μπορείτε να το χρησιμοποιήσετε για να εκκινήσετε το σύστημα εγκαταστάσης. Κάντε
+διπλό κλικ στο εικονίδιο της εφαρμογής <guiicon>BootX</guiicon>. Πατήστε το
+κουμπί <guibutton>Options</guibutton> και επιλέξτε <guilabel>Use
+Specified RAM Disk</guilabel>. Αυτό θα σας δώσει την ευκαιρία να διαλέξετε το
+αρχείο  <filename>ramdisk.image.gz</filename>. 'ισως χρειαστεί να τσεκάρετε
+την επιλογή <guilabel>No Video Driver</guilabel>, ανάλογα με το hardware του
+συστήματός σας. Πατήστε στην συνέχεια το κουμπί
+<guibutton>Linux</guibutton> για να σταματήσετε το MacOS και ξεκινήστε τον
+εγκαταστάτη.
+
+</para>
+   </sect3>
+
+
+  <sect3 id="boot-newworld">
+  <title>Εκκίνηση ενός NewWorld Mac από το OpenFirmware</title>
+<para>
+
+Θα έχετε ήδη τοποθετήσει τα αρχεία <filename>vmlinux</filename>,
+<filename>initrd.gz</filename>, <filename>yaboot</filename>, και
+<filename>yaboot.conf</filename> στη ρίζα της HFS
+διαμέρισής σας σύμφωνα με την  ενότητα <xref linkend="files-newworld"/>. 
+Ξαναξεκινήστε τιον υπολογιστή, και αμέσως (κατά τη διάρκεια της επανεκκίνησης)
+κρατήστε ταυτόχρονα κάτω τα πλήκτρα 
+<keycap>Option</keycap>, <keycap>Command (cloverleaf/Apple)</keycap>,
+<keycap>o</keycap>, και <keycap>f</keycap>. Μετά από λίγα δευτερόλεπτα θα δείτε
+μπροστά σας το προτρεπτικό του Open Firmware.
+Εκεί, πληκτρολογήστε
+
+<informalexample><screen>
+
+0 > boot hd:<replaceable>x</replaceable>,yaboot
+
+</screen></informalexample>
+
+αντικαθιστώντας το <replaceable>x</replaceable> με τον αριθμό της HFS διαμέρισης
+όπου βρίσκονται τα αρχεία του πυρήνα και του yaboot,  και στη συνέχεια
+πατήστε το  &enterkey;. Σε μερικά μηχανήματα ίσως χρειαστεί να
+χρησιμοποιήσετε <userinput>ide0:</userinput> αντί για 
+<userinput>hd:</userinput>. Σε μερικά ακόμα δευτερόλεπτα θα δείτε το προτρεπτικό
+του yaboot.
+
+<informalexample><screen>
+
+boot:
+
+</screen></informalexample>
+
+Στο προτρεπτικό του yaboot <prompt>boot:</prompt>, πληκτρολογήστε
+είτε <userinput>install</userinput> ή <userinput>install video=ofonly</userinput>
+και στη συνέχεια  &enterkey;.  Το όρισμα
+<userinput>video=ofonly</userinput> είναι για μέγιστη συμβατότητα;
+μπορείτε να τη δοκιμάσετε σε περίπτωση που η επιλογή
+<userinput>install</userinput> δεν δουλέψει. Το πρόγραμμα εγκατάστασης του Debian
+θα πρέπει τότε να ξεκινήσει.
+
+</para>
+   </sect3>
+  </sect2>
+
+  <sect2 arch="powerpc" id="boot-tftp"><title>Εκκίνηση με TFTP</title>
+
+&boot-installer-intro-net.xml;
+
+<para>
+
+Προς το παρόν μόνο, PReP και New World PowerMac συστήματα υποστηρίζουν εκκίνηση
+ από το δίκτυο. 
+
+</para><para>
+
+Σε μηχανήματα με Open Firmware, όπως NewWorld Power Mac, μπείτε στην οθόνη εκκίνησης
+(δείτε το <xref linkend="invoking-openfirmware"/>) και χρησιμοποιήστε την εντολή
+<command>boot enet:0</command>.  Συστήματα PReP και CHRP
+ίσως να έχουν διαφορετικούς τρόπους χειρισμού του δικτύου. Σε ένα μηχάνημα PReP,
+θα μπορούσατε να δοκιμάσετε <userinput>boot
+<replaceable>server_ipaddr</replaceable>,<replaceable>file</replaceable>,<replaceable
+>client_ipaddr</replaceable></userinput>.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="powerpc">
+  <title>Εκκίνηση από δισκέττες</title>
+<para>
+
+Εκκίνηση από δισκέττες υποστηρίζεται από την αρχιτεκτονική &arch-title;,
+αν και γενικά είναι εφαρμόσιμη στα συστήματα OldWorld.
+Συστήματα NewWorld δεν είναι εφοδιασμένα με συσκευές δισκέττας και προσαρτώμενες
+USB συσκευές δισκέττας δεν υποστηρίζονται για εκκίνηση.
+
+</para><para>
+
+Θα έχετε ήδη κατεβάσει τις εικόνες δισκεττών που χρειάζεστε και δημιουργήσει από
+αυτές τις δισκέττες σύμφωνα με την <xref
+linkend="create-floppy"/>.
+
+</para><para>
+
+Για εκκίνηση από την εικόνα δισκέττας <filename>boot-floppy-hfs.img</filename>,
+βάλτε τη δισκέττα στον οδηγό μετά το σβήσιμο του μηχανήματος και πριν πατήσετε τον
+διακόπτη για την επανεκκίνηση.
+
+</para><note><para>
+Για όσους δεν είναι εξοικειωμένοι με τον τρόπο λειτουργίας μιας δισκέττας σε
+Macintosh: μια δισκέττα που μπαίνει στο μηχάνημα πριν το ξεκίνημά του θα είναι η
+πρώτη προτεραιότητα για την εκκίνηση του συστήματος. Μια δισκέττα χωρίς έγκυρο
+σύστημα εκκίνησης θα απορριφθεί και στη συνέχεια το μηχάνημα θα ελέγξει για
+εκκινήσιμες διαμερίσεις στον σκληρό δίσκο.
+
+</para></note><para>
+
+Μετά την εκκίνηση, θα σας ζητηθεί η δισκέττα <filename>root.bin</filename>.
+Βάλετε τη δισκέττα με το ριζικό σύστημα και πατήστε &enterkey;. Το πρόγραμμα της
+εγκαταστάσης θα ξεκινήσει μετά το φόρτωμα του ριζικού συστήματος στη μνήμη.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="powerpc"><title>Παράμετροι Εκκίνησης για PowerPC</title>
+<para>
+
+Πολλές παλιότερες οθόνες Apple χρησιμοποιούσαν την ανάλυση 640x480 67Hz. Αν η
+εικόνα εμφανίζεται παραμορφωμένη σε μια τέτοια παλιότερη οθόνη Apple, προσπαθήστε
+να προσθέσετε το όρισμα εκκίνησης <userinput>video=atyfb:vmode:6</userinput> ,
+που θα επιλέξει αυτή την κατάσταση για τις περισσότερες κάρτες οθόνης Mach64 και
+Rage. Για κάρτες  Rage 128, αυτό αλλάζει
+σε <userinput>video=aty128fb:vmode:6</userinput> .
+
+</para>
+  </sect2>

@@ -1,0 +1,358 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: m68k.xml 22935 2004-10-09 18:36:20Z fjpop-guest $ -->
+
+  <sect2 arch="m68k"><title>Επιλέγοντας Μέθοδο Εγκατάστασης</title>
+
+<para>
+
+Μερικές υπο-αρχιτεκτονικές της  &arch-title; έχουν την επιλογή της εκκίνησης
+χρησιμοποιώντας είτε έναν πυρήνα 2.4.x είτε έναν 2.2.x. Όταν έχετε μια τέτοια
+δυνατότητα δοκιμάστε τον πυρήνα 2.4.x. O εγκαταστάτης επιπλέον απαιτεί λιγότερη
+μνήμη όταν χρησιμοποιεί τον πυρήνα 2.4.x καθώς η υποστήριξη του πυρήνα 2.2.x
+απαιτεί μια σταθερού μεγέθους ramdisk ενώ ο πυρήνας 2.4.x χρησιμοποιεί tmpfs.
+
+</para><para>
+
+Αν χρησιμοποιείτε έναν πυρήνα 2.2.x, τότε σιγουρευτείτε ότι χρησιμοποιείτε μια
+ramdisk ικανή να "φιλοξενήσει" αυτόν τον πυρήνα, δείτε την ενότητα  <ulink
+url="&disturl;/main/installer-&architecture;/current/images/MANIFEST">MANIFEST</ulink
+>. Θα πρέπει ακόμα να χρησιμοποιήσετε την παράμετρο  &ramdisksize; του πυρήνα.
+
+</para><para>
+ 
+Βεβαιωθείτε ότι η <userinput>root=/dev/ram</userinput> είναι μια από τις
+παραμέτρους του πυρήνα σας.
+
+</para><para>
+
+Αν έχετε πρόβλημα ελέγξτε τις συχνές ερωτήσεις στο 
+<ulink url="&url-m68k-cts-faq;">cts's &arch-title; debian-installer FAQ</ulink>.
+
+</para>
+
+<itemizedlist>
+	<listitem><xref linkend="m68k-boot-amiga"/></listitem>
+	<listitem><xref linkend="m68k-boot-atari"/></listitem>
+	<listitem><xref linkend="m68k-boot-bvme6000"/></listitem>
+	<listitem><xref linkend="m68k-boot-mac"/></listitem>
+	<listitem><xref linkend="m68k-boot-mvme"/></listitem>
+	<listitem><xref linkend="m68k-boot-q40"/></listitem>
+</itemizedlist>
+
+
+    <sect3 arch="m68k" id="m68k-boot-amiga"><title>Amiga</title>
+<para>
+
+Η μόνη διαθέσιμη μέθοδος εγκατάστασης για την  amiga είναι από τον σκληρό δίσκο
+(δείτε το  <xref linkend="m68k-boot-hd"/>).  
+<emphasis>Με άλλα λόγια ένα cdrom δεν είναι εκκινήσιμο.</emphasis> 
+
+</para><para>
+
+Η Amiga δεν δουλεύει προς το παρόν με το  bogl, επομένως αν δείτε μηνύματα λάθους
+από το bogl, θα πρέπει να συμπεριλάβετε την παράμετρο
+<userinput>debian-installer/framebuffer=false</userinput> για τον πυρήνα.
+
+</para>
+    </sect3>
+
+    <sect3 arch="m68k" id="m68k-boot-atari"><title>Atari</title>
+<para>
+
+Ο εγκαταστάτης για τον  atari μπορεί να ξεκινήσει είτε από τον σκληρό δίσκο  (δείτε
+το <xref linkend="m68k-boot-hd"/>) ή από δισκέττες 
+(δείτε το <xref linkend="boot-from-floppies"/>).
+<emphasis>Με άλλα λόγια το cdrom δεν είναι εκκινήσιμο.</emphasis> 
+
+</para><para>
+
+Ο Atari δεν δουλεύει προς το παρόν με το  bogl, επομένως αν δείτε μηνύματα λάθους
+από το bogl, θα πρέπει να συμπεριλάβετε την παράμετρο
+<userinput>debian-installer/framebuffer=false</userinput> για τον πυρήνα.
+	
+</para>
+    </sect3>
+
+    <sect3 arch="m68k" id="m68k-boot-bvme6000"><title>BVME6000</title>
+<para>
+
+Ο εγκαταστάτης για  BVME6000 μπορεί να ξεκινήσει είτε από ένα cdrom 
+(δείτε <xref linkend="m68k-boot-cdrom"/>), είτε από δισκέττες
+(δείτε <xref linkend="boot-from-floppies"/>), ή από το δίκτυο
+(δείτε <xref linkend="boot-tftp"/>).
+
+</para>
+    </sect3>
+
+    <sect3 arch="m68k" id="m68k-boot-mac"><title>Macintosh</title>
+<para>
+
+Η μοναδική μέθοδος διαθέσιμη για εγκατάσταση στον mac είναι από το σκληρό δίσκο
+(δείτε <xref linkend="m68k-boot-hd"/>).
+<emphasis>Με άλλα λόγια το cdrom δεν είναι εκκινήσιμο.</emphasis> 
+Για τους Mac δεν υπάρχει κάποιος πυρήνας 2.4.x που να δουλεύει.
+
+</para>
+    </sect3>
+
+    <sect3 arch="m68k" id="m68k-boot-mvme"><title>MVME147 και MVME16x</title>
+<para>
+
+O εγκαταστάτης για MVEM147 και MVEM16x μπορεί να ξεκινήσει είτε από δισκέττες (δείτε
+<xref linkend="boot-from-floppies"/>) 
+ή από το δίκτυο (δείτε  <xref linkend="boot-tftp"/>).  
+<emphasis>Με άλλα λόγια το  cdrom δεν είναι εκκινήσιμο.</emphasis> 
+
+</para>
+    </sect3>
+
+    <sect3 arch="m68k" id="m68k-boot-q40"><title>Q40/Q60</title>
+<para>
+
+Η μόνη διαθέσιμη μέθοδος εγκατάστασης για Q40/Q60 είναι από το σκληρό δίσκο  (δείτε
+<xref linkend="m68k-boot-hd"/>).
+<emphasis>Με άλλα λόγια το cdrom δεν είναι εκκινήσιμο.</emphasis> 
+
+</para>
+    </sect3>
+
+  </sect2>
+
+  <sect2 arch="m68k" id="m68k-boot-hd"><title>Εκκίνηση από Σκληρό Δίσκο</title>
+
+&boot-installer-intro-hd.xml;
+
+<para>
+
+Τουλάχιστον έξι διαφορετικές  ramdisk μπορούν να χρησιμοποιηθούν για εκκίνηση από 
+το σκληρό δίσκο, τρεις διαφορετικοί τύποι κάθε ένας με κα χωρίς υποστήριξη για
+έναν πυρήνα 2.2.x  (δείτε το
+<ulink
+url="&disturl;/main/installer-&architecture;/current/images/MANIFEST">MANIFEST</ulink
+>
+για λεπτομέρειες).
+
+</para><para>
+
+Οι τρεις διαφορετικοί τύποι ramdisk είναι οι  <filename>cdrom</filename>,
+<filename>hd-media</filename>, και <filename>nativehd</filename>. Αυτοί
+διαφέρουν μόνο στην πηγή τους για τα πακέτα της εγκατάστασης. 
+Η <filename>cdrom</filename> ramdisk χρησιμοποιεί ένα cdrom για την απόκτηση  των
+πακέτων του debian-installer. Η <filename>hd-media</filename> ramdisk 
+χρησιμοποιεί το αρχείο μιας εικόνας iso ενός cdrom που βρίσκεται σε έναν σκληρό
+ δίσκο. Τέλος, η <filename>nativehd</filename> ramdisk χρησιμοποιεί το δίκτυο για
+την εγκατάσταση των πακέτων.
+
+</para>
+
+<itemizedlist>
+	<listitem><xref linkend="m68k-boothd-amiga"/></listitem>
+	<listitem><xref linkend="m68k-boothd-atari"/></listitem>
+	<listitem><xref linkend="m68k-boothd-mac"/></listitem>
+	<listitem><xref linkend="m68k-boothd-q40"/></listitem>
+</itemizedlist>
+
+
+    <sect3 arch="m68k" id="m68k-boothd-amiga"><title>Εκκίνηση από το  AmigaOS</title>
+<para>
+
+Ευρισκόμενοι στο <command>Workbench</command>, ξεκινήστε τη διαδικασία της
+εγκατάστασης του Linux με διπλό κλικ στο εικονίδιο <guiicon>StartInstall</guiicon>
+στον κατάλογο  <filename>debian</filename>.
+
+</para><para>
+
+Ίσως να πρέπει να πατήσετε το &enterkey;  μετά την εμφάνιση σε ένα
+παράθυρο πληροφορίας αποσφαλμάτωσης από το πρόγραμμα του εγκαταστάτη στο Amiga.
+Μετά από αυτό η οθόνη θα γίνει γκρι, και θα υπάρξει μια καθυστέρηση μερικών
+δευτερολέπτων. Στη συνέχεια θα εμφανιστεί μια μαύρη οθόνη με άσπρο κείμενο που
+εμφανίζει κάθε είδους πληροφορία αποσφαλμάτωσης από την εκκίνηση του πυρήνα. Τα
+μηνύματα αυτά πιθανόν να τρέχουν πολυ γρήγορα για να τα διαβάσετε αλλά αυτό
+είναι εντάξει. Μετά από ένα-δύο δευτερόλεπτα, το πρόγραμμα εγκατάστασης θα
+ξεκινήσει αυτόματα οπότε μπορείτε να συνεχίσετε παρακάτω στο  <xref
+linkend="d-i-intro"/>.
+
+</para>
+    </sect3>
+
+
+    <sect3 arch="m68k" id="m68k-boothd-atari"><title>Ξεκινώντας από το
+Atari TOS</title>
+<para>
+
+Στο GEM desktop, ξεκινήστε τη διαδικασία εγκατάστασης του Linux με διπλό-κλικ στο
+εικονίδιο <guiicon>bootstra.prg</guiicon> στον κατάλογο
+<filename>debian</filename> και πληκτρολογώντας 
+<guibutton>Ok</guibutton> στο "κουτί" διαλόγου των επιλογών του προγράμματος.
+
+</para><para>
+
+Ίσως να πρέπει να πατήσετε το &enterkey;  μετά την εμφάνιση σε ένα
+παράθυρο πληροφορίας αποσφαλμάτωσης από το πρόγραμμα του εγκαταστάτη στο Amiga.
+Μετά από αυτό η οθόνη θα γίνει γκρι, και θα υπάρξει μια καθυστέρηση μερικών
+δευτερολέπτων. Στη συνέχεια θα εμφανιστεί μια μαύρη οθόνη με άσπρο κείμενο που
+εμφανίζει κάθε είδους πληροφορία αποσφαλμάτωσης από την εκκίνηση του πυρήνα. Τα
+μηνύματα αυτά πιθανόν να τρέχουν πολυ γρήγορα για να τα διαβάσετε αλλά αυτό
+είναι εντάξει. Μετά από ένα-δύο δευτερόλεπτα, το πρόγραμμα εγκατάστασης θα
+ξεκινήσει αυτόματα οπότε μπορείτε να συνεχίσετε παρακάτω στο  <xref
+linkend="d-i-intro"/>
+
+</para>
+    </sect3>
+
+
+    <sect3 arch="m68k" id="m68k-boothd-mac"><title>Ξεκινώντας από το  MacOS</title>
+<para>
+
+Πρέπει να διατηρήσετε το αρχικό Mac σύστημα και να εκκινήσετε από αυτό.
+Είναι  <emphasis>ουσιώδες</emphasis> όταν ξεκινάτε το  MacOS προετοιμάζοντας
+την εκκίνηση του φορτωτή Penguin linux, να κρατήσετε πατημένο το πλήκτρο
+<keycap>shift</keycap> ώστε να αποτρέψετε το φόρτωμα των επεκτάσεων του MacOS. Αν
+δεν χρησιμοποιήσετε το MacOS παρά μόνο για το φόρτωμα του linux,
+μπορείτε να πετύχετε το ίδιο αποτέλεσμα απομακρύνοντας όλες τις επεκτάσεις και τα
+πάνελ ρυθμίσεων από τον φάκελο Συστήματος του Mac. Διαφορετικά επεκτάσεις πιθανόν να
+εξακολουθούν να τρέχουν προκαλώντας έτσι απρόβλεπτα προβλήματα με τον τρέχοντα πυρήνα
+ του linux.
+
+</para><para>
+
+Οι Mac απαιτούν τον φορτωτή εκκίνησης <command>Penguin</command>.
+ Αν δεν έχετε τα εργαλεία για το χειρισμό ενός αρχείου  <command>Stuffit</command>
+, το &penguin19.hfs; είναι μια εικόνα δίσκου 
+hfs με αποσυμπιεσμένο τον φορτωτή <command>Penguin</command>. 
+Η ενότητα <xref linkend="create-floppy"/> περιγράφει πώς μπορείτε να
+αντιγράψετε αυτή την εικόνα σε μια δισκέττα.
+
+</para><para>
+
+Ενώ είσαστε στο MacOS desktop, ξεκινήστε τη διαδικασία της εγκατάστασης του Linux
+με διπλό-κλικ στο εικονίδιο  <guiicon>Penguin Prefs</guiicon>
+στον κατάλογο <filename>Penguin</filename>. Ο φορτωτής
+<command>Penguin</command> θα ξεκινήσει. Πηγαίνετε στο αντικείμενο
+<guimenuitem>Settings</guimenuitem> στο μενού <guimenu>File</guimenu>,
+ και πατήστε το <guilabel>Kernel</guilabel> tab. Επιλέξτε τον πυρήνα
+(<filename>vmlinuz</filename>) και τις εικόνες ramdisk
+(<filename>initrd.gz</filename>) στον κατάλογο
+<filename>install</filename> πατώντας τα αντίστοιχα κουμπιά στην πάνω δεξιά
+γωνία και κινούμενοι ανάμεσα στους διαλόγους επιλογής αρχείων για να εντοπίσετε τα
+συγκεκριμένα αρχεία. 
+
+</para><para>
+
+Για να θέσετε τις παραμέτρους εκκίνησης στο Penguin,
+επιλέξτε  <guimenu>File</guimenu> -&gt;
+<guimenuitem>Settings...</guimenuitem>, και μετά πηγαίνετε στο
+<guilabel>Options</guilabel> tab.  Οι παράμετροι εκκίνησης μπορούν να τυπωθούν
+στην περιοχή εισόδου κειμένου. Αν θέλετε να χρησιμοποιείτε μόνιμα αυτές τις
+ρυθμίσεις επιλέξτε  <guimenu>File</guimenu> -&gt; <guimenuitem>Save Settings as
+Default</guimenuitem>.
+
+</para><para>
+
+Κλείστε το διάλογο <guilabel>Settings</guilabel>
+dialog, σώστε τις ρυθμίσεις και ξεκινήστε την διαδικασία εκκίνησης
+χρησιμοποιώντας το αντικείμενο <guimenuitem>Boot Now</guimenuitem> στο
+μενού <guimenu>File</guimenu>.
+
+</para><para>
+
+Ο φορτωτής <command>Penguin</command> θα εμφανίσει κάποιες πληροφορίες
+αποσφαλμάτωσης σε ένα παράθυρο. Μετά από αυτό η οθόνη θα γίνει γκρι, και θα υπάρξει
+μια καθυστέρηση μερικών δευτερολέπτων. Στη συνέχεια θα εμφανιστεί μια μαύρη οθόνη με
+άσπρο κείμενο που εμφανίζει κάθε είδους πληροφορία αποσφαλμάτωσης από την εκκίνηση
+του πυρήνα. Τα μηνύματα αυτά πιθανόν να τρέχουν πολυ γρήγορα για να τα διαβάσετε αλλά
+αυτό είναι εντάξει. Μετά από ένα-δύο δευτερόλεπτα, το πρόγραμμα εγκατάστασης θα
+ξεκινήσει αυτόματα οπότε μπορείτε να συνεχίσετε παρακάτω στο  <xref
+linkend="d-i-intro"/>
+
+</para>
+
+    </sect3>
+
+    <sect3 arch="m68k" id="m68k-boothd-q40"><title>Ξεκινώντας από  το Q40/Q60</title>
+
+<para>
+
+ΔΙΟΡΘΩΣΕ ΜΕ
+
+</para><para>
+
+Το πρόγραμμα εγκατάστασης θα ξεκινήσει αυτόματα οπότε μπορείτε να προχωρήσετε
+παρακάτω στο  <xref linkend="d-i-intro"/>.
+
+</para>
+
+    </sect3>
+  </sect2>
+
+
+  <sect2 arch="m68k" id="m68k-boot-cdrom"><title>Ξεκινώντας από ένα  CD-ROM</title>
+<para>
+
+Προς το παρόν η μόνη &arch-title; υπο-αρχιτεκτονική που υποστηρίζει εκκίνηση
+από CD-ROM είναι η BVME6000. 
+
+</para>
+
+&boot-installer-intro-cd.xml;
+
+  </sect2>
+
+
+  <sect2 arch="m68k" id="boot-tftp"><title>Εκκίνηση με TFTP</title>
+
+&boot-installer-intro-net.xml;
+
+<para>
+
+Μετά την εκκίνηση των συστημάτων  VMEbus θα βρεθείτε μπροστά στο προτρεπτικό
+<prompt>Boot:</prompt> του LILO. Εκεί πληκτρολογήσετε ένα από τα ακόλουθα για να
+εκκινήσετε το Linux και να αρχίσετε την κανονική διαδικασία εγκατάστασης του
+λογισμικού του Debian χρησιμοποιώντας προσομοίωση τερματικού vt102:
+
+<!-- Because the &enterkey; definition uses <keycap>,    -->
+<!-- we use <screen> instead of <userinput> in this list -->
+
+<itemizedlist>
+<listitem><para>
+
+πληκτρολογήστε <screen>i6000 &enterkey;</screen> για εγκατάσταση σε ένα BVME4000/6000
+
+</para></listitem>
+<listitem><para>
+
+πληκτρολογήστε <screen>i162 &enterkey;</screen> για εγκατάσταση σε ένα MVME162
+
+</para></listitem>
+<listitem><para>
+
+πληκτρολογήστε <screen>i167 &enterkey;</screen> για εγκατάσταση σε ένα  MVME166/167
+
+</para></listitem>
+    </itemizedlist>
+
+</para><para>
+
+Μπορείτε επιπρόσθετα να παραθέσετε τη συμβολοσειρά <screen>TERM=vt100</screen>
+για χρήση προσομοίωσης  τερματικού vt100,
+πχ., <screen>i6000 TERM=vt100 &enterkey;</screen>.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="m68k" id="boot-from-floppies">
+  <title>Εκκίνηση από δισκέττες</title>
+<para>
+
+Για τις περισσότερες  &arch-title; υπο-αρχιτεκτονικές, η εκκίνηση από ένα
+τοπικό σύστημα αρχείων είναι η προτεινόμενη μέθοδος.
+
+</para><para>
+
+Αυτή τη στιγμή εκκίνηση από δισκέττα υποστηρίζεται μόνο για Atari και VME
+(με έναν οδηγό  SCSI για δισκέττα στην VME). 
+
+</para>
+ </sect2>
+
