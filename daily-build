@@ -16,30 +16,30 @@ for t in netboot cdrom bootfloppy hd-media floppy; do
     make TYPE="$t" reallyclean
 done
 mkdir -p dest
-for t in netboot cdrom bootfloppy floppy; do
-    (
-    echo
-    echo BUILDING INITRD FOR $t
-    echo
-    fakeroot make TYPE="$t" initrd
-    ) 2>&1 | tee dest/$t.log # This is allowed to fail
-done
-for t in cdrom bootfloppy hd-media floppy; do
+for t in netboot cdrom bootfloppy hd-media floppy; do
     (
     echo
     echo BUILDING IMAGE FOR $t
     echo
     fakeroot make -k TYPE="$t" image
-    ) 2>&1 | tee -a dest/$t.log # This is allowed to fail
+    ) 2>&1 | tee dest/$t.log # This is allowed to fail
 done
 fakeroot make all_stats | 2>&1 tee dest/stats.txt # This is allowed to fail
 
 echo
 echo UPLOADING FILES
 echo
+
+KERNEL=
+for k in cdrom bootfloppy hd-media floppy netboot; do
+    if [ -f tmp/$k/vmlinuz ]; then
+        KERNEL=tmp/$k/vmlinuz
+        break
+    fi
+done
 ssh $host mkdir -p $basedir/$dir/RSYNC_IN_PROGRESS
 ssh $host cp -a $basedir/daily/. $basedir/$dir/RSYNC_IN_PROGRESS/ || true
-rsync --stats -v tmp/cdrom/vmlinuz dest/*-image.img dest/*-initrd.gz dest/*.log dest/stats.txt $host:$basedir/$dir/RSYNC_IN_PROGRESS/
+rsync --stats -v $KERNEL dest/*-image.img* dest/*-initrd.gz dest/*.log dest/stats.txt $host:$basedir/$dir/RSYNC_IN_PROGRESS/
 ssh $host mv $basedir/$dir/RSYNC_IN_PROGRESS/\* $basedir/$dir/
 ssh $host rmdir $basedir/$dir/RSYNC_IN_PROGRESS
 ssh $host rm -f $basedir/daily
