@@ -119,7 +119,7 @@ define recurse
 endef
 
 define genext2fs-userdevfs
-  genext2fs -d $(TREE) -b $(USERDEVFS_SIZE) -r 0 -f userdevfs-dev.txt
+  genext2fs -d $(TREE) -b $(USERDEVFS_SIZE) -r 0 -f userdevfs-devs
 endef
 
 define genext2fs
@@ -384,7 +384,7 @@ $(STAMPS)tree-$(targetstring)-stamp: $(STAMPS)tree-unpack-$(targetstring)-stamp
 	# Create a dev tree.
 	mkdir -p $(TREE)/dev
 	# Always needed, in case devfs is not mounted on boot.
-	# userdevfs uses userdevfs-dev.txt w/genext2fs
+	# userdevfs uses userdevfs-devs w/genext2fs
 ifndef USERDEVFS
 	mknod $(TREE)/dev/console c 5 1
 	mknod $(TREE)/dev/null c 1 3
