@@ -55,7 +55,7 @@ you will also have to get a local working copy of the manual as described there.
   This enables you to track changes is the original English documents.
   see 'Keeping your translation up to date' below for an explanation.
   - change directory to: installer/doc/manual/
-  - ./rev-update <lang>
+  - ./scripts/rev-update <lang>
 
   4. Commit the changes to SVN
   ----------------------------
@@ -94,12 +94,12 @@ Translation order
 =================
 
 Suggested translation order:
-- ./preface.xml
+- ./preface.xml, ./bookinfo.xml
 - ./welcome/*.xml
 - ./using-d-i/*.xml
+- ./using-d-i/modules/*.xml
 - ./boot-new/*.xml
 - ./boot-new/modules/*.xml
-- ./module/*.xml
 
 Note that currently (may 10, 2004) it look like there will be a fairly major
 reorganization of parts of the manual in the next month(s).
@@ -152,20 +152,20 @@ your working copy.
   --------------------------
   If there are any new files (marked 'A' in the output from 'svn up'),
   copy them to the directory for your translation and then:
-  - ./rev-update <lang>
+  - ./scripts/rev-update <lang>
   This will change the revision comment in the copied file to:
   <!-- original version: ##### untranslated -->
   You will also have to run 'svn add' for the new documents.
 
   3. Check for other changes
   --------------------------
-  - ./doc-check <lang>
+  - ./scripts/doc-check <lang>
   If changes are listed for documents that are marked 'untranslated', you
   can just copy the new English version to the directory for your translation
   and again use rev-update to change the revision comments.
   If changes are listed for documents that are not marked 'untranslated',
   you can create a diff to find out what the changes are by running:
-  - ./doc-check -d <lang>
+  - ./scripts/doc-check -d <lang>
   
   4. Update your translations
   ---------------------------
@@ -173,8 +173,8 @@ your working copy.
   !! Don't forget to also update the revision number in the revision comment
      after you updated a translation. The revision number should be the same
      as the revision number in the new version of the English document.
-  You should run './doc-check <lang>' again after you finish all updates and
-  before you commit your changes to SVN; there should be no output.
+  You should run './scripts/doc-check <lang>' again after you finish all updates
+  and before you commit your changes to SVN; there should be no output.
   
   Other uses of the scripts
   -------------------------
@@ -266,6 +266,9 @@ are probably errors.  Please fix it if you find errors.
 
 --------------------------------------------------------------------------
 Changelog:
+
+2004/09/27 Frans Pop
+ - Update in line with changes in SVN (moved files/directories)
 
 2004/09/04 Guillem Jover
  - Refer to Adam Conrad's subversion backport instead.
