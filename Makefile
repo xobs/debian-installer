@@ -103,17 +103,12 @@ tree: get_udebs
 	# Only dpkg needs this stuff, so it can be removed later.
 	mkdir -p $(DPKGDIR)/updates/
 	touch $(DPKGDIR)/available
-	# Unpack the udebs with dpkg, ignoring pre-dependancies.
-	# This command must run as root or fakeroot.
-	dpkg --force-depends --root=$(DEST) --unpack $(UDEBDIR)/*.udeb
+	# Unpack the udebs with dpkg. This command must run as root or fakeroot.
+	dpkg --root=$(DEST) --unpack $(UDEBDIR)/*.udeb
 	# Clean up after dpkg.
 	rm -rf $(DPKGDIR)/updates
 	rm -f $(DPKGDIR)/available $(DPKGDIR)/*-old $(DPKGDIR)/lock
 	# TODO: configure some of the packages?
-
-	# This is temporary; I have filed a bug asking ash-udeb to include
-	# the link.
-	ln -s ash $(DEST)/bin/sh
 
 # Library reduction.
 lib_reduce:
