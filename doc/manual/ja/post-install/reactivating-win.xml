@@ -1,19 +1,29 @@
+<?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: reactivating-win.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+<!-- $Id$ -->
+<!-- original version: 11875 -->
 
 
  <sect1 arch="i386" id="reactivating-win">
- <title>Reactivating DOS and Windows</title>
+ <title>DOS および Windows を利用できるようにする</title>
 <para>
 
+<!--
 After installing the base system and writing to the <emphasis>Master Boot
 Record</emphasis>, you will be able boot Linux, but probably nothing else.
 This depends what you have chosen during the installation. This chapter
 will describe how you can reactivate your old systems so that you can also
 boot your DOS or Windows again.
+-->
+基本システムをインストールし、<emphasis>マスターブートレコード</emphasis>を書き込むと、
+Linux は起動できるようになりますが、それ以外の OS はおそらく起動できなくなります。
+これはインストール時の選択によって異なってきます。この節では、
+DOS や Windows を再起動できるよう、インストール前に利用していたシステムを
+再び利用できるようにする方法を説明します。
 
 </para><para>
 
+<!--
 <command>LILO</command> is a boot manager with which you can also boot
 other operating systems than Linux, which complies to PC
 conventions. The boot manager is configured via
@@ -21,9 +31,18 @@ conventions. The boot manager is configured via
 file you have to run <command>lilo</command> afterwards. The reason
 for this is that the changes will take place only when you call the
 program.
+-->
+<command>LILO</command> は、Linux や他のオペレーティングシステムの
+起動が可能なブートマネージャで、PC 規格に準拠しています。
+このブートマネージャの設定は
+<filename>/etc/lilo.conf</filename> ファイルによって行います。この
+ファイルを編集した場合は、編集後必ず <command>lilo</command> コマンド
+を実行しなければなりません。このプログラムを実行しないと変更が
+反映されません。
 
 </para><para>
 
+<!--
 Important parts of the <filename>lilo.conf</filename> file are the
 lines containing the <userinput>image</userinput> and
 <userinput>other</userinput> keywords, as well as the lines following
@@ -37,13 +56,33 @@ configuration file is important because it determines which system
 will be booted automatically after, for instance, a timeout
 (<userinput>delay</userinput>) presuming <command>LILO</command>
 wasn't stopped by pressing the <keycap>shift</keycap> key.
+-->
+<filename>lilo.conf</filename> ファイルでは、<userinput>image</userinput>
+あるいは <userinput>other</userinput> キーワードを含む行と、それに続く
+数行が重要な箇所です。これらを用いて、<command>LILO</command> が起動
+できるシステムを記述します。このようなシステムとしては、カーネル
+(<userinput>image</userinput>)・ルートパーティション・カーネルパラメータ
+などを指定することもでき、他の Linux 以外の OS
+(<userinput>other</userinput>) を起動するための設定を指定することもできます。
+これらのキーワードは何度でも利用できます。設定ファイルに記述された各システムの
+順序は重要です。<keycap>シフト</keycap> キーを押すなどして
+<command>LILO</command> を中断しないと、タイムアウト
+(<userinput>delay</userinput>) 後にいずれかのシステムが自動的に
+起動されますが、どのシステムが自動的に起動されるかはその順序によって
+決定されるからです。
 
 </para><para>
 
+<!--
 After a fresh install of Debian, just the current system is configured
 for booting with <command>LILO</command>. If you want to boot another
 Linux kernel, you have to edit the configuration file
 <filename>/etc/lilo.conf</filename> to add the following lines:
+-->
+新規にインストールした場合は、現行のシステムのみが 
+<command>LILO</command> で起動できるように設定されます。他の Linux カーネル
+を起動したい場合は、設定ファイル <filename>/etc/lilo.conf</filename> を
+編集して、以下の行を追加する必要があります。
 
 <informalexample><screen>
 
@@ -51,6 +90,7 @@ Linux kernel, you have to edit the configuration file
 
 </screen></informalexample>
 
+<!--
 For a basic setup just the first two lines are necessary. If you want
 to know more about the other two options please have a look at the
 <command>LILO</command> documentation. This can be found in
@@ -61,14 +101,32 @@ the world of booting a system you can also look at the
 an overview of configuration keywords and <filename>lilo</filename>
 for description of the installation of the new configuration into the
 boot sector.
+-->
+基本的な設定としては、最初の 2 行だけあれば充分です。
+他の 2 行のオプションに関するより詳しい情報については、
+<command>LILO</command> のドキュメントをご覧ください。こちらは
+<filename>/usr/share/doc/lilo/</filename> にあります。
+特に <filename>Manual.txt</filename> をお読みください。
+システムを起動する方法についてより手早く調べたい場合は、
+<command>LILO</command> の man ページをご覧になるのもよいでしょう。
+設定キーワードの概観については <filename>lilo.conf</filename>
+を、新規設定をブートセクタにインストールする方法については
+<filename>lilo</filename> をご覧ください。
 
 </para><para>
 
+<!--
 Notice that there are other boot loaders available in &debian;, such as
 GRUB (in <classname>grub</classname> package), 
 CHOS (in <classname>chos</classname> package),
 Extended-IPL (in <classname>extipl</classname> package), 
 loadlin (in <classname>loadlin</classname> package) etc.
+-->
+なお、&debian; では、GRUB (<classname>grub</classname> パッケージ)、
+CHOS (<classname>chos</classname> パッケージ)、
+Extended-IPL (<classname>extipl</classname> パッケージ)、
+loadlin (<classname>loadlin</classname> パッケージ) 
+といった他のブートローダもご利用いただけます。
 
 </para>
  </sect1>
