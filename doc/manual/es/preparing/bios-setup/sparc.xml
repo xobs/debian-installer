@@ -1,85 +1,90 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 untranslated -->
+<!-- original version: 11648 -->
 
 
-  <sect2 arch="sparc" id="invoking-openboot"><title>Invoking OpenBoot</title>
+  <sect2 arch="sparc" id="invoking-openboot"><title>Invocar OpenBoot</title>
 
 <para>
 
-OpenBoot provides the basic functions needed to boot the &arch-title;
-architecture.  This is rather similar in function to the BIOS in the
-x86 architecture, although much nicer.  The Sun boot PROMs have a
-built-in forth interpreter which lets you do quite a number of things
-with your machine, such as diagnostics, simple scripts, etc.
+OpenBoot provee las funciones básicas que se necesitan para arrancar
+la arquitectura &arch-title;. Esto es bastante similar en funciones
+al BIOS de la arquitectura x86, aunque mucho mas simpático. Los PROMs
+de arranque de Sun tiene un intérprete de embebido el cual en adelante
+le permite hacer cierto número de cosas con su máquina, como diagnósticos,
+programas simples, etc.
 
 </para><para>
 
-To get to the boot prompt you need to hold down the
-<keycap>Stop</keycap> key (on older type 4 keyboards, use the
-<keycap>L1</keycap> key, if you have a PC keyboard adapter, use
-the <keycap>Break</keycap> key) and press the
-<keycap>A</keycap> key. The boot PROM will give you a prompt,
-either <userinput>ok</userinput> or <userinput>&gt;</userinput>. It is
-preferred to have the <userinput>ok</userinput> prompt. So if you get
-the old style prompt, hit the <keycap>n</keycap> key to get the new
-style prompt. 
+Para obtener el cursor de arranque debe mantener presionada la 
+tecla <keycap>Stop</keycap> (en teclados antiguos de tipo 4, use
+la tecla <keycap>L1</keycap>, si tiene un adaptador de teclado de
+PC, use la tecla <keycap>Break</keycap>) y presiona la tecla
+<keycap>A</keycap>. El PROM de arranque le mostrará un cursor, ya
+sea <userinput>ok</userinput> o <userinput>&gt;</userinput>. Es
+preferido tener el cursor <userinput>ok</userinput>. De modo que 
+si obtiene el cursor del estilo antiguo, presione la tecla
+<keycap>n</keycap> para obtener el cursor de nuevo estilo.
 
 </para>
   </sect2>
 
   <sect2 arch="sparc" id="boot-dev-select-sun">
-  <title>Boot Device Selection</title>
+  <title>Selección de dispositivo de arranque</title>
 
 <para>
 
-You can use OpenBoot to boot from specific devices, and also to change
-your default boot device.  However, you need to know some details
-about how OpenBoot names devices; it's much different from Linux
-device naming, described in <xref linkend="device-names"/>.
-Also, the command will vary a bit, depending on what version of
-OpenBoot you have.  More information about OpenBoot can be found in
-the <ulink url="&url-openboot;">Sun OpenBoot Reference</ulink>.
+Puede usar OpenBoot para arrancar desde dispositivos específicos, 
+y también para cambiar el dispositivo de arranque predeterminado.
+Sin embargo, necesita saber algunos detalles sobre como OpenBoot
+nombra los dispositivos, es muy diferente del sistema de nombrado
+de dispositivos de Linux descrito en <xref linkend="device-names"/>.
+También, la orden varia un poco, dependiendo de que versión de
+OpenBoot tenga. Puede encontrar mas información sobre OpenBoot en
+la <ulink url="&url-openboot;">Referencia de OpenBoot de Sun</ulink>.
 
 </para><para>
 
-Typically, with newer revisions, you can use OpenBoot device such as
-``floppy'', ``cdrom'', ``net'', ``disk'', or ``disk2''.  These have
-the obvious meanings; the ``net'' device is for booting from the
-network.  Additionally, the device name can specify a particular
-partition of a disk, such as ``disk2:a'' to boot disk2, first
-partition.  Full OpenBoot device names have the form
+Típicamente, con últimas versiones puede usar un dispositivo de
+OpenBoot como "floppy", "cdrom", "net", "disk" o "disk2". Estos
+tienen el significado obvio, el dispositivo "net" es para arrancar
+desde la red. Adicionalmente, el nombre de dispositivo puede
+especificar una partición particular de un disco, como "disk2:a"
+para arrancar la primera partición de disk2. Los nombres completos
+de los dispositivos de OpenBoot tienen la forma:
 
 <informalexample>
 <screen>
-<replaceable>driver-name</replaceable>@
-<replaceable>unit-address</replaceable>:
-<replaceable>device-arguments</replaceable>
+<replaceable>nomre-controlador</replaceable>@
+<replaceable>dirección-unidad</replaceable>:
+<replaceable>argumentos-dispositivo</replaceable>
 </screen></informalexample>.
 
-In older revisions of OpenBoot, device naming is a bit different: the
-floppy device is called ``/fd'', and SCSI disk devices are of the form
-``sd(<replaceable>controller</replaceable>,
+En versiones antiguas de OpenBoot, el nombrado de dispositivos es un
+poco diferente: El dispositivo de disquete es llamado "/fd" y los
+dispositivos de disco SCSI tienen la forma: "sd(
+<replaceable>controlador</replaceable>,
 <replaceable>disk-target-id</replaceable>,
-<replaceable>disk-lun</replaceable>)''.  The command
-<userinput>show-devs</userinput> in newer OpenBoot revisions is useful
-for viewing the currently configured devices.  For full information,
-whatever your revision, see the 
-<ulink url="&url-openboot;">Sun OpenBoot Reference</ulink>.
+<replaceable>disk-lun</replaceable>)". El comando
+<userinput>show-devs</userinput> en las últimas revisiones de
+OpenBoot es útil para ver los dispositivos configurados actualmente.
+Para información completa, cualquiera sea su revisión, vía la
+<ulink url="&url-openboot;">Referencia de OpenBoot de Sun</ulink>.
 
 </para><para>
 
-To boot from a specific device, use the command <userinput>boot
-<replaceable>device</replaceable></userinput>.  You can set this
-behavior as the default using the <userinput>setenv</userinput>
-command.  However, the name of the variable to set changed between
-OpenBoot revisions.  In OpenBoot 1.x, use the command
+Para arrancar desde un dispositivo específico, use la orden
+<userinput>boot <replaceable>device</replaceable></userinput>.  
+Puede definir este procedimiento como el predeterminado usando
+la orden <userinput>setenv</userinput>. Sin embargo, el nombre
+de la variable a definir cambia entre las revisiones de OpenBoot.
+En OpenBoot 1.x, use la orden 
 <userinput>setenv boot-from
-<replaceable>device</replaceable></userinput>.  In later revisions of
-OpenBoot, use the command <userinput>setenv boot-device
-<replaceable>device</replaceable></userinput>. Note, this is also
-configurable using the <command>eeprom</command> command on Solaris,
-or modifying the appropriate files in
-<filename>/proc/openprom/options/</filename>, for example under Linux:
+<replaceable>device</replaceable></userinput>.  En revisiones
+posteriores de OpenBoot, use la orden <userinput>setenv boot-device
+<replaceable>device</replaceable></userinput>. Note que esto
+también es configurable usando la orden <command>eeprom</command> 
+en Solaris, o modificando los ficheros apropiados en
+<filename>/proc/openprom/options/</filename>, por ejemplo desde Linux:
 
 <informalexample><screen>
 
@@ -87,7 +92,7 @@ echo disk1:1 &gt;/proc/openprom/options/boot-device
 
 </screen></informalexample> 
 
-and under Solaris:
+y desde Solaris:
 
 <informalexample><screen>
 

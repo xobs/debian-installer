@@ -1,126 +1,130 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 untranslated -->
+<!-- original version: 11648 -->
 
 
-  <sect2 arch="m68k"><title>Partitioning in AmigaOS</title>
+  <sect2 arch="m68k"><title>Particionar en AmigaOS</title>
 <para>
 
-If you are running AmigaOS, you can use the <command>HDToolBox</command>
-program to adjust your native partitions prior to installation.
+Si usted esta ejecutando AmigaOS, puede usar el programa
+<command>HDToolBox</command> para ajustar sus particiones nativas
+antes de la instalación.
 
 </para>
   </sect2>
 
-  <sect2 arch="m68k"><title>Partitioning in Atari TOS</title>
+  <sect2 arch="m68k"><title>Particionar en Atari TOS</title>
 <para>
 
-Atari partition IDs are three ASCII characters, use ``LNX'' for data
-and ``SWP'' for swap partitions. If using the low memory installation
-method, a small Minix partition is also needed (about 2 MB), for which
-the partition ID is ``MNX''.  Failure to set the appropriate partition
-IDs not only prevents the Debian installation process from recognizing
-the partitions, but also results in TOS attempting to use the Linux
-partitions, which confuses the hard disk driver and renders the whole
-disk inaccessible.
+Los IDs de particiones Atari tienen tres caracteres, use "LNX" para
+datos y "SWP" para particiones de intercambio (swap). Si usted usa el
+método de instalación para máquinas con poca memoria, se necesita
+también una partición Minux (cerca de 2MB), para el cual el ID es "MNX".
+Los fallos al definir el ID apropiado para la partición no solo impiden
+el proceso de reconocimiento de las particiones en la instalación de Debian,
+sino también puede ocasionar que TOS intente usar las particiones de
+Linux, lo cual confunde al controlador del disco duro y convierte todo
+el disco en inaccesible.
 
 </para><para>
 
-There are a multitude of third party partitioning tools available (the
-Atari <command>harddisk</command> utility doesn't permit changing the
-partition ID); this manual cannot give detailed descriptions for all
-of them. The following description covers <command>SCSITool</command> (from
-Hard+Soft GmBH).
+Existe un multitud de herramientas de particionado provista por terceros
+disponible (la herramienta <command>harddisk</command> de Atari no
+permite cambiar los ID de las particiones); este manual no puede dar
+una descripción detallada para todos estos. La siguiente descripción
+cubre <command>SCSITool</command> (de Hard+Soft GmBH).
 
 <orderedlist>
 <listitem><para>
 
-Start <command>SCSITool</command> and select the disk you want to partition
-(<guimenu>Disk</guimenu> menu, item <guimenuitem>select</guimenuitem>).
+Inicie <command>SCSITool</command> y elija el disco que desea particionar.
+(menú <guimenu>Disk</guimenu> menú, opción <guimenuitem>select</guimenuitem>).
 
 </para></listitem>
 <listitem><para>
 
-From the <guimenu>Partition</guimenu> menu, select either
-<guimenuitem>New</guimenuitem> to add new partitions or change the
-existing partition sizes, or <guimenuitem>Change</guimenuitem> to
-change one specific partition.  Unless you have already created
-partitions with the right sizes and only want to change the partition
-ID, <guimenuitem>New</guimenuitem> is probably the best choice.
+Desde el menú <guimenu>Partition</guimenu>, elija ya sea 
+<guimenuitem>New</guimenuitem> para añadir nuevas particiones
+o cambiar el tamaño de las existentes o <guimenuitem>Change</guimenuitem>
+para cambiar una partición en específico. A menos que ya tenga
+creadas las particiones con los tamaños correctos y solamente quiera
+cambiar el ID de la partición, probablemente <guimenuitem>New<guimenuitem>
+sea la mejor opción.
 
 </para></listitem>
 <listitem><para>
 
-For the <guimenuitem>New</guimenuitem> choice, select
-<guilabel>existing</guilabel> in the dialog box
-prompting the initial settings. The next window shows a list of
-existing partitions which you can adjust using the scroll buttons, or
-by clicking in the bar graphs. The first column in the partition list
-is the partition type; just click on the text field to edit it.  When
-you are finished changing partition settings, save the changes by
-leaving the window with the <guibutton>OK</guibutton> button.
+En caso use <guimenuitem>New<guimenuitem>, elija <guilabel>existing</guilabel>
+en la caja que diálogo que se muestra en la configuración inicial. La 
+ventana siguiente muestra una lista de las particiones existentes las
+cuales puede ajustar usando los botones de desplazamiento, o presionando
+el botón del ratón en los gráficos de barras. La primera columna en la
+lista de particiones es el tipo de partición, simplemente presione en el
+siguiente campo para editarlo. Cuando haya finalizado el cambiar la
+configuración de particiones, guarde los valores actuales cerrando
+la ventana al presionar el botón <guibutton>OK</guibutton>.
 
 </para></listitem>
 <listitem><para>
 
-For the <guimenuitem>Change</guimenuitem> option, select the partition
-to change in the selection list, and select <guilabel>other
-systems</guilabel> in the dialog box.  The 
-next window lists detailed information about the location of this
-partition, and lets you change the partition ID.  Save changes by
-leaving the window with the <guibutton>OK</guibutton> button.
+En caso use la opción <guimenuitem>Change</guimenuitem>, elija la
+partición a cambiar en la lista de selecciones y elija <guilabelk>other
+systems</guilabel> en la caja de diálogo. La siguiente ventana muestra
+información detallada sobre la ubicación de la partición y le permite
+cambiar el ID de ésta partición. Guarde los valores cerrando la
+ventana al presionar el botón <guibutton>OK</guibutton>.
 
 </para></listitem>
 <listitem><para>
 
-Write down the Linux names for each of the partitions you created or
-changed for use with Linux &mdash; see <xref linkend="device-names"/>.
+Escriba los nombre de cada partición que ha creado o cambiado para
+usarlo con Linux &mdash; vea <xref linkend="device-names"/>.
 
 </para></listitem>
 <listitem><para>
 
-Quit <command>SCSITool</command> using the
-<guimenuitem>Quit</guimenuitem> item from the <guimenu>File</guimenu>
-menu.  The computer will reboot to make sure the changed partition
-table is used by TOS. If you changed any TOS/GEM partitions, they will
-be invalidated and have to be reinitialized (we told you to back up
-everything on the disk, didn't we?).
+Cierre <command>SCSITool</command> usando la opción 
+<guimenuitem>Quit</guimenuitem> desde el menú <guimenu>File</guimenu>.
+El computador se reiniciará para asegurarse que la tabla de particiones
+modificada sea usada por TOS. Si usted cambió cualquier partición TOS/GEM,
+estas serán invalidadas y tendrán que ser reinstaladas (le advertimos
+que haga copias de seguridad ¿cierto?).
 
 </para></listitem>
 </orderedlist>
 
 </para><para>
 
-There is a partitioning tool for Linux/m68k called
-<command>atari-fdisk</command> in the installation system, but for now we
-recommend you partition your disk using a TOS partition editor or some
-disk tool. If your partition editor doesn't have an option to edit the
-partition type, you can do this crucial step at a later stage (from
-the booted temporary install RAMdisk).  <command>SCSITool</command> is only
-one of the partition editors we know of which supports selection of
-arbitrary partition types. There may be others; select the tool that
-suits your needs.
+Existe una herramienta de particionado para Linux/m68k llamada
+<command>atari-fdisk</command> en el sistema de instalación, pero por
+ahora le recomendamos particionar su disco usando el editor de particiones
+de TOS o alguna herramienta de disco. Si su editor de particiones no tiene
+una opción para editar el tipo de partición, usted puede efectuar este
+paso crucial en mayor tiempo (desde un disco de instalación usando RAMdisk).
+<command>SCSITool</command> solamente es uno de los editores de partición
+que conocemos, el cual soportar la selección arbitraria de tipos de partición.
+Podrían haber otros, elija la herramienta que se adapte a sus necesidades.
 
 </para>
 </sect2>
 
-  <sect2 arch="m68k"><title>Partitioning in MacOS</title>
+  <sect2 arch="m68k"><title>Particionar en MacOS</title>
 <para>
 
-Partitioning tools for Macintosh tested include <command>pdisk</command>,
-<command>HD SC Setup</command> 7.3.5 (Apple), <command>HDT</command> 1.8 (FWB),
-<command>SilverLining</command> (LaCie), and <command>DiskTool</command> (Tim
-Endres, GPL). Full versions are required for <command>HDT</command> and
-<command>SilverLining</command>. The Apple tool requires a patch in order
-to recognize third-party disks (a description on how to patch <command>HD
-SC Setup</command> using <command>ResEdit</command> can be found at 
+Las herramientas de particionado probadas, para Macintosh, incluyen
+<command>pdisk</command>, <command>HD SC Setup</command> 7.3.5 (Apple), 
+<command>HDT</command> 1.8 (FWB), <command>SilverLining</command> (LaCie)
+y <command>DiskTool</command> (Tim Endres, GPL). Se requiere las 
+versiones completas para <command>HDT</command> y 
+<command>SilverLining</command>. La herramienta de Apple requiere un
+parche para que puede reconocer discos de terceros (puede encontrar
+una descripción de como parchar <command>HD SC Setup</command> en
 <ulink url="http://www.euronet.nl/users/ernstoud/patch.html"></ulink>).
 
 </para><para>
 
-For IDE based Macs, you need to use <command>Apple Drive Setup</command> to create
-empty space for the Linux partitions, and complete the partitioning under
-Linux, or use the MacOS version of pdisk available from the MkLinux FTP
-server.
+Para Macs basadas en IDE, necesita usar <command>Apple Driver Setup</command>
+para crear el espacio libre para las particiones Linux y completar el
+particionado en Linux o usar la versión de MacOS
 
 </para>
 </sect2>

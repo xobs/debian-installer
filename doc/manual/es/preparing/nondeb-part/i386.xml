@@ -1,116 +1,123 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 untranslated -->
+<!-- original version: 11648 -->
 
 
-  <sect2 arch="i386"><title>Partitioning From DOS or Windows</title>
+  <sect2 arch="i386"><title>Particionar desde DOS o Windows</title>
 <para>
 
-If you are manipulating existing FAT or NTFS partitions, it is
-recommended that you either use the scheme below or native Windows or
-DOS tools.  Otherwise, it is not really necessary to partition from DOS
-or Windows; the Linux partitioning tools will generally do a better
-job.
+Si usted esta manipulando ficheros particiones FAT o NTFS existentes,
+es recomendable que o use el esquema mostrado a continuación o 
+herramientas nativas de Windows o DOS. De otro modo, realmente no es
+necesario particionar desde DOS o Windows, las herramientas de particionado
+de Linux generalmente harán un mejor trabajo.
 
 </para><para>
 
-But if you have a large IDE disk, and are using neither LBA addressing,
-overlay drivers (sometimes provided by hard disk manufacturers), nor a
-new (post 1998) BIOS that supports large disk access extensions, then
-you must locate your Debian boot partition carefully. In this case,
-you will have to put the boot partition into the first 1024 cylinders
-of your hard drive (usually around 524 megabytes, without BIOS
-translation). This may require that you move an existing FAT or NTFS
-partition.
+Pero si tiene un disco IDE grande y esta usando ya sea direccionamiento
+LBA, controladores sobrepuestos (aveces provistos por fabricantes de
+discos duros) o un BIOS nuevo (fabricado después de 1998) que
+soporta acceso a extensiones de discos grandes, entonces debe ubicar su
+la partición de arranque de su sistema Debian cuidadosamente. En
+este caso tendrá que ubicar la partición de arranque dentro de los
+primeros 1024 cilindros de su disco duro (usualmente cerca de los 524 
+megabytes, sin traducción de BIOS). Esto puede requerir que tenga que
+mover una partición FAT o NTFS existente.
 
 </para>
 
    <sect3 id="lossless">
-   <title>Lossless Repartitioning When Starting From DOS, Win-32 or OS/2
+   <title>Reparticionado sin pérdida cuando se inicia desde DOS, Win-32 u OS/2
    </title>
 
 <para>
 
-One of the most common installations is onto a system that already
-contains DOS (including Windows 3.1), Win32 (such as Windows 95, 98, Me,
-NT, 2000, XP), or OS/2, and it is desired to put Debian onto the same disk
-without destroying the previous system.  As explained in the 
-<xref linkend="partition-sizing"/>, decreasing the size 
-of an existing partition
-will almost certainly damage the data on that partition unless certain
-precautions are taken.  The method described here, while not
-guaranteed to protect your data, works extremely well in practice.  As
-a precaution, you should <emphasis>make a backup</emphasis>.
+Una de las instalaciones mas comunes es en un sistema que ya tiene DOS
+(incluyendo Windows 3.1), Win32 (como Windows 95, 98, Me,
+NT, 2000, XP) o OS/2 y desea instalar Debian en el mismo disco sin
+destruir el sistema anterior. Como se explica en 
+<xref linkend="partition-sizing"/>, el reducir el tamaño de una 
+partición existente es bastante probable que dañe la información en esta
+partición a menos que se tomen ciertas precauciones. El método aquí
+descrito, aunque no garantiza proteger su información, funciona
+extremadamente bien en la práctica. Como precaución debe 
+<emphasis>hacer copias de seguridad</emphasis>.
 
 </para><para>
 
-Before going any further, you should have decided how you will be
-dividing up the disk. The method in this section will only split a
-partition into two pieces. One will contain the original OS and the
-other will be used for Debian.  During the installation of Debian, you
-will be given the opportunity to use the Debian portion of the disk as you
-see fit, i.e., as swap or as a file system.
+Antes de proseguir, deberá haber decidido como será la división del
+disco. El método en esta sección solamente dividirá la partición en
+dos partes. Una contendrá el sistema operativo original y la otra
+será usado para Debian. Durante la instalación de Debian, se le
+dará la oportunidad de usar la parte del disco perteneciente a
+Debian como le parezca mejor, esto es como partición de intercambio
+o como sistema de ficheros.
 
 </para><para>
 
-The idea is to move all the data on the partition to the beginning,
-before changing the partition information, so that nothing will be
-lost.  It is important that you do as little as possible between the
-data movement and repartitioning to minimize the chance of a file
-being written near the end of the partition as this will decrease the
-amount of space you can take from the partition.
+La idea es mover toda la información de la partición al inicio,
+antes de cambiar la información de la partición, de modo que nada
+se perderá. Es importante que intente en lo posible evitar el
+movimiento de información y reparticionar para minimizar las
+posibilidades de que se escriba un fichero cerca del final de la 
+partición puesto que esto reducirá la cantidad de espacio de la
+partición que usted puede utilizar.
 
 </para><para>
 
-The first thing needed is a copy of <command>fips</command> which is
-available in the <filename>tools/</filename> directory on your nearest Debian
-mirror. Unzip the archive and copy the files
-<filename>RESTORRB.EXE</filename>, <filename>FIPS.EXE</filename> and
-<filename>ERRORS.TXT</filename> to a bootable floppy.  A bootable floppy can
-be created using the command <filename>sys a:</filename> under DOS.
-<command>fips</command> comes with very good documentation which you may
-want to read.  You will definitely need to read the documentation if
-you use a disk compression driver or a disk manager.  Create the disk
-and read the documentation <emphasis>before</emphasis> you defragment the disk.
+Lo primero que se requiere es una copia de <command>fips</command> la
+que esta disponible en el directorio <filename>tools/</command> de
+del mas cercano servidor espejo de Debian. Desempaquete el archivo y
+copie los ficheros <filename>RESTORRB.EXE</filename>, 
+<filename>FIPS.EXE</filename> y <filename>ERRORS.TXT</filename> a un
+disquete arrancable. Puede crear un disquete arrancable usando la
+orden <filename>sys a:</filename> en DOS. <command>fips</command> 
+viene con muy buena documentación que usted debería leer. Definitivamente
+necesitará leer la documentación si usted usa compresión de disco o un
+gestor de disco. Cree el disco y lea la documentación 
+<emphasis>antes</emphasis> que de-fragmente el disco.
 
 </para><para>
 
-The next thing needed is to move all the data to the beginning of the
-partition. <command>defrag</command>, which comes standard with DOS 6.0 and
-later can easily do the job.  See the <command>fips</command> documentation
-for a list of other software that may do the trick.  Note that if you
-have Windows 9x, you must run <command>defrag</command> from there, since
-DOS doesn't understand VFAT, which is used to support for long
-filenames, used in Windows 95 and higher.
+Lo siguiente que necesitará es mover todos los datos al inicio de la
+partición. <command>defrag</command>, que viene con el DOS 6.0 después
+puede fácilmente realizar el trabajo. Vea la documentación de 
+<command>fips</command> para una lista de otro software que pueda ayudarlo.
+Note que si tiene Windows 9x, debe ejecutar <command>defrag</command> 
+desde allí, puesto que DOS no reconoce el sistema de ficheros VFAT, el
+cual es usado para soporte de ficheros de nombres largos, éste es usado
+en Windows 95 y superior.
 
 </para><para>
 
-After running the defragmenter (which can take a while on a large
-disk), reboot with the <command>fips</command> disk you created in the
-floppy drive.  Simply type <filename>a:\fips</filename> and follow the directions.
+Después de ejecutar el defragmentador (lo que puede tomar un cierto
+tiempo en un disco grande), reinicie con el disquete que creó con
+el programa <command>fips</command> en él. Simplemente escriba
+<filename>a:\fips</filename> y siga las instrucciones.
 
 </para><para>
 
-Note that there are many other other partition managers out there, in
-case <command>fips</command> doesn't do the trick for you.
+Note que existen muchos otros gestores de particiones, en caso de que
+<command>fips</command> no pueda ayudarlo.
 
 </para>
    </sect3>
 
-   <sect3 id="partitioning-for-dos"><title>Partitioning for DOS</title>
+   <sect3 id="partitioning-for-dos"><title>Particionar para DOS</title>
 
 <para>
 
-If you are partitioning for DOS drives, or changing the size of DOS
-partitions, using Linux tools, many people experience problems working
-with the resulting FAT partitions.  For instance, some have reported
-slow performance, consistent problems with <command>scandisk</command>, or
-other weird errors in DOS or Windows.
+Si usted esta particionando para discos DOS o modificando el tamaño de
+las particiones DOS usando herramientas de Linux, muchas personas
+experimentan problemas al trabajar con las particiones DOS resultantes.
+De hecho, algunos han informado mejor desempeño, problemas consistentes
+con <command>scandisk</command> u otros fallos extraños en DOS o Windows.
 
 </para><para>
 
-Apparently, whenever you create or resize a partition for DOS use,
-it's a good idea to fill the first few sectors with zeros.  Do this
-prior to running DOS's <command>format</command> command, from Linux:
+Aparentemente, cada vez que cree o modifique una partición para
+uso de DOS es una buena idea llenar los primeros sectores con ceros.
+Haga esto antes de ejecutar el comando <command>format</command> de
+DOS, puede ejecutar lo siguiente desde Linux:
 <informalexample><screen>
 
 dd if=/dev/zero of=/dev/hdXX bs=512 count=4
