@@ -1,52 +1,51 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 18660 untranslated -->
+<!-- original version: 18660 -->
 
 
-  <sect2 arch="ia64"><title>Partitioning for &arch-title;</title>
+  <sect2 arch="ia64"><title>Partitionierung für &arch-title;</title>
 
 <para>
 
-The <command>partman</command> disk partitioner is the default
-partitioning tool for the installer.
-It manages the set of partitions and their mount points to ensure
-that the disks and filesystems is properly configured for a successful 
-installation.  It actually uses the <command>parted</command> to
-do the on-disk partitioning.
+Der Partitionierer <command>partman</command> ist das Standard-Werkzeug für
+den Installer. Er verwaltet die Menge der Partitionen und ihre Mountpunkte,
+um sicherzustellen, dass die Festplatten und Dateisysteme für eine
+erfolgreiche Installation richtig konfiguriert sind. Er benutzt für die
+direkte Manipulation der Festplatte <command>parted</command>.
 
 </para>
 
    <note>
-   <title>EFI Recognized Formats</title>
+   <title>Von EFI erkannte Formate</title>
 <para>
 
-The IA64 EFI firmware supports two partition table (or disk label)
-formats, GPT and MS-DOS.  MS-DOS, the format typically used on i386
-PCs, is no longer recommended for IA64 systems.  Although
-the installer also provides the <command>cfdisk</command>,
-you should only use the <ulink url="parted.txt">
-<command>parted</command></ulink> because only it can manage both GPT
-and MS-DOS tables correctly.
+Die EFI-Firmware der IA64-Architektur unterstützt zwei Formate für
+Partitionstabellen (bzw. Disklabel), GPT und MS-DOS. Letzteres wird
+üblicherweise auf i386-PCs verwendet und wird für IA64-Systeme nicht mehr
+empfohlen. Obwohl der Installer auch <command>cfdisk</command> anbietet,
+sollten Sie nur <ulink url="parted.txt"> <command>parted</command></ulink>
+benutzen, weil nur dieses sowohl GP- als auch MS-DOS-Tabellen korrekt
+behandeln kann.
 
 </para></note>
 
 <para>
 
-The automatic partitioning recipes for <command>partman</command>
-allocate an EFI partition as the first partition on the disk.
-You can also set up the partition under the <guimenuitem>Guided
-partitioning</guimenuitem> from the main menu in a manner similar to
-setting up a <emphasis>swap</emphasis> partition.
+Das automatische Partitionierungsverfahren von <command>partman</command>
+belegt eine EFI-Partition als erste Partition auf der Festplatte. Sie
+können diese auch mit <guimenuitem>Guided partitioning</guimenuitem>
+(<quote>Schritt-für-Schritt-Partitionierung</quote>) im Hauptmenü
+aufsetzen, ähnlich wie man eine <emphasis>Swap</emphasis>-Partition
+aufsetzt.
 
 </para><para>
 
-The <command>partman</command> partitioner will handle most disk
-layouts.
-For those rare cases where it is necessary to manually set up a disk,
-you can use the shell as described above and run the
-<command>parted</command> utility directly using its command line interface.
-Assuming that you want to erase your whole disk and create a GPT table
-and some partitions, then something similar to the following command
-sequence could be used:
+<command>partman</command> wird mit den meisten Festplatten-Layouts
+fertigwerden. In den seltenen Fällen, in denen eine manuelle Konfiguration
+nötig ist, können Sie wie oben beschrieben die Shell benutzen und
+<command>parted</command> direkt per Kommandozeile bedienen. Falls Sie
+z.B. Ihre ganze Festplatte löschen, eine GP-Tabelle erzeugen und mehrere
+Partitionen anlegen wollen, könnten Sie eine Kommandosequenz wie diese
+benutzen:
 
 </para><para>
 <informalexample><screen>
@@ -62,67 +61,65 @@ sequence could be used:
 </screen></informalexample>
 </para><para>
 
-This creates a new partition table, and three partitions to be used as
-an EFI boot partition, swap space, and a root file system.  Finally it
-sets the boot flag on the EFI partition.  Partitions are specified in
-Megabytes, with start and end offsets from the beginning of the disk.
-So, for example, above we created a 1999MB ext2 file system starting
-at offset 1001MB from the start of the disk.  Note that formatting swap
-space with <command>parted</command> can take a few minutes to
-complete, as it scans the partition for bad blocks.
+Das erstellt eine neue Partitionstabelle und drei Partitionen: eine
+EFI-Boot-, eine Swap- und eine Root-Partition mit einem
+ext2-Dateisystem. Schließlich setzte es auf der EFI-Partition das
+Boot-Flag. Die Partitionsgrößen werden in Megabytes angegeben, Beginn und
+Ende jeweils ab dem Anfang der ganzen Festplatte. Im Beispiel haben wir
+ein 1999 MB großes ext2-Dateisystem angegeben, das am 1001. MB der
+Festplatte anfängt. Beachten Sie, dass die Formatierung einer
+Swap-Partition mit <command>parted</command> ein paar Minuten in Anspruch
+nehmen kann, weil die Partition auf defekte Sektoren überprüft wird.
 
 </para>
   </sect2>
 
-  <sect2 arch="ia64"><title>Boot Loader Partition Requirements</title>
+  <sect2 arch="ia64"><title>Erfordernisse für die Partition des Bootloaders</title>
 
 <para>
 
-ELILO, the ia64 boot loader, requires a partition containing a FAT
-file system with the <userinput>boot</userinput> flag set.
-The partition must be big enough to hold the boot loader and any
-kernels or RAMdisks you may wish to boot.  A minimum size would be
-about 20MB, but if you expect to run with multiple kernels, then
-128MB might be a better size.
+ELILO, der IA64-Bootloader, erfordert eine Partition mit einem
+FAT-Dateisystem und gesetztem <userinput>Boot</userinput>-Flag. Sie muss
+groß genug für den Bootloader und alle gewünschten Kernels oder RAMdisks
+sein. Eine Minimalgröße wäre etwa 20 MB, aber wenn Sie möglicherweise
+mehrere Kernels benutzen wollen, sind 128 MB besser.
 
 </para><para>
 
-The EFI Boot Manager and the EFI Shell fully support the GPT table
-so the boot partition does not necessarily have to be the first
-partition or even on the same disk.
-This is convenient if you should forget to allocate the partition and
-only find out after you have formatted the other partitions on your disk(s).
-The <command>partman</command> partitioner checks for an EFI partition
-at the same time it checks for a properly set up <emphasis>root</emphasis>
-partition.
-This gives you an opportunity to correct the disk layout before the
-package install begins.
-The easiest way to correct this omission is to shrink the last partition
-of the disk to make enough free space for adding an EFI partition.
+Der EFI-Bootmanager und die EFI-Kommandozeile unterstützen vollständig die
+GP-Tabelle, daher muss die Boot-Partition nicht unbedingt die erste
+Partition sein, sie muss sogar nicht einmal auf derselben Festplatte
+untergebracht sein. Das ist praktisch, wenn Sie das Anlegen der Partition
+vergessen haben und das erst merken, nachdem die anderen Partitionen der
+Festplatte(n) bereits formatiert haben. Wenn <command>partman</command>
+nach einer richtig aufgesetzten <emphasis>Root</emphasis>-Partition sucht,
+prüft er auch die Existenz einer EFI-Partition. Das gibt Ihnen die
+Möglichkeit, die Partitionen zu korrigieren, bevor die Installation der
+Pakete beginnt. Am einfachsten geht das, indem Sie die letzte Partition der
+Festplatte verkleinern, um genug Platz für eine EFI-Partition zu schaffen.
 
 </para><para>
 
-It is strongly recommended that you allocate the EFI boot partition
-on the same disk as the <emphasis>root</emphasis> filesystem.
+Es wird dringend dazu geraten, die EFI-Bootpartition auf derselben
+Festplatte wie das <emphasis>Root</emphasis>-Dateisystem anzulegen.
 
 </para>
 
   </sect2>
 
-  <sect2 arch="ia64"><title>EFI Diagnostic Partitions</title>
+  <sect2 arch="ia64"><title>EFI-Diagnose-Partitionen</title>
 
 <para>
 
-The EFI firmware is significantly more sophisticated than the usual
-BIOS seen on most x86 PCs.
-Some system vendors take advantage of the ability of the EFI to
-access files and run programs from a hard disk filesystem to store diagnostics
-and EFI based system management utilities on the hard disk.
-This is a separate FAT format filesystem on the system disk.
-Consult the system documentation and accessories that come with the
-system for details.
-The easiest time to set up a diagnostics partition is at the same time you
-set up the EFI boot partition.
+Die Firmware EFI ist deutlich fortgeschrittener als das übliche BIOS, das
+man auf den meisten x86-PCs findet. Es kann auf Dateien zugreifen und
+Programme von einem Dateisystem der Festplatte starten; einige Hersteller
+nutzen diese Fähigkeit und speichern Diagnose- und EFI-basierte
+Systemverwaltungsprogramme auf der Festplatte. Dazu wird ein getrenntes
+Dateisystem im FAT-Format auf der Systemfestplatte verwendet. Lesen Sie
+weitere Details in
+den mit dem System mitgelieferten Dokumentationen. Am besten legen Sie eine
+Diagnose-Partition zusammen mit der EFI-Bootpartition an.
 
 </para>
 
