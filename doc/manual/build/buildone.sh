@@ -28,8 +28,8 @@ stylesheet_dsssl="$stylesheet_dir/style-print.dsl"
 entities_path="$build_path/entities"
 source_path="$manual_path/$language"
 
-if [ -z $destination ]; then
-    destination="build.out"
+if [ -z "$destdir" ]; then
+    destdir="build.out"
 fi
 
 tempdir="build.tmp"
@@ -48,8 +48,8 @@ create_profiled () {
     fi
 
     # Now we source the profiling information for the selected architecture
-    [ -f arch-options/${arch} ] || {
-        echo "Error: unknown architecture $arch!"
+    [ -f "arch-options/${arch}" ] || {
+        echo "Error: unknown architecture '$arch'"
         return 1
     }
     . arch-options/$arch
@@ -63,12 +63,12 @@ create_profiled () {
     echo "<!ENTITY architecture \"${arch}\">" >> $dynamic
     echo "<!ENTITY kernelversion \"${kernelversion}\">" >> $dynamic
     echo "<!ENTITY altkernelversion \"${altkernelversion}\">" >> $dynamic
-
     sed "s:##SRCPATH##:$source_path:" templates/docstruct.ent >> $dynamic
+
     sed "s:##LANG##:$language:g" templates/install.xml.template | \
-    sed "s:##TEMPDIR##:$tempdir:g" | \
-    sed "s:##ENTPATH##:$entities_path:g" | \
-    sed "s:##SRCPATH##:$source_path:" > $tempdir/install.${language}.xml
+        sed "s:##TEMPDIR##:$tempdir:g" | \
+        sed "s:##ENTPATH##:$entities_path:g" | \
+        sed "s:##SRCPATH##:$source_path:" > $tempdir/install.${language}.xml
 
     # Create the profiled xml file
     /usr/bin/xsltproc \
@@ -89,7 +89,7 @@ create_html () {
 
     /usr/bin/xsltproc \
         --xinclude \
-        --stringparam base.dir $destination/html/ \
+        --stringparam base.dir $destdir/html/ \
         $stylesheet_html \
         $tempdir/install.${language}.profiled.xml
     RET=$?; [ $RET -ne 0 ] && return $RET
@@ -124,7 +124,7 @@ create_text () {
     echo "Info: creating .txt file..."
 
     # Set encoding for output file
-    case $language in
+    case "$language" in
         cs)
             CHARSET=ISO-8859-2
             ;;
@@ -141,7 +141,7 @@ create_text () {
     
     /usr/bin/w3m -dump $tempdir/install.${language}.corr.html \
         -o display_charset=$CHARSET \
-        >$destination/install.${language}.txt
+        >$destdir/install.${language}.txt
     RET=$?; [ $RET -ne 0 ] && return $RET
 
     return 0
@@ -153,7 +153,7 @@ create_dvi () {
     [ -x /usr/bin/jadetex ] || return 9
 
     # Skip this step if the .dvi file already exists
-    [ -f $tempdir/install.${language}.dvi ] && return
+    [ -f "$tempdir/install.${language}.dvi" ] && return
 
     echo "Info: creating temporary .tex file..."
 
@@ -198,7 +198,7 @@ create_pdf() {
 
     /usr/bin/dvipdf $tempdir/install.${language}.dvi
     RET=$?; [ $RET -ne 0 ] && return $RET
-    mv install.${language}.pdf $destination/
+    mv install.${language}.pdf $destdir/
 
     return 0
 }
@@ -214,7 +214,7 @@ create_ps() {
 
     /usr/bin/dvips -q $tempdir/install.${language}.dvi
     RET=$?; [ $RET -ne 0 ] && return $RET
-    mv install.${language}.ps $destination/
+    mv install.${language}.ps $destdir/
 
     return 0
 }
@@ -223,15 +223,15 @@ create_ps() {
 
 # Clean old builds
 rm -rf $tempdir
-rm -rf $destination
+rm -rf $destdir
 
-[ -d $manual_path/$language ] || {
-    echo "Error: unknown language $language"
+[ -d "$manual_path/$language" ] || {
+    echo "Error: unknown language '$language'"
     exit 1
 }
 
 mkdir -p $tempdir
-mkdir -p $destination
+mkdir -p $destdir
 
 # Create profiled XML. This is needed for all output formats.
 create_profiled
