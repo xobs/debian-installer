@@ -63,29 +63,6 @@ while (@lists) {
 				next; # move onto teh next line
 			}
 
-			# limited kernel version substitutions
-			if (/\$\{kernel:Version(?:=(.*?))?\}/)
-			{
-				if (! length $1 ) {
-					print STDERR "warning: empty kernel version substitution list\n";
-					next;
-				}
-				my $l = $_;
-				my @limits = split( /,/, $1 );
-
-				foreach my $v (@kernel_versions)
-				{
-					my $str = $l;
-					if( grep { $sub_arch eq $_ } @limits )
-					{
-						#kernel_version is in limit list
-						$str =~ s/\${kernel:Version=.*?}/$v-$kernel_flavour/g;
-						print "$str\n";
-					}
-				}
-				next; # move onto the next line
-			}
-
 			#if nothing else matches print the line untouched
 			print "$_\n";
 		    }
