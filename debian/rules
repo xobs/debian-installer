@@ -20,11 +20,12 @@ KERNELPACKAGE=$(shell perl -e 'print join(" | ", @ARGV)' \
 clean:
 	dh_testdir
 	dh_testroot
-#	$(MAKE) reallyclean
-	$(MAKE) all_clean
-	dh_clean
+	$(MAKE) reallyclean
+	dh_clean build-stamp
 
-build:
+build: build-stamp
+build-stamp:
+	touch build-stamp
 	fakeroot $(MAKE) all_images all_stats SUITE=$(DISTRIBUTION)
 
 install: build
@@ -50,7 +51,7 @@ binary-arch: install
 	dh_gencontrol -- -Vkernel:Package='$(KERNELPACKAGE)'
 	dh_builddeb
 	cd debian/tmp && tar czvf ../../../$(TARNAME) .
-	dpkg-distaddfile $(TARNAME) byhand standard
+	dpkg-distaddfile $(TARNAME) byhand -
 
 binary-indep:
 
