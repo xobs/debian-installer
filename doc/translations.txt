@@ -175,16 +175,36 @@ an alioth account and ask in -boot for getting write access.
  SVN (Subversion) commit
  -----------------------
 
-You need to install subversion on your system. For Debian unstable users,
-just do "apt-get install svn". Others may use backports from www.backports.org. Please add this entry to your /etc/apt/sources.list file:
+  1) Installing subversion
+  ------------------------
 
-deb http://www.backports.org/debian stable subversion
+  You need to install subversion on your system. For Debian unstable users,
+  just do "apt-get install svn". Others may use backports from www.backports.org.
+  Please add this entry to your /etc/apt/sources.list file:
+    
+    deb http://www.backports.org/debian stable subversion
 
-Or use Colin Watson's backports: 
-http://people.debian.org/~cjwatson/subversion-woody/ 
+  Or use Colin Watson's backports: 
+    http://people.debian.org/~cjwatson/subversion-woody/ 
 
-Changelogs updates are not longer required because an automated tool
-is now used when releasing packages.
+  2) Getting write access to the subversion repository
+  ----------------------------------------------------
+
+  If you are not a Debian Developper, you first need to create a guest account
+  on http://alioth.debian.org/, than ask on debian-boot@lists.debian.org
+  for somebody to add your guest account to the debian-installer project.
+ 
+  3) Using the subversion to get and put back files
+  -------------------------------------------------
+
+  Once your account is allowed to write to the project, you can retreive the
+  full project using this:
+    svn co svn+ssh://<username>@svn.debian.org/svn/d-i/trunk debian-installer
+  and commit files using something like this:
+    cd debian-installer ; svn ci packages/languagechooser/languagelist.l10n
+
+  Changelogs updates are not longer required because an automated tool
+  is now used when releasing packages.
 
  File a bug
  ----------
@@ -412,6 +432,9 @@ you discover such packages, and fix it if you find errors.
 
 --------------------------------------------------------------------------
 Changelog:
+
+2004/04/17 Jean Christophe Andre
+  - Completed the SVN section (alioth account, SVN co & ci)
 
 2004/03/28 Christian Perrier
   - Added reference to a SVN browse URL
