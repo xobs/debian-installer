@@ -1,111 +1,120 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: shadow.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+<!-- $Id: shadow.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
 
  <sect2 id="base-config-users">
- <title>Setting Up Users And Passwords</title>
+ <title>Gebruikers en wachtwoorden instellen</title>
 
   <sect3 id="base-config-shadow">
-  <title>Shadow Passwords</title>
+  <title>Schaduwwachtwoorden</title>
 
 <para>
 
-Depending on a given priority, the system may ask whether you want to
-enable shadow passwords.  This is a system in which your GNU/Linux
-system is made to be a bit more secure.  In a system without shadow
-passwords, passwords are stored (encrypted) in a world-readable file,
-<filename>/etc/passwd</filename>.  This file has to be readable to
-anyone who can log in because it contains vital user information, for
-instance, how to map between numeric user identifiers and login names.
-Therefore, someone could conceivably grab your
-<filename>/etc/passwd</filename> file and run a brute force attack
-(i.e. run an automated test of all possible password combinations)
-against it to try to determine passwords.
+Afhankelijk van de gekozen prioriteit, kan het systeem de vraag stellen of u
+schaduwwachtwoorden wilt activeren. Dit is een systeem waarmee uw GNU/Linux
+systeem een beetje beter beveiligd wordt. In een systeem zonder
+schaduwwachtwoorden, worden wachtwoorden (versleuteld) opgeslagen in een
+bestand, <filename>/etc/passwd</filename>, dat voor iedereen leesbaar is.
+Dit bestand moet leesbaar zijn voor iedereen die kan aanloggen omdat het
+essentiële informatie over gebruikers bevat, waaronder de vertaling van de
+numerieke gebruikersidentificatie naar gebruikersnamen. Hierdoor is het in
+theorie mogelijk dat iemand uw <filename>/etc/passwd</filename> bestand pakt
+en hierop een 'brute kracht aanval' (dat wil zeggen een geautomatiseerde
+test van alle mogelijke wachtwoordcombinaties) uitvoert om te proberen de
+wachtwoorden te achterhalen.
 
 </para><para>
 
-If you have shadow passwords enabled, passwords are instead stored in
-<filename>/etc/shadow</filename>, which is readable and writable only
-by root, and readable by group shadow. Therefore, we recommend that
-you enable shadow passwords.
+Als u schaduwwachtwoorden geactiveerd heeft, worden wachtwoorden echter bewaard
+in <filename>/etc/shadow</filename> dat alleen door root gelezen en geschreven
+kan worden en daarnaast door de groep 'shadow' kan worden gelezen. Om deze reden
+raden wij u aan om schaduwwachtwoorden te activeren.
 
 </para><para>
 
-Reconfiguration of the shadow password system can be done at any time
-with the <command>shadowconfig</command> program.  After installation,
-see <filename>/usr/share/doc/passwd/README.debian.gz</filename> for
-more information.
+Het is altijd mogelijk om het systeem voor schaduwwachtwoorden opnieuw te
+configureren met de opdracht <command>shadowconfig</command>. U kunt, na
+de installatie, <filename>/usr/share/doc/passwd/README.debian.gz</filename>
+raadplegen voor nadere informatie.
 
 </para>
   </sect3>
 
   <sect3 id="base-config-root">
-  <title>Set the Root Password</title>
+  <title>Het wachtwoord voor root instellen</title>
 
 <para>
 
-The <emphasis>root</emphasis> account is also called the
-<emphasis>super-user</emphasis>; it is a login that bypasses all
-security protection on your system. The root account should only be
-used to perform system administration, and only used for as short
-a time as possible.
+Het <emphasis>root</emphasis>-account wordt ook wel de
+<emphasis>super-user</emphasis> genoemd; het is een login die alle
+beveiligingen op uw systeem omzeilt. Het root-account dient alleen te
+worden gebruikt voor systeemadministratie en altijd gedurende een zo
+kort mogelijke tijd.
 
 </para><para>
 
-Any password you create should contain at least 6 characters, and
-should contain both upper- and lower-case characters, as well as
-punctuation characters.  Take extra care when setting your root
-password, since it is such a powerful account.  Avoid dictionary
-words or use of any personal information which could be guessed.
+Elk wachtwoord dat u aanmaakt zou uit tenminste 6 tekens moeten bestaan en
+zou zowel hoofd- als kleine letters als ook leestekens moeten bevatten.
+Wees extra zorgvuldig als u het wachtwoord voor root instelt, aangezien
+dit account zoveel rechten geeft. Vermijd woorden die voorkomen in
+woordenboeken en het gebruik van persoonlijke gegevens die eenvoudig kunnen
+worden geraden.
+<!-- FJP: vermelden dat wachtwoorden tijdens invoer onleesbaar zijn en daarom
+twee keer moeten worden ingevoerd? //-->
 
 </para><para>
 
-If anyone ever tells you they need your root password, be extremely
-wary. You should normally never give your root account out, unless you
-are administering a machine with more than one system administrator.
+Wees zeer argwanend als iemand u ooit vertelt dat hij het wachtwoord
+van uw root-account nodig heeft. Normaalgesproken zou u uw root-account
+nooit mogen uitgeven, tenzij u een machine beheert die meer dan één
+systeembeheerder heeft.
+<!-- FJP: noemen alternatieven: su, sudo //-->
 
 </para>
   </sect3>
 
   <sect3 id="make-normal-user">
-  <title>Create an Ordinary User</title>
+  <title>Een gewone gebruiker aanmaken</title>
 
 <para>
 
-The system will ask you whether you wish to create an ordinary user
-account at this point.  This account should be your main personal
-log-in.  You should <emphasis>not</emphasis> use the root account for
-daily use or as your personal login.
+Het systeem zal u op dit punt ook vragen of u een gewoon gebruikersaccount
+wilt aanmaken. Dit account is voor u de normale manier om aan te loggen.
+Het is <emphasis>niet</emphasis> de bedoeling dat u het root-account benut
+voor dagelijks gebruik of als uw persoonlijke login.
 
 </para><para>
 
-Why not?  Well, one reason to avoid using root's privileges is that it
-is very easy to do irreparable damage as root.  Another reason is that
-you might be tricked into running a <emphasis>Trojan-horse</emphasis>
-program &mdash; that is a program that takes advantage of your
-super-user powers to compromise the security of your system behind
-your back. Any good book on Unix system administration will cover this
-topic in more detail &mdash; consider reading one if it is new to you.
+Waarom niet? Wel, één reden om het gebruik van de privileges van root te
+vermijden is dat het zeer eenvoudig is om als root onherstelbare schade
+aan te richten. Een andere reden is dat u verleid zou kunnen worden om een
+<emphasis>Trojaans-paard</emphasis> te draaien &mdash; een programma dat
+misbruik maakt van uw rechten als super-user om achter uw rug de beveiliging
+van uw systeem de doorbreken. In elk degelijk boek over systeembeheer voor
+Unix wordt meer uitgebreid ingegaan op dit onderwerp &mdash; overweeg om er
+een te lezen als dit nieuw voor u is.
 
 </para><para>
 
-Name the user account anything you like.  If your name is John Smith,
-you might use <userinput>smith</userinput>,
-<userinput>john</userinput>, <userinput>jsmith</userinput> or
-<userinput>js</userinput>.  You will also be prompted for the full
-name of the user, and, like before, a password.
+U kunt uw gebruikersaccount een willekeurige naam geven. Als u Jan Jansen
+heet, dan zou u <userinput>jansen</userinput>, <userinput>jan</userinput>,
+<userinput>jjansen</userinput> of <userinput>jj</userinput> kunnen gebruiken.
+U zal ook worden gevraagd naar de volledige naam voor de gebruiker en, net
+als hiervoor, om een wachtwoord.
 
 </para><para>
 
-If at any point after installation you would like to create another
-account, use the <command>adduser</command> command.
+Als u op enig moment na de installatie nog een gebruikersaccount wilt
+aanmaken, kunt u het commando <command>adduser</command> gebruiken.
 
 </para><para arch="s390">
 
-You need to create a user account on &arch-title; if you want to login
-over the network using telnet. The telnet server does not allow root
-logins in Debian's default configuration. However, you can use ssh
-(Secure SHell) to remotely login as root but this is not
-recommended.
+Voor &arch-title; zult u, als u met telnet over het netwerk wilt kunnen
+inloggen, een gebruikersaccount moeten aanmaken. De telnet-server staat
+binnen de standaard configuratie van Debian niet toe om als root in te loggen.
+Wel kunt u gebruik maken van ssh (Secure SHell) om op afstand als root in te
+loggen, maar ook dit wordt niet aangeraden.
+<!-- FJP: telnet en ssh markeren als <command>'s //-->
 
 </para>
   </sect3>

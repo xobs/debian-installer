@@ -1,114 +1,116 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: ppp.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+<!-- $Id: ppp.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
 
  <sect2 arch="not-s390" id="PPP">
- <title>Setting Up PPP</title>
+ <title>PPP-configuratie</title>
 
 <para>
 
-You will next be asked whether you wish to install the rest of the
-system using PPP.  If you are installing from CD-ROM and/or are
-connected directly to the network, you can safely say &MSG-NO; and
-skip this section.
+Vervolgens zal u worden gevraagd of u bij de rest van de installatie gebruik
+wilt maken van een PPP-verbinding. Als u installeert vanaf CD en/of een
+directe netwerkverbinding heeft, kunt u veilig &MSG-NO; antwoorden en deze
+sectie overslaan. (Als u al een geconfigureerde netwerkverbinding heeft, is
+het mogelijk dat deze vraag wordt overgeslagen.)
+<!-- FJP: joeyh: wordt alleen gevraagd als nog geen netwerk geconfigureerd //-->
 
 </para><para>
 
-If you do choose to configure PPP at this point, a program named
-<command>pppconfig</command> will be run.  This program helps you
-configure your PPP connection.  <emphasis>Make sure, when it asks you
-for the name of your dialup connection, that you name it
+Als u ervoor kiest om op dit punt PPP te configureren, zal het programma
+<command>pppconfig</command> worden gestart. Dit programma helpt u bij de
+configuratie van uw PPP-verbinding. <emphasis>Het is essentieel dat u,
+als het programma vraagt om een naam voor uw inbelverbinding, antwoord met
 <userinput>provider</userinput>.</emphasis>
 
 </para><para>
 
-Hopefully, the <command>pppconfig</command> program will walk you
-through a pain-free PPP connection setup.  However, if it does not
-work for you, see below for detailed instructions.
+Hopelijk zal <command>pppconfig</command> een probleemloze configuratie van
+uw PPP-vervinding verzorgen. Voor het geval dit voor u niet het geval is,
+vindt u hieronder meer gedetailleerde instructies.
 
 </para><para>
 
-In order to setup PPP, you'll need to know the basics of file viewing
-and editing in GNU/Linux.  To view files, you should use
-<command>more</command>, and <command>zmore</command> for compressed
-files with a <userinput>.gz</userinput> extension.  For example, to
-view <filename>README.debian.gz</filename>, type <userinput>zmore
-README.debian.gz</userinput>.  The base system comes with an editor
-named <command>nano</command>, which is very simple to use, but does
-not have a lot of features. You will probably want to install more
-full-featured editors and viewers later, such as
-<command>jed</command>, <command>nvi</command>,
-<command>less</command>, and <command>emacs</command>.
+Om PPP te kunnen configureren, dient u bekend te zijn met de beginselen
+van het bekijken en wijzigen van bestanden onder GNU/Linux. Om bestanden
+te bekijken, kunt u gebruik maken van <command>more</command> of, voor
+gecomprimeerde bestanden met de extensie <userinput>.gz</userinput>,
+<command>zmore</command>. Als u bijvoorbeeld
+<filename>README.debian.gz</filename> wil bekijken, typt u <userinput>zmore
+README.debian.gz</userinput>. Het basissysteem is uitgerust met een editor
+genaamd <command>nano</command> die eenvoudig te gebruiken is, maar niet
+veel functionaliteit heeft. Waarschijnlijk zult u later programma's willen
+installeren met meer functionaliteit voor het bekijken en wijzigen van
+bestanden, zoals <command>jed</command>, <command>nvi</command>,
+<command>less</command> en <command>emacs</command>.
 
 </para><para>
 
-Edit <filename>/etc/ppp/peers/provider</filename> and replace
-<userinput>/dev/modem</userinput> with
-<userinput>/dev/ttyS<replaceable>&num;</replaceable></userinput> where
-<replaceable>&num;</replaceable> stands for the number of your serial
-port. In Linux, serial ports are counted from 0; your first serial
-port <phrase arch="i386">(i.e., <userinput>COM1</userinput>)</phrase>
-is <filename>/dev/ttyS0</filename> under Linux.
+Wijzig het bestand <filename>/etc/ppp/peers/provider</filename> en vervang
+<userinput>/dev/modem</userinput> met 
+<userinput>/dev/ttyS<replaceable>&num;</replaceable></userinput> waarbij
+<replaceable>&num;</replaceable> staat voor het nummer van uw seriële poort.
+Onder Linux worden seriële poorten geteld vanaf 0; uw eerste seriële poort
+<phrase arch="i386">(bijvoorbeeld <userinput>COM1</userinput>)</phrase> is
+onder Linux: <filename>/dev/ttyS0</filename>.
 
-<phrase arch="powerpc;m68k">On Macintoshes with serial ports, the
-modem port is <filename>/dev/ttyS0</filename> and the printer port is
+<phrase arch="powerpc;m68k">Op Macintoshes met seriële poorten is de
+modempoort <filename>/dev/ttyS0</filename> en de printerpoort
 <filename>/dev/ttyS1</filename>.</phrase>
 
-The next step is to edit
-<filename>/etc/chatscripts/provider</filename> and insert your
-provider's phone number, your user-name and password. Please do not
-delete the <quote>\q</quote> that precedes the password. It hides the
-password from appearing in your log files.
+De volgende stap is het wijzigen van
+<filename>/etc/chatscripts/provider</filename> en daarin het telefoonnummer,
+en uw gebruikersnaam en -wachtwoord toe te voegen. Verwijder daarbij zeker
+niet de <quote>\q</quote> die voorafgaat aan het wachtwoord; dit zorgt ervoor
+dat uw wachtwoord niet in uw logboekbestanden wordt getoond.
 
 </para><para>
 
-Many providers use PAP or CHAP for login sequence instead of text mode
-authentication.  Others use both.  If your provider requires PAP or
-CHAP, you'll need to follow a different procedure.  Comment out
-everything below the dialing string (the one that starts with
-<quote>ATDT</quote>) in
-<filename>/etc/chatscripts/provider</filename>, modify
-<filename>/etc/ppp/peers/provider</filename> as described above, and
-add <userinput>user <replaceable>name</replaceable></userinput> where
-<replaceable>name</replaceable> stands for your user-name for the
-provider you are trying to connect to.  Next, edit
-<filename>/etc/ppp/pap-secrets</filename> or
-<filename>/etc/ppp/chap-secrets</filename> and enter your password
-there.
+Veel providers gebruiken PAP of CHAP in plaats van leesbare tekst als
+autorisatiemethode. Anderen gebruiken beide. Als uw provider het gebruik van
+PAP of CHAP vereist, zal u een andere procedure moeten volgen. Wijzig in
+<filename>/etc/chatscripts/provider</filename> alle regels onder de inbelstring
+(deze start met <quote>ATDT</quote>) in commentaarregels, wijzig
+<filename>/etc/ppp/peers/provider</filename> zoals hiervoor beschreven en voeg
+<userinput>user <replaceable>naam</replaceable></userinput> toe waarbij
+<replaceable>naam</replaceable> staat voor uw gebruikersnaam bij de provider
+waarmee u probeert een verbinding te maken. Voeg vervolgens uw wachtwoord toe
+in <filename>/etc/ppp/pap-secrets</filename> of
+<filename>/etc/ppp/chap-secrets</filename>.
+<!-- FJP: instructie voor maken van een commentaarregel (voetnoot?) //-->
+<!-- FJP: wijzigingen in /etc/ppp moeten als root! //-->
 
 </para><para>
 
-You will also need to edit <filename>/etc/resolv.conf</filename> and
-add your provider's name server (DNS) IP addresses.  The lines in
-<filename>/etc/resolv.conf</filename> are in the following format:
-<userinput>nameserver
-<replaceable>xxx.xxx.xxx.xxx</replaceable></userinput> where the
-<replaceable>x</replaceable>s stand for numbers in your IP
-address. Optionally, you could add the
-<userinput>usepeerdns</userinput> option to the
-<filename>/etc/ppp/peers/provider</filename> file, which will enable
-automatic choosing of appropriate DNS servers, using settings the
-remote host usually provides.
+U zal ook in het bestand <filename>/etc/resolv.conf</filename> de IP-adressen
+van de domeinnaamservers (DNS) van uw provider moeten toevoegen. De regels in
+<filename>/etc/resolv.conf</filename> hebben het volgende formaat:
+<userinput>nameserver <replaceable>xxx.xxx.xxx.xxx</replaceable></userinput>
+waarbij de <replaceable>x</replaceable>'en staan voor de cijfers in het
+IP-adres. Desgewenst kunt u de optie <userinput>usepeerdns</userinput> toevoegen
+in het bestand <filename>/etc/ppp/peers/provider</filename> waarmee automatische
+keuze van geschikte DNS-servers geactiveerd wordt; hierbij wordt gebruik gemaakt
+van instellingen die de inbelserver van de provider normaalgesproken biedt.
+<!-- FJP Fout in origineel: het is niet _uw_ IP-adres maar dat van de provider //-->
+<!-- FJP Is usepeerdns 'optionally' or 'alternatively'? //-->
 
 </para><para>
 
-Unless your provider has a login sequence different from the majority
-of ISPs, you are done! Start the PPP connection by typing
-<command>pon</command> as root, and monitor the process using
-<command>plog</command> command. To disconnect, use
-<command>poff</command>, again, as root.
+Tenzij uw provider een aanlogprocedure heeft die afwijkt van de meerderheid van
+de ISP's, bent u klaar! Start de PPP-verbinding door als root <command>pon</command>
+te typen en volg het proces met behulp van de opdracht <command>plog</command>.
+Gebruik <command>poff</command> om de verbinding te verbreken, wederom als root.
 
 </para><para>
 
-Read <filename>/usr/share/doc/ppp/README.Debian.gz</filename> file for
-more information on using PPP on Debian.
+Lees het bestand <filename>/usr/share/doc/ppp/README.Debian.gz</filename> voor
+meer informatie over het gebruik van PPP in Debian.
 
 </para><para>
 
-For static SLIP connections, you will need to add the
-<userinput>slattach</userinput> command (from the
-<classname>net-tools</classname> package) into
-<filename>/etc/init.d/network</filename>. Dynamic SLIP will require
-the <classname>gnudip</classname> package.
+Voor statische SLIP-verbindingen zal u de opdracht <userinput>slattach</userinput>
+(uit het pakket <classname>net-tools</classname>) moeten toevoegen in 
+<filename>/etc/init.d/network</filename>. Dynamisch SLIP vereist het pakket
+<classname>gnudip</classname>.
 
 </para>
  </sect2>
