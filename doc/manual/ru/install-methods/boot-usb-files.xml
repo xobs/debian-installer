@@ -1,10 +1,10 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: boot-usb-files.xml 14337 2004-04-24 15:05:40Z mck-guest $ -->
+<!-- $Id: boot-usb-files.xml 22935 2004-10-09 18:36:20Z fjpop-guest $ -->
 
  <sect1 condition="bootable-usb" id="boot-usb-files">
  <title>Preparing Files for USB Memory Stick Booting</title>
 
-<para>For preparing the USB stick you will need a system where GNU/Linux is already running and where USB is supported. You should assure that the usb-storage kernel module is loaded (<userinput>modprobe usb-storage</userinput>) and try to find out which SCSI device the USB stick has been mapped to (in this example <filename>/dev/sda</filename> is used). To write to your stick, you will probably have to turn off its write protection switch. </para><para>Note, that the USB stick should be at least 128 MB in size (smaller setups are possible if you follow <xref linkend="usb-copy-flexible"/>). </para>
+<para>For preparing the USB stick you will need a system where GNU/Linux is already running and where USB is supported. You should ensure that the usb-storage kernel module is loaded (<userinput>modprobe usb-storage</userinput>) and try to find out which SCSI device the USB stick has been mapped to (in this example <filename>/dev/sda</filename> is used). To write to your stick, you will probably have to turn off its write protection switch. </para><para>Note, that the USB stick should be at least 128 MB in size (smaller setups are possible if you follow <xref linkend="usb-copy-flexible"/>). </para>
 
   <sect2 id="usb-copy-easy">
   <title>Copying the files - the easy way</title>
@@ -25,7 +25,7 @@ mkdosfs /dev/<replaceable>sda1</replaceable>
 
 syslinux /dev/<replaceable>sda1</replaceable>
 
-</screen></informalexample> Again, take care that you use the correct device name. The partition must not be mounted when starting <command>SYSLINUX</command>. This procedure writes a boot sector to the partition and creates the file <filename>ldlinux.sys</filename> which contains the boot loader code. </para><para>Mount the parition (<userinput>mount /dev/sda1 /mnt</userinput>) and copy the following files from the Debian archives to the stick: <itemizedlist> <listitem><para> <filename>vmlinuz</filename> (kernel binary) </para></listitem> <listitem><para> <filename>initrd.gz</filename> (initial ramdisk image) </para></listitem> <listitem><para> <filename>syslinux.cfg</filename> (SYSLINUX configuration file) </para></listitem> <listitem><para> Optional kernel modules </para></listitem> </itemizedlist> If you want to rename the files, please note that <command>SYSLINUX</command> can only process DOS (8.3) file names. </para><para>The <filename>syslinux.cfg</filename> configuration file should contain the following two lines: <informalexample><screen>
+</screen></informalexample> Again, take care that you use the correct device name. The partition must not be mounted when starting <command>SYSLINUX</command>. This procedure writes a boot sector to the partition and creates the file <filename>ldlinux.sys</filename> which contains the boot loader code. </para><para>Mount the partition (<userinput>mount /dev/sda1 /mnt</userinput>) and copy the following files from the Debian archives to the stick: <itemizedlist> <listitem><para> <filename>vmlinuz</filename> (kernel binary) </para></listitem> <listitem><para> <filename>initrd.gz</filename> (initial ramdisk image) </para></listitem> <listitem><para> <filename>syslinux.cfg</filename> (SYSLINUX configuration file) </para></listitem> <listitem><para> Optional kernel modules </para></listitem> </itemizedlist> If you want to rename the files, please note that <command>SYSLINUX</command> can only process DOS (8.3) file names. </para><para>The <filename>syslinux.cfg</filename> configuration file should contain the following two lines: <informalexample><screen>
 
 default vmlinuz
 append initrd=initrd.gz ramdisk_size=10000 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
