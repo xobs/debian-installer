@@ -4,8 +4,9 @@
 # Copyright 2001 by Joey Hess <joeyh@debian.org>.
 # Licensed under the terms of the GPL.
 #
-# This makefile builds a debian-installer system from a collection of
-# udebs.
+# This makefile builds a debian-installer system and bootable images from 
+# a collection of udebs which it downloads from a Debian archive. See
+# README for details.
 
 # The kernel version to use on the boot floppy.
 KVERS=2.4.0-di
@@ -89,7 +90,7 @@ TREE=$(TMPDIR)/tree
 # This is the kernel image that we will boot from.
 KERNEL=$(TMPDIR)/vmlinuz
 
-build: demo_clean tree lib_reduce status_reduce stats
+build: demo_clean reduced_tree stats
 
 demo:
 	sudo chroot $(TREE) bin/sh -c "if ! mount | grep ^proc ; then bin/mount proc -t proc /proc; fi"
@@ -126,13 +127,13 @@ get_udebs:
 		needed=`echo $$needed | sed "s/$$package *//"`; \
 	done; \
 	if [ $(DEBUG) = y ] ; then \
-	mkdir -p $(DEBUGUDEBDIR); \
-	cd $(DEBUGUDEBDIR); \
-	export DEB_BUILD_OPTIONS="debug"; \
-	$(APT_GET) source --build --yes $$needed; \
-	cd ..; \
+		mkdir -p $(DEBUGUDEBDIR); \
+		cd $(DEBUGUDEBDIR); \
+		export DEB_BUILD_OPTIONS="debug"; \
+		$(APT_GET) source --build --yes $$needed; \
+		cd ..; \
 	else \
-	$(APT_GET) -dy install $$needed; \
+		$(APT_GET) -dy install $$needed; \
 	fi; \
 
 	# Now the udebs are in APTDIR/cache/archives/ and maybe LOCALUDEBDIR,
@@ -156,8 +157,8 @@ get_udebs:
 		fi; \
 	done
 
-
 # Build the installer tree.
+reduced_tree: tree lib_reduce status_reduce
 tree: $(TREE)
 $(TREE): get_udebs
 	dh_testroot
@@ -175,13 +176,14 @@ $(TREE): get_udebs
 	# Clean up after dpkg.
 	rm -rf $(DPKGDIR)/updates
 	rm -f $(DPKGDIR)/available $(DPKGDIR)/*-old $(DPKGDIR)/lock
-	mkdir -p $(TREE)/lib/modules/$(KVER)/
-	depmod -q -a -b $(TREE)/ $(KVER)
+	mkdir -p $(TREE)/lib/modules/$(KVERS)/
+	depmod -q -a -b $(TREE)/ $(KVERS)
 	# Move the kernel image out of the way, into a temp directory
 	# for use later. We don't need it bloating our image!
 	mv -f $(TREE)/boot/vmlinuz $(KERNEL)
+	-rmdir $(TREE)/boot/
 
-tarball: build
+tarball: reduced_tree
 	tar czf $(TYPE)-debian-installer.tar.gz $(TREE)
 
 # Make sure that the temporary mountpoint exists and is not occupied.
@@ -200,9 +202,10 @@ tmp_mount:
 # 4. unmount the file, compress it
 #
 # TODO: get rid of this damned fuzz factor!
-initrd: FUZZ=127
-initrd: TMP_FILE=$(TMPDIR)/$(TREE)
-initrd: tmp_mount
+initrd: $(INITRD)
+$(INITRD): FUZZ=127
+$(INITRD): TMP_FILE=$(TMPDIR)/image.tmp
+$(INITRD): tmp_mount reduced_tree
 	dh_testroot
 	rm -f $(TMP_FILE)
 	install -d $(TMPDIR)
@@ -218,7 +221,7 @@ initrd: tmp_mount
 # 1. make a dos filesystem image
 # 2. copy over kernel, initrd
 # 3. install syslinux
-floppy_image: initrd kernel tmp_mount
+floppy_image: initrd tmp_mount
 	dh_testroot
 	
 	dd if=/dev/zero of=$(FLOPPY_IMAGE) bs=1k count=$(FLOPPY_SIZE)
@@ -226,7 +229,7 @@ floppy_image: initrd kernel tmp_mount
 	mount -t msdos -o loop $(FLOPPY_IMAGE) $(TMP_MNT)
 	
 	cp $(KERNEL) $(TMP_MNT)/LINUX
-	cp initrd.gz $(TMP_MNT)/
+	cp $(INITRD) $(TMP_MNT)/
 	
 	cp syslinux.cfg $(TMP_MNT)/
 	todos $(TMP_MNT)/syslinux.cfg
