@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23678 -->
+<!-- original version: 25152 -->
 
  <sect1 id="kernel-baking"><title>Einen neuen Kernel kompilieren</title>
 <para>
@@ -22,14 +22,6 @@ Hardware oder zusätzliche Optionen unterstützen, die im Standardkernel nicht
 enthalten sind, wie z.B. APM oder SMP
 
 </para></listitem>
-
-<listitem arch="i386"><para>
-
-Die "compact"- und "idepci"-Varianten haben keine Soundunterstützung.
-Der "vanilla"-Kernel hat Sound, aber er könnte aus anderen Gründen
-trotzdem nicht funktionieren.
-
-</para></listitem>
 <listitem><para>
 
 den Kernel optimieren durch Entfernen von nicht benötigten Treibern,
@@ -38,8 +30,8 @@ um die Bootzeit zu verkürzen
 </para></listitem>
 <listitem><para>
 
-Optionen des Kernels nutzen, die vom Standardkernel nicht unterstützt werden
-(wie z.B. Netzwerk-Firewall)
+Optionen des Kernels nutzen, die vom Standardkernel nicht unterstützt werden,
+wie z.B. Unterstützung für viel Arbeitsspeicher (high memory support)
 
 </para></listitem>
 <listitem><para>
@@ -84,7 +76,7 @@ Kernels.
 
 </para><para>
 
-Beachten Sie, dass Sie Ihren Kernel nicht auf Debian-Art kompilieren
+Beachten Sie, dass Sie Ihren Kernel nicht auf <quote>Debian-Art</quote> kompilieren
 <emphasis>müssen</emphasis>, aber wir meinen, dass es erheblich sicherer
 und einfacher ist, das Paketsystem zur Verwaltung der Kernel zu verwenden.
 Sie können auch Ihre Kernelquellen direkt von Linus beziehen statt aus
@@ -101,24 +93,30 @@ nur eine kurze Einführung.
 
 </para><para>
 
-Wir gehen hier davon aus, dass sich Ihre Kernelquellen in
-<filename>/usr/local/src</filename> befinden und dass Ihre Kernelversion
-&kernelversion; ist. Erzeugen Sie als root ein Verzeichnis in
-<filename>/usr/local/src</filename> und ändern Sie den Eigentümer des
-Verzeichnisses auf Ihren normalen Nicht-Root-Benutzernamen.
-Wechseln Sie als normaler Nicht-Root-Benutzer in das Verzeichnis,
-wo Sie die Kernelquellen auspacken möchten
-(<userinput>cd /usr/local/src</userinput>), extrahieren Sie die Kernelquellen
-(<userinput>tar xjf /usr/src/kernel-source-&kernelversion;.tar.bz2</userinput>)
-und wechseln Sie in das entstandene Verzeichnis
-(<userinput>cd kernel-source-&kernelversion;/</userinput>).
+Wir gehen hier davon aus, dass Sie freien Zugriff auf Ihren Rechner haben
+und die Kernelquellen irgendwo in Ihr Home-Verzeichnis entpacken werden<footnote>
+
+<para>
+
+Es gibt auch andere Verzeichnisse, in die Sie die Kernelquellen entpacken und
+wo Sie Ihren eigenen Kernel bauen können, aber dieses ist der einfachste Weg,
+da er keine speziellen Berechtigungen erfordert.
+
+</para>
+
+</footnote>. Ebenso gehen wird davon aus, dass die zu bauende Kernel-Version
+&kernelversion; ist. Vergewissern Sie sich, dass Sie sich in dem Verzeichnis
+befinden, in das Sie die Kernelquellen entpacken möchten und extrahieren Sie
+sie mittels <userinput>tar xjf /usr/src/kernel-source-&kernelversion;.tar.bz2</userinput>.
+Wechseln Sie in das Verzeichnis <filename>kernel-source-&kernelversion;</filename>,
+das erzeugt wurde. 
 
 </para><para>
 
 Sie können jetzt Ihren Kernel konfigurieren. Führen Sie <userinput>make
-xconfig</userinput> aus, wenn X11 installiert ist, konfiguriert ist und läuft,
+xconfig</userinput> aus, wenn X11 installiert, konfiguriert und gestartet ist;
 andernfalls nehmen Sie <userinput>make menuconfig</userinput> (hierzu muss
-das <classname>ncurses-dev</classname>-Paket installiert sein). Nehmen Sie sich
+das Paket <classname>libncurses5-dev</classname>-Paket installiert sein). Nehmen Sie sich
 die Zeit, die Onlinehilfe zu lesen, und wählen Sie sorgfältig die Optionen aus.
 Wenn Sie Zweifel haben, ist es typischerweise besser, den zweifelhaften
 Gerätetreiber mit in den Kernel zu integrieren (ein Gerätetreiber ist ein
@@ -126,9 +124,11 @@ Stück Software, das Hardware-Peripherie verwaltet, wie z.B. Ethernetkarten,
 SCSI-Controller und so weiter). Seien Sie vorsichtig: andere Optionen, die nicht
 zu einer bestimmten Hardwarekomponente gehören, sollten Sie auf dem Standardwert
 belassen, wenn Sie sie nicht verstehen. Vergessen Sie nicht, den
-"Kernel module loader" unter "Loadable module support" zu aktivieren
-(diese Option ist standardmäßig nicht aktiv). Tun Sie dies nicht, wird
+<quote>Kernel module loader</quote> unter <quote>Loadable module support</quote>
+zu aktivieren (diese Option ist standardmäßig nicht aktiv). Tun Sie dies nicht, wird
 Ihr Debian-System Probleme machen.
+
+ <quote>Kernel module loader</quote>
 
 </para><para>
 
@@ -140,10 +140,10 @@ Säubern Sie den Kernelquellen-Baum und setzen Sie die
 
 Kompilieren Sie jetzt den Kernel mit:
 <userinput>fakeroot make-kpkg --revision=custom.1.0 kernel_image</userinput>.
-Die Versionsnummer "1.0" können Sie nach Belieben ändern. Sie wird nur
+Die Versionsnummer <quote>1.0</quote> können Sie nach Belieben ändern. Sie wird nur
 von Ihnen selbst verwendet, um Ihre verschiedenen Kernel zu verwalten.
-Ebenso können Sie jedes andere Wort statt "custom" verwenden (z.B. den
-Namen des Rechners). Die Kernelkompilierung könnte eine Weile dauern,
+Ebenso können Sie jedes andere Wort statt <quote>custom</quote> verwenden (z.B. den
+Host-Namen des Rechners). Die Kernelkompilierung könnte eine Weile dauern,
 abhängig von der Leistungsfähigkeit Ihres Rechners.
 
 </para><para condition="supports-pcmcia">
@@ -161,7 +161,7 @@ Sobald die Kompilierung beendet ist, können Sie Ihren eigenen Kernel wie
 ein Paket installieren. Tippen Sie als root <userinput>dpkg -i
 ../kernel-image-&kernelversion;-<replaceable>subarchitecture</replaceable>_custom.1.0_&architecture;.deb</userinput>
 ein. Der Teil <replaceable>subarchitecture</replaceable> im Dateinamen ist eine
-optionale Unterarchitektur, <phrase arch="i386"> wie z.B. "i586", </phrase>
+optionale Unterarchitektur, <phrase arch="i386"> wie z.B. <quote>i586</quote>, </phrase>
 abhängig davon, welche Kerneloptionen Sie gesetzt haben.
 <userinput>dpkg -i kernel-image...</userinput> installiert den Kernel
 zusammen mit ein paar anderen dazugehörigen Dateien. Zum Beispiel wird
