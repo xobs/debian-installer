@@ -1,18 +1,19 @@
 #!/usr/bin/perl
 # Outputs a list of udebs to install. Pass it the type of image to build as
-# the first parameter, then the kernel flavour, and then the kernel version(s)
+# the first parameter, then the kernel flavour, then the sub architecture
+# (or an empty string if there are none) and then the kernel version(s)
 # as the rest of the parameters. Reads the lists in pkg-lists.
 
 use warnings;
 use strict;
 
+if (int(@ARGV) < 4) {
+	die "Usage: $0 type KERNEL_FLAVOUR SUB_ARCH KERNEL_VERSION [KERNEL_VERSION ...]\n";
+}
 my $type=shift;
 my $kernel_flavour=shift;
+my $sub_arch=shift;
 my @kernel_versions=@ARGV;
-
-if (! @kernel_versions || ! length $kernel_flavour || ! length $type) {
-	die "Usage: $0 type KERNEL_FLAVOUR KERNEL_VERSION [KERNEL_VERSION ...]\n";
-}
 
 my $deb_host_arch=`dpkg-architecture -qDEB_HOST_ARCH`;
 chomp $deb_host_arch;
@@ -73,7 +74,7 @@ while (@lists) {
 				foreach my $v (@kernel_versions)
 				{
 					my $str = $l;
-					if( grep { $v eq $_ } @limits )
+					if( grep { $sub_arch eq $_ } @limits )
 					{
 						#kernel_version is in limit list
 						$str =~ s/\${kernel:Version=.*?}/$v-$kernel_flavour/g;
