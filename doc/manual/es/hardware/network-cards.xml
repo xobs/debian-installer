@@ -1,0 +1,230 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: network-cards.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
+
+ <sect1 id="network-cards">
+ <title>Hardware de conectividad de red</title>
+
+<para arch="i386">
+
+<!-- last updated for kernel-image_2.0.36-2 -->
+Algunas tarjetas de red (NIC, network interface card
+n. del t.) no están soportadas por los discos de instalación de Debian,
+este es el caso de las tarjetas y protocolos AX.25; 3Com EtherLink Plus (3c505) y 
+EtherLink16 (3c507); NI5210; tarjetas NE2100 genéricas; tarjetas NI6510
+y NI16510 EtherBlaster; tarjetas SEEQ 8005; tarjetas Schneider &amp; 
+Koch G16; Ansel Communications EISA 3200, tarjetas basadas en
+Winbond-840 (ej. Realtek-1000A), algunas nuevas tarjetas basadas en
+Tulip y la tarjeta de red integrada Zenith Z-Note. Las tarjetas indicadas a continuación están
+soportadas por el sabor "bf2.4": tarjetas basadas en Winbond-840,
+tarjetas nuevas basadas en Tulip, las series DP8381x/DP8382x de National
+Semiconductor y Sundance ST201 "Alta". Las tarjetas de red Microchannel
+(MCA) no están soportadas por el sistema de instalación estándar, pero
+vea <ulink url="&url-linux-mca;">Linux on MCA</ulink> para algunas 
+instrucciones (antiguas), y los <ulink url="&url-linux-mca-discussion;">
+archivos de discusión de Linux MCA</ulink>.
+Los discos de instalación no soportan redes FDDI, ni las
+tarjetas ni los protocolos. Sin embargo, usted puede crear un núcleo que
+soporte cualquier otra tarjeta y luego sustituirlo en el 
+instalador (vea <xref linkend="rescue-replace-kernel"/>).
+
+</para><para arch="i386">
+
+Con respecto a RDSI (ISDN), el protocolo de canal D para el (antiguo)
+1TR6 alemán no está soportado; las tarjetas RDSI Spellcaster BRI
+tampoco están soportadas por el &d-i;.
+
+</para><para arch="i386">
+
+Tampoco están soportados de forma predeterminada los dispositivos de sonido.
+Pero como ya se ha mencionado previamente: si desea utilizar
+su propio núcleo por favor vaya a <xref linkend="kernel-baking"/> para más 
+información.
+
+</para>
+
+<para arch="m68k">
+
+Cualquier tarjeta de red (NIC) soportada por el núcleo Linux debería también
+estar soportada por los discos de instalación. Puede que necesite
+cagar su controlador de red como un módulo. De nuevo, vea
+<ulink url="&url-m68k-faq;"></ulink> para más detalles. 
+
+</para>
+
+<para arch="sparc">
+
+El núcleo de arranque soporta directamente las siguientes tarjetas de red
+(NICs):
+
+<itemizedlist>
+ <listitem><para>
+
+Sun LANCE
+ 
+
+</para></listitem>
+ <listitem><para>
+
+Sun Happy Meal
+ 
+
+</para></listitem>
+</itemizedlist>
+
+</para><para arch="sparc">
+
+Las siguientes tarjetas de red están soportas como
+módulos. Se podrán activar una vez que se hayan instalado los
+controladores en la instalación. No obstante, debería ser capaz de arrancar
+de estos dispositivos gracias a la magia de la OpenPROM:
+
+<itemizedlist>
+ <listitem><para>
+
+Sun BigMAC
+ 
+
+</para></listitem>
+ <listitem><para>
+
+Sun QuadEthernet
+
+</para></listitem>
+ <listitem><para>
+
+MyriCOM Gigabit Ethernet
+
+</para></listitem>
+</itemizedlist>
+
+</para><para arch="alpha">
+
+Cualquier tarjeta de red (NIC) soportada por el núcleo de
+Linux debería estar soportada por los discos de arranque. En el
+núcleo se ha compilado el soporte para la Ethernet DECChip
+(Tulip) incorporada a muchos modelos Alpha.
+Deberá cargar el controlador de red como módulo
+para otras tarjetas.
+
+</para><para arch="powerpc"> 
+
+Cualquier tarjeta de red (NIC) soportada por el núcleo de
+Linux debería estar soportada por los discos de arranque. Sin embargo, puede
+que deba cargar su controlador de red como módulo.
+
+</para><para arch="hppa">
+
+Cualquier tarjeta de red (NIC) soportada por el núcleo de
+Linux debería estar soportada por los discos de arranque. Sin embargo, puede
+que deba cargar su controlador de red como módulo.
+
+</para><para arch="mips">
+
+Cualquier tarjeta de red (NIC) soportada por el núcleo de
+Linux debería estar soportada por los discos de arranque. Sin embargo, puede
+que deba cargar su controlador de red como módulo.
+
+</para><para arch="mipsel">
+
+Solamente se soportan las tarjetas de red integradas en las DECstations
+debido a limitaciones del núcleo. No funcionan en la actualidad las tarjetas
+opcionales de red TurboChannel.
+
+</para><para arch="s390">
+
+Cualquier tarjeta de red (NIC) soportada por el núcleo de
+Linux debería estar soportada por los discos de arranque. Todos los
+controladores de red están compilados como módulos de modo que puede
+necesitar cargar uno primero durante la configuración de red inicial.
+La lista de dispositivos de red soportados es:
+
+<itemizedlist>
+ <listitem><para>
+
+Conexión canal a canal (CTC) o ESCON (real o emulado)
+ 
+
+</para></listitem>
+ <listitem><para>
+
+lcs: OSA-2 Token Ring/Ethernet u OSA-Express Fast Ethernet
+          (non-QDIO)
+
+</para></listitem>
+<listitem><para>
+
+Inter-User Communication Vehicle (IUCV) - disponible solamente para invitados VM
+
+</para></listitem>
+<listitem><para>
+
+qeth: OSA-Express in QDIO mode / HiperSockets - esto requiere
+un segundo initrd con los módulos OCO que se pueden obtener desde
+<ulink url="http://oss.software.ibm.com/developerworks/opensource/linux390/index.shtml">developerWorks</ulink>. 
+Por favor lea <xref linkend="ipl-tape"/> para más información sobre
+como obtener o crear un segundo initrd.
+
+</para></listitem>
+</itemizedlist>
+
+</para>
+
+<para arch="arm">
+
+Los siguientes dispositivos de red están soportados directamente
+por los discos de arranque en máquinas NetWinder y CATS:
+
+<itemizedlist>
+ <listitem><para>
+
+    NE2000 basada en PCI
+ 
+
+</para></listitem>
+ <listitem><para>
+
+    DECchip Tulip
+
+</para></listitem>
+</itemizedlist>
+
+</para><para arch="arm">
+
+Los siguientes dispositivos de red están soportados directamente por
+los discos de arranque en RiscPCs:
+
+<itemizedlist>
+ <listitem><para>
+
+    Ether1
+
+</para></listitem>
+ <listitem><para>
+
+    Ether3
+
+</para></listitem>
+ <listitem><para>
+
+    EtherH
+
+</para></listitem>
+</itemizedlist>
+
+</para><para arch="arm">
+
+Puede realizar la instalación completa desde la red, sin necesidad
+de CD-ROMs o disquetes, si su tarjeta está mencionada en las listas
+anteriores.
+
+</para><para arch="arm">
+
+Cualquier otra tarjeta de red (NIC) soportada por el núcleo de
+Linux debería estar soportada por los discos de arranque. Sin embargo, puede
+que deba cargar su controlador de red como módulo; esto significa
+que tendrá que instalar el núcleo del sistema operativo y los módulos
+usando algún otro dispositivo.
+
+</para>
+
+ </sect1>
