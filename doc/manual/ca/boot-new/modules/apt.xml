@@ -1,96 +1,97 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 18642 untranslated -->
+<!-- original version: 18642 -->
 
  <sect2 id="configure-apt">
- <title>Configuring APT</title>
+ <title>Configurant l'APT</title>
 
 <para>
 
-The main means that people use to install packages on their system is
-via a program called <command>apt-get</command>, from the
-<classname>apt</classname> package.<footnote>
+El principal mètode que s'utilitza per instal·lar paquets al sistema,
+és basa en la utilització d'un programa del paquet
+<classname>apt</classname> anomenat <command>apt-get</command>.<footnote>
 
 <para>
 
-Note that the actual program that installs packages is called
-<command>dpkg</command>.  However, this package is more of a low-level
-tool.  <command>apt-get</command> will invoke <command>dpkg</command>
-as appropriate; it is a higher-level too, however, because it knows to
-install other packages which are required for the package you're
-trying to install, as well as how to retrieve the package from your
-CD, the network, or wherever.
+Recordeu que el programa que s'utilitza actualment per a la instal·lació
+de paquets s'anomena <command>dpkg</command>. Tot i això, aquest paquet
+és una eina de més baix nivell. L'<command>apt-get</command> cridarà
+el <command>dpkg</command> de forma adecuada; el primer és de més alt
+nivell, ja que és capaç d'instal·lar els paquets dels quals depèn el
+paquet que voleu instal·lar i obtenir el paquet d'un CD, de la xarxa
+o de qualsevol lloc.
 
 </para>
 </footnote>
 
-APT must be configured, however, so that it knows where to retrieve
-packages from.  The helper application which assists in this task is
-called <command>apt-setup</command>.
+L'APT s'ha de configurar perquè localitzi els llocs d'on ha d'obtenir
+els paquets. L'aplicació que us ajudarà en el procés de configuració
+s'anomena <command>apt-setup</command>.
 
 </para><para>
 
-The next step in your configuration process is to tell APT where other
-Debian packages can be found.  Note that you can re-run this tool at
-any point after installation by running <command>apt-setup</command>,
-or by manually editing <filename>/etc/apt/sources.list</filename>.
+El següent pas del procés de configuració és indicar a l'APT la
+ubicació d'altres paquets de Debian. Recordeu que podeu tornar
+a executar l'aplicació en qualsevol instant posterior a la instal·lació
+utilitzant l'ordre <command>apt-setup</command> o editant manualment el
+fitxer <filename>/etc/apt/sources.list</filename>.
 
 </para><para>
 
-If an official CD-ROM is in the drive at this point, then that CD-ROM
-should automatically be configured as an apt source without prompting.
-You will notice this because you will see the CD-ROM being scanned.
+Si en aquest instant hi ha insertat un CD-ROM a la unitat, aquest s'hauria
+de configurar automàticament com a una font de l'apt. Us n'adonareu
+perquè s'estarà escanejat el CD-ROM.
 
 </para><para>
 
-For users without an official CD-ROM, you will be offered an array of
-choices for how Debian packages are accessed: FTP, HTTP, CD-ROM, or
-a local file system.
+Els usuaris que no disposin d'un CD-ROM oficial podran accedir
+als paquets de Debian a través de diversos mètodes: FTP, HTTP, CD-ROM
+o el sistema de fitxers local.
 
 </para><para>
 
-You should know that it's perfectly acceptable to have a number of
-different APT sources, even for the same Debian archive.
-<command>apt-get</command> will automatically pick the package with
-the highest version number given all the available versions.  Or, for
-instance, if you have both an HTTP and a CD-ROM APT source,
-<command>apt-get</command> should automatically use the local CD-ROM
-when possible, and only resort to HTTP if a newer version is available
-there.  However, it is not a good idea to add unnecessary APT sources,
-since this will tend to slow down the process of checking the network
-archives for new versions.
+Heu de saber que és viable disposar de múltiples fonts diferents
+de l'APT, encara que corresponguin al mateix arxiu de Debian.
+L'<command>apt-get</command> agafarà el paquet amb la versió
+més alta de les múltiples versions disponibles. Per exemple,
+si disposeu d'una font de l'APT en HTTP i una en CD-ROM, l'
+<command>apt-get</command> hauria d'utilitzar automàticament
+el CD-ROM local sempre que fos possible, i accedir a HTTP únicament
+si hi hagués una versió més nova. Tot i això, no és recomanable
+afegir fonts de l'APT innecessàries, ja que tendirà a alentir el procés
+de comprovació de les noves versions en els arxius en xarxa.
 
 </para>
 
   <sect3 id="configure-apt-net">
-  <title>Configuring Network Package Sources</title>
+  <title>Configurant les fonts de paquets en la xarxa</title>
 
 <para>
 
-If you plan on installing the rest of your system via the network, the
-most common option is to select the <userinput>http</userinput>
-source.  The <userinput>ftp</userinput> source is also acceptable, but
-tends to be a little slower making connections.
+Si planegeu instal·lar la resta del sistema mitjançant la xarxa,
+l'opció més comuna és seleccionar la font <userinput>http</userinput>.
+També s'accepta l'<userinput>ftp</userinput>, però tendeix a alentir
+connexions més lentament.
 
 </para><para>
 
-The next step during the configuration of network packages sources is
-to tell <command>apt-setup</command> which country you live in.  This
-configures which of the official Debian Internet mirror network you
-connect to.  Depending on which country you select, you will be given
-a list of possible machines.  Its generally fine to pick the one on
-the top of the list, but any of them should work.
+El següent pas és especificar a l'<command>apt-setup</command> el
+país on viviu. Aquesta opció configura el mirall d'Internet de
+Debian oficial al qual us connectareu. En funció del país que
+seleccioneu us apareixerà una llista d'ordinadors possibles.
+En general és correcte escollir el primer de la llista, però
+qualsevol d'ells hauria de funcionar correctament.
 
 </para><para>
 
-If you are installing via HTTP, you will be asked to configure your
-proxy server.  This is sometimes required by people behind firewalls,
-on corporate networks, etc.
+Si ho esteu instal·lant via HTTP, us preguntarà sobre la configuració
+del servidor intermediari. Aquesta opció és necessària en cas d'estar
+darrere un tallafocs, en una xarxa corporativa, etc.
 
 </para><para>
 
-Finally, your new network package source will be tested.  If all goes
-well, you will be prompted whether you want to do it all over again
-with another network source.
+Finalment es comprovarà la nova font de paquets de la xarxa. Si tot
+funciona correctament us preguntarà si ho voleu repetir amb un
+altre font de la xarxa.
 
 </para>
   </sect3>

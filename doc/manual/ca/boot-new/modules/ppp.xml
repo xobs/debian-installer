@@ -1,112 +1,116 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 18642 untranslated -->
+<!-- original version: 18642 -->
 
  <sect2 arch="not-s390" id="PPP">
- <title>Setting Up PPP</title>
+ <title>Configurant el PPP</title>
 
 <para>
 
-If your computer is not connected to a network, you will next be asked
-whether you wish to install the rest of the system using PPP.
+Si el vostre ordinador no està connectat a una xarxa se us preguntarà
+si voleu la resta del sistema utilitzant el PPP.
 
 </para><para>
 
-If you do choose to configure PPP at this point, a program named
-<command>pppconfig</command> will be run.  This program helps you
-configure your PPP connection.  <emphasis>Make sure, when it asks you
-for the name of your dialup connection, that you name it
+Si escolliu configurar PPP en aquest punt, s'executarà un programa
+anomenat <command>pppconfig</command>. Aquest programa us ajudarà
+a configurar la vostra connexió PPP. <emphasis>Assegureu-vos de que
+quan us pregunti el nom de la vostra connexió telefònica l'anomeneu
 <userinput>provider</userinput>.</emphasis>
 
 </para><para>
 
-Hopefully, the <command>pppconfig</command> program will walk you
-through a pain-free PPP connection setup.  However, if it does not
-work for you, see below for detailed instructions.
+Afortunadament, el programa <command>pppconfig</command> us guiarà
+a través d'una configuració de la connexió PPP sense excessiu
+patiment. Tot i això, si aquest no us servís, seguiu llegint la
+secció per a instruccions més detallades.
 
 </para><para>
 
-In order to setup PPP, you'll need to know the basics of file viewing
-and editing in GNU/Linux.  To view files, you should use
-<command>more</command>, and <command>zmore</command> for compressed
-files with a <userinput>.gz</userinput> extension.  For example, to
-view <filename>README.debian.gz</filename>, type <userinput>zmore
-README.debian.gz</userinput>.  The base system comes with an editor
-named <command>nano</command>, which is very simple to use, but does
-not have a lot of features. You will probably want to install more
-full-featured editors and viewers later, such as
-<command>jed</command>, <command>nvi</command>,
-<command>less</command>, and <command>emacs</command>.
+Per configurar el PPP necessitareu conèixer els conceptes bàsics
+de la visualització i edició de fitxers en GNU/Linux.  Per veure
+fitxers podeu utilitzar <command>more</command> i
+<command>zmore</command> per a fitxers comprimits amb l'extensió
+<userinput>.gz</userinput>. Per exemple, per veure el fitxer
+<filename>README.debian.gz</filename> escriviu <userinput>zmore
+README.debian.gz</userinput>. El sistema base proporciona un
+editor simple d'utilitzar però amb funcionalitats limitades anomenat
+<command>nano</command>. Posteriorment probablement us interessarà
+instal·lar editors i visualitzadors amb més funcionalitats com el
+<command>jed</command>, <command>nvi</command>, <command>less</command>
+i <command>emacs</command>.
 
 </para><para>
 
-Edit <filename>/etc/ppp/peers/provider</filename> and replace
-<userinput>/dev/modem</userinput> with
-<userinput>/dev/ttyS<replaceable>&num;</replaceable></userinput> where
-<replaceable>&num;</replaceable> stands for the number of your serial
-port. In Linux, serial ports are counted from 0; your first serial
-port <phrase arch="i386">(i.e., <userinput>COM1</userinput>)</phrase>
-is <filename>/dev/ttyS0</filename> under Linux.
+Editeu  el fitxer <filename>/etc/ppp/peers/provider</filename>
+i substituïu <userinput>/dev/modem</userinput> per
+<userinput>/dev/ttyS<replaceable>&num;</replaceable></userinput>
+on <replaceable>&num;</replaceable> serà el número del vostre
+port sèrie. En Linux els ports sèrie s'enumeren des de 0; el
+primer port sèrie <phrase arch="i386">(p.e.
+<userinput>COM1</userinput>)</phrase> és <filename>/dev/ttyS0</filename>
+en Linux.
 
-<phrase arch="powerpc;m68k">On Macintoshes with serial ports, the
-modem port is <filename>/dev/ttyS0</filename> and the printer port is
-<filename>/dev/ttyS1</filename>.</phrase>
+<phrase arch="powepc;m68k">En els Macintosh amb ports sèrie,
+el port del mòdem és <filename>/dev/ttyS0</filename> i el port
+d'impressora és <filename>/dev/ttyS1</filename>.</phrase>
 
-The next step is to edit
-<filename>/etc/chatscripts/provider</filename> and insert your
-provider's phone number, your user-name and password. Please do not
-delete the <quote>\q</quote> that precedes the password. It hides the
-password from appearing in your log files.
-
-</para><para>
-
-Many providers use PAP or CHAP for login sequence instead of text mode
-authentication.  Others use both.  If your provider requires PAP or
-CHAP, you'll need to follow a different procedure.  Comment out
-everything below the dialing string (the one that starts with
-<quote>ATDT</quote>) in
-<filename>/etc/chatscripts/provider</filename>, modify
-<filename>/etc/ppp/peers/provider</filename> as described above, and
-add <userinput>user <replaceable>name</replaceable></userinput> where
-<replaceable>name</replaceable> stands for your user-name for the
-provider you are trying to connect to.  Next, edit
-<filename>/etc/ppp/pap-secrets</filename> or
-<filename>/etc/ppp/chap-secrets</filename> and enter your password
-there.
+El següent pas és editar el fitxer
+<filename>/etc/chatscripts/provider</filename> i afegir-hi el
+número de telèfon del vostre proveïdor, nom d'usuari i
+contrasenya. Si us plau no suprimiu la <quote>q</quote> que
+precedeix a la contrasenya.  Aquesta característica fa que la
+contrasenya no aparegui als fitxers registre.
 
 </para><para>
 
-You will also need to edit <filename>/etc/resolv.conf</filename> and
-add your provider's name server (DNS) IP addresses.  The lines in
-<filename>/etc/resolv.conf</filename> are in the following format:
-<userinput>nameserver
-<replaceable>xxx.xxx.xxx.xxx</replaceable></userinput> where the
-<replaceable>x</replaceable>s stand for numbers in your IP
-address. Optionally, you could add the
-<userinput>usepeerdns</userinput> option to the
-<filename>/etc/ppp/peers/provider</filename> file, which will enable
-automatic choosing of appropriate DNS servers, using settings the
-remote host usually provides.
+Molts proveïdors utilitzen PAP o CHAP per a la seqüència
+d'entrada en comptes de l'autenticació en mode de text. D'altres
+utilitzen tots dos mètodes. Si el vostre proveïdor necessita
+PAP o CHAP, necessitareu seguir un procediment diferent. Comenteu
+tot el que estigui sota la línia de marcatge (la que comença per
+<quote>ATDT</quote>) al fitxer <filename>/etc/chatscripts/provider</filename>,
+modifiqueu el fitxer <filename>/etc/ppp/peers/provider</filename>
+tal i com es descriu anteriorment i afegiu <userinput>user
+<replaceable>nom</replaceable></userinput> on
+<replaceable>nom</replaceable> serà el vostre nom d'usuari del
+proveïdor al qual esteu intentant connectar. Seguidament editeu
+el fitxer <filename>/etc/ppp/pap-secrets</filename> o el
+<filename>/etc/ppp/chap-secrets</filename> i introduïu-hi
+la vostra contrasenya.
 
 </para><para>
 
-Unless your provider has a login sequence different from the majority
-of ISPs, you are done! Start the PPP connection by typing
-<command>pon</command> as root, and monitor the process using
-<command>plog</command> command. To disconnect, use
-<command>poff</command>, again, as root.
+També haureu d'editar el fitxer <filename>/etc/resolv.conf</filename>
+i afegir-hi l'adreça d'IP del servidor de noms (DNS) del vostre
+proveïdor. Les línies del fitxer <filename>/etc/resolv.conf</filename>
+tenen el següent format: <userinput>nomservidor
+<replaceable>xxx.xxx.xxx.xxx</replaceable></userinput> on
+<replaceable>x</replaceable> correspon al números de l'adreça
+d'IP. Opcionalment podeu afegir l'opció <userinput>usepeerdns<userinput>
+al fitxer <filename>/etc/ppp/peers/provider</filename>, que
+activarà la selecció automàtica dels servidors DNS apropiats,
+utilitzant els valors que el servidor remot generalment proporciona.
 
 </para><para>
 
-Read <filename>/usr/share/doc/ppp/README.Debian.gz</filename> file for
-more information on using PPP on Debian.
+Si no és que el vostre proveïdor té una seqüència diferent a la
+de la majoria d'ISP, ja heu acabat la feina!  Inicieu una connexió
+PPP escrivint <command>pon</command> com a root i monitoritzeu el
+procés utilitzant l'eina <command>plog</command>. Per a
+desconnectar-vos utilitzeu <command>poff</command>, també com a
+root.
 
 </para><para>
 
-For static SLIP connections, you will need to add the
-<userinput>slattach</userinput> command (from the
-<classname>net-tools</classname> package) into
-<filename>/etc/init.d/network</filename>. Dynamic SLIP will require
-the <classname>gnudip</classname> package.
+Per a més informació de com utilitzar el PPP en Debian
+llegiu el fitxer <filename>/usr/share/doc/ppp/README.Debian.gz</filename>
+
+</para><para>
+
+Per a connexions estàtiques SLIP, necessitareu afegir l'ordre
+<userinput>slattach</userinput> (del paquet <classname>net-tools</classname>)
+al fitxer <filename>/etc/init.d/network</filename>. L'SLIP dinàmic
+necessitarà el paquet <classname>gnudip</classname>.
 
 </para>
  </sect2>
