@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- original version: 22580 -->
+<!-- revisado jfs, 21 noviembre 2004 -->
+<!-- TODO: no todo el fichero de preconfiguración está traducido -->
 
 <sect1 id="example-preseed">
 <title>Ejemplo de fichero de preconfiguración</title>
 
-Este es un ejemplo de un fichero de preconfiguración funcional, para 
-efectuar una instalación automatizada. Su uso se explica en
-<xref linkend="automatic-install"/>. Tal vez quiera descomentar alguna
-de las líneas antes de usar el fichero.
+A continuación se muestra un ejemplo de un fichero de preconfiguración
+funcional que puede utilizar para realizar una instalación
+automatizada. Su uso se explica en <xref
+linkend="automatic-install"/>. Tal vez quiera descomentar alguna de
+las líneas antes de usar el fichero.
 
 <informalexample><screen>
 #### Modificar syslinux.cfg.
@@ -17,53 +20,56 @@ de las líneas antes de usar el fichero.
 #
 # Por lo menos querra añadir un parámetro indicando al instalador de donde
 # obtener el fichero de preconfiguración.
-# Si esta insatlando desde un medio USB, use el siguiente parámetro, y coloque
-# el fichero de preconfiguración en el directorio superior del dispostiivo USB.
+# Si está instalando desde un medio USB, use el siguiente parámetro, y coloque
+# el fichero de preconfiguración en el directorio raíz del dispositivo USB.
 #   preseed/file=/hd-media/preseed
-# En cambio, si esta arrancando desde red, use este:
+# En cambio, si está arrancando desde red, use este:
 #   preseed/url=http://maquina/ruta/hacia/fichero/preseed
-# Si esta remasterizando un CD, podría usar este otro:
+# Si está remasterizando un CD, podría usar este otro:
 #   preseed/file=/cdrom/preseed
 # Asegúrese de copiar este fichero a la uicación que ha especificado.
 # 
-# Mientras esta realizando esto, tal vez quiera cambiar allí a 
+# Mientras está realizando esto, tal vez quiera cambiar allí a 
 # debconf/priority=critical, para evitar la mayoría de preguntas incluso
 # si la siguiente preconfiguración obvia alguna.
 # También podría definir el tiempo de espera a 1 en syslinux.cfg para
-# evitar la necesidad de presionar enter para arrancar el instalador.
+# evitar la necesidad de presionar Enter para arrancar el instalador.
 #
 # La selección de idioma, país y teclado no puede ser preconfigurada desde
-# un fichero, debido a que estas preguntas son efectuadas antes de que
-# el fichero de preconfiguración pueda ser cargado.
-# En su lugar, para obviar estas preguntas, pase algunos parámetros más
+# un fichero, debido a que se configuran éstas antes de que se cargue
+# el fichero de preconfiguración.
+# En su lugar, para evitar estas preguntas, pase algunos parámetros más
 # al núcleo:
 #
 #    languagechooser/language-name=Spanish
 #    countrychooser/shortlist=ES
 #    console-keymaps-at/keymap=es
 
-#### Órdenes de Shell.
+#### Órdenes del intérprete de comandos.
 
-# La preconfiguración de d-u es inherentement insegura. Ninguna parte del
+# La preconfiguración de d-u es inherentemente insegura. Ninguna parte del
 # instalador verifica intentos de desbordamiento de buffer u otras
 # formas de vulneración de los valores de un fichero de preconfiguración
-# como este. ¡Solamente use ficheros de preconfiguración de fuentes
-# confiables! Para lograr gestionar esto, y porque generalmente es útil,
+# como éste. ¡Use solamente ficheros de preconfiguración de fuentes
+# confiables! Para poder gestionar esto, y porque generalmente es útil,
 # a continuación ofrecemos una forma de ejecutar cualquier orden de shell
 # que desee dentro del instalador, de forma automática.
 
 # La primera orden a ejecutar tan pronto como sea posible, después de que
-# el fichero de preconfiguración es leido.
+# se lea el fichero de preconfiguración:
 #d-i	preseed/early_command		string wget http://url/to/my.udeb -O /tmp/my.udeb ; udpkg -i /tmp/my.udeb
+#
 # Esta orden se ejecuta justamente antes de que finalize la instalación,
-# pero cuando todavía existe un directorio /target usable.
+# pero cuando todavía existe un directorio /target usable:
 #d-i	preseed/late_command		string for deb in /hd-media/*.deb; do cp $deb /target/tmp; chroot /target dpkg -i /tmp/$(basename $deb); done
-# Esta orden se ejecuta tan pronto como se inicie base-config.
+#
+# Esta orden se ejecuta tan pronto como se inicie base-config:
 #base-config	base-config/early_command	string echo hi mom
+#
 # Esta orden se ejecuta después de que se finalice con base-config, y
-# antes de presentar el cursor «login:». Esta es una buena forma de
+# antes de presentar el indicador «login:». Ésta es una buena forma de
 # instalar el conjunto de paquetes que deseea, o de modificar la
-# configuración del sistema.
+# configuración del sistema:
 #base-config	base-config/late_command	string apt-get install zsh; chsh -s /bin/zsh
 
 #### Configuración de red.
