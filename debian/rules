@@ -21,6 +21,7 @@ clean:
 	dh_testroot
 	dh_clean build-stamp
 	$(MAKE) -C build reallyclean
+	$(MAKE) -C doc/devel/partman clean
 
 build: build-stamp
 build-stamp:
@@ -28,19 +29,21 @@ build-stamp:
 	fakeroot $(MAKE) -C build all_build stats SUITE=$(DISTRIBUTION)
 	touch $@
 	
-build-manual:
+build-docs:
 	-rm -rf debian/tmp/$(DESTDIR)/doc/manual
 	cd doc/manual/build && \
 	        official_build=1 \
 		destination=$(shell pwd)/debian/tmp/$(DESTDIR)/doc/manual \
 		architectures=$(ARCH) noarchdir=1 ./build.sh
 
+	$(MAKE) -C doc/devel/partman
+
 install: build
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_install
-	debian/rules build-manual
+	debian/rules build-docs
 	install -d debian/tmp/$(IMAGEDIR)
 	cp -a build/dest/* debian/tmp/$(IMAGEDIR)
 	cd debian/tmp/$(IMAGEDIR) && md5sum `find . -type f` > MD5SUMS
@@ -51,7 +54,7 @@ binary-arch: install
 	dh_testroot
 	dh_installchangelogs
 	dh_installdocs debian/tmp/$(DESTDIR)/doc/manual
-	dh_installdocs -X historic -X manual doc/*
+	dh_installdocs -X manual doc/* -X Makefile -X partman-doc.sgml
 	dh_compress
 	dh_fixperms
 	dh_gencontrol -- -Vkernel:Package='$(KERNELPACKAGE)'

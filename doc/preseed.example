@@ -60,7 +60,7 @@
 # locations! To drive that home, and because it's generally useful, here's
 # a way to run any shell command you'd like inside the installer,
 # automatically.
-#d-i	preseed/command		string	echo hi mom; rm -rf /
+#d-i	preseed/command		string wget http://url/to/my.udeb -O /tmp/my.udeb ; udpkg -i /tmp/my.udeb
 
 #### Network configuration.
 
@@ -89,35 +89,54 @@ d-i	netcfg/get_domain	string unassigned-domain
 # Disable that annoying WEP key dialog.
 d-i	netcfg/wireless_wep	string 
 # The wacky dhcp hostname that some ISPs use as a password of sorts.
-#d-i	netcfg/dhcp_hostname	string /radish
+#d-i	netcfg/dhcp_hostname	string radish
 
 #### Mirror settings.
 
 d-i	mirror/country		string enter information manually
-# You probably want to change this, unless your mirror is named "mirror".
-d-i	mirror/http/hostname	string mirror
+d-i	mirror/http/hostname	string http.us.debian.org
 d-i	mirror/http/directory	string /debian
 d-i	mirror/suite		string unstable
 #d-i	mirror/http/proxy	string http://192.168.1.1:3128/
 
 ### Partitioning.
 
-# Choosing the disk to destroy^Winstall to.
-# TODO!
+# If the system has free space you can choose to only partition that space.
+#d-i	partman-auto/init_automatically_partition	select Use the largest continuous free space
+# Alternatively, you can specify a disk to partition. The device name can
+# be given in either devfs or traditional non-devfs format.
+# For example, to use the first disk devfs knows of:
+d-i	partman-auto/disk	string /dev/discs/disc0/disc
 
-
-# You can choose from any of the predefined recipes:
+# You can choose from any of the predefined partitioning recipes:
 d-i	partman-auto/choose_recipe	select All files in one partition (recommended for new users)
 #d-i	partman-auto/choose_recipe	select Desktop machine
 #d-i	partman-auto/choose_recipe	select Multi-user workstation
-# If you want, you could provide your own partman-auto recipe in a udeb,
-# get that loaded into the installer, and set these variables to make it be
-# used:
-#d-i	partman-auto/choose_recipe	select expert
-#d-i	partman-auto/expert_recipe	string /my-recipe
-# Of you could abuse things to download your recipe from the net, if you
-# really wanted to:
-#d-i	preseed/command		string wget http://url/to/recipe -O /my-recipe
+# Or provide a recipe of your own...
+# The recipe format is documented in the file devel/partman-auto-recipe.txt.
+# If you have a way to get a recipe file into the d-i environment, you can
+# just point at it.
+#d-i	partman-auto/expert_recipe_file	string /hd-media/recipe
+# If not, you can put an entire recipe in one line. This example creates
+# a small /boot partition, suitable swap, and uses the rest of the space
+# for the root partition:
+#d-i	partman-auto/expert_recipe	string boot-root :: 20 50 100 ext3 $primary{ } $bootable{ } method{ format } format{ } use_filesystem{ } filesystem{ ext3 } mountpoint{ /boot } .  500 10000 1000000000 ext3 method{ format } format{ } use_filesystem{ } filesystem{ ext3 } mountpoint{ / } .  64 512 300% linux-swap method{ swap } format{ } . 
+# For reference, here is that same recipe in a more readable form:
+# 	boot-root ::
+# 	40 50 100 ext3
+#		$primary{ } $bootable{ }
+#		method{ format } format{ }
+#		use_filesystem{ } filesystem{ ext3 }
+#		mountpoint{ /boot }
+#	.
+# 	500 10000 1000000000 ext3
+#		method{ format } format{ }
+#		use_filesystem{ } filesystem{ ext3 }
+#		mountpoint{ / }
+#	.
+# 	64 512 300% linux-swap
+#		method{ swap } format{ }
+#	.
 
 # This makes partman automatically partition without confirmation.
 d-i	partman/choose_partition	select Finish partitioning and write changes to disk
