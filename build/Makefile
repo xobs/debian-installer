@@ -645,7 +645,7 @@ $(STAMPS)extra-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
 	echo -n > $(TEMP)/diskusage.txt
 	set -e; \
 	for file in $(shell grep --no-filename -v ^\#  pkg-lists/$(TYPE)/common \
-		`if [ -f pkg-lists/$(TYPE)/$(ARCH) ]; then echo pkg-lists/$(TYPE)/$(ARCH); fi` \
+		`if [ -f pkg-lists/$(TYPE)/$(ARCH).cfg ]; then echo pkg-lists/$(TYPE)/$(ARCH).cfg; fi` \
 		| sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2\n)/g' ) ; do \
 			cp $(UDEBDIR)/$$file* $(TREE) ; \
 	done
