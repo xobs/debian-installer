@@ -163,7 +163,79 @@ future).
 </sect4>
 <sect4>
 <title>
-Request for early support for your language
+Prerequisites
+</title>
+
+<para>
+For a language to be supported completely in the installer and later
+in the Debian distribution, at least "locale" must exist for this 
+language.
+</para>
+
+<para>
+This document is not aimed at describing locales and what is the information
+they contain. As a rough description, a locale describes specific properties
+of a language/country combination. For instance, the "de_DE" locale describes
+specifics of the german language in Germany:
+</para>
+
+	    <unorderedlist>
+	      <listitem>
+		<para>
+		  name of the days of the weeks (and abbreviations)
+		</para>
+	      </listitem>
+	      <listitem>
+		name of the months (and abbreviations)
+	      </listitem>
+	      <listitem>
+		<para>
+		  official symbol of the currency
+		</para>
+	      </listitem>
+	      <listitem>
+		<para>
+		  writing numbers
+		</para>
+	      </listitem>
+	      <listitem>
+		<para>
+		  writing dates
+		</para>
+	      </listitem>
+	      <listitem>
+		<para>
+		  writing telephone numbers
+		</para>
+	      </listitem>
+	      <listitem>
+		<para>
+		  collation order for sorting alphabetic lists
+		</para>
+	      </listitem>
+	      <listitem>
+		<para>
+		  usual paper size
+		</para>
+	      </listitem>
+	      <listitem>
+		<para>
+		  .../...
+		</para>
+	      </listitem>
+	    </unorderedlist>
+
+<para>
+Writing a locale need to be used to the locale files format, so don't be
+afraid by this : this part may be handled by a i18n specialist
+in Debian, most often one of the D-I i18n coordinators. You will only need to
+provide him/her the above informations when (s)he will need it.
+</para>
+
+</sect4>
+<sect4>
+<title>
+Request for early support for your language in Debian Installer
 </title>
 
 <para>
@@ -394,6 +466,11 @@ the levels concepts.
 	      <itemizedlist>
 		<listitem>
 		  <para>
+		    newt (programs)
+		  </para>
+		</listitem>
+		<listitem>
+		  <para>
 		    base-config (programs and debconf)
 		  </para>
 		</listitem>
@@ -422,11 +499,6 @@ the levels concepts.
 		    exim4 (debconf)       
 		  </para>
 		</listitem>
-		<listitem>
-		  <para>
-		    popularity-contest (debconf)
-		  </para>
-		</listitem>
 	      </itemizedlist>
 	    </listitem>
 	    <listitem>
@@ -437,6 +509,11 @@ the levels concepts.
 		which may display their screens under certain circumstances:
 	      </para>
 	      <itemizedlist>
+		<listitem>
+		  <para>
+		    popularity-contest (debconf)
+		  </para>
+		</listitem>
 		<listitem>
 		  <para>
 		    discover1 (debconf)  
@@ -475,6 +552,11 @@ the levels concepts.
 		during any type of installation of a Debian base system:
 	      </para>
 	      <itemizedlist>
+		<listitem>
+		  <para>
+		    debconf (program)
+		  </para>
+		</listitem>
 		<listitem>
 		  <para>
 		    discover1 (program)
@@ -649,6 +731,11 @@ other <emphasis>regular</emphasis> Debian packages:
 	  <itemizedlist>
 	    <listitem>
 	      <para>
+		newt
+	      </para>
+	    </listitem>
+	    <listitem>
+	      <para>
 		base-config (D-I team)
 	      </para>
 	    </listitem>
@@ -677,11 +764,6 @@ other <emphasis>regular</emphasis> Debian packages:
 		exim4
 	      </para>
 	    </listitem>
-	    <listitem>
-	      <para>
-		popularity-contest
-	      </para>
-	    </listitem>
 	  </itemizedlist>
 
 <para>Iso-codes and console-data packages material is indeed used in D-I
@@ -694,6 +776,64 @@ level 2.
 <para>Please follow the order below for translating files. This means that
 you should first translate base-config, then shadow and so on...
 </para>
+
+<sect5>
+<title>
+Newt
+</title>
+
+<para>
+The newt package is a library (whiptail) which includes widgets used by
+the most popular interface to the debconf software, the software
+involved in packages configuration steps. These widgets include the <emphasis>Yes</emphasis> or  <emphasis>No</emphasis> widgets used by boolean templates, as well as the  <emphasis>OK</emphasis> or  <emphasis>Abort</emphasis> buttons
+text.
+</para>
+
+<para>The translation of newt is very simple as the above shows.
+</para>
+
+<emphasis>
+Getting files for newt
+</emphasis>
+
+<para>
+This package is a <emphasis>regular</emphasis> Debian package. The package
+maintainer currently does no use any CVS or SVN repository.
+</para>
+
+<para>This package's l10n material is in one single file:
+</para>
+
+<itemizedlist>
+<listitem>
+<para>
+<filename>po/newt.pot</filename> : whiptail widgets translatable text
+</para>
+</listitem>
+</itemizedlist>
+
+<para>Check whether an incomplete translation exists for your language:
+   <ulink url="http://people.debian.org/~seppy/d-i/level2/files/xx/newt_po_xx.po">http://people.debian.org/~seppy/d-i/level2/files/xx/newt_po_xx.po</ulink>
+</para>
+
+<para>If it doesn't exist, get the POT file at:
+   <ulink url="http://people.debian.org/~seppy/d-i/level2/POT/newt_po.pot">http://people.debian.org/~seppy/d-i/level2/POT/newt_po.pot</ulink>
+</para>
+
+<emphasis>
+Sending files for newt
+</emphasis>
+
+<para>
+The translation file must be reported as a bug against the <emphasis>newt</emphasis>
+package. Mention that the file is the <emphasis>debconf</emphasis> translation.
+</para>
+<para>
+Please see the <ulink url="#reporting_bugs">Reporting bugs against Debian packages</ulink> section of
+this document.
+</para>
+
+</sect5>
 
 <sect5>
 <title>
@@ -1211,6 +1351,68 @@ this document.
 </para>
 
 </sect5>
+</sect4>
+<sect4>
+<title>
+Level 3 of translations
+</title>
+
+<para>
+The level 3 of translations groups together the translation of
+steps which are not always been used during installation made with
+D-I. These steps are optional steps and do no occur on default
+installs.
+</para>
+
+<para>All packages which interact with users during second stage optional
+steps are considered part of the level 3 of l10n for D-I.
+</para>
+
+<para>This includes the following <emphasis>regular</emphasis> Debian packages:
+
+	    <itemizedlist>
+		<listitem>
+		  <para>
+		    popularity-contest
+		  </para>
+		</listitem>
+	      <listitem>
+		<para>
+		  discover1 (debconf)
+		</para>
+	      </listitem>
+	      <listitem>
+		<para>
+		</para>
+	      </listitem>
+	      <listitem>
+		<para>
+		  aptitude
+		</para>
+	      </listitem>
+	      <listitem>
+		<para>
+		  pppconfig
+		</para>
+	      </listitem>
+	      <listitem>
+		<para>
+		  console-common
+		</para>
+	      </listitem>
+	      <listitem>
+		<para>
+		  dictionaries-common
+		</para>
+	      </listitem>
+	      <listitem>
+		<para>
+		  pcmcia-cs
+		</para>
+	      </listitem>
+	    </itemizedlist>
+</para>
+	   
 <sect5>
 <title>
 Popularity-contest
@@ -1282,63 +1484,6 @@ fix is <emphasis>pending</emphasis>.
 </para>
 
 </sect5>
-</sect4>
-<sect4>
-<title>
-Level 3 of translations
-</title>
-
-<para>
-The level 3 of translations groups together the translation of
-steps which are not always been used during installation made with
-D-I. These steps are optional steps and do no occur on default
-installs.
-</para>
-
-<para>All packages which interact with users during second stage optional
-steps are considered part of the level 3 of l10n for D-I.
-</para>
-
-<para>This includes the following <emphasis>regular</emphasis> Debian packages:
-
-	    <itemizedlist>
-	      <listitem>
-		<para>
-		  discover1 (debconf)
-		</para>
-	      </listitem>
-	      <listitem>
-		<para>
-		</para>
-	      </listitem>
-	      <listitem>
-		<para>
-		  aptitude
-		</para>
-	      </listitem>
-	      <listitem>
-		<para>
-		  pppconfig
-		</para>
-	      </listitem>
-	      <listitem>
-		<para>
-		  console-common
-		</para>
-	      </listitem>
-	      <listitem>
-		<para>
-		  dictionaries-common
-		</para>
-	      </listitem>
-	      <listitem>
-		<para>
-		  pcmcia-cs
-		</para>
-	      </listitem>
-	    </itemizedlist>
-</para>
-	   
 <sect5>
 <title>
 discover1 (debconf)
@@ -1775,6 +1920,11 @@ l10n for D-I.
 	    <itemizedlist>
 	      <listitem>
 		<para>
+		  debconf (program)
+		</para>
+	      </listitem>
+	      <listitem>
+		<para>
 		  discover1 (program)
 		</para>
 	      </listitem>
@@ -1801,9 +1951,66 @@ life of a Debian system, so having them translated, though very
 tedious, is a must-have for a good localised system.
 </para>
 
-<para>Discover1 outputs messages to the console during D-I processes.
+<para>Discover1 outputs messages to the console during D-I processes just like
+debconf does.
 </para>
 
+<sect5>
+<title>
+debconf (program)
+</title>
+
+<para>The debconf program is the softare which is used for user interaction
+during Debian packages configuration step. All Debian packages should
+use debconf when they need user input for installation-time configuration.
+</para>
+
+<para>Debconf may output information to the screen : this is why the
+program translation is included in D-I fourth level of
+translation.
+</para>
+
+<emphasis>
+Getting files for debconf (program)
+</emphasis>
+
+<para>
+This package is a <emphasis>regular</emphasis> Debian package. The package maintainer
+(the D-I team) use a SVN repository. The D-I i18n coordinator
+handles commits for l10n material.
+</para>
+
+<para>This package's l10n material  for program translation is in one file:
+</para>
+
+<para><filename>po/debconf.pot</filename> : program output
+</para>
+
+<para>Check whether an incomplete translation exists for your language:
+   <ulink url="http://people.debian.org/~seppy/d-i/level4/files/xx/debconf_po_xx.po">http://people.debian.org/~seppy/d-i/level4/files/xx/debconf_po_xx.po</ulink>
+</para>
+
+<para>If it doesn't exist, get the POT file at:
+   <ulink url="http://people.debian.org/~seppy/d-i/level4/POT/debconf_po.pot">http://people.debian.org/~seppy/d-i/level4/POT/debconf_po.pot</ulink>
+</para>
+
+<emphasis>
+Sending files for debconf (program)
+</emphasis>
+
+<para>
+The translation files must be reported as bugs against the <emphasis>debconf</emphasis>
+package. Please mention that the file is the
+<emphasis>program</emphasis> translation.  Please see the 
+<ulink url="#reporting_bugs">Reporting bugs against Debian packages</ulink> section of this document.
+</para>
+
+<para>The translation will most often be quickly committed by the D-I i18n
+coordinator with a short message back to you mentioning that the bug
+fix is <emphasis>pending</emphasis>.
+</para>
+
+</sect5>
 <sect5>
 <title>
 discover1 (program)
@@ -1867,6 +2074,7 @@ fix is <emphasis>pending</emphasis>.
 </para>
 
 </sect5>
+
 <sect5>
 <title>
 dpkg
