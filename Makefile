@@ -298,13 +298,11 @@ $(STAMPS)tree-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
 	rm -rf $(DPKGDIR)/updates
 	rm -f $(DPKGDIR)/available $(DPKGDIR)/*-old $(DPKGDIR)/lock
 
+ifdef KERNELVERSION
 ifdef VERSIONED_SYSTEM_MAP
 	# Set up modules.dep, ensure there is at least one standard dir (kernel
 	# in this case), so depmod will use its prune list for archs with no
 	# modules.
-	#
-	# FIXME:
-	# linux-kernel-di does not yet generate uniquely named System.map files.
 	#
 	set -e; \
 	$(foreach VERSION,$(KERNELVERSION), \
@@ -315,8 +313,7 @@ ifdef VERSIONED_SYSTEM_MAP
 		else \
 			depmod -q -a -b $(TREE)/ $(VERSION); \
 		fi;)
-endif
-ifdef KERNELVERSION
+else
 	set -e; \
 	$(foreach VERSION,$(KERNELVERSION), \
 		mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
@@ -326,6 +323,7 @@ ifdef KERNELVERSION
 		else \
 			depmod -q -a -b $(TREE)/ $(VERSION); \
 		fi;)
+endif
 	# These files depmod makes are used by hotplug, and we shouldn't
 	# need them, yet anyway.
 	find $(TREE)/lib/modules/ -name 'modules*' \
