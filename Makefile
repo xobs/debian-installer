@@ -12,6 +12,10 @@ APTDIR=apt
 # Directory udebs are placed in.
 UDEBDIR=udebs
 
+# Local directory that is searched for udebs, to avoid downloading.
+# (Or for udebs that are not yet available for download.)
+LOCALUDEBDIR=localudebs
+
 # All these options makes apt read ./sources.list, and
 # use APTDIR for everything so it need not run as root.
 APT_GET=apt-get --assume-yes \
@@ -20,7 +24,7 @@ APT_GET=apt-get --assume-yes \
 	-o Debug::NoLocking=true \
 	-o Dir::Cache=$(APTDIR)/cache
 
-UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE) )
+UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE))
 
 build: tree reduce stats
 
@@ -35,19 +39,37 @@ get_udebs:
 	mkdir -p $(APTDIR)/state/lists/partial
 	mkdir -p $(APTDIR)/cache/archives/partial
 	$(APT_GET) update
-	$(APT_GET) -dy install $(UDEBS)
-# Now the udebs are in APTDIR/cache/archives/, but there may be
-# other udebs there too besides those we asked for. So link those
-# we asked for to UDEBDIR, renaming them to more useful names.
+	# If there are local udebs, remove them from the list of things to
+	# get. Then get all the udebs that are left to get.
+	needed="$(UDEBS)"; \
+	for file in `find $(LOCALUDEBDIR) -type f -printf %f 2>/dev/null`; do \
+		package=`echo $$file | cut -d _ -f 1`; \
+		needed=`echo $$needed | sed "s/$$package *//"`; \
+	done; \
+	echo $$needed; \
+	$(APT_GET) -dy install $$needed
+	# Now the udebs are in APTDIR/cache/archives/ and maybe LOCALUDEBDIR,
+	# but there may be other udebs there too besides those we asked for.
+	# So link those we asked for to UDEBDIR, renaming them to more useful
+	# names.
 	rm -rf $(UDEBDIR)
 	mkdir -p $(UDEBDIR)
 	for package in $(UDEBS); do \
-		ln $(APTDIR)/cache/archives/$$package\_*.deb $(UDEBDIR)/$$package.udeb; \
+		if [ -e $(APTDIR)/cache/archives/$$package\_* ]; then \
+			ln -f $(APTDIR)/cache/archives/$$package\_* \
+				$(UDEBDIR)/$$package.udeb; \
+		fi; \
+		if [ -e $(LOCALUDEBDIR)/$$package\_* ]; then \
+			ln -f $(LOCALUDEBDIR)/$$package\_* \
+				$(UDEBDIR)/$$package.udeb; \
+		fi; \
 	done
 
 # Build the installer tree.
 DPKGDIR=$(TREE)/var/lib/dpkg
 tree: get_udebs
+	dh_testroot
+
 	# This build cannot be restarted, because dpkg gets confused.
 	rm -rf $(TREE)
 	# Set up the basic files [u]dpkg needs.
@@ -57,7 +79,9 @@ tree: get_udebs
 	mkdir -p $(DPKGDIR)/updates/
 	touch $(DPKGDIR)/available
 	# Unpack the udebs with dpkg, ignoring dependancies.
-	fakeroot dpkg --force-depends --root=$(TREE) --unpack $(UDEBDIR)/*.udeb
+	# (So you'd better get the deps right in your .list files!)
+	# This command must run as root or fakeroot.
+	dpkg --force-depends --root=$(TREE) --unpack $(UDEBDIR)/*.udeb
 	# Clean up after dpkg.
 	rm -rf $(DPKGDIR)/updates
 	rm -f $(DPKGDIR)/available $(DPKGDIR)/available-old \
