@@ -28,7 +28,7 @@ foprocessor=./fop/fop.sh
 dynamic="dynamic.ent"
 
 ## You should comment the following line before Official Build
-fixme="FIXME"
+unofficial_build="FIXME;unofficial-build"
 
 ## Now we have to setup correct profiling information for each architecture
 case $arch in
@@ -159,7 +159,7 @@ case $arch in
 esac
 
 ## Join all gathered info into one big variable
-cond="$fdisk;$network;$boot;$smp;$other;$goodies;$fixme"
+cond="$fdisk;$network;$boot;$smp;$other;$goodies;$unofficial_build"
 
 ## Write dynamic non-profilable entities into the file
 echo "<!-- arch- and lang-specific non-profilable entities -->" > $dynamic
