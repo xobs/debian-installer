@@ -16,9 +16,7 @@ KERNELS_hppa     :=
 # FIXME hppa kernel not uploaded yet
 # KERNELS_hppa     := 2.4.19-32
 KERNELS_i386     := 2.4.20-386
-KERNELS_ia64	 := 
-# FIXME ia64 kernel not uploaded yet
-# KERNELS_ia64     := 2.4.20
+KERNELS_ia64	 := 2.4.20-ia64
 KERNELS_m68k     := 2.2.20-mac
 KERNELS_mips     := 
 KERNELS_mipsel   :=
@@ -73,13 +71,16 @@ install: configure
 	dh_testroot
 	dh_clean -k
 	dh_installdirs       --package $(PACKAGE)
-	dh_installdocs       --package $(PACKAGE)
 	dh_installchangelogs --package $(PACKAGE)
-	dh_compress	     --package $(PACKAGE)
+	./debian/fixup-missing touch
+	dh_installdocs       --package $(PACKAGE)
 	dh_install           --package $(PACKAGE)
+	./debian/fixup-missing remove
+	dh_compress          --package $(PACKAGE)
+	dh_installdocs       --package $(PACKAGE) missing.txt
 	( cd debian/$(PACKAGE)/$(DISKS_ROOT) ; md5sum `find . -type f` > md5sum.txt )
-	dh_gencontrol --package $(PACKAGE)  -- -n$(PACKAGE)_$(VERSION)_all.deb 
-	dh_builddeb   --package $(PACKAGE)  --filename=$(PACKAGE)_$(VERSION)_all.deb
+	dh_gencontrol --package $(PACKAGE)  -- -n$(PACKAGE)_$(VERSION)_${ARCH}.deb 
+	dh_builddeb   --package $(PACKAGE)  --filename=$(PACKAGE)_$(VERSION)_${ARCH}.deb
 
 binary: binary-indep binary-arch 
 .PHONY: build clean binary-indep binary-arch binary install 
