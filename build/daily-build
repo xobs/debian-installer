@@ -5,10 +5,18 @@ if [ -z "$HOST" ]; then
 	HOST=people.debian.org
 fi
 if [ -z "$BASEDIR" ]; then
-	BASEDIR=public_html/d-i/images
+	BASEDIR=~/public_html/d-i/images
 fi
 if [ -z "$DIR" ]; then
 	DIR=`date +%Y-%m-%d`
+fi
+if [ "$HOST" = "local" ]; then
+	SYNC="rsync"
+	SYNC_BASEDIR="$BASEDIR"
+else
+	CALL="ssh $HOST"
+	SYNC="rsync -e ssh"
+	SYNC_BASEDIR="$HOST:$BASEDIR"
 fi
 
 if [ ! -d pkg-lists ]; then
@@ -19,8 +27,7 @@ fi
 unset LANG LC_ALL LANGUAGE || true
 svn up || true
 
-make reallyclean
-mkdir dest
+#make reallyclean
 for t in $(make all_list |grep '^build'); do
     (
     echo
@@ -35,12 +42,10 @@ echo
 echo UPLOADING FILES
 echo
 
-ssh $HOST mkdir -p $BASEDIR/daily $BASEDIR/$DIR/RSYNC_IN_PROGRESS
-ssh $HOST cp -a $BASEDIR/daily/. $BASEDIR/$DIR/RSYNC_IN_PROGRESS/ || true
-rsync --stats -rv -e ssh dest/ $HOST:$BASEDIR/$DIR/RSYNC_IN_PROGRESS/
-ssh $HOST mv $BASEDIR/$DIR/RSYNC_IN_PROGRESS/\* $BASEDIR/$DIR/
-ssh $HOST rmdir $BASEDIR/$DIR/RSYNC_IN_PROGRESS
-ssh $HOST rm -rf $BASEDIR/daily
-ssh $HOST ln -sf $DIR $BASEDIR/daily
+$CALL mkdir -p $BASEDIR/${DIR}_RSYNC_IN_PROGRESS
+$SYNC --stats -rv -e ssh dest/ $SYNC_BASEDIR/${DIR}_RSYNC_IN_PROGRESS/
+$CALL mv $BASEDIR/${DIR}_RSYNC_IN_PROGRESS $BASEDIR/$DIR
+$CALL rm -rf $BASEDIR/daily
+$CALL ln -sf $DIR $BASEDIR/daily
 
 make reallyclean
