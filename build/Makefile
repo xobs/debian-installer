@@ -408,7 +408,7 @@ endif
 	mkdir -p $(TEMP)/udeblibs
 	-cp -a `find $(TREE)/lib -type f -name '*.so.*'` $(TEMP)/udeblibs
 	mkdir -p $(TREE)/lib
-	$(shell ./choose-subarch-env) $(MKLIBS) -L $(TREE)/usr/lib -L $(TEMP)/udeblibs -v -d $(TREE)/lib --root=$(TREE) `find $(TEMP) -type f -perm +0111 -o -name '*.so' | grep -v udeblibs`
+	$(MKLIBS) -L $(TREE)/usr/lib -L $(TEMP)/udeblibs -v -d $(TREE)/lib --root=$(TREE) `find $(TEMP) -type f -perm +0111 -o -name '*.so' | grep -v udeblibs`
 	rm -rf $(TEMP)/udeblibs
 
 	# Add missing symlinks for libraries
