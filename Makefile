@@ -90,7 +90,8 @@ demo_clean:
 
 clean:
 	dh_clean
-	rm -rf $(INITRD) $(DEST) $(APTDIR) $(UDEBDIR) $(TMPDIR)
+	rm -f $(FLOPPY_IMAGE) $(INITRD)
+	rm -rf $(DEST) $(APTDIR) $(UDEBDIR) $(TMPDIR)
 
 # Get all required udebs and put in UDEBDIR.
 get_udebs:
