@@ -13,7 +13,7 @@ architecture    := $(shell dpkg-architecture -qDEB_HOST_ARCH)
 # The version of the kernel to use.
 
 ifeq "$(architecture)" "i386"
-KVERS=2.4.18
+KVERS=2.4.19
 FLAVOUR=386
 KERNELNAME=vmlinuz
 endif
