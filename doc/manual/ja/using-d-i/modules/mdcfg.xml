@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 22026 -->
+<!-- original version: 22953 -->
 
    <sect3 id="mdcfg">
    <title>マルチディスクデバイス (ソフトウェア RAID) の設定</title>
@@ -60,7 +60,7 @@ creating. Currently supported are:
 <term>RAID0</term><listitem><para>
 
 <!--
-Is mainly aimed at performance.  RAID0 splits all incomming data into
+Is mainly aimed at performance.  RAID0 splits all incoming data into
 <firstterm>stripes</firstterm> and distributes them equally over each
 disk in the array. This can increase the speed of read/write
 operations, but when one of the disks fails, you will loose
@@ -92,18 +92,18 @@ RAID0 の典型的な使用法は映像編集用のパーティションです。
 
 <!--
 Is suitable for setups where reliability is the first concern.  It
-consists of several (usualy two) equaly sized partitions where every
-partition contains exactly the same data. This essentialy means three
+consists of several (usually two) equally sized partitions where every
+partition contains exactly the same data. This essentially means three
 things.  First, if one of your disks fails, you still have the data
 mirrored on the remaining disks. Second, you can use only a fraction
 of the available capacity (more precisely, it is the size of the
-smallest partition in the RAID). Third, file reads are load balanced amoung
+smallest partition in the RAID). Third, file reads are load balanced among
 the disks, which can improve performance on a server, such as a file
 server, that tends to be loaded with more disk reads than writes.
 -->
 信頼性第一である場合、RAID1 を構成するとよいでしょう。
 全パーティションが正確に同じデータを含むような、
-いくつかの (たいてい) 等しいサイズのパーティションから成ります。
+いくつかの (たいてい 2 つ) 等しいサイズのパーティションから成ります。
 これは本質的にに 3 つのことを意味します。
 まずディスクの 1 つが破損した場合、残ったディスクにデータミラーが残ります。
 次に利用可能領域の断片だけの使用もできます。
@@ -120,6 +120,49 @@ place of the failed disk in the case of failure.
 -->
 破損した場合に、任意に予備ディスクを破損したディスクの代わりに、
 ディスクアレイにつけることができます。
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>RAID5</term><listitem><para>
+
+<!--
+Is a good compromise between speed, reliability and data redundancy.
+RAID5 splits all incomming data into stripes and distributes them
+equally on all but one disks (similar to RAID0). Unlike RAID0, RAID5
+also computes <firstterm>parity</firstterm> information, which gets
+written on the remaining disk. The parity disk is not static (that
+would be called RAID4), but is changing periodically, so the parity
+information is distributed equally on all disks.  When one of the
+disks fails, the missing part of information can be computed from
+remaining data and its parity. RAID5 must consist of at least three
+active partitions. Optionally you can have a spare disk in the array
+which will take the place of the failed disk in the case of failure.
+-->
+RAID5 は速度と信頼性、データの冗長性をうまく折衷しています。
+RAID5 はストライプへ入力するデータをすべて分割し、
+1 つ以外の全ディスクに (RAID0 のように) 等しく分配します。
+RAID0 と違い、RAID5 は (残りのディスクに書かれている) 
+<firstterm>パリティ</firstterm>情報も計算します。
+パリティディスクは静的 (これを RAID4 と呼ぶ) ではありません。
+(定期的に変更され) パリティ情報を全ディスクに等しく分配します。
+あるディスクが故障した場合、
+情報の失った部分は残ったディスクとそのパリティから計算されます。
+RAID5 は少なくとも 3 つのアクティブなパーティションから成ります。
+故障した場合に、任意でディスクアレイ中の故障したディスクの箇所に
+予備のディスクをセットできます。
+
+</para><para>
+
+<!--
+As you can see, RAID5 has similar degree of reliability like RAID1
+while achieving less redundancy. On the other hand it might be a bit
+slower on write operation than RAID0 due to computation of parity
+information.
+-->
+おわかりのように、RAID5 は RAID1 より冗長性が少なく、同程度の信頼性を持ちます。
+一方パリティ情報を計算することで、RAID0 より書込操作が少し遅いかもしれません。
 
 </para></listitem>
 </varlistentry>
@@ -158,6 +201,16 @@ To sum it up:
   <entry>RAID にある最小パーティションのサイズ</entry>
 </row>
 
+<row>
+  <entry>RAID5</entry>
+  <entry>3</entry>
+  <entry>任意</entry>
+  <entry>可</entry>
+  <entry>
+    RAID にある最小パーティションのサイズ×(デバイス数 - 1)
+  </entry>
+</row>
+
 </tbody></tgroup></informaltable>
 
 </para><para>
@@ -189,10 +242,19 @@ MD デバイスを作成するには、RAID で使うための
 </para><warning><para>
 
 <!--
-Currently you can't use MD for root (<filename>/</filename>)
-partition.
+Support for MD is a relatively new addition to the installer.
+You may experience problems for some RAID levels and in combination
+with some bootloaders if you try to use MD for the root
+(<filename>/</filename>) filesystem. For experienced users, it may be
+possible to work around some of these problems by executing some
+configuration or installation steps manually from a shell.
 -->
-現在、MD を root (<filename>/</filename>) パーティションでは使用できません。
+MD のサポートは、インストーラに比較的新しく追加されました。
+root (<filename>/</filename>) ファイルシステム用に MD を使用するなら、
+RAID レベルやブートローダと組み合わせた際の問題に行き当たるでしょう。
+経験を積んだユーザ向けに、
+いくつか設定したりインストールステップをシェルから手動で行ったりして、
+問題を回避して動作させることができるかも知れません。
 
 </para></warning><para>
 
@@ -246,6 +308,17 @@ RAID1 は少しトリッキーです。
 心配しないでください。
 間違って違う数のパーティションを選択した場合、&d-i; は問題を修正するまで、
 先に進ませません。
+
+</para></listitem>
+<listitem><para>
+
+<!--
+RAID5 has similar setup procedure as RAID1 with the exception that you
+need to use at least <emphasis>three</emphasis> active partitions.
+-->
+RAID5は、少なくとも <emphasis>3 つ</emphasis>のアクティブパーティションを
+使用する必要があるという例外を除き、
+RAID1 と同様のセットアップ手続きを行います。
 
 </para></listitem>
 </itemizedlist>
