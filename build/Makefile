@@ -77,6 +77,13 @@ ARCH = $(DEB_HOST_ARCH)
 all: list
 
 #
+# Globally useful variables.
+#
+targetstring = $(patsubst _%,%,$(if $(SUBARCH),_$(SUBARCH),)$(if $(MEDIUM),_$(MEDIUM),)$(if $(FLAVOUR),_$(FLAVOUR),))
+targetdirs = $(subst _,/,$(targetstring))
+
+
+#
 # Configurations for the varying ARCH, SUBARCH, MEDIUM, FLAVOUR.
 # For simplicity, we use a similiar tree layout for config/, tmp/
 # and dest/.
@@ -118,13 +125,6 @@ endef
 define genext2fs
 	genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` -r 0
 endef
-
-#
-# Globally useful variables.
-#
-targetstring = $(patsubst _%,%,$(if $(SUBARCH),_$(SUBARCH),)$(if $(MEDIUM),_$(MEDIUM),)$(if $(FLAVOUR),_$(FLAVOUR),))
-targetdirs = $(subst _,/,$(targetstring))
-
 
 #
 # A generic recursion rule
@@ -318,23 +318,25 @@ ifdef VERSIONED_SYSTEM_MAP
 	#
 	set -e; \
 	$(foreach VERSION,$(KERNELVERSION), \
+		if [ -d $(TREE)/lib/modules/$(VERSION) ]; then \
 		mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
 		if [ -e $(TREE)/boot/System.map-$(VERSION) ]; then \
 			$(shell ./choose-subarch-env $(VERSION)) depmod -F $(TREE)/boot/System.map-$(VERSION) -q -a -b $(TREE)/ $(VERSION); \
 			mv $(TREE)/boot/System.map-$(VERSION) $(TEMP); \
 		else \
 			$(shell ./choose-subarch-env $(VERSION)) depmod -q -a -b $(TREE)/ $(VERSION); \
-		fi;)
+		fi;fi;)
 else
 	set -e; \
 	$(foreach VERSION,$(KERNELVERSION), \
+		if [ -d $(TREE)/lib/modules/$(VERSION) ]; then \
 		mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
 		if [ -e $(TREE)/boot/System.map ]; then \
 			$(shell ./choose-subarch-env $(VERSION)) depmod -F $(TREE)/boot/System.map -q -a -b $(TREE)/ $(VERSION); \
 			mv $(TREE)/boot/System.map $(TEMP); \
 		else \
 			$(shell ./choose-subarch-env $(VERSION)) depmod -q -a -b $(TREE)/ $(VERSION); \
-		fi;)
+		fi;fi;)
 endif
 	# These files depmod makes are used by hotplug, and we shouldn't
 	# need them, yet anyway.
