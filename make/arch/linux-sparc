@@ -2,8 +2,10 @@
 
 arch-image: $(IMAGE)
 
+ifdef FLOPPY_SIZE
 $(IMAGE): $(INITRD)
 	tilo -o $@ $(foreach NAME,$(KERNELNAME),$(TEMP)/$(NAME)) $(INITRD)
+endif # FLOPPY_SIZE
 
 # Copy files somewhere the CD build scripts can find them
 cd_content:

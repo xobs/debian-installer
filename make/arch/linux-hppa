@@ -1,7 +1,9 @@
 arch-image: $(IMAGE)
 
+ifdef FLOPPY_SIZE
 # hppa boots a lifimage, which can contain an initrd and two kernels
 # (one 32 and one 64 bit)
 $(IMAGE): $(INITRD)
 	palo -f /dev/null $(foreach NAME,$(KERNELNAME),-k $(TEMP)/$(NAME)) -r $^ -s $@ \
 		-c "0/linux HOME=/ ramdisk_size=8192 initrd=0/ramdisk rw"
+endif # FLOPPY_SIZE
