@@ -591,11 +591,9 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 # raw kernel images
 $(KERNEL): TEMP_REAL_KERNEL = $(TEMP)/$(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,')
 $(KERNEL):
-	@$(MAKE) $(TEMP_REAL_KERNEL)
+	@$(MAKE) $(STAMPS)tree-unpack-$(targetstring)-stamp $(TEMP_REAL_KERNEL)
 	install -m 644 -D $(TEMP_REAL_KERNEL) $@
 	./update-manifest $@ $(MANIFEST-KERNEL)
-
-$(TEMP_KERNEL): $(STAMPS)tree-unpack-$(targetstring)-stamp
 
 # bootable images
 $(BOOT): $(TEMP_BOOT)
