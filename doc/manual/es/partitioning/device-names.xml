@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 12766 -->
+
+ <sect1 id="device-names">
+ <title>Nombres de los dispositivos en Linux</title>
+<para>
+
+En Linux, los nombres de los discos y las particiones pueden ser
+diferentes de los usados en otros sistemas operativos. Es necesario saber
+los nombres que Linux emplea cuando crea y monta particiones.
+A continuación, se presenta una lista de los esquemas
+usados para los nombres.
+
+</para>
+<itemizedlist arch="not-s390">
+<listitem><para>
+
+La primera unidad de disco flexible se llama <filename>/dev/fd0</filename>.
+
+</para></listitem>
+<listitem><para>
+
+La segunda unidad de disco flexible se llama <filename>/dev/fd1</filename>.
+
+</para></listitem>
+<listitem><para>
+
+La primera unidad de disco SCSI (identificación SCSI address-wise) se llama
+<filename>/dev/sda</filename>.
+
+</para></listitem>
+<listitem><para>
+
+La segunda unidad de disco SCSI (address-wise) se llama 
+<filename>/dev/sdb</filename>, y así sucesivamente.
+
+</para></listitem>
+<listitem><para>
+
+La primera unidad de un CD-ROM SCSI se llama <filename>/dev/scd0</filename>, 
+también conocida como <filename>/dev/sr0</filename>.
+
+</para></listitem>
+<listitem><para>
+
+El disco maestro en el controlador IDE primario se llama 
+<filename>/dev/hda</filename>.
+
+</para></listitem>
+<listitem><para>
+
+El disco esclavo en el controlador IDE primario es llamado
+<filename>/dev/hdb</filename>.
+
+</para></listitem>
+<listitem><para>
+
+Los discos maestro y esclavo en el controlador IDE secundario se llaman normalmente 
+<filename>/dev/hdc</filename> y <filename>/dev/hdd</filename>,
+respectivamente.  Los nuevos controladores IDE pueden tener dos
+canales de lectura, actuando, efectivamente, como 2 controladores.
+
+<phrase arch="m68k">
+Las letras de las particiones pueden ser diferentes de las que muestra el programa 
+para mac pdisk (e.j. en pdisk, lo que muestra como <filename>/dev/hdc</filename> puede
+mostrarse como <filename>/dev/hda</filename> en Debian). 
+</phrase>
+
+</para></listitem>
+
+<listitem arch="i386"><para>
+
+El primer disco XT se llama <filename>/dev/xda</filename>.
+
+</para></listitem>
+<listitem arch="i386"><para>
+
+El segundo disco XT se llama <filename>/dev/xdb</filename>.
+
+</para></listitem>
+<listitem arch="m68k"><para>
+
+La primera unidad ACSI se llama <filename>/dev/ada</filename>, y la segunda
+<filename>/dev/adb</filename>.  
+
+</para></listitem>
+</itemizedlist>
+
+<itemizedlist arch="s390">
+<listitem><para>
+
+Los dispositivos DASD son llamados
+<filename>/dev/dasd/<replaceable>xxxx</replaceable>/device</filename>
+donde <replaceable>xxxx</replaceable> es el número en hexadecimal del
+dispositivo. El núcleo que viene con &debian; usa por omisión devfs, 
+por lo tanto los nodos de los dispositivos se crean o eliminan
+automáticamente al conectar o desconectar un dispositivo DASD. Revise el
+capítulo 3 en el manual de
+<ulink url="http://oss.software.ibm.com/developerworks/opensource/linux390/docu/l390dd08.pdf">
+Controladores de dispositivos y comandos de instalación</ulink> para mayor información acerca
+de este tema.
+
+</para></listitem>
+</itemizedlist>
+
+<para arch="not-s390">
+
+Las particiones en cada disco son representadas añadiendo un número decimal al 
+nombre del disco: <filename>sda1</filename> y
+<filename>sda2</filename> representan a la primera y segunda
+partición en la primera unidad de disco SCSI en el sistema.
+
+</para><para arch="not-s390">
+
+He aquí un ejemplo de la vida real. Supongamos que tiene un sistema
+con 2 discos SCSI, uno en la dirección SCSI 2 y el otro en la dirección
+SCSI 4. El primer disco (dirección 2) se llama entonces <filename>sda</filename>,
+y el segundo <filename>sdb</filename>. Si el dispositivo 
+<filename>sda</filename> tiene 3 particiones en ella, estas se llamarán 
+<filename>sda1</filename>, <filename>sda2</filename>, y
+<filename>sda3</filename> respectivamente.  Esto mismo se aplica a el disco
+<filename>sdb</filename> y sus particiones.
+
+</para><para arch="not-s390">
+
+Note que si usted tiene dos controladores SCSI,
+el orden de estos dispositivos puede confundirse. La mejor solución
+para este caso es revisar los mensajes del inicio del sistema, asumiendo
+que conoce los modelos de los dispositivos y/o las capacidades.
+
+</para><para arch="i386">
+
+Linux representa la partición primaria como el nombre del dispositivo
+más un número del 1 al 4. Por ejemplo, la primera partición en la primera
+unidad IDE es <filename>/dev/hda1</filename>. Las particiones lógicas
+son enumeradas empezando desde el número 5, así la primera partición
+lógica en el mismo disco es <filename>/dev/hda5</filename>. 
+Recuerde que la partición extendida, es decir, la partición primaria que 
+contiene a las particiones lógicas, no es usable por sí sola. Esto se aplica 
+a los discos SCSI como también a los discos IDE.
+
+</para><para arch="m68k">
+
+El sistema VMEbus usando por la unidad de disco flexible SCSI TEAC FC-1 se
+verá como un disco SCSI normal. Para hacer una simple identificación
+de este dispositivo, el programa de instalación creará un link simbólico
+hacia el dispositivo apropiado y lo establecerá en <filename>/dev/sfd0</filename>.
+
+</para><para arch="sparc">
+
+Las particiones de los discos Sun permiten 8 particiones separadas (o rebanadas). 
+La tercera partición es usual y preferentemente la partición 
+del ``Disco Entero''.  Esta partición hace referencia a todos los sectores del disco, y es
+usado por el encargado de iniciar el sistema (SILO, ó los propios de Sun).
+
+</para><para arch="s390">
+
+En los discos de la arquitectura arch-title; se permiten 3 particiones separadas, 
+llamadas <filename>/dev/dasd/<replaceable>xxxx</replaceable>/part1</filename>,
+<filename>/dev/dasd/<replaceable>xxxx</replaceable>/part2</filename> y
+<filename>/dev/dasd/<replaceable>xxxx</replaceable>/part3</filename> respectivamente.
+
+</para>
+ </sect1>
