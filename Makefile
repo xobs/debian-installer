@@ -13,25 +13,26 @@ architecture    := $(shell dpkg-architecture -qDEB_HOST_ARCH)
 # The version of the kernel to use.
 
 ifeq "$(architecture)" "i386"
-KVERS=2.4.19
-FLAVOUR=386
+KERNELVERSION=2.4.19-386
 KERNELNAME=vmlinuz
 endif
 ifeq "$(architecture)" "ia64"
-KVERS=2.4.19
-FLAVOUR=ia64
+KERNELVERSION=2.4.19-ia64
 KERNELNAME=vmlinuz
 endif
 ifeq "$(architecture)" "powerpc"
-KVERS=2.4.19
-FLAVOUR=powerpc
+KERNELVERSION=2.4.19-powerpc
 KERNELNAME=vmlinux
 endif
 ifeq "$(architecture)" "s390"
-KVERS=2.4.19
-FLAVOUR=s390
+KERNELIMAGEVERSION=2.4.19-s390
+KERNELVERSION=2.4.19
 KERNELNAME=vmlinux
 KERNELNAME_SECOND=vmlinux-tape
+endif
+
+ifndef KERNELIMAGEVERSION
+KERNELIMAGEVERSION=${KERNELVERSION}
 endif
 
 # The type of system to build. Determines what udebs are unpacked into
@@ -145,7 +146,7 @@ APT_GET=apt-get --assume-yes \
 	-o Dir::Cache=$(CWD)$(APTDIR)/cache
 
 # Get the list of udebs to install. Comments are allowed in the lists.
-UDEBS=$(shell grep --no-filename -v ^\# pkg-lists/base pkg-lists/$(TYPE)/common `if [ -f pkg-lists/$(TYPE)/$(architecture) ]; then echo pkg-lists/$(TYPE)/$(architecture); fi` | sed 's/$${kernel:Version}/$(KVERS)/g' | sed 's/$${kernel:Flavour}/$(FLAVOUR)/g') $(EXTRAS)
+UDEBS=$(shell grep --no-filename -v ^\# pkg-lists/base pkg-lists/$(TYPE)/common `if [ -f pkg-lists/$(TYPE)/$(architecture) ]; then echo pkg-lists/$(TYPE)/$(architecture); fi` | sed 's/$${kernel:Version}/$(KERNELIMAGEVERSION)/g') $(EXTRAS)
 
 # Scratch directory.
 BASE_TMP=./tmp/
@@ -268,11 +269,11 @@ $(TYPE)-tree-stamp:
 	rm -rf $(DPKGDIR)/updates
 	rm -f $(DPKGDIR)/available $(DPKGDIR)/*-old $(DPKGDIR)/lock
 	# Set up modules.dep
-	mkdir -p $(TREE)/lib/modules/$(KVERS)-$(FLAVOUR)/
-	depmod -q -a -b $(TREE)/ $(KVERS)-$(FLAVOUR)
+	mkdir -p $(TREE)/lib/modules/$(KERNELVERSION)/
+	depmod -q -a -b $(TREE)/ $(KERNELVERSION)
 	# These files depmod makes are used by hotplug, and we shouldn't
 	# need them, yet anyway.
-	find $(TREE)/lib/modules/$(KVERS)-$(FLAVOUR)/ -name 'modules*' \
+	find $(TREE)/lib/modules/$(KERNELVERSION)/ -name 'modules*' \
 		-not -name modules.dep | xargs rm -f
 	# Create a dev tree
 	mkdir -p $(TREE)/dev
