@@ -1,45 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 14033 -->
+<!-- original version: 14602 -->
 
 <chapter id="boot-new">
  <title>Démarrer votre nouveau système Debian</title>
 
- <sect1><title>Rendre le système amorçable</title>
-<para>
-
-Notez que pouvoir démarrer plusieurs systèmes d'exploitation sur une même 
-machine relève encore de la magie noire. Ce document ne cherche même pas à 
-documenter les divers gestionnaires de démarrage, qui peuvent être différent 
-suivant les architectures et même d'une sous-architecture à l'autre. Vous
-devriez regarder la documentation de votre gestionnaire de démarrage pour de 
-plus amples informations.
-
-</para>
-
-&bootloader-i386.xml;
 &bootloader-m68k.xml;
-&bootloader-alpha.xml;
-&bootloader-sparc.xml;
 &bootloader-powerpc.xml;
-&bootloader-hppa.xml;
-&bootloader-s390.xml;
-&bootloader-arm.xml;
-&bootloader-mipsel.xml;
-
-  <sect2 condition="supports-nfsroot">
-<title>Poste de travail sans disque</title>
-<para>
-
-Si vous installez un poste de travail sans disque, démarrer depuis le disque 
-local n'a évidement pas de sens, et cette étape sera sautée.
-<phrase arch="sparc"> Vous pouvez configurer l'OpenBoot pour démarrer par 
-défaut depuis le réseau&nbsp;; voyez
-<xref linkend="boot-dev-select-sun"/>.</phrase>
-
-</para>
-
-  </sect2>
-</sect1>
 
  <sect1 id="base-boot"><title>Le moment de vérité</title>
 <para>
@@ -50,23 +16,21 @@ première fois.
 
 </para><para arch="s390">
 
-Sélectionnez&nbsp;: «&nbsp;Reboot the System&nbsp;» dans le menu, cela va 
-provoquer l'arrêt de la machine car le redémarrage ne fonctionne pas sur 
-&arch-title; dans ce cas de figure. Vous devez «&nbsp;IPL&nbsp;» GNU/Linux 
-depuis le lecteur DASD que vous avez sélectionné comme système de fichiers 
-root au cours des premières étapes de l'installation.
+Sélectionnez l'élément <guimenuitem>Reboot the System</guimenuitem> dans le 
+menu, cela va provoquer l'arrêt de la machine car le redémarrage ne 
+fonctionne pas sur &arch-title; dans ce cas de figure. Vous devez 
+«&nbsp;IPL&nbsp;» GNU/Linux depuis le lecteur DASD que vous avez sélectionné 
+comme système de fichiers racine au cours des premières étapes de 
+l'installation.
 
 </para><para>
 
 Si vous démarrez directement sur Debian, et que le système ne démarre pas, 
-utilisez le support d'installation d'origine (par exemple la disquette de 
-secours), ou insérez la disquette «&nbsp;Démarrage personnalisé&nbsp;» si 
-vous l'avez créée, puis relancez votre système. Si vous 
-<emphasis>n'utilisez pas</emphasis> la disquette 
-«&nbsp;Démarrage personnalisé&nbsp;», vous devrez sans doute ajouter des 
-paramètres de démarrage&nbsp;: si vous démarrez à partir de la disquette de 
-secours (ou une technique similaire), vous devrez spécifier 
-<userinput>rescue root=<replaceable>root</replaceable></userinput>, où 
+utilisez le support d'installation d'origine, ou insérez la disquette 
+«&nbsp;Démarrage personnalisé&nbsp;» si vous l'avez créée, puis relancez 
+votre système. De cette façon, vous devrez sans doute ajouter des 
+paramètres de démarrage comme 
+<userinput>root=<replaceable>root</replaceable></userinput>, où 
 <replaceable>root</replaceable> est votre partition racine, 
 par exemple&nbsp;: <filename>/dev/sda1</filename>.
 
