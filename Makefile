@@ -182,9 +182,9 @@ demo_clean:
 	-@sudo chroot $(TREE) bin/sh -c "bin/umount /dev ; bin/umount /proc" &> /dev/null
 
 clean: demo_clean tmp_mount
+	rm -rf $(TREE) 2>/dev/null || sudo rm -rf $(TREE)
 	dh_clean
 	rm -f *-stamp
-	rm -rf $(TREE) || sudo rm -rf $(TREE)
 	rm -rf $(APTDIR) $(UDEBDIR) $(BASE_TEMP) $(DEST) $(TMP_MNT)
 
 # Get all required udebs and put in UDEBDIR.
