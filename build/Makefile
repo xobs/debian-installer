@@ -757,7 +757,11 @@ TOTAL_SZ = $(shell du -hs $(TREE) | cut -f 1)
 LIBS_SZ = $(shell [ -d $(TREE)/lib ] && du -hs --exclude=modules $(TREE)/lib |cut -f 1)
 MODULES_SZ = $(shell [ -d $(TREE)/lib/modules ] && du -hs $(TREE)/lib/modules |cut -f 1)
 DISK_SZ = $(shell expr \( $(shell du -bs $(TREE) |cut -f 1) + 0 \) / 1024)
+ifeq ($(TEMP_INITRD),)
+INITRD_SZ = 0
+else
 INITRD_SZ = $(shell expr \( $(shell [ -f $(TEMP_INITRD) ] && du -bs $(TEMP_INITRD) |cut -f 1) + 0 \) / 1024)
+endif
 KERNEL_SZ = $(shell expr \( $(foreach kern,$(TEMP_KERNEL),$(shell [ -f $(kern) ] && du -bs $(kern) |cut -f 1)) + 0 \) / 1024)
 .PHONY: general-stats
 general-stats:
