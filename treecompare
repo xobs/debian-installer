@@ -1,6 +1,9 @@
 #!/bin/sh -e
+# "Daddy, I wanna be a perl script when I grow up.."
+#
 # Compares two unpacked trees, and finds and flags added files,
 # files that have increased in size, and so on.
+
 if [ ! "$1" -o ! "$2" ]; then
 	echo "Usage: $0 oldtree newtree" >&2
 	exit 1
@@ -74,8 +77,8 @@ if [ $sizechange -gt 0 ]; then
 	perl -e '
 		$dir2=shift()."/";
 		$dir1=shift()."/";
-		%du=map {chomp;s/$dir1//;reverse split " ", $_, 2} `du $dir1`;
-		%du2=map {chomp;s/$dir2//;reverse split " ", $_, 2} `du $dir2`;
+		%du=map {chomp;s/$dir1//;reverse split " ", $_, 2} `du -b $dir1`;
+		%du2=map {chomp;s/$dir2//;reverse split " ", $_, 2} `du -b $dir2`;
 		foreach (sort { $du{$b} <=> $du{$a} } keys %du) {
 			next unless exists $du2{$_};
 			next if $du{$_} <= $du2{$_};

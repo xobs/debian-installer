@@ -231,6 +231,7 @@ tree-stamp:
 	-rmdir $(TREE)/boot/
 
 	# Copy terminfo files for slang frontend
+	# TODO: terminfo.udeb?
 	for file in /etc/terminfo/a/ansi /etc/terminfo/l/linux \
 		    /etc/terminfo/v/vt102; do \
 		mkdir -p $(TREE)/`dirname $$file`; \
@@ -289,7 +290,7 @@ endif
 	    -name '*.postrm' -o -name '*.prerm' -o -name '*.preinst'`; do \
 	    rm $$file; \
 	done
-	
+
 	touch tree-stamp
 
 tarball: tree
@@ -379,11 +380,16 @@ stats: tree
 # don't want to use this grungy code, at least not without overrideing
 # this:
 UPLOAD_DIR=klecker.debian.org:~/public_html/debian-installer/daily/
-daily_build: clean
+daily_build:
+	-mv $(TREE) $(TYPE)-oldtree
+	$(MAKE) clean
 	install -d $(DEST)
 	fakeroot $(MAKE) tarball > $(DEST)/log 2>&1
+	./treecompare $(TYPE)-oldtree $(TREE) > $(DEST)/$(TYPE)-treecompare
 	scp -q -B $(DEST)/log $(UPLOAD_DIR)
 	scp -q -B $(DEST)/$(TYPE)-debian-installer.tar.gz \
 		$(UPLOAD_DIR)/$(TYPE)-debian-installer-$(shell date +%Y%m%d).tar.gz
+	scp -q -B $(DEST)/$(TYPE)-treecompare \
+		$(UPLOAD_DIR)/$(TYPE)-treecompare-$(shell date +%Y%m%d)
 
 .PHONY: tree
