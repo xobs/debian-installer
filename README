@@ -57,3 +57,29 @@ A more detailed overview of how the installer is built:
 * Some boot images have associated "driver" disks. These disks just get
   udebs put on them.
 * The final images are put in the dest/ directory.
+
+------------
+
+Notes on the build/config makefile fragments:
+
+Nowe that most of the structure is in place, making new versions of d-i is
+mostly a matter of filling in Makefile variables, and new rules for anything
+unusual or new. Here are some guidelines on what you need to fill in.
+
+Top level specifies supported subarches, media or flavours supported with 
+SUBARCHES_SUPPORTED, MEDIUM_SUPPORTED, or FLAVOUR SUPPORTED - a list of
+subarches, media of flavours - each of which is a subdirectory under <arch>.
+The names have no special significance.
+
+A typical 'leaf' .cfg file specifies:
+KERNELVERSION
+KERNEL_FLAVOUR
+KERNELNAME
+KERNELIMAGEVERSION
+and 
+TYPE
+
+TYPE is the thing that specifies which pkg-list files are used. 
+e.g. $TYPE=cdrom means that pkg-lists/cdrom/local, pkg-lists/cdrom/common and
+pkg-lists/cdrom/<arch> are used.
+
