@@ -1,7 +1,7 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23061 untranslated -->
+<!-- original version: 21617 -->
 
-  <sect2 arch="i386"><title>Booting from a CD-ROM</title>
+  <sect2 arch="i386"><title>Arrencant des d'un CD-ROM</title>
 
 &boot-installer-intro-cd.xml;
 
@@ -108,50 +108,62 @@ bf2.4 flavor. The symptom of the problem is an
 END FIXME -->
 
   <sect2 arch="i386" id="boot-initrd">
-  <title>Booting from linux using <command>LILO</command> or
+  <title>Arrencant des del Linux utilitzant el <command>LILO</command> o el
   <command>GRUB</command></title>
 
 <para>
-To boot the installer from hard disk, you must first download
-and place the needed files as described in <xref linkend="boot-drive-files"/>.
+
+Per arrencar l'instal·lador des d'un disc dur, primer heu de baixar
+els fitxers necessaris tal i com es descriu a
+<xref linkend="boot-drive-filers"/>.
+
 </para>
 
 <para>
-If you intend to use the hard drive only for booting and then
-download everything over the network, you should download the
-<filename>netboot/debian-installer/i386/initrd.gz</filename> file and its corresponding kernel.
-This will allow you
-to repartition the hard disk from which you boot the installer, although
-you should do so with care.
+
+Si voleu utilitzar el disc dur únicament per a l'arrencada i
+voleu baixar-ho tot des de la xarxa, hauríeu de baixar el fitxer
+<filename>netboot/debian-installer/i386/initrd.gz</filename>
+i el nucli corresponent.
+
+Us permetrà tornar a particionar el disc dur del qual heu arrencat
+l'instal·lador, tot i això, ho hauríeu de fer amb molt de compte.
+
 </para>
 
 <para>
-Alternatively, if you intend to keep an existing partition on the hard
-drive unchanged during the install, you can download the
-<filename>hd-media/initrd.gz</filename>
-file and its kernel, as well as copy a CD iso to the drive (make sure the
-file is named ending in ".iso". The installer can then boot from the drive
-and install from the CD image, without needing the network.
+
+Si durant la instal·lació preteneu mantenir sense modificacions una
+partició existent al disc dur, podeu baixar el fitxer
+<filename>hd-media/initrd.gz</filename> i el nucli corresponent, i
+també copiar una imatge iso del CD al dispositiu (assegureu-vos
+que el nom del fitxer acaba amb ".iso"). En aquest cas l'instal·lador
+pot arrencar del dispositiu i instal·lar des de la imatge del CD sense
+necessitar la xarxa.
+
 </para>
 
 <para>
-For <command>LILO</command>, you will need to configure two
-essential things in <filename>/etc/lilo.conf</filename>:
+
+Per utilitzar el <command>LILO</command> haureu de configurar
+dos punts essencials del fitxer <filename>/etc/lilo.conf</filename>:
+
 <itemizedlist>
 <listitem><para>
 
-to load the <filename>initrd.gz</filename> installer at boot time;
+carregar l'instal·lador <filename>initrd.gz</filename> a l'arrencada;
 
 </para></listitem>
 <listitem><para>
 
-have the <filename>vmlinuz</filename> kernel use a RAM disk as
-its root partition.
+obligar al nucli <filename>vmlinuz</filename> a utilitzar un disc
+de RAM com a partició arrel.
 
 </para></listitem>
 </itemizedlist>
 
-Here is a <filename>/etc/lilo.conf</filename> example:
+A continuació trobareu un exemple del fitxer
+<filename>/etc/lilo.conf</filename>:
 
 </para><para>
 
@@ -160,267 +172,276 @@ Here is a <filename>/etc/lilo.conf</filename> example:
 image=/boot/newinstall/vmlinuz
        label=newinstall
        initrd=/boot/newinstall/initrd.gz
-       root=/dev/ram0
+       root=/dev/ram
        append="devfs=mount,dall ramdisk_size=17000"
 
 </screen></informalexample>
 
-For more details, refer to the
+Per a més informació vegeu les pàgines del manual
 <citerefentry><refentrytitle>initrd</refentrytitle>
-<manvolnum>4</manvolnum></citerefentry> and
+<manvolnum>4</manvolnum></citerefentry> i
 <citerefentry><refentrytitle>lilo.conf</refentrytitle>
-<manvolnum>5</manvolnum></citerefentry> man pages. Now run
-<userinput>lilo</userinput> and reboot.
+<manvolnum>5</manvolnum></citerefentry>. Executeu l'ordre
+<userinput>lilo</userinput> i reinicieu el sistema.
 
 </para><para>
 
-The procedure for <command>GRUB</command> is quite similar. Locate your
-<filename>menu.lst</filename> in the <filename>/boot/grub/</filename>
-directory (sometimes in the <filename>/boot/boot/grub/</filename>),
-add the following lines:
+El procediment pel <command>GRUB</command> és similar. Cerqueu el fitxer
+<filename>menu.lst</filename> al directori <filename>/boot/grub/</filename>
+(en algunes ocasions al directori <filename>/boot/boot/grub/</filename>)
+i afegiu-hi les línies següents:
 
 <informalexample><screen>
 
 title  New Install
-kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram0 devfs=mount,dall ramdisk_size=17000
+kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram devfs=mount,dall ramdisk_size=17000
 initrd (hd0,0)/boot/newinstall/initrd.gz
 
 </screen></informalexample>
 
-and reboot. Note that the value of the <userinput>ramdisksize</userinput>
-may need to be adjusted for the size of the initrd image. 
-From now on, there should be no difference between <command>GRUB</command>
-or <command>LILO</command>.
+i reinicieu el sistema. Recordeu que el valor de
+<userinput>ramdisksize</userinput> s'hauria d'ajustar a la mida de
+la imatge initrd. A partir d'ara no hi hauria d'haver cap diferència
+entre el <command>GRUB</command> i el <command>LILO</command>.
 
 </para>
   </sect2>
 
   <sect2 arch="i386" id="usb-boot">
-  <title>Booting from USB memory stick</title>
+  <title>Arrencant des d'un llapis USB</title>
 <para>
 
-Lets assume you have prepared everything from <xref
-linkend="boot-dev-select"/> and <xref linkend="boot-usb-files"/>.  Now
-just plug your USB stick into some free USB connector and reboot the
-computer.  The system should boot up, and you should be presented with
-the <prompt>boot:</prompt> prompt.  Here you can enter optional boot
-arguments, or just hit &enterkey;.
+S'assumeix que heu seguit els passos descrits a
+<xref linkend="boot-dev-select"/> i <xref linkend="boot-usb-files"/>.
+Només heu de connectar el llapis USB a algun connector USB lliure i
+reiniciar l'ordinador. El sistema s'hauria d'arrencar i us hauria
+d'aparèixer l'indicador <prompt>boot:</prompt>. Podeu introduïr-hi
+els paràmetres d'arrencada opcionals o únicament prémer &enterkey;
 
 </para><para>
 
-In case your computer doesn't support booting from USB memory devices,
-you can still use a single floppy to do the initial boot and then
-switch to USB. Boot your system as described in <xref linkend="floppy-boot"/>;
-the kernel on the boot floppy should detect your USB stick automatically.
-When it asks for the root floppy, simply press &enterkey;. You should see
-&d-i; starting.
+En el cas que el vostre ordinador no permeti l'arrencada des d'un
+dispositiu de memòria USB, podeu utilitzar un disquet per fer
+l'arrencada inicial i posteriorment commutar a l'USB. Segons
+<xref linkend="floppy-boot"/>; el nucli del disquet d'arrencada
+hauria de detectar automàticament el llapis USB. Quan se us demani
+el disquet arrel, premeu &enterkey;. Hauríeu de veure com s'inicialitza
+el &d-i;.
 
 </para>
   </sect2>
 
   <sect2 arch="i386" id="floppy-boot">
-  <title>Booting from Floppies</title>
+  <title>Arrencant des dels disquets</title>
 <para>
 
-You will have already downloaded the floppy images you needed and
-created floppies from the images in <xref linkend="create-floppy"/>.
-<!-- missing-doc FIXME If you need to, you can also modify the boot floppy; see 
+Haureu d'haver descarregat les imatges del disquet i haver-ne
+creat els disquets corresponents segons <xref linkend="create-floppy"/>.
+<!-- missing-doc FIXME If you need to, you can also modify the boot floppy; see
 <xref linkend="rescue-replace-kernel"/>. -->
 
 </para><para>
 
-To boot from the installer boot floppy, place it in the primary floppy
-drive, shut down the system as you normally would, then turn it back
-on.
+Per arrencar des del disquet d'arrencada instal·lador, introduïu-lo
+a la disquetera, atureu el sistema i torneu-lo a engegar.
 
 </para><para>
 
-For installing from a LS-120 drive (ATAPI version) with a set of
-floppies, you need to specify the virtual location for the floppy
-device.  This is done with the <emphasis>root=</emphasis> boot
-argument, giving the device that the ide-floppy driver maps the device
-to. For example, if your LS-120 drive is connected as the first IDE
-device (master) on the second cable, you enter
-<userinput>linux root=/dev/hdc</userinput> at the boot prompt.
-Installation from LS-120 is only supported by 2.4 and later kernels.
+Per instal·lar des d'una unitat LS-120 (versió ATAPI) utilitzant
+un conjunt de disquets, heu d'especificar la ubicació virtual de la
+disquetera. Ho podeu fer a través del paràmetre d'arrencada
+<emphasis>root=</emphasis>, especificant que el controlador de la
+disquetera-ide mapeja el dispositiu. Per exemple, si la unitat LS-120
+està connectada al primer dispositiu IDE (master) del segon cable,
+hauríeu d'introduir <userinput>linux root=/dev/hdc</userinput> a
+l'indicador d'arrencada. La instal·lació des del LS-120 només està
+suportada a partir de la versió del nucli 2.4.
 
 </para><para>
 
-Note that on some machines, <keycombo><keycap>Control</keycap>
-<keycap>Alt</keycap> <keycap>Delete</keycap></keycombo> does not
-properly reset the machine, so a ``hard'' reboot is recommended.  If
-you are installing from an existing operating system (e.g., from a DOS
-box) you don't have a choice. Otherwise, please do a hard reboot when
-booting.
+Recodeu que en alguns ordinadors la combinació
+<keycombo><keycap>Control</keycap>
+<keycap>Alt</keycap> <keycap>Delete</keycap></keycombo>
+no reinicia correctament l'ordinador i es recomana
+reiniciar-lo manualment. Si ho esteu instal·lant des d'un sistema operatiu
+existent (ex. des d'un DOS) teniu l'opció. Si no és el cas reinicieu-lo
+manualment durant l'arrencada.
 
 </para><para>
 
-The floppy disk will be accessed, and you should then see a screen
-that introduces the boot floppy and ends with the <prompt>boot:</prompt>
-prompt.
+S'hauria d'accedir al disquet i hauria d'aparèixer una pantalla
+relacionada amb el disquet d'arrencada i que acaba amb
+l'indicador <prompt>boot:</prompt>.
 
 </para><para>
 
-Once you press &enterkey;, you should see the message
-<computeroutput>Loading...</computeroutput>, followed by
-<computeroutput>Uncompressing Linux...</computeroutput>, and
-then a screenfull or so of information about the hardware in your
-system.  More information on this phase of the boot process can be
-found below in <xref linkend="kernel-msgs"/>.
+Al prémer &enterkey; hauríeu de veure el missatge
+<computeroutput>Loading...</computeroutput>, seguit de
+<computeroutput>Uncompressing Linux...</computeroutput>, i
+a continuació una pàgina amb la informació del maquinari del sistema.
+Per a més informació d'aquesta fase del procés d'arrencada vegeu
+<xref linkend="kernel-msgs"/>.
 
 </para><para>
 
-After booting from the boot floppy, the root floppy is
-requested. Insert the root floppy and press &enterkey;, and the
-contents are loaded into memory. The installer program
-<command>debian-installer</command> is automatically launched.
+Un cop arrencat des del disquet d'arrencada se us sol·licitarà
+el disquet arrel. Inserteu el disquet arrel i permeu &enterkey;,
+seguidament es carregaran els continguts a la memòria.
+El programa instal·lador <command>debian-installer</command>
+s'iniciarà automàticament. 
 
 </para>
   </sect2>
-  
-  <sect2 arch="i386" id="boot-tftp"><title>Booting with TFTP</title>
- 
+
+  <sect2 arch="i386" id="boot-tftp"><title>Arrencant via TFTP</title>
+
 &boot-installer-intro-net.xml;
- 
+
 <para>
 
-There are various ways to do a TFTP boot on i386.
+Hi ha diversos mètodes per a arrencar via TFTP en i386.
 
 </para>
-
-   <sect3><title>NIC or Motherboard that support PXE</title>
-<para>
-
-It could be that your Network Interface Card or Motherboard provides
-PXE boot functionality.
-This is a <trademark class="trade">Intel</trademark> re-implemention
-of TFTP boot. If so you may be able to configure your BIOS to boot from the
-network.
-
-</para>
-   </sect3>
-   
-   <sect3><title>NIC with network bootROM</title>
-<para>
-
-It could be that your Network Interface Card provides
-TFTP boot functionality.
-
-</para><para condition="FIXME">
-
-Let us (<email>&email-debian-boot-list;</email>) know how did you manage it.
-Please refer to this document.
-
-</para>
-   </sect3>
 
    <sect3><title>Etherboot</title>
 <para>
 
-The <ulink url="http://www.etherboot.org">etherboot project</ulink>
-provides bootdiskettes and even bootroms that do a TFTPboot.
+El <ulink url="http://www.etherboot.org">projecte etherboot</ulink>
+proporciona disquets d'arrencada i fins hi tot roms d'arrencada
+que permeten l'arrencada via TFTP.
+
+</para>
+   </sect3>
+
+   <sect3><title>Tarja de xarxa amb una ROM d'arrencada via xarxa</title>
+<para>
+
+És possible que la vostra tarja de xarxa proporcioni la possibilitat
+d'arrencar via TFTP.
+
+</para><para condition="FIXME">
+
+Informeu-nos (<email>&email-debian-boot-list;</email>) de com us ha anat.
+
+</para>
+   </sect3>
+
+   <sect3><title>Tarja de xarxa o placa mare que suporta PXE</title>
+<para>
+
+És possible que la vostra tarja de xarxa o la placa mare proporcionin
+la possibilitat d'arrencara via PXE. Es tracta d'una reimplementació
+d'<trademark class="trade">Intel</trademark> de l'arrencada via TFTP.
+Si és el vostre cas podeu configurar la BIOS perquè arrenqui via la
+xarxa.
 
 </para>
    </sect3>
   </sect2>
 
-  <sect2 arch="i386"><title>i386 Boot Parameters</title>
+  <sect2 arch="i386"><title>Paràmetre d'arrencada i386</title>
 <para>
 
-When the installer boots, you will be presented with the boot prompt,
-<prompt>boot:</prompt>. You can do two things at the <prompt>boot:</prompt>
-prompt. You can press the function keys <keycap>F1</keycap> through
-<keycap>F10</keycap> to view a few pages of helpful information, or
-you can press <keycap>Enter</keycap> to boot the system.
+Quan arrenqui l'instal·lador us apareixerà l'indicador d'arrencada
+<prompt>boot:</prompt>. En l'indicador <prompt>boot:</prompt> podeu
+fer dues coses. Podeu prémer les tecles de <keycap>F1</keycap>
+a <keycap>F10</keycap> per visualitzar pàgines d'informació útil,
+o podeu prémer <keycap>Enter</keycap> per reiniciar el sistema.
 
 </para><para>
 
-Information on boot parameters which might be useful can be found by
-pressing <keycap>F3</keycap> through <keycap>F7</keycap>.  If you add any
-parameters to
-the boot command line, be sure to type the boot method (the default is
-<userinput>linux</userinput>) and a space before the first parameter (e.g.,
-<userinput>linux floppy=thinkpad</userinput>). If you simply press &enterkey;,
-that's the same as typing <userinput>linux</userinput> without any special
-parameters.
+Podeu accedir a informació interessant sobre els paràmetre d'arrencada
+prement les tecles de <keycap>F3</keycap> a <keycap>F7</keycap>.
+Si afegiu qualsevol paràmetre a la línia d'ordres d'arrencada,
+assegureu-vos d'escriure el mètode d'arrencada (el predeterminat és
+<userinput>linux</userinput>) i un espai abans del primer paràmetre
+(ex. <userinput>linux floppy=thinkpad</userinput>). Prémer &enterkey;,
+és el mateix que escriure <userinpt>linux</userinput> sense cap
+paràmetre especial.
 
 </para><para>
 
-Some systems have floppies with ``inverted DCLs''. If you receive
-errors reading from the floppy, even when you know the floppy is good,
-try the parameter <userinput>floppy=thinkpad</userinput>.
+Alguns sistemes tenen disqueteres amb els "DCL invertits". Si
+us apareixen errors mentre esteu llegint de la disquetera tot
+i saber que funciona correctament, proveu d'utilitzar el paràmetre
+<userinput>floppy=thinkpad</userinput>.
 
 </para><para>
 
-On some systems, such as the IBM PS/1 or ValuePoint (which have ST-506
-disk drivers), the IDE drive may not be properly recognized.  Again,
-try it first without the parameters and see if the IDE drive is
-recognized properly.  If not, determine your drive geometry
-(cylinders, heads, and sectors), and use the parameter
-<userinput>hd=<replaceable>cylinders</replaceable>,<replaceable>heads</replaceable>,<replaceable>sectors</replaceable></userinput>.
+En alguns sistemes com els IBM PS/1 o el ValuePoint (que disposa
+dels controladors de disc del ST-506) la unitat IDE no es reconeixerà
+correctament. En aquest cas proveu-ho sense paràmetres i espereu si
+es reconeix correctament. Si no és el cas, cerqueu els paràmetres
+del dispositiu (cilindres, capçals i sectors) i utilitzeu el paràmetre
+<userinput>hd=<replaceable>cilindres</replaceable>,<replaceable>capçals</replaceable>,<replaceable>sectors</replaceable></userinput>.
 
 </para><para>
 
-If you have a very old machine, and the kernel hangs after saying
-<computeroutput>Checking 'hlt' instruction...</computeroutput>, then
-you should try the <userinput>no-hlt</userinput> boot argument, which
-disables this test.
+Si disposeu d'un ordinador molt vell i el nucli es penja
+després de mostrar el missatge
+<computeroutput>Checking 'hlt' instruction...</computeroutput>,
+hauríeu de provar el paràmetre d'arrencada que inhabilita la prova
+<userinput>no-hlt</userinput>.
 
 </para><para>
 
-If your screen begins to show a weird picture while the kernel boots,
-eg. pure white, pure black or colored pixel garbage, your system may
-contain a problematic video card which does not switch to the
-framebuffer mode properly.  Then you can use the boot parameter
-<userinput>debian-installer/framebuffer=false</userinput> or
-<userinput>video=vga16:off</userinput> to disable the framebuffer
-console. Only the English
-language will be available during the installation due to limited
-console features. See <xref linkend="boot-parms"/> for details.
-
-</para>
-  </sect2>
-
-
-  <sect2 arch="i386">
-  <title>System freeze during the PCMCIA configuration phase</title>
-
-<para>
-
-Some laptop models produced by Dell are known to crash when PCMCIA device
-detection tries to access some hardware addresses. Other laptops may display
-similar problems. If you experience such a problem and you don't need PCMCIA
-support during the installation, you can disable PCMCIA using the
-<userinput>hw-detect/start_pcmcia=false</userinput> boot parameter. You can
-then configure PCMCIA after the installation is completed and exclude the
-resource range causing the problems.
-
-</para><para>
-
-Alternatively, you can boot the installer in expert mode. You will
-then be asked to enter the resource range options your hardware
-needs. For example, if you have one of the Dell laptops mentioned
-above, you should enter <userinput>exclude port
-0x800-0x8ff</userinput> here. There is also a list of some common
-resource range options in the <ulink
-url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-2.html#ss2.5">System
-resource settings section of the PCMCIA HOWTO</ulink>. Note that you
-have to omit the commas, if any, when you enter this value in the
-installer.
+Si durant l'arrencada del nucli apareixen caràcters estranys a la pantalla,
+és possible que el sistema disposi d'una tarja de vídeo problemàtica
+que no commuta correctament al mode framebuffer. En aquest cas podeu
+utilitzar el paràmetre d'arrencada
+<userinput>debian-installer/framebuffer=false</userinput> o
+<userinput>video=vga16:off</userinput> per inhabilitar el frambuffer.
+Durant la instal·lació únicament es disposarà de l'idioma anglès
+arran de les limitacions de la consola. Per a més informació
+vegeu
+<xref linkend="boot-parms"/>.
 
 </para>
   </sect2>
 
   <sect2 arch="i386">
-  <title>System freeze while loading the USB modules</title>
+  <title>El sistema queda congelat durant la fase de configuració de la PCMCIA</title>
+
 <para>
 
-The kernel normally tries to install USB modules and the USB keyboard driver
-in order to support some non-standard USB keyboards. However, there are some
-broken USB systems where the driver hangs on loading. A possible workaround
-may be disabling the USB controller in your mainboard BIOS setup. Another option
-is passing the <userinput>debian-installer/probe/usb=false</userinput> parameter
-at the boot prompt, which will prevent the modules from being loaded.
+Alguns models d'ordinadors portàtils produïts per Dell són coneguts
+per penjar-se quan la detecció de dispositius PCMCIA intenta accedir a
+algunes adreces de maquinari. D'altres portàtils poden descriure
+problemàtiques similars. Si patiu algun problema similar i durant
+la instal·lació no preciseu del suport PCMCIA, el podeu inhabilitar
+utilitzant el paràmetre d'arrencada
+<userinput>hw-detect/start_pcmcia=false</userinput>.
+Podeu configurar el suport de PCMCIA després de la instal·lació
+i excloure'n el rang de recursos problemàtic.
+
+</para><para>
+
+D'altra banda, podeu arrencar l'instal·lador en mode expert. Se us
+demanarà que introduïu les opcions del rang de recursos que precisa
+el vostre maquinari. Per exemple, si disposeu d'un dels ordinadors
+portàtils Dell anomenats anteriorment, hauríeu d'introduir-hi
+<userinput>exclude port 0x800-0x8ff</userinput>. Disposeu d'una llista
+de les opcions del rangs de recursos més habituals a
+<ulink url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-2.html#ss2.5">System
+resource settings section of the PCMCIA HOWTO</ulink>.
+Recordeu que heu d'evitar la utilització de les comes a l'hora
+d'introduir els valors a l'instal·lador.
+
+</para>
+  </sect2>
+
+  <sect2 arch="i386">
+  <title>El sistema queda congelat durant la càrrega dels mòduls USB</title>
+<para>
+
+El nucli acostuma a intentar instal·lar els mòduls USB i els controladors
+del teclat USB per suportar alguns teclats USB no estàndards. Tot i això,
+hi ha alguns sistemes USB inconsistents en els quals el controlador
+es penja durant la càrrega. Una possible solució és inhabilitar el controlador
+USB en la configuració de la BIOS de la placa mare. Una altra opció és
+passsar el paràmetre
+<userinput>debian-installer/probe/usb=false</userinput>
+a l'indicador d'arrencada, que evitarà que es carreguin els mòduls.
 
 </para>
   </sect2>

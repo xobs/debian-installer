@@ -1,89 +1,79 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23207 untranslated -->
+<!-- original version: 22236 -->
 
- <sect1 id="boot-parms"><title>Boot Parameters</title>
+ <sect1 id="boot-parms"><title>Paràmetres d'arrencada</title>
 <para>
 
-Boot parameters are Linux kernel parameters which are generally used
-to make sure that peripherals are dealt with properly.  For the most
-part, the kernel can auto-detect information about your peripherals.
-However, in some cases you'll have to help the kernel a bit.
+Els paràmetres d'arrencada són paràmetres del nucli de Linux que
+s'utilitzen per assegurar que els perifèrics es gestionen
+correctament. En la majoria de casos el nucli és capaç
+de detectar automàticament la informació dels perifèrics.
+Tot i això, en algunes ocasions haureu d'ajudar-lo.
 
 </para><para>
 
-If this is the first time you're booting the system, try the default
-boot parameters (i.e., don't try setting parameters) and see if it works
-correctly. It probably will.  If not, you can reboot later and look for
-any special parameters that inform the system about your hardware.
+Si és la primera vegada que arrenqueu el sistema utilitzeu
+els paràmetres d'arrencada predeterminats (ex. no intenteu
+especificar cap paràmetre) i observeu si s'executa
+correctament; probablement ho farà. Si no és el cas,
+podeu tornar a arrencar més tard i buscar qualsevol
+paràmetre especial que informi al sistema respecte
+al vostre maquinari.
 
 </para><para>
 
-Information on many boot parameters can be found in the 
-<ulink url="http://www.tldp.org/HOWTO/BootPrompt-HOWTO.html"> Linux
-BootPrompt HOWTO</ulink>, including tips for obscure hardware.  This
-section contains only a sketch of the most salient parameters.  Some
-common gotchas are included below in 
-<xref linkend="boot-troubleshooting"/>.
+Podeu trobar informació referent a molts paràmetre de l'arrencada a
+<ulink url="http://www.tldp.org/HOWTO/BootPrompt-HOWTO.html">Linux
+BootPrompt HOWTO</ulink>, inclosos alguns trucs per a maquinari
+obscur. Aquesta secció conté únicament una representació dels paràmetres
+més destacats. Podeu trobar una petita selecció dels problemes més
+habituals a <xref linkend="boot-troubleshooting"/>.
 
 </para><para>
 
-When the kernel boots, a message 
+A l'inici de l'arrencada del nucli hauria d'aparèixer el missatge
 
 <informalexample><screen>
 
-Memory:<replaceable>avail</replaceable>k/<replaceable>total</replaceable>k available 
+Memòria:<replaceable>dispo</replaceable>k/<replaceable>total</replaceable>k disponible
 
 </screen></informalexample>
 
-should be emitted early in the process.
-<replaceable>total</replaceable> should match the total amount of RAM,
-in kilobytes.  If this doesn't match the actual amount of RAM you have
-installed, you need to use the
-<userinput>mem=<replaceable>ram</replaceable></userinput> parameter,
-where <replaceable>ram</replaceable> is set to the amount of memory,
-suffixed with ``k'' for kilobytes, or ``m'' for megabytes.  For
-example, both <userinput>mem=65536k</userinput> and
-<userinput>mem=64m</userinput> mean 64MB of RAM.
+<replaceable>total</replaceable> hauria d'indicar la quantitat
+total de RAM en kilobytes. Si no coincideix amb la quantitat de RAM que
+teniu instal·lada utilitzeu el paràmetre
+<userinput>mem=<replaceable>ram</replaceable></userinput>,
+on <replaceable>ram</replaceable> correspon a la quantitat de memòria,
+amb el sufix 'k' pels kilobytes, o 'm' per les megabytes. Per exemple,
+<userinput>mem=65536K</userinput> i <userinput>mem=64M</userinput>
+corresponen a 65MB de RAM.
 
 </para><para condition="supports-serial-console">
 
-If you are booting with a serial console, generally the kernel will
-autodetect this 
-<phrase arch="mipsel">(although not on DECstations)</phrase>
-If you have a videocard (framebuffer) and a keyboard also attached to
-the computer which you wish to boot via serial console, you may have
-to pass the
+Si esteu arrencant via una consola sèrie el nucli ho detectarà
+automàticament
+<phrase arch="mipsel">(no en el cas de les estacions DEC)</phrase>
+Si disposeu d'una tarja de vídeo (framebuffer) i un teclat connectats
+a l'ordinador del qual voleu arrencar, hauríeu de passar passar el
+paràmetre
 <userinput>console=<replaceable>device</replaceable></userinput>
-argument to the kernel, where <replaceable>device</replaceable> is
-your serial device, which is usually something like
-<filename>ttyS0</filename>.
+al nucli; <replaceable>device</replaceable> correspon al dispositiu
+sèrie, que acostuma a ser similar a <filename>ttyS0</filename>.
 
 </para><para arch="sparc">
 
-For &arch-title; the serial devices are <filename>ttya</filename> or
-<filename>ttyb</filename>.
-Alternatively, set the <envar>input-device</envar> and
-<envar>output-device</envar> OpenPROM variables to
-<filename>ttya</filename>.
+Per a l'arquitectura &arch-title; els dispositius sèrie són els
+<filename>ttya</filename> o <filename>ttyb</filename>.
+D'altra banda, definiu les variables OpenROM <envar>input-device</envar>
+i <envar>output-device</envar> com a <filename>ttya</filename>.
 
 </para>
 
-
-  <sect2 id="installer-args"><title>Debian Installer Parameters</title>
+  <sect2 id="installer-args"><title>Paràmetres de l'instal·lador de Debian</title>
 <para>
 
-The installation system recognizes a few additional boot parameters<footnote>
-
-<para>
-
-Note that the kernel accepts a maximum of 8 command line options and
-8 environment options (including any options added by default for the
-installer). If these numbers are exceeded, 2.4 kernels will drop any
-excess options and 2.6 kernels will panic.
-
-</para>
-
-</footnote> which may be useful. 
+El sistema d'instal·lació reconeix un conjunt de paràmetres d'arrencada
+addicionals que us podrien ser d'utilitat.
 
 </para>
 
@@ -92,35 +82,41 @@ excess options and 2.6 kernels will panic.
 <term>debconf/priority</term>
 <listitem><para>
 
-This parameter settings will set the highest priority of messages
-to be displayed. 
+Aquest paràmetre de configuració definirà la prioritat més alta dels
+missatges a mostrar.
 
 </para><para>
 
-The default installation uses <userinput>debconf/priority=high</userinput>.
-This means that both high and critical priority messages are shown, but medium
-and low priority messages are skipped. 
-If problems are encountered, the installer adjusts the priority as needed.
+La instal·lació predeterminada utilitza
+<userinput>debconf/priority=high</userinput>.
+En aquest cas es mostraran els missatges amb prioritat high i critical,
+però s'anul·laran els missatges amb prioritat medium i low. Si
+l'instal·lador detecta algun problema, ajustarà la prioritat en
+funció de les necessitats que n'esdevinguin.
 
 </para><para>
 
-If you add <userinput>debconf/priority=medium</userinput> as boot parameter, you
-will be shown the installation menu and gain more control over the installation.
-When <userinput>debconf/priority=low</userinput> is used, all messages are shown
-(this is equivalent to the <emphasis>expert</emphasis> boot method).
-With <userinput>debconf/priority=critical</userinput>, the installation system
-will display only critical messages and try to do the right thing without fuss.
+Si utilitzeu el paràmetre d'arrencada
+<userinput>debconf/priority=medium</userinput>, se us mostrarà el
+menú d'instal·lació i disposareu de més control sobre la instal·lació.
+Quan s'utilitza el paràmetre <userinput>debconf/priority=low</userinput>
+es mostraran tots els missatges (és equivalent al mètode d'arrencada
+<emphasis>expert</emphasis>). En el cas de
+<userinput>debconf/priority=critical</userinput>, el sistema
+d'instal·lació mostrarà únicament els missatges crítics i
+procurarà fer la feina correctament sense mostrar missatges.
+
 
 </para></listitem>
 </varlistentry>
-
 
 <varlistentry>
 <term>DEBIAN_FRONTEND</term>
 <listitem><para>
 
-This boot parameter controls the type of user interface used for the
-installer. The current possible parameter settings are:
+Aquest paràmetre d'arrencada defineix el tipus d'interfície d'usuari
+utilitzat per l'instal·lador. Els possibles paràmetres de configuració
+actuals són:
 
 <itemizedlist>
 <listitem>
@@ -142,45 +138,47 @@ installer. The current possible parameter settings are:
 </listitem>
 </itemizedlist>
 
-The default front end is <userinput>DEBIAN_FRONTEND=newt</userinput>.
-<userinput>DEBIAN_FRONTEND=text</userinput> may be preferable for
-serial console installs. Generally only the
-<userinput>newt</userinput> frontend is available on default install
-media, so this is not very useful right now.
+El tipus predeterminat és
+<userinput>DEBIAN_FRONTEND=newt</userinput>.
+En el cas de les instal·lacions a través de la consola sèrie s'acostuma
+a utilitzar
+<userinput>DEBIAN_FRONTEND=text</userinput>. En general, l'únic tipus
+disponible en el mitjà d'instal·lació predeterminat és el
+<userinput>newt</userinput>, i per tant actualment no és molt útil.
 
 </para></listitem>
 </varlistentry>
-
 
 <varlistentry>
 <term>BOOT_DEBUG</term>
 <listitem><para>
 
-Passing this boot parameter will cause the boot to be more verbosely 
-logged.
+Utilitzant aquest paràmetre d'arrencada induirà l'arrencada a mostrar
+més missatges.
 
 <variablelist>
 <varlistentry>
 <term><userinput>BOOT_DEBUG=0</userinput></term>
-<listitem><para>This is the default.</para></listitem>
+<listitem><para>És el valor predeterminat.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>BOOT_DEBUG=1</userinput></term>
-<listitem><para>More verbose than usual.</para></listitem>
+<listitem><para>Més missatges de l'habitual.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>BOOT_DEBUG=2</userinput></term>
-<listitem><para>Lots of debugging information.</para></listitem>
+<listitem><para>Molta informació de depuració.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>BOOT_DEBUG=3</userinput></term>
 <listitem><para>
 
-Shells are run at various points in the boot process to allow detailed
-debugging. Exit the shell to continue the boot.
+Durant el procés d'arrencada s'executen diversos intèrprets d'ordres
+que permeten una depuració més detallada. Per continuar l'arrencada
+hareu de sortir de l'intèrpret d'ordres.
 
 </para></listitem>
 </varlistentry>
@@ -189,20 +187,20 @@ debugging. Exit the shell to continue the boot.
 </para></listitem>
 </varlistentry>
 
-
 <varlistentry>
 <term>INSTALL_MEDIA_DEV</term>
 <listitem><para>
 
-The value of the parameter is the path to the device to load the
-Debian installer from. For example,
+El valor del paràmetre correspon al camí al dispositiu des del qual
+carregar l'instal·lador de Debian. Per exemple,
 <userinput>INSTALL_MEDIA_DEV=/dev/floppy/0</userinput>
 
 </para><para>
 
-The boot floppy, which normally scans all floppies and USB storage
-devices it can to find the root floppy, can be overridden by this
-parameter to only look at the one device.
+El disquet d'arrencada, que normalment escaneja tots els disquets
+i dispositius USB d'emmagatzematge per trobar el disquet arrel, es
+pot substituir per aquest paràmetre per forçar que únicament busqui
+en aquest dispositiu.
 
 </para></listitem>
 </varlistentry>
@@ -211,26 +209,28 @@ parameter to only look at the one device.
 <term>debian-installer/framebuffer</term>
 <listitem><para>
 
-Some architectures use the kernel framebuffer to offer installation in
-a number of languages. If framebuffer causes a problem on your system
-you can disable the feature by the parameter
-<userinput>debian-installer/framebuffer=false</userinput>. Problem
-symptoms are error messages about bterm or bogl, a blank screen, or
-a freeze within a few minutes after starting the install.
+Algunes arquitectures utilitzen el framebuffer del nucli per oferir
+la instal·lació en diferents idiomes. Si el framebuffer us provoca
+errors al sistema, podeu habilitar la característica utilitzant
+el paràmetre <userinput>debian-installer/framebuffer=false</userinput>.
+Els símptomes del problema són missatges d'error referents al
+bogl, una pantalla en blanc o que es quedi congelat durant uns quants
+minuts després d'iniciar la instal·lació.
 
 </para><para arch="i386">
 
-The <userinput>video=vga16:off</userinput> argument may also be used
-to disable the framebuffer. Such problems have been reported on a Dell
-Inspiron with Mobile Radeon card.
+Per inhabilitar el framebuffer també podeu utilitzar l'argument
+<userinput>video=vga16:off</userinput>. La problemàtica relacionada
+amb aquest paràmetre s'ha detectat en ordinadors Dell Inspiron
+amb una tarja Mobile Radeon.
 
 </para><para arch="m68k">
 
-Such problems have been reported on the Amiga 1200 and SE/30.
+La problemàtica s'ha detectat a l'Amiga 1220 i SE/30.
 
 </para><para arch="hppa">
 
-Such problems have been reported on hppa.
+La problemàtica s'ha detectat a l'hppa.
 
 </para></listitem>
 </varlistentry>
@@ -239,8 +239,8 @@ Such problems have been reported on hppa.
 <term>debian-installer/probe/usb</term>
 <listitem><para>
 
-Set to <userinput>false</userinput> to prevent probing for USB on
-boot, if that causes problems.
+Si l'intent d'arrencada a través d'USB us genera problemes,
+el podeu evitar seleccionant <userinput>false</userinput>.
 
 </para></listitem>
 </varlistentry>
@@ -249,17 +249,18 @@ boot, if that causes problems.
 <term>netcfg/disable_dhcp</term>
 <listitem><para>
 
-By default, the &d-i; automatically probes for network configuration
-via DHCP. If the probe succeeds, you won't have a chance to review and
-change the obtained settings. You can get to the manual network setup
-only in case the DHCP probe fails.
+El &d-i; procura, per defecte,  configurar la xarxa automàticament
+utilitzant el DHCP. Si la configuració es realitza correctament
+no podreu revisar-ne i modificar-ne els paràmetres obtinguts.
+L'accés a la configuració manual de la xarxa només es donarà
+quan falli la configuració per DHCP.
 
 </para><para>
 
-If you have a DHCP server on your local network, but want to avoid it
-because e.g. it gives wrong answers, you can use the parameter
-<userinput>netcfg/disable_dhcp=true</userinput> to prevent configuring
-the network with DHCP and to enter the information manually.
+Si en la vostra xarxa local disposeu d'un servidor de DHCP però
+no el voleu utilitzar, perquè per exemple us retorna respostes
+incorrectes, podeu evitar-lo i introduir la informació manualment
+utilitzant el paràmetre <userinput>netfcg/disable_dhcp=true</userinput>.
 
 </para></listitem>
 </varlistentry>
@@ -268,9 +269,9 @@ the network with DHCP and to enter the information manually.
 <term>hw-detect/start_pcmcia</term>
 <listitem><para>
 
-Set to <userinput>false</userinput> to prevent starting PCMCIA
-services, if that causes problems. Some laptops are well known for
-this misbehavior.
+Si us causa problemes i per evitar que s'iniciïn els serveis
+PCMCIA trieu <userinput>false</userinput>. Aquest comportament
+s'ha detectat en alguns ordinadors portàtils.
 
 </para></listitem>
 </varlistentry>
@@ -279,8 +280,9 @@ this misbehavior.
 <term>preseed/url</term>
 <listitem><para>
 
-Specify the url to a preconfiguration file to download and use in
-automating the install. See <xref linkend="automatic-install"/>.
+Especifica l'URL que enllaça a un fitxer de preconfiguració
+a baixar i utilitzar per automatitzar la instal·lació.
+Per a més informació vegeu <xfref linkend="automatic-install"/>.
 
 </para></listitem>
 </varlistentry>
@@ -289,8 +291,9 @@ automating the install. See <xref linkend="automatic-install"/>.
 <term>preseed/file</term>
 <listitem><para>
 
-Specify the url to a preconfiguration file to load to
-automating the install. See <xref linkend="automatic-install"/>.
+Especifica l'URL que enllaça a un fitxer de preconfiguració
+a carregar per automatitzar la instal·lació. Per a més
+informació vegeu <xref linkend="automatic-install"/>
 
 </para></listitem>
 </varlistentry>
@@ -299,7 +302,8 @@ automating the install. See <xref linkend="automatic-install"/>.
 <term>ramdisk_size</term>
 <listitem><para>
 
-If you are using a 2.2.x kernel, you may need to set &ramdisksize;.
+Si utilitzeu un nucli 2.2.x, probablement haureu d'especificar
+la &ramdisksize;.
 
 </para></listitem>
 </varlistentry>
