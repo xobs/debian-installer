@@ -29,7 +29,8 @@ foreach my $p (sort keys %$collect) {
 
 	# Warn about missing deps. This is not perfect, in since pkgdeps
 	# ignores dependencies on virtual packages and does not support
-	# alternates. Still, it will catch most common mistakes.
+	# alternates (which are not really allowed for udebs anyway). 
+	# Still, it will catch most common mistakes.
 	foreach my $dep (pkgdeps($p)) {
 		if (! $collect->{$dep} && ! $exclude->{$dep} && ! $parentcollect->{$dep}) {
 			warning("in $type, $p has unsatisfied dependency on $dep");
@@ -79,6 +80,7 @@ sub pkgdeps {
 	my @deps=`apt-cache \\
 		-o Dir::Etc::sourcelist=./sources.list.udeb \\
 		-o Dir::State=./apt.udeb/state \\
+		-o Dir::State::Status=./apt.udeb/state/status \\
 		-o Dir::Cache=./apt.udeb/cache depends $package`;
 	shift @deps; # package name;
 	foreach my $dep (@deps) {

@@ -67,8 +67,8 @@ APT_GET="apt-get --assume-yes \
 # Prepare APTDIR
 mkdir -p $APTDIR/state/lists/partial
 mkdir -p $APTDIR/cache/archives/partial
+echo -n > $APTDIR/state/status
 if [ "$TYPE" = "deb" ]; then
-	echo -n > $APTDIR/state/status
 	APT_GET="$APT_GET -o Dir::State::Status=`pwd`/$APTDIR/state/status"
 else
 	# Prime status file with system libraries
