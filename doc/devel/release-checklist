@@ -1,48 +1,63 @@
 Release testing checklist. Successful installs should be reported 
 for each of the following before release.
 
-							pass/fail (details)
+					pass/fail (details)
 languages
-	Albanese					fail     base-config loops at the end of 2nd stage
-	Arabic						pass     Needs jfbterm at console after reboot otherwise Mojibake
-	Basque						pass	 
-	Bosnian						pass	 After reboot (otherwise Latin-1 console)
-	Bulgarian					pass	 
-	Catalan						pass
-	Chinese (Simplified)				pass     Needs jfbterm: "jfbterm -q -c other,EUC-JP,iconv,UTF-8 -e"
-	Chinese (Traditional)				pass     Needs jfbterm: "jfbterm -q -c other,EUC-JP,iconv,UTF-8 -e"
-	Croatian					pass     After reboot (otherwise Latin-1 console)
-	Czech						pass     After reboot (otherwise Latin-1 console)
-	Danish						pass
-	Dutch						pass
-	French						pass
-	Galician					pass
-	German						pass
-	Greek						pass
-	Hebrew						pass 	 Needs jfbterm at console after reboot otherwise Mojibake
-	Hungarian					pass     After reboot (otherwise Latin-1 console)
-	Indonesian					pass
-	Italian						pass
-	Japanese					pass 	Needs jfbterm: "jfbterm -q -c other,EUC-JP,iconv,UTF-8 -e"
-	Korean						pass 	Needs jfbterm: "jfbterm -q -c other,EUC-JP,iconv,UTF-8 -e"
-	Latvian						pass 	Doubt for keyboard. lv-latin4 loads well but where are the non ASCII chars? (maybe the map has none of these)
-	Lithuanian					fail	lt keymap missing (#275087). Is OK with US keyboard
-	Northern Sami					halfpass Second stage has no borders around dialog boxes (probably because of UTF-8 locale)
-	Norwegian Bokmal				pass    One encoding problem in shadow screen (already reported)
-	Norwegian Nynorsk				pass    exim4 config screen broken, bug reported
-	Persian						halfpass  Probably still missing characters. No 2nd stage translation but 2nd stage and installed system certainly need jfbterm
-	Polish						pass	After reboot (otherwise Latin-1 console)
-	Portuguese of Brazil				pass
-	Portuguese					pass
-	Romanian					pass	After reboot (otherwise Latin-1 console)
-	Russian						pass	After reboot (otherwise Latin-1 console)
-	Serbian						pass    But uses Bosnian translation mostly (not cyrillic). Console-cyrillic seems properly installed though. Maybe some glitches in 2nd stage.
-	Slovakian					pass	After reboot (otherwise Latin-1 console)
-	Slovenian					pass	After reboot (otherwise Latin-1 console)
-	Spanish						pass
-	Swedish						pass
-	Turkish						pass	After reboot (otherwise Latin-1 console)
-	Ukrainian					pass	After reboot (otherwise Latin-1 console)
+
+jfbterm: means that using jfbterm on the consoleis mandatory for 
+         avoiding Mojibake
+reboot : means that the display is correct only after rebooting the
+         installed system. This is because of reset to Latin-1
+	 at the end of base-config
+
+	Albanese			fail	base-config loops at the end of 2nd stage
+	Arabic				pass	jfbterm
+	Basque				pass	 
+	Bosnian				pass	reboot
+	Bulgarian			pass	 
+	Catalan				pass
+	Chinese (Simplified)		pass	jfbterm
+	Chinese (Traditional)		pass	jfbterm
+	Croatian			pass	reboot
+	Czech				pass	reboot
+	Danish				pass
+	Dutch				pass
+	French				pass
+	Galician			pass
+	German				pass
+	Greek				pass
+	Hebrew				pass	fbterm
+	Hungarian			pass	reboot
+	Indonesian			pass
+	Italian				pass
+	Japanese			pass	jfbterm
+	Korean				pass 	jfbterm
+	Latvian				pass 	
+	Lithuanian			fail	lt keymap missing (#275087). 
+						Is OK with US keyboard
+	Northern Sami			pass	No borders around dialog in 2nd stage
+	Norwegian Bokmal		pass    Encoding problem in shadow 
+						(already reported)
+	Norwegian Nynorsk		pass    exim4 config screen broken, bug reported
+	Persian				fail	Missing characters
+						No 2nd stage translation
+						jfbterm (probably)
+	Polish				pass	reboot. exim4 broken (same as nn)
+	Portuguese of Brazil		pass
+	Portuguese			pass
+	Romanian			pass	reboot
+	Russian				pass	reboot
+	Serbian				fail    Uses Bosnian translation as fallback
+						Console-cyrillic properly installed though
+						Glitches in 2nd stage.
+	Slovakian			pass	reboot
+	Slovenian			pass	reboot
+	Spanish				pass
+	Swedish				pass
+	Turkish				pass	reboot
+	Ukrainian			pass	reboot
+	Welsh				pass	reboot
+						No lines around dialog boxes in 2nd stage
 
 i386
 	netinst cd install				
@@ -51,11 +66,13 @@ i386
 	floppy + cd install				
 	floppy + network install			
 	netboot install					
-	pcmcia network install (any boot media)		
+	pcmcia network install 
+          (any boot media)		
 	lvm install					
 	lvm root					
 	raid root					
-	raid 1 root and boot (lilo)			
+	raid 1 root and boot 
+          (lilo)			
 	lvm over raid					
 	software raid install				
 	32 mb ram install				
