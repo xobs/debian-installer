@@ -87,7 +87,7 @@ referenced later below.
 The tool that the Debian installer uses, which is recognized as the
 official way to install a Debian base system, is
 <command>debootstrap</command>. It uses <command>wget</command>, but
-otherwise depends only on <classname>glibc</classname>. Install
+otherwise depends only on <classname>/bin/sh</classname>. Install
 <command>wget</command> if it isn't already on your current system,
 then download and install <command>debootstrap</command>.
 
@@ -130,7 +130,7 @@ the binaries.
   </sect2>
 
   <sect2>
-  <title>Run <command>debootstrap</command> (Network-connected)</title>
+  <title>Run <command>debootstrap</command></title>
 <para>
 
 <command>debootstrap</command> can download the needed files directly
@@ -142,7 +142,7 @@ network-wise. Mirrors are listed at
 
 </para><para>
 
-If you have a woody version &debian; CD mounted at
+If you have a &releasename; &debian; CD mounted at
 <filename>/cdrom</filename>, you could substitute a file URL instead
 of the http URL: <userinput>file:/cdrom/debian/</userinput>
 
@@ -165,57 +165,13 @@ in the <command>debootstrap</command> command:
 
 <informalexample><screen>
 
- $ /usr/sbin/debootstrap --arch ARCH woody \
+ $ /usr/sbin/debootstrap --arch ARCH sarge \
      /mnt/debinst http://http.us.debian.org/debian
 
 </screen></informalexample>
 
 </para>
 
-  </sect2>
-
-  <sect2>
-  <title>Run <command>debootstrap</command> 
-  (Using <filename>basedebs.tar</filename>)</title>
-<para>
-
-<command>debootstrap</command> can use the
-<filename>basedebs.tar</filename> file, if you have already downloaded
-it ahead of time. The <filename>basedebs.tar</filename> file is
-generated only every once in a while, so you'll get the latest version
-of the base system by pointing <command>debootstrap</command> directly
-to a Debian archive as shown in the previous section.
-
-</para><para>
-
-The <filename>basedebs.tar</filename> file is found in the
-<filename>base-images-current</filename> directory of the Debian
-archive for your architecture, for example: 
-<ulink url="http://http.us.debian.org/debian/dists/woody/main/disks-&architecture;/base-images-current/basedebs.tar"></ulink>
-
-</para><para>
-
-Substitute one of the following for <replaceable>ARCH</replaceable> in the
-<command>debootstrap</command> command: 
-
-<userinput>alpha</userinput>, 
-<userinput>arm</userinput>,
-<userinput>hppa</userinput>, 
-<userinput>i386</userinput>, 
-<userinput>ia64</userinput>, 
-<userinput>m68k</userinput>,
-<userinput>mips</userinput>, 
-<userinput>mipsel</userinput>, 
-<userinput>powerpc</userinput>, 
-<userinput>s390</userinput>, or
-<userinput>sparc</userinput>.
-<informalexample><screen>
- 
-$ /usr/sbin/debootstrap --arch ARCH --unpack-tarball \
-    /path-to-downloaded/basedebs.tar woody /mnt/debinst
-
-</screen></informalexample>
-</para>
   </sect2>
 
   <sect2>
@@ -297,15 +253,6 @@ continuing:
 
 </para>
 
-<para>
-A RedHat user reports that on his system, this should be 
-
-<informalexample><screen>
-
- # mount -t none proc /proc
-
-</screen></informalexample>
-</para>
    </sect3>
 
    <sect3>
@@ -425,7 +372,7 @@ sources by running
 
 <informalexample><screen>
 
- # /usr/sbin/base-config
+ # /usr/sbin/base-config new
 
 </screen></informalexample>
 </para>
@@ -485,15 +432,18 @@ Then install your choice using its package name.
 <para>
 
 To make your &debian; system bootable, set up your boot loader to load
-the installed kernel with your new root partition.
+the installed kernel with your new root partition. Note that debootstrap
+does not install a boot loader, though you can use apt-get inside your
+Debian chroot to do so.
 
 </para><para arch="i386">
 
-Check <userinput>man lilo.conf</userinput> for instructions on setting
-up the bootloader.  If you are keeping the system you used to install
-Debian, just add an entry for the Debian install to your existing
-lilo.conf.  You could also copy it to the new system and edit it
-there. After you are done editing, call lilo (remember it will use
+Check <userinput>info grub</userinput> or <userinput>man
+lilo.conf</userinput> for instructions on setting up the
+bootloader.  If you are keeping the system you used to install Debian, just
+add an entry for the Debian install to your existing grub menu.lst or
+lilo.conf.  For lilo.conf, you could also copy it to the new system and
+edit it there. After you are done editing, call lilo (remember it will use
 lilo.conf relative to the system you call it from).
 
 </para><para arch="i386">
@@ -540,12 +490,6 @@ label=Debian
 
 On some machines, you may need to use <userinput>ide0:</userinput> 
 instead of <userinput>hd:</userinput>. 
-
-</para><para arch="not-i386;not-powerpc">
-
-<phrase condition="FIXME">
-FIXME: Someone may eventually supply an example for this architecture.
-</phrase>
 
 </para>
   </sect2>
