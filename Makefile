@@ -403,6 +403,15 @@ endif
 	rm -f $(DPKGDIR)/status
 	ln -sf status.udeb $(DPKGDIR)/status
 
+ifdef NO_I18N
+	# Remove all internationalization from the templates.
+	# Not ideal, but useful if you're very tight on space.
+	for FILE in $$(find $(TREE) -name "*.templates"); do \
+		perl -e 'my $$status = 0; while (<>) { if (/^[A-Z]/ || /^$$/) { if (/^(Choices|Description)-/) { $$status = 0; } else { $$status = 1; } } print if ($$status); }' < $$FILE > temp; \
+		mv temp $$FILE; \
+	done
+endif
+
 	# Strip all kernel modules, just in case they haven't already been
 	for module in `find $(TREE)/lib/modules/ -name '*.o'`; do \
 	    strip -R .comment -R .note -g $$module; \
@@ -500,6 +509,7 @@ $(INITRD):  $(TYPE)-tree-stamp
 	rm -f $(TMP_FILE)
 	install -d $(TEMP)
 	install -d $(DEST)
+
 	if [ $(INITRD_FS) = ext2 ]; then \
 		genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` $(TMP_FILE); \
 	elif [ $(INITRD_FS) = romfs ]; then \
