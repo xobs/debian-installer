@@ -459,6 +459,10 @@ cd_content: floppy_image
 		cp -f $(TEMP)/$(NAME) $(DEST)/$(TYPE)-linux; )
 	cp syslinux.cfg $(DEST)/$(TYPE)-syslinux.cfg
 
+cd_image: cd_content
+	mkisofs -r -J -b `basename $(FLOPPY_IMAGE)` -o $(TYPE).iso $(DEST)
+	mv $(TYPE).iso $(DEST)
+
 # Write image to floppy
 boot_floppy: floppy_image
 	install -d $(DEST)
