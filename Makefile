@@ -13,7 +13,7 @@ architecture    := $(shell dpkg-architecture -qDEB_HOST_ARCH)
 # The version of the kernel to use.
 
 ifeq "$(architecture)" "i386"
-KVERS=2.4.10
+KVERS=2.4.12
 FLAVOUR=386
 endif
 
@@ -389,7 +389,7 @@ stats: tree
 # this:
 UPLOAD_DIR=klecker.debian.org:~/public_html/debian-installer/daily/
 daily_build:
-	-mv $(TREE) $(TYPE)-oldtree
+	-cvs update
 	$(MAKE) clean
 	install -d $(DEST)
 	fakeroot $(MAKE) tarball > $(DEST)/log 2>&1
@@ -399,5 +399,8 @@ daily_build:
 		$(UPLOAD_DIR)/$(TYPE)-debian-installer-$(shell date +%Y%m%d).tar.gz
 	scp -q -B $(DEST)/$(TYPE)-treecompare \
 		$(UPLOAD_DIR)/$(TYPE)-treecompare-$(shell date +%Y%m%d)
+	rm -rf $(TYPE)-oldtree
+	-mv $(TREE) $(TYPE)-oldtree && rm -f tree-stamp
+	mail $(shell whoami) -s "today's treecompare" $(DEST)/$(TYPE)-treecompare 
 
 .PHONY: tree
