@@ -112,7 +112,8 @@ find out the process ID for <command>inetd</command>, and run
 To use the Pre-boot Execution Environment (PXE) method of TFTP
 booting, you will need a TFTP server with <userinput>tsize</userinput>
 support.  On a &debian; server, the <classname>atftpd</classname> and
-<classname>tftpd-hpa</classname> packages qualify.
+<classname>tftpd-hpa</classname> packages qualify; we recommend
+<classname>tftpd-hpa</classname>.
 
 </para></note><para arch="mips">
 
@@ -163,52 +164,11 @@ images via TFTP itself.  For net booting, use the
 <filename>yaboot-netboot.conf</filename>.  Just rename this to
 <filename>yaboot.conf</filename> in the TFTP directory.
 
-</para><para arch="not-powerpc">
-
-Often, the file that the TFTP client will look for is
-<replaceable>client-ip-in-hexclient-architecture</replaceable>.  To
-compute <replaceable>client-ip-in-hex</replaceable>, take each byte of
-the client IP address and translate it into hexadecimal notation.  If
-you have a machine handy with the <command>bc</command> program, you
-can use the program.  First issue the <userinput>obase=16</userinput>
-command to set the output to hex, then enter the individual components
-of the client IP one at a time.  As for
-<replaceable>client-architecture</replaceable>, try out some values.
-
 </para><para arch="i386">
 
-For PXE booting, you can use the boot loader included with
-<classname>syslinux</classname>: <filename>pxelinux.0</filename>. The boot
-loader should be copied into the <filename>/tftpboot</filename>
-folder. Then create a subdirectory within
-<filename>/tftpboot</filename> named
-<filename>/tftpboot/pxelinux.cfg</filename>, and within that directory
-create a text file <filename>default</filename>. Here is an example of
-a <filename>default</filename> file's contents:
-
-<informalexample><screen>
-
-default lanlinux
-prompt 1
-
-label lanlinux
-  kernel vmlinuz
-  append initrd=initrd.gz devfs=mount root=/dev/ram
-
-</screen></informalexample>
-
-Note that <userinput>devfs=mount</userinput> is important, because without it
-there may be problems mounting the initrd.gz file system once the
-kernel is booted. Also note that you may need an additional parameter
-<userinput>ramdisk_size=<replaceable>size in KB</replaceable></userinput>,
-depending on the image you are booting.
-
-</para><para arch="i386">
-
-Finally, copy the <filename>vmlinuz</filename> and
-<filename>initrd.gz</filename> files (for the netboot installation method)
-from the Debian ftp archive into the <filename>/tftpboot</filename> folder,
-where the bootloader will be looking for them.
+For PXE booting, everything you should need is set up in the
+<filename>netboot/pxeboot.tar.gz</filename> tarball. Simply extract this
+tarball into the <command>tftpd</command> boot image directory.
 
 </para>
 
