@@ -1,13 +1,27 @@
-debian-installer (20040315) unstable; urgency=low
+debian-installer (20040316) UNRELEASED; urgency=low
 
-  * One more build for beta3 after all, since we forgot to update the
-    installation howto for partman. Also, ftp-master has not accepted the old
-    one, so this causes no extra delay.
+  * Joey Hess
+    - Move countrychooser off of the i386 root floppy, and onto
+      the net-drivers and cd-drivers floppys, freeing 50k.
+      load-floppy now runs before it.
+    - Reenable all translations for root floppy again, though this can't last.
+    - Always include /dev/console, even for images that will use devfs.
+      This means that netboot users will not have to remember the devfs=mount.
+    - Left devfs=mount in syslinux.cfg anyway, out of general caution.
+    - Add another dh_testroot call before udebs are downloaded.
   * dann frazier
     - Fix installs w/ USB keyboards w/ ia64 cdroms.  Add input-modules to the
       pkglist, and fix ia64.cfg, which was pointing at the non-smp kernel.
       This caused the build to put modules.dep in the wrong directory, causing
       modprobe to fail - will need linux-kernel-di 0.50 to build.
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 15 Mar 2004 20:08:46 -0500
+
+debian-installer (20040315) unstable; urgency=low
+
+  * One more build for beta3 after all, since we forgot to update the
+    installation howto for partman. Also, ftp-master has not accepted the old
+    one, so this causes no extra delay.
 
  -- Joey Hess <joeyh@debian.org>  Sun, 14 Mar 2004 21:09:03 -0500
 

@@ -336,10 +336,11 @@ endif
 
 	# Create a dev tree.
 	mkdir -p $(TREE)/dev
+	# Always needed, in case devfs is not mounted on boot.
+	mknod $(TREE)/dev/console c 5 1
 ifdef USERDEVFS
 	# Create initial /dev entries -- only those that are absolutely
 	# required to boot sensibly, though.
-	mknod $(TREE)/dev/console c 5 1
 	mkdir -p $(TREE)/dev/vc
 	mknod $(TREE)/dev/vc/0 c 4 0
 	mknod $(TREE)/dev/vc/1 c 4 1
@@ -492,6 +493,7 @@ UDEBS = $(shell set -e; ./pkg-list $(TYPE) $(KERNEL_FLAVOUR) $(KERNELIMAGEVERSIO
 
 # Get all required udebs and put them in UDEBDIR.
 $(STAMPS)get_udebs-$(targetstring)-stamp: sources.list.udeb
+	dh_testroot
 	@rm -f $@
 	./get-packages udeb $(UDEBS)
 	@touch $@
