@@ -253,6 +253,10 @@ _build:
 	@[ -n "$(SUBARCH) $(MEDIUM) $(FLAVOUR)" ] || { echo "invalid target"; false; }
 	@$(submake) tree_umount $(EXTRATARGETS) $(TARGET)
 
+# Convenience rule to clean and build.
+.PHONY: rebuild_%
+rebuild_%:
+	@$(submake) clean_$(subst rebuild_,,$@) build_$(subst rebuild_,,$@)
 
 #
 # The general tree target.
