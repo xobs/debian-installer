@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 -->
+<!-- original version: 18623 -->
 
  <sect1 condition="supports-floppy-boot" id="create-floppy">
  <title>ディスクイメージからのフロッピーの作成</title>
 <para>
 
 <!--
-Bootable floppy disks are commonly used to boot the installer system
-for machines with a floppy drive. Floppies can also be used for
-installation of the kernel and modules on most systems.
+Bootable floppy disks are generally used as a last resort to boot the
+installer on hardware that cannot boot from CD or by other means.
 -->
-フロッピードライブのついているマシンで
-インストーラシステムを起動するには、
-起動可能なフロッピーディスクを用いるのが一般的です。
+CD から起動できないハードウェアやその他の理由の時に
+通常最後の手段として、インストーラを起動するのに
+起動可能なフロッピーディスクを用います。
 
 </para><para arch="powerpc">
 
@@ -71,11 +70,12 @@ floppies from disk images on different platforms.
 
 <!--
 No matter which method you use to create your floppies, you should
-remember to flip the tab on the floppies once you have written them,
-to ensure they are not damaged unintentionally.
+remember to flip the write-protect tab on the floppies once you have
+written them, to ensure they are not damaged unintentionally.
 -->
 どの方法でフロッピーを作成するにせよ、
-一旦イメージを書き込んだら忘れずにフロッピーのツメをずらして書き込み禁止にし、
+一旦イメージを書き込んだら、
+忘れずにフロッピーの書き込み禁止タブをずらして書き込み禁止にし、
 不注意で壊すことがないようにしましょう。
 
 </para>
@@ -102,14 +102,17 @@ where <replaceable>file</replaceable> is one of the floppy disk image
 files (see <xref linkend="downloading-files"/> for what
 <replaceable>file</replaceable> should be).
 <filename>/dev/fd0</filename> is a commonly used name of the floppy
-disk device, it may be different on your workstation (on Solaris, it
-is <filename>/dev/fd/0</filename>). The command may return to the
+disk device, it may be different on your workstation
+<phrase arch="sparc">(on Solaris, it is
+<filename>/dev/fd/0</filename>)</phrase>.
+The command may return to the
 prompt before Unix has finished writing the floppy disk, so look for
 the disk-in-use light on the floppy drive and be sure that the light
 is out and the disk has stopped revolving before you remove it from
 the drive. On some systems, you'll have to run a command to eject the
-floppy from the drive (on Solaris, use <command>eject</command>, see
-the manual page).
+floppy from the drive
+<phrase arch="sparc">(on Solaris, use <command>eject</command>, see
+the manual page)</phrase>.
 -->
 <replaceable>file</replaceable> のところには、
 フロッピーディスクイメージのどれかの名前を書きます。
@@ -118,7 +121,8 @@ the manual page).
 <filename>/dev/fd0</filename> はフロッピーディスク装置に
 よく使われている名前ですが、
 あなたのワークステーションでは異なるかもしれません
-(Solaris では <filename>/dev/fd/0</filename> になります)。
+<phrase arch="sparc">(Solaris では 
+<filename>/dev/fd/0</filename> になります)</phrase>。
 このコマンドは、Unix がフロッピーディスクへの書き込みを終える前に
 終了してプロンプトを返すかもしれません。
 そのため、フロッピードライブのディスク使用中のランプを見て、
@@ -128,8 +132,9 @@ the manual page).
 システムによっては、
 ドライブからフロッピーディスクを取り出すには、
 なんらかのコマンド実行が必要となることもあります
+<phrase arch="sparc">
 (Solaris 上では <command>eject</command> を使ってください。
-詳しくはマニュアルページを見てください)。
+詳しくはマニュアルページを見てください)</phrase>。
 
 </para><para>
 <!--
@@ -137,7 +142,9 @@ Some systems attempt to automatically mount a floppy disk when you
 place it in the drive. You might have to disable this feature before
 the workstation will allow you to write a floppy in <emphasis>raw
 mode</emphasis>.  Unfortunately, how to accomplish this will vary
-based on your operating system.  On Solaris, you can work around
+based on your operating system.
+<phrase arch="sparc">
+On Solaris, you can work around
 volume management to get raw access to the floppy.  First, make sure
 that the floppy is auto-mounted (using <command>volcheck</command> or
 the equivalent command in the file manager). Then use a
@@ -148,6 +155,7 @@ where <replaceable>floppy_name</replaceable> is the name the floppy
 disk was given when it was formatted (unnamed floppies default to the
 name <filename>unnamed_floppy</filename>).  On other systems, ask your
 system administrator.
+</phrase>
 -->
 システムによっては、
 ドライブに挿入されたフロッピーディスクを自動的にマウントしようとします。
@@ -155,7 +163,7 @@ system administrator.
 <emphasis>raw mode</emphasis> 形式で書き込むには、
 この自動マウント機能を無効にしなければならないかもしれません。
 残念ながら、これをどのように行うかは OS によって異なります。
-Solaris では、ボリューム管理を使わないようにすれば、
+<phrase arch="sparc">Solaris では、ボリューム管理を使わないようにすれば、
 フロッピーに raw mode でアクセスできます。
 まずフロッピーが自動マウントされていることを確認します
 (ファイルマネージャの <command>volcheck</command> などのプログラムを使ってください)。
@@ -166,6 +174,7 @@ Solaris では、ボリューム管理を使わないようにすれば、
 フロッピーディスクのフォーマット時に与えた名前です
 (名前をつけない場合のデフォルトは <filename>unnamed_floppy</filename> です)。
 その他のシステムでは、システム管理者にお尋ねください。
+</phrase>
 
 </para><para arch="powerpc"> 
 

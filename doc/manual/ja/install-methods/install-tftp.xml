@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 17795 -->
+<!-- original version: 18630 -->
 
  <sect1 condition="supports-tftp" id="install-tftp">
  <title>TFTP ネットブート用ファイルの準備</title>
@@ -23,12 +23,12 @@ TFTP を用いると、そのマシンをネットワーク越しに他のマシンから起動できます。
 </para><para>
 
 <!--
-You need to setup a TFTP server, and for CATS machines, a BOOTP server
+You need to setup a TFTP server, and for many machines, a BOOTP server
 <phrase condition="supports-rarp">, or RARP server</phrase>
 <phrase condition="supports-dhcp">, or DHCP server</phrase>.
 -->
 設定が必要なのは TFTP サーバです。
-また CATS マシンでは BOOTP サーバ
+また多くのマシンでは BOOTP サーバ
 <phrase condition="supports-rarp">、RARP サーバ</phrase>
 <phrase condition="supports-dhcp">、DHCP サーバ</phrase>.
 のいずれかの設定が必要です。
@@ -204,12 +204,14 @@ Debian マシンでは <userinput>/etc/init.d/inetd reload</userinput>
 To use the Pre-boot Execution Environment (PXE) method of TFTP
 booting, you will need a TFTP server with <userinput>tsize</userinput>
 support.  On a &debian; server, the <classname>atftpd</classname> and
-<classname>tftpd-hpa</classname> packages qualify.
+<classname>tftpd-hpa</classname> packages qualify; we recommend
+<classname>tftpd-hpa</classname>.
 -->
 TFTP ブートで Pre-boot Execution Environment (PXE) 法を使用するには、
 <userinput>tsize</userinput>をサポートする TFTP サーバが必要になります。
 &debian; サーバでは、<classname>atftpd</classname> と 
-<command>tftp-hpa</command> がその資格があります。
+<classname>tftpd-hpa</classname> がその資格があります。
+<classname>tftpd-hpa</classname> をお奨めします。
 
 </para></note><para arch="mips">
 
@@ -293,88 +295,17 @@ NewWorld Power Macintosh マシンでは、
 これを <filename>yaboot.conf</filename> という名前に変えて、
 TFTP のディレクトリに置いてください。
 
-</para><para arch="not-powerpc">
-
-<!--
-Often, the file that the TFTP client will look for is
-<replaceable>client-ip-in-hexclient-architecture</replaceable>.  To
-compute <replaceable>client-ip-in-hex</replaceable>, take each byte of
-the client IP address and translate it into hexadecimal notation.  If
-you have a machine handy with the <command>bc</command> program, you
-can use the program.  First issue the <userinput>obase=16</userinput>
-command to set the output to hex, then enter the individual components
-of the client IP one at a time.  As for
-<replaceable>client-architecture</replaceable>, try out some values.
--->
-TFTP クライアントが検索するファイルは、
-<replaceable>client-ip-in-hexclient-architecture</replaceable>
-であることが多いです。
-<replaceable>client-ip-in-hex</replaceable> を計算するには、
-クライアントの IP アドレスの各バイトを 16 進数表記に変換します。
-<command>bc</command> プログラムが使えるマシンが手元にあるようなら、
-これを使うのがいいでしょう。
-まず <userinput>obase=16</userinput> コマンドを実行し、
-出力を 16 進にします。続いてクライアントの IP アドレスの各部を
-ひとつづつ入力します。
-<replaceable>client-architecture</replaceable> の値には、
-いろいろな値を入れて試してみてください。
-
 </para><para arch="i386">
 
 <!--
-For PXE booting, you can use the boot loader included with
-<classname>syslinux</classname>: <filename>pxelinux.0</filename>. The boot
-loader should be copied into the <filename>/tftpboot</filename>
-folder. Then create a subdirectory within
-<filename>/tftpboot</filename> named
-<filename>/tftpboot/pxelinux.cfg</filename>, and within that directory
-create a text file <filename>default</filename>. Here is an example of
-a <filename>default</filename> file's contents:
+For PXE booting, everything you should need is set up in the
+<filename>netboot/pxeboot.tar.gz</filename> tarball. Simply extract this
+tarball into the <command>tftpd</command> boot image directory.
 -->
-PXE 起動では <classname>syslinux</classname>: <filename>pxelinux.0</filename>
-に含まれたブートローダを使用できます。
-ブートローダは <filename>/tftpboot</filename> フォルダにコピーするべきです。
-
-その後、<filename>/tftpboot</filename> に <filename>/tftpboot/pxelinux.cfg</filename> というサブディレクトリを作成し、
-そのディレクトリに <filename>default</filename> というテキストファイルを作成します。
-以下に <filename>default</filename> ファイルの内容例を示します。
-
-<informalexample><screen>
-
-default lanlinux
-prompt 1
-
-label lanlinux
-  kernel vmlinuz
-  append initrd=initrd.gz devfs=mount root=/dev/ram
-
-</screen></informalexample>
-
-<!--
-Note that <userinput>devfs=mount</userinput> is important, because without it
-there may be problems mounting the initrd.gz file system once the
-kernel is booted. Also note that you may need an additional parameter
-<userinput>ramdisk_size=<replaceable>size in KB</replaceable></userinput>,
-depending on the image you are booting.
--->
-<userinput>devfs=mount</userinput> が重要であることに注意してください。
-これがないと、カーネル起動時に一回だけ行う initrd.gz 
-ファイルシステムのマウントに問題が発生するからです。
-また起動しようとするイメージによって、追加パラメータ
-<userinput>ramdisk_size=<replaceable>サイズ (KB)</replaceable></userinput>
-が、必要になるかもしれないことにも注意してください。
-</para><para arch="i386">
-
-<!--
-Finally, copy the <filename>vmlinuz</filename> and
-<filename>initrd.gz</filename> files (for the netboot installation method)
-from the Debian ftp archive into the <filename>/tftpboot</filename> folder,
-where the bootloader will be looking for them.
--->
-最後に <filename>vmlinuz</filename> と <filename>initrd.gz</filename> を、
-Debian ftp アーカイブから <filename>/tftpboot</filename> フォルダへ
-コピーしてください。 (netboot インストール法用)
-そこにブートローダがあるはずです。
+PXE 起動では、必要なことがすべて <filename>netboot/pxeboot.tar.gz</filename> 
+tarball の中にセットアップされています。
+単にこの tarball を、
+<command>tftpd</command> ブートイメージディレクトリに展開してください
 
 </para>
 
@@ -621,18 +552,20 @@ SGI Indy では、TFTP ファイルの名前の指定を
    </sect3>
   </sect2>
 
+<!-- FIXME: commented out since it seems too old to be usable and a current
+            way is not known
+            訳注 訳文をそのままにコメントアウトします。
+  
   <sect2 id="tftp-low-memory">
   <title>メモリの少ないシステムでの TFTP インストール</title>
 <para>
 
-<!--
 On some systems, the standard installation RAMdisk, combined with the
 memory requirements of the TFTP boot image, cannot fit in memory.  In
 this case, you can still install using TFTP, you'll just have to go
 through the additional step of NFS mounting your root directory over
 the network as well.  This type of setup is also appropriate for
 diskless or dataless clients.
--->
 システムによっては、標準のインストール RAM ディスクと、
 TFTP ブートイメージに必要なメモリとをあわせると、
 メモリが足りないことがあります。
@@ -644,19 +577,15 @@ NFS でマウントするようにすればいいのです。
 
 </para><para>
 
-<!--
 First, follow all the steps above in <xref linkend="install-tftp"/>.
--->
 まず、<xref linkend="install-tftp"/> に説明されている全ての手順を踏んでください。
 
 <orderedlist>
 <listitem><para>
 
-<!--
 Copy the Linux kernel image on your TFTP server using the
 <userinput>a.out</userinput> image for the architecture you are
 booting.
--->
 Linux カーネルイメージを TFTP サーバにコピーします。
 起動させようとしているアーキテクチャの 
 <userinput>a.out</userinput> イメージにしてください。
@@ -664,10 +593,8 @@ Linux カーネルイメージを TFTP サーバにコピーします。
 </para></listitem>
 <listitem><para>
 
-<!--
 Untar the root archive on your NFS server (can be the same system as
 your TFTP server): 
--->
 root アーカイブを NFS サーバで untar します
 (NFS サーバは TFTP サーバと同じマシンでも構いません)。
 
@@ -678,10 +605,8 @@ root アーカイブを NFS サーバで untar します
 
 </screen></informalexample>
 
-<!--
 Be sure to use the GNU <command>tar</command> (other tar programs, like the
 SunOS one, badly handle devices as plain files).
--->
 GNU <command>tar</command> を使ってください。
 (SunOS のものなど、他の tar プログラムでは、
 デバイスを通常のファイルとして扱ってしまいます)
@@ -689,12 +614,10 @@ GNU <command>tar</command> を使ってください。
 </para></listitem>
 <listitem><para>
 
-<!--
 Export your <filename>/tftpboot/debian-sparc-root</filename> directory
 with root access to your client.  E.g., add the following line to
 <filename>/etc/exports</filename> (GNU/Linux syntax, should be similar
 for SunOS):
--->
 <filename>/tftpboot/debian-sparc-root</filename> ディレクトリを、
 クライアントから root でアクセスできるようにします。
 つまり次の行を <filename>/etc/exports</filename> に追加します
@@ -706,22 +629,18 @@ for SunOS):
 
 </screen></informalexample>
 
-<!--
 NOTE: "client" is the host name or IP address recognized by the server for
 the system you are booting.
--->
 注意: "client" は、起動しようとしているシステムの
 (このサーバから見た) ホスト名または IP アドレスにします。
 
 </para></listitem>
 <listitem><para>
 
-<!--
 Create a symbolic link from your client IP address in dotted notation
 to <filename>debian-sparc-root</filename> in the
 <filename>/tftpboot</filename> directory.  For example, if the client
 IP address is 192.168.1.3, do
--->
 <filename>/tftpboot</filename> ディレクトリに、
 <filename>debian-sparc-root</filename> に対するシンボリックリンクを、
 IP アドレスの名前 (ドット区切り表記) で作ります。
@@ -744,14 +663,12 @@ IP アドレスの名前 (ドット区切り表記) で作ります。
   <title>TFTP と NFS Root でのインストール</title>
 <para>
 
-<!--
 Installing with TFTP and NFS Root is similar to 
 <xref linkend="tftp-low-memory"/> because you don't want to 
 load the RAMdisk anymore but boot from the newly created NFS-root file
 system.  You then need to replace the symlink to the tftpboot image by
 a symlink to the kernel image (for example,
 <filename>linux-a.out</filename>).
--->
 <xref linkend="tftp-low-memory"/> の場合と似ています。
 RAM ディスクをロードせず、
 新しく作った NFS-root ファイルシステムから起動させたいわけですから。
@@ -761,15 +678,15 @@ tftpboot イメージへのシンボリックリンクは、
 
 </para><para>
 
-<!--
 RARP/TFTP requires all daemons to be running on the same server (the
 workstation is sending a TFTP request back to the server that replied
 to its previous RARP request).
--->
 RARP/TFTP は、すべてのデーモンが同じサーバで動作している必要がありました
 (sparc ワークステーションは TFTP リクエストを以前の RARP リクエストに
 返答したサーバに送ります)。
 </para>
 
+
   </sect2>
+END FIXME -->
  </sect1>
