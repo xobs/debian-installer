@@ -224,7 +224,7 @@ _clean: tree_umount
 	rm -f $(TEMP)/diskusage.txt
 	rm -f $(TEMP)/all.utf
 	rm -f $(TEMP)/unifont.bdf $(TREE)/unifont.bgf
-	rm -f $(INITRD) $(KERNEL) $(BOOT) $(ROOT) $(EXTRA) $(MINIISO)
+	rm -f $(INITRD) $(KERNEL) $(BOOT) $(ROOT) $(EXTRA) $(MINIISO) $(DEBIAN_CD_INFO)
 	rm -rf $(TEMP)
 
 
@@ -573,6 +573,8 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 
 $(TEMP_BOOT): $(TEMP_INITRD) arch_boot
 
+$(TEMP_DEBIAN_CD_INFO): arch_debian_cd_info
+
 # raw kernel images
 $(KERNEL): $(STAMPS)tree-$(targetstring)-stamp
 	install -m 644 -D $(TEMP)/$(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,') $@
@@ -588,6 +590,10 @@ $(ROOT): $(TEMP_INITRD) arch_root
 # miniature ISOs with only a boot image
 $(MINIISO): $(TEMP_BOOT) arch_miniiso
 	install -m 644 -D $(TEMP_MINIISO) $@
+
+# various kinds of information, for use on debian-cd isos.
+$(DEBIAN_CD_INFO): $(TEMP_DEBIAN_CD_INFO)
+	(cd $(TEMP_DEBIAN_CD_INFO); tar cz .) > $@
 
 # Other images, e.g. driver floppies. Those are simply handled as flavours
 $(EXTRA): $(TEMP_EXTRA)
