@@ -1,30 +1,26 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 14602 untranslated -->
+<!-- original version: 18660 -->
 
-   <sect3 id="partman"><title>Partitioning Your Disks</title>
+   <sect3 id="partman"><title>Particionando sus Discos</title>
 <para>
 
-Now it is time to partition your disks. If you are uncomfortable with
-partitioning, or just want to know more details, see <xref
-linkend="partitioning"/>.
+Es hora de particionar sus discos. Si no se siente a gusto particionando, o
+simplemente quiere conocer más detalles, lea <xref linkend="partitioning"/>.
 
 </para><para>
 
-First you will be given the opportunity to automatically partition
-either an entire drive, or free space on a drive. This is also called
-<quote>guided</quote> partitioning. If you do not want to
-autopartition, choose <guimenuitem>Manually edit partition
-table</guimenuitem> from the menu and skip to the next
-paragraph. Otherwise you will be asked if you want <guimenuitem>All
-files in one partition</guimenuitem>, <guimenuitem>Separate partition
-for home directories</guimenuitem>, or if you rather plan to have
-a <guimenuitem>Multi-user system</guimenuitem>. All schemes have their
-pros and cons, some of which are discussed in <xref
-linkend="partitioning"/>. If you are unsure, choose the first
-one. Bear in mind, that guided partitioning needs certain minimal
-amount of free space to operate with. If you don't give it at least
-about 1GB of space (depends on chosen scheme), guided partitioning
-will fail.
+Primero se le dará la oportunidad de particionar automáticamente un disco
+entero. A esto también se le llama particionamiento <quote>guiado</quote>. Si no
+quiere autoparticionar, elija <guimenuitem>Editar manualmente la tabla de
+particiones</guimenuitem> en el menú y vaya al siguiente párrafo. En otro caso,
+se le preguntará si quiere <guimenuitem>Todos los ficheros en una
+partición</guimenuitem>, <guimenuitem>Partición separada para los directorios
+personales</guimenuitem>, o, si planea tener un <guimenuitem>Sistema
+multiusuario</guimenuitem>. Todos los esquemas tienen sus pros y sus contras,
+algunos se discuten en <xref linkend="partitioning"/>. Si no está seguro, escoja
+el primero. Tenga en cuenta, que el particionamiento guiado requiere una cantidad
+mínima de espacio libre para pode operar. Si no tiene al menos un 1GB de espacio
+(depende del esquema seleccionado), el particionamiento guiado fallará.
 
 </para>
 
@@ -32,25 +28,25 @@ will fail.
 <tgroup cols="3">
 <thead>
 <row>
-  <entry>Partitioning scheme</entry>
-  <entry>Minimum space</entry>
-  <entry>Created partitions</entry>
+  <entry>Esquema de particionamiento</entry>
+  <entry>Espacio mínimo</entry>
+  <entry>Particiones creadas</entry>
 </row>
 </thead>
 
 <tbody>
 <row>
-  <entry>All files in one partition</entry>
+  <entry>Todos los ficheros en una partición</entry>
   <entry>600MB</entry>
   <entry><filename>/</filename>, swap</entry>
 </row><row>
-  <entry>Separate partition for home directories</entry>
+  <entry>Partición separada para los directorios personales</entry>
   <entry>500MB</entry>
   <entry>
     <filename>/</filename>, <filename>/home</filename>, swap
   </entry>
 </row><row>
-  <entry>Multi-user system</entry>
+  <entry>Sistema multiusuario</entry>
   <entry>1GB</entry>
   <entry>
     <filename>/</filename>, <filename>/home</filename>,
@@ -63,44 +59,55 @@ will fail.
 
 <para>
 
-On the next screen you will see your partition table, how the
-partitions will be formatted, and where they will be mounted.
-If you did automatic partitioning, you should just be able to choose
-<guimenuitem>Finished partitioning</guimenuitem> from the menu to use
-what it set up.
+En la siguiente pantalla verá la tabla de particiones, el modo en que se les
+dará formato, y donde se montarán. Si realiza el particionamiento automático
+debería poder elegir en el menú <guimenuitem>Particionamiento
+finalizado</guimenuitem> para usar lo que ya está definido.
+
+</para><para arch="ia64">
+
+Si escoge el particionamiento automático para su sistema IA64, habrá una
+partición adicional, con un sistema de ficheros FAT16 y arrancable, para el
+gestor de arranque EFI. Además hay una opción adicional en el menú que permite
+dar formato a los discos para establecer manualmente una partición como una
+partición de arranque EFI.
 
 </para><para>
 
-Select partititons from the list to modify or delete them. If you have
-free space it will also show up under a drive, and you can select it
-to create new partitions. When modifying a partition you will have the
-opportunity to choose how to use the partition, the file system to
-use, and where to mount it. The partitioning menu also has a choice at
-the bottom that can be used to automatically partition a drive or
-existing free space on a drive, if you'd rather go that route. Be sure
-to create at least two partitions, one for <emphasis>swap</emphasis>
-and one for the <emphasis>root</emphasis> filesystem (which must be
-mounted as <filename>/</filename>). If you forget to mount the root
-filesystem, <command>partman</command> won't let you continue until
-you correct this issue. However, this situation should not happen,
-because <command>partman</command> by default offers reasonable
-defaults.
+Seleccione particiones de la lista para modificarlas o eliminarlas. Si tiene
+espacio libre se mostrará debajo de un disco, y podrá seleccionarlo para crear
+particiones nuevas. Cuando modifique una partición tendrá la oportunidad de
+elegir como usar la partición, el sistema de ficheros a usar, y donde montarlo.
+El menú de particiones también tiene una opción en la parte superior que 
+puede usarse para particionar automáticamente un disco o el espacio libre 
+restante de éste, si es que quiere usar esta facilidad. Asegúrese de crear al 
+menos dos particiones, una para el <emphasis>espacio de intercambio</emphasis> 
+(swap) y otra para el sistema de ficheros <emphasis>raíz</emphasis> (que debe 
+montarse como <filename>/</filename>). Si olvida montar el sistema de 
+ficheros raíz, <command>partman</command> no le dejará continuar hasta que 
+corrija el problema. Sin embargo, esta situación no debería darse, porque
+<command>partman</command> ofrece configuraciones predeterminadas razonables.
+
+</para><para arch="ia64">
+
+Si olvida seleccionar y dar formato a una partición de arranque EFI
+<command>partman</command> lo detectará y no le dejará continuar hasta que
+habilite una.
 
 </para><para>
 
-Capabilities of <command>partman</command> can be extended with
-installer modules, so if you can't see all promised goodies, check if
-you have loaded all required modules
-(e.g. <filename>partman-ext3</filename>,
-<filename>partman-xfs</filename>, or
+Las capacidades de <command>partman</command> se pueden extender con módulos
+para el instalador, así que si no están disponibles todas las funcionalidades
+que esperaba, compruebe que ha cargado todos los módulos necesarios
+(e.g. <filename>partman-ext3</filename>, <filename>partman-xfs</filename>, o
 <filename>partman-lvm</filename>).
 
 </para><para>
 
-After you are satisfied with partitioning, select <guimenuitem>Finished
-partitioning</guimenuitem> from the partitioning menu. You will be
-presented with a summary of changes made to the disks and asked to
-confirm that the filesystems should be created as requested.
+Cuando esté satisfecho con el particionamiento, seleccione
+<guimenuitem>Particionamiento terminado</guimenuitem> del menú de
+particionamiento. Se le presentará un resumen de los cambios realizados en los
+discos y se le pedirá confirmación para crear los sistemas de ficheros pedidos.
 
 </para>
    </sect3>
