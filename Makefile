@@ -43,13 +43,13 @@ APT_GET=apt-get --assume-yes \
 	-o Dir::Cache=$(CWD)$(APTDIR)/cache
 
 # Get the list of udebs to install.
-UDEBS = $(shell ./pkg-list $(TYPE) $(KERNELIMAGEVERSION)) $(EXTRAS)
+UDEBS = $(shell ./pkg-list $(TYPE) $(KERNEL_FLAVOUR) $(KERNELIMAGEVERSION)) $(EXTRAS)
 
 ifeq ($(TYPE),floppy)
 # List of additional udebs for driver floppys.
 DRIVERFD_UDEBS = \
 	$(shell for target in $(EXTRA_FLOPPIES) ; do \
-		./pkg-list $$target $(KERNELIMAGEVERSION); \
+		./pkg-list $$target $(KERNEL_FLAVOUR) $(KERNELIMAGEVERSION); \
 	done)
 endif
 
@@ -58,7 +58,7 @@ ifeq (,$(filter $(TYPE),type $(TYPES_SUPPORTED)))
 %:
 	@echo "unsupported type"
 	@echo "type: $(TYPE)"
-	$(MAKE) listtypes
+	@echo "supported types: $(TYPES_SUPPORTED)"
 	@exit 1
 endif
 
@@ -101,7 +101,7 @@ uml: $(INITRD)
 demo_clean: tree_umount
 
 clean: demo_clean tmp_mount debian/control
-	rm -rf $(TREE) || sudo rm -rf $(TREE)
+	rm -rf $(TEMP) || sudo rm -rf $(TEMP)
 	dh_clean
 	rm -f *-stamp
 	rm -rf $(UDEBDIR) $(EXTRAUDEBDIR) $(TMP_MNT) debian/build
@@ -112,7 +112,7 @@ clean: demo_clean tmp_mount debian/control
 
 reallyclean: clean
 	rm -rf $(APTDIR) $(DEST) $(BASE_TMP) $(SOURCEDIR) $(DEBUGUDEBDIR)
-	rm -f diskusage*.txt missing.txt all-*.utf *.bdf
+	rm -f diskusage*.txt all-*.utf *.bdf
 	rm -f sources.list
 
 # Auto-generate a sources.list.
@@ -141,7 +141,7 @@ $(TYPE)-get_udebs-stamp: sources.list
 	needed="$(UDEBS) $(DRIVERFD_UDEBS) "; \
 	for file in `find $(LOCALUDEBDIR) -name "*_*" -printf "%f\n" 2>/dev/null`; do \
 		package=`echo $$file | cut -d _ -f 1`; \
-		needed=`echo " $$needed " | sed "s/ $$package / /"`; \
+		needed=`echo " $$needed " | sed "s/ $$package / /g"`; \
 	done; \
 	if [ "$(DEBUG)" = y ] ; then \
 		mkdir -p $(DEBUGUDEBDIR); \
@@ -524,7 +524,7 @@ endif
 	@echo "Disk usage per package:"
 	@ls -l $(TEMP)/$*/*.udeb
 
-# These tagets build all available types.
+# These tagets act on all available types.
 all_build:
 	set -e; for type in $(TYPES_SUPPORTED); do \
 		$(MAKE) build TYPE=$$type; \
@@ -532,6 +532,10 @@ all_build:
 all_images:
 	set -e; for type in $(TYPES_SUPPORTED); do \
 		$(MAKE) image TYPE=$$type; \
+	done
+all_clean:
+	set -e; for type in $(TYPES_SUPPORTED); do \
+		$(MAKE) clean TYPE=$$type; \
 	done
 # Suitable for a cron job, you'll only see the stats unless a build fails.
 all_stats:
