@@ -1,0 +1,74 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: rarp.xml 15652 2004-05-19 00:37:43Z kraai $ -->
+
+
+  <sect2 condition="supports-rarp" id="tftp-rarp">
+   <title>Ρυθμίζοντας έναν RARP server</title>
+<para>
+
+Για να ρυθμίσετε έναν server RARP, θα πρέπει να ξέρετε την διεύθυνση Ethernet
+(αλλιώς διεύθυνση MAC) των συστημάτων πελατών όπου θα γίνουν οι εγκαταστάσεις.
+Αν δεν ξέρετε αυτήν την πληροφορία, μπορείτε:
+
+<phrase arch="sparc"> να την εντοπίσετε από τα αρχικά μηνύματα στην εκκίνηση της
+OpenPROM, να χρησιμοποιήσετε την εντολή OpenBoot <userinput>.enet-addr</userinput>,
+ή </phrase>
+
+να εκκινήσετε σε κατάσταση ``Rescue'' (πχ., από μια δισκέττα διάσωσης (rescue
+floppy)) και να χρησιμοποιήσετε την εντολή <userinput>/sbin/ifconfig
+eth0</userinput>.
+
+</para><para>
+
+Σε ένα σύστημα με RARP server που χρησιμοποιεί πυρήνα  Linux 2.2.x,
+θα πρέπει να "γεμίσετε" με τιμές τον πίνακα RARP του πυρήνα.
+Για να το κάνετε αυτό, τρέξτε τις ακόλουθες εντολές:
+
+<informalexample>
+<para>
+
+<userinput>/sbin/rarp -s 
+<replaceable>client-hostname</replaceable>
+<replaceable>client-enet-addr</replaceable> 
+</userinput>
+
+</para><para>
+
+<userinput>/usr/sbin/arp -s 
+<replaceable>client-ip</replaceable>
+<replaceable>client-enet-addr</replaceable>
+</userinput>
+
+</para></informalexample>
+
+</para><para>
+
+Αν πάρετε ένα μήνυμα λάθους
+
+<informalexample><screen>
+SIOCSRARP: Invalid argument
+</screen></informalexample> 
+
+πιθανόν να πρέπει να φορτώσετε το RARP module του πυρήνα ή να ξαναχτίσετε τον
+πυρήνα με υποστήριξη για RARP.  Δοκιμάστε την εντολή <userinput>modprobe
+rarp</userinput> και μετά την εντολή <command>rarp</command> ξανά.
+
+</para><para>
+
+Σε ένα σύστημα με RARP server που χρησιμοποιεί πυρήνα Linux 2.4.x,
+δεν υπάρχει RARP module, και θα έπρεπε αντί γι' αυτό να χρησιμοποιήσετε το πρόγραμμα
+ <command>rarpd</command>. Η διαδικασία είναι παρόμοια με αυτήν που χρησιμοποιείται
+για το SunOS στην επόμενη παράγραφο.
+
+</para><para>
+
+Για το λειτουργικό σύστημα SunOS, πρέπει να σιγουρευτείτε ότι η διεύθυνση της
+κάρτας Ethernet για τον πελάτη περιλαμβάνεται στη βάση ``ethers'' (είτε στο
+αρχείο <filename>/etc/ethers</filename>, είτε μέσω NIS/NIS+) και στην βάση ``hosts''.
+Στη συνέχεια θα πρέπει να ξεκινήσετε το δαiμόνιο RARP. Στο σύστημα SunOS
+4, δώστε την εντολή (σαν χρήστης root): 
+<userinput>/usr/etc/rarpd -a</userinput>; στο SunOS 5, χρησιμοποιήστε την εντολή
+<userinput>/usr/sbin/rarpd -a</userinput>.
+
+</para>
+  </sect2>

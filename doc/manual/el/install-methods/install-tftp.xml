@@ -1,0 +1,459 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: install-tftp.xml 23213 2004-10-18 21:04:56Z fjpop-guest $ -->
+
+ <sect1 condition="supports-tftp" id="install-tftp">
+ <title>Προετοιμασία Αρχείων για δικτυακή εκκίνηση με TFTP </title>
+<para>
+
+Αν το μηχάνημά σας είναι συνδεδεμένο σε ένα τοπικό δίκτυο (local area network),
+μπορείτε ίσως να το εκκινήσετε από ένα άλλο μηχάνημα μέσω του δικτύου αυτού
+χρησιμοποιώντας TFTP. Αν προτίθεστε να εκκινήσετε το σύστημα εγκατάστασης από ένα
+άλλο μηχάνημα, τα αρχεία εκκίνησης θα πρέπει να τοποθετηθούν σε συγκεκριμένες
+θέσεις στο μηχάνημα αυτό, το οποίο πρέπει επίσης να είναι ρυθμισμένο ώστε να
+υποστηρίζει την εκκίνηση του συγκεκριμένου μηχανήματός σας.
+
+</para><para>
+
+Θα πρέπει να "στήσετε"  έναν TFTP server, και για περισσότερα μηχανήματα έναν BOOTP
+server
+<phrase condition="supports-rarp">, ή έναν  RARP server</phrase>
+<phrase condition="supports-dhcp">, ή έναν  DHCP server</phrase>.
+
+</para><para>
+
+<phrase condition="supports-rarp">Tο  Reverse Address Resolution Protocol (RARP)
+είναι ένας τρόπος να πείτε στον client ποια διεύθυνση IP  να χρησιμοποιήσει ο
+ίδιος. Ένας άλλος τρόπος είναι να χρησιμοποιήσετε το πρωτόκολλο ΒOOTP. </phrase>
+
+<phrase condition="supports-bootp">Το BOOTP είναι ένα πρωτόκολλο IP που
+πληροφορεί έναν υπολογιστή για το ποια είναι η διεύθυνση του IP και από πού στο
+δίκτυο να αποκτήσει μια εικόνα εκκίνησης. </phrase>
+
+<phrase arch="m68k"> Μια άλλη εναλλακτική λύση σε συστήματα VMEbus:
+η διεύθυνση IP μπορεί να δωθεί χειροκίνητα στην μνήμη εκκίνησης  ROM. </phrase>
+
+<phrase condition="supports-dhcp">Tο πρωτόκολλο DHCP (Dynamic Host Configuration
+Protocol) είναι μια πιο ευέλικτη και συμβατή προς τα πίσω επέκταση του
+πρωτοκόλλου BOOTP. Κάποια συστήματα μπορούν να ρυθμιστούν μόνο μέσω του πρωτοκόλλου
+αυτού. </phrase>
+
+</para><para arch="powerpc">
+
+Για την αρχιτεκτονική PowerPC, αν έχετε ένα μηχάνημα "NewWorld" Power
+Macintosh, είναι μια καλή ιδέα να χρησιμοποιήσετε DHCP αντί για BOOTP.
+Μερικά από τα πιο πρόσφατα μηχανήματα δεν μπορούν να εκκινήσουν με χρήση του BOOTP.
+
+</para><para arch="alpha"> 
+
+Σε αντίθεση με το Open Firmware που βρίσκουμε στα μηχανήματα Sparc και PowerPC, η
+κονσόλα SRMl <emphasis>δεν</emphasis> θα χρησιμοποιήσει το RARP για να πάρει την
+διεύθυνση του IP, και συνεπώς πρέπει να χρησιμοποιήσετε BOOTP για εκκίνηση από το
+δίκτυο ενός συστήματος Alpha.
+Μπορείτε επίσης να εισάγετε τις ρυθμίσεις για το IP των δικτυακών interfaces
+κατευθείαν από την κονσόλα SRM.
+
+<footnote>
+<para>
+
+Συστήματα Alpha μπορούν επίσης να ξεκινήσουν δικτυακά με χρήση του DECNet
+MOP (Maintenance Operations Protocol), κάτι που όμως δεν καλύπτουμε εδώ.
+Κατά πάσα πιθανότητα, ο τοπικός OpenVMS operator θα σας βοηθούσε με ευχαρίστηση
+αν είχατε μια τόσο έντονη ανάγκη να χρησιμοποιήσετε το πρωτόκολλο  MOP για να
+εκκινήσετε το Linux στο σύστημά σας  Alpha.
+
+</para>
+</footnote></para><para arch="hppa"> 
+
+Μερικά παλιότερα μηχανήματα HPPA machines (πχ. 715/75) χρησιμοποιούν RBOOTD
+αντί για BOOTP. Ένα πακέτο RBOOTD είναι διαθέσιμο στο δικτυακό τόπο του parisc-linux.
+
+</para><para>
+
+Το πρωτόκολλο TFTP (Trivial File Transfer Protocol) χρησιμοποιείται για το
+σερβίρισμα της εικόνας εκκίνησης στον "πελάτη". 
+Θεωρητικά, οποιοσδήποτε server, σε οποιαδήποτε πλατφόρμα,
+που υλοποιεί αυτά τα πρωτόκολλα, μπορεί να χρησιμοποιηθεί. Στα παραδείγματα αυτής της
+ενότητας, θα δώσουμε εντολές για SunOS 4.x, SunOS 5.x
+(δηλ. το Solaris), και GNU/Linux.
+
+</para>
+
+&tftp-rarp.xml;
+&tftp-bootp.xml;
+&tftp-dhcp.xml;
+
+  <sect2 id="tftpd">
+  <title>Ενεργοποίηση του TFTP Server</title>
+<para>
+
+Για να προετοιμάσετε τον TFTP server, θα πρέπει πρώτα να βεβαιωθείτε ότι ο
+δαίμονας <command>tftpd</command> είναι ενεργοποιημένος. Αυτή η ενεργοποίηση γίνεται
+συνήθως περιλαμβάνοντας μια γραμμή όπως η ακόλουθη
+στο αρχείο <filename>/etc/inetd.conf</filename>:
+
+<informalexample><screen>
+
+tftp dgram udp wait nobody /usr/sbin/tcpd in.tftpd /tftpboot
+
+</screen></informalexample>
+
+Τα πακέτα Debian θα κάνουν αυτές τις ρυθμίσεις σωστά από την πρώτη στιγμή με την
+εγκατάστασή τους.
+
+</para><para>
+
+Κοιτάξτε το αρχείο αυτό και φροντίστε να θυμάστε τον κατάλογο που
+χρησιμοποιείται σαν όρισμα του <command>in.tftpd</command> καθώς θα το χρειαστείτε
+στη συνέχεια. Το όρισμα <userinput>-l</userinput> επιτρέπει σε κάποιες
+εκδόσεις του <command>in.tftpd</command> να καταγράφει όλες τις αιτήσεις που
+δέχεται στα αρχεία καταγραφής του συστήματος, κάτι που είναι χρήσιμο στη διάγνωση
+λαθών κατά την εκκίνηση. Αν πρέπει για κάποιο λόγο να αλλάξετε το
+αρχείο <filename>/etc/inetd.conf</filename>, θα πρέπει να ενημεώσετε γι' αυτό
+τον δαίμονα <command>inetd</command> που τρέχει για την αλλαγή αυτή.
+Σε ένα μηχάνημα Debian, τρέξτε  <userinput>/etc/init.d/inetd
+reload</userinput>; σε άλλα μηχανήματα,
+βρείτε τον αριθμό της διαδικασίας για τον <command>inetd</command>, και τρέξτε
+<userinput>kill -HUP <replaceable>inetd-pid</replaceable></userinput>.
+
+</para><note arch="i386"><para>
+
+Για να χρησιμοποιήσετε την μέθοδο Pre-boot Execution Environment (PXE) για εκκίνηση
+με  TFTP, θα χρειαστείτε έναν TFTP server με υποστήριξη <userinput>tsize</userinput>.
+ Σε έναν  &debian; server, τα πακέτα <classname>atftpd</classname> είναι
+<classname>tftpd-hpa</classname> κατάλληλα; συνιστούμε επίσης το πακέτο
+<classname>tftpd-hpa</classname>.
+
+</para></note><para arch="mips">
+
+Αν προτίθεστε να εγκαταστήσετε το Debian σε ένα μηχάνημα SGI και ο TFTP server σας
+είναι ένα κουτί GNU/Linux με πυρήνα 2.4, θα πρέπει να ρυθμίσετε τα ακόλουθα
+στον server σας:
+
+<informalexample><screen>
+
+echo 1 > /proc/sys/net/ipv4/ip_no_pmtu_disc
+
+</screen></informalexample>
+
+για να απενεργοποιήσετε το "Path MTU discovery", διαφορτικά η μνήμη PROM
+του Indy δεν μποερί να κατεβάσει τον πυρήνα. Επιπλέον, σιγουρευτείτε ότι
+τα πακέτα TFTP στέλνονται από μια πόρτα στην πηγή όχι μεγαλύτερη από την 32767,
+διαφορετικά το κατέβασμα θα "κολλήσει" μετά το πρώτο πακέτο. Και πάλι, είναι ο
+πυρήνας  Linux 2.4.X που μεταφέρει αυτό το σφάλμα στην PROM και μπορείτε να το
+αποφύγετε βάζοντας 
+
+<informalexample><screen>
+
+echo "2048 32767" > /proc/sys/net/ipv4/ip_local_port_range
+
+</screen></informalexample>
+
+για την προσαρμογή του εύρους των θυρών που χρησιμοποιεί ο server TFTP στο Linux.
+
+</para>
+  </sect2>
+
+  <sect2 id="tftp-images">
+  <title>Μεταφορά των εικόνων TFTP στη θέση τους</title>
+<para>
+
+Στη συνέχεια, τοποθετήστε την εικόνα εκκίνησης του TFTP, όπως βρίσκεται στο
+<xref linkend="where-files"/>, στον κατάλογο των εικόνων εκκίνησης του
+<command>tftpd</command>.  Γενικά, ο κατάλογος αυτός θα είναι ο
+<filename>/tftpboot</filename>.  Θα πρέπει να δημιουργήσετε έναν σύνδεσμο από
+το αρχείο αυτό στο αρχείο που ο server <command>tftpd</command> θα χρησιμοποιήσει
+για την εκκίνηση ενός συγκεκριμένου πελάτη. Δυστυχώς, το αρχείο αυτό
+καθορίζεται από τον πελάτη του TFTP, και δεν υπάρχουν γι' αυτό σταθερά πρότυπα.
+
+</para><para arch="powerpc">
+
+Σε μηχανήματα NewWorld Power Macintosh, θα πρέπει να ρυθμίσετε τον φορτωτή
+εκκίνησης <command>yaboot</command> σαν την εικόνα εκκίνησης του TFTP.
+Το <command>Yaboot</command> θα ανακτήσει τότε τις εικόνες του πυρήνα και του
+δίσκου RAM (RAMdisk) μέσω του ίδιου του TFTP.  Για δικτυακή εκκίνηση,
+χρησιμοποιήστε το αρχείο <filename>yaboot-netboot.conf</filename>. Απλά
+μετονομάστε το σε <filename>yaboot.conf</filename> στον κατάλογο του TFTP.
+
+</para><para arch="i386">
+ 
+Για εκκίνηση με τη μέθοδο PXE, ό,τι χρειάζεστε βρίσκεται στο συμπιεσμένο
+αρχείο <filename>netboot/netboot.tar.gz</filename>. Απλά αποσυμπιέστε το αρχείο
+στον κατάλογο της εικόνας εκκίνησης του <command>tftpd</command>. Βεβαιωθείτε ότι
+ο server dhcp server έχει ρυθμιστέι να περάσει το <filename>/pxelinux.0</filename>
+στον δαίμονα <command>tftpd</command> σαν το όνομα του αρχείου για εκκίνηση.
+
+</para><para arch="ia64">
+
+Για εκκίνηση με τη μέθοδο PXE, ό,τι χρειάζεστε βρίσκεται στο
+συμπιεσμένο αρχείο <filename>netboot/netboot.tar.gz</filename>. Απλά
+αποσυμπιέστε το αρχείο στον κατάλογο της εικόνας εκκίνησης του
+<command>tftpd</command>. Βεβαιωθείτε ότι ο server dhcp είναι ρυθμισμένος να περνά 
+το <filename>/debian-installer/ia64/elilo.efi</filename>
+στον <command>tftpd</command> σαν το όνομα του αρχείου εκκίνησης.
+
+</para>
+
+   <sect3 arch="mipsel">
+   <title>Εικόνες TFTP για DECstation </title>
+<para>
+
+Για μηχανήματα DECstation, υπάρχουν αρχεία tftpimage για κάθε υποαρχιτεκτονική,
+που περιέχουν τόσο τον πυρήνα όσο και τον εγκαταστάτη σε ένα αρχείο. Η σύμβαση όσο
+αφορά την ονομασία είναι:
+<replaceable>subarchitecture</replaceable>/netboot-boot.img.
+Αντιγράψτε το αρχείο tftpimage που θα θέλατε να χρησιμοποιήσετε σαν
+<userinput>/tftpboot/tftpboot.img</userinput> αν δουλεύετε με τα παραδείγματα
+ρυθμίσεων για BOOTP/DHCP που περιγράψαμε παραπάνω.
+
+</para><para>
+
+Το firmware για DECstation εκκινείται από το TFTP με την εντολή <userinput>boot
+<replaceable>#</replaceable>/tftp</userinput>, όπου
+<replaceable>#</replaceable> είναι ο αριθμός της συσκευής
+TurboChannel από την οποία θα εκκινήσουμε. Στα περισσότερα συστήματα DECstation
+αυτός ο αριθμός είναι  "3". Αν ο server BOOTP/DHCP δεν παρέχει το όνομα του
+αρχείου ή θα πρέπει εσείς να δώσετε επιπρόσθετα ορίσματα, αυτά μπορούν να
+δωθούν επιλεκτικά με την ακόλουθη σύνταξη:
+
+</para><para>
+
+<userinput>boot #/tftp/filename param1=value1 param2=value2 ...</userinput>
+
+</para><para>
+
+Αρκετές αναβαθμίσεις τέτοιων firmware φαίνεται να έχουν πρόβλημα σχετικά με
+τη δικτυακή εκκίνηση: η μεταφορά αρχίζει, αλλά μετά από λίγη ώρα σταματά με ένα
+σφάλμα <computeroutput>a.out err</computeroutput>.
+Αυτό μπορεί να έχει διάφορες αιτίες:
+
+<orderedlist>
+<listitem><para>
+
+Το firmware δεν ανταποκρίνεται στις αιτήσεις ARP κατά τη διάρκεια μιας
+μεταφοράς με TFTP. Αυτό οδηγεί σε ένα ARP timeout και η μεταφορά σταματά. Η λύση
+γι' αυτό είναι να προσθέσουμε τη διεύθυνση MAC της κάρτας Ethernet στο
+σύστημα DECstation στατικά στον πίνακα ARP του server TFTP. Αυτό γίνεται
+τρέχοντας την εντολή <userinput>arp -s
+<replaceable>IP-address</replaceable>
+<replaceable>MAC-address</replaceable></userinput> σαν root στο μηχάνημα που
+λειτουργεί σαν server TFTP. H διεύθυνση MAC του DECstation μπορεί να τη δει κανείς
+εισάγοντας την εντολή <command>cnfg</command> στο προτρεπτικό του firmware
+του DECstation.
+
+</para></listitem>
+<listitem><para>
+
+Το firmware έχει ένα όριο μεγέθους για τα αρχεία που μπορούν να εκκινηθούν με TFTP.
+
+</para></listitem>
+</orderedlist>
+
+Υπάρχουν ακόμα και εκδόσεις του firmware που δεν μπορούν να εκκινήσουν
+καθόλου μέσω TFTP. Μια επισκόπηση των διαφορετικών εκδόσεων  firmware μπορούν να
+βρεθούν στις σελίδες του NetBSD:
+<ulink url="http://www.netbsd.org/Ports/pmax/board-list.html#proms"></ulink>.
+
+</para>
+   </sect3>
+
+   <sect3 arch="alpha">
+   <title>Εκκίνηση με TFTP για Alpha </title>
+<para>
+Στην αρχιτεκτονική Alpha, θα πρέπει να προσδιορίσετε το όνομα του αρχείου (σαν
+σχετική διαδρομή ως προς τον κατάλογο της εικόνας εκκίνησης)
+χρησιμοποιώντας το όρισμα <userinput>-file</userinput> στην εντολή
+του SRM <userinput>boot</userinput>, ή θέτοντας την μεταβλητή
+περιβάλλοντος <userinput>BOOT_FILE</userinput>. Εναλλακτικά,
+το όνομα αρχείου μπορεί να δωθεί μέσω BOOTP (στον δαίμονα ISC
+<command>dhcpd</command>,
+χρησιμοποιήστε το προστακτικό (directive) <userinput>filename</userinput>).  Σε
+αντίθεση με το Open
+Firmware, δεν υπάρχει  <emphasis>δεδομένο από πριν όνομα αρχείου</emphasis> στην SRM,
+οπότε <emphasis>πρέπει</emphasis> να προσδιορίσετε ένα τέτοιο όνομα με μια από
+τις δυο αυτές μεθόδους.
+
+</para>
+   </sect3>
+
+   <sect3 arch="sparc">
+   <title>Εκκίνηση με TFTP για SPARC</title>
+<para>
+
+Αρχιτεκτονικές SPARC χρησιμοποιούν για παράδειγμα τα ονόματα των
+υποαρχιτεκτονικών, όπως τα ``SUN4M''  ή ``SUN4C''; σε μερικές περιπτώσεις,
+η αρχιτεκτονική αφήνεται κενή, οπότε το αρχείο που "ψάχνει" ο πελάτης (client) είναι
+απλά η δεκαεξαδική διεύθυνσή του IP <filename>client-ip-in-hex</filename>. 
+Επομένως, αν η υποαρχιτεκτονική σας είναι ένα σύστημα SUN4C, και η διεύθυνσή του IP
+είναι 192.168.1.3, το όνομα του αρχείου θα είναι <filename>C0A80103.SUN4C</filename>.
+Ένας εύκολος τρόπος για να την προσδιορίσετε είναι εισάγοντας την ακόλουθη εντολή
+σε ένα κέλυφος (υποθέτοντας ότι η επιθυμητή/επιδιωκόμενη διεύθυνση IP είναι
+10.0.0.4).
+
+</para>
+
+<informalexample><screen>
+printf '%.2x%.2x%.2x%.2x\n' 10 0 0 4
+</screen></informalexample>
+
+<para>
+
+Αυτό θα επιστρέψει την διεύθυνση IP σε δεκαεξαδική μορφή; για να πάρετε το σωστό
+όνομα αρχείου, θα χρειαστεί να αλλάξετε όλα τα γράμματα σε κεφαλαία και αν
+απαραίτητο και αν απαραίτητο να προσθέσετε στο τέλος το όνομα της υποαρχιτεκτονικής.
+
+</para><para>
+
+Μπορείτε επίσης να αναγκάσετε μερικά συστήματα sparc να κοιτάξουν για ένα
+συγκεκριμένο όνομα αρχείου προσθέτοντάς το στο τέλος της εντολής εκκίνησης OpenPROM,
+όπως για παράδειγμα <userinput>boot net my-sparc.image</userinput>. Αυτό το
+αρχείο πρέπει να βρίσκεται ακόμα στον κατάλογο όπου ψάχνει ο server TFTP.
+
+</para>
+   </sect3>
+
+   <sect3 arch="m68k">
+   <title>Εκκίνηση TFTP για BVM/Motorola</title>
+<para>
+
+Για συστήματα BVM και Motorola VMEbus αντιγράψετε τα αρχεία
+&bvme6000-tftp-files; στον κατάλογο <filename>/tftpboot/</filename>.
+
+</para><para>
+
+Στη συνέχεια, ρυθμίστε τις μνήμες  ROM εκκίνησης ή τον server BOOTP ώστε να
+φορτώσουν αρχικά τα αρχεία <filename>tftplilo.bvme</filename> ή
+<filename>tftplilo.mvme</filename> από τον server TFTP. Aναφερθείτε στο
+αρχείο <filename>tftplilo.txt</filename> της υποαρχιτεκτονικής σας για
+περισσότερες πληροφορίες σχετικά με τις ρυθμίσεις για συγκεκριμένα συστήματα.
+
+</para>
+   </sect3>
+
+   <sect3 arch="mips">
+   <title>Εκκίνηση TFTP για SGI Indy</title>
+<para>
+
+Σε συστήματα SGI Indy μπορείτε να στηριχθείτε στον δαίμονα
+<command>bootpd</command> για την προμήθεια του ονόματος του αρχείου
+TFTP. Δίνεται είτε σαν το δεδομένο
+<userinput>bf=</userinput> στο αρχείο <filename>/etc/bootptab</filename> ή σαν η
+επιλογή <userinput>filename=</userinput> στο
+αρχείο <filename>/etc/dhcpd.conf</filename>.
+
+</para>
+   </sect3>
+
+   <sect3 arch="mips">
+   <title>Εκκίνηση TFTP με Broadcom BCM91250A </title>
+<para>
+
+Δεν χρειάζεται να κάνετε κάποια ειδική ρύθμιση για το DHCP επειδή θα περάσετε την
+πλήρη διαδρομή για το αρχείο που θα φορτωθεί στο CFE.
+
+</para>
+   </sect3>
+
+  </sect2>
+
+<!-- FIXME: commented out since it seems too old to be usable and a current
+            way is not known
+  
+  <sect2 id="tftp-low-memory">
+  <title>TFTP Installation for Low-Memory Systems</title>
+<para>
+
+On some systems, the standard installation RAMdisk, combined with the
+memory requirements of the TFTP boot image, cannot fit in memory.  In
+this case, you can still install using TFTP, you'll just have to go
+through the additional step of NFS mounting your root directory over
+the network as well.  This type of setup is also appropriate for
+diskless or dataless clients.
+
+</para><para>
+
+First, follow all the steps above in <xref linkend="install-tftp"/>.
+
+<orderedlist>
+<listitem><para>
+
+Copy the Linux kernel image on your TFTP server using the
+<userinput>a.out</userinput> image for the architecture you are
+booting.
+
+</para></listitem>
+<listitem><para>
+
+Untar the root archive on your NFS server (can be the same system as
+your TFTP server): 
+
+<informalexample><screen>
+
+# cd /tftpboot
+# tar xvzf root.tar.gz
+
+</screen></informalexample>
+
+Be sure to use the GNU <command>tar</command> (other tar programs, like the
+SunOS one, badly handle devices as plain files).
+
+</para></listitem>
+<listitem><para>
+
+Export your <filename>/tftpboot/debian-sparc-root</filename> directory
+with root access to your client.  E.g., add the following line to
+<filename>/etc/exports</filename> (GNU/Linux syntax, should be similar
+for SunOS):
+
+<informalexample><screen>
+
+/tftpboot/debian-sparc-root client(rw,no_root_squash)
+
+</screen></informalexample>
+
+NOTE: "client" is the host name or IP address recognized by the server for
+the system you are booting.
+
+</para></listitem>
+<listitem><para>
+
+Create a symbolic link from your client IP address in dotted notation
+to <filename>debian-sparc-root</filename> in the
+<filename>/tftpboot</filename> directory.  For example, if the client
+IP address is 192.168.1.3, do
+
+<informalexample><screen>
+
+# ln -s debian-sparc-root 192.168.1.3
+
+</screen></informalexample>
+
+</para></listitem>
+</orderedlist>
+
+</para>
+
+  </sect2>
+
+  <sect2 condition="supports-nfsroot">
+  <title>Installing with TFTP and NFS Root</title>
+<para>
+
+Installing with TFTP and NFS Root is similar to 
+<xref linkend="tftp-low-memory"/> because you don't want to 
+load the RAMdisk anymore but boot from the newly created NFS-root file
+system.  You then need to replace the symlink to the tftpboot image by
+a symlink to the kernel image (for example,
+<filename>linux-a.out</filename>).
+
+</para><para>
+
+RARP/TFTP requires all daemons to be running on the same server (the
+workstation is sending a TFTP request back to the server that replied
+to its previous RARP request).
+
+</para>
+
+
+  </sect2>
+END FIXME -->
+ </sect1>

@@ -1,0 +1,468 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: alpha.xml 19466 2004-08-19 04:48:50Z vorlon $ -->
+
+ <sect2 arch="alpha" id="alpha-firmware">
+ <title>Κονσόλα Firmware σε Alpha</title>
+<para>
+
+To firmware της κονσόλας αποθηκεύεται σε μια μνήμη flash ROM και ξεκινά όταν ένα
+σύστημα Alpha μπαίνει σε λειτουργία ή επαναξεκινά. Υπάρχουν δυο διαφορετικές
+προδιαγραφές για τις κονσόλες που χρησιμοποιούνται στα συστήματα Alpha, και κατά
+συνέπειαν δυο διαφορετικές κλάσεις firmware για κονσόλα διαθέσιμες:
+
+</para>
+
+<itemizedlist>
+<listitem><para>
+
+  <emphasis>κονσόλα SRM</emphasis>, βασισμένη στις προδιαγραφές  Alpha
+Console Subsystem, που παρέχει ένα λειτουργικό περιβάλλον για τα λειτουργικά
+συστήματα OpenVMS, Tru64 UNIX, και Linux.
+
+</para></listitem>
+<listitem><para>
+
+  <emphasis>ARC, AlphaBIOS, ή ARCSBIOS κονσόλα</emphasis>, βασισμένη στις
+προδιαγραφές Advanced RISC Computing (ARC), που παρέχει ένα λειτουργικό
+περιβάλλον για τα Windows NT.
+
+</para></listitem>
+</itemizedlist>
+
+<para>
+
+Από τη σκοπιά του χρήστη, η σπουδαιότερη διαφορά ανάμεσα στα περιβάλλοντα SRM
+και ARC είναι ότι η επιλογή της κονσόλας περιορίζει (δεσμεύει) το πιθανό σχήμα
+διαμέρισης για τον δίσκο από τον οποίο επιθυμείτε να εκκινήσετε.
+
+</para><para>
+
+Η ARC απαιτεί να χρησιμοποιήσετε ένα MS-DOS πίνακα διαμέρισης
+(καθώς δημιουργείται με την εντολή <command>cfdisk</command>) για το δίσκο
+εκκίνησης.  Συνεπώς πίνακες διαμέρισης MS-DOS είναι η "φυσική" μορφή
+διαμέρισης για εκκίνηση από ARC. Στην πραγματικότητα, καθώς το AlphaBIOS
+περιλαμβάνει ένα εργαλείο διαμέρισης δίσκων, πιθανόν να προτιμήσετε να
+διαμερίσετε τους δίσκους σας από τα μενού για το firmware πριν την εγκατάσταση
+του Linux.
+
+</para><para>
+Αντίθετα, η κονσόλα SRM είναι <emphasis>ασύμβατη</emphasis> με πίνακες
+διαμερίσεις MS-DOS.
+<footnote><para>Συγκεκριμένα, ο τύπος του bootsector που προϋποθέτει η
+προδιαγραφή Console Subsystem Specification συγκρούεται με την τοποθέτηση
+του πίνακα διαμέρισης από το DOS.</para></footnote> Μιας και το Tru64
+Unix χρησιμοποιεί την μορφή του BSD disklabel,α
+αυτός είναι και ο "φυσικός"  τύπος διαμέρισης για εγκαταστάσεις σε  SRM.
+
+</para><para>
+
+Επειδή το GNU/Linux είναι το μοναδικό λειτουργικό σύστημα για την αρχιτεκτονική Alpha
+που μπορεί να εκκινήσει και από τους δύο τύπους κονσόλας, η επιλογή σας θα
+εξαρτάται επίσης από το ποια άλλα λειτουργικά συστήματα θα θέλατε να
+χρησιμοποιήσετε στο ίδιο μηχάνημα.  Όλα τα άλλα τύπου-Unix λειτουργικά συστήματα
+(Tru64 Unix, FreeBSD, OpenBSD, και NetBSD) και το OpenVMS μπορούν να ξεκινήσουν
+μόνο από την κονσόλα SRM, ενώ τα  Windows NT μπορούν να εκκινήσουν μόνο από ARC.
+
+</para><para>
+
+Ο επόμενος πίνακας συνοψίζει τους διαθέσιμους και υποστηριζόμενους συνδυασμούς
+τύπου συστήματος/κονσόλας (δείτε <xref linkend="alpha-cpus"/> για τα ονόματα των
+τύπων συστημάτων).  η λέξη `ARC' παρακάτω δηλώνει οποιαδήποτε ARC-συμβατή
+κονσόλα.
+
+</para><para>
+
+<informaltable><tgroup cols="2">
+<thead>
+<row>
+  <entry>Τύπος Συστήματος</entry>
+  <entry>Υποστηριζόμενος Τύπος Κονσόλας</entry>
+</row>
+</thead>
+
+<tbody>
+<row>
+  <entry>alcor</entry>
+  <entry>ARC ή SRM</entry>
+</row><row>
+  <entry>avanti</entry>
+  <entry>ARC ή SRM</entry>
+</row><row>
+  <entry>book1</entry>
+  <entry>SRM μόνο</entry>
+</row><row>
+  <entry>cabriolet</entry>
+  <entry>ARC ή SRM</entry>
+</row><row>
+  <entry>dp264</entry>
+  <entry>SRM μόνο</entry>
+</row><row>
+  <entry>eb164</entry>
+  <entry>ARC ή SRM</entry>
+</row><row>
+  <entry>eb64p</entry>
+  <entry>ARC ή SRM</entry>
+</row><row>
+  <entry>eb66</entry>
+  <entry>ARC ή SRM</entry>
+</row><row>
+  <entry>eb66p</entry>
+  <entry>ARC ή SRM</entry>
+</row><row>
+  <entry>jensen</entry>
+  <entry>SRM μόνο</entry>
+</row><row>
+  <entry>lx164</entry>
+  <entry>ARC ή SRM</entry>
+</row><row>
+  <entry>miata</entry>
+  <entry>ARC ή SRM</entry>
+</row><row>
+  <entry>mikasa</entry>
+  <entry>ARC ή SRM</entry>
+</row><row>
+  <entry>mikasa-p</entry>
+  <entry>SRM μόνο</entry>
+</row><row>
+  <entry>nautilus</entry>
+  <entry>ARC μόνο (δείτε το εγχειρίδιο της μητρικής)</entry>
+</row><row>
+  <entry>noname</entry>
+  <entry>ARC ή SRM</entry>
+</row><row>
+  <entry>noritake</entry>
+  <entry>SRM μόνο</entry>
+</row><row>
+  <entry>noritake-p</entry>
+  <entry>SRM μόνο</entry>
+</row><row>
+  <entry>pc164</entry>
+  <entry>ARC ή SRM</entry>
+</row><row>
+  <entry>rawhide</entry>
+  <entry>SRM μόνο</entry>
+</row><row>
+  <entry>ruffian</entry>
+  <entry>ARC μόνο</entry>
+</row><row>
+  <entry>sable</entry>
+  <entry>SRM μόνο</entry>
+</row><row>
+  <entry>sable-g</entry>
+  <entry>SRM μόνο</entry>
+</row><row>
+  <entry>sx164</entry>
+  <entry>ARC ή SRM</entry>
+</row><row>
+  <entry>takara</entry>
+  <entry>ARC ή SRM</entry>
+</row><row>
+  <entry>xl</entry>
+  <entry>ARC μόνο</entry>
+</row><row>
+  <entry>xlt</entry>
+  <entry>ARC ή SRM</entry>
+</row>
+
+</tbody>
+</tgroup>
+</informaltable>
+
+</para><para>
+
+Γενικά,  καμμιά από τις κονσόλες αυτές δεν μπορεί να εκκινήσει το Linux κατευθείαν,
+επομένως απαιτείται η βοήθεια ενός ενδιάμεσου φορτωτή εκκίνησης. Υπάρχουν δυο
+κύριοι φορτωτές Linux: <command>MILO</command> και
+<command>aboot</command>.
+
+</para><para>
+
+Ο <command>MILO</command> είναι ο ίδιος μια κονσόλα, που αντικαθιστά την
+ARC ή την SRM στην μνήμη.  Ο <command>MILO</command> μπορεί να ξεκινήσει τόσο από
+την ARC όσο και την SRM και είναι ο μόνος τρόπος να ξεκινήσει (bootstrap) το Linux
+από την κονσόλα ARC.
+Ο <command>MILO</command> είναι εξαρτώμενος από την πλατφόρμα (οπότε ένας
+διαφορετικός  <command>MILO</command> χρειάζεται για κάθε τύπο συστήματος) και
+υπάρχει μόνο για εκείνα τα συστήματα στον παραπάνω πίνακα όπου εμφανίζεται
+υποστήριξη για ARC. Δείτε επίσης και το (δυστυχώς ξεπερασμένο)
+<ulink url="&url-milo-howto;">MILO HOWTO</ulink>.
+
+</para><para>
+
+Ο <command>aboot</command> είναι ένας μικρόςl, ανεξάρτητος από
+την πλατφόρμα, φορτωτής εκκίνησης, που τρέχει μόνο στην κονσόλα SRM. Δείτε επίσης 
+το  (επίσης δυστυχώς ξεπερασμένο) <ulink
+url="&url-srm-howto;">SRM HOWTO</ulink> για περισσότερες πληροφορίες σχετικά με
+τον <command>aboot</command>.
+
+</para><para>
+
+Έτσι, υπάρχουν γενικά τρία πιθανά σενάρια, ανάλογα με το firmware της κονσόλας του 
+συστήματος και το κατά πόσον είναι διαθέσιμος ο  <command>MILO</command>:
+
+<informalexample><screen>
+
+SRM -> aboot
+SRM -> MILO
+ARC -> MILO
+
+</screen></informalexample>
+
+</para><para>
+
+Η μητρική  UP1000 (υποαρχιτεκτονική με το όνομα `nautilus') από την εταιρεία Alpha
+Processor, Inc. διαφέρει από τις άλλες, κατά το ότι χρησιμοποιεί έναν
+API-συγκεκριμένο φορτωτή εκκίνησης που τρέχει κάτω από το AlphaBIOS
+firmware.
+
+</para><para>
+
+Επειδή ο φορτωτής <command>MILO</command> δεν είναι διαθέσιμος για κανένα από τα
+συστήματα Alpha σε παραγωγή αυτή τη στιγμή (τον Φεβρουάριο του 2000), και καθώς
+δεν είναι πια απαραίτητο να αγοράσετε μια άδεια OpenVMS ή Tru64 Unix για να
+έχετε SRM firmware στο παλιότερο σύστημά σας Alpha, σας συνιστούμε να
+χρησιμοποιήσετε την κονσόλα SRM και <command>aboot</command> σε νέες
+εγκαταστάσεις του GNU/Linux, εκτός και αν επιθυμείτε να έχετε διπλή-εκκίνηση
+με Windows NT.
+
+</para><para>
+
+Η πλειοψηφία των AlphaServers και όλων των τωρινών προϊόντων server και σταθμών
+εργασίας  περιλαμβάνουν και την SRM και AlphaBIOS στο firmware τους. Για
+"half-flash" μηχανήματα όπως διάφορες πλατφόρμες δοκιμών, είναι δυνατόν να αλλάξει
+κανείς από την μια στην άλλη με reflashing του firmware. Επίσης, από τη στιγμή της
+ εγκατάστασης της SRM, είναι δυνατόν να τρέξει κανείς ARC/AlphaBIOS
+από μια δισκέττα (χρησιμοποιώντας την εντολή <command>arc</command>). Για τους
+λόγους που αναφέρθηκαν παραπάνω, συνιστούμε να αλλάξετε στην κονσόλα SRM πριν
+την εγκατάσταση του  &debian;.
+
+</para><para>
+
+Όπως και με άλλες αρχιτεκτονικές, θα πρέπει να εγκαταστήσετε τις πιο πρόσφατες
+διαθέσιμες εκδόσεις του firmware <footnote><para>Με εξαίρεση την  Jensen,
+όπου το Linux δεν υποστηρίζεται για εκδόσεις του firmware μεταγενέστερες από την 1.7
+- δείτε τη σελίδα <ulink url="&url-jensen-howto;"></ulink> για περισσότερες
+πληροφορίες </para></footnote> πριν εγκαταστήσετε το &debian;.  Για την 
+Alpha, αναβαθμίσεις του firmware μπορούν να ληφθούν από τη σελίδα
+<ulink url="&url-alpha-firmware;">Alpha Firmware Updates</ulink>.
+
+</para>
+ </sect2>
+
+
+  <sect2 arch="alpha"><title>Εκκίνηση με  TFTP</title>
+<para>
+
+Στην SRM, τα Ethernet interfaces ονοματοδοτούνται με το πρόθεμα
+<userinput>ewa</userinput>, και θα εμφανιστούν στην έξοδο της εντολής <userinput>show
+dev</userinput> κάπως έτσι (ελαφρά διορθωμένα ):
+
+<informalexample><screen>
+
+>>> show dev
+ewa0.0.0.9.0               EWA0              08-00-2B-86-98-65
+ewb0.0.0.11.0              EWB0              08-00-2B-86-98-54
+ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
+
+</screen></informalexample>
+
+Πρέπει κατ' αρχήν να ορίσετε το πρωτόκολλο εκκίνησης:
+<informalexample><screen>
+
+>>> set ewa0_protocol bootp
+
+</screen></informalexample>
+
+Μετά ελέγξτε ότι ο τύπος του μέσου είναι ο σωστός:
+
+<informalexample><screen>
+
+>>> set ewa0_mode <replaceable>mode</replaceable>
+
+</screen></informalexample>
+
+Μπορείτε να πάρετε μια λίστα των έγκυρων τύπων με την εντολή 
+<userinput>>>>set ewa0_mode</userinput>.
+
+</para><para>
+
+Μετά, για να εκκινήσετε από το πρώτο Ethernet interface,
+θα πρέπει να τυπώσετε:
+
+<informalexample><screen>
+
+>>> boot ewa0 -flags ""
+
+</screen></informalexample>
+
+</para><para>
+
+Αυτό θα δώσει εκκίνηση με τις προκαθορισμένες παραμέτρους στον πυρήνα όπως
+περιλαμβάνεται στην εικόνα του netboot.
+
+</para><para>
+
+Αν θέλετε να χρησιμοποιήσετε μια σειριακή κονσόλα, θα
+<emphasis>πρέπει</emphasis>
+να περάσετε την παράμετρο <userinput>console=</userinput> στον πυρήνα.
+Αυτό μπορεί να γίνει χρησιμοποιώντας το όρισμα <userinput>-flags</userinput>
+στην εντολή <userinput>boot</userinput> της κονσόλας SRM.  Oι σειριακές θύρες
+έχουν τα ονόματα των αντίστοιχων τους αρχείων στον κατάλογο
+<userinput>/dev</userinput>.  Για παράδειγμα, για να ξεκινήσετε από
+το interface <userinput>ewa0</userinput> και να χρησιμοποιήσετε μια κονσόλα στην
+πρώτη σειριακή θύρα θα πρέπει να πληκτρολογήσετε: 
+
+<informalexample><screen>
+
+>>> boot ewa0 -flags console=ttyS0
+
+</screen></informalexample>
+
+</para>
+  </sect2>
+
+  <sect2 arch="alpha"><title>Εκκινώντας από CD-ROM με την κονσόλα SRM</title>
+<para>
+
+Πληκτρολογήστε
+
+<informalexample><screen>
+
+&gt;&gt;&gt; boot xxxx -flags 0
+
+</screen></informalexample>
+
+όπου  <replaceable>xxxx</replaceable> είναι η συσκευή σας  CD-ROM στον
+συμβολισμό της SRM.
+
+</para>
+  </sect2>
+
+  <sect2 arch="alpha">
+  <title>Εκκίνηση από CD-ROM με την κονσόλα ARC ή AlphaBIOS</title>
+<para>
+
+Για να εκκινήσετε ένα CD-ROM από κονσόλα ARC, βρείτε το κωδικό όνομα της
+υποαρχιτεκτονικής σας  (δείτε το <xref
+linkend="alpha-cpus"/>), στη συνέχεια πληκτρολογήστε 
+<filename>\milo\linload.exe</filename> σαν τον φορτωτή εκκίνησης καθώς και
+<filename>\milo\<replaceable>subarch</replaceable></filename> (όπου
+<replaceable>subarch</replaceable> είναι το κανονικό όνομα της υποαρχιτεκτονικής
+σας) σαν το OS Path στο μενού  `OS Selection Setup'. Ruffians αποτελούν εξαίρεση:
+θα πρέπει να χρησιμοποιήσετε  <filename>\milo\ldmilo.exe</filename> σαν φορτωτή
+εκκίνησης.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="alpha">
+  <title>Εκκίνηση από δισκέττες με την κονσόλα SRM </title>
+<para>
+
+Στο προτρεπτικό της SRM (<prompt>&gt;&gt;&gt;</prompt>), δώστε την παρακάτω εντο
+λή:
+
+<informalexample><screen>
+
+&gt;&gt;&gt; boot dva0 -flags 0
+        
+</screen></informalexample>
+
+πιθανόν αντικαθιστώντας το  <filename>dva0</filename> με τό όνομα της 
+πραγματικής συσκευής. Συνήθως  <filename>dva0</filename> είναι η συσκευή δισκέττας;
+πληκτρολογήστε
+
+<informalexample><screen>
+
+&gt;&gt;&gt; show dev
+        
+</screen></informalexample>
+
+για να δείτε τη λιστα των συσκευών (πχ., αν θέλετε να εκκινήσετε από ένα CD).
+Σημειώστε ότι αν εκκινείτε μέσω MILO, το όρισμα
+<command>-flags</command> δεν λαμβάνεται υπόψιν, οπότε μπορείτε απλά να
+πληκτρολογήσετε <command>boot dva0</command>.
+Αν όλα πάνε καλά, θα δείτε τελικά τον πυρήνα του Linux να ξεκινά.
+
+</para><para>
+
+Αν θέλετε να προσδιορίσετε κάποιες παραμέτρους του πυρήνα όταν εκκινείτε μέσω του
+<command>aboot</command>, χρησιμοποιήστε την ακόλουθη εντολή:
+<informalexample><screen>
+
+&gt;&gt;&gt; boot dva0 -file linux.bin.gz -flags "root=/dev/fd0 load_ramdisk=1 arguments"
+        
+</screen></informalexample>
+(δοσμένη σε μια γραμμή),αντικαθιστώντας, αν είναι απαραίτητο, το όνομα της
+πραγματικής SRM συσκευής αντί του  <filename>dva0</filename>, το όνομα της
+συσκευής εκκίνησης στο Linux αντί του <filename>fd0</filename>,
+και τις επιθυμητές παραμέτρους του πυρήνα για τα <filename>arguments</filename>.
+
+</para><para>
+
+Αν θέλετε βα προσδιορίσετε παραμέτρους του πυρήνα όταν ξεκινάτε μέσω του
+<command>MILO</command>, θα πρέπει να διακόψετε την διαδικασία πρωτοεκκίνησης
+(bootstrap) μόλις μπείτε στο MILO.  See <xref linkend="booting-from-milo"/>.
+</para>
+  </sect2>
+
+
+  <sect2 arch="alpha">
+  <title>Εκκινώντας από δισκέττες με την κονσόλα ARC ή AlphaBIOS</title>
+
+<para>
+
+Στο μενού OS Selection, ορίστε το  <command>linload.exe</command> σαν φορτωτή
+εκκίνησης, και το <command>milo</command> σαν OS Path. Πρωτοεκκινήστε
+χρησιμοποιώντας την μόλις δοσμένη επιλογή.
+
+</para>
+  </sect2>
+
+  <sect2 arch="alpha">
+  <title>Εκκίνηση από δισκέττες με τον φορτωτή εκκίνησης APB (UP1000)</title>
+
+<para>
+
+Για να εκκινήσετε στην πλατφόρμα αυτή, τρέξτε την
+εντολή <command>\apb\apb.exe</command> από το μενού 
+`Utility/Run Maintenance Program', και πληκτρολογήστε 
+      <informalexample><screen>
+
+boot debian_install
+      
+</screen></informalexample>
+ στο προτρεπτικό  APB .
+
+</para>
+  </sect2>
+
+ <sect2 arch="alpha" id="booting-from-milo"><title>Εκκίνηση με  MILO</title>
+<para>
+
+Ο MILO που περιλαμβάνεται στα μέσα της πρωτοεκκίνησης είναι ρυθμισμένος ώστε
+να προχωρά κατευθείαν στο Linux αυτόματα. Σε περίπτωση που θα θέλατε να 
+παρέμβετε στη διαδικασία, το μόνο που χρειάζεται να κάνετε είναι να πατήσετε το
+ πλήκτρο space στη διάρκεια της αντίστροφης μέτρησης του MILΟ.
+
+</para><para>
+
+Αν θέλετε να προσδιορίσετε όλα τα στοιχεία εκπεφρασμένα (για παράδειγμα, να δώσετε
+επιπλέον παραμέτρους), μπορείτε να χρησιμοποιήσετε μια εντολή όπως αυτή: 
+
+<informalexample><screen>
+
+MILO&gt; boot fd0:linux.bin.gz root=/dev/fd0 load_ramdisk=1 <!-- arguments -->
+        
+</screen></informalexample>
+
+</para><para>
+αν εκκινείτε από κάτι άλλο εκτός από δισκέττα, αντικαταστήστε το
+<filename>fd0</filename> στο παραπάνω παράδειγμα με το κατάλληλο όνομα της συσκευής
+με το συμβολισμό του Linux.  Η εντολή <command>help</command> μπορεί να σας δώσει
+ένα σύντομο οδηγό αναφοράς για τις εντολές του MILO.
+
+</para>
+ </sect2>
+

@@ -1,0 +1,81 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: bootp.xml 16879 2004-06-16 21:47:55Z fjpop-guest $ -->
+
+
+  <sect2 condition="supports-bootp" id="tftp-bootp">
+  <title>Στήνοντας έναν  BOOTP server</title>
+<para>
+
+Υπάρχουν δύο BOOTP servers διαθέσιμοι για το  GNU/Linux, ο CMU
+<command>bootpd</command> ενώ ο αλλος είναι στην πραγματικότητα ένας DHCP
+server, ο ISC <command>dhcpd</command>, που περιλαμβάνονται στα πακέτα
+<classname>bootp</classname> και <classname>dhcp</classname>
+στο &debian;.
+
+</para><para>
+
+Για να χρησιμοποιήσετε τον CMU <command>bootpd</command>, πρέπει πρώτα να
+"αποσχολιάσετε" (ή να προσθέσετε) την σχετική γραμμή στο αρχείο
+<filename>/etc/inetd.conf</filename>.  Στο
+&debian;, μπορείτε να τρέξετε την εντολή <userinput>update-inetd
+--enable bootps</userinput>, και μετά  <userinput>/etc/init.d/inetd
+reload</userinput> ώστε να ενεργοποιηθούν οι αλλαγές. Σε άλλα συστήματα, η
+ζητούμενη γραμμή πρέπει να είναι όπως:  
+
+<informalexample><screen>
+
+bootps  dgram  udp  wait  root  /usr/sbin/bootpd  bootpd -i -t 120
+
+</screen></informalexample>
+
+</para><para>
+
+Τώρα, θα πρέπει να δημιουργήσετε ένα αρχείο 
+<filename>/etc/bootptab</filename>, το οποίο έχει ανάλογη με την οικεία και
+"κρυπτογραφημένη" μορφή των παλιών καλών BSD αρχείων
+<filename>printcap</filename>, <filename>termcap</filename>, και
+<filename>disktab</filename>. Δείτε την σελίδα χρήσης
+του <filename>bootptab</filename> για περισσότερες πληροφορίες.
+Για τον server CMU <command>bootpd</command>, θα πρέπει να ξέρετε την διεύθυνση
+MAC του συστήματος "πελάτη". Εδώ είναι ένα παράδειγμα αρχείου
+<filename>/etc/bootptab</filename>:
+
+<informalexample><screen>
+
+client:\
+  hd=/tftpboot:\
+  bf=tftpboot.img:\
+  ip=192.168.1.90:\
+  sm=255.255.255.0:\
+  sa=192.168.1.1:\
+  ha=0123456789AB:
+
+</screen></informalexample>
+
+Θα πρέπει να αλλάξετε τουλάχιστον την επιλογή "ha", που προσδιορίζει την
+διεύθυνση υλικού του πελάτη.  Η επιλογή "bf" προσδιορίζει το αρχείο που θα
+έπρεπε ένας πελάτης να ανακτήσει μέσω TFTP. Δείτε το σύνδεσμο 
+<xref linkend="tftp-images"/> για περισσότερες πληροφορίες.
+
+<phrase arch="mips"> 
+Σε συστήματα SGI Indy μπορείτε απλά να μπείτε στην οθόνη εντολών και να
+πληκτρολογήσετε <userinput>printenv</userinput>.  Η τιμή της μεταβλητής
+<userinput>eaddr</userinput> είναι η διεύθυνση MAC του πελάτη..
+</phrase>
+
+</para><para>
+
+Αντίθετα, η ρύθμιση του BOOTP με τον ISC server
+<command>dhcpd</command> είναι πραγματικά εύκολη,
+γιατί αντιμετωπίζει τους πελάτες BOOTP σαν μια σχετικά ειδική περίπτωση
+πελατών DHCP. Μερικές αρχιτεκτονικές απαιτούν μια πολύπλοκη ρύθμιση για την εκκίνηση
+πελατών μέσω  BOOTP.  Αν η δική σας είναι μια από αυτές, διαβάστε την ενότητα 
+<xref linkend="dhcpd"/>. Διαφορετικά, μπορείτε πιθανόν να τα καταφέρετε
+απλά προσθέτοντας το προστακτικό <userinput>allow
+bootp</userinput> στο κομμάτι των ρυθμίσεων για το υποδίκτυο που περιέχει τον πελάτη,
+και επενεκκινήστε τον server <command>dhcpd</command> με την εντολή
+<userinput>/etc/init.d/dhcpd
+restart</userinput>.
+
+</para>
+  </sect2>
