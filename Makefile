@@ -157,6 +157,7 @@ clean: demo_clean tmp_mount debian/control
 	rm -f *-stamp
 	rm -rf $(UDEBDIR) $(EXTRAUDEBDIR) $(TMP_MNT) debian/build
 	rm -rf $(DEST)/$(TYPE)-* || sudo rm -rf $(DEST)/$(TYPE)-*
+	rm -f unifont-reduced-$(TYPE).bdf
 
 reallyclean: clean
 	rm -rf $(APTDIR) $(DEST) $(BASE_TMP) wget-cache $(SOURCEDIR)
