@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 23678 -->
+<!-- original version: 25152 -->
 
  <sect1 id="kernel-baking"><title>Compiler un nouveau noyau</title>
 <para>
@@ -23,13 +23,6 @@ dans le noyau par défaut, tel que l'APM ou le SMP&nbsp;;
 
 </para></listitem>
 
-<listitem arch="i386"><para>
- 
-Les variantes compact et idepci n'ont pas de gestion du son.
-Bien que le noyau par défaut l'intègre, cela pourrait ne pas marcher pour
-d'autres raisons&nbsp;;
-
-</para></listitem>
 <listitem><para>
 
 Optimiser le noyau en enlevant les pilotes inutiles, ce qui peut
@@ -39,7 +32,7 @@ accélérer le démarrage de la machine&nbsp;;
 <listitem><para>
 
 Utiliser des options du noyau qui ne sont pas reconnues par le
-noyau par défaut, gestion des pare-feux par exemple&nbsp;;
+noyau par défaut, la gestion de la mémoire haute par exemple&nbsp;;
 
 </para></listitem>
 <listitem><para>
@@ -102,23 +95,26 @@ contient qu'un bref didacticiel.
 </para>
 <para>
 
-Dans ce qui suit, nous supposerons que les sources de votre noyau sont
-situées dans <filename>/usr/local/src/</filename> et qu'il s'agit du noyau 
-version &kernelversion;. En tant que superutilisateur, créez un répertoire 
-dans <filename>/usr/local/src</filename> et changez le propriétaire de ce 
-répertoire en votre compte utilisateur habituel.
-En utilisant ce compte, allez dans le répertoire où vous voulez désarchiver 
-les sources (<userinput>cd /usr/local/src</userinput>) et désarchivez-les
-(<userinput>tar xjf /usr/src/kernel-source-&kernelversion;.tar.bz2</userinput>
-), et déplacez-vous dans ce répertoire 
-(<userinput>cd kernel-source-&kernelversion;/</userinput>).
+Dans ce qui suit, nous supposerons que vous pouvez tout faire sur votre 
+machine et que vous allez extraire les sources du noyau dans votre répertoire
+personnel <footnote>
+<para> D'autres endroits sont possibles pour extraire les sources et construire
+le noyau, mais c'est le plus facile car aucun droit spécial n'est demandé.
+</para></footnote>.
+Nous supposerons aussi que la version du noyau est &kernelversion;. Allez 
+dans le répertoire où vous voulez désarchiver 
+les sources et désarchivez-les avec
+<userinput>tar xjf /usr/src/kernel-source-&kernelversion;.tar.bz2</userinput>
+, et déplacez-vous dans le répertoire 
+<filename>kernel-source-&kernelversion;</filename> qui vient d'être créé.
 
 </para><para>
 
 Maintenant, vous pouvez configurer votre noyau. Exécutez 
-<userinput>make xconfig</userinput> si X11 est installé, configuré et lancé, 
-<userinput>make menuconfig</userinput> dans le cas contraire (vous aurez 
-alors besoin du paquet <classname>ncurses-dev</classname>). Prenez le temps 
+<userinput>make xconfig</userinput> si X11 est installé, configuré et lancé. 
+Exécutez <userinput>make menuconfig</userinput> dans le cas contraire 
+(vous aurez alors besoin du paquet <classname>libncurses5-dev</classname>). 
+Prenez le temps 
 de lire l'aide en ligne et de choisir judicieusement les options à activer.
 En cas de doute, il est souvent préférable d'inclure les pilotes de 
 périphériques (tels que les contrôleurs SCSI, cartes Ethernet, etc.) que vous 
@@ -164,7 +160,7 @@ personnalisé comme n'importe quel autre paquet. En étant superutilisateur,
 tapez <userinput>dpkg -i ../kernel-image-&kernelversion;-<replaceable>subarchitecture</replaceable>_custom.1.0_&architecture;.deb</userinput>.
 La partie <replaceable>subarchitecture</replaceable> est une 
 sous-architecture optionnelle,
-<phrase arch="i386"> telle que ``i586'', </phrase>
+<phrase arch="i386"> telle que <quote>i586</quote>, </phrase>
 suivant les options de compilation que vous avez définies.
 <userinput>dpkg -i kernel-image...</userinput> installera votre noyau ainsi 
 que les autres fichiers qui lui seront nécessaires.
