@@ -55,6 +55,7 @@ ifeq "$(architecture)" "m68k"
 KERNELIMAGEVERSION=2.2.20-mac
 KERNELVERSION=2.2.20
 KERNELNAME=vmlinuz
+USERDEVFS=t
 endif
 
 ifndef KERNELIMAGEVERSION
@@ -313,6 +314,17 @@ $(TYPE)-tree-stamp:
 	# Clean up after dpkg.
 	rm -rf $(DPKGDIR)/updates
 	rm -f $(DPKGDIR)/available $(DPKGDIR)/*-old $(DPKGDIR)/lock
+ifdef USERDEVFS
+	# Create initial /dev entries -- only those that are absolutely
+	# required to boot sensibly, though.
+	mknod $(TREE)/dev/console c 5 1
+	mknod $(TREE)/dev/tty0 c 4 0
+	mknod $(TREE)/dev/tty1 c 4 1
+	mknod $(TREE)/dev/tty2 c 4 2
+	mknod $(TREE)/dev/tty3 c 4 3
+	mknod $(TREE)/dev/tty4 c 4 4
+	mknod $(TREE)/dev/tty5 c 4 5
+endif
 	# Set up modules.dep, ensure there is at least one standard dir (kernel
 	# in this case), so depmod will use its prune list for archs with no
 	# modules.
