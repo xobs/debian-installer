@@ -1,26 +1,24 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 14359 -->
+<!-- original version: 18767 -->
 
  <sect1 id="installation-media">
 <title>Les supports d'installation</title>
 
+<para>
+Cette section précise les différents supports utilisables pour installer
+Debian. Il est possible par exemple d'installer debian avec un lecteur de
+disquettes. Un chapitre entier est consacré aux supports, 
+<xref linkend="install-methods"/>&nbsp;; il indique les avantages et les
+désavantages de chaque support.
+</para>
+
 <sect2 condition="supports-floppy-boot">
-<title></title>
+<title>Les disquettes</title>
 
 <para>
-Dans beaucoup de cas, vous devrez effectuer votre premier amorçage depuis un 
-lecteur de disquettes, en utilisant la disquette de secours. En général vous 
+Dans certains cas, vous devrez effectuer votre premier amorçage depuis un 
+lecteur de disquettes. En général vous 
 avez besoin d'une disquette haute densité (1440 kilo-octets) de 3,5 pouces.
-</para>
-
-<para arch="i386">
-Des disquettes d'installation 5,25 pouces, double densité
-(1200&nbsp;Ko) sont aussi fournies. 
-</para>
-
-<para arch="m68k">
-Des disquettes d'installation basse densité (720 Ko) sont
-aussi fournies pour les Ataris. 
 </para>
 
 <para arch="powerpc">
@@ -28,7 +26,15 @@ Pour CHRP, l'utilisation de disquette est actuellement impossible.
 </para>
 </sect2>
 
-<sect2><title>CD-ROM</title>
+<sect2><title>CD-ROM, DVD-ROM</title>
+
+<note><para>
+Chaque fois que vous lirez <quote>cédérom</quote> dans ce manuel, cela 
+voudra dire aussi bien cédérom que DVD-ROM, car, du point de vue du système
+d'exploitation, les deux techniques sont les mêmes, mis à part quelques
+vieux lecteurs non standard, ni SCSI ni IDE/ATAPI.
+</para></note> 
+
 <para>
 L'installation à partir d'un cédérom est aussi possible avec certaines 
 architectures. Sur les ordinateurs qui acceptent de démarrer sur cédérom 
@@ -48,7 +54,7 @@ Mips ne peut pas démarrer depuis un cédérom.
 
 <para arch="i386">
 Les cédéroms de type SCSI et IDE/ATAPI sont reconnus. 
-De plus, toutes les interfaces de cédéroms
+De plus, toutes les interfaces de cédérom
 non standard reconnues par Linux sont reconnues par les
 disquettes de démarrage (comme les lecteurs Mitsumi et
 Matsushita). Cependant, ces modèles peuvent demander des
@@ -59,6 +65,10 @@ non standard risque de ne pas être possible. Le
 informations détaillées sur l'utilisation de cédéroms avec
 Linux. 
 </para>
+
+<para arch="i386">
+Les lecteurs USB sont reconnus, comme le sont les périphériques FireWire
+reconnus par les pilotes ohci1394 et sbp2.
 
 <para arch="arm">
 Les cédéroms IDE/ATAPI sont reconnus par toutes
@@ -106,9 +116,14 @@ suivant cette syntaxe&nbsp;:
 param1=valeur1 param2=valeur2 ...</userinput>
 </para>
 
+</para>
+</sect2>
+
+<sect2><title>Les disques durs</title>
 <para>
 L'installation à partir d'un disque local est possible sur beaucoup 
-d'architectures.
+d'architectures. Cela demande qu'un autre système d'exploitation charge
+l'installateur sur le disque dur.
 </para>
 
 <para arch="m68k">
@@ -125,23 +140,33 @@ est tout à fait possible.
 </para>
   </sect2>
 
-<sect2><title>Réseau</title>
+<sect2 condition="bootable-usb"><title>Les clés USB</title>
+
+<para>
+Beaucoup de machines Debian n'ont besoin d'un lecteur de disquettes ou 
+d'un lecteur de cédéroms que pour l'installation du système ou pour gérer
+des problèmes. Si vous administrez des serveurs, vous avez sans doute déjà
+penser à vous débarrasser de ces lecteurs et à utiliser les clés USB. Elles
+sont aussi utiles pour les systèmes avec peu de place.
+</para>
+</sect2>
+
+<sect2><title>Le réseau</title>
 
 <para condition="supports-tftp">
-Vous pouvez aussi <emphasis>démarrer</emphasis> votre système sur le réseau.
+Vous pouvez aussi <emphasis>amorcer</emphasis> votre système sur le réseau.
 <phrase arch="mips">C'est la méthode d'installation préférée pour Mips.</phrase>
 </para>
 
 <para condition="supports-nfsroot">
 L'installation sans disque, en utilisant le démarrage par réseau et le 
-montage par NFS de tous les systèmes de fichiers locaux, est une autre option
-&mdash; vous aurez probablement besoin, pour cela de 16&nbsp;Mo de mémoire. 
+montage par NFS de tous les systèmes de fichiers locaux, est une autre option.
 </para>
 
 <para>
 Après l'installation de votre système de base, vous pouvez
 installer le reste de votre système grâce à toutes sortes de connexion
-réseau (y compris PPP), via FTP, HTTP ou NFS.
+réseau (y compris PPP), via FTP ou HTTP.
 </para>
 </sect2>
 
@@ -172,10 +197,9 @@ matériel possible.
 <para arch="i386">
 En général, le système d'installation Debian reconnaît les disquettes, les 
 disques IDE, les disquettes IDE, les périphériques IDE sur le port parallèle, 
-less contrôleurs et disques SCSI. Les systèmes de fichiers reconnus 
-comprennent MINIX, FAT, les extensions FAT Win-32 (VFAT), parmi d'autres 
-(notez que NTFS n'est pas reconnu&nbsp;; vous pouvez l'ajouter plus tard,
-voyez&nbsp;: <xref linkend="kernel-baking"/>).
+les contrôleurs et disques SCSI, les périphériques USB et FireWire. Les 
+systèmes de fichiers reconnus comprennent FAT, les extensions FAT Win-32 
+(VFAT), NTFS et d'autres encore.
 </para>
 
 <para arch="i386">
@@ -188,21 +212,6 @@ provenant de beaucoup de constructeurs différents sont
 reconnus. Voyez le 
 <ulink url="&url-hardware-howto;">HOWTO de compatibilité matérielle Linux</ulink> 
 pour plus de détails.
-</para>
-
-<para>
-Les disques SCSI sur IDE et certains contrôleurs SCSI ne
-sont pas reconnus, parmi lesquels&nbsp;:
-<itemizedlist>
-  <listitem><para>
-  Les adaptateurs SCSI conformes au protocole EATA-DMA
-  comme le SmartCache III/IV, les familles de contrôleurs
-  SmartRAID et les contrôleurs DPT PM2011B et PM2012B&nbsp;;
-  </para></listitem>
-  <listitem><para>
-  La famille de contrôleurs SCSI NCR 53c7 (mais les
-  contrôleurs 53c8 et 5380 sont reconnus).
-  </para></listitem></itemizedlist>
 </para>
 
 <para arch="m68k">
