@@ -1,10 +1,50 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id$ -->
-<!-- original version: 1.7 -->
+<!-- original version: 19278 -->
 
   <sect2 arch="m68k"><title>Inicializando através de um Disco Rígido</title>
 
 &boot-installer-intro-hd.xml;
+<para>
+
+O único método de isntalaçõa para &arch-title; amiga e mac é através do 
+disco rígido. Esta também é uma opçõa para atari &arch-title;. <emphasis>Em 
+outras palavras o cdrom não é inicializável.</emphasis> Estas subarquiteturas
+tem a opção de três diferentes discos na memória ram: <filename>cdrom</filename> 
+(<filename>root.bin</filename> em um cdrom), 
+<filename>hd-media</filename>, e
+<filename>nativehd</filename>. Estas imagens de discos ram se diferem apenas pela
+fonte de arquivos usaa na instalação de pacotes. O ramdisk 
+<filename>cdrom</filename> usa um cdrom para obter pacotes do debian-installer. O 
+disco ram <filename>hd-media</filename> usa um arquivo de imagem iso de um 
+cdrom a partir de um disco rígido. Finalmente, o <filename>nativehd</filename> 
+usa a rede para instalar pacotes.
+
+</para><para>
+
+Algumas subarquiteturas &arch-title; tem a opção de inicialização para ambos os 
+kernels do Linux 2.4.x ou 2.2.x e discos ram associados. Quando tal escolha 
+está disponível, tente primeiro o kernel 2.4.x e o disco ram associado. Os M68k
+não possui um kernel 2.4.x funcional.
+
+</para><para>
+
+Tenha certeza que <userinput>root=/dev/ram</userinput> é um de seus parâmetros
+do kernel. O amiga e atari atualmente não funcionam com o bogl, assim se 
+você estiver vendo erros no bogl, você precisará adicionar o parâmetro
+de inicialização do kernel <userinput>debian-installer/framebuffer=false</userinput>.
+</para><para>
+
+Se estiver usando um kernel do linux 2.2.x, então você deverá se assegurar que 
+está usando um disco ram construído para acomoda-lo, veja 
+<ulink url="&disturl;/main/installer-&architecture;/current/images/MANIFEST">MANIFESTO</ulink>. Você também precisará do parâmetro do kernel &ramdisksize;.
+
+</para><para>
+
+Se estive tenod problemas, veja 
+<ulink url="&url-m68k-cts-faq;">cts's &arch-title; debian-installer FAQ</ulink>.
+
+</para>
+
 
   </sect2>
 
@@ -25,7 +65,7 @@ texto branco será mostrada, mostrando as mensagens de depuração
 do kernel. Estas mensagem podem rolar muito rápido para poder lê-las, 
 mas isso é normal. Após alguns segundos, o programa de instalação 
 deverá iniciar automaticamente, assim você poderá continuar em 
-<xref linkend="init-config"/>.
+<xref linkend="d-i-intro"/>.
 
 </para>
   </sect2>
@@ -48,7 +88,7 @@ segundos. Após isso, uma tela preta com texto branco será mostrada,
 mostrando as mensagens de depuração do kernel. É normal se estas mensagens
 rolem rapidamente na tela. Após alguns segundos, o programa de instalação
 deverá iniciar automaticamente, você então poderá continuar seguindo os
-passos em <xref linkend="init-config"/>.
+passos em <xref linkend="d-i-intro"/>.
 
 </para>
   </sect2>
@@ -57,16 +97,26 @@ passos em <xref linkend="init-config"/>.
   <sect2 arch="m68k"><title>Inicializando através do MacOS 68k</title>
 <para>
 
+Os Macs requerem o gerenciador de partida <command>Penguin</command>. 
+Se não souber trabalhar com um arquivo <command>Stuffit</command>, o 
+&penguin19.hfs; é uma imagem de disco com o <command>Penguin</command> 
+descompactado. 
+<xref linkend="create-floppy"/> descreve como realizar a cópia desta
+imagem para um disquete.
+
+</para><para>
+
+
 No desktop MacOS, inicie o processo de instalação do Linux
 dando um clique duplo no ícone <guiicon>Penguin Prefs</guiicon> do
-diretório <filename>debian</filename>. O programa de inicialização
+diretório <filename>Penguin</filename>. O programa de inicialização
 <command>Penguin</command> será mostrado. Vá até o item
 <guimenuitem>Settings</guimenuitem> do menu
 <guimenu>File</guimenu>, clique na tab
 <guilabel>Kernel</guilabel>. Selecione o kernel
-(<filename>linux.bin</filename>) e a imagem de disco raíz
-(<filename>root.bin</filename>) do diretório
-<filename>debian</filename> clicando nos botões correspondentes
+(<filename>vmlunuz</filename>) e a imagem de disco raíz
+(<filename>initrd.gz</filename>) do diretório
+<filename>install</filename> clicando nos botões correspondentes
 no lado superior direito e navegando pelos diálogos e selecionando os 
 arquivos. Feche o diálogo <guilabel>Settings</guilabel>, salve as 
 configurações e inicie o programa de partida usando o item
@@ -81,22 +131,47 @@ alguns segundos. Após isto, uma tela preta aparecerá com texto
 branco com todas as mensagens de depuração do kernel. Estas mensagens
 poderão rolar rápidas demais para poder lê-las, não se preocupe. Após
 alguns segundos, o programa de instalação iniciará automaticamente, então
-poderá continuar seguindo os passos de <xref linkend="init-config"/>.
+poderá continuar seguindo os passos de <xref linkend="d-i-intro"/>.
 
 </para>
   </sect2>
 
 
-  <sect2 arch="m68k"><title>Inicialização através de um CD-ROM</title>
+  <sect2 arch="m68k"><title>Parâmetros de inicialização do Penguin</title>
+<para>
+No programa de inicialização Pengun, selecione <guimenu>File</guimenu> -&gt;
+<guimenuitem>Settings...</guimenuitem>, então vá até a tab
+<guilabel>Options</guilabel>. Os parâmetros de inicialização podem ser digitados
+na área de entrada de textos. Se sempre deseja usar estas configurações, 
+selecione <guimenu>File</guimenu> -&gt; <guimenuitem>Save Settings as
+Default</guimenuitem>.
 
-&boot-installer-intro-cd.xml;
+</para>
+  </sect2>
+ 
+  <sect2 arch="m68k"><title>Limitações do Macintosh</title>
 
 <para>
+No caso do Macintosh, você deverá manter o sistema Mac original e 
+inicializar através dele. É <emphasis>essêncial</emphasis> que, 
+durante a inicialização do MacOS para preparar o gerenciador de 
+partida Penguin, você mantenha pressionada a tecla <keycap>shift</keycap> 
+para prevenir que as extensões sejam carregadas. Se você não vai usar o 
+MacOS, exceto para carregar o linux, você pode fazer a mesma coisa removendo
+as extensões e painéis de controle da pasta de sistemas do Mac. Caso contrário
+as extensões podem ser deixadas rodando e causar probleas aleatórios com o kernel
+do Linux que estiver sendo executado.
+
+</para>
+&boot-installer-intro-cd.xml;
+  </sect2>
+
+  <sect2 arch="m68k"><title>Booting from a CD-ROM</title>
+<para>
+
 
 Atualmente, a única sub-arquitetura &arch-title; que suporta a 
-inicialização através de CD-ROM é o BVME6000. O caminho mais fácil
-é usar o <ulink url="&url-debian-cd-vendors;">conjunto de CDs da Debian</ulink>. 
-Por favor insira seu CD, reinicie e prossiga até o próximo capítulo.
+a inicialização através do CD-ROM é o BVME6000. 
 
 </para>
   </sect2>
@@ -149,7 +224,7 @@ e.g., <screen>i6000 TERM=vt100 &enterkey;</screen>.
   <title>Inicializando através de Disquetes</title>
 <para>
 
-Para a maioria das arquiteturas m68k, a inicialização através de um 
+Para a maioria das arquiteturas &arch-title;, a inicialização através de um 
 sistema de arquivos locais é o método recomendado.
 
 </para><para>
@@ -160,33 +235,3 @@ VME (com um disquete SCSI no VME) atualmente.
 </para>
  </sect2>
 
-
-  <sect2 arch="m68k"><title>Limitações do Macintosh</title>
-<para>
-
-No caso do Macintosh, você deverá manter o sistema Mac original e 
-inicializar através dele. É <emphasis>essencial</emphasis> que, durante
-a inicialização do MacOS em preparação do Penguin linux loader, você 
-deverá pressionar a tecla <keycap>shift</keycap> pressionada para 
-evitar que as extensões sejam carregadas. Se não usar o MacOS exceto
-para carregar o Linux, você poderá fazer a mesma coisa removendo todas
-as extensões e painéis de controle da pasta de sistema do Mac. 
-Caso contrário, as extensões podem continuar funcionando e causar
-problemas aleatórios com o kernel do linux em execução.
-
-</para>
-  </sect2>
-
-
-  <sect2 arch="m68k"><title>Parâmetros de Inicialização do Penguin</title>
-<para>
-
-No programa de inicialização Penguin, escolha <guimenu>File</guimenu> -&gt;
-<guimenuitem>Settings...</guimenuitem>, então mude para a tab
-<guilabel>Options</guilabel>. Os parâmetros de inicialização podem ser digitados
-na próxima área de texto. Caso sempre deseje usar estas configurações, 
-selecione <guimenu>File</guimenu> -&gt; <guimenuitem>Save Settings as
-Default</guimenuitem>.
-
-</para>
-  </sect2>

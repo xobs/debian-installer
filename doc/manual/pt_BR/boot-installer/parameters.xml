@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- $Id$ -->
-<!-- original version: 1.7 -->
+<!-- original version: 20054 -->
 
  <sect1 id="boot-parms"><title>Parâmetros de Inicialização</title>
 <para>
@@ -14,7 +13,7 @@ você terá que ajudar um pouco o kernel.
 </para><para>
 
 Se esta for a primeira vez que iniciou o sistema, tente os parâmetros
-padrões de inicialização (i.e., não passe argumentos) e veja se o 
+padrões de inicialização (i.e., não passe parâmetros) e veja se o 
 sistema funciona corretamente. Ele provavelmente funcionará. Caso
 não seja esse o caso, reinicie mais tarde e descubra qualquer 
 parâmetro especial que precisa informar ao sistema sobre seu hardware.
@@ -47,11 +46,6 @@ onde <replaceable>ram</replaceable> será ajustado para a quantidade de
 memória, seguindo os sufixos "k" para kilobytes, ou "m" para megabytes.
 <userinput>mem=64m</userinput> significa 64MB de RAM.
 
-</para><para>
-
-Caso seu monitor somente seja capaz de mostra preto e branco, 
-use o argumento de inicialização <userinput>mono</userinput>. 
-Caso contrário, use o color, que é o padrão.
 
 </para><para condition="supports-serial-console">
 
@@ -80,39 +74,46 @@ Alternativamente, ajuste as variáveis do OpenPROM <envar>input-device</envar> e
   <sect2 id="installer-args"><title>Parâmetros do Debian Installer</title>
 <para>
 
-O sistema de instalação reconhece alguns argumentos de inicialização
+O sistema de instalação reconhece alguns parâmetros adicionais de inicialização
 que podem ser úteis.
 
 </para>
 
 <variablelist>
 <varlistentry>
-<term>DEBCONF_PRIORITY</term>
+<term>debconf/priority</term>
 <listitem><para>
 
-Estas configurações de parâmetros serão de forma parecida configurados para 
-a maior propriedade das mensagens que serão exibidas.
+Este parâmetro definirá qual o a prioridade mais alta de mensagens que 
+serão exibidas.
+
 
 </para><para>
 
-Usando <userinput>DEBCONF_PRIORITY=critical</userinput>, o sistema de instalação 
-mostrará somente mensagens críticas e tentará fazer a coisa certa sem confusão. 
-Caso sejam encontrados problemas, o programa de instalação ajusta a 
-prioridade se necessário.
+
+A instalação padrão usa <userinput>debconf/priority=high</userinput>.
+Isto significa que ambas mensagens com prioridade "high" (alta) e 
+"critical" (crítica) serão mostradas, mas não as de prioridade média e baixa.
+Caso encontre problemas, o programa de instalação ajustará a prioridade conforme
+necessário.
 
 </para><para>
 
-Caso esteja configurada para <userinput>DEBCONF_PRIORITY=high</userinput> (a 
-configuração padrão), ambas as mensagens de prioridade high e critical são 
-mostradas, mas mensagens de prioridade medium e low são puladas. Quando 
-<userinput>DEBCONF_PRIORITY=low</userinput> for usado, todas as mensagens 
-são mostradas.
+
+Se adicionar <userinput>debconf/priority=medium</userinput> com parâmetro de 
+inicialização, lhe será mostrado um menu de instalação e ganhará mais controle
+através da instalação
+Quando <userinput>debconf/priority=low</userinput> for usdo, todas as mensagens
+são mostradas
+(esta opção é equivalente ao método de inicialização <emphasis>expert</emphasis>).
+Com <userinput>debconf/priority=critical</userinput> o sistema de instalação 
+mostrará somente mensagens críticas e tentará fazer a coisa certa sem bagunça.
 
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term>DEBCONF_FRONTEND</term>
+<term>debconf/frontend</term>
 <listitem><para>
 
 Este parâmetro de inicialização controla o tipo da interface de usuário
@@ -120,27 +121,29 @@ usada para o programa de instalação. Os parâmetros possíveis são:
 
 <itemizedlist>
 <listitem>
-<para><userinput>DEBCONF_FRONTEND=noninteractive</userinput></para>
+<para><userinput>debconf/frontend=noninteractive</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=text</userinput></para>
+<para><userinput>debconf/frontend=text</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=newt</userinput></para>
+<para><userinput>debconf/frontend=newt</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=slang</userinput></para>
+<para><userinput>debconf/frontend=slang</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=ncurses</userinput></para>
+<para><userinput>debconf/frontend=ncurses</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=bogl</userinput></para>
+<para><userinput>debconf/frontend=bogl</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=gtk</userinput></para>
+<para><userinput>debconf/frontend=gtk</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=corba</userinput></para>
+<para><userinput>debconf/frontend=corba</userinput></para>
 </listitem>
 </itemizedlist>
 
-O front end padrão é <userinput>DEBCONF_FRONTEND=newt</userinput>. O 
-<userinput>DEBCONF_FRONTEND=text</userinput> pode ser o tipo preferido 
-para instalações usando console serial.
+A interface padrão é <userinput>debconf/frontend=newt</userinput>.
+<userinput>debconf/frontend=text</userinput> pode ser preferível para 
+a instalação através de console serial. Geralmente somente a interface 
+com o usuário <userinput>newt</userinput> está disponível na mídia padrão
+de instalação, assim a seleção desta opção não é tão útil por agora.
 
 </para></listitem>
 </varlistentry>
@@ -229,6 +232,57 @@ Tais problemas foram relatados no hppa.
 
 </para></listitem>
 </varlistentry>
+
+<varlistentry>
+<term>debian-installer/probe/usb</term>
+<listitem><para>
+
+Ajuste o valor desta opção para <userinput>false</userinput> para evitar a 
+detecção de hardwares USB na inicialização do sistema, caso esteja dando 
+problemas.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>netcfg/disable_dhcp</term>
+<listitem><para>
+
+Por padrão, o &d-i; automaticamente detecta a configuração de rede 
+através do DHCP. Caso a detecção seja realizada, você não terá a chance de 
+revisar e alterar as configurações obtidas. Você verá somente a 
+configuração manual de rede caso a detecção do DHCP falhe.
+
+</para><para>
+
+Se tiver um servidor DHCP em sua rede local, mas deseja evita-lo por 
+algum motivo (e.g. ele envia respostas incorretas), você pode usar o 
+parâmetro <userinput>netcfg/disable_dhcp=true</userinput> para evitar
+a configuração da rede via DHCP e entrar com os dados manualmente.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>hw-detect/start_pcmcia</term>
+<listitem><para>
+
+Ajuste seu valor para <userinput>false</userinput> evitando que o sistema
+inicie os serviços PCMCIA, caso lhe tragam problemas. Alguns modelos de 
+notebooks tem problemas com isto.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>ramdisk_size</term>
+<listitem><para>
+
+Se estiver usando um kernel da série 2.2.x, você pode precisa ajustar &ramdisksize;.
+
+</para></listitem>
+</varlistentry>
+
 
 </variablelist>
   </sect2>
