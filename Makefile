@@ -279,6 +279,7 @@ stats:
 	@echo Single Floppy kernel must be less than: ~$(shell expr 1400 - $(COMPRESSED_SZ) )k
 # Add your interesting stats here.
 
+
 # Upload a daily build to klecker. If you're not Joey Hess, you probably
 # don't want to use this grungy code, at least not without overrideing
 # this:
