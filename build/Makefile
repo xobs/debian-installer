@@ -514,7 +514,8 @@ sources.list.udeb:
 		|grep '[ \t]main' \
 		|awk '{print $$1 " " $$2}' \
 		|sed "s,/* *$$, $(SUITE) main/debian-installer," \
-		|sed "s,^deb file,deb copy,"; \
+		|sed "s,^deb file,deb copy," \
+		|perl -ne 'print unless $$seen{$$_}; $$seen{$$_}=1' ; \
 	fi) > $@
 
 sources.list.deb:
