@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 22919 -->
+<!-- original version: 24321 -->
 
   <sect2 arch="ia64"><title>Amorcer à partir d'un cédérom</title>
 
@@ -40,8 +40,8 @@ de démarrage sur les systèmes plus conventionnels.
 Le cédérom Debian contient une petite partition EFI sur laquelle résident le 
 programme d'amorçage <command>ELILO</command>, son fichier de configuration, 
 le noyau de l'installateur ainsi qu'un système de fichiers initial (initrd). 
-Le système en marche contient aussi une partition EFI sur laquelle réside les 
-fichiers nécessaires au démarrage du système. Ces fichiers sont lisibles 
+Le système en marche contient aussi une partition EFI sur laquelle résident 
+les fichiers nécessaires au démarrage du système. Ces fichiers sont lisibles 
 depuis le shell EFI comme décrit plus bas.
 
 </para><para>
@@ -187,9 +187,9 @@ flèches et appuyez sur <command>ENTER</command>. Le shell EFI va examiner
 tous les périphériques amorçables et les affichera sur le terminal avant 
 d'afficher son invite. Les partitions amorçables reconnues sur les 
 périphériques auront un nom comme &nbsp;:
-<filename>fs<emphasis>n</emphasis>:</filename>. Toutes les autres partitions 
-seront nommées comme&nbsp;:
-<filename>blk<emphasis>n</emphasis>:</filename>.
+<filename>fs<replaceable>n</replaceable>:</filename>. Toutes les autres 
+partitions seront nommées comme&nbsp;:
+<filename>blk<replaceable>n</replaceable>:</filename>.
 Si vous avez inséré le cédérom juste avant d'entrer dans le Shell, cet examen 
 pourrait prendre quelques secondes de plus car il initialise le lecteur CD.
 
@@ -201,16 +201,16 @@ pourrait prendre quelques secondes de plus car il initialise le lecteur CD.
 Examinez la sortie du shell en cherchant le lecteur de cédérom. C'est très 
 probablement le périphérique <filename>fs0:</filename> bien que que d'autres 
 périphériques ayant une partition amorçable seront affichées comme
-<filename>fs<emphasis>n</emphasis></filename>.
+<filename>fs<replaceable>n</replaceable></filename>.
  
 </para></listitem>
 
 <listitem><para>
 
-Entrez <command>fs<emphasis>n</emphasis>:</command> et appuyez sur
+Entrez <command>fs<replaceable>n</replaceable>:</command> et appuyez sur
 <command>ENTER</command> afin de sélectionner le périphérique ayant 
-<emphasis>n</emphasis> comme numéro de partition pour le cédérom. Le shell 
-affichera maintenant le numéro de partition dans son invite.
+<replaceable>n</replaceable> comme numéro de partition pour le cédérom. 
+Le shell affichera maintenant le numéro de partition dans son invite.
 
 </para></listitem>
 
@@ -228,29 +228,15 @@ Cela lancera la séquence d'amorçage.
 Comme avec l'option 1, ces étapes démarrent le programme d'amorçage Debian 
 qui affichera une page de menu vous permettant de sélectionner un noyau et 
 des options. Vous pouvez également entrer la commande plus courte
-<command>fs<emphasis>n</emphasis>:elilo</command> à l'invite du shell. 
+<command>fs<replaceable>n</replaceable>:elilo</command> à l'invite du shell. 
 Poursuivez en choisissant le noyau et les options.
 
 </para>
 </sect3>
 
-<sect3 arch="ia64" id="kernel-option-menu">
-  <title>Sélection du noyau et des options</title>
+  <sect3 arch="ia64" id="serial-console">
+  <title>Installer avec une console série</title>
 
-<para>
-
-Le programme d'amorçage affichera un formulaire avec une liste et une
-fenêtre de texte avec une invite<classname>Boot:</classname>. Les touches 
-flèches sélectionnent un article du menu et tout texte entré au clavier 
-apparaîtra dans la fenêtre de texte. Il y a aussi des écrans d'aide qui
-peuvent être affichés en appuyant sur la touche de fonction appropriée. 
-L'écran d'aide <classname>General</classname> explique les choix du menu et 
-l'écran <classname>Params</classname> expliquent les options communes de
-la ligne de commande.
-
-</para>
- 
-   <title>Terminal série</title>
 <para>
 
 Pour faire l'installation, vous pouvez choisir d'utiliser un écran et un 
@@ -269,6 +255,7 @@ que celui de votre connexion au terminal EFI. Si vous n'êtes pas sûr de ce
 réglage, vous pouvez l'obtenir grâce à la commande <command>baud</command>
 entrée dans le shell EFI.
 </para>
+
 <para>
 Si aucune des options disponibles n'est appropriée à votre périphérique série 
 ou à votre taux baud, vous pouvez passer outre les réglages de la console
@@ -295,6 +282,22 @@ choisir le noyau et d'entrer les paramètres, mais tant le terminal que vos
 choix seront perdus dès que le noyau se chargera, vous obligeant à réamorcer 
 la machine avant de pouvoir débuter l'installation.
 </para></warning>
+
+<sect3 arch="ia64" id="kernel-option-menu">
+  <title>Sélection du noyau et des options</title>
+
+<para>
+
+Le programme d'amorçage affichera un formulaire avec une liste et une
+fenêtre de texte avec une invite<classname>Boot:</classname>. Les touches
+flèches sélectionnent un article du menu et tout texte entré au clavier
+apparaîtra dans la fenêtre de texte. Il y a aussi des écrans d'aide qui
+peuvent être affichés en appuyant sur la touche de fonction appropriée.
+L'écran d'aide <classname>General</classname> explique les choix du menu et
+l'écran <classname>Params</classname> expliquent les options communes de
+la ligne de commande.
+
+</para>
 
 <para>
 
@@ -330,14 +333,13 @@ l'installateur Debian.
 
 </itemizedlist>
 
-    </sect3>
-
 <para>
 
 Passez au prochain chapitre pour continuer l'installation. Là vous pourrez 
 régler la localisation, le réseau et les partitions des disques.
 
 </para>
+</sect3>
   </sect2>
 
 <sect2 arch="ia64" id="boot-tftp"><title>Amorcer avec TFTP</title>
