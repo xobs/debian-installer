@@ -10,28 +10,31 @@ if [ "$1" = "--help" ] ; then
     exit 0
 fi
 
-WORKDIR="./integrated"
+BUILDDIR="./build"
+if [ -z "$PO_USEBUILD" ] ; then
+    WORKDIR="./integrated"
+    PODIR="./po"
+else
+    WORKDIR="$BUILDDIR/build.po"
+    PODIR="$BUILDDIR/build.po"
+fi
 SOURCEDIR="$WORKDIR/en"
-PODIR="./po"
 RET=0
 
 [ -d $SOURCE ] || exit 1
+mkdir -p $PODIR/pot
 
-if [ -d "$PODIR" ] ; then
-    echo "Deleting old .pot files..."
-    for i in `find $PODIR/ -name "*.pot"` ; do
-        rm $i
-    done
+# This check is broken!
+if [ -n "$(find $PODIR/pot/ -name *.pot 2>/dev/null)" ] ; then
+    echo "Deleting old POT files..."
+    rm $PODIR/pot/*.pot
 fi
 
 for XML in `find $SOURCEDIR -name "*.xml"` ; do
-    echo "Creating new .pot file for $XML"
-    SUBDIR=$(dirname $XML | sed "s:$SOURCEDIR::" | sed "s:^/::")
+    echo "Creating new POT file for $XML"
     POT=$(basename $XML .xml).pot
 
-    mkdir -p $PODIR/$SUBDIR
-
-    xml2pot $XML >$PODIR/$SUBDIR/$POT
+    xml2pot $XML >$PODIR/pot/$POT
     RC=$?
     if [ $RC -ne 0 ] ; then
         RET=$RC

@@ -13,28 +13,41 @@ fi
 
 language=${1:-pl}
 
-PODIR="./po"
+SPODIR="./po"
+BUILDDIR="./build"
+if [ -z "$PO_USEBUILD" ] ; then
+    PODIR=$SPODIR
+else
+    PODIR="$BUILDDIR/build.po"
+    mkdir -p $PODIR/$language
+fi
 RET=0
 
 [ -d "$PODIR" ] || exit 1
 
-echo "Updating .po files for language '$language':"
-for POT in `find $PODIR -name "*.pot"` ; do
+echo "Updating PO files for language '$language':"
+for POT in `find $PODIR/pot -name "*.pot"` ; do
     BASENAME="$(basename $POT .pot)"
-    BASEDIR="$(dirname $POT | sed "s:$PODIR::" | sed "s:^/::")"
-    PO=$PODIR/$BASEDIR/$BASENAME.$language.po
-    DISP="$(echo $BASEDIR/$BASENAME | sed "s:^/::")"
+    PO=$PODIR/$language/$BASENAME.po
+    SPO=$SPODIR/$language/$BASENAME.po
 
-    if [ -f $PO ] ; then
-        echo "- $DISP"
-        msgmerge -q -U --backup=simple $PO $POT
-        RC=$?
+    if [ -f $SPO ] ; then
+        echo "- $BASENAME"
+        if [ -z "$PO_USEBUILD" ] ; then
+            # Update existing PO file
+            msgmerge -q -U --backup=simple $PO $POT
+            RC=$?
+        else
+            # Generate temporary PO file in build directory
+            msgmerge -q $SPO $POT -o $PO
+            RC=$?
+        fi
         if [ $RC -ne 0 ] ; then
             RET=$RC
-            echo "* $DISP: error $RC while executing msgmerge"
+            echo "* $BASENAME: error $RC while executing msgmerge"
         fi
     else
-        echo "* No .po file found for '$DISP'."
+        echo "* No PO file found for '$BASENAME'."
     fi
 done
 

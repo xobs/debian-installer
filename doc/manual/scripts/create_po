@@ -21,34 +21,31 @@ WORKDIR="./integrated"
 SOURCEDIR="$WORKDIR/$language"
 PODIR="./po"
 
-if [ -d "$PODIR" ] ; then
-    echo "Deleting old .po files for '$language'..."
-    for i in `find $PODIR/ -name "*.$language.po"` ; do
-        rm $i
-    done
-else
+if [ ! -d "$PODIR" ] ; then
     echo "Error: directory $PODIR does not exist."
     exit 1
 fi
 
+mkdir -p $PODIR/$language
+if [ -n "$PODIR/$language/*.po" ] ; then
+    echo "Deleting old PO files for '$language'..."
+    rm $PODIR/$language/*.po
+fi
+
 XMLLIST=$(find $SOURCEDIR -name "*.xml")
 
-echo "Creating .po files for language '$language'..."
+echo "Creating PO files for language '$language'..."
 
 export NO_CREDITS=1      # Repress KDE specific credits
                          # Note: not yet supported by split2po
 
 for SOURCEXML in $XMLLIST ; do
     SUBDIR=$(dirname $SOURCEXML | sed "s:$SOURCEDIR::" | sed "s:^/::")
-    if [ ! -d $PODIR/$SUBDIR ] ; then
-        echo "Skipping $SUBDIR; directory does not exist under $PODIR"
-        continue
-    fi
     XML=$(basename $SOURCEXML)
     ORIGXML=$WORKDIR/en/$SUBDIR/$XML
-    PO=$PODIR/$SUBDIR/$(basename $SOURCEXML .xml).$language.po
+    PO=$PODIR/$language/$(basename $SOURCEXML .xml).po
 
-    echo "Converting translated $SUBDIR/$XML to .po file"
+    echo "Converting translated $SUBDIR/$XML to PO file"
     split2po $ORIGXML $SOURCEXML >$PO
     if [ $? -ne 0 ] ; then
         echo "** Error during conversion."
@@ -73,7 +70,7 @@ for SOURCEXML in $XMLLIST ; do
     fi
     # Check if there are any we don't yet know about
     if grep "POXML_" $PO ; then
-        echo "** Error: file contains unknown "POXML_" references."
+        echo "** Error: file contains unknown 'POXML_' references."
     fi
 
     # Remove spurious msgid's created by split2po (drop last 6 lines)
@@ -88,12 +85,12 @@ done
 
 # Check the results
 echo ""
-echo "Checking whether translation matches corresponding .pot file..."
-for PO in `find $PODIR -name "*.$language.po"` ; do
-    TDIR=$(dirname $PO); POT=$(basename $PO ".$language.po").pot
+echo "Checking whether translation matches corresponding POT file..."
+for PO in `find $PODIR/$language -name "*.po"` ; do
+    POT="$PODIR/pot/$(basename $PO .po).pot"
     if [ -s $PO ] ; then
-        if [ -f $TDIR/$POT ] ; then
-            count_POT=$(egrep "^msgid " $TDIR/$POT | wc -l)
+        if [ -f $POT ] ; then
+            count_POT=$(egrep "^msgid " $POT | wc -l)
             count_PO=$(egrep "^msgstr " $PO | wc -l)
             if [ $count_PO != $count_POT ] ; then
                 echo "** Warning: translation for $PO has $count_PO strings, while original has $count_POT strings."
@@ -104,7 +101,7 @@ for PO in `find $PODIR -name "*.$language.po"` ; do
                 echo "** Warning: translation for $PO has $count_missing_PO missing strings."
             fi
         else
-            echo "** Error: corresponding .pot file not found for $PO."
+            echo "** Error: corresponding POT file not found for $PO."
         fi
     else
         echo "** Error: $PO is empty (conversion error)."
@@ -114,15 +111,15 @@ echo "Done."
 
 # Checking for untranslated strings
 echo ""
-echo "Checking for untranslated strings in the .po files..."
-for PO in `find po/ -name "*.$language.po"` ; do
+echo "Checking for untranslated strings in the PO files..."
+for PO in `find $PODIR/$language -name "*.po"` ; do
     echo "Checking $PO..."
     awk -f $SCRIPTDIR/mark_untranslated.awk $PO
 done
 
 echo ""
 echo "The conversion has finished successfully."
-echo "The .po files for $language have been saved in '$PODIR'."
+echo "The PO files for $language have been saved in '$PODIR/$language'."
 echo ""
 echo "Please check all messages above very carefully."
 echo "If any translations are shown to have a different amount of strings than the original,"

@@ -14,7 +14,11 @@ language=${1:-pl}
 
 SCRIPTDIR="./scripts"
 BUILDDIR="./build"
-WORKDIR="./integrated"
+if [ -z "$PO_USEBUILD" ] ; then
+    WORKDIR="./integrated"
+else
+    WORKDIR="$BUILDDIR/build.po"
+fi
 LANGDIR="./$language"
 
 [ -d $LANGDIR ] || exit 1
@@ -38,8 +42,8 @@ done
 IFS=$OLD_IFS
 
 # Make sure that all files are in UTF-8 first
-echo "Converting .xml files to UTF-8..."
-echo "Converting .xml files to UTF-8..." >>$LOG
+echo "Converting XML files to UTF-8..."
+echo "Converting XML files to UTF-8..." >>$LOG
 for FILE in `find $LANGDIR -name "*.xml"` ; do
     SUBDIR=$(dirname $FILE | sed "s:$LANGDIR::");
     XML=$(basename $FILE)
@@ -57,8 +61,8 @@ done
 echo "" >>$LOG
 
 # Include lower level xml-files for all the main level xml-files
-echo "Merging .xml files per 'chapter'..."
-echo "Merging .xml files per 'chapter'..." >>$LOG
+echo "Merging XML files per 'chapter'..."
+echo "Merging XML files per 'chapter'..." >>$LOG
 awk -v WORKDIR="$TEMPDIR" -v LOG=$LOG -v ENTLIST="$TEMPDIR/entlist" \
     -f $SCRIPTDIR/merge_xml.awk $BUILDDIR/templates/install.xml.template
 
