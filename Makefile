@@ -59,7 +59,6 @@ DRIVERFD_UDEBS = \
 		pkg-lists/driver1/common \
 		`if [ -f pkg-lists/driver1/$(DEB_HOST_ARCH) ]; then echo pkg-lists/driver1/$(DEB_HOST_ARCH); fi` \
 		| sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2\n)/g' )
-	EXTRA_TARGETS=driver1
 endif
 
 # Scratch directory.
@@ -74,6 +73,8 @@ TREE=$(TEMP)/tree
 CD_IMAGE_TREE=$(TEMP)/cd_image_tree
 
 DPKGDIR=$(TREE)/var/lib/dpkg
+FULLDPKGDIR=$(TEMP)/full/var/lib/dpkg
+
 TMP_MNT:=$(shell pwd)/mnt
 
 ifdef ERROR_TYPE
@@ -84,9 +85,9 @@ ifdef ERROR_TYPE
 	@exit 1
 endif
 
-build: tree_umount tree stats $(EXTRA_TARGETS)
+build: tree_umount tree  $(EXTRA_TARGETS) stats
 
-image: arch-image
+image: arch-image $(EXTRA_IMAGES)
 
 # Include arch targets
 -include make/arch/$(DEB_HOST_GNU_SYSTEM)
@@ -101,22 +102,22 @@ else
 endif
 
 # Build the driver1 fd image
-driver1: TMP_FILE=$(TEMP)/image.tmp
-driver1: floppy-get_udebs-stamp
-	mkdir -p $(TEMP)/driver1
+$(DRIVER1_IMAGE) driver1: floppy-get_udebs-stamp
+	mkdir -p $(DRIVER1)
 	for file in $(DRIVERFD_UDEBS) ; do \
-		cp $(APTDIR)/cache/archives/$$file*.udeb $(TEMP)/driver1 ; done
-	rm -f $(TMP_FILE)
+		cp $(APTDIR)/cache/archives/$$file*.udeb $(DRIVER1) ; done
+	rm -f $(DRIVER1_IMAGE)
 	install -d $(TEMP)
 	install -d $(DEST)
 	if [ $(INITRD_FS) = ext2 ]; then \
-		genext2fs -d $(TEMP)/driver1 -b `expr $$(du -s $(TEMP)/driver1 | cut -f 1) + $$(expr $$(find $(TEMP)/driver1 | wc -l) \* 2)` $(TMP_FILE); \
+		genext2fs -d $(DRIVER1) -b `expr $$(du -s $(DRIVER1) | cut -f 1) + $$(expr $$(find $(DRIVER1) | wc -l) \* 2)` $(DRIVER1_IMAGE); \
         elif [ $(INITRD_FS) = romfs ]; then \
-                genromfs -d $(TEMP)/driver1 -f $(TMP_FILE); \
+                genromfs -d $(DRIVER1) -f $(DRIVER1_IMAGE); \
         else \
                 echo "Unsupported filesystem type"; \
                 exit 1; \
         fi;
+
 
 
 tree_umount:
@@ -226,8 +227,10 @@ $(TYPE)-get_udebs-stamp:
 	# while doing that.
 	rm -rf $(UDEBDIR)
 	mkdir -p $(UDEBDIR)
+	rm -rf $(EXTRAUDEBDIR)
+	mkdir -p $(EXTRAUDEBDIR)
 	lnpkg() { \
-		local pkg=$$1; local dir=$$2; \
+		local pkg=$$1; local dir=$$2 debdir=$$3; \
 		local L1="`echo $$dir/$$pkg\_*`"; \
 		local L2="`echo $$L1 | sed -e 's, ,,g'`"; \
 		if [ "$$L1" != "$$L2" ]; then \
@@ -235,18 +238,27 @@ $(TYPE)-get_udebs-stamp:
 			exit 1; \
 		fi; \
 		if [ -e $$L1 ]; then \
-			ln -f $$dir/$$pkg\_* $(UDEBDIR)/$$pkg.udeb; \
+			ln -f $$dir/$$pkg\_* $$debdir/$$pkg.udeb; \
 		fi; \
 	}; \
-	for package in $(UDEBS); do \
-		lnpkg $$package $(APTDIR)/cache/archives; \
-		lnpkg $$package $(LOCALUDEBDIR); \
-		lnpkg $$package $(DEBUGUDEBDIR); \
+	for package in $(UDEBS) ; do \
+		lnpkg $$package $(APTDIR)/cache/archives $(UDEBDIR); \
+		lnpkg $$package $(LOCALUDEBDIR) $(UDEBDIR); \
+		lnpkg $$package $(DEBUGUDEBDIR) $(UDEBDIR); \
 		if ! [ -e $(UDEBDIR)/$$package.udeb ]; then \
 			echo "Needed $$package not found (looked in $(APTDIR)/cache/archives/, $(LOCALUDEBDIR)/, $(DEBUGUDEBDIR)/)"; \
 			exit 1; \
 		fi; \
-	done
+	done ; \
+	for package in $(DRIVERFD_UDEBS) ; do \
+                lnpkg $$package $(APTDIR)/cache/archives $(EXTRAUDEBDIR); \
+		lnpkg $$package $(LOCALUDEBDIR) $(EXTRAUDEBDIR); \
+                lnpkg $$package $(DEBUGUDEBDIR) $(EXTRAUDEBDIR); \
+                if ! [ -e $(EXTRAUDEBDIR)/$$package.udeb ]; then \
+                        echo "Needed $$package not found (looked in $(APTDIR)/cache/archives/, $(LOCALUDEBDIR)/, $(DEBUGUDEBDIR)/)"; \
+                        exit 1; \
+                fi; \
+        done
 
 	touch $(TYPE)-get_udebs-stamp
 
@@ -269,12 +281,19 @@ $(TYPE)-tree-stamp: $(TYPE)-get_udebs-stamp debian/control
 	mkdir -p $(DPKGDIR)/updates/
 	touch $(DPKGDIR)/available
 
+	# Create a full tree with everything in it, to run mklibs in
+	mkdir -p $(TEMP)/full 
+	mkdir -p $(TEMP)/full/tmp
+	mkdir -p $(FULLDPKGDIR)/info $(FULLDPKGDIR)/updates
+	touch $(FULLDPKGDIR)/status $(FULLDPKGDIR)/available
+
 	# Unpack the udebs with dpkg. This command must run as root
 	# or fakeroot.
 	echo -n > diskusage-$(TYPE).txt
 	oldsize=0; oldblocks=0; oldcount=0; for udeb in $(UDEBDIR)/*.udeb ; do \
 		pkg=`basename $$udeb` ; \
 		dpkg --force-overwrite --root=$(TREE) --unpack $$udeb ; \
+		dpkg --force-overwrite --root=$(TEMP)/full --unpack $$udeb; \
 		newsize=`du -bs $(TREE) | awk '{print $$1}'` ; \
 		newblocks=`du -s $(TREE) | awk '{print $$1}'` ; \
 		newcount=`find $(TREE) -type f | wc -l | awk '{print $$1}'` ; \
@@ -287,6 +306,26 @@ $(TYPE)-tree-stamp: $(TYPE)-get_udebs-stamp debian/control
 		oldblocks=$$newblocks ; \
 		oldcount=$$newcount ; \
 	done
+ifeq ($(TYPE),floppy)
+	oldsize=0; oldblocks=0; oldcount=0; \
+	for udeb in $(EXTRAUDEBDIR)/*.udeb ; do \
+		pkg=`basename $$udeb`; \
+		dpkg --force-overwrite --root=$(TEMP)/full --unpack $$udeb; \
+		newsize=`du -bs $(TEMP)/full | awk '{print $$1}'` ; \
+                newblocks=`du -s $(TEMP)/full | awk '{print $$1}'` ; \
+                newcount=`find $(TEMP)/full -type f | wc -l | awk '{print $$1}'` ; \
+                usedsize=`echo $$newsize - $$oldsize | bc`; \
+                usedblocks=`echo $$newblocks - $$oldblocks | bc`; \
+                usedcount=`echo $$newcount - $$oldcount | bc`; \
+                version=`dpkg-deb --info $$udeb | grep Version: | awk '{print $$2}'` ; \
+                echo " $$usedsize B - $$usedblocks blocks - $$usedcount files used by pkg $$pkg (version $$version )" >> diskusage-extra.txt; \
+		 oldsize=$$newsize ; \
+                 oldblocks=$$newblocks ; \
+                 oldcount=$$newcount ; \
+	done
+	sort -n < diskusage-extra.txt > diskusage-extra.txt.new && \
+		mv diskusage-extra.txt.new diskusage-extra.txt
+endif
 	sort -n < diskusage-$(TYPE).txt > diskusage-$(TYPE).txt.new && \
 		mv diskusage-$(TYPE).txt.new diskusage-$(TYPE).txt
 
@@ -351,7 +390,7 @@ endif
 
 	# Library reduction.
 	mkdir -p $(TREE)/lib
-	$(MKLIBS) -v -d $(TREE)/lib --root=$(TREE) `find $(TREE) -type f -perm +0111 -o -name '*.so'`
+	$(MKLIBS) -v -d $(TREE)/lib --root=$(TEMP)/full `find $(TEMP)/full -type f -perm +0111 -o -name '*.so'`
 
 	# Add missing symlinks for libraries
 	# (Needed for mklibs.py)
@@ -449,6 +488,11 @@ boot_floppy: $(IMAGE)
 	install -d $(DEST)
 	dd if=$(IMAGE) of=$(FLOPPYDEV)
 
+# Write driver1 to floppy
+driver1_floppy: $(DRIVER1_IMAGE)
+	install -d $(DEST)
+	dd if=$(DRIVER1_IMAGE) of=$(FLOPPYDEV)
+
 # If you're paranoid (or things are mysteriously breaking..),
 # you can check the floppy to make sure it wrote properly.
 # This target will fail if the floppy doesn't match the floppy image.
@@ -457,7 +501,8 @@ boot_floppy_check: floppy_image
 
 COMPRESSED_SZ=$(shell expr $(shell tar czf - $(TREE) | wc -c) / 1024)
 KERNEL_SZ=$(shell expr \( $(foreach NAME,$(KERNELNAME),$(shell du -b $(TEMP)/$(NAME) | cut -f 1) +) 0 \) / 1024)
-stats: tree
+DRIVER1_SZ=$(shell du -sk $(TEMP)/driver1 )
+stats: tree $(EXTRA_TARGETS)
 	@echo
 	@echo "System stats for $(TYPE)"
 	@echo "-------------------------"
@@ -473,6 +518,16 @@ endif
 	@echo "Disk usage per package:"
 	@sed 's/^/  /' < diskusage-$(TYPE).txt
 # Add your interesting stats here.
+	@$(MAKE) stats-$(EXTRA_TARGETS)
+
+stats-driver1:
+	@echo
+	@echo "Driver1 size: $(shell du -s -h  $(DRIVER1) | cut -f 1 ) "
+	@echo "Disk usage per package on driver1:"
+	@sed 's/^/  /' < diskusage-extra.txt
+	@echo
+
+stats-:
 	@echo
 
 # Upload a daily build to peope.debian.org. If you're not Joey Hess,
