@@ -315,15 +315,18 @@ $(TYPE)-tree-stamp:
 	# Unpack the udebs with dpkg. This command must run as root
 	# or fakeroot.
 	echo -n > diskusage-$(TYPE).txt
-	oldsize=0; oldcount=0; for udeb in $(UDEBDIR)/*.udeb ; do \
+	oldsize=0; oldblocks=0; oldcount=0; for udeb in $(UDEBDIR)/*.udeb ; do \
 		pkg=`basename $$udeb` ; \
 		dpkg --force-overwrite --root=$(TREE) --unpack $$udeb ; \
-		newsize=`du -s $(TREE) | awk '{print $$1}'` ; \
+		newsize=`du -bs $(TREE) | awk '{print $$1}'` ; \
+		newblocks=`du -s $(TREE) | awk '{print $$1}'` ; \
 		newcount=`find $(TREE) -type f | wc -l | awk '{print $$1}'` ; \
 		usedsize=`echo $$newsize - $$oldsize | bc`; \
+		usedblocks=`echo $$newblocks - $$oldblocks | bc`; \
 		usedcount=`echo $$newcount - $$oldcount | bc`; \
-		echo $$usedsize KiB and $$usedcount files used by pkg $$pkg >>diskusage-$(TYPE).txt;\
+		echo $$usedsize B - $$usedblocks blocks - $$usedcount files used by pkg $$pkg >>diskusage-$(TYPE).txt;\
 		oldsize=$$newsize ; \
+		oldblocks=$$newblocks ; \
 		oldcount=$$newcount ; \
 	done
 	sort -n < diskusage-$(TYPE).txt > diskusage-$(TYPE).txt.new && \
@@ -551,8 +554,8 @@ COMPRESSED_SZ=$(shell expr $(shell tar cz $(TREE) | wc -c) / 1024)
 KERNEL_SZ=$(shell expr $(shell du -b $(KERNEL) | cut -f 1) / 1024)
 stats: tree
 	@echo
-	@echo "System stats"
-	@echo "------------"
+	@echo "System stats for $(TYPE)"
+	@echo "-------------------------"
 	@echo "Installed udebs: $(UDEBS)"
 	@echo -n "Total system size: $(shell du -h -s $(TREE) | cut -f 1)"
 	@echo -n " ($(shell du -h --exclude=modules -s $(TREE)/lib | cut -f 1) libs, "
@@ -563,7 +566,7 @@ stats: tree
 	@echo "Disk usage per package:"
 	@sed 's/^/  /' < diskusage-$(TYPE).txt
 # Add your interesting stats here.
-
+	@echo
 
 # Upload a daily build to peope.debian.org. If you're not Joey Hess,
 # you probably don't want to use this grungy code, at least not without
