@@ -9,14 +9,14 @@
  7f³70    packages and automatically configures them with the default settings.   ³10
  7f³70                                                                            ³10
  7f³70                                                                            ³10
+ 7f³70    See the Installation Manual or the FAQ for more information; both       ³10
+ 7f³70    documents are available at the Debian web site:                         ³10
+ 7f³70      http://www.debian.org/                                                ³10
  7f³70                                                                            ³10
  7f³70                                                                            ³10
- 7f³70                                                                            ³10
- 7f³70                                                                            ³10
- 7f³70                                                                            ³10
- 7f³70                                                                            ³10
- 7f³70                                                                            ³10
- 7f³70                                                                            ³10
+ 7f³70    Debian GNU/Linux is Copyright (C) 1993-2004 Software in the Public      ³10
+ 7f³70    and others and comes with ABSOLUTELY NO WARRANTY , to the  extent       ³10
+ 7f³70    permitted by applicable law.                                            ³10
  7f³70                                                                            ³10
  7f³70                                                                            ³10
  7f³70                  Press any key to return to main screen                    ³10
