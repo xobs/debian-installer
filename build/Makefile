@@ -642,7 +642,13 @@ $(DEBIAN_CD_INFO): $(TEMP_BOOT_SCREENS)
 	(cd $(TEMP_BOOT_SCREENS); tar czf - .) > $@
 	./update-manifest $@ $(MANIFEST-DEBIAN_CD_INFO)
 
+# a tarball for pxe netbooting.
+$(PXE_BOOT): $(TEMP_BOOT_SCREENS) $(TEMP_PXE_BOOT)
+	(cd $(TEMP_PXE_BOOT); tar czf - .) > $@
+	./update-manifest $@ $(MANIFEST-PXE_BOOT)
+
 $(TEMP_BOOT_SCREENS): arch_boot_screens
+$(TEMP_PXE_BOOT): arch_pxe_boot
 
 $(MISC): TEMP_REAL_MISC = $(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,')
 $(MISC): 
