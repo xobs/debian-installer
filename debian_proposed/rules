@@ -15,13 +15,13 @@ clean:
 
 build:
 	for TYPE in $(TYPES) ; do \
-		$(MAKE) TYPE=$$TYPE image ; \
+		$(MAKE) DEST=dest/$$TYPE TYPE=$$TYPE image ; \
 	done 
 
 install: build
 	dh_testdir
 	dh_testroot
-	dh_clean -k
+	dh_clean -k -s
 	dh_installdirs
 	for TYPE in $(TYPES) ; do \
 		mkdir -p debian/debian-installer-$$TYPE/usr/lib/debian-installer-$$TYPE/$(ARCH); \
@@ -34,10 +34,10 @@ binary-arch: install
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs
-	dh_installdocs
-	dh_compress
-	dh_gencontrol 
-	dh_builddeb
+	dh_installdocs -s
+	dh_compress -s
+	dh_gencontrol -s
+	dh_builddeb -s
 
 binary: binary-indep binary-arch 
 .PHONY: build clean binary-indep binary-arch binary install 
