@@ -49,6 +49,12 @@ while (@lists) {
 			# includes
 			if (/^#include \"(.*)\"/) {
 				my $include=$1;
+				if (-e "pkg-lists/kernel_specific/$kernel_major/$deb_host_arch/$sub_arch/$include") {
+					push @lists, "pkg-lists/kernel_specific/$kernel_major/$deb_host_arch/$sub_arch/$include";
+				}
+				if (-e "pkg-lists/kernel_specific/$kernel_major/$deb_host_arch/$include") {
+					push @lists, "pkg-lists/kernel_specific/$kernel_major/$deb_host_arch/$include";
+				}
 				if (-e "pkg-lists/kernel_specific/$kernel_major/$include") {
 					push @lists, "pkg-lists/kernel_specific/$kernel_major/$include";
 				}
