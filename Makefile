@@ -221,8 +221,10 @@ demo_clean:
 	-@sudo chroot $(TREE) bin/sh -c "bin/umount /dev ; bin/umount /proc" &> /dev/null
 
 clean: demo_clean tmp_mount
-	if mount | grep -q $(USER_MOUNT_HACK); then \
-	    umount $(USER_MOUNT_HACK);\
+	if [ "$(USER_MOUNT_HACK)" ] ; then \
+	    if mount | grep -q "$(USER_MOUNT_HACK)"; then \
+	        umount "$(USER_MOUNT_HACK)";\
+	    fi ; \
 	fi
 	rm -rf $(TREE) 2>/dev/null || sudo rm -rf $(TREE)
 	dh_clean
@@ -309,8 +311,18 @@ $(TYPE)-tree-stamp:
 	# Only dpkg needs this stuff, so it can be removed later.
 	mkdir -p $(DPKGDIR)/updates/
 	touch $(DPKGDIR)/available
-	# Unpack the udebs with dpkg. This command must run as root or fakeroot.
-	dpkg --force-overwrite --root=$(TREE) --unpack $(UDEBDIR)/*.udeb
+
+	# Unpack the udebs with dpkg. This command must run as root
+	# or fakeroot.
+	oldsize=0; for udeb in $(UDEBDIR)/*.udeb ; do \
+		pkg=`basename $$udeb` ; \
+		dpkg --force-overwrite --root=$(TREE) --unpack $$udeb ; \
+		newsize=`du -s $(TREE) | awk '{print $$1}'` ; \
+		usedsize=`echo $$newsize - $$oldsize | bc`; \
+		echo pkg $$pkg used $$usedsize KiB; \
+		oldsize=$$newsize ; \
+	done
+
 	# Clean up after dpkg.
 	rm -rf $(DPKGDIR)/updates
 	rm -f $(DPKGDIR)/available $(DPKGDIR)/*-old $(DPKGDIR)/lock
