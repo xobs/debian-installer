@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 24518 -->
+<!-- original version: 24633 -->
 
 <sect1 id="example-preseed">
 <title>Exemple de fichier de préconfiguration</title>
@@ -71,7 +71,7 @@ imprévisibles.
 # dans l'installateur ne vérifie que des dépassements de tampons ou des
 # exploitations quelconques des valeurs données dans ce fichier n'ont pas lieu.
 # N'utilisez que les fichiers dont vous connaissez la provenance&nbsp;!
-# Pour le dire comme c'est et parce que c'est en général utile, voici un
+# Pour tout dire, et parce que c'est en général utile, voici un
 # moyen d'exécuter automatiquement une commande dans l'installateur.
 
 # La première commande est exécutée aussi tôt que possible, juste après
@@ -86,7 +86,7 @@ imprévisibles.
 #    chroot /target dpkg -i /tmp/$(basename $deb); done
 
 # Cette commande est exécutée au moment où base-config commence.
-#base-config	base-config/early_command	string echo hi mom
+#base-config base-config/early_command	string echo hi mom
 
 # Cette commande est exécutée après base-config, juste avant la connexion.
 # C'est un bon moyen d'installer les paquets que vous voulez ou d'affiner la
@@ -104,7 +104,7 @@ imprévisibles.
 
 # Choisir une interface précise pour netcfg. Ce n'est normalement pas 
 # nécessaire puisque netcfg utilise toute interface connectée
-#d-i	netcfg/choose_interface	select eth0
+#d-i netcfg/choose_interface	select auto
 
 # Si vous préférez configurer vous-même le réseau, voici comment faire&nbsp;:
 #d-i	netcfg/disable_dhcp	boolean true
@@ -122,10 +122,10 @@ d-i  netcfg/get_hostname	string unassigned-hostname
 d-i  netcfg/get_domain	        string unassigned-domain
 
 # Supprimer le dialogue irritant sur la clé WEP.
-d-i	netcfg/wireless_wep	string 
+d-i netcfg/wireless_wep	        string 
 # Et l'étonnant nom de machine dhcp que certains FAI utilisent comme mot de
 # passe.
-#d-i	netcfg/dhcp_hostname	string radish
+#d-i netcfg/dhcp_hostname	string radish
 
 # Valeurs pour les miroirs
 
@@ -189,7 +189,7 @@ d-i partman-auto/choose_recipe	    select \
 # Partman créera automatiquement les partitions sans demander de confirmation.
 d-i partman/confirm_write_new_label    boolean true
 d-i partman/choose_partition	       select \
-#   Finish partitioning and write changes to disk
+   Finish partitioning and write changes to disk
 d-i partman/confirm		       boolean true
 
 #### Installation du programme d'amorçage.
@@ -236,38 +236,38 @@ base-config	base-config/login	note
 
 # Si vous installez un gestionnaire d'affichage et si vous ne voulez pas le
 # lancer immédiatemment après base-config&nbsp;:
-#base-config	base-config/start-display-manager	boolean false
+#base-config base-config/start-display-manager	boolean false
 
 ###### Configuration du fuseau horaire.
 
 # Cette commande règle l'horloge matérielle sur GMT ou non&nbsp;:
-base-config	tzconfig/gmt		boolean true
+base-config tzconfig/gmt		boolean true
 
 # Si vous avez dit à l'installateur que vous habitez aux USA, vous pouvez
 # utiliser cette valeur pour déclarer le fuseau horaire.
 # (Les choix sont les suivants&nbsp;: Eastern, Central, Mountain, Pacific, 
 # Alaska, Hawaii, Aleutian, Arizona East-Indiana, Indiana-Starke, Michigan, 
 # Samoa, autre)
-base-config	tzconfig/choose_country_zone/US	select Eastern
+base-config tzconfig/choose_country_zone/US	select Eastern
 
 # Si vous avez dit à l'installateur que vous habitez au Canada.
 # (Choix : Newfoundland, Atlantic, Eastern, Central,
 # East-Saskatchewan, Saskatchewan, Mountain, Pacific, Yukon, autre)
-base-config	tzconfig/choose_country_zone/CA	select Eastern
+base-config tzconfig/choose_country_zone/CA	select Eastern
 
 # Si vous avez dit à l'installateur que vous habitez au Brésil. (Choix : 
 # East, West, Acre, DeNoronha, autre)
-base-config	tzconfig/choose_country_zone/BR	select East
+base-config tzconfig/choose_country_zone/BR	select East
 
 # Beaucoup de pays n'ont qu'un seul fuseau horaire. Si vous avez dit à 
 # l'installateur que vous habitez dans l'un de ces pays, vous pouvez le choisir
 # avec cette question.
-base-config	tzconfig/choose_country_zone_single boolean true
+base-config tzconfig/choose_country_zone_single boolean true
 
 # Cette question est posée pour les pays qui n'appartiennent pas à la liste
 # précédente et qui ont plusieurs fuseaux horaires. Vous pouvez préconfigurer
 # l'un des fuseaux ou <quote>autre</quote>.
-#base-config	tzconfig/choose_country_zone_multiple select 
+#base-config tzconfig/choose_country_zone_multiple    select 
 
 ###### Configuration des comptes.
 
@@ -380,7 +380,7 @@ xserver-xfree86	xserver-xfree86/config/monitor/mode-list \
 # à leur tout contenir d'autres directives de préconfiguration ou d'inclusion.
 # Notez que si les fichiers sont relatifs, ils seront pris dans le répertoire 
 # où se trouve le fichier qui les inclut.
-#d-i	preseed/include	string x.cfg
+#d-i preseed/include	string x.cfg
 
 # D'une manière plus souple, cela exécute des commandes du shell et si le 
 # résultat donne les noms de ces fichiers, ils sont inclus. Par exemple,

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 23061 -->
+<!-- original version: 24663 -->
 
   <sect2 arch="i386"><title>Amorcer depuis un cédérom</title>
 
@@ -91,9 +91,7 @@ sélectionner l'option «&nbsp;safe mode command prompt only&nbsp;»&nbsp;:
 contient la saveur que vous avez choisie, p. ex.
 
 <informalexample><screen>
-
 cd c:\current\compact
-
 </screen></informalexample>.  
 
 Ensuite exécutez <command>install.bat</command>. Le noyau se chargera et 
@@ -164,13 +162,11 @@ Voici un exemple de fichier <filename>/etc/lilo.conf</filename>&nbsp;:
 </para><para>
 
 <informalexample><screen>
-
 image=/boot/newinstall/vmlinuz
        label=newinstall
        initrd=/boot/newinstall/initrd.gz
        root=/dev/ram0
        append="devfs=mount,dall ramdisk_size=17000"
-
 </screen></informalexample>
 
 Pour plus de précisions, référez-vous aux pages de manuel de
@@ -188,14 +184,16 @@ Cherchez le fichier <filename>menu.lst</filename> dans le répertoire
 <filename>/boot/boot/grub/</filename>), ajoutez les lignes suivantes&nbsp;:
 
 <informalexample><screen>
-
 title  New Install
-kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram0 devfs=mount,dall ramdisk_size=17000
+kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram0 ramdisk_size=12000
 initrd (hd0,0)/boot/newinstall/initrd.gz
-
 </screen></informalexample>
 
-et redémarrez. Veuillez noter qu'il sera peut-être nécessaire d'augmenter 
+et redémarrez. En cas d'échec, vous pouvez ajouter
+<userinput>devfs=mount,dall</userinput> à la ligne <quote>kernel</quote>.
+</para>
+<para>
+Il sera peut-être nécessaire d'augmenter 
 le paramètre <userinput>ramdisk_size</userinput>, selon l'image que vous
 démarrez.
 À partir de maintenant, il ne devrait plus y avoir de différences
@@ -410,7 +408,7 @@ votre matériel. Par exemple, si votre ordinateur est un des portables Dell
 mentionnés plus haut, vous pouvez indiquer 
 <userinput>exclude port 0x800-0x8ff</userinput>. Il existe une liste de ces
 options communes dans la section sur les ressources système du
-<ulink url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-2.html#ss2.5">HOWTO PCMCIA</ulink>. Notez qu'il faut supprimer les virgules quand vous
+<ulink url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-1.html#ss1.12">HOWTO PCMCIA</ulink>. Notez qu'il faut supprimer les virgules quand vous
 passez ces valeurs à l'installateur.
 </para>
 </sect2>

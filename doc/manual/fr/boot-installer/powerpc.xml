@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-15"?>
-<!-- original version: 23151 -->
+<!-- original version: 24663 -->
 
 
   <sect2 arch="powerpc" id="boot-cd"><title>Amorcer depuis un cédérom</title>
@@ -19,7 +19,7 @@ lors du démarrage pour amorcer sur le cédérom.
 </para><para>
 
 Les OldWorld Powermac ne s'amorceront pas depuis un cédérom Debian, car les 
-ordinateurs OldWorld ont besoin d'un pilote de cédérom MacOSROM sur le 
+ordinateurs OldWorld ont besoin d'un pilote de cédérom Mac OS ROM sur le 
 cédérom, et une version libre de ce pilote n'est pas disponible. Tous les
 systèmes OldWorld possèdent un lecteur de disquettes, vous devrez par 
 conséquent l'utiliser pour lancer le programme d'installation, et ensuite 
@@ -36,7 +36,7 @@ amorcer depuis le disque dur à l'exception de l'utilisation du chemin vers
 
 <informalexample><screen>
 
-0 > boot cd:,\install\yaboot
+0 &gt; boot cd:,\install\yaboot
 
 </screen></informalexample>
 </para>
@@ -82,7 +82,7 @@ Vous devez déjà avoir placé les fichiers <filename>vmlinux</filename>,
 <filename>initrd.gz</filename>, <filename>yaboot</filename> et
 <filename>yaboot.conf</filename> à la racine de votre partition HFS dans 
 <xref linkend="files-newworld"/>.
-          Redémarrez votre ordinateur et immédiatement après le carillon,
+Redémarrez votre ordinateur et immédiatement après le carillon,
 appuyez simultanément sur les touches <keycap>Option</keycap>,
 <keycap>Command (touche trèfle/Apple)</keycap>, <keycap>o</keycap> et
 <keycap>f</keycap>. Vous aurez l'invite du microprogramme OpenFirmware au 
@@ -90,7 +90,7 @@ bout de quelques secondes&nbsp;:
 
 <informalexample><screen>
 
-0 > boot hd:<replaceable>x</replaceable>,yaboot
+0 &gt; boot hd:<replaceable>x</replaceable>,yaboot
 
 </screen></informalexample>
 
@@ -116,7 +116,63 @@ une compatibilité maximale&nbsp;; vous pouvez l'essayer si l'argument
    </sect3>
   </sect2>
 
-  <sect2 arch="powerpc" id="boot-tftp"><title>Amorcer avec TFTP</title>
+<sect2 arch="powerpc" id="usb-boot">
+<title>Amorcer sur une clé USB</title>  
+<para>
+
+Les systèmes NewWorld PowerMac peuvent s'amorcer sur un périphérique USB.
+</para>
+<para>
+Préparez tout suivant <xref linkend="boot-usb-files"/>. Pour amorcer un
+système Macintosh sur une clé USB, vous devez utiliser l'invite 
+du microprogramme Open Firmware car celui-ci ne recherche pas automatiquement
+les périphériques USB.
+<!-- TODO: although it could be made to; watch this space -->
+Pour obtenir l'invite, appuyez simultanément sur les touches
+<keycombo><keycap>Command</keycap> <keycap>Option</keycap>
+<keycap>o</keycap> <keycap>f</keycap></keycombo> lors de l'amorçage, voyez
+<xref linkend="invoking-openfirmware"/>.
+</para>
+
+<para>
+Vous devez chercher où se trouve le périphérique USB dans l'arborescence car
+pour l'instant <command>ofpath</command> ne peut pas le trouver 
+automatiquement. Saisissez, à l'invite du microprogramme, 
+<userinput>dev / ls</userinput> et <userinput>devalias</userinput> pour obtenir
+une liste des périphériques connus et de leurs alias. Sur le système de 
+l'auteur, de telles adresses existent, <filename>usb0/disk</filename>, 
+<filename>usb0/hub/disk</filename>, 
+<filename>/pci@f2000000/usb@1b,1/disk@1</filename>, et
+<filename>/pci@f2000000/usb@1b,1/hub@1/disk@1</filename>.
+</para>
+<para>
+
+Quand vous connaissez l'adresse du périphérique, amorcez l'installateur
+comme suit&nbsp;:
+
+<informalexample><screen>
+boot <replaceable>usb0/disk</replaceable>:<replaceable>2</replaceable>,\\:tbxi
+</screen></informalexample>
+
+Le <replaceable>2</replaceable> signifie la partition Apple_HFS ou
+Apple_Bootstrap sur laquelle vous avez copié l'image d'amorçage, et
+le <userinput>,\\:tbxi</userinput> demande au microprogramme d'amorcer sur
+un fichier HFS de type "tbxi" (<command>yaboot</command>) qui se trouve dans
+le répertoire préalablement préparé avec <command>hattrib -b</command>.
+</para>
+<para>
+Le système devrait s'amorcer et vous devriez voir une invite 
+<prompt>boot:</prompt>. Vous pouvez saisir des paramètres d'amorçage, ou
+appuyer simplement sur &enterkey;.
+</para>
+<warning><para>
+Cette méthode est nouvelle. Il se peut qu'elle soit difficile à mettre en
+&oelig;uvre sur des systèmes NewWorld. Si vous rencontrez des problèmes,
+envoyez un rapport de bogue. Voyez <xref linkend="submit-bug"/>.
+</para></warning>
+</sect2>
+
+<sect2 arch="powerpc" id="boot-tftp"><title>Amorcer avec TFTP</title>
 
 &boot-installer-intro-net.xml;
 

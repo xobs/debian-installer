@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 23664 -->
+<!-- original version: 24665 -->
 
 
  <sect2 arch="alpha" id="alpha-firmware">
@@ -224,11 +224,9 @@ microprogramme de la console du système et selon que <command>MILO</command>
 est disponible ou non&nbsp;:
 
 <informalexample><screen>
-
-SRM -> aboot
-SRM -> MILO
-ARC -> MILO
-
+SRM -&gt; aboot
+SRM -&gt; MILO
+ARC -&gt; MILO
 </screen></informalexample>
 
 </para><para condition="FIXME">
@@ -274,31 +272,26 @@ avec le préfixe <userinput>ewa</userinput> et seront affichées en sortie de
         la commande <userinput>show dev</userinput>, comme ceci&nbsp;:
 
 <informalexample><screen>
-
->>> show dev
+&gt;&gt;&gt; show dev
 ewa0.0.0.9.0               EWA0              08-00-2B-86-98-65
 ewb0.0.0.11.0              EWB0              08-00-2B-86-98-54
 ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
-
 </screen></informalexample>
 
 Vous devez commencer par configurer le protocole d'amorçage&nbsp;:
+
 <informalexample><screen>
-
->>> set ewa0_protocol bootp
-
+&gt;&gt;&gt; set ewa0_protocol bootp
 </screen></informalexample>
 
 puis vérifier que le type du média est correct&nbsp;:
 
 <informalexample><screen>
-
->>> set ewa0_mode <replaceable>mode</replaceable>
-
+&gt;&gt;&gt; set ewa0_mode <replaceable>mode</replaceable>
 </screen></informalexample>
 
 Vous pouvez obtenir une liste de modes valides avec 
-<userinput>>>>set ewa0_mode</userinput>.
+<userinput>&gt;&gt;&gt;set ewa0_mode</userinput>.
 
 </para><para>
 
@@ -306,9 +299,7 @@ Ensuite, pour amorcer sur la première interface Ethernet, vous
         devrez taper&nbsp;:
 
 <informalexample><screen>
-
->>> boot ewa -flags ""0
-
+&gt;&gt;&gt; boot ewa -flags ""
 </screen></informalexample>
 
 </para><para>
@@ -331,9 +322,7 @@ Par exemple, pour amorcer depuis
         saisir&nbsp;:
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot ewa0 -flags &quot;root=/dev/ram ramdisk_size=16384 console=ttyS0&quot;
-
 </screen></informalexample>
 
 </para>
@@ -346,9 +335,7 @@ Par exemple, pour amorcer depuis
 Exécutez
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot xxxx -flags 0
-
 </screen></informalexample>
 
 où <replaceable>xxxx</replaceable> est votre lecteur de cédérom 
@@ -387,9 +374,7 @@ code de votre sous-architecture (voyez&nbsp;:
        commande suivante&nbsp;:
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot dva0 -flags 0
-        
 </screen></informalexample>
 
 en remplaçant <filename>dva0</filename> avec le périphérique en service
@@ -397,9 +382,7 @@ en remplaçant <filename>dva0</filename> avec le périphérique en service
        de disquette&nbsp;; tapez
 
 <informalexample><screen>
-
 &gt;&gt;&gt; show dev
-        
 </screen></informalexample>
 
 pour afficher la liste des périphériques (si vous désirez
@@ -415,9 +398,7 @@ Si vous désirez spécifier des arguments au noyau en amorçant
 via <command>aboot</command>, utilisez la commande suivante&nbsp;:
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot dva0 -file linux.bin.gz -flags "root=/dev/fd0 load_ramdisk=1 arguments"
-        
 </screen></informalexample>
 
 (saisissez sur une seule ligne) en substituant, si nécessaire, le
@@ -466,9 +447,7 @@ Si vous désirez tout spécifier (pour fournir par exemple des paramètres
 supplémentaires), vous pouvez utiliser une commande de ce type&nbsp;:
 
 <informalexample><screen>
-
 MILO&gt; boot fd0:linux.bin.gz root=/dev/fd0 load_ramdisk=1 <!-- arguments -->
-        
 </screen></informalexample>
 
 </para><para>
