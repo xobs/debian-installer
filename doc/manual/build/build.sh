@@ -2,7 +2,7 @@
 
 if [ -z "$languages" ]; then
 	# Please add languages only if they build properly.
-	languages="en cs fr ja nl pt_BR de" # es
+	languages="en cs de es fr ja nl pt_BR" # el it
 fi
 
 if [ -z "$architectures" ]; then
