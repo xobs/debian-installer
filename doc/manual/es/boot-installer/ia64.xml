@@ -1,4 +1,4 @@
-<!-- original version: 18660 -->
+<!-- original version: 18974 -->
 
   <sect2 arch="ia64"><title>Arranque desde un CD-ROM</title>
 
@@ -10,23 +10,23 @@
 <para>
 
 Existen tres variaciones básicas de los CDs de instalación de Debian.
-El CD <emphasis>Business Card</emphasis> tiene una instalación 
-mínima que cabe en este pequeño formato de CD.
-Requiere conexión de red a modo de instalar el resto de la
-instalación base y tener un sistema usable.
-El CD <emphasis>Network Install</emphasis> tiene todos los paquetes
+El CD <emphasis>Tarjeta de negocios</emphasis> tiene una instalación 
+mínima que cabe en este medio de CD de formato pequeño.
+Requiere conexión de red para instalar el resto de la instalación
+base y tener un sistema utilizable.
+El CD <emphasis>Instalación de red</emphasis> tiene todos los paquetes
 para la instalación base pero requiere una conexión de red a un
-sitio de réplica de Debian a modo de instalar los paquetes 
-adicionales que desee para un sistemas completo.
+sitio de réplica de Debian para instalar los paquetes 
+adicionales que desee para tener un sistemas completo.
 El juego de CDs de Debian puede instalar un sistema completo
-desde el amplio rango de paquetes sin necesidad de acceder a
-la red.
+desde el amplio rango de paquetes que contiene sin necesidad de 
+acceder a la red.
 </para>
   </note>
 
 <para>
 
-IA-64 usa la siguiente generación de Interfaz de firmware extensible (EFI)
+IA-64 usa la siguiente generación de Interfaz de Firmware Extensible (EFI)
 de Intel.
 A diferencia del tradicional BIOS x86 que conoce muy poco sobre el
 dispositivo de arranque, además de la tabla de particiones y el 
@@ -34,7 +34,7 @@ registro principal de arranque (MBR), el EFI puede leer y escribir
 ficheros de particiones de disco formateadas con FAT16 o FAT32.
 Esto simplifica el proceso, a menudo arcaico, de iniciar un sistema.
 El gestor de arranque del sistema y el firmware EFI que lo soporta
-tiene un sistema de ficheros completo para almacenar los ficheros
+tiene un sistema de ficheros entero para almacenar los ficheros
 necesarios para arrancar la máquina.
 Esto significa que el disco de sistema en un sistema IA-64 tiene una
 partición adicional dedicada a EFI en lugar del simple MBR o bloque
@@ -52,22 +52,18 @@ continuación.
 
 </para><para>
 
-Muchos de los detalles son de como <command>elilo</command> realmente
+Muchos de los detalles de como <command>elilo</command> realmente
 carga e inicia un sistema desde la parte mas transparente del 
 instalador. Sin embargo, el instalador debe configurar una partición
 EFI antes de instalar el sistema base. De otra forma, la instalación
-de <command>elilo</command> fallará, lo que resulta en un sistema
+de <command>elilo</command> fallará, lo que resultará en un sistema
 no arrancable. La partición EFI se asigna y formatea en el paso de
 particionado de la instalación, antes de cargar cualquier paquete
 en el disco del sistema. La tarea de particionado también verifica que
 una partición EFI adecuada este presente, antes de permitir que la
 instalación prosiga.
 
-</para>
-
-  <sect3 arch="ia64" id="boot-from-cd">
-  <title>Arrancar desde el shell de EFI</title>
-<para>
+</para><para>
 
 El gestor de arranque de EFI se inicia como el último paso de la
 inicialización del firmware. Éste muestra una lista de menú desde
@@ -75,8 +71,92 @@ donde el usuario puede elegir una opción.
 Dependiendo del modelo del sistema y que otro software ha sido
 cargado en el sistema, este menú podría ser diferente de un
 sistema a otro.
-En cualquier evento, debe haber una opción llamada
+Se deben mostrar dos opciones del menú,
+<command>Boot Option Maintenance Menu</command> y
 <command>EFI Shell [Built-in]</command>.
+De preferencia use la primera opción, sin embargo, si ésta
+no esta disponible o por alguna razón el CD no arranca con ésta,
+use la segunda opción.
+
+</para>
+
+  <warning>
+  <title>IMPORTANTE</title>
+<para>
+El gestor de arranque EFI elegirá la acción de arranque predeterminada,
+usualmente la primera opción del menú, después de algunos segundos 
+pre-determinados.
+Esto es indicado por un contador en la parte inferior de la pantalla.
+Cuando el contador expira y el sistema inicia la acción predeterminada,
+tendrá que reiniciar la máquina para continuar la instalación.
+</para>
+  </warning>
+
+  <sect3 arch="ia64" id="bootable-cd">
+  <title>Opción 1: Arrancar desde la opción de arranque de mantenimiento del menú</title>
+<para>
+
+</para>
+
+<itemizedlist>
+
+<listitem><para>
+Inserte el CD en la unidad DVD/CD y reinicia la máquina.
+El firmware mostrará la página del gestor de arranque EFI y el menú
+después de que finalize la inicialización del sistema.
+</para></listitem>
+
+<listitem><para>
+Elija <command>Boot From a File</command> desde el menú con
+las teclas de desplazamiento y pulse <command>ENTER</command>.
+Esto mostrará una lista de dispositivos probados por el firmware.
+Deberá obtener dos líneas de menú conteniendo las etiquetas
+<command>Debian Inst [Acpi ...</command> o
+<command>Removable Media Boot</command>.
+Si examina el resto de la línea de menú, notará que la
+información del dispositivo y el controlador son las mismas.
+</para></listitem>
+
+<listitem><para>
+Puede elegir alguna de las entradas que se refieren a la unidad de
+CD/DVD.
+Escoja su elección con las teclas de desplazamiento y pulse 
+<command>ENTER</command>. Si elije <command>Removable Media Boot</command>
+la máquina inmediatamente iniciará la secuencia de arranque.
+Si en cambio elije <command>Debian Inst [Acpi ...</command>, ésta
+le mostrará un directorio listando la porción arrancable del CD,
+solicitandole que prosiga con el paso siguiente (y adicional).
+</para></listitem>
+
+<listitem><para>
+Necesitará efectuar este paso solamente si elije
+<command>Debian Inst [Acpi ...</command>.
+El listado del directorio también mostrará
+<command>[Treat like Removable Media Boot]</command> en la penúltima
+línea.
+Elija esta línea con las teclas de desplazamiento y pulse 
+<command>ENTER</command>.
+Esto iniciará la secuencia de arranque.
+</para></listitem>
+
+</itemizedlist>
+
+<para>
+
+Estos pasos inician el gestor de arranque de Debian el cual mostrará
+una página de menú para que elija un núcleo de arranque y opciones.
+Proceda a elegirlas.
+
+</para>
+  </sect3>
+
+  <sect3 arch="ia64" id="boot-with-efi">
+  <title>Opción 2: Arrancar desde el shell de EFI</title>
+<para>
+
+Si, por alguna razón, no tiene éxito usando la opción, reinicie la
+máquina y cuando aparezca la pantalla de gestor de arranque EFI
+deberá haber una opción llamada <command>EFI Shell [Built-in]</command>.
 Arranque el CD del instalador de Debian con los siguientes pasos:
 
 </para>
@@ -84,12 +164,15 @@ Arranque el CD del instalador de Debian con los siguientes pasos:
 <itemizedlist>
 
 <listitem><para>
-Inserte el CD en la unidad DVD/CD.
+Inserte el CD en la unidad DVD/CD y reinicie la máquina.
+El firmware mostrará la página del gestor de arranque EFI después
+que finalize la inicialización del sistema.
 </para></listitem>
 
 <listitem><para>
-Elija <command>EFI Shell</command> desde el menú.
-El shell EFI leerá todos los dispositivos arrancables y los
+Elija <command>EFI Shell</command> desde el menú usando las teclas de
+desplazamiento y pulse <command>ENTER</command>.
+El shell EFI buscará todos los dispositivos arrancables y los
 mostrará en la consola antes de mostrar su cursor de ordenes.
 Las particiones arrancables reconocidas en los dispositivos
 mostrarán un nombre de dispositivo de
@@ -117,36 +200,113 @@ como su cursor.
 </para></listitem>
 
 <listitem><para>
-Ingrese <command>elilo</command>.
-Esto iniciará el gestor de arranque.
-<classname>elilo</classname> mostrará su cursor y esperará por un
-nombre de núcleo a cargar.
-Si no recibe ninguna entrada hasta su límite de espera (al rededor
-de 20 segundos) elegirá el núcleo predeterminado.
-</para></listitem>
-
-<listitem><para>
-Elija la opción de arranque, típicamente <classname>linux</classname> o
-<classname>linux26</classname>.
-Simplemente presione <emphasis>Enter</emphasis> o espere que termine
-el tiempo de espera para que elija el predeterminado.
-Le mostrará mensajes conforme descomprime el núcleo, carga y 
-descomprime el sistema de ficheros raíz inicial.
+Ingrese <command>elilo</command> y pulse <command>ENTER</command>.
+Esto iniciará la secuencia de arranque.
 </para></listitem>
 
 </itemizedlist>
 
-<para> 
+<para>
 
-Estos pasos inician el núcleo del instalador.
+Como en la opción 1, estos pasos inician el gestor de arranque de Debian
+que mostrará una página de menú para que elija un núcleo de arranque y
+opciones. 
 También puede ingresar la orden corta
-<command>fs<emphasis>n</emphasis>:elilo</command> en el cursor
-del shell.
-Una vez que el núcleo termina su inicialización, junto con los
-mensajes comunes de consola, iniciara el instalador de Debian.
+<<command>fs<emphasis>n</emphasis>:elilo</command> en el cursor del
+shell.
+Proceda a elejir el núcleo de arranque y las opciones.
+
 </para>
 
   </sect3>
+
+  <sect3 arch="ia64" id="kernel-option-menu">
+  <title>Elegir el núcleo de arranque y opciones</title>
+
+<para>
+
+El gestor de arranque mostrará un menú en forma de lista y una
+ventana de texto con un cursor <classname>Boot:</classname>.
+Las teclas de desplazamiento seleccionan un elemento del menú y
+cualquier texto que se escriba en el teclado aparecerá en la ventana
+de texto.
+También existen ventanas de ayuda que pueden ser mostradas al presionar
+la tecla de función apropiada.
+La ventana de ayuda <classname>General</classname> explica las
+opciones del menú y la ventana <classname>Params</classname> explica
+las opciones comunes de línea de ordenes.
+
+</para>
+
+  <warning>
+  <title>Consola de puerto serie</title>
+<para>
+
+Algunas plataformas IA64 tiene además una consola de serie, un teclado
+y una tarjeta de video que puede ser configurada en el firmware EFI
+para ser usada como la consola del sistema.
+La consola EFI tiene la capacidad de mostrar y aceptar entradas tanto
+desde el teclado y video como del puerto serie.
+El núcleo Linux tomará los dispositivos de teclado y video como su
+consola predeterminada si detecta el teclado durante la inicialización.
+Tendrá que habilitar la consola de puerto serie en el gestor de
+arranque EFI e ingresar
+<command>console=ttyS0,9600n8</command> en la ventana de texto
+<classname>Boot:</classname> para poder instalar a través de consola
+serie.
+Si esta usando una consola de puerto serie y olvida configurarla en
+la línea de ordenes, podrá elegir el núcleo e ingresar parametros
+pero tanto la visualización como la entrada se perderán tan pronto
+inicie el núcleo, requiriendole reiniciar si su sistema no tiene
+un teclado y dispositivo de video instalados.
+</para></warning>
+
+<para>
+
+Consulte la ventana de ayuda <classname>General</classname> para
+la descripción de los núcleos y modos de instalación mas adecuados
+para su instalación.
+También debe consultar <xref linkend="boot-parms"/> a continuación,
+para cualquier parametro adicional que pueda desear definir en la
+ventana de texto <classname>Boot:</classname>.
+La versión del núcleo que elija selecciona la versión que será
+usada tanto para el proceso de instalación como para el sistema
+instalado.
+Si encuentra problemas de núcleo en la instalación, es posible
+que también tenga estos mismos problemas en el sistema que instale.
+Los siguientes dos pasos elegirán e iniciarán la instalación:
+
+</para>
+
+<itemizedlist>
+
+<listitem><para>
+Elija la versión del núcleo y modo de instalación mas adecuado
+para sus necesidades con las teclas de desplazamiento.
+</para></listitem>
+
+<listitem><para>
+Ingrese cualquier parámetro de arranque escribiendolo en el teclado.
+El texto será mostrado directamente en la ventana de texto.
+Esto es donde la consola de serie ha sido definida.
+</para></listitem>
+
+<listitem><para>
+Pulse <command>ENTER</command>. Esto cargará e iniciará el núcleo.
+El núcleo mostrará sus mensajes de inicialización usuales, seguido
+por la primera pantalla del instalador de Debian.
+</para></listitem>
+
+</itemizedlist>
+
+  </sect3>
+
+<para>
+
+Proceda con el siguiente capítulo para continuar la instalación, en donde
+definira el locale de idioma, red y particiones de disco.
+
+</para>
   </sect2>
 
   <sect2 arch="ia64" id="boot-tftp"><title>Arrancar con TFTP</title>
@@ -197,8 +357,8 @@ el cliente.
 
 </para><para>
 
-Cree un sub-directorio <filename>ia64/</filename> en si directorio
-tftpboot, y pueblelo con los ficheros <filename>vmlinuz</filename> y
+Cree un sub-directorio <filename>ia64/</filename> en su directorio
+tftpboot, y copie allí los ficheros <filename>vmlinuz</filename> y
 <filename>initrd.gz</filename> desde el directorio netboot del instalador
 de Debian.
 
@@ -215,17 +375,17 @@ directorio netboot del instalador de Debian.
 
 Cree un fichero <filename>elilo.conf</filename> en su directorio tftpboot.
 Éste será cargado por <command>elilo.efi</command> una vez que se ejecute
-en el cliente, y controla lo que ocurre después, incluyendo la elección
+en el cliente, y controle lo que ocurre después, incluyendo la elección
 del núcleo, imagen initrd, etc. Un fichero de ejemplo se provee en el
 directorio netboot del instalador de Debian, revise los contenidos y
-actualizelo, de ser necesario para su caso, la elección de rutas, etc.
+actualize lo necesario para su caso, la elección de rutas, etc.
 
 Es posible tener diferentes ficheros de configuración para clientes
 distintos al nombrarlos usando la dirección IP de los clientes en hexadecimal
 con el sufijo <filename>.conf</filename> en lugar de 
 <filename>elilo.conf</filename>.
 Vea la documentación que provee el paquete <classname>elilo</classname>
-para detalles.
+para más detalles.
 
 </para>
   </sect3>
