@@ -1,133 +1,134 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 untranslated -->
+<!-- original version: 11648 -->
 
 
  <sect1 id="directory-tree">
- <title>The Directory Tree</title>
+ <title>Der Verzeichnisbaum</title>
 <para>
 
-&debian; adheres to the 
-<ulink url="&url-fhs-home;">Filesystem Hierarchy Standard</ulink>
-for directory and file naming. This standard allows users and software
-programs to predict the location of files and directories. The root
-level directory is represented simply by the slash
-<filename>/</filename>. At the root level, all Debian systems include
-these directories:
+&debian; hält sich bezüglich der Verzeichnis- und Dateinamen an den
+<ulink url="&url-fhs-home;">Filesystem Hierarchy Standard</ulink>.
+Dieser Standard erlaubt es Benutzern und Softwareprogrammen, die Position
+von Dateien und Verzeichnissen vorauszusagen. Das Wurzelverzeichnis
+wird durch einen einfachen Schrägstrich (<filename>/</filename>, »slash«)
+repräsentiert. Auf der ersten Verzeichnisebene enthalten alle Debian-Systeme
+die folgenden Unterverzeichnisse:
 
 <informaltable>
 <tgroup cols="2">
 <thead>
 <row>
-  <entry>Directory</entry><entry>Content</entry>
+  <entry>Verzeichnis</entry><entry>Inhalt</entry>
 </row>
 </thead>
 
 <tbody>
 <row>
   <entry><filename>bin</filename></entry>
-  <entry>Essential command binaries</entry>
+  <entry>Grundlegende Binär-Kommando-Dateien</entry>
 </row><row>
   <entry><filename>boot</filename></entry>
-  <entry>Static files of the boot loader</entry>
+  <entry>Statische Dateien des Bootloaders</entry>
 </row><row>
   <entry><filename>dev</filename></entry>
-  <entry>Device files</entry>
+  <entry>Geräte-Dateien</entry>
 </row><row>
   <entry><filename>etc</filename></entry>
-  <entry>Host-specific system configuration</entry>
+  <entry>Systemkonfigurationen, die das eigene System betreffen</entry>
 </row><row>
   <entry><filename>home</filename></entry>
-  <entry>User home directories</entry>
+  <entry>Home-Verzeichnisse der Benutzer</entry>
 </row><row>
   <entry><filename>lib</filename></entry>
-  <entry>Essential shared libraries and kernel modules</entry>
+  <entry>Grundlegende, gemeinsam genutzte Bibliotheken und Kernelmodule</entry>
 </row><row>
   <entry><filename>mnt</filename></entry>
-  <entry>Mount point for mounting a file system temporarily</entry>
+  <entry>Einhängepunkt für vorübergehend einzuhängende Dateisysteme</entry>
 </row><row>
   <entry><filename>proc</filename></entry>
-  <entry>Virtual directory for system information</entry>
+  <entry>Virtuelles Verzeichnis für System-Informationen</entry>
 </row><row>
   <entry><filename>root</filename></entry>
-  <entry>Home directory for the root user</entry>
+  <entry>Home-Verzeichnis des Superusers root</entry>
 </row><row>
   <entry><filename>sbin</filename></entry>
-  <entry>Essential system binaries</entry>
+  <entry>Grundlegende System-Binär-Dateien</entry>
 </row><row>
   <entry><filename>tmp</filename></entry>
-  <entry>Temporary files</entry>
+  <entry>Temporäre Dateien</entry>
 </row><row>
   <entry><filename>usr</filename></entry>
-  <entry>Secondary hierarchy</entry>
+  <entry>Zweite Ebene in der Hierarchy</entry>
 </row><row>
   <entry><filename>var</filename></entry>
-  <entry>Variable data</entry>
+  <entry>Sich oft verändernde Daten</entry>
 </row><row>
   <entry><filename>opt</filename></entry>
-  <entry>Add-on application software packages</entry>
+  <entry>Zusätzliche Anwendungspakete, die nicht von Debian stammen</entry>
 </row>
 </tbody></tgroup></informaltable>
 </para>
 
 <para>
 
-The following is a list of important considerations regarding
-directories and partitions.
+Es folgt eine Liste mit wichtigen Festlegungen bezüglich Verzeichnissen
+und Partitionen.
 
 </para>
 <itemizedlist>
 <listitem><para>
 
-The root partition <filename>/</filename> must always physically
-contain <filename>/etc</filename>, <filename>/bin</filename>,
-<filename>/sbin</filename>, <filename>/lib</filename> and
-<filename>/dev</filename>, otherwise you won't be able to boot.
-Typically 100 MB is needed for the root partition, but this may vary.
+Die root-Partition <filename>/</filename> muss immer physikalisch
+die Verzeichnisse <filename>/etc</filename>, <filename>/bin</filename>,
+<filename>/sbin</filename>, <filename>/lib</filename> und
+<filename>/dev</filename> enthalten, sonst können Sie nicht booten.
+100MB sind ein typischer Wert für die root-Partition, dies kann jedoch
+variieren.
 
 </para></listitem>
 <listitem><para>
 
-<filename>/usr</filename>: all user programs
-(<filename>/usr/bin</filename>), libraries
-(<filename>/usr/lib</filename>), documentation
-(<filename>/usr/share/doc</filename>), etc., are in this
-directory. This part of the file system needs most of the space. You
-should provide at least 500 MB of disk space. If you want to install
-more packages you should increase the amount of space you give this
-directory.
+<filename>/usr</filename>: alle Benutzer-Programme
+(<filename>/usr/bin</filename>), Bibliotheken
+(<filename>/usr/lib</filename>), Dokumentation
+(<filename>/usr/share/doc</filename>), etc. sind in diesem Verzeichnis.
+Dieser Teil des Dateisystems benötigt den meisten Platz. Sie sollten mindestens
+500MB Festplattenplatz vorsehen. Möchten Sie viele Pakete installieren, sollten
+Sie den Platz für dieses Verzeichnis erhöhen.
 
 </para></listitem>
 <listitem><para>
 
-<filename>/home</filename>: every user will put his data into a
-subdirectory of this directory. The size of this depends on how many
-users will be using the system and what files are to be stored in
-their directories.  Depending on your planned usage you should reserve
-about 100 MB for each user, but adapt this value to your needs.
+<filename>/home</filename>: jeder Benutzer legt seine Daten in einem
+Unterverzeichnis von /home ab. Die Größe hängt davon ab, wie viele Nutzer
+das System hat und welche Dateien diese in ihren Verzeichnissen abspeichern.
+Abhängig von der geplanten Nutzung sollten Sie mindestens 100MB für jeden
+Benutzer reservieren, dieser Wert kann aber je nach Ihren Bedürfnissen
+variieren.
 
 </para></listitem>
 <listitem><para>
 
-<filename>/var</filename>: all variable data like news articles,
-e-mails, web sites, the packaging system cache, etc. will be placed
-under this directory. The size of this directory depends greatly on
-the usage of your computer, but for most people will be dictated by
-the package management tool's overhead.  If you are going to do a full
-installation of just about everything Debian has to offer, all in one
-session, setting aside 2 or 3 gigabytes of space for
-<filename>/var</filename> should be sufficient. If you are going to
-install in pieces (that is to say, install services and utilities,
-followed by text stuff, then X, ...), you can get away with 300 - 500
-megabytes in <filename>/var</filename>.  If hard drive space is at a
-premium and you don't plan on doing major system updates, you can get
-by with as little as 30 or 40 megabytes in <filename>/var</filename>.
+<filename>/var</filename>: alle veränderlichen Daten, wie News-Artikel, E-Mails,
+Webseiten, der Zwischenspeicher des Paketmanagement-Systems usw. werden
+unterhalb dieses Verzeichnisses abgelegt. Die Größe hängt überwiegend von
+der Nutzung des Rechners ab, wird aber bei vielen Leuten auch durch den Overhead
+des Paketmanagement-Systems bestimmt. Wenn Sie eine Komplettinstallation
+durchführen oder in einem Durchgang fast alles installieren, was Debian
+zu bieten hat, sind 2 oder 3 Gigabyte ausreichend für <filename>/var</filename>.
+Wenn Sie in mehreren Schritten installieren
+(also sagen wir zuerst die Dienste und Werkzeuge, dann
+Textbearbeitungs-Werkzeuge, dann X, ... ), können Sie mit 300 bis 500MB
+für <filename>/var</filename> auskommen. Wenn Plattenplatz rar ist und Sie
+keine großen Systemupdates planen, können Sie auch mit wenig Platz, ca. 30 oder
+40MB, für <filename>/var</filename> auskommen.
 
 </para></listitem>
 <listitem><para>
 
-<filename>/tmp</filename>: if a program creates temporary data it will
-most likely go in <filename>/tmp</filename>. 20-50 MB should usually
-be enough.
+<filename>/tmp</filename>: wenn ein Programm temporäre Dateien erzeugt, werden
+diese wahrscheinlich in <filename>/tmp</filename> gespeichert. 20 bis 50MB sollten
+hier meistens genügen.
 
 </para></listitem>
 </itemizedlist>
