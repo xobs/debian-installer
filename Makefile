@@ -8,8 +8,8 @@
 # a collection of udebs which it downloads from a Debian archive. See
 # README for details.
 
-# The kernel version to use on the boot floppy.
-KVERS=2.4.1-di
+# The version of the kernel to use.
+KVERS=2.4.1
 
 # The type of system to build. Determines what udebs are unpacked into
 # the system. See the .list files for various types. You may want to
@@ -100,7 +100,7 @@ APT_GET=apt-get --assume-yes \
 	-o Dir::Cache=$(CWD)$(APTDIR)/cache
 
 # Get the list of udebs to install. Comments are allowed in the lists.
-UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE)) $(EXTRAS)
+UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE) | sed 's/$${kernel:Version}/$(KVERS)/g') $(EXTRAS)
 
 DPKGDIR=$(TREE)/var/lib/dpkg
 TEMP=./tmp
@@ -202,8 +202,8 @@ tree-stamp:
 	rm -rf $(DPKGDIR)/updates
 	rm -f $(DPKGDIR)/available $(DPKGDIR)/*-old $(DPKGDIR)/lock
 	# Set up modules.dep
-	mkdir -p $(TREE)/lib/modules/$(KVERS)/
-	depmod -q -a -b $(TREE)/ $(KVERS)
+	mkdir -p $(TREE)/lib/modules/$(KVERS)-di/
+	depmod -q -a -b $(TREE)/ $(KVERS)-di
 
 	# Move the kernel image out of the way, into a temp directory
 	# for use later. We don't need it bloating our image!
