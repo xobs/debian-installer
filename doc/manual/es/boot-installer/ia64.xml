@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 22919 -->
+<!-- original version: 24321 -->
 
   <sect2 arch="ia64"><title>Arranque desde un CD-ROM</title>
 
@@ -179,9 +179,9 @@ El shell EFI buscará todos los dispositivos arrancables y los
 mostrará en la consola antes de mostrar su cursor de ordenes.
 Las particiones arrancables reconocidas en los dispositivos
 mostrarán un nombre de dispositivo de
-<filename>fs<emphasis>n</emphasis>:</filename>.
+<filename>fs<replaceable>n</replaceable>:</filename>.
 Todas las otras particiones reconocidas serán nombradas
-<filename>blk<emphasis>n</emphasis>:</filename>.
+<filename>blk<replaceable>n</replaceable>:</filename>.
 Si inserta un CD después de ingresar al shell, podría tomar
 algunos segundos adicionales mientras inicializa la unidad de CD.
 </para>
@@ -192,12 +192,12 @@ Examine la salida del shell al buscar la unidad de CDROM.
 Es mas probable que sea el dispositivo <filename>fs0:</filename>,
 aunque otros dispositivos con particiones arrancables 
 también serán mostrados como
-<filename>fs<emphasis>n</emphasis></filename>.
+<filename>fs<replaceable>n</replaceable></filename>.
 </para></listitem>
 
 <listitem><para>
-Escriba <command>fs<emphasis>n</emphasis>:</command> para elegir
-ese dispositivo donde <emphasis>n</emphasis> es el número de partición
+Escriba <command>fs<replaceable>n</replaceable>:</command> para elegir
+ese dispositivo donde <replaceable>n</replaceable> es el número de partición
 para el CDROM. Este shell le mostrará ahora el número de partición
 como su cursor.
 </para></listitem>
@@ -215,7 +215,7 @@ Como en la opción 1, estos pasos inician el gestor de arranque de Debian
 que mostrará una página de menú para que elija un núcleo de arranque y
 opciones. 
 También puede introducir la orden corta
-<command>fs<emphasis>n</emphasis>:elilo</command> en el cursor del
+<command>fs<replaceable>n</replaceable>:elilo</command> en el cursor del
 shell.
 Proceda a elegir el núcleo de arranque y las opciones.
 
@@ -223,26 +223,11 @@ Proceda a elegir el núcleo de arranque y las opciones.
 
   </sect3>
 
-  <sect3 arch="ia64" id="kernel-option-menu">
-  <title>Elegir el núcleo de arranque y opciones</title>
+  <sect3 arch="ia64" id="serial-console">
+  <title>Instalar usando una consola en el puerto serie</title>
 
 <para>
 
-El gestor de arranque mostrará un menú en forma de lista y una
-ventana de texto con un cursor <classname>Boot:</classname>.
-Las teclas de desplazamiento seleccionan un elemento del menú y
-cualquier texto que se escriba en el teclado aparecerá en la ventana
-de texto.
-También existen ventanas de ayuda que pueden ser mostradas al presionar
-la tecla de función apropiada.
-La ventana de ayuda <classname>General</classname> explica las
-opciones del menú y la ventana <classname>Params</classname> explica
-las opciones comunes de línea de ordenes.
-
-</para>
-
-  <title>Consola de puerto serie</title>
-<para>
 Puede realizar la instalación con monitor y teclado o usar una conexión
 serie. Para configurar el monitor/teclado, seleccione la opción que contenga
 [VGA console]. Para instalar a través de un conexión serie, seleccione la opción
@@ -250,19 +235,22 @@ que contenga [<replaceable>BAUD</replaceable> baud serial console], donde
 <replaceable>BAUD</replaceable> es la velocidad de la consola serie.
 Las opciones del menú están configuradas de antemano para los baudios más
 comunes de ttyS0.
-</para>
-<para>
+
+</para><para>
+
 En la mayoría de las circunstancias, querrá configurar el instalador para usar
 los mismos baudios que su conexión a la consola EFI. Si no está seguro del valor
 correcto para este parámetro, puede obtenerlo con la orden
 <command>baud</command> en el shell EFI.
-</para>
-<para>
+
+</para><para>
+
 Si no hay ninguna opción disponible ya configurada para dispositivo serie o los
 baudios que desea usar, puede modificar la configuración de una de las opciones
 del menú. Por ejemplo, para usar una consola a 57600 baudios a través del
 dispositivo ttyS1, introduzca <command>console=ttyS1,57600n8</command> en la
 ventana de texto <classname>Boot:</classname>.
+
 </para>
 
 <note><para>
@@ -280,7 +268,25 @@ parámetros pero tanto la visualización como la entrada se perderán tan pronto
 inicie el núcleo, requiriéndole reiniciar antes de poder empezar la instalación.
 </para></warning>
 
+</sect3>
+
+  <sect3 arch="ia64" id="kernel-option-menu">
+  <title>Elegir el núcleo de arranque y opciones</title>
+
 <para>
+
+El gestor de arranque mostrará un menú en forma de lista y una
+ventana de texto con un cursor <classname>Boot:</classname>.
+Las teclas de desplazamiento seleccionan un elemento del menú y
+cualquier texto que se escriba en el teclado aparecerá en la ventana
+de texto.
+También existen ventanas de ayuda que pueden ser mostradas al presionar
+la tecla de función apropiada.
+La ventana de ayuda <classname>General</classname> explica las
+opciones del menú y la ventana <classname>Params</classname> explica
+las opciones comunes de línea de ordenes.
+
+</para><para>
 
 Consulte la ventana de ayuda <classname>General</classname> para
 la descripción de los núcleos y modos de instalación mas adecuados
@@ -319,7 +325,6 @@ por la primera pantalla del instalador de Debian.
 
 </itemizedlist>
 
-  </sect3>
 
 <para>
 
@@ -327,6 +332,7 @@ Proceda con el siguiente capítulo para continuar la instalación, en donde
 configurará su idioma, red y particiones de disco.
 
 </para>
+  </sect3>
   </sect2>
 
   <sect2 arch="ia64" id="boot-tftp"><title>Arrancar con TFTP</title>
