@@ -1,0 +1,133 @@
+#!/bin/sh
+#
+# get-packages <type> <package> ...
+#
+# Download deb or udeb package with the help of apt-get
+#
+# Files:
+#   sources.list.udeb / sources.list.udeb.local
+#   sources.list.deb  / sources.list.deb.local
+#
+# Environment:
+#   APTDIR       - basename for the apt directory (default: apt.$TYPE)
+#   DEBUG        - build debug udebs from source (default: n)
+#   DEBUGUDEBDIR - directory for debug udebs (default: debugudebs)
+#   UDEBDIR      - directory for ready-to-use udebs (default: udebs)
+#   LOCALUDEBDIR - directory for locally provided udebs (default: localudebs)
+#   ONLINE       - update Packages files (default: y)
+
+set -e
+
+# parse parameters
+TYPE=$1
+shift
+PACKAGES=$*
+
+# Setup environment
+if [ ! $APTDIR ]; then
+	APTDIR="apt"
+fi
+if [ ! $DEBUGUDEBDIR ]; then
+	DEBUGUDEBDIR="debugudebs"
+fi
+if [ ! $UDEBDIR ]; then
+	UDEBDIR="udebs"
+fi
+if [ ! $LOCALUDEBDIR ]; then
+	LOCALUDEBDIR="localudebs"
+fi
+if [ ! $ONLINE ]; then
+	ONLINE="y"
+fi
+
+# Set APTDIR according to type
+# debs are kept in another apt cache so only the needed Packages files
+# are downloaded and autoclean doesnt run wild.
+APTDIR=$APTDIR.$TYPE
+
+# Set sources.list file
+if [ -f sources.list.$TYPE.local ]; then
+	LIST=sources.list.$TYPE.local
+else
+	LIST=sources.list.$TYPE
+	make sources.list.$TYPE
+fi
+
+# All these options make apt read the right sources list, and use APTDIR for
+# everything so it need not run as root.
+APT_GET="apt-get --assume-yes \
+        -o Dir::Etc::sourcelist=`pwd`/$LIST \
+	-o Dir::State=`pwd`/$APTDIR/state \
+	-o Dir::State::Status=`pwd`/$APTDIR/state/status \
+	-o Debug::NoLocking=true \
+	-o Dir::Cache=`pwd`/$APTDIR/cache "
+
+# Prepare APTDIR
+mkdir -p $APTDIR/state/lists/partial
+mkdir -p $APTDIR/cache/archives/partial
+# Prime status file with system libraries - 
+echo -n > $APTDIR/state/status
+# SOme archs have libc6 others have libc6.1
+dpkg -s libc6 >> $APTDIR/state/status || dpkg -s libc6.1 >> $APTDIR/state/status
+for i in libnewt0.51 libdebconfclient0 libdebian-installer4 \
+	 libdb1-compat libpopt0 slang1a-utf8 libuuid1 libparted1.6-0; do
+	dpkg -s $i >> $APTDIR/state/status
+done
+if [ "$ONLINE" = "y" ]; then
+	$APT_GET update
+	$APT_GET autoclean
+fi
+
+# If there are local (u)debs, remove them from the list of things to
+# get. Then get all the (u)debs that are left to get. Note that the
+# trailing blank on the next line is significant. It makes the sed
+# below always work.
+
+needed="$PACKAGES "
+for file in `find $LOCALUDEBDIR -name "*_*" -printf "%f\n" 2>/dev/null`; do
+	package=`echo $file | cut -d _ -f 1`
+	needed=`echo " $needed " | sed "s/ $package / /g"`
+done
+if [ "$DEBUG" = y ]; then
+	mkdir -p $DEBUGUDEBDIR
+	cd $DEBUGUDEBDIR
+	export DEB_BUILD_OPTIONS="debug"
+	$APT_GET source --build --yes $needed
+	cd ..
+else
+	echo Need to download : $needed
+	if [ -n "$needed" ]; then
+		$APT_GET -dy install $needed
+	fi
+fi
+
+# Now the (u)debs are in APTDIR/cache/archives/ and maybe LOCALUDEBDIR
+# or DEBUGUDEBDIR, but there may be other (u)debs there too besides
+# those we asked for. So link those we asked for to UDEBDIR, renaming
+# them to more useful names. Watch out for duplicates and missing
+# files while doing that.
+rm -rf $UDEBDIR
+mkdir -p $UDEBDIR
+
+lnpkg() {
+	local pkg=$1; local dir=$2 debdir=$3;
+	local L1="`echo $dir/$pkg\_*`"
+	local L2="`echo $L1 | sed -e 's, ,,g'`"
+	if [ "$L1" != "$L2" ]; then
+		echo "Duplicate package $pkg in $dir/";
+		exit 1
+	fi
+	if [ -e $L1 ]; then
+		ln -f $dir/${pkg}_* $debdir/$pkg.$TYPE
+	fi
+}
+
+for package in $PACKAGES; do
+	lnpkg $package $APTDIR/cache/archives $UDEBDIR
+	lnpkg $package $LOCALUDEBDIR $UDEBDIR
+	lnpkg $package $DEBUGUDEBDIR $UDEBDIR
+	if [ ! -e $UDEBDIR/$package.$TYPE ]; then
+		echo "Needed $package not found (looked in $APTDIR/cache/archives/, $LOCALUDEBDIR/, $DEBUGUDEBDIR/)";
+		exit 1
+	fi
+done
