@@ -1,73 +1,61 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 11648 -->
-
+<!-- original version: 23579 -->
+<!-- revisado jfs, 3 noviembre 2004 -->
 
   <sect2 arch="alpha"><title>Particionado en Tru64 UNIX</title>
 <para>
 
-Tru64 UNIX, anteriormente conocido como Digital UNIX, que en su
-momento fue conocido como OSF/1, usa el esquema de particionado similar
-al  «disk label» de BSD, que le permite hasta ocho particiones por disco
-duro. Las particiones son numeradas desde «1» hasta «8» en Linux y
-"nombradas" desde «a» hasta «h» en UNIX. Los núcleos Linux versión 2.2 y
-superiores siempre asocian «1» a «a», y «2» a «b» y sucesivamente.
-Por ejemplo <filename>rz0e</filename> en UNIX Tru64 es bastante probable
-que sea llamado <filename>sda5</filename> en Linux.
+Tru64 UNIX, anteriormente conocido como Digital UNIX, que a su vez
+fue conocido en su como OSF/1, usa el esquema de particionado similar
+al las etiquetas de disco («disk label», N. del T.) de BSD. Este sistema
+permite hasta ocho particiones por unidad de disco.
+Las particiones se numeran desde «1» hasta «8» en Linux y
+se nombran desde la «a» hasta la «h» en UNIX. A partir de la versión 2.2
+del núcleo de Linux siempre se asocia el número «1» a la letra «a», el «2» a
+la  «b» y así sucesivamente.
+Por ejemplo, la unidad llamada en UNIX Tru64 <filename>rz0e</filename> 
+es muy probable que se llame <filename>sda5</filename> en Linux.
 
 </para><para>
 
-Las particiones en el disk label podrían sobreponerse. Además, la 
-partición «c» es requerida para albergar el disco entero (esto es
-sobreponer todas las otras particiones no vacías). Bajo Linux esto
-convierte a <filename>sda3</filename> idéntico a <filename>sda</filename>
-(<filename>sdb3</filename> a <filename>sdb</filename>, si esta presente,
-y en adelante). Además de satisfacer este requerimiento, debe evitar
-cuidadosamente el sobreponer una partición.
+Las particiones en una etiqueta de disco de Tru64 se pueden solapar.
+Es más, si el disco se va utilizar en Tru64, es necesario una
+partición «c» que albergue el disco entero (solapándose con 
+las demás particiones no vacías). Para Linux esto
+hace que <filename>sda3</filename> sea idéntico a <filename>sda</filename>
+(si existe, <filename>sdb3</filename> será igual a
+<filename>sdb</filename>, y así sucesivamente).
+La herramienta de particionado «partman» que utiliza &d-i;, sin
+embargo, no puede gestionar actualmente particiones
+solapadas. Consecuentemente, no es recomendable compartir discos entre
+Tru64 y Debian. Sí se pueden montar particiones disponibles en discos
+Tru64 en Debian una vez se haya finalizado con la instalación.
 
 </para><para>
 
-Otro requerimiento convencional es que la partición «a» debe empezar
+Otro requisito habitual es que la partición «a» debe empezar
 en el principio del disco, de modo que siempre incluya el bloque de
 arranque con la etiqueta del disco. Si pretende arrancar Debian desde
 este disco, necesita definirlo con un tamaño de por lo menos 2MB para
-que pueda caber aboot y tal vez un núcleo.
-
-</para><para>
-
-Note que estas dos particiones son requeridas únicamente para
-compatibilidad, no debe crear un sistema de ficheros en
-ellos o destruirá la información. Si no va a compartir el
-disco con Unix Tru64 o alguno de los sistemas operativos derivados
-de 4.4BSD-Lite (FreeBSD, OpenBSD o NetBSD), puede ignorar estos
-requerimientos y usar la herramienta de particionado de los discos
-de arranque de Debian. Vea <xref linkend="partition-programs"/>
-para mayor detalle.
-
-</para><para>
-
-Los discos pueden ser particionados con la herramienta de configuración
-gráfica que es accesible a través del «Application Manager» o con utilidad
-de línea de órdenes <command>disklabel</command>. El tipo de partición
-para el sistema de ficheros de Linux debe ser configurado como «resrvd8».
-Esto solamente puede ser hecho a través de <command>disklabel</command>;
-sin embargo, todas las otras configuraciones pueden efectuarse fácilmente
-con la herramienta gráfica.
+que pueda caber «aboot» y tal vez un núcleo. Tenga en cuenta que esta 
+partición sólo es necesaria por razones de compatibilidad, no debe
+crear ningún sistema de ficheros en ésta o perderá datos.
 
 </para><para>
 
 Es posible, y de hecho razonable, compartir una partición de intercambio
-(swap) entre UNIX y Linux. En este caso sera necesario efectuar un 
+(swap) entre UNIX y Linux. En este caso deberá ejecutar
 <command>mkswap</command> en esta partición cada vez que se reinicie el
-sistema de UNIX a Linux, puesto que UNIX podría dañar la firma swap.
-Podría querer ejecutar <command>mkswap</command> desde los programas
-de arranque de Linux antes de añadir espacio de intercambio con 
-<command>swapon -a</command>.
+sistema de UNIX a Linux, puesto que UNIX dañará la firma de la partición de
+intercambio. Seguramente querrá ejecutar el programa
+<command>mkswap</command> en los guiones de arranque de Linux antes
+de añadir espacio de intercambio con <command>swapon -a</command>.
 
 </para><para>
 
-Si desea montar particiones UNIX bajo Linux, note que Digital UNIX
-puede usar dos tipos de sistemas de ficheros, UFS y AdvFS, de los que
-Linux solamente entiende el anterior.
+Tenga en cuenta, si desea montar particiones UNIX bajo Linux, que Digital UNIX
+puede usar dos tipos de sistemas de ficheros, UFS y AdvFS. Linux sólo
+entiende el sistema de ficheros UFS.
 
 </para>
   </sect2>
@@ -76,23 +64,26 @@ Linux solamente entiende el anterior.
 
 <para>
 
-Windows NT usa el estilo de tabla de particiones PC. Si está
-manipulando particiones FAT o NTFS, se recomienda que use las 
-herramientas nativas de Windows NT (o, mas convenientemente, también 
+Windows NT usa el estilo de tabla de particiones PC. 
+Se recomienda que use las herramientas nativas de Windows NT si está
+manipulando particiones FAT o NTFS. También 
 puede reparticionar su disco desde el menú de configuración de
-AlphaBIOS). De otra manera, no es necesario particionar desde Windows,
-las herramientas de particionado de Linux generalmente hacen un mejor
-trabajo. Note que cuando ejecute NT, el Administrador de disco puede
-ofrecerle escribir una "firma dañina" en discos no Windows si tiene
+AlphaBIOS. Si no va a hacer esto, no es necesario particionar desde Windows,
+las herramientas de particionado de Linux generalmente harán un mejor
+trabajo. Tenga en cuenta que cuando ejecute NT, el Administrador de disco puede
+ofrecerle escribir una «firma inocua» en discos no Windows si tiene
 alguno. <emphasis>Nunca</emphasis> permita que lo haga, puesto
 que esta firma destruirá la información de la partición.
 
 </para><para>
 
 Si planea arrancar Linux desde una consola ARC/AlphaBIOS/ARCBIOS,
-necesitará una (pequeña) partición para MILO. 5Mb es prácticamente
-suficiente. Si Windows NT está intalado, su partición de arranque de 6Mb
-puede ser empleada para este propósito.
+necesitará una (pequeña) partición FAT para MILO. Será suficiente con
+5Mb para esta partición. Puede utilizar la partición de arranque de 6Mb
+de Windows NT para este propósito, si lo tiene instalado.
+No es posible instalar MILO con Debian &releasename;. Sin embargo,
+si ya ha instalado MILO en su sistema, o puede instalarlo de alguna otra
+forma, podrá arrancar Debian desde ARC.
 
 </para>
   </sect2>
