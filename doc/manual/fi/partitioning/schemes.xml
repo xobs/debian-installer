@@ -1,0 +1,84 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 18917 untranslated -->
+
+
+ <sect1>
+ <title>Recommended Partitioning Scheme</title>
+<para>
+
+For new users, personal Debian boxes, home systems, and other
+single-user setups, a single <filename>/</filename> partition (plus
+swap) is probably the easiest, simplest way to go.  However, if your
+partition is larger than around 6GB, choose ext3 as your partition
+type.  Ext2 partitions need periodic file system integrity checking,
+and this can cause delays during booting when the partition is large.
+
+</para><para>
+
+For multi-user systems or systems with lots of disk space, it's best
+to put <filename>/usr</filename>, <filename>/var</filename>,
+<filename>/tmp</filename>, and <filename>/home</filename> each on
+their own partitions separate from the <filename>/</filename>
+partition.
+
+</para><para>
+
+You might need a separate <filename>/usr/local</filename> partition if
+you plan to install many programs that are not part of the Debian
+distribution.  If your machine will be a mail server, you might need
+to make <filename>/var/mail</filename> a separate partition.  Often,
+putting <filename>/tmp</filename> on its own partition, for instance
+20 to 50MB, is a good idea.  If you are setting up a server with lots
+of user accounts, it's generally good to have a separate, large
+<filename>/home</filename> partition.  In general, the partitioning
+situation varies from computer to computer depending on its uses.
+
+</para><para>
+
+For very complex systems, you should see the 
+<ulink url="&url-multidisk-howto;">
+Multi Disk HOWTO</ulink>.  This contains in-depth information, mostly
+of interest to ISPs and people setting up servers.
+
+</para><para>
+
+With respect to the issue of swap partition size, there are many
+views.  One rule of thumb which works well is to use as much swap as
+you have system memory. It also shouldn't be smaller than 16MB, in
+most cases.  Of course, there are exceptions to these rules. If you
+are trying to solve 10000 simultaneous equations on a machine with
+256MB of memory, you may need a gigabyte (or more) of swap.  
+
+</para><para arch="m68k"> 
+
+On the other hand, Atari Falcons and Macs feel pain when swapping, so
+instead of making a large swap partition, get as much RAM as possible.
+
+</para><para>
+
+On 32-bit architectures (i386, m68k, 32-bit SPARC, and PowerPC), the
+maximum size of a swap partition is 2GB. That should be enough for
+nearly any installation.  However, if your swap requirements are this
+high, you should probably try to spread the swap across different
+disks (also called <quote>spindles</quote>) and, if possible, different SCSI or
+IDE channels.  The kernel will balance swap usage between multiple
+swap partitions, giving better performance.
+
+</para><para>
+
+As an example, an older home machine might have 32MB of RAM and a
+1.7GB IDE drive on <filename>/dev/hda</filename>. There might be a
+500MB partition for another operating system on
+<filename>/dev/hda1</filename>, a 32MB swap partition on
+<filename>/dev/hda3</filename> and about 1.2GB on
+<filename>/dev/hda2</filename>) as the Linux partition.
+
+</para><para>
+
+For an idea of the space taken by tasks
+you might be interested in adding after your system installation is 
+complete, check <xref linkend="tasksel-size-list"/>.
+
+</para>
+
+ </sect1>

@@ -1,0 +1,188 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 14337 untranslated -->
+
+ <sect1 condition="bootable-usb" id="boot-usb-files">
+ <title>Preparing Files for USB Memory Stick Booting</title>
+
+<para>
+
+For preparing the USB stick you will need a system where GNU/Linux is
+already running and where USB is supported. You should assure that the
+usb-storage kernel module is loaded (<userinput>modprobe
+usb-storage</userinput>) and try to find out which SCSI device the USB
+stick has been mapped to (in this example
+<filename>/dev/sda</filename> is used). To write to your stick, you
+will probably have to turn off its write protection switch.
+
+</para><para>
+
+Note, that the USB stick should be at least 128 MB in size (smaller
+setups are possible if you follow <xref linkend="usb-copy-flexible"/>).
+
+</para>
+
+  <sect2 id="usb-copy-easy">
+  <title>Copying the files - the easy way</title>
+<para>
+
+There is an all-in-one file <filename>hd-media/boot.img.gz</filename>
+which contains all the installer files (including the kernel) as well
+as <command>SYSLINUX</command> and its configuration file. You only
+have to extract it directly to to your USB stick:
+
+<informalexample><screen>
+
+gzip -dc boot.img.gz >/dev/<replaceable>sda</replaceable>
+
+</screen></informalexample>
+
+Of course this will destroy anything already on the device, so take
+care that you use the correct device name for your USB stick.
+
+</para><para>
+
+After that, mount the USB memory stick (<userinput>mount /dev/sda
+/mnt</userinput>), which will now have a FAT filesystem on it, and
+copy a Debian netinst or businesscard ISO image to it. Please note
+that the file name must end in <filename>.iso</filename>. Unmount the
+stick (<userinput>umount /mnt</userinput>) and you are done.
+
+</para>
+  </sect2>
+
+  <sect2 id="usb-copy-flexible">
+  <title>Copying the files - the flexible way</title>
+<para>
+
+If you like more flexibility or just want to know what's going on, you
+should use the following method to put the files on your stick. We
+will show how to setup the memory stick to use the first partition,
+instead of entire device.
+
+</para><note><para>
+
+Since most USB sticks come pre-configured with a single FAT16
+partition, you probably won't have to repartition or reformat the
+stick.  If you have to do that anyway, use <command>cfdisk</command>
+or any other partitioning tool for creating a FAT16 partition and then
+type
+
+<informalexample><screen>
+
+mkdosfs /dev/<replaceable>sda1</replaceable>
+
+</screen></informalexample>
+
+Take care that you use the correct device name for your USB stick. The
+<command>mkdosfs</command> command is contained in the
+<classname>dosfstools</classname> Debian package.
+
+</para></note><para>
+
+In order to start the kernel after booting from the USB stick, we will
+put a boot loader on the stick. Although any boot loader
+(e.g. <command>LILO</command>) should work, it's convenient to use
+<command>SYSLINUX</command>, since it uses a FAT16 partition and can
+be reconfigured by just editing a text file. Any operating system
+which supports the FAT file system can be used to make changes to the
+configuration of the boot loader.
+
+</para><para>
+
+To put <command>SYSLINUX</command> on the FAT16 partition on your USB
+stick, install the <classname>syslinux</classname> and
+<classname>mtools</classname> packages on your system, and type
+
+<informalexample><screen>
+
+syslinux /dev/<replaceable>sda1</replaceable>
+
+</screen></informalexample>
+
+Again, take care that you use the correct device name. The partition
+must not be mounted when starting <command>SYSLINUX</command>. This
+procedure writes a boot sector to the partition and creates the file
+<filename>ldlinux.sys</filename> which contains the boot loader code.
+
+</para><para>
+
+Mount the parition (<userinput>mount /dev/sda1 /mnt</userinput>) and
+copy the following files from the Debian archives to the stick:
+
+<itemizedlist>
+<listitem><para>
+
+<filename>vmlinuz</filename> (kernel binary)
+
+</para></listitem>
+<listitem><para>
+
+<filename>initrd.gz</filename> (initial ramdisk image)
+
+</para></listitem>
+<listitem><para>
+
+<filename>syslinux.cfg</filename> (SYSLINUX configuration file)
+
+</para></listitem>
+<listitem><para>
+
+Optional kernel modules
+
+</para></listitem>
+</itemizedlist>
+
+If you want to rename the files, please note that
+<command>SYSLINUX</command> can only process DOS (8.3) file names.
+
+</para><para>
+
+The <filename>syslinux.cfg</filename> configuration file should
+contain the following two lines:
+
+<informalexample><screen>
+
+default vmlinuz
+append initrd=initrd.gz ramdisk_size=10000 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+
+</screen></informalexample>
+
+Please note, that the <userinput>ramdisk_size</userinput> parameter
+may need to be increased, depending on the image you are booting.
+
+</para><para>
+
+Now you should put any Debian ISO image (businesscard, netinst or even
+a full one) onto your stick (if it fits). The file name of such an
+image must end in <filename>.iso</filename>.
+
+</para><para>
+
+If you want to install over the network, without using an ISO image,
+you will of course skip the previous step. Moreover you will have to
+use the initial ramdisk from the <filename>netboot</filename>
+directory instead of the one from <filename>hd-media</filename>,
+because <filename>hd-media/initrd.gz</filename> does not have network
+support.
+
+</para><para>
+
+When you are done, unmount the USB memory stick (<userinput>umount
+/mnt</userinput>) and activate its write protection switch.
+
+</para><warning><para>
+
+If your system refuses to boot from the memory stick, the stick may
+contain an invalid master boot record (MBR). To fix this, use the
+<command>install-mbr</command> command from the package
+<classname>mbr</classname>:
+
+<informalexample><screen>
+
+install-mbr /dev/<replaceable>sda</replaceable>
+
+</screen></informalexample>
+
+</para></warning>
+  </sect2>
+ </sect1>

@@ -1,0 +1,86 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 11648 untranslated -->
+
+
+  <sect2 arch="i386"><title>Partitioning for &arch-title;</title>
+<para>
+
+The PC BIOS generally adds additional constraints for disk
+partitioning.  There is a limit to how many <quote>primary</quote> and
+<quote>logical</quote> partitions a drive can contain.  Additionally, with pre
+1994-98 BIOS, there are limits to where on the drive the BIOS can boot
+from.  More information can be found in the
+ <ulink url="&url-partition-howto;">Linux Partition HOWTO</ulink> and the 
+<ulink url="&url-phoenix-bios-faq-large-disk;">Phoenix BIOS FAQ</ulink>, but
+this section will include a brief overview to help you plan most
+situations.
+
+</para><para>
+
+<quote>Primary</quote> partitions are the original partitioning scheme for PC
+disks.  However, there can only be four of them.  To get past this
+limitation, <quote>extended</quote> and <quote>logical</quote> partitions were invented.  By
+setting one of your primary partitions as an extended partition, you
+can subdivide all the space allocated to that partition into logical
+partitions.  You can create up to 60 logical partitions per extended
+partition; however, you can only have one extended partition per
+drive.
+
+</para><para>
+
+Linux limits the partitions per drive to 15 partitions for SCSI disks
+(3 usable primary partitions, 12 logical partitions), and 63
+partitions on an IDE drive (3 usable primary partitions, 60 logical
+partitions). However the normal &debian; system provides 
+only 20 devices for partitions, so you may not install on partitions
+higher than 20 unless you first manually create devices for those
+partitions. 
+
+</para><para>
+
+If you have a large IDE disk, and are using neither LBA addressing,
+nor overlay drivers (sometimes provided by hard disk manufacturers),
+then the boot partition (the partition containing your kernel image)
+must be placed within the first 1024 cylinders of your hard drive
+(usually around 524 megabytes, without BIOS translation).
+
+</para><para>
+
+This restriction doesn't apply if you have a BIOS newer than around
+1995-98 (depending on the manufacturer) that supports the <quote>Enhanced
+Disk Drive Support Specification</quote>.  Both Lilo, the Linux loader, and
+Debian's alternative <command>mbr</command> must use the BIOS to read the
+kernel from the disk into RAM.  If the BIOS int 0x13 large disk access
+extensions are found to be present, they will be utilized. Otherwise,
+the legacy disk access interface is used as a fall-back, and it cannot
+be used to address any location on the disk higher than the 1023rd
+cylinder.  Once Linux is booted, no matter what BIOS your computer
+has, these restrictions no longer apply, since Linux does not use the
+BIOS for disk access.
+
+</para><para>
+
+If you have a large disk, you might have to use cylinder translation
+techniques, which you can set from your BIOS setup program, such as
+LBA (Logical Block Addressing) or CHS translation mode (<quote>Large</quote>).
+More information about issues with large disks can be found in the
+<ulink url="&url-large-disk-howto;">Large Disk HOWTO</ulink>.  If you
+are using a cylinder translation scheme, and the BIOS does not support
+the large disk access extensions, then your boot partition has to fit
+within the <emphasis>translated</emphasis> representation of the
+1024th cylinder.
+
+</para><para>
+
+The recommended way of accomplishing this is to create a small (5-10MB
+should suffice) partition at the beginning of the disk to be used as
+the boot partition, and then create whatever other partitions you wish
+to have, in the remaining area.  This boot partition
+<emphasis>must</emphasis> be mounted on <filename>/boot</filename>,
+since that is the directory where the Linux kernel(s) will be stored.
+This configuration will work on any system, regardless of whether LBA
+or large disk CHS translation is used, and regardless of whether your
+BIOS supports the large disk access extensions.
+
+</para>
+  </sect2>

@@ -1,0 +1,103 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 21994 untranslated -->
+
+  <sect2 arch="sparc"><title>Booting from NFS</title>
+<para>
+
+To install the system via NFS, simply select
+<userinput>NFS</userinput> for the location of the images and files
+and follow the instructions provided.  You will be prompted for the
+<filename>server:/directory</filename> where the images are located.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="sparc" id="boot-tftp"><title>Booting with TFTP</title>
+
+&boot-installer-intro-net.xml;
+
+<para>
+
+On machines with OpenBoot, simply enter the boot monitor on the
+machine which is being installed (see 
+<xref linkend="invoking-openboot"/>).
+Use the command <userinput>boot net</userinput> to boot from a TFTP
+and RARP server, or try <userinput>boot net:bootp</userinput> or
+<userinput>boot net:dhcp</userinput> to boot from a TFTP and BOOTP
+or DHCP server. Some older OpenBoot revisions require using
+the device name, such as <userinput>boot le()</userinput>; these
+probably don't support BOOTP nor DHCP.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="sparc"><title>Booting from a CD-ROM</title>
+
+&boot-installer-intro-cd.xml;
+
+<para>
+
+Most OpenBoot versions support the <userinput>boot cdrom</userinput>
+command which is simply an alias to boot from the SCSI device on ID 6
+(or the secondary master for IDE based systems). You may have to use
+the actual device name for older OpenBoot versions that don't support
+this special command. Note that some problems have been reported on Sun4m
+(e.g., Sparc 10s and Sparc 20s) systems booting from CD-ROM.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="sparc">
+  <title>Booting from Floppies</title>
+<para>
+
+To boot from floppy on a Sparc, use 
+<informalexample><screen>
+
+Stop-A -> OpenBoot: "boot floppy"
+
+</screen></informalexample>
+</para><para>
+
+Be warned that the newer Sun4u (ultra) architecture does not support
+floppy booting. A typical error message is <computeroutput>Bad magic
+number in disk label - Can't open disk label package</computeroutput>.
+Furthermore, a number of Sun4c models (such as the IPX) do not support
+the compressed images found on the disks, so also are not supported.
+
+</para><para>
+
+Several Sparcs (e.g. Ultra 10) have an OBP bug that prevents them from
+booting (instead of not supporting booting at all). The appropriate
+OBP update can be downloaded as product ID 106121 from
+<ulink url="http://sunsolve.sun.com"></ulink>.
+
+</para><para>
+
+If you are booting from the floppy, and you see messages such as 
+<informalexample><screen>
+
+Fatal error: Cannot read partition
+Illegal or malformed device name
+
+</screen></informalexample>
+then it is possible that floppy booting is simply not supported on
+your machine.
+
+</para>
+  </sect2>
+
+  <sect2 arch="sparc"><title>IDPROM Messages</title>
+<para>
+
+If you cannot boot because you get messages about a problem with
+``IDPROM'', then it's possible that your NVRAM battery, which holds
+configuration information for you firmware, has run out.  See the
+<ulink url="&url-sun-nvram-faq;">Sun NVRAM FAQ</ulink> for more
+information.
+
+</para>
+  </sect2>
