@@ -185,7 +185,7 @@ compiled-stamp: $(SOURCEDIR)/udeb-sources-stamp
 # Generate a sources.list from configuration
 
 sources.list:
-	if [[ "$(MIRROR)x" != "x" ]]; then \
+	if [ "$(MIRROR)x" != "x" ]; then \
 		echo "deb $(MIRROR) $(SUITE) main/debian-installer" > sources.list; \
 	else \
 	cat $(SYSTEM_SOURCES_LIST) | grep ^deb\  |grep -v file:/ | grep -v debian-non-US | \
