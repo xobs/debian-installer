@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 18637 untranslated -->
+<!-- original version: 20466 -->
 
  <sect1 id="boot-troubleshooting">
  <title>Problemas e Processo de Instalação</title>
@@ -138,64 +138,70 @@ após o computador inicializar no sistema de instalação.
   </sect2>
 
   <sect2 id="submit-bug">
-  <title>Enviando Relatórios de Falhas</title>
+  <title>Enviando Relatórios de Instalação</title>
 <para>
 
-Caso ainda tiver problemas, por favor envia um relatório de falha. 
-Envie um e-mail para  <email>submit@bugs.debian.org</email>. Você
-<emphasis>deve</emphasis> incluir o seguinte como primeiras 
-linhas do e-mail:
+Caso ainda tenha problemas, envie por favor um relatório de instalação. 
+Nós também encorajamos o envio de relatórios de instalação até mesmo 
+se tudo correr bem durante a instalação, assim teremos uma grande quantiade
+de informações disponíbies e uma larga quantidade de configurações de hardware.
+Utilize este modelo quando preencher o relatório de instalação e envie um 
+relatório de erro como falha no pseudo pacote
+"installation-reports" para o destinatário
+<email>submit@bugs.debian.org</email>.
 
 <informalexample><screen>
 
-Package: install-reports
-Version: <replaceable>versão</replaceable>
+Package: installation-reports
+
+Debian-installer-version: &lt;Preencha com a data e de onde pegou a imagem de 
+instalação&gt;
+uname -a: &lt;O resultado da execução do comando uname -a no aviso de comando&gt;
+Date: &lt;Data e Hora da instalação&gt;
+Method: &lt;Como foi feita a instalação? Seu método de inicialização? Caso foi feita
+	uma instalação via rede, a partir de onde? feita através de Proxy?&gt;
+
+Machine: &lt;Descrição da máquina (eg, IBM Thinkpad R32)&gt;
+Processor:
+Memory:
+Root Device: &lt;IDE?  SCSI?  Nome do dispositivo?&gt;
+Root Size/partition table: &lt;Sinta-se livre para colar toda a tabela de 
+      partições com notas de que partições estão montadas aonde.&gt;
+Saída do comando lspci e lspci -n:
+
+Lista de checagens da instalação do sistema básico:
+[O] = OK, [E] = Error (por favor, descreva abaixo), [ ] = não utilizei/tentei
+
+Initial boot worked:    [ ] (inicialização do sistema funcionou)
+Configure network HW:   [ ] (Configuração do Hardware de rede)
+Config network:         [ ] (Configuração de rede)
+Detect CD:              [ ] (Detecção do CD)
+Load installer modules: [ ] (Carregar módulos do programa de instalação)
+Detect hard drives:     [ ] (Detecção de discos rígidos)
+Partition hard drives:  [ ] (Particionamento de discos rígidos)
+Create file systems:    [ ] (Criação de sistemas de arquivos)
+Mount partitions:       [ ] (Montagem de partições)
+Install base system:    [ ] (Instalação do sistema básico)
+Install boot loader:    [ ] (Instalação do gerenciador de partida)
+Reboot:                 [ ] (Reinicialização)
+
+Comentários/Problemas:
+
+&lt;Descrição da instalação, como uma conversa e qualquer idéia, idéias, 
+comentários que teve durante a instalação (você precisará envia-la em 
+inglês).&gt;
 
 </screen></informalexample>
 
-Tenha certeza de preencher <replaceable>versão</replaceable> com a 
-versão do debian-installer que você usou. 
-O número de versão pode ser encontrado pressionando-se a tecla 
-<keycap>F1</keycap> no aviso <prompt>boot:</prompt> de sua mídia de 
-instalação. Você também deve mencionar de onde baixou a mídia de 
-instalação ou o conjunto de CDs que baixou.
-
 </para><para>
 
-Você deverá incluir as seguintes informações em seu relatório 
-de falha. Caso use o programa <command>reportbug</command> para
-enviar seu relatório, esta informação será incluída automaticamente.
-
-<informalexample><screen>
-
-<phrase arch="i386">
-flavor:        <replaceable>tipo da imagem que está usando</replaceable>
-</phrase>
-architecture:  &architecture; 
-model:         <replaceable>o nome do fabricante do seu hardware e modelo</replaceable>
-memory:        <replaceable>quantidade de memória RAM</replaceable>
-scsi:          <replaceable>placa adaptadora SCSI, se tiver</replaceable>
-cd-rom:        <replaceable>modelo da unidade de CD-ROM e tipo da interface, e.g., ATAPI</replaceable>
-network card:  <replaceable>placa de rede, se tiver</replaceable>
-pcmcia:        <replaceable>detalhes de qualquer dispositivo PCMCIA</replaceable>
-
-</screen></informalexample>
-
-</para><para>
-
-Dependendo da natureza da falha, pode também ser útil relatar 
-se está instalando para discos IDE ou SCSI, outros periféricos como
-audio, capacidade de disco e modelo da placa de vídeo.
-
-</para><para>
-
-Neste relatório de falha, descreva qual é o seu problema incluindo
-pelo menos as mensagens visíveis do kernel no evento do travamento
-do kernel. Descreva os passos que realizou até o estado defeituoso
-do sistema.
+No relatório de falha, descreva qual foi seu problema, incluindo as 
+últimas mensagens visíveis do kernel caso o kernel tenha travado. 
+Descreva os passos realizados até chegar no momento do problema.
 
 </para>
 
   </sect2>
 
  </sect1>
+

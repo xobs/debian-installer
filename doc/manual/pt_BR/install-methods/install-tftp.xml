@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 11648 untranslated -->
-<!-- original version: 1.13 -->
+<!-- original version: 22232 -->
 
  <sect1 condition="supports-tftp" id="install-tftp">
  <title>Preparando os arquivos para inicialização via rede usando TFTP</title>
@@ -15,7 +14,7 @@ a máquina configurada para suportar inicialização em sua máquina
 específica.
 
 </para><para>
-Você precisará configurar um servidor TFTP e para máquinas CATS um 
+Você precisará configurar um servidor TFTP e para muitas máquinas um 
 servidor BOOTP
 <phrase condition="supports-rarp">, ou um servidor RARP</phrase>
 <phrase condition="supports-dhcp">, ou um servidor DHCP</phrase>.
@@ -90,13 +89,19 @@ o SunOS 4.x, SunOS 5.x (a.k.a. Solaris), e para o GNU/Linux.
 
 Para ter o servidor TFTP pronto, você terá primeiro que ter certeza
 que o <command>tftpd</command> está ativado. Ele normalmente é ativado
-tendo a seguinte linha no seu arquivo <filename>/etc/inetd.conf</filename>:
+através da seguinte linha no seu arquivo <filename>/etc/inetd.conf</filename>:
 
 <informalexample><screen>
 
-tftp dgram udp wait root /usr/sbin/tcpd in.tftpd /tftpboot
+tftp dgram udp wait nobody /usr/sbin/tcpd in.tftpd /tftpboot
 
 </screen></informalexample>
+
+Os pacotes da Debian geralmente configurarão isto corretamente por padrão
+quando forem instalados.
+
+</para><para>
+
 
 Olhe neste arquivo e lembre-se do diretório que é usado como 
 argumento para o <command>in.tftpd</command>; você irá precisa dele
@@ -108,22 +113,24 @@ diagnosticar erros de inicialização. Se você tiver que mudar o
 processo em execução <command>inetd</command> de que o arquivo foi 
 modificado.
 Em máquinas Debian, execute <userinput>/etc/init.d/inetd
-reload</userinput> (para a potato/2.2 e sistemas mais novos use
-<userinput>/etc/init.d/inetd reload</userinput>); em outras máquinas,
+reload</userinput>; em outras máquinas,
 encontre o ID do processo do <command>inetd</command> e execute o 
 comando <userinput>kill -HUP <replaceable>inetd-pid</replaceable></userinput>.
 
-</para><para arch="i386">
+</para><note arch="i386"><para>
 
 Para usar o método Pre-boot Execution Environment (PXE) na 
 inicialização TFTP, você somente precisará de um servidor TFTP
-com o suporte a <userinput>tsize</userinput>. Em um servidor 
-&debian; o <command>tftp-hpa</command> se qualifica.
+com o suporte a <userinput>tsize</userinput>. 
+Em um servidor &debian;, os pacotes <classname>atftpd</classname> e
+<classname>tftpd-hpa</classname> se qualificam para esta tarefa; nós
+recomendamos o <classname>tftpd-hpa</classname>.
 
-</para><para arch="mips">
+</para></note><para arch="mips">
 
-Caso seu servidor TFTP seja uma máquina GNU/Linux rodando 
-o 2.4.x você precisará configurar o seguinte em seu servidor:
+Se tiver a intenção de instalar a Debian em uma máquina SGI e seu servidor
+TFTP é uma máquina GNU/Linux executando o kernel do Linux 2.4, você precisará
+configurar o seguinte em seu servidor:
 
 <informalexample><screen>
 
@@ -131,7 +138,7 @@ echo 1 > /proc/sys/net/ipv4/ip_no_pmtu_disc
 
 </screen></informalexample>
 
-para desligar o discovery de caminho MTU, caso contrário
+para desligar a descoberta de caminho MTU, caso contrário
 o PROM do Indy não poderá baixar o kernel. Além disso, tenha 
 certeza que os pacotes TFTP são enviados de uma porta de origem
 que não seja maior que 32767 ou o download irá parar após o 
@@ -174,50 +181,21 @@ em RAM via TFTP. Para a inicialização via rede, use o
 <filename>yaboot-netboot.conf</filename>. Apenas renomeie este arquivo
 para <filename>yaboot.conf</filename> no diretório do TFTP.
 
-</para><para arch="not-powerpc">
-
-Freqüentemente, o arquivo que o cliente TFTP irá procurar é
-<replaceable>client-ip-in-hexclient-architecture</replaceable>. Para 
-computar <replaceable>client-ip-in-hex</replaceable>, pegue cada 
-byte do endereço IP do cliente e transforme-o em notação hexadecimal. 
-Se tiver uma máquina por perto com o programa <command>bc</command>,
-você poderá usa-lo. Primeiro digite o comando <userinput>obase=16</userinput>
-para ajustar a base para hex, então entre com componentes individuais
-do IP do cliente um de cada vez. Como em
-<replaceable>client-arquitetura</replaceable>, tente alguns valores.
-
 </para><para arch="i386">
+Para a inicialização usando o PXE, tudo que precisa fazer já está feito no 
+arquivo tar <filename>netboot/netboot.tar.gz</filename>. Simplesmente 
+descompacte este arquivo no diretório de imagem de inicialização do 
+<command>tftpd</command>. Tenha certeza que seu servidor DHCP está configurado
+para passar o arquivo <filename>/pxelinux.0</filename> através do
+<command>tftpd</command> para inicializar através dele.
 
-Para a inicialização usando o PXE, você poderá usar o gerenciador
-de inicialização incluído com o <classname>syslinux</classname>: 
-<filename>pxelinux.0</filename>. O gerenciador de partida deverá 
-ser copiado na pasta <filename>/tftpboot</filename>. Então crie um 
-subdiretório dentro de <filename>/tftpboot</filename> com o nome
-<filename>/tftpboot/pxelinux.cfg</filename> e dentro daquele 
-diretório crie um arquivo texto chamado <filename>default</filename>. 
-Aqui está um exemplo do conteúdo do arquivo <filename>default</filename>:
-
-<informalexample><screen>
-
-default lanlinux
-prompt 1
-
-label lanlinux
-  kernel tftpboot.img
-  append load initrd=root.bin devfs=nomount
-
-</screen></informalexample>
-
-<userinput>devfs=nomount</userinput> é importante, porque
-sem ele você poderá ter problemas durante a montagem do sistema 
-de arquivos root.bin assim que o kernel inicializar.
-
-</para><para arch="i386">
-
-Finalmente, copie o arquivo <filename>tftpboot.img</filename> e
-<filename>root.bin</filename> do arquivo ftp da Debian para a 
-pasta <filename>/tftpboot</filename>, onde o gerenciador de partida
-procurará por eles.
+</para><para arch="ia64">
+Para inicialização através do PXE, tudo que precisa fazer já está feito 
+no arquivo tar <filename>netboot/netboot.tar.gz</filename>. Simplesmente
+descompacte este arquivo para o diretório de imagem de <command>tftpd</command>. 
+Tenha certeza que seu servidor dhcp está configurado para passar o arquivo
+<filename>/debian-installer/ia64/elilo.efi</filename> para o 
+<command>tftpd</command> para inicializar através dele.
 
 </para>
 
@@ -361,8 +339,21 @@ como opção <userinput>filename=</userinput> no arquivo
 
 </para>
    </sect3>
+
+   <sect3 arch="mips">
+   <title>Inicialização através de TFTP na Broadcom BCM91250A</title>
+<para>
+
+Você não precisa configurar o DHCP de uma forma especial porque você 
+passará o caminho compelto do arquivo que será carregado para o CFE.
+
+</para>
+   </sect3>
   </sect2>
 
+<!-- FIXME: commented out since it seems too old to be usable and a current
+            way is not known
+  
   <sect2 id="tftp-low-memory">
   <title>Instalação via TFTP em sistemas com pouca memória</title>
 <para>
@@ -440,6 +431,7 @@ caso o endereço IP do cliente seja 192.168.1.3, faça
 </para>
 
   </sect2>
+FIM do FIXME -->
 
   <sect2 condition="supports-nfsroot">
   <title>Instalando com o TFTP e NFS root</title>

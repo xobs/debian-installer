@@ -1,42 +1,48 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 11648 untranslated -->
-<!-- original version: 1.4 -->
-
+<!-- original version: 18660 -->
 
   <sect2 arch="ia64"><title>Particionamento para &arch-title;</title>
+
+<para>
+O particionador de discos <command>partman</command> é a ferramenta de 
+particionamento padrão do programa de instalação. Ele gerencia o conjunto
+de partições e seus pontos de montagem para se assegurar que os discos e 
+sistemas de arquivos estão corretamente configurados para realizar uma 
+instalação com sucesso. Atualmente ele utiliza o <command>parted</command> com
+ferramenta de particionamento de discos.
 <para>
 
-A firmware EFI do ia64 suporta dois formatos de tabelas de partições (ou 
-volumes de disco); GPT e a MS-DOS. O MS-DOS é o formato tipicamente usado
-em PCs i386 e não é mais recomendado para sistemas ia64. O programa de 
-instalação fornece dois programas de particionamento, o
-<ulink url="cfdisk.txt"><command>cfdisk</command></ulink> e
-<ulink url="parted.txt"><command>parted</command></ulink>.
-O <command>parted</command> pode gerenciar ambas as tabelas GPT e a MS-DOS, enquanto
-o <command>cfdisk</command> somente pode gerenciar tabelas MS-DOS. É 
-muito importnate notar que caso seu disco foi particionado anteriormente
-com uma tabela GPT e agora você deseja usar as tabelas MS-DOS, você deverá 
-usar o <command>parted</command> para criar a nova tabela de partição. 
-Isto é necessário porque as duas tabelas usam áreas diferentes do disco
-e o programa <command>cfdisk</command> não sabe como remover uma partição GPT.
-</para><para>
+   <note>
+   <title>Formatos Reconhecidos do EFI</title>
+<para>
 
-Uma diferença importante entre o <command>cfdisk</command> e o
-<command>parted</command> está na forma que eles identificam um
-"tipo" de partição. O <command>cfdisk</command> utiliza um byte na tabela
-de partição (por exemplo, 83 para a partição ext2 do Linux), 
-enquanto o <command>parted</command> identifica o "tipo" da partição
-examinando os dados dentro dela. Isto significa que o 
-<command>parted</command> não considerará uma partição como sendo 
-swap até que você a formate. De forma idêntica, ele não considerará 
-uma partição como linux ext2 até que crie um sistema de arquivos nela.
-O <command>parted</command> lhe permite criar sistemas de arquivos
-e formatar o espaço para swap e você deverá fazer isto dentro do 
-<command>parted</command>.
+A firmware EFI do IA64 suportam dois formatos de tabelas de partição (ou 
+volumes de disco; o GTP e MS-DOS. O MS-DOS, o formato tipicamente usado
+nos PCs i386, não é mais recomendado para sistemas IA64. No entanto, o 
+programa de instalação também oferece o <command>cfdisk</command>,
+você deverá somente usar o <ulink url="parted.txt">
+<command>parted</command></ulink> pois é o único que podem gerenciar ambas
+as tabelas de partição GPT e MS-DOS corretamente.
+
+</para></note>
+
+<para>
+
+O método automático de particionamento para o <command>partman</command>
+aloca uma partição EFI como primeira partição no disco. Você também poderá 
+configurar uma partição sob o item <guimenuitem>Particionamento Guiado
+</guimenuitem> através do menu principal de uma maneira parecida com a 
+configuração de uma partição <emphasis>swap</emphasis>.
+
 
 </para><para>
-Infelizmente, o <command>parted</command> é um programa guiado via linha
-de comando e não é tão fácil de usar quanto o <command>cfdisk</command>.
+
+O particionador <command>partman</command> trabalhará com a maioria dos 
+layouts de disco.
+Para os casos mais raros aonde é necessário fazer a configuração manual do 
+disco, você poderá usar o interpretador de comandos como descrito acima e 
+executar o utilitário <command>parted</command> diretamente usando sua 
+interface de linha de comando.
 Assumindo que deseja apagar todo o disco e criar uma tabela GPT e algumas
 partições, então algo similar como a sequência dos seguintes comandos
 deverá ser usada:
@@ -73,14 +79,54 @@ pois ele procura por blocos defeituosos na partição.
 <para>
 
 O ELILO, o gerenciador de partida do ia64, requer uma partição 
-contendo o sistema de arquivos FAT. Caso usar tabelas de partição
-GPT, então esta partição deverá ter a opção <userinput>boot</userinput> 
-definida; se usar tabelas de partição em formato MS-DOS, então esta 
-partição deverá ser do tipo "EF". Esta partição deverá ser grande o 
-suficiente para armazenar o gerenciador de partida e quaisquer 
-kernels e discos RAM que deverá ter. Um tamanho mínimo deverá estar 
-em torno de 16MB, mas se você estiver fazendo desenvolvimentos ou 
-testes com kernels diferentes, então 128MB será uma melhor escolha.
+no sistema de arquivos com a opção <userinput>boot</userinput> definida. 
+Esta partição deverá ser grande o suficiente para armazenar o gerenciador 
+de partida e quaisquer kernels e discos RAM que deverá ter. Um tamanho mínimo 
+deverá estar em torno de 
+20MB, mas se quiser executar diversos tipos de kernels, então 128MB será uma
+melhor escolha.
+</para><para>
+
+O gerenciador de partida EFI e o Shell do EFI suportam completamente
+a tabela de partições GPT assim a partição de partida não precisa 
+necessariamente ser a primeira partição no disco ou até mesmo estar 
+no mesmo disco. Isto é conveniente se esquecer de alocar a partição e 
+somente perceber isto após formatar as outras partições em seus discos.
+O programa de particionamento <command>partman</command> procurar por uma
+partição EFI ao mesmo tempo que procurar por uma partição <emphasis>raíz</emphasis>
+corretamente configurada.
+Isso lhe dá a oportunidade de corrigir o layout do disco antes da instalação
+de pacotes ser iniciada.
+O método mais fácil de corrigir esta omissão é diminuir o tamanho da última 
+partição do disco para liberar espaço livre o suficiente para adicionar uma
+partição EFI.
+
+</para><para>
+
+É altamente recomendado que você aloque uma partição de partida EFI no mesmo
+disque que seu sistema de arquivos <emphasis>raíz</emphasis>.
 
 </para>
+
+
   </sect2>
+
+  <sect2 arch="ia64"><title>Partições de Diagnóstico do EFI</title>
+
+<para>
+
+A firmware do EFI é significantemente mais sofisticada que as BIOS 
+normais vistas na maioria dos PCs x86.
+Alguns vendedores de sistemas levam vantaem da habilidade do EFI em 
+acessar arquivos e executar programas através do sistema de arquivos 
+do disco rígido para armazenar programas de diagnóstico e utilitários
+de gerenciamento baseados no EFI no disco rígido.
+Este é um sisetma de arquivos separado em formato FAT no disco de sistema. 
+Consulte a documentação do sistema e acessórios que vem com o sistema para
+detalhes.
+O método mais fácil de configurar uma partição de diagnóstico é ao mesmo 
+tempo que configura sua partição de inicialização do EFI.
+
+</para>
+
+   </sect2>

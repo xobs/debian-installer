@@ -1,54 +1,156 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 19278 -->
+<!-- original version: 20629 -->
 
-  <sect2 arch="m68k"><title>Inicializando através de um Disco Rígido</title>
-
-&boot-installer-intro-hd.xml;
+  <sect2 arch="m68k"><title>Selecionando um Método de Instalação</title>
 <para>
 
-O único método de isntalaçõa para &arch-title; amiga e mac é através do 
-disco rígido. Esta também é uma opçõa para atari &arch-title;. <emphasis>Em 
-outras palavras o cdrom não é inicializável.</emphasis> Estas subarquiteturas
-tem a opção de três diferentes discos na memória ram: <filename>cdrom</filename> 
-(<filename>root.bin</filename> em um cdrom), 
-<filename>hd-media</filename>, e
-<filename>nativehd</filename>. Estas imagens de discos ram se diferem apenas pela
-fonte de arquivos usaa na instalação de pacotes. O ramdisk 
-<filename>cdrom</filename> usa um cdrom para obter pacotes do debian-installer. O 
-disco ram <filename>hd-media</filename> usa um arquivo de imagem iso de um 
-cdrom a partir de um disco rígido. Finalmente, o <filename>nativehd</filename> 
-usa a rede para instalar pacotes.
+Argumas subarquiteturas &arch-title; tem a opção de fazer a inicialização ou 
+usando um kernel do Linux 2.4.x ou 2.2.x. Quando tal escolha existe, tente o 
+kernel do Linux 2.4.x. O programa de instalação também requer pouca memória quando 
+utiliza o kernel 2.4.x pois o suporte ao kernel 2.2.x requer um disco ram de 
+tamanho fixo enquanto o 2.4.x usa o tmpfs.
 
 </para><para>
 
-Algumas subarquiteturas &arch-title; tem a opção de inicialização para ambos os 
-kernels do Linux 2.4.x ou 2.2.x e discos ram associados. Quando tal escolha 
-está disponível, tente primeiro o kernel 2.4.x e o disco ram associado. Os M68k
-não possui um kernel 2.4.x funcional.
+Se estiver usando um kernel do Linux versão 2.2.x, então se assegura de usar um 
+disco ram com tamanho suficiente para acomodea-lo, veja <ulink url="&disturl;/main/installer-&architecture;/current/images/MANIFEST">MANIFEST</ulink>. Você também 
+precisará do parâmetro do kernel &ramdisksize;.
 
 </para><para>
 
-Tenha certeza que <userinput>root=/dev/ram</userinput> é um de seus parâmetros
-do kernel. O amiga e atari atualmente não funcionam com o bogl, assim se 
-você estiver vendo erros no bogl, você precisará adicionar o parâmetro
-de inicialização do kernel <userinput>debian-installer/framebuffer=false</userinput>.
-</para><para>
-
-Se estiver usando um kernel do linux 2.2.x, então você deverá se assegurar que 
-está usando um disco ram construído para acomoda-lo, veja 
-<ulink url="&disturl;/main/installer-&architecture;/current/images/MANIFEST">MANIFESTO</ulink>. Você também precisará do parâmetro do kernel &ramdisksize;.
+Tenha certeza de que o parâmetro <userinput>root=/dev/ram</userinput> está entre os
+parâmetros de seu kernel.
 
 </para><para>
 
-Se estive tenod problemas, veja 
+Se estiver tenod problemas, verifique o link
 <ulink url="&url-m68k-cts-faq;">cts's &arch-title; debian-installer FAQ</ulink>.
 
 </para>
 
+<itemizedlist>
+	<listitem><xref linkend="m68k-boot-amiga"/></listitem>
+	<listitem><xref linkend="m68k-boot-atari"/></listitem>
+	<listitem><xref linkend="m68k-boot-bvme6000"/></listitem>
+	<listitem><xref linkend="m68k-boot-mac"/></listitem>
+	<listitem><xref linkend="m68k-boot-mvme"/></listitem>
+	<listitem><xref linkend="m68k-boot-q40"/></listitem>
+</itemizedlist>
 
-  </sect2>
 
-  <sect2 arch="m68k"><title>Inicializando através do AmigaOS</title>
+    <sect3 arch="m68k" id="m68k-boot-amiga"><title>Amiga</title>
+<para>
+
+O único método disponível de instalação para o amiga é a prtir do disco
+rígido
+(veja <xref linkend="m68k-boot-hd"/>).  
+<emphasis>Em outras palavras, não é possível iniciar a partir do CD-ROM.</emphasis> 
+
+</para><para>
+
+O Amiga atualmente não funciona com o bogl, assim se estiver vendo
+erros no bogl, você precisará adicionar o parâmetro
+de inicialização do kernel <userinput>debian-installer/framebuffer=false</userinput>.
+
+</para>
+    </sect3>
+
+    <sect3 arch="m68k" id="m68k-boot-atari"><title>Atari</title>
+<para>
+
+O programa de instalação para o atari pode ser iniciado ou 
+a partir da unidade de discos (veja <xref linkend="m68k-boot-hd"/>) ou através
+de disquetes (veja <xref linkend="boot-from-floppies"/>).
+<emphasis>Em outras palavras, não é possível inicializar a partir de um CD-ROM.</emphasis> 
+
+</para><para>
+
+O Atari atualmente não funciona com o bogl, se estiver vendo erros no bogl, você
+precisará incluir um parâmetro do kernel
+<userinput>debian-installer/framebuffer=false</userinput>.
+	
+</para>
+    </sect3>
+ 
+    <sect3 arch="m68k" id="m68k-boot-bvme6000"><title>BVME6000</title>
+<para>
+
+O programa de instalação para o BVME6000 pode ser iniciado a partir de um CD-ROM
+(veja <xref linkend="m68k-boot-cdrom"/>), disquete
+(veja <xref linkend="boot-from-floppies"/>) ou através da rede
+(veja <xref linkend="boot-tftp"/>).
+
+</para>
+
+    </sect3>
+
+    <sect3 arch="m68k" id="m68k-boot-mac"><title>Macintosh</title>
+<para>
+
+O único método de instalação disponível para o mac é 
+através de um disco rígido (veja <xref linkend="m68k-boot-hd"/>).
+<emphasis>Em outras palavras, não é possível fazer a inicialização
+através de um CDROM.</emphasis> Os Macs também não tem um kernel 
+2.4 funcional.
+
+</para>
+    </sect3>
+
+    <sect3 arch="m68k" id="m68k-boot-mvme"><title>MVME147 e MVME16x</title>
+<para>
+
+O programa de instalação para o MVEM147 e MVEM16x podem ser iniciados ou a 
+partir de disquetes (veja <xref linkend="boot-from-floppies"/>) ou 
+através da rede (veja <xref linkend="boot-tftp"/>).  
+<emphasis>Em outras palavras, não é possível dar a partida através de um CD-ROM.</emphasis> 
+
+</para>
+    </sect3>
+
+    <sect3 arch="m68k" id="m68k-boot-q40"><title>Q40/Q60</title>
+<para>
+
+O único método de instalação disponível para o Q40/Q60 é 
+através do disco rígido (veja <xref linkend="m68k-boot-hd"/>).
+<emphasis>Em outras palavras, não é possível dar a partida através do CD-ROM.</emphasis> 
+
+</para>
+    </sect3>
+ </sect2>
+
+
+
+  <sect2 arch="m68k" id="m68k-boot-hd"><title>Inicializando através de um Disco Rígido</title>
+
+&boot-installer-intro-hd.xml;
+
+<para>
+Pelo menos seis diferentes discos ram podem ser usados para inicialização
+através do disco riido, três tipos cada com e sem o suporte ao kernel 
+do Linux 2.2.x (veja <ulink url="&disturl;/main/installer-&architecture;/current/images/MANIFEST">MANIFEST</ulink> para detalhes).
+
+</para><para>
+
+Os três tipos diferentes de discos ram são <filename>cdrom</filename>,
+<filename>hd-media</filename> e <filename>nativehd</filename>. Estes 
+discos ram se diferem somente com relação a origem de instalação
+dos pacotes. O disco ram <filename>cdrom</filename> usa uma unidade de 
+cdrom para obter os pacotes do debian-installer. O disco ram
+<filename>hd-media</filename> usa um arquivo de imagem iso de CD 
+que foi copiado para o disco rígido. Finalmente o disco ram 
+<filename>nativehd</filename> usa a rede para instalar os pacotes.
+
+</para>
+
+<itemizedlist>
+	<listitem><xref linkend="m68k-boothd-amiga"/></listitem>
+	<listitem><xref linkend="m68k-boothd-atari"/></listitem>
+	<listitem><xref linkend="m68k-boothd-mac"/></listitem>
+	<listitem><xref linkend="m68k-boothd-q40"/></listitem>
+</itemizedlist>
+
+
+    <sect3 arch="m68k" id="m68k-boothd-amiga"><title>Inicialização através do AmigaOS</title>
 <para>
 
 No <command>Workbench</command>, inicie a instalação do Linux 
@@ -68,10 +170,10 @@ deverá iniciar automaticamente, assim você poderá continuar em
 <xref linkend="d-i-intro"/>.
 
 </para>
-  </sect2>
+  </sect3>
 
 
-  <sect2 arch="m68k"><title>Inicializando através do Atari TOS</title>
+  <sect3 arch="m68k" id="m68k-boothd-atari"><title>Inicializando através do Atari TOS</title>
 <para>
 
 No desktop GEM, inicie o processo de instalação do Linux dando
@@ -91,15 +193,27 @@ deverá iniciar automaticamente, você então poderá continuar seguindo os
 passos em <xref linkend="d-i-intro"/>.
 
 </para>
-  </sect2>
+  </sect3>
 
 
-  <sect2 arch="m68k"><title>Inicializando através do MacOS 68k</title>
+  <sect3 arch="m68k" id="m68k-boothd-mac"><title>Inicializando através do MacOS 68k</title>
 <para>
+Você dever'amanter o sistema Mac original e inicializar através dele. 
+Será <emphasis>essencial</emphasis> que, quando estiver 
+inicializando o MacOS para preparar o gerenciador de partida
+Pengui, você mantenha pressionada a tecla <keycap>shift</keycap> para 
+evitar que a extensões sejam carregadas. Se não usar o MacOS exceto
+para carregar o linux, você pode fazer a mesma coisa removendo todas
+as extensões e painéis de controle da pasta de sistema do Mac. Caso
+contrário, as extensões podem continuar rodando e causa problemas 
+aleatórios durante a execução do kernel do Linux.
+
+</para><para>
+
 
 Os Macs requerem o gerenciador de partida <command>Penguin</command>. 
-Se não souber trabalhar com um arquivo <command>Stuffit</command>, o 
-&penguin19.hfs; é uma imagem de disco com o <command>Penguin</command> 
+Se não tiver ferramentas para trabalhar com um arquivo <command>Stuffit</command>, 
+o &penguin19.hfs; é uma imagem de disco com o <command>Penguin</command> 
 descompactado. 
 <xref linkend="create-floppy"/> descreve como realizar a cópia desta
 imagem para um disquete.
@@ -118,7 +232,21 @@ diretório <filename>Penguin</filename>. O programa de inicialização
 (<filename>initrd.gz</filename>) do diretório
 <filename>install</filename> clicando nos botões correspondentes
 no lado superior direito e navegando pelos diálogos e selecionando os 
-arquivos. Feche o diálogo <guilabel>Settings</guilabel>, salve as 
+arquivos. 
+
+</para><para>
+
+Para definir parâmetros de inicialização no Penguin, selecione 
+<guimenu>File</guimenu> -&gt;
+<guimenuitem>Settings...</guimenuitem> então vá até a tab
+<guilabel>Options</guilabel>. Os parâmetros de partida podem ser digitados
+na área de textos. Se deseja ter sempre estas opções disponíveis, selecione 
+<guimenu>File</guimenu> -&gt; <guimenuitem>Save Settings as
+Default</guimenuitem>.
+
+</para><para>
+
+Feche o diálogo <guilabel>Settings</guilabel>, salve as 
 configurações e inicie o programa de partida usando o item
 <guimenuitem>Boot Now</guimenuitem> do menu
 <guimenu>File</guimenu>.
@@ -134,39 +262,20 @@ alguns segundos, o programa de instalação iniciará automaticamente, então
 poderá continuar seguindo os passos de <xref linkend="d-i-intro"/>.
 
 </para>
-  </sect2>
+    </sect3>
 
-
-  <sect2 arch="m68k"><title>Parâmetros de inicialização do Penguin</title>
+    <sect3 arch="m68k" id="m68k-boothd-q40"><title>Inicialização através do Q40/Q60</title>
 <para>
-No programa de inicialização Pengun, selecione <guimenu>File</guimenu> -&gt;
-<guimenuitem>Settings...</guimenuitem>, então vá até a tab
-<guilabel>Options</guilabel>. Os parâmetros de inicialização podem ser digitados
-na área de entrada de textos. Se sempre deseja usar estas configurações, 
-selecione <guimenu>File</guimenu> -&gt; <guimenuitem>Save Settings as
-Default</guimenuitem>.
+FIXME
 
+</para><para>
+O programa de instalação deverá iniciar automaticamente, e poderá 
+continuar seguindo os passos descritos em <xref linkend="d-i-intro"/>.
 </para>
-  </sect2>
- 
-  <sect2 arch="m68k"><title>Limitações do Macintosh</title>
-
-<para>
-No caso do Macintosh, você deverá manter o sistema Mac original e 
-inicializar através dele. É <emphasis>essêncial</emphasis> que, 
-durante a inicialização do MacOS para preparar o gerenciador de 
-partida Penguin, você mantenha pressionada a tecla <keycap>shift</keycap> 
-para prevenir que as extensões sejam carregadas. Se você não vai usar o 
-MacOS, exceto para carregar o linux, você pode fazer a mesma coisa removendo
-as extensões e painéis de controle da pasta de sistemas do Mac. Caso contrário
-as extensões podem ser deixadas rodando e causar probleas aleatórios com o kernel
-do Linux que estiver sendo executado.
-
-</para>
-&boot-installer-intro-cd.xml;
+   </sect3>
   </sect2>
 
-  <sect2 arch="m68k"><title>Booting from a CD-ROM</title>
+  <sect2 arch="m68k" id="m68k-boot-cdrom"><title>Inicialização através de CD-ROM</title>
 <para>
 
 

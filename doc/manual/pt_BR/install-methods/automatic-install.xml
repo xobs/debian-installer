@@ -11,8 +11,79 @@ instalações totalmente automáticas. Os pacotes da Debian
 que tem por objetivo fazer isso incluem o
 <classname>fai</classname> (que usa um servidor de instalação),
 <classname>replicator</classname>,
-<classname>systemimager</classname>, e
-<classname>autoinstall</classname>.
+<classname>systemimager</classname>, 
+<classname>autoinstall</classname> e o
+próprio programa de instalação da Debian.
 
 </para>
+
+<sect2>
+<title>Instalação automática usando o programa de instalação da Debian</title>
+
+<para>
+O programa de instalação da Debian suporte a instalação automática
+através de arquivos de pré-configuração. Um arquivo de pré-configuração
+pode ser carregado através da rede ou de uma mídia removível e usada para 
+responder as questões feitas durante o processo de instalação.
+
+</para><para>
+
+O arquivo de pré-configuração usa o mesmo formato utilizado
+pelo comando <command>debconf-set-selections</command>. Um 
+método fácil de gerar um arquivo completo contendo as pré-configurações 
+é fazer uma instalação manual e então usar o 
+<filename>debconf-get-selections</filename> que vem com o pacote 
+<classname>debconf-utils</classname> par fazer o dump da base de dados
+do debconf e do cdebconf que estão em /var/log/debian-installer/cdebconf 
+para um arquivo simples:
+
+<informalexample><screen>
+debconf-get-selections --installer > arquivo
+debconf-get-selections >> arquivo
+</screen></informalexample>
+
+</para><para>
+
+Alternativamente este arquivo é um bom e bem documentado ponto de partida
+que pode editar:
+
+&example-preseed.xml;
+
+</para><para>
+
+Assim que tiver um arquivo de pré-configuração, você pode edita-lo se 
+necessário e coloca-lo em um servidor web ou copia-lo para uma mídia
+de inicialização do programa de instalação. Onde quer que coloque o 
+arquivo, você precisará passar um parâmetro para o programa de instalação
+no momento da inicialização dizendo para usar aquele arquivo.
+
+</para><para>
+
+Para fazer o programa de instalação utilizar o arquivo de pré-configuração
+copiado através da rede, passe o parâmetro
+<emphasis>preseed/url=http://url/para/preseed.cfg</emphasis> para o kernel. 
+É claro que a pré-configuração não terá efeito até que o programa de instalação
+configure a rede para baixar o arquivo, desta forma isto é mais útil caso 
+o programa de instalação pode configurar a rede através do DHCP sem perguntar 
+qualquer questão. Você pode desejar ajustar a prioridade da instalação para 
+crítica para evitar qualquer questão durante a configuração da rede. Veja
+<xref linkend="installer-args"/>.
+
+</para><para>
+
+Para colocar um arquivo de pré-configuração em um CD, você precisará 
+regravar a imagem ISO após incluir seu arquivo de pré-configuração. Veja
+a página de manual do mkisofs para deatlhes. Alternativamente, coloque o 
+arquivo que contém as pré-configurações em um disquete e 
+passe o argumento use preseed/file=/floppy/preseed.cfg para o kernel.
+
+</para><para arch="i386">
+
+Se estiver inicializando através de um memory stick USB, simplesmente copie
+seu arquivo de pré-configuração para o sistema de arquivos da memory stick 
+e edite o arquivo syslinux.cfg adicionando preseed/file=/hd-media/preseed.cfg 
+como parâmetro de inicialização do kernel.
+
+</para>
+</sect2>
  </sect1>

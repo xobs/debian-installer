@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 11648 untranslated -->
-<!-- original version: 1.3 -->
-
+<!-- original version: 22232 -->
 
   <sect2 arch="mips" id="boot-tftp"><title>Inicialização através de TFTP</title>
+
+   <sect3>
+   <title>Inicialização através de TFTP na SGI Indys</title>
+
 <para>
 
 Após entrar no monitor de comando use
@@ -23,10 +25,47 @@ unsetenv netaddr
 no monitor de comandos para fazer isto.
 
 </para>
+  </sect3>
+
+   <sect3>
+   <title>Inicialização através de TFTP no Broadcom BCM91250A</title>
+<para>
+
+Na placa de avaliação Broadcom BCM91250A, será necessário carregar o gerenciador
+de partida SiByl através do TFTP que então carregará e iniciará o Debian Installer. 
+Na maioria dos casos, você primeiramente obterá ume ndereço IP através do DHCP, mas
+também é possível configurar um endereço fixo. Para usar um endereço DHCP, você 
+deverá digitar o seguinte comando na linha de comando do CFE:
+
+<informalexample><screen>
+
+ifconfig eth0 -auto
+
+</screen></informalexample>
+
+Assim que obter um endereço IP, você poderá carregar o SiByl com o seguinte
+comando:
+
+<informalexample><screen>
+
+boot 192.168.1.1:/boot/sibyl
+
+</screen></informalexample>
+
+Substitua o endereço IP listado neste exemplo pelo nome ou endereço IP 
+do seu servidor TFTP. Assim que executar este comando o programa de 
+instalação será automaticamente carregado.
+
+</para>
+</sect3>
+
   </sect2>
 
 
   <sect2 arch="mips"><title>Parâmetros de Inicialização</title>
+
+   <sect3>
+   <title>Inicialização através de TFTP na Indys SGI</title>
 <para>
 
 Nos Indys SGI você poderá adicionar parâmetros de 
@@ -41,4 +80,19 @@ usando o servidor bootp/dhcp server - Exemplo:
 <command>bootp():/boot/tftpboot.img</command>
 
 </para>
+  </sect3>
+
+   <sect3>
+   <title>Inicialização através de TFTP na Broadcom BCM91250A</title>
+<para>
+
+Você não poderá passar qualquer parâmetro de inicialização diretamente através
+da linha de comando do CFE. Ao invés disso, oderá editar o arquivo 
+<filename>/boot/sibyl.conf</filename> no servidor TFTP e adicionar 
+seus parâmetros de inicialização na variável <replaceable>extra_args</replaceable>.
+
+</para>
+  </sect3>
+
+
   </sect2>
