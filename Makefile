@@ -82,7 +82,7 @@ UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE)) $(EXTRAS)
 
 DPKGDIR=$(TREE)/var/lib/dpkg
 TEMP=./tmp
-TMP_MNT=./mnt/$(TREE)
+TMP_MNT=./mnt/
 
 # Build tree location.
 TREE=$(TEMP)/tree
