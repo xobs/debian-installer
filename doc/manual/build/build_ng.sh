@@ -19,7 +19,7 @@ if [ -z "$destination" ]; then
 fi
 
 if [ -z "$formats" ]; then
-        formats="new.ps new.pdf html"
+        formats="newps newpdf html htmlone ps pdf text"
         #formats="html"
 fi
 
@@ -33,24 +33,15 @@ fi
 #noarchdir="yes"
 
 for lang in $languages; do
-    echo "Language: $lang";
-    for arch in $architectures; do
-	echo "Architecture: $arch"
-	if [ -n "$noarchdir" ]; then
-		destsuffix="$lang"
-	else
-		destsuffix="${lang}/${arch}"
-	fi
-	./buildone_ng.sh "$arch" "$lang" "$formats"
-	mkdir -p "$destination/$destsuffix"	
-	for format in $formats; do
-	    if [ "$format" = html ]; then
-		mv ./build.out/html/ "$destination/$destsuffix"
-	    else
-		mv ./build.out/*.${format} "$destination/$destsuffix"
-	    fi
+	for arch in $architectures; do
+#		for format in $formats; do
+			if [ -n "$noarchdir" ]; then
+				destsuffix="$lang"
+			else
+				destsuffix="${lang}/${arch}"
+			fi
+			./buildone_ng.sh $arch $lang $formats -d "$destination/$destsuffix"
+#		done
 	done
-	./clear.sh
-    done
 done
 
