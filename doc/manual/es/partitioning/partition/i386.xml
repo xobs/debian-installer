@@ -1,86 +1,85 @@
-<!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 untranslated -->
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 11648 -->
 
-
-  <sect2 arch="i386"><title>Partitioning for &arch-title;</title>
+  <sect2 arch="i386"><title>Particionado en &arch-title;</title>
 <para>
 
-The PC BIOS generally adds additional constraints for disk
-partitioning.  There is a limit to how many <quote>primary</quote> and
-<quote>logical</quote> partitions a drive can contain.  Additionally, with pre
-1994-98 BIOS, there are limits to where on the drive the BIOS can boot
-from.  More information can be found in the
- <ulink url="&url-partition-howto;">Linux Partition HOWTO</ulink> and the 
-<ulink url="&url-phoenix-bios-faq-large-disk;">Phoenix BIOS FAQ</ulink>, but
-this section will include a brief overview to help you plan most
-situations.
+Generalmente, la BIOS del computador añade restricciones adicionales
+para particionar el disco. Hay un límite al número de particiones
+<quote>primarias</quote> y <quote>lógicas</quote> que se pueden crear. 
+Adicionalmente, con las BIOS anteriores a 1994-98, existen limitaciones
+sobre los dispositivos desde los cuales se puede iniciar el sistema.
+Para mayor información, vea la documentación acerca de 
+ <ulink url="&url-partition-howto;">cómo particionar en Linux</ulink> y la 
+<ulink url="&url-phoenix-bios-faq-large-disk;">FAQ de la BIOS Phoenix</ulink>, 
+pero de todas maneras, esta sección incluye una visión general para guiarlo
+en la mayoría de las situaciones posibles.
 
 </para><para>
 
-<quote>Primary</quote> partitions are the original partitioning scheme for PC
-disks.  However, there can only be four of them.  To get past this
-limitation, <quote>extended</quote> and <quote>logical</quote> partitions were invented.  By
-setting one of your primary partitions as an extended partition, you
-can subdivide all the space allocated to that partition into logical
-partitions.  You can create up to 60 logical partitions per extended
-partition; however, you can only have one extended partition per
-drive.
+Las particiones <quote>primarias</quote> son el método original
+de particionado para discos. Sin embargo, solamente pueden haber cuatro de ellas. 
+Para rebasar esta limitación, se inventaron las particiones de tipos
+<quote>extendidas</quote> y <quote>lógicas</quote>. Estableciendo su
+partición primaria como partición extendida, puede subdividir todo su
+espacio asignado dentro de particiones lógicas. Puede crear hasta
+60 particiones lógicas en cada partición extendida; sin embargo,
+puede tener solamente una partición extendida por disco.
 
 </para><para>
 
-Linux limits the partitions per drive to 15 partitions for SCSI disks
-(3 usable primary partitions, 12 logical partitions), and 63
-partitions on an IDE drive (3 usable primary partitions, 60 logical
-partitions). However the normal &debian; system provides 
-only 20 devices for partitions, so you may not install on partitions
-higher than 20 unless you first manually create devices for those
-partitions. 
+Linux limita a 15 particiones como máximo por cada disco SCSI
+(3 particiones primarias, 12 particiones lógicas), y 63
+particiones en una unidad IDE (3 particiones primarias, 60 particiones lógicas). 
+Sin embargo, los sistemas normales de &debian; proveen sólo 20 dispositivos
+por partición, por lo tanto, no podrá instalar sobre la partición número 20 o siguientes, 
+a menos que haya creado manualmente los dispositivos para esas particiones.
+
 
 </para><para>
 
-If you have a large IDE disk, and are using neither LBA addressing,
-nor overlay drivers (sometimes provided by hard disk manufacturers),
-then the boot partition (the partition containing your kernel image)
-must be placed within the first 1024 cylinders of your hard drive
-(usually around 524 megabytes, without BIOS translation).
+Si tiene un disco IDE relativamente grande, y no esta utilizando LBA,
+ni conductores de overlay (proporcionados a veces por los fabricantes
+de los discos duros), la partición de inicio de su máquina (aquella que
+contiene la imagen del núcleo de Linux) debe estar ubicada en los primeros
+1024 cilindros de su disco duro (generalmente alrededor de 524 megabytes,
+sin considerar la traducción que realiza la BIOS).
+</para><para>
+
+Esta restricción no se aplica si tiene una BIOS relativamente nueva,
+(posterior a 1995-98, dependiendo del fabricante) que soporte las
+<quote>Especificaciones avanzadas de los discos duros</quote>. 
+Ambos Lilo, el cargador de Linux, y la alternativa de Debian 
+<command>mbr</command> deben usar la BIOS para leer el núcleo desde el disco 
+y cargarlo en la RAM. Si la BIOS dispone de las extensiones int 0x13 de acceso a
+discos grandes, se usarán esas extensiones. De otra manera, se 
+utilizará la interfaz primitiva de acceso al disco, que no se podrá usar
+para acceder a posiciones superiores al cilindro 1023. Una vez que se inicie Linux,
+no tiene importancia la BIOS que tenga, ya que las restricciones
+ya no se aplican más, puesto a que Linux no utiliza la BIOS para acceder
+a los discos.
 
 </para><para>
 
-This restriction doesn't apply if you have a BIOS newer than around
-1995-98 (depending on the manufacturer) that supports the <quote>Enhanced
-Disk Drive Support Specification</quote>.  Both Lilo, the Linux loader, and
-Debian's alternative <command>mbr</command> must use the BIOS to read the
-kernel from the disk into RAM.  If the BIOS int 0x13 large disk access
-extensions are found to be present, they will be utilized. Otherwise,
-the legacy disk access interface is used as a fall-back, and it cannot
-be used to address any location on the disk higher than the 1023rd
-cylinder.  Once Linux is booted, no matter what BIOS your computer
-has, these restrictions no longer apply, since Linux does not use the
-BIOS for disk access.
+Si posee un disco grande, podría tener que usar las técnicas para la traducción de
+cilindros, las cuales pueden ser configuradas desde la BIOS, opciones, tales
+como LBA (Dirección lógica de bloques) o traducción de modo (<quote>grande</quote>),
+vía CHS.
+Más información acerca de estos problemas con discos grandes se puede ver en
+la <ulink url="&url-large-disk-howto;">Documentación acerca de discos grandes</ulink>. 
+Si está usando un esquema de traducción de cilindros, y su BIOS no tiene la extensión
+para soportar discos grandes, su partición de inicio debe estar dentro de los primeros
+1024 cilindros (según la visión <emphasis>traducida</emphasis> de la la BIOS).
 
 </para><para>
 
-If you have a large disk, you might have to use cylinder translation
-techniques, which you can set from your BIOS setup program, such as
-LBA (Logical Block Addressing) or CHS translation mode (<quote>Large</quote>).
-More information about issues with large disks can be found in the
-<ulink url="&url-large-disk-howto;">Large Disk HOWTO</ulink>.  If you
-are using a cylinder translation scheme, and the BIOS does not support
-the large disk access extensions, then your boot partition has to fit
-within the <emphasis>translated</emphasis> representation of the
-1024th cylinder.
-
-</para><para>
-
-The recommended way of accomplishing this is to create a small (5-10MB
-should suffice) partition at the beginning of the disk to be used as
-the boot partition, and then create whatever other partitions you wish
-to have, in the remaining area.  This boot partition
-<emphasis>must</emphasis> be mounted on <filename>/boot</filename>,
-since that is the directory where the Linux kernel(s) will be stored.
-This configuration will work on any system, regardless of whether LBA
-or large disk CHS translation is used, and regardless of whether your
-BIOS supports the large disk access extensions.
+La manera recomendada de solucionar este problema, es creando una pequeña partición
+(5 a 10MB deberían ser suficientes) al principio del disco para usadr como partición
+de inicio, y después, en el área restante, crear las otras particiones que desee tener.
+Esta partición de inicio, se <emphasis>debe</emphasis> montar en <filename>/boot</filename>,
+ya que es en este directorio donde se almacenarán los núcleos de Linux.
+Está configuración funcionará en cualquier sistema, sin importar si se utiliza
+traducción LBA o CHS, ni tampoco si su BIOS soporta las extensiones para discos grandes.
 
 </para>
   </sect2>
