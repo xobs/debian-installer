@@ -4,13 +4,13 @@
  7f³70                                                                            ³10
  7f³70   You can enter boot parameters on the Boot: line.                         ³10
  7f³70                                                                            ³10
- 7f³70   For the serial console         console=ttyS0,9600n8                      ³10
+ 7f³70   For the serial console                console=ttyS0,9600n8               ³10
  7f³70                                                                            ³10
- 7f³70   Verbose debugging              DEBCONF_DEBUG=5                           ³10
- 7f³70   Force static network config    netcfg/disable_dhcp=true                  ³10
+ 7f³70   Verbose debugging                     DEBCONF_DEBUG=5                    ³10
+ 7f³70   Force static network config           netcfg/disable_dhcp=true           ³10
  7f³70                                                                            ³10
- 7f³70                                                                            ³10
- 7f³70                                                                            ³10
+ 7f³70   Text mode (improves interactivity     DEBIAN_FRONTEND=text               ³10
+ 7f³70              for slow consoles)                                            ³10
  7f³70                                                                            ³10
  7f³70                                                                            ³10
  7f³70                                                                            ³10

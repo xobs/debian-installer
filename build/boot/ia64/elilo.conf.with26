@@ -1,5 +1,7 @@
+## Elilo only supports up to 16 image definitions, so some desired
+## installer configurations are commented out.
 chooser=textmenu
-default=Linux
+default=Linux26
 delay=20
 prompt
 
@@ -7,66 +9,162 @@ message=${SYSDIR}elilo_menu.msg
 f1=${SYSDIR}general.msg
 f2=${SYSDIR}params.msg
 
-image=${KERNEL}
-    label=Linux
-    description="Install with Linux 2.4"
-    initrd=${INITRD}
-    root=/dev/ram
-    append="ramdisk_size=${RAMDISK_SIZE} --"
-    read-only
-
-image=${KERNEL}
-    label=Expert
-    description="Install in Expert mode with Linux 2.4"
-    initrd=${INITRD}
-    root=/dev/ram
-    append="DEBCONF_PRIORITY=low ramdisk_size=${RAMDISK_SIZE} --"
-    read-only
-
 image=${KERNEL_26}
     label=Linux26
-    description="Install with Linux 2.6"
+    description="Linux 2.6 [VGA console]"
     initrd=${INITRD_26}
     root=/dev/ram
     append="ramdisk_size=${RAMDISK_SIZE_26} --"
     read-only
 
+image=${KERNEL}
+    label=Linux
+    description="Linux 2.4 [VGA console]"
+    initrd=${INITRD}
+    root=/dev/ram
+    append="ramdisk_size=${RAMDISK_SIZE} --"
+    read-only
+
 image=${KERNEL_26}
     label=Expert26
-    description="Install in Expert mode with Linux 2.6"
+    description="Linux 2.6 [Expert mode]"
     initrd=${INITRD_26}
     root=/dev/ram
     append="DEBCONF_PRIORITY=low ramdisk_size=${RAMDISK_SIZE_26} --"
     read-only
 
 image=${KERNEL}
-    label=SerialLinux
-    description="Install with Linux 2.4 (serial console)"
+    label=Expert
+    description="Linux 2.4 [Expert mode]"
     initrd=${INITRD}
     root=/dev/ram
-    append="ramdisk_size=${RAMDISK_SIZE} console=ttyS0,9600n8 DEBIAN_FRONTEND=text --"
+    append="DEBCONF_PRIORITY=low ramdisk_size=${RAMDISK_SIZE} --"
+    read-only
+
+#image=${KERNEL_26}
+#    label=Linux26Serial9600Text
+#    description="Linux 2.6 [9600 baud serial console] [Text frontend]"
+#    initrd=${INITRD_26}
+#    root=/dev/ram
+#    append="ramdisk_size=${RAMDISK_SIZE_26} console=ttyS0,9600n8 DEBIAN_FRONTEND=text --"
+#    read-only
+
+#image=${KERNEL}
+#    label=LinuxSerial9600Text
+#    description="Linux 2.4 [9600 baud serial console] [Text frontend]"
+#    initrd=${INITRD}
+#    root=/dev/ram
+#    append="ramdisk_size=${RAMDISK_SIZE} console=ttyS0,9600n8 DEBIAN_FRONTEND=text --"
+#    read-only
+
+image=${KERNEL_26}
+    label=Linux26Serial9600
+    description="Linux 2.6 [9600 baud serial console]"
+    initrd=${INITRD_26}
+    root=/dev/ram
+    append="ramdisk_size=${RAMDISK_SIZE_26} console=ttyS0,9600n8 --"
     read-only
 
 image=${KERNEL}
-    label=SerialExpert
-    description="Install in Expert mode with Linux 2.4 (serial console)"
+    label=LinuxSerial9600
+    description="Linux 2.4 [9600 baud serial console]"
     initrd=${INITRD}
     root=/dev/ram
-    append="DEBCONF_PRIORITY=low ramdisk_size=${RAMDISK_SIZE} console=ttyS0,9600n8 DEBIAN_FRONTEND=text --"
+    append="ramdisk_size=${RAMDISK_SIZE} console=ttyS0,9600n8 --"
     read-only
 
 image=${KERNEL_26}
-    label=SerialLinux26
-    description="Install with Linux 2.6 (serial console)"
+    label=Linux26Serial38400
+    description="Linux 2.6 [38400 baud serial console]"
     initrd=${INITRD_26}
     root=/dev/ram
-    append="ramdisk_size=${RAMDISK_SIZE_26} console=ttyS0,9600n8 DEBIAN_FRONTEND=text --"
+    append="ramdisk_size=${RAMDISK_SIZE_26} console=ttyS0,38400n8 --"
+    read-only
+
+image=${KERNEL}
+    label=LinuxSerial38400
+    description="Linux 2.4 [38400 baud serial console]"
+    initrd=${INITRD}
+    root=/dev/ram
+    append="ramdisk_size=${RAMDISK_SIZE} console=ttyS0,38400n8 --"
     read-only
 
 image=${KERNEL_26}
-    label=SerialExpert26
-    description="Install in Expert mode with Linux 2.6 (serial console)"
+    label=Linux26Serial115200
+    description="Linux 2.6 [115200 baud serial console]"
     initrd=${INITRD_26}
     root=/dev/ram
-    append="DEBCONF_PRIORITY=low ramdisk_size=${RAMDISK_SIZE_26} console=ttyS0,9600n8 DEBIAN_FRONTEND=text --"
+    append="ramdisk_size=${RAMDISK_SIZE_26} console=ttyS0,115200n8 --"
+    read-only
+
+image=${KERNEL}
+    label=LinuxSerial115200
+    description="Linux 2.4 [115200 baud serial console]"
+    initrd=${INITRD}
+    root=/dev/ram
+    append="ramdisk_size=${RAMDISK_SIZE} console=ttyS0,115200n8 --"
+    read-only
+
+#image=${KERNEL_26}
+#    label=Expert26Serial9600Text
+#    description="Linux 2.6 [Expert mode] [9600 baud serial console] [Text frontend]"
+#    initrd=${INITRD_26}
+#    root=/dev/ram
+#    append="DEBCONF_PRIORITY=low ramdisk_size=${RAMDISK_SIZE_26} console=ttyS0,9600n8 DEBIAN_FRONTEND=text --"
+#    read-only
+
+#image=${KERNEL}
+#    label=ExpertSerial9600Text
+#    description="Linux 2.4 [Expert mode] [9600 baud serial console] [Text Frontend]"
+#    initrd=${INITRD}
+#    root=/dev/ram
+#    append="DEBCONF_PRIORITY=low ramdisk_size=${RAMDISK_SIZE} console=ttyS0,9600n8 DEBIAN_FRONTEND=text --"
+#    read-only
+
+image=${KERNEL_26}
+    label=Expert26Serial9600
+    description="Linux 2.6 [Expert mode] [9600 baud serial console]"
+    initrd=${INITRD_26}
+    root=/dev/ram
+    append="DEBCONF_PRIORITY=low ramdisk_size=${RAMDISK_SIZE_26} console=ttyS0,9600n8 --"
+    read-only
+
+image=${KERNEL}
+    label=ExpertSerial9600
+    description="Linux 2.4 [Expert mode] [9600 baud serial console]"
+    initrd=${INITRD}
+    root=/dev/ram
+    append="DEBCONF_PRIORITY=low ramdisk_size=${RAMDISK_SIZE} console=ttyS0,9600n8 --"
+    read-only
+
+image=${KERNEL_26}
+    label=Expert26Serial38400
+    description="Linux 2.6 [Expert mode] [38400 baud serial console]"
+    initrd=${INITRD_26}
+    root=/dev/ram
+    append="DEBCONF_PRIORITY=low ramdisk_size=${RAMDISK_SIZE_26} console=ttyS0,38400n8 --"
+    read-only
+
+image=${KERNEL}
+    label=ExpertSerial38400
+    description="Linux 2.4 [Expert mode] [38400 baud serial console]"
+    initrd=${INITRD}
+    root=/dev/ram
+    append="DEBCONF_PRIORITY=low ramdisk_size=${RAMDISK_SIZE} console=ttyS0,38400n8 --"
+    read-only
+
+image=${KERNEL_26}
+    label=Expert26Serial115200
+    description="Linux 2.6 [Expert mode] [115200 baud serial console]"
+    initrd=${INITRD_26}
+    root=/dev/ram
+    append="DEBCONF_PRIORITY=low ramdisk_size=${RAMDISK_SIZE_26} console=ttyS0,115200n8 --"
+    read-only
+
+image=${KERNEL}
+    label=ExpertSerial115200
+    description="Linux 2.4 [Expert mode] [115200 baud serial console]"
+    initrd=${INITRD}
+    root=/dev/ram
+    append="DEBCONF_PRIORITY=low ramdisk_size=${RAMDISK_SIZE} console=ttyS0,115200n8 --"
     read-only
