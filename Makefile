@@ -15,10 +15,12 @@ architecture    := $(shell dpkg-architecture -qDEB_HOST_ARCH)
 ifeq "$(architecture)" "i386"
 KVERS=2.4.18
 FLAVOUR=386
+KERNELNAME=vmlinuz
 endif
 ifeq "$(architecture)" "powerpc"
 KVERS=2.4.18
 FLAVOUR=powerpc
+KERNELNAME=vmlinux
 endif
 
 # The type of system to build. Determines what udebs are unpacked into
@@ -123,7 +125,7 @@ TMP_MNT=`pwd`/mnt/
 TREE=$(TEMP)/tree
 
 # This is the kernel image that we will boot from.
-KERNEL=$(TEMP)/vmlinuz
+KERNEL=$(TEMP)/$(KERNELNAME)
 
 build: demo_clean tree stats
 
@@ -240,7 +242,7 @@ tree-stamp:
 
 	# Move the kernel image out of the way, into a temp directory
 	# for use later. We don't need it bloating our image!
-	mv -f $(TREE)/boot/vmlinuz $(KERNEL)
+	mv -f $(TREE)/boot/$(KERNELNAME) $(KERNEL)
 	-rmdir $(TREE)/boot/
 
 	# Copy terminfo files for slang frontend
@@ -270,7 +272,7 @@ endif
 
 	# Add missing symlinks for libraries
 	# (Needed for mklibs.py)
-#	/sbin/ldconfig -n $(TREE)/lib $(TREE)/usr/lib
+	/sbin/ldconfig -n $(TREE)/lib $(TREE)/usr/lib
 
 	# Remove any libraries that are present in both usr/lib and lib,
 	# from lib. These were unnecessarily copied in by mklibs, and
