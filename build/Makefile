@@ -632,7 +632,7 @@ $(TEMP_MINIISO): $(TEMP_BOOT_SCREENS) arch_miniiso
 
 # various kinds of information, for use on debian-cd isos.
 $(DEBIAN_CD_INFO): $(TEMP_BOOT_SCREENS)
-	(cd $(TEMP_BOOT_SCREENS); tar cz .) > $@
+	(cd $(TEMP_BOOT_SCREENS); tar czf - .) > $@
 	./update-manifest $@ $(MANIFEST-DEBIAN_CD_INFO)
 
 $(TEMP_BOOT_SCREENS): arch_boot_screens
