@@ -8,6 +8,13 @@ fi
 arch=${1-i386}
 language=${2-en}
 
+## Function to check result of executed programs and exit on error
+checkresult () {
+    if [ ! "$1" = "0" ]; then
+	exit $1
+    fi
+}
+
 ## First we define some paths to various xsl stylesheets
 stylesheet_profile="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/profiling/profile.xsl"
 stylesheet_html="style-html.xsl"
@@ -171,14 +178,18 @@ $xsltprocessor --stringparam profile.arch "$archspec" \
                --stringparam profile.condition "$cond" \
                --output install.${language}.profiled.xml \
                $stylesheet_profile install.${language}.xml
-		   
+checkresult $?
+
 ## ...then we convert it to the .html...
 $xsltprocessor $stylesheet_html install.${language}.profiled.xml
-		   
+checkresult $?
+
 ## ...and also to the .fo...
 # $xsltprocessor --output install.${language}.fo \
 #                $stylesheet_fo install.${language}.profiled.xml
-		   
+# checkresult $?
+
 ## ...from which we can generate (little bit ugly) pdf/ps/txt.
 # $foprocessor -fo install.${language}.fo -pdf install.${language}.pdf
+# checkresult $?
 
