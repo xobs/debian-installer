@@ -742,10 +742,10 @@
 						<xsl:apply-templates select="tfoot">
 							<xsl:with-param name="frame" select="$tfoot.frame"/>
 						</xsl:apply-templates>
+						<xsl:apply-templates select="tbody"/>
 						<xsl:if test="$tfoot.frame=1 and not(tfoot)">
 							<xsl:text>\hline &#10;</xsl:text>
 						</xsl:if>
-						<xsl:apply-templates select="tbody"/>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:if test="$thead.frame=1 and not(thead)">
@@ -791,7 +791,7 @@
 					<xsl:with-param name="frame" select="$tfoot.frame"/>
 				</xsl:apply-templates>
 				<xsl:if test="$tfoot.frame=1 and not(tfoot)">
-					<xsl:text>\hline &#10;</xsl:text>
+					<xsl:text>\hline  &#10;</xsl:text>
 				</xsl:if>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -1114,9 +1114,7 @@
 		</doc:variables>
 	</doc:template>
 	<xsl:template match="tfoot/row">
-		<xsl:call-template name="generate.table.row.separator">
-			<xsl:with-param name="cline-string" select="$cline-string" />
-		</xsl:call-template>
+		<xsl:call-template name="generate.table.row.separator"/>
 		<xsl:apply-templates/>
 		<xsl:text> \tabularnewline&#10;</xsl:text>
 	</xsl:template>
@@ -1327,16 +1325,6 @@
 		</xsl:call-template>
 	</xsl:if> 
     </xsl:template>
-
-<!--
-
-	DER PLAN:
-
-	1. Finde heraus: CountNonZeroPre, CountNonZeroPost
-	2. If CountNonZeroPre + 1 = position(), print &*CountNonZeroPre
-	3. print &*CountNonZeroPost
-
--->
 
 	<xsl:template name="get.multirow.description.pos">
 		<xsl:if test="$pos = 0">
