@@ -232,7 +232,7 @@ endif
 	# we want to use the ones in usr/lib instead since they came 
 	# from udebs. Only libdebconf has this problem so far.
 	for lib in `find $(TREE)/usr/lib/lib* -type f -printf "%f\n" | cut -d . -f 1 | sort | uniq`; do \
-		rm $(TREE)/lib/$$lib.*; \
+		rm -f $(TREE)/lib/$$lib.*; \
 	done
 	
 	# Now we have reduced libraries installed .. but they are
