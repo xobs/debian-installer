@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 11648 untranslated -->
-<!-- original version: 1.5 -->
+<!-- original version: 18773 -->
 
  <sect1 id="linux-upgrade">
- <title>Instalando o Debian GNU/Linux a partir de um sistema Unix/Linux</title>
+ <title>Instalando a &debian; a partir de um sistema Unix/Linux</title>
 
 <para>
 
-Esta seção explica como instalar o Debian GNU/Linux a partir de um 
+Esta seção explica como instalar a &debian; a partir de um 
 sistema Unix ou Linux existente, sem usar o sistema de instalação
 baseado em ncurses, guiado por menus como explicado no resto deste 
 manual. O HOWTO "cross-install"  foi pedido por usuários que estavam 
-migrando para o Debian GNU/Linux a partir do Red Hat, Mandrake e SUSE. 
+migrando para o &debian; a partir do Red Hat, Mandrake e SUSE. 
 É assumida nesta seção alguma familiaridade com a linha de comando e 
 navegação no sistema de arquivos.
 O símbolo <prompt>$</prompt> significa um comando que será executado por 
@@ -23,7 +22,7 @@ comando no chroot da Debian.
 Uma vez que tiver o novo sistema Debian configurado para sua 
 preferência, você poderá migrar os dados existentes de usuários (se 
 existirem) para ele, e mantê-lo em pleno funcionamento. Isto é 
-chamada instalação do Debian GNU/Linux "sem parada". Este 
+chamada instalação do &debian; "sem parada". Este 
 também é um excelente método para lidar com hardwares que 
 não se comportam de forma amigável com vários tipos de 
 inicialização ou mídias de instalação.
@@ -92,7 +91,7 @@ será referenciado mais adiante abaixo.
 A ferramenta que o Debian installer utiliza, que é reconhecida
 como o método oficial de instalar um sistema básico da Debian, é o 
 <command>debootstrap</command>. Ele utiliza o <command>wget</command>, 
-mas depende somente da <classname>glibc</classname>. Instale o 
+mas depende somente do <classname>/bin/sh</classname>. Instale o 
 <command>wget</command> caso ele ainda não esteja instalado em seu
 sistema, então baixe e instale o <command>debootstrap</command>.
 
@@ -136,7 +135,7 @@ root para instalar estes binários.
   </sect2>
 
   <sect2>
-  <title>Executar o <command>debootstrap</command> (Conectado em rede)</title>
+  <title>Executar o <command>debootstrap</command></title>
 <para>
 
 O <command>debootstrap</command> pode baixar os arquivos 
@@ -149,7 +148,7 @@ partir de <ulink url="http://www.debian.org/misc/README.mirrors"></ulink>.
 
 </para><para>
 
-Se tiver uma versão do CD woody da Debian GNU/Linux montado em 
+Se tiver uma versão do CD &releasename; da &debian; montado em 
 <filename>/cdrom</filename>, poderá substituir por uma url 
 file ao invés de usar http: <userinput>file:/cdrom/debian/</userinput>
 
@@ -172,57 +171,13 @@ no comando <command>debootstrap</command>:
 
 <informalexample><screen>
 
- $ /usr/sbin/debootstrap --arch ARCH woody \
+ $ /usr/sbin/debootstrap --arch ARCH sarge \
      /mnt/debinst http://http.us.debian.org/debian
 
 </screen></informalexample>
 
 </para>
 
-  </sect2>
-
-  <sect2>
-  <title>Executar o <command>debootstrap</command> 
-  (Usando o <filename>basedebs.tar</filename>)</title>
-<para>
-
-O <command>debootstrap</command> pode usar o arquivo
-<filename>basedebs.tar</filename>, caso já tiver uma cópia 
-local. O arquivo <filename>basedebs.tar</filename> é gerado 
-de vez em quando, assim você somente terá a versão mais 
-recente dos arquivos da Debian caso aponte o <command>debootstrap</command> \
-diretamente para um repositório da Debian mostrado na seção anterior.
-
-</para><para>
-
-O arquivo <filename>basedebs.tar</filename> é encontrado no diretório
-<filename>base-images-current</filename> de sua arquitetura Debian, por 
-exemplo: 
-<ulink url="http://http.us.debian.org/debian/dists/woody/main/disks-&architecture;/base-images-current/basedebs.tar"></ulink>
-
-</para><para>
-
-Substitua a sua arquitetura por um dos nomes da lista abaixo no 
-<command>debootstrap</command> command: 
-
-<userinput>alpha</userinput>, 
-<userinput>arm</userinput>,
-<userinput>hppa</userinput>, 
-<userinput>i386</userinput>, 
-<userinput>ia64</userinput>, 
-<userinput>m68k</userinput>,
-<userinput>mips</userinput>, 
-<userinput>mipsel</userinput>, 
-<userinput>powerpc</userinput>, 
-<userinput>s390</userinput>, or
-<userinput>sparc</userinput>.
-<informalexample><screen>
- 
-$ /usr/sbin/debootstrap --arch ARCH --unpack-tarball \
-    /path-to-downloaded/basedebs.tar woody /mnt/debinst
-
-</screen></informalexample>
-</para>
   </sect2>
 
   <sect2>
@@ -304,16 +259,6 @@ proc antes de continuar:
 
 </para>
 
-<para>
-Um usuário da RedHat relatou que em seu sistema isto 
-deve ser feito da seguinte forma:
-
-<informalexample><screen>
-
- # mount -t none proc /proc
-
-</screen></informalexample>
-</para>
    </sect3>
 
    <sect3>
@@ -339,7 +284,7 @@ Para configurar o teclado:
 Para configurar a rede, edite os arquivos
 <filename>/etc/network/interfaces</filename>,
 <filename>/etc/resolv.conf</filename>, e
-<filename>etc/hostname</filename>.
+<filename>/etc/hostname</filename>.
 
 <informalexample><screen>
 
@@ -433,7 +378,7 @@ selecione as fontes do <command>apt</command> executando
 
 <informalexample><screen>
 
- # /usr/sbin/base-config
+ # /usr/sbin/base-config new
 
 </screen></informalexample>
 </para>
@@ -495,19 +440,22 @@ nome de pacote.
 <title>Configurando seu Gerenciador de Inicialização</title>
 <para>
 
-Para tornar seu sistema Debian GNU/Linux inicializável, 
+Para tornar seu sistema &debian; inicializável, 
 ajuste seu gerenciador de inicialização para carregar o kernel
-instalado com sua nova partição raíz.
+instalado com sua nova partição raíz. Note que o debootstrap
+não instala um gerenciador de partida, você deverá executar um 
+apt-get dentro do seu chroot da Debian para faze-lo.
 
 </para><para arch="i386">
 
-Veja <userinput>man lilo.conf</userinput> por instruções de como 
-configurar o gerenciador de partida. Se estiver mantendo o sistema
-que usou para instalar o Debian, apenas adicione uma entrada para a 
-instalação da Debian em seu <filename>lilo.conf</filename>. Você 
-também poderá copia-lo para seu novo sistema e edita-lo lá. Após 
-termina a edição, execute o <command>lilo</command> (lembre-se de 
-usar o <filename>lilo.conf</filename> relativo ao sistema que 
+Veja <userinput>info grub</userinput> ou <userinput>man
+lilo.conf</userinput> por instruções de como configurar um gerenciador de
+partida. Se estiver mantendo o sistema que usou para instalar a Debian, 
+simplesmente adicione uma entrada para a nova instalação da Debian no seu 
+arquivo <filename>menu.lst</filename> ou <filename>lilo.conf</filename>. Para
+o <filename>lilo.conf</filename> você também precisar-a copia-los para o novo 
+sistema e edita-lo lá. Após terminar a edição, execute o <command>lilo</command> 
+(lembre-se de usar o <filename>lilo.conf</filename> relativo ao sistema que 
 está sendo instalado).
 
 </para><para arch="i386">
@@ -558,12 +506,6 @@ label=Debian
 
 Em algumas máquinas, pode ser necessária a utilização de 
 <userinput>ide0:</userinput>  ao invés de <userinput>hd:</userinput>. 
-
-</para><para arch="not-i386;not-powerpc">
-
-<phrase condition="FIXME">
-FIXME: Alguém poderá eventualmente dar um exemplo para esta arquitetura.
-</phrase>
 
 </para>
   </sect2>

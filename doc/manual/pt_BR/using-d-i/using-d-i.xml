@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 11648 untranslated -->
-<!-- original version: 1.5 -->
+<!-- original version: 19074 -->
 
  <chapter id="d-i-intro"><title>Usando o Debian Installer</title>
 
@@ -9,24 +8,36 @@
 
 O Debian installer consiste em um númerro de componentes de propósitos
 especiais para fazer cada tarefa de instalação. Cada componente faz
-sua tarefa, perguntando por questões ao usuário quando necessário para 
-fazer seu trabalho. Caso não tenha problemas, o próximo componente na 
-sequência continua sem interação com o usuário (melhor que 
-várias mensagens de progresso). Quando existe um problema, o usuário 
-verá uma tela de erro, e o menu do program ad einstalação será mostrado
-para selecionar uma ação alternativa. Se não existir problemas, o usuário
-nunca verá o menu do programa de instalação, mas simplesmente responderá 
-questões para cada componente que ativar.
+sua tarefa, perguntando ao usuário questões necessárias para fazer seu
+trabalho. Estas questões possuem prioridades definidas e a prioridade
+das questões a serem mostradas é configurada quando o programa de 
+instalação se inicia.
 
 </para><para>
 
-As questões por si só tem prioridades definidas, e as prioridades
-das questões que serão mostradas tem prioridade. Assim, se o 
-programa de instalação souber o que fazer, e o usuário não precisa 
-se preocupar das outras escolhas que estão disponíveis, então 
-o programa de instalação fará a escolha sozinho e não mostrará a questão.
-Notificações de erros sérios tem a prioridade "crítica" assim o usuário
-sempre será notificado.
+Quando uma instalação padrão é feita, somente questões essenciais
+(alta prioridade) são feitas. Isto resulta em um processo de instalação
+altamente automatizado com pouca interação com o usuário. Os componentes
+são automaticamente executados em sequência; que compoentes são executados
+dependem principalmente do método de instalação que está usando em seu 
+hardware. O programa de instalação usará valores padrões para questões
+que não forem perguntadas.
+
+</para><para>
+
+Se ocorrer um problema, o usuário verá uma tela de erro e o menu do 
+programa de instalação será mostrado para selecionar uma ação alternativa. 
+Se não existir problemas, o usuário nunca verá o menu do programa de instalação, 
+mas simplesmente responderá questões para cada componente que ativar.
+
+</para><para>
+
+Alguns dos valores padrões que o programa de instalação utiliza podem ser 
+influenciados passando parâmetros de inicialização quando o &d-i; é iniciado.
+Por exemplo, se deseja forçar a configuração de rede estática (DHCP é usado
+por padrão se estiver disponível) você deverá adicinar o parâmetro de 
+inicialização <userinput>netcfg/disable_dhcp=true</userinput>.
+Veja <xref linkend="installer-args"/> para ver as opções disponíveis.
 
 </para><para>
 
@@ -35,17 +46,27 @@ dirigida por menus, onde cada passo é controaldo pelo usuário ao
 invés da instalação fazendo cada passo automaticamente na 
 sequência. Para usar o programa em modo manual, no método 
 via meenus, adicione o argumento de inicialização
-<userinput>DEBCONF_PRIORITY=medium</userinput>.
+<userinput>debconf/priority=medium</userinput>.
+
+</para><para>
+
+
+Caso seu hardware requerer opções especiais para os módulos do kernel
+durante sua instalação, você precisará iniciar o programa de instalação
+em modo <quote>expert</quote>. Isto pode ser feito ou usando o comando
+<command>expert</command> para iniicar o programa de isntalação ou adicionando
+o argumento de inicialização <userinput>debconf/priority=low</userinput>.
+O modo expert lhe da controle total sobre o &d-i;.
 
 </para><para>
 
 A tela do programa de instalação normal é baseado em caracteres 
 (como oposto a interface gráfica mais familiar). O mouse não é 
 operacional neste ambiente. Estas são as teclas que você poderá 
-usar para navegar dentro das diversas caixas de diálogo. A seta para
-a <keycap>direita</keycap> ou <keycap>Tab</keycap> move para frente, 
-e separa para <keycap>esquerda</keycap> ou <keycombo> <keycap>Shift</keycap> 
-<keycap>Tab</keycap></keycombo> move para trás entre os botões mostrados
+usar para navegar dentro das diversas caixas de diálogo. A tecla
+<keycap>Tab</keycap> ou seta para <keycap>direita</keycap> move para frente, 
+e <keycombo> <keycap>Shift</keycap> <keycap>Tab</keycap></keycombo> ou 
+seta para <keycap>esquerda</keycap> movem para trás entre os botões mostrados 
 e seleções.
 A seta para <keycap>cima</keycap> e <keycap>baixo</keycap> selecionam 
 os diferentes itens dentro de uma lista com rolagem, e também 
@@ -59,14 +80,14 @@ Use a tecla &enterkey; para ativar as escolhas.
 </para><para arch="s390">
 
 O S/390 não suporta consoles virtuais. Você terá que abrir uma segunda
-ou terceira seção de telnet para ver os logs descritos abaixo.
+ou terceira seção de ssh para ver os logs descritos abaixo.
 
 </para><para>
 
-As mensagens de erro são direcionadas para o terceiro console
-(conhecido como <userinput>tty3</userinput>).  Você poderá acessar este
-console digitando <keycombo><keycap>Left Alt</keycap><keycap>F3</keycap></keycombo>
-(pressione a tecla <keycap>Alt</keycap> enquanto pressiona a tecla de 
+As mensagens de erro são direcionadas para o terceiro console. 
+Você poderá acessar este console digitando <keycombo><keycap>Left Alt</keycap>
+<keycap>F3</keycap></keycombo>
+(pressione a tecla <keycap>Alt</keycap> esquerda enquanto pressiona a tecla de 
 função <keycap>F3</keycap>); volte para o processo de instalação 
 principal pressionando 
 <keycombo><keycap>Left Alt</keycap><keycap>F1</keycap></keycombo>.
@@ -75,11 +96,11 @@ principal pressionando
 
 Esta mensagens também podem ser encontradas no arquivo
 <filename>/var/log/messages</filename>. Após a instalação, esta mensagem
-de log é copiada para <filename>/var/log/installer.log</filename> em seu 
-novo sitema. As outras mensagens de instalação podem ser encontradas em
-<filename>/target/var/log/debian-installer/</filename> durante a 
-isntalação, e <filename>/var/log/debian-installer/</filename>
-após o computador ser iniciado com o sistema recém instalado.
+de log é copiada para <filename>/var/log/debian-installer/messages</filename> 
+em seu novo sistema. As outras mensagens de instalação podem ser encontradas em
+<filename>/var/log/</filename> durante a instalação, e 
+<filename>/var/log/debian-installer/</filename> após o computador ser iniciado com 
+o sistema recém instalado.
 
 </para>
  </sect1>
@@ -101,13 +122,19 @@ em <xref linkend="module-details"/>.
 <term>main-menu</term><listitem><para>
 
 Mostra a lista de componentes para o usuário durante a operação
-de instalação, e inicia um componente selecionado quando ele for 
+de instalação, e inicia um componente quando ele for 
 selecionado. As questões do menu principal são ajustadas para 
-prioridade MEDIA (MEDIUM), assim se sua prioridade for ajustada para 
-ALTA(HIGH) ou CRÍTICA (CRITICAL) (ALTA é o padrão), você não verá o 
+prioridade medium, assim se sua prioridade for ajustada para 
+high ou critical (high é o padrão), você não verá o 
 menu. por outro lado, se existir um erro que requira sua intervenção, 
 a prioridade da questão pode ser temporariamente abaixada para lhe
 permitir resolve-lo, neste caso o menu aparecerá.
+
+</para><para>
+
+Você poderá retornar para o menu principal selecionando o botão
+"Voltar" repetidamente no caminho de um componente que estiver 
+sendo executado atualmente.
 
 </para></listitem>
 </varlistentry>
@@ -133,27 +160,27 @@ Mostra uma lista de paises. O usuário poderá selecionar o país que vive.
 <varlistentry>
 
 
-<term>ddetect</term><listitem><para>
-
-Detecta discos rígidos, ambos instalados ou ligados ao computador.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
-<term>pcmcia</term><listitem><para>
-
-Permite ao usuário configurar as placas PCMCIA usada em 
-notebooks para a rede.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
 <term>kbd-chooser</term><listitem><para>
 
-Mostra uma lista de teclados, onde o usuário poderá escolher o modelo
-que confere mais com o seu.
+Mosta uma lista de teclados, no qual o usuário pode escolher o modelo que 
+é exatamente igual ao que possui.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>hw-detect</term><listitem><para>
+
+Detecta automaticamente a maioria dos hardware do sistema, incluindo placas
+de rede, unidades de disco e PCMCIA.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>cdrom-detect</term><listitem><para>
+
+Procura por um e monta o CD de instalação da Debian.
 
 </para></listitem>
 </varlistentry>
@@ -179,18 +206,28 @@ CD-ROM ou em um disco rígido.
 
 <term>choose-mirror</term><listitem><para>
 
-Mostra uma lista de arquivos de mirrors da Debian. O usuário poderá
-selecionar a fonte dos seus pacotes na instalação. Normalmente um
-CD-ROM ou mirror na rede são selecionados.
+Mostra uma lista de arquivos espelhos (mirrors) do Debian. O usuário pode 
+escolher a origem dos pacotes de instalação.
 
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term>cdrom-detect</term><listitem><para>
+<term>cdrom-checker</term><listitem><para>
 
-Detecta unidades de CD-ROM, ambas instaladas ou conectadas ao seu 
-computador.
+Verifica a integridade de um CD-ROM. Desta forma, o usuário pode ter 
+certeza que seu CD-ROM de instalação não foi corrompido.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+
+<term>lowmem</term><listitem><para>
+
+O lowmem tenta detectar sistemas com pouca memória e então faz várias 
+checagens para remover partes desnecessárias do &d-i; da memória 
+(pelo custo de algumas características).
 
 </para></listitem>
 </varlistentry>
@@ -234,6 +271,26 @@ instruções do usuário.
 </varlistentry>
 <varlistentry>
 
+<term>lvmcfg</term><listitem><para>
+
+Ajuda o usuário com a configuração do 
+<firstterm>LVM</firstterm> (Logical Volume Manager).
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>mdcfg</term><listitem><para>
+
+Permite ao usuário configurar o <firstterm>RAID</firstterm> (Redundant 
+Array of Inexpensive Disks) via software. Este RAID software é 
+normalmente superior a controladoras RAID IDE baratas (pseudo hardware) 
+encontradas em placas mãe mais novas.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
 <term>base-installer</term><listitem><para>
 
 Instala o conjunto mais básico de pacots que permite ao 
@@ -243,11 +300,12 @@ computaodr operar sob o Linux quando for reiniciado.
 </varlistentry>
 <varlistentry>
 
-<term>kernel-chooser</term><listitem><para>
-
-Permite ao usuário escolher a versão do kernel
-do sistema operacional, caso tenha mais de uma versão
-disponível.
+<term>os-prober</term><listitem><para>
+Detecta os sistemas operacionais instalados atualmente no 
+computador e passa esta informação para a instalação do 
+gerenciador de partida, que pode lhe oferecer a possibilidade de adicionar
+os sistemas detectados no menu de inicialização. Isto da ao usuário facilidade 
+de selecionar que sistema operacional deverá ser usado na partida do sistema.
 
 </para></listitem>
 </varlistentry>
@@ -264,7 +322,7 @@ usuário escolher um sistema operacional cada vez que ele é reiniciado.
 </varlistentry>
 <varlistentry>
 
-<term>baseconfig</term><listitem><para>
+<term>base-config</term><listitem><para>
 
 Mostra diálogos para configurar os pacotes do sistema básico de 
 acordo com as preferências do usuário. Isto normalmente é feito
@@ -298,41 +356,6 @@ tarde.
 
  </sect1>
 
- <sect1 id="module-details"><title>Usando Componentes Individuais</title>
-
-&module-languagechooser.xml;
-&module-countrychooser.xml;
-&module-s390-netdevice.xml;
-&module-s390-dasd.xml;
-&module-ddetect.xml;
-&module-pcmcia.xml;
-&module-kbd-chooser.xml;
-&module-netcfg.xml;
-&module-iso-scan.xml;
-&module-choose-mirror.xml;
-&module-cdrom-detect.xml;
-&module-anna.xml;
-&module-autopartkit.xml;
-&module-partitioner.xml;
-&module-partconf.xml;
-&module-prebaseconfig.xml;
-&module-base-installer.xml;
-&module-kernel-chooser.xml;
-
-&module-mips-arcboot-installer.xml;
-&module-alpha-aboot-installer.xml;
-&module-i386-grub-installer.xml;
-&module-i386-lilo-installer.xml;
-&module-hppa-palo-installer.xml;
-&module-ia64-elilo-installer.xml;
-&module-s390-zipl-installer.xml;
-&module-powerpc-yaboot-installer.xml;
-&module-sparc-silo-installer.xml;
-
-&module-baseconfig.xml;
-&module-bugreporter.xml;
-&module-shell.xml;
-
- </sect1>
+&using-d-i-components.xml;
 </chapter>
 
