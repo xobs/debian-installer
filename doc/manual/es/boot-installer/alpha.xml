@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- original version: 25496 -->
 <!-- revisado jfs, 21 noviembre 2004 -->
+<!-- revisado Rudy Godoy, 23 feb. 2005 -->
 
  <sect2 arch="alpha" id="alpha-firmware">
  <title>Firmware de consola Alpha</title>
@@ -43,7 +44,7 @@ arrancar.
 ARC requiere usar una tabla de particiones MS-DOS (como la que crea
 <command>cfdisk</command>) para el disco de arranque. Por consiguiente
 las tablas de particiones MS-DOS están en el formato «nativo» de partición
-cuando se arranca desde ARC. De hecho, puesto que AlphaBIOS contiene
+cuando se arranca desde ARC. De hecho, puesto que «AlphaBIOS» contiene
 una utilidad de particionado de disco, podría preferir particionar
 sus discos desde los menús del firmware antes de instalar Linux.
 
@@ -67,7 +68,7 @@ arrancarse en sistemas con SRM.  No podrá usar el instalador de
 no se dispone de ninguna versión de SRM, si va a utilizar un sistema de 
 arranque dual con Windows NT, o bien si su dispositivo de arranque exige
 la consola ARC para su inicialización BIOS.
-Sin embargo, sí que podrá correr
+Sin embargo, sí que podrá ejecutar 
 &debian; &release; en estos sistemas si usa otra medio de instalación;
 por ejemplo, puede instalar Debian woody con MILO y luego actualizar el
 sistema a &debian; &release;.
@@ -185,21 +186,21 @@ directamente, por lo que se requiere la asistencia de un gestor de
 arranque intermedio. Para la consola SRM, se usa
 <command>aboot</command>, un gestor de arranque pequeño e
 independiente de plataforma.  Para obtener más información sobre
-<command>aboot</command> consulte <ulink url="&url-srm-howto;">COMO de
+<command>aboot</command> consulte <ulink url="&url-srm-howto;">CÓMO de
 SRM</ulink> (desafortunadamente está desactualizado).
 
 </para><para condition="FIXME">
 
-Los parrafos siguientes provienen del manual de instalación de woody y
+Los párrafos siguientes provienen del manual de instalación de woody y
 se incluyen aquí como referencia. Pueden ser útiles a algunas personas
 más adelante cuando Debian vuelva a tener soporte de instalaciones
 basadas en MILO.
 
 </para><para condition="FIXME">
 
-Ningunga de estas consolas puede ejecutar Linux de forma directa por
-lo que es necesario la asistencia de un cargador de arranque
-intermedio. Los cargadores de arranque más utilizados son:
+Ninguna de estas consolas puede ejecutar Linux de forma directa por
+lo que es necesario la asistencia de un gestor de arranque
+intermedio. Los gestores de arranque más utilizados son:
 <command>MILO</command> y <command>aboot</command>.
 
 </para><para condition="FIXME">
@@ -207,7 +208,7 @@ intermedio. Los cargadores de arranque más utilizados son:
 <command>MILO</command> es una consola en sí misma, que reemplaza en
 la memoria a ARC ó SRM. Se puede arrancar <command>MILO</command>
 tanto desde ARM como desde SRM y es la única forma de arrancar un
-sistema Linux desde la consola ARC.  El prgorama
+sistema Linux desde la consola ARC.  El programa
 <command>MILO</command> es dependiente de la plataforma (se necesita
 una versión distinta de <command>MILO</command> para cada tipo de
 sistema) y sólo existe para aquellos sistemas para los que se indica
@@ -217,7 +218,7 @@ desactualizado).
 
 </para><para condition="FIXME">
 
-<command>aboot</command> es un cargador de arranque independiente de
+<command>aboot</command> es un gestor de arranque independiente de
 plataforma y pequeño que sólo puede ejecutarse desde SRM. Para más
 información sobre <command>aboot</command> consulte también el <ulink
 url="&url-srm-howto;">SRM COMO</ulink> (también desafortunadamente
@@ -249,7 +250,7 @@ La mayoría de los AlphaServers y todos los productos actuales de
 servidor y estación de trabajo contienen tanto SRM como AlphaBIOS en
 su firmware. Para máquinas con «mitad de flash», como es el caso de
 diversas placas de evaluación, es posible cambiar de una versión a
-otra al re-grabar el firmware. También es posible ejecutar
+otra al volver a grabar el firmware. También es posible ejecutar
 ARC/AlphaBIOS desde un disquete (usando la orden
 <command>arc</command>) una vez que sea instalado SRM.  Recomendamos
 cambiar a SRM antes de instalar &debian; por estas razones.
@@ -317,8 +318,8 @@ pasar el parámetro <userinput>console=</userinput> al núcleo.
 Esto se puede hacer usando el argumento <userinput>-flags</userinput>
 con la orden <userinput>boot</userinput> de SRM. Los puertos serie
 se nombran de forma similar a sus ficheros correspondientes en
-<userinput>/dev</userinput>. Además hay que repetir ciertas opciónes 
-implícitas que las imagenes de &d-i; requieren cuando se especifican
+<userinput>/dev</userinput>. Además hay que repetir ciertas opciones 
+implícitas que las imágenes de &d-i; requieren cuando se especifican
 parámetros de núcleo adicionales.  Por ejemplo, para arrancar desde
 <userinput>ewa0</userinput> y usar una consola en el primer puerto
 serie, debería escribir:
@@ -355,7 +356,7 @@ arranque y <filename>\milo\<replaceable>subarq</replaceable></filename>
 (donde
 <replaceable>subarq</replaceable> es el nombre de subarquitectura correspondiente)
 como la ruta de sistema operativo en el menú «OS Selection Setup» 
-(Selección de sistema operativo, N. del T.). Las
+(Selección de sistema operativo, N. del t.). Las
 máquinas «ruffian» son una excepción: deberá usar 
 <filename>\milo\ldmilo.exe</filename> como gestor de arranque.
 
@@ -367,7 +368,7 @@ máquinas «ruffian» son una excepción: deberá usar
   <title>Arranque desde disquetes con la consola SRM</title>
 <para>
 
-Debe escribir la siguiente orden en el indicador de comandos de SRM (<prompt>&gt;&gt;&gt;</prompt>):
+Debe escribir la siguiente orden en el indicador de órdenes de SRM (<prompt>&gt;&gt;&gt;</prompt>):
 
 <informalexample><screen>
 &gt;&gt;&gt; boot dva0 -flags 0
@@ -397,7 +398,7 @@ a través de <command>aboot</command>:
 &gt;&gt;&gt; boot dva0 -file linux.bin.gz -flags "root=/dev/fd0 load_ramdisk=1 argumentos"
 </screen></informalexample>
 
-(escrita en una sola línea). Substituya, en caso de que sea necesario, el 
+(escrita en una sola línea). Sustituya, en caso de que sea necesario, el 
 nombre real del dispositivo de arranque SRM por <filename>dva0</filename>, el
 nombre del dispositivo de arranque de Linux por <filename>fd0</filename>, y
 los parámetros de núcleo que desee por <filename>argumentos</filename>.
@@ -435,7 +436,7 @@ cuenta atrás de MILO.
 
 Puede usar una orden como la siguiente
 si desea especificar todos los argumentos explícitamente (por ejemplo,
-proveer parámetros adicionales:
+proveer parámetros adicionales), puede utilizar una orden como esta:
 
 <informalexample><screen>
 MILO&gt; boot fd0:linux.bin.gz root=/dev/fd0 load_ramdisk=1 <!-- arguments -->

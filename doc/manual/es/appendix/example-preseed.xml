@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- original version: 25005 -->
 <!-- actualizado, Rudy Godoy, 5 diciembre 2004 -->
+<!-- revisado Rudy Godoy, 23 feb. 2005 -->
 
 <sect1 id="example-preseed">
 <title>Ejemplo de fichero de preconfiguración</title>
@@ -18,7 +19,7 @@ Para poder presentar este ejemplo correctamente en el manual hemos
 tenido que dividir algunas líneas. Esto se indica con el uso del
 carácter de continuación de línea <quote>\</quote> y un nivel
 de indentación adicional en la línea siguiente. En un fichero de
-preconfiguración real estas líneas debe estar unidas en 
+preconfiguración real estas líneas deben colocarse en 
 <emphasis>una sola línea</emphasis>. Si no lo hace así, la preconfiguración
 fallará con resultados impredecibles.
 </para></note>
@@ -45,24 +46,24 @@ fallará con resultados impredecibles.
 # Asegúrese de copiar este fichero a la ubicación que ha especificado.
 # 
 # Mientras está realizando esto, tal vez quiera cambiar allí a 
-# debconf/priority=critical, para evitar la mayoría de preguntas incluso
+# debconf/priority=critical, para obviar la mayoría de preguntas incluso
 # si la siguiente preconfiguración excluye alguna.
 # También podría definir el tiempo de espera a 1 en syslinux.cfg para
-# evitar la necesidad de presionar Enter para arrancar el instalador.
+# evitar la necesidad de presionar «Enter» para arrancar el instalador.
 #
 # La selección de idioma, país y teclado no puede ser preconfigurada desde
-# un fichero, debido a que se configuran éstas antes de que se cargue
+# un fichero, debido a que éstas se configuran antes de que se cargue
 # el fichero de preconfiguración.
-# En su lugar, para evitar estas preguntas, pase algunos parámetros más
+# En su lugar, para obviar estas preguntas, pase algunos parámetros más
 # al núcleo:
 #
 #    languagechooser/language-name=Spanish
 #    countrychooser/shortlist=ES
 #    console-keymaps-at/keymap=es
 #
-# Note que el núcleo aceptar un máximo de 8 opciones de línes de órdenes
+# Note que el núcleo acepta un máximo de 8 opciones de línea de órdenes
 # y 8 opciones de entorno (incluyendo cualquier opción añadida en forma
-# predeterminada por el instalador). Si éstos se exceden, los núcleos
+# predeterminada por el instalador). Si éstas se exceden, los núcleos
 # 2.4 eliminarán cualquier opción de exceso y los 2.6 darán un mensaje
 # de «panic».
 # Algunas opciones predeterminadas, como «vga=normal» y «devfs=mount»,
@@ -90,11 +91,11 @@ fallará con resultados impredecibles.
 #    for deb in /hd-media/*.deb; do cp $deb /target/tmp; \
 #    chroot /target dpkg -i /tmp/$(basename $deb); done
 
-# Ésta orden se ejecuta tan pronto como se inicie base-config:
+# Ésta orden se ejecuta tan pronto como se inicie «base-config»:
 #base-config base-config/early_command	string echo hola mama
 
-# Ésta orden se ejecuta después de que finalice base-config, y
-# antes de presentar el indicador «login:». Ésta es una buena forma de
+# Ésta orden se ejecuta después de que finalice «base-config», y
+# antes de presentar el indicador «login:». Esta es un buen método de
 # instalar el conjunto de paquetes que desea, o de modificar la
 # configuración del sistema:
 #base-config base-config/late_command	string \
@@ -102,13 +103,13 @@ fallará con resultados impredecibles.
 
 #### Configuración de red.
 
-# Obviamente, ¡esto no funcionará si esta cargando su fichero de 
+# Obviamente, ¡esto no funcionará si está cargando su fichero de 
 # preconfiguración desde la red!. Pero es fantástico si está arrancando
 # desde CD o memoria USB. También puede pasar parámetros de configuración
 # de red en los parámetros del núcleo si está cargando el fichero de
 # preconfiguración desde la red.
 
-# netcfg elegirá una interfaz que en lo posible tenga conexión. Esto
+# «netcfg» elegirá una interfaz que en lo posible tenga conexión. Esto
 # hace que se evite mostrar una lista si existe más de una interfaz.
 d-i  netcfg/choose_interface select auto
 
@@ -132,7 +133,7 @@ d-i netcfg/wireless_wep		string
 # El nombre de máquina dhcp que algunos ISPs usan como un tipo de claves.
 #d-i netcfg/dhcp_hostname	string radish
 
-#### Configuración de servidor espejo (réplica)
+#### Configuración de servidor de réplica
 
 d-i mirror/country		string enter information manually
 d-i mirror/http/hostname	string http.es.debian.org
@@ -192,7 +193,7 @@ d-i  partman-auto/choose_recipe	select \
 #		method{ swap } format{ }
 #	.
 
-# Lo siguiente hace que partman particione automáticamente sin confirmación.
+# Lo siguiente hace que «partman» particione automáticamente sin confirmación.
 d-i partman/confirm_write_new_label	boolean true
 d-i partman/choose_partition		select \
     Finish partitioning and write changes to disk
@@ -200,7 +201,7 @@ d-i partman/confirm			boolean	true
 
 #### Instalación del gestor de arranque.
 
-# GRUB es el gestor de arranque predeterminado (para x86). Si instalar
+# GRUB es el gestor de arranque predeterminado (para x86). Si quiere instalar
 # lilo en su lugar, descomente esto:
 #d-i grub-installer/skip		boolean true
 
@@ -222,20 +223,20 @@ d-i grub-installer/with_other_os	boolean true
 
 ##### Final de la primera fase de instalación.
 
-# Evitar el mensaje final sobre la finalización de la instalación.
+# Obviar el mensaje final sobre la finalización de la instalación.
 d-i prebaseconfig/reboot_in_progress	note 
 
 
 ##### base-config de preconfiguración.
 
-# Evitar el mensaje de bienvenida.
+# Obviar el mensaje de bienvenida.
 base-config base-config/intro	note 
 
-# Evitar el mensaje final.
+# Obviar el mensaje final.
 base-config base-config/login	note 
 
 # Si ha instalado un gestor de ventanas, pero no desea iniciarlo 
-# inmediatamente después que finalice base-config.
+# inmediatamente después que finalice «base-config».
 #base-config base-config/start-display-manager	boolean false
 
 ###### Configuración de zona horaria.
@@ -256,17 +257,17 @@ base-config  tzconfig/choose_country_zone/CA	select Eastern
 # DeNoronha, other)
 base-config  tzconfig/choose_country_zone/BR	select East
 # Muchos países solamente tienen una zona horaria. Si indica al instalador
-# que se encuentra en uno de estos, puede elegir su zona horaria estándar
+# que se encuentra en una de estas, puede elegir su zona horaria estándar
 # a través de esta pregunta.
 base-config  tzconfig/choose_country_zone_single boolean true
-# Esta pregunta se formula como un método de respaldo para otros países 
+# Esta pregunta se formula como un método de soporte para otros países 
 # distintos a los mencionados antes, y que tienen más de una zona horaria. 
 # Puede preconfigurar una de las zonas horarias o «other».
 #base-config  tzconfig/choose_country_zone_multiple select 
 
 ###### Configuración de cuenta.
 
-# Para preconfigurar la clave de superusuario (root), debe colocarla en
+# Para preconfigurar la clave de superusuario, debe colocarla en
 # texto legible en este fichero. Esta no es una buena idea, ¡usela con
 # precaución!
 #passwd passwd/root-password		password r00tme
@@ -292,11 +293,11 @@ base-config  tzconfig/choose_country_zone_single boolean true
 # filesystem y editar la lista en forma manual.
 base-config  apt-setup/uri_type		select http
 
-# Si elige ftp o http, se le preguntará el país y un servidor espejo.
+# Si elige ftp o http, se le preguntará el país y un servidor de réplica.
 base-config  apt-setup/country		select enter information manually
 base-config  apt-setup/hostname		string http.es.debian.org
 base-config  apt-setup/directory	string /debian
-# Para luego de elegir un servidor espejo.
+# Para luego de elegir un servidor de réplica.
 base-config  apt-setup/another	boolean false
 
 # Puede elegir instalar software desde «non-free» y «contrib».
@@ -308,7 +309,7 @@ base-config  apt-setup/security-updates	boolean true
 
 ###### Selección de paquetes.
 
-# Puede elegir instalar cualquier combinación de paquetes que este
+# Puede elegir instalar cualquier combinación de paquetes que esté
 # disponible. Las tareas disponibles al momento de escribir este fichero
 # incluyen: Entorno de escritorio, Servidor web, Servidor de impresión, 
 # Servidor DNS, Servidor de ficheros, Servidor de correos, Base de datos,
