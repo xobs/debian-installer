@@ -89,7 +89,6 @@ get_udebs:
 		package=`echo $$file | cut -d _ -f 1`; \
 		needed=`echo $$needed | sed "s/$$package *//"`; \
 	done; \
-	echo $$needed; \
 	$(APT_GET) -dy install $$needed
 	# Now the udebs are in APTDIR/cache/archives/ and maybe LOCALUDEBDIR,
 	# but there may be other udebs there too besides those we asked for.
@@ -164,7 +163,8 @@ stats:
 # this:
 UPLOAD_DIR=klecker.debian.org:~/public_html/debian-installer/daily/
 daily_build:
-	fakeroot $(MAKE) PATH=$$PATH:. image > log 2>&1
+	fakeroot $(MAKE) PATH=$$PATH:. build > log 2>&1
+	$(MAKE) image
 	scp -q -B log $(UPLOAD_DIR)
 	scp -q -B ../debian-installer.tar.gz \
 		$(UPLOAD_DIR)/debian-installer-$(shell date +%Y%m%d).tar.gz
