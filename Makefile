@@ -29,10 +29,19 @@ UDEBDIR=udebs
 # (Or for udebs that are not yet available for download.)
 LOCALUDEBDIR=localudebs
 
+# Figure out which sources.list to use. The .local one is preferred,
+# so you can set up a locally preferred one (and not accidentially cvs
+# commit it).
+ifeq ($(wildcard sources.list.local),sources.list.local)
+SOURCES_LIST=sources.list.local
+else
+SOURCES_LIST=sources.list
+endif
+
 # All these options makes apt read ./sources.list, and
 # use APTDIR for everything so it need not run as root.
 APT_GET=apt-get --assume-yes \
-	-o Dir::Etc::sourcelist=./sources.list \
+	-o Dir::Etc::sourcelist=./$(SOURCES_LIST) \
 	-o Dir::State=$(APTDIR)/state \
 	-o Debug::NoLocking=true \
 	-o Dir::Cache=$(APTDIR)/cache
