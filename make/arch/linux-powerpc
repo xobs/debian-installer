@@ -3,20 +3,20 @@
 # apple powerpc (newworld) computers
 cd_content: initrd
 	mkdir -p $(CD_IMAGE_TREE)
-	mkdir -p $(CD_IMAGE_TREE)/boot
+	mkdir -p $(CD_IMAGE_TREE)/install/powermac
 
 	$(foreach NAME,$(KERNELNAME), \
-		cp -f $(TEMP)/$(NAME) $(CD_IMAGE_TREE)/boot/$(TYPE)-linux; )
+		cp -f $(TEMP)/$(NAME) $(CD_IMAGE_TREE)/install/powermac/$(TYPE)-linux; )
 
-	cp -f $(INITRD) $(CD_IMAGE_TREE)/boot/
+	cp -f $(INITRD) $(CD_IMAGE_TREE)/install/powermac
 
 	#New-world bootability
-	cp -f boot/powerpc/ofboot.b $(CD_IMAGE_TREE)/boot/
-	cp -f /usr/lib/yaboot/yaboot $(CD_IMAGE_TREE)/boot/
-	cp -f boot/powerpc/boot.msg $(CD_IMAGE_TREE)/boot/
-	cp -f boot/powerpc/$(TYPE)-yaboot.conf $(CD_IMAGE_TREE)/boot/yaboot.conf
+	cp -f boot/powerpc/ofboot.b $(CD_IMAGE_TREE)/install/powermac
+	cp -f /usr/lib/yaboot/yaboot $(CD_IMAGE_TREE)/install/powermac
+	cp -f boot/powerpc/boot.msg $(CD_IMAGE_TREE)/install/powermac
+	cp -f boot/powerpc/$(TYPE)-yaboot.conf $(CD_IMAGE_TREE)/install/powermac/yaboot.conf
 
 
 # creates a bootable cd image for powerpc
 cd_image: cd_content
-	mkisofs -r -T --netatalk -hfs -probe -map boot/powerpc/hfs.map -part -no-desktop -hfs-bless $(CD_IMAGE_TREE)/boot -hfs-volid Debian-Installer/PPC -o $(DEST)/$(TYPE).iso $(CD_IMAGE_TREE)
+	mkisofs -r -T --netatalk -hfs -probe -map boot/powerpc/hfs.map -part -no-desktop -hfs-bless $(CD_IMAGE_TREE)/install/powermac -hfs-volid Debian-Installer/PPC -o $(DEST)/$(TYPE).iso $(CD_IMAGE_TREE)
