@@ -20,6 +20,7 @@ else
 	SYNC="rsync -e ssh"
 	SYNC_BASEDIR="$HOST:$BASEDIR"
 fi
+[ -n "$ROOTCMD" ] || ROOTCMD="fakeroot"
 
 overview () {
     LANG=C echo "$(dpkg --print-architecture) ($(date)) $(whoami)@$(hostname | cut -d . -f 1) $1" >> dest/overview.log
@@ -35,10 +36,10 @@ svn up || true
 
 # Override $TARGETS with custom makefile targets.
 if [ -z "$TARGETS" ]; then
-	TARGETS="$(make all_list |grep '^build')"
+	TARGETS="$($ROOTCMD make all_list |grep '^build')"
 fi
 
-make reallyclean
+$ROOTCMD make reallyclean
 mkdir dest
 touch dest/overview.log
 for t in $TARGETS; do
@@ -46,14 +47,14 @@ for t in $TARGETS; do
     echo
     echo BUILDING IMAGE FOR $t
     echo
-    if fakeroot make $t; then
+    if $ROOTCMD make $t; then
 	overview "$t success"
     else
 	overview "$t failed"
     fi
     ) 2>&1 | tee dest/$t.log # This is allowed to fail
 done
-fakeroot make $(echo $TARGETS | sed 's/build_/stats_/g') | 2>&1 tee dest/stats.txt # This is allowed to fail
+$ROOTCMD make $(echo $TARGETS | sed 's/build_/stats_/g') | 2>&1 tee dest/stats.txt # This is allowed to fail
 
 echo
 echo UPLOADING FILES
