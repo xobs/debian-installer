@@ -1,7 +1,15 @@
 #! /usr/bin/make -f
 
+TYPES=cdrom cdrom144 net
+
 clean:
+	for TYPE in $(TYPES) ; do \
+		$(MAKE) TYPE=$$TYPE clean ; \
+	done
+
 build:
-	$(MAKE) TYPE=net stats cd_content
+	for TYPE in $(TYPES) ; do \
+		$(MAKE) TYPE=$$TYPE stats cd_content ; \
+	done
 
 binary-arch: build
