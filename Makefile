@@ -73,7 +73,7 @@ TREE=$(TEMP)/tree
 CD_IMAGE_TREE=$(TEMP)/cd_image_tree
 
 DPKGDIR=$(TREE)/var/lib/dpkg
-DRIVEREXTRASDIR=$(TREE)/
+DRIVEREXTRASDIR=$(TREE)/driver-tmp
 DRIVEREXTRASDPKGDIR=$(DRIVEREXTRASDIR)/var/lib/dpkg
 
 TMP_MNT:=$(shell pwd)/mnt
