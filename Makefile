@@ -102,7 +102,7 @@ get_udebs:
 	# If there are local udebs, remove them from the list of things to
 	# get. Then get all the udebs that are left to get.
 	needed="$(UDEBS)"; \
-	for file in `find $(LOCALUDEBDIR) -type f -name "*_*" -printf "%f\n" 2>/dev/null`; do \
+	for file in `find $(LOCALUDEBDIR) -name "*_*" -printf "%f\n" 2>/dev/null`; do \
 		package=`echo $$file | cut -d _ -f 1`; \
 		needed=`echo $$needed | sed "s/$$package *//"`; \
 	done; \
