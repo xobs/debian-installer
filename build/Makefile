@@ -759,7 +759,7 @@ _stats:
 	@rm -f $(BASE_TMP)log
 	@[ ! -f $(TEMP)/diskusage.txt ] || $(submake) general-stats
 
-TOTAL_SZ = $(shell du -hs $(TREE) | cut -f 1)
+TOTAL_SZ = $(shell expr $(shell du -bs $(TREE) | cut -f 1) / 1024)
 LIBS_SZ = $(shell [ -d $(TREE)/lib ] && du -hs --exclude=modules $(TREE)/lib |cut -f 1)
 MODULES_SZ = $(shell [ -d $(TREE)/lib/modules ] && du -hs $(TREE)/lib/modules |cut -f 1)
 ifeq ($(TEMP_INITRD),)
@@ -767,26 +767,34 @@ INITRD_SZ = 0
 else
 INITRD_SZ = $(shell expr \( $(shell [ -f $(TEMP_INITRD) ] && du -bs $(TEMP_INITRD) |cut -f 1) + 0 \) / 1024)
 endif
+ifeq ($(TEMP_KERNEL),)
+KERNEL_SZ = 0
+else
 KERNEL_SZ = $(shell expr \( $(foreach kern,$(TEMP_KERNEL),$(shell [ -f $(kern) ] && du -bs $(kern) |cut -f 1)) + 0 \) / 1024)
+endif
+ifeq ($(TARGET),$(ROOT))
+# image without a kernel
+KERNEL_SZ = 0
+endif
 .PHONY: general-stats
 general-stats:
-	@echo 
+	@echo k $(KERNEL_SZ) f $(FLOPPY_SIZE) i $(INITRD_SZ)
 	@echo "System stats for $(targetstring)"
 	@echo "-------------------------"
 	@echo "Installed udebs: $(UDEBS)"
-	@echo "Total system size: $(TOTAL_SZ) ($(LIBS_SZ) libs, $(MODULES_SZ) kernel modules)"
+	@printf "Total system size: $(TOTAL_SZ)k"
+ifneq ($(LIBS_SZ)$(MODULES_SZ),)
+	@echo " ($(LIBS_SZ) libs, $(MODULES_SZ) kernel modules)"
+else
+	@echo
+endif
 	@echo "Initrd size: $(INITRD_SZ)k"
 	@echo "Kernel size: $(KERNEL_SZ)k"
 ifdef FLOPPY_SIZE
-ifeq ($(TARGET),$(ROOT))
-# image without a kernel
-	@echo "Free space: $(shell expr $(FLOPPY_SIZE) - $(INITRD_SZ))k"
-else
 ifneq ($(INITRD_SZ),0)
 	@echo "Free space: $(shell expr $(FLOPPY_SIZE) - $(KERNEL_SZ) - $(INITRD_SZ))k"
 else
-	@echo "Free space: $(shell expr $(FLOPPY_SIZE) - $(KERNEL_SZ) - $(DISK_SZ))k"
-endif
+	@echo "Free space: $(shell expr $(FLOPPY_SIZE) - $(KERNEL_SZ) - $(TOTAL_SZ))k"
 endif
 endif
 	@echo "Disk usage per package:"
