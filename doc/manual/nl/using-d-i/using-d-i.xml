@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 16407 -->
+<!-- original version: 17055 -->
 
  <chapter id="d-i-intro"><title>Het Debian installatiesysteem gebruiken</title>
 
@@ -9,30 +9,39 @@
 Het Debian installatiesysteem bestaat uit een aantal modules die
 zijn ontwikkeld om een specifieke taak uit te voeren tijdens de installatie.
 Elke module voert zijn taak uit, waarbij vragen kunnen worden gesteld
-aan de gebruiker als dat voor die taak nodig is. Als er geen probleem optreedt,
-wordt vervolgd met de eerstvolgende module in de cyclus zonder dat
-daarvoor interactie met de gebruiker nodig is (anders dan voortgangsinformatie).
-Als er wel een probleem optreedt, wordt een scherm met een foutboodschap getoond
-en kan het menu van het installatiesysteem worden getoond zodat de gebruiker
-een alternatieve actie kan selecteren. Als er geen problemen zijn, zal de
-gebruiker het menu van het installatiesysteem nooit zien, maar gewoon de
-achtereenvolgende vragen voor iedere module beantwoorden.
+aan de gebruiker als dat voor die taak nodig is. Aan de vragen zelf is
+een prioriteit toegekend, en de prioriteit van de vragen die zullen worden
+gesteld wordt ingesteld bij het opstarten van het installatiesysteem.
 
 </para><para>
 
-Aan de vragen zelf wordt een prioriteit toegekend. En de prioriteit van de
-vragen die moeten worden gesteld, kan worden ingesteld.
-Dit betekent dat, als voor de prioriteit HIGH (de standaard waarde) is
-gekozen èn het installatiesysteem zelf kan bepalen welke acties nodig zijn
-èn het niet noodzakelijk is dat de gebruiker op de hoogte is van mogelijke
-alternatieve keuzen, dan zal het installatiesysteem zelf de keuze maken en
-de vraag niet tonen. Meldingen van kritische fouten hebben een prioriteit
-CRITICAL waardoor de gebruiker altijd geïnformeerd zal worden.
-<!-- FJP Ik weet niet of de originele tekst helemaal logisch is.
-Volgens mij zou de tweede zin moeten zijn (hij loopt trouwens ook niet):
-Thus, if the priority is set to HIGH (the default value), and the installer
-knows what to do, and the user ... //-->
+Als een standaard installatie wordt uitgevoerd, zullen alleen essentiële
+vragen (met prioriteit HIGH) worden gesteld. Het resultaat is een in hoge
+mate geautomatiseerd installatieproces met weinig interactie met de
+gebruiker. Componenten worden vanzelf in de juiste volgorde uitgevoerd;
+welke componenten worden uitgevoerd wordt hoofdzakelijk bepaald door de
+gekozen installatiemethode en door uw apparatuur. Het installatiesysteem
+zal standaard antwoorden gebruiken voor vragen die niet worden gesteld.
+
+</para><para>
+
+Als er een probleem optreedt, wordt een scherm met een foutboodschap getoond
+en kan het menu van het installatiesysteem worden getoond zodat de gebruiker
+een alternatieve actie kan selecteren. Als er geen problemen zijn, zal de
+gebruiker het menu van het installatiesysteem nooit zien, maar eenvoudig de
+vragen voor iedere opeenvolgende component kunnen beantwoorden. Meldingen van
+kritische fouten hebben een prioriteit CRITICAL waardoor de gebruiker altijd
+geïnformeerd zal worden.
 <!-- FJP Prioriteiten in caps (gebeurt ook later in tekst) //-->
+
+</para><para>
+
+Enkele van de standaard waarden die het installatiesysteem gebruikt, kunnen
+worden gestuurd door opstartparameters mee te geven bij het starten van &d-i;.
+Als u bijvoorbeeld statische netwerkconfiguratie wilt forceren (standaard wordt
+DHCP gebruikt indien dit beschikbaar is), kunt u de opstartparameter
+<userinput>netcfg/use_dhcp=false</userinput> toevoegen. Zie
+<xref linkend="installer-args"/> voor een overzicht van beschikbare opties.
 
 </para><para>
 
@@ -40,9 +49,17 @@ Het is mogelijk dat gevorderde gebruikers zich meer thuis voelen met een
 menugestuurde interface, waarbij niet het installatiesysteem automatisch
 elke stap in volgorde uitvoert maar elke stap door de gebruiker zelf
 wordt bepaald. Om het installatiesysteem op een handmatige, menugestuurde
-manier uit te voeren, moet het opstartargument
+manier uit te voeren, moet de opstartparameter
 <userinput>DEBCONF_PRIORITY=medium</userinput> worden toegevoegd.
-<!-- FJP 'opstartargument'? //-->
+
+</para><para>
+
+Als het voor uw apparatuur noodzakelijk is om parameters mee te geven bij de
+installatie van kernelmodules, dan zal u het installatiesysteem moeten starten
+in de <quote>expert</quote> modus. Dit is mogelijk door voor het opstarten
+van het installatiesysteem ofwel het commando <command>expert</command> te
+gebruiken ofwel de opstartparameter <userinput>DEBCONF_PRIORITY=low</userinput>
+toe te voegen. De expert modus geeft u volledige controle over &d-i;.
 
 </para><para>
 
@@ -50,9 +67,9 @@ De standaard schermweergave van het installatiesysteem is karakter georiënteerd
 (dit in tegenstelling tot de tegenwoordig meer vertrouwde grafische interface).
 De muis is in deze omgeving niet actief. Dit zijn de toetsen waarmee u kunt
 navigeren binnen de diverse configuratieschermen. Om `vooruit' of `terug' te gaan
-tussen getoonde knoppen of selecties, gebruikt u de  pijl <keycap>rechts</keycap>
-of <keycap>Tab</keycap> toets, respectievelijk de pijl <keycap>links</keycap> of
-<keycombo> <keycap>Shift</keycap> <keycap>Tab</keycap> </keycombo>. Met de pijlen
+tussen getoonde knoppen of selecties, gebruikt u de toetsen <keycap>Tab</keycap>
+of pijl <keycap>rechts</keycap>, respectievelijk de <keycombo> <keycap>Shift</keycap>
+<keycap>Tab</keycap> </keycombo> of pijl <keycap>links</keycap>. Met de pijlen
 <keycap>omhoog</keycap> en <keycap>omlaag</keycap> selecteert u de verschillende
 regels in een schuifbare lijst en verschuift u ook de lijst zelf. Daarnaast
 kunt u, bij lange lijsten, een letter intoetsen waadoor meteen het deel van de
@@ -60,7 +77,6 @@ lijst zal worden getoond waarvan de regels met die letter beginnen. Ook kunt
 u met <keycap>Pagina&nbsp;omhoog</keycap> en <keycap>Pagina&nbsp;omlaag</keycap>
 de lijst per pagina verschuiven. Met de <keycap>spatiebalk</keycap> selecteert u
 opties, bijvoorbeeld bij een keuzevak. Gebruik &enterkey; om keuzes te activeren.
-<!-- FJP Pijlen en tabtoetsen beter andersom (eerst tab)! //-->
 
 </para><para arch="s390">
 
@@ -72,7 +88,7 @@ telnet sessie openen om de hieronder beschreven logboeken te bekijken.
 Foutmeldingen worden omgeleid naar de derde console (bekend als 
 <userinput>tty3</userinput>). U kunt toegang krijgen tot deze console door
 op <keycombo><keycap>linker Alt</keycap><keycap>F3</keycap></keycombo>
-te drukken (houd de <keycap>linker Alt</keycap> toets vast terwijl u de 
+te drukken (houd de linker <keycap>Alt</keycap> toets vast terwijl u de 
 <keycap>F3</keycap> functietoets indrukt); u keert terug naar het hoofd
 installatiescherm met
 <keycombo><keycap>linker Alt</keycap><keycap>F1</keycap></keycombo>.
