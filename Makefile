@@ -314,14 +314,17 @@ $(TYPE)-tree-stamp:
 
 	# Unpack the udebs with dpkg. This command must run as root
 	# or fakeroot.
+	echo -n > diskusage-$(TYPE).txt
 	oldsize=0; for udeb in $(UDEBDIR)/*.udeb ; do \
 		pkg=`basename $$udeb` ; \
 		dpkg --force-overwrite --root=$(TREE) --unpack $$udeb ; \
 		newsize=`du -s $(TREE) | awk '{print $$1}'` ; \
 		usedsize=`echo $$newsize - $$oldsize | bc`; \
-		echo pkg $$pkg used $$usedsize KiB; \
+		echo $$usedsize KiB used by pkg $$pkg >>diskusage-$(TYPE).txt;\
 		oldsize=$$newsize ; \
 	done
+	sort -n < diskusage-$(TYPE).txt > diskusage-$(TYPE).txt.new && \
+	mv diskusage-$(TYPE).txt.new diskusage-$(TYPE).txt
 
 	# Clean up after dpkg.
 	rm -rf $(DPKGDIR)/updates
@@ -534,6 +537,8 @@ stats: tree
 	@echo "Initrd size: $(COMPRESSED_SZ)k"
 	@echo "Kernel size: $(KERNEL_SZ)k"
 	@echo "Free space: $(shell expr $(FLOPPY_SIZE) - $(KERNEL_SZ) - $(COMPRESSED_SZ))k"
+	@echo "Disk usage per package:"
+	@sed 's/^/  /' < diskusage-$(TYPE).txt
 # Add your interesting stats here.
 
 
