@@ -66,7 +66,7 @@
 #d-i	preseed/early_command		string wget http://url/to/my.udeb -O /tmp/my.udeb ; udpkg -i /tmp/my.udeb
 # This command is run just before the install finishes, but when there is
 # still a usable /target directory.
-#d-i	preseed/late_command		string for deb in /hd-media/*.deb; do cp $deb /target/tmp; chroot /target dpkg -i /tmp/$deb; done
+#d-i	preseed/late_command		string for deb in /hd-media/*.deb; do cp $deb /target/tmp; chroot /target dpkg -i /tmp/$(basename $deb); done
 # This command is run after base-config is done, just before the login:
 # prompt. This is a good way to install a set of packages you want, or to
 # tweak the configuration of the system.
