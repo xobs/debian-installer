@@ -5,10 +5,12 @@ arch-image: $(IMAGE)
 # 2. copy over kernel, initrd
 # 3. install syslinux
 $(IMAGE): $(INITRD)
+ifdef KERNELNAME
 	-if [ "$(UPX)" ] ; then \
 		$(foreach NAME,$(KERNELNAME), \
 			$(UPX) -9 $(TEMP)/$(NAME); ) \
 	fi
+endif
 
 	mkfs.msdos -i $(DOS_VOLUME_ID) -n $(DOS_VOLUME_LABEL) -C $@.new $(FLOPPY_SIZE)
 	# mkfs.msdos gets the mode wrong (bug filed)
