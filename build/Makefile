@@ -628,7 +628,7 @@ $(TEMP_EXTRA): $(STAMPS)extra-$(targetstring)-stamp
 	install -d $(shell dirname $@)
 	install -d $(TREE)
 	set -e; if [ $(INITRD_FS) = ext2 ]; then \
-		$(genext2fs) $@; \
+		genext2fs -d $(TREE) -b $(IMAGE_SIZE) -r 0 $@; \
 	else \
 		echo "Unsupported filesystem type"; \
                 exit 1; \
