@@ -458,7 +458,7 @@ endif
 
 	# Collect the used UTF-8 strings, to know which glyphs to include in
 	# the font.
-	cp graphic.utf $(TEMP)/all.utf
+	cat graphic.utf needed-characters/?? > $(TEMP)/all.utf
 ifdef EXTRADRIVERS
 	if [ -n "`find $(EXTRADRIVERSDPKGDIR)/info/ -name \\*.templates`" ]; then \
 		cat $(EXTRADRIVERSDPKGDIR)/info/*.templates >> $(TEMP)/all.utf; \
