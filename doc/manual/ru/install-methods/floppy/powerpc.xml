@@ -2,32 +2,32 @@
 <!-- $Id: powerpc.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
 
 
-  <sect2 arch="powerpc"><title>Writing Disk Images From MacOS</title>
-<para>An AppleScript, <application>Make Debian Floppy</application>, is available for burning floppies from the provided disk image files. It can be downloaded from <ulink url="ftp://ftp2.sourceforge.net/pub/sourceforge/debian-imac/MakeDebianFloppy.sit"></ulink>. To use it, just unstuff it on your desktop, and then drag any floppy image file to it. You must have Applescript installed and enabled in your extensions manager. Disk Copy will ask you to confirm that you wish to erase the floppy and proceed to write the file image to it. </para><para>You can also use the MacOS utility <command>Disk Copy</command> directly, or the freeware utility <command>suntar</command>. The <filename>root.bin</filename> file is an example of a floppy image. Use one of the following methods to create a floppy from the floppy image with these utilities. </para>
+  <sect2 arch="powerpc"><title>Запись образов дисков из MacOS</title>
+<para>Для создания дискет из файлов образов дисков есть AppleScript, <application>Make Debian Floppy</application>. Его можно загрузить с<ulink url="ftp://ftp2.sourceforge.net/pub/sourceforge/debian-imac/MakeDebianFloppy.sit"></ulink>. Для его использования, просто поместите его на рабочий стол, а затем перетащите на него любой файл образа дискеты. У вас должен быть установлен и включён в менеджере расширений Applescript. Disk Copy попросит вас подтвердить, что вы хотите стереть дискету и записать на неё образ файла. </para><para>Также, вы сразу можете использовать утилиту MacOS <command>Disk Copy</command> или свободную утилиту <command>suntar</command>. Файл <filename>root.bin</filename> это пример образа дискеты. Используйте один из следующих методов для создания дискеты из образа. </para>
 
    <sect3>
-   <title>Writing Disk Images with <command>Disk Copy</command></title>
-<para>If you are creating the floppy image from files which were originally on the official &debian; CD, then the Type and Creator are already set correctly. The following <command>Creator-Changer</command> steps are only necessary if you downloaded the image files from a Debian mirror. </para>
+   <title>Запись образов дисков с помощью <command>Disk Copy</command></title>
+<para>Если вы создаёте дискету из образа файла, который взят с официального&debian; CD, то Тип и Создатель ужё установлены правильно. Следующие шаги <command>Creator-Changer</command> необходимы только если вы загрузили файлы образов с сервера-зеркала Debian. </para>
 <orderedlist>
-<listitem><para>Obtain <ulink url="&url-powerpc-creator-changer;">Creator-Changer</ulink> and use it to open the <filename>root.bin</filename> file. </para></listitem>
-<listitem><para>Change the Creator to <userinput>ddsk</userinput> (Disk Copy), and the Type to <userinput>DDim</userinput> (binary floppy image). The case is sensitive for these fields. </para></listitem>
-<listitem><para><emphasis>Important:</emphasis> In the Finder, use <userinput>Get Info</userinput> to display the Finder information about the floppy image, and `X' the <userinput>File Locked</userinput> check box so that MacOS will be unable to remove the boot blocks if the image is accidentally mounted. </para></listitem>
-    <listitem><para>Obtain <command>Disk Copy</command>; if you have a MacOS system or CD it will very likely be there already, otherwise try <ulink url="&url-powerpc-diskcopy;"></ulink>. </para></listitem>
-<listitem><para>Run <command>Disk Copy</command>, and select `Make a Floppy' from the <userinput>Utilities</userinput> menu, then select the <emphasis>locked</emphasis> image file from the resulting dialog. It will ask you to insert a floppy, then ask if you really want to erase it. When done it should eject the floppy. </para></listitem>
+<listitem><para>Получите <ulink url="&url-powerpc-creator-changer;">Creator-Changer</ulink> и используйте его для открытия файла <filename>root.bin</filename>. </para></listitem>
+<listitem><para>Измените Создатель на <userinput>ddsk</userinput> (Disk Copy), а Тип на<userinput>DDim</userinput> (двоичный образ дискеты). Регистр вводимых данных важен. </para></listitem>
+<listitem><para><emphasis>Важно:</emphasis> В Finder, воспользуйтесь <userinput>Get Info</userinput> что посмотреть Finder информацию об образе дискеты, а в поле <userinput>File Locked</userinput> должен стоять `X', чтобы MacOS не смог удалить загрузочные блоки, если образ будет случайно смонтирован. </para></listitem>
+    <listitem><para>Получите <command>Disk Copy</command>; если у вас система MacOS и есть CD, то скорее всего она уже есть, иначе попробуйте <ulink url="&url-powerpc-diskcopy;"></ulink>. </para></listitem>
+<listitem><para>Запустите <command>Disk Copy</command>, и выберите `Make a Floppy' из меню<userinput>Utilities</userinput>, затем выберите <emphasis>locked</emphasis> файл образа в появившемся диалоговом окне. Вас попросят вставить дискету, затем спросят хотите ли вы стереть её содержимое. Когда всё закончится, дискета вылезет из дисковода. </para></listitem>
 </orderedlist>
 
    </sect3>
 
    <sect3>
-   <title>Writing Disk Images with <command>suntar</command></title>
+   <title>Запись образов дисков с помощью <command>suntar</command></title>
 <para>
 
 <orderedlist>
-<listitem><para>Obtain <command>suntar</command> from <ulink url="&url-powerpc-suntar;"> </ulink>. Start the <command>suntar</command> program and select `Overwrite Sectors...' from the <userinput>Special</userinput> menu. </para></listitem>
-<listitem><para>Insert the floppy disk as requested, then hit &enterkey; (start at sector 0). </para></listitem>
-<listitem><para>Select the <filename>root.bin</filename> file in the file-opening dialog. </para></listitem>
-<listitem><para>After the floppy has been created successfully, select `Eject' from the <userinput>File</userinput> menu. If there are any errors writing the floppy, simply toss that floppy and try another. </para></listitem>
+<listitem><para>Получите <command>suntar</command>из <ulink url="&url-powerpc-suntar;"> </ulink>. Запустите программу <command>suntar</command> и выберите `Overwrite Sectors...' из меню <userinput>Special</userinput>. </para></listitem>
+<listitem><para>Вставьте дискету, нажмите &enterkey; (начало с сектора 0). </para></listitem>
+<listitem><para>Выберите файл <filename>root.bin</filename> в появившемся диалоговом окне. </para></listitem>
+<listitem><para>После успешного создания дискеты, выдерите `Eject' из меню<userinput>File</userinput>. Если были какие-то ошибки при записи дискеты, просто выньте эту и вставьте другую дискету. </para></listitem>
 </orderedlist>
-Before using the floppy you created, <emphasis>set the write protect tab</emphasis>! Otherwise if you accidentally mount it in MacOS, MacOS will helpfully ruin it. </para>
+Перед использованием созданной дискеты, <emphasis>установите защёлку защиты от записи</emphasis>! Иначе, если вы нечаянно смонтируете её в MacOS, MacOS просто испортит её. </para>
    </sect3>
   </sect2>
