@@ -1,23 +1,15 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 17789 -->
+<!-- original version: 18767 -->
 
   <sect2 arch="i386"><title>Zavedení z CD-ROM</title>
 
 &boot-installer-intro-cd.xml;
 
-<para>
-
-Možná budete muset nastavit hardware podle
-<xref linkend="boot-dev-select"/>. Vložte CD-ROM do mechaniky a
-restartujte. Systém by měl naběhnout a měl by se zobrazit prompt
-<prompt>boot:</prompt>.  Zde můžete zadat zaváděcí parametry, nebo
-prostě zmáčknout &enterkey;.
-
-</para><para>
-
 <!-- We'll comment the following section until we know exact layout -->
 <!--
+
+<para>
 
 Disk 1 z oficiální sady debianích CD-ROM pro &arch-title; se vám na
 většině počítačů ohlásí promptem <prompt>boot:</prompt>. Klávesou
@@ -73,26 +65,14 @@ Zavede jádro <quote>bf2.4</quote>.
 
  </variablelist>
 
-</para><para>
+</para>
 
 -->
 
-Jestliže váš počítač nepodporuje zavádění z CD-ROM, nic se neděje.
-Instalaci můžete spustit z DOSu příkazem
-<command>E:\install\boot.bat</command>, kde <userinput>E:</userinput>
-nahradíte písmenem své CD mechaniky. Poté přeskočte na
-<xref linkend="init-config"/>.
-
-</para><para>
-
-Pokud budete instalovat z oblasti FAT, můžete zavést instalační
-systém z pevného disku. Informace o této metodě naleznete v
-<xref linkend="install-from-dos"/>.
-
-</para>
   </sect2>
 
-
+<!-- FIXME the documented procedure does not exactly work, commented out
+     until fixes
 
   <sect2 arch="i386" id="install-from-dos">
   <title>Zavedení z DOSové oblasti</title>
@@ -109,7 +89,7 @@ jádra, např.
 
 <informalexample><screen>
 
-cd c:\current\compact
+cd c:\install
 
 </screen></informalexample>.  
 
@@ -126,11 +106,33 @@ bf2.4. Příznakem tohoto problému je chybová hláška
 </para>
   </sect2>
 
+END FIXME -->
 
   <sect2 arch="i386" id="boot-initrd">
   <title>Zavedení z Linuxu programem <command>LILO</command> nebo
   <command>GRUB</command></title>
 <para>
+
+Pro zavedení instalároru z pevného disku musíte nejprve stáhnout
+potřebné soubory a umístit je podle kapitoly<xref
+linkend="boot-drive-files"/>.
+
+</para><para>
+
+Plánujete-li z disku jenom nastartovat a poté již všechno stáhnout ze
+sítě, měli byste použít soubor <filename>netboot/initrd.gz</filename>
+a odpovídající jádro. To vám umožní přerozdělit disk, ze kterého jste
+instalaci spustili.
+
+</para><para>
+
+Pokud během instalace nebudete měnit diskovou oblast, na které jsou
+soubory instalačního systému, můžete použít
+<filename>hd-media/initrd.gz</filename>, příslušné jádro a také obraz
+CD (musí končit na <filename>.iso</filename>). Instalační systém pak
+nebude vyžadovat připojení k síti.
+
+</para><para>
 
 Pro zavaděč <command>LILO</command> musíte v souboru
 <filename>/etc/lilo.conf</filename> nastavit dvě důležité věci:
@@ -160,7 +162,7 @@ image=/boot/newinstall/vmlinuz
        label=newinstall
        initrd=/boot/newinstall/initrd.gz
        root=/dev/ram
-       append="devfs=mount,dall"
+       append="devfs=mount,dall ramdisk_size=17000"
 
 </screen></informalexample>
 
@@ -181,84 +183,15 @@ Postup pro <command>GRUB</command> je velmi podobný. Do souboru
 <informalexample><screen>
 
 title  New Install
-kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram devfs=mount,dall
+kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram devfs=mount,dall ramdisk_size=17000
 initrd (hd0,0)/boot/newinstall/initrd.gz
 
 </screen></informalexample>
 
-a restartujte počítač. Je možné, že podle typu instalace budete muset
-přidat parametr <userinput>ramdisk_size=<replaceable>velikost
-v KB</replaceable></userinput>. Od teď by neměl být mezi oběma
+a restartujte počítač. Je možné, že budete muset upravit hodnotu
+parametru <userinput>ramdisk_size</userinput> podle skutečné velikosti
+obrazu <filename>initrd.gz</filename>. Od teď by neměl být mezi oběma
 zavaděči žádný rozdíl.
-
-</para><para>
-
-Magii okolo <filename>initrd</filename> můžete během zavádění
-vystopovat na několika místech.
-
-<itemizedlist>
-<listitem><para>
-
-Ještě před zavedením jádra zobrazí <command>LILO</command> řádku
-<computeroutput>Loading
-<replaceable>názevobrazu</replaceable>......</computeroutput> s mnohem
-více tečkami než obvykle. To je stav zavádění RAMdisku.
-
-</para></listitem>
-<listitem><para>
-
-Někde kolem hlášky o inicializaci hodin se zobrazí řádka
-<computeroutput>RAM disk driver initialized</computeroutput>, která
-sděluje, že jádro podporuje RAMdisk.
-
-</para></listitem>
-<listitem><para>
-
-A konečně po kontrole oblastí se objeví hláška
-<computeroutput>RAMDISK: ext2 filesystem found at block 0</computeroutput>.
-(Pokud ne, tak jádro <filename>initrd</filename> nepodporuje.)
-
-</para></listitem>
-</itemizedlist>
-
-</para><para condition="FIXME">
-
-Nyní byste měli vidět spuštěný instalační systém. Pokud nepoužíváte
-žádné výměnné médium, měli byste se <emphasis>před</emphasis>
-rozdělením disku pečlivě přesvědčit, že vaše síťové připojení opravdu
-funguje. Možná potřebujete nahrát nějaké moduly (třeba pro síťovou
-kartu). Nyní je potřeba <emphasis>neposlouchat</emphasis>
-<command>debian-installer</command> a přeskočit rovnou ke kroku
-<userinput>Připojit dříve inicializovanou oblast</userinput>. Zde si
-připojíte oblast, na kterou jste rozbalili jaderné moduly z
-<filename>drivers.tgz</filename> (<xref linkend="files-lilo"></xref>).
-
-</para>
-
-<!-- Ideally, configure Device Driver Modules should support the
-following (insmod-ing from the hard-disk) and not only from a floppy.
-That would avoid the need to open a shell -->
-
-<para>
-
-Přepněte se na druhou konzolu (viz <xref linkend="shell"/>) a v adresáři
-<filename>/target</filename> vyhledejte potřebné ovladače. Ty pak
-nahrajete příkazem <userinput>insmod</userinput>.
-
-</para><para>
-
-Vraťte se zpět do <command>debian-installer</command>, z menu vyberte
-krok <xref linkend="netcfg"/> a
-zkuste <userinput>ping</userinput>nout své oblíbené zrcadlo s Debianem.
-Povedlo se? Gratulujeme!
-
-</para><para>
-
-Po příkazu <userinput>Odpojit oblast</userinput> se můžete vrátit zpět
-k dělení disku a pokračovat jako obvykle. Nyní dokonce můžete (i když
-je to trošku riskantní) úplně smazat předchozí oblasti a začít s
-čistým diskem. Jediné riziko je v tom, že po krátkou dobu během
-instalace nebudete moci z disku zavést systém.
 
 </para>
   </sect2>
@@ -292,9 +225,10 @@ nastartovat.
 
 Předpokládáme, že jste si již potřebné obrazy stáhli a podle
 <xref linkend="create-floppy"/> vytvořili příslušné diskety.
+<!--
 Jestliže je to nutné, můžete si zaváděcí disketu přizpůsobit,
 viz <xref linkend="rescue-replace-kernel"/>.
-
+-->
 </para><para>
 
 Zavedení z diskety je jednoduché. Zasuňte disketu do první disketové
@@ -319,23 +253,6 @@ je nutné použít <quote>tvrdý restart</quote>. Pokud instalujete z
 existujícího operačního systému (např. na stanici, kde je nainstalován
 DOS), pak nemáte na výběr. V ostatních případech použijte <quote>tvrdý
 restart</quote> během zavádění.
-
-</para><para>
-
-Kontrolka disketové mechaniky se rozsvítí a měla by se zobrazit
-uvítací obrazovka končící výzvou <prompt>boot:</prompt>.  Na této
-obrazovce si můžete buď přečíst informace dostupné po stisknutí
-funkčních kláves <keycap>F1</keycap> až <keycap>F10</keycap>, nebo
-rovnou spustit zavádění systému.
-
-</para><para>
-
-Užitečné informace o zaváděcích parametrech jsou dostupné pod
-klávesami <keycap>F4</keycap> až <keycap>F5</keycap>. Jestliže chcete
-zadat nějaké parametry, nezapomeňte před nimi uvést název zaváděcí
-metody (například <userinput>linux floppy=thinkpad</userinput>). Pokud
-pouze zmáčknete &enterkey;, je to jako byste napsali
-<userinput>linux</userinput> bez dalších doplňujících parametrů.
 
 </para><para>
 
@@ -394,12 +311,7 @@ Text pište anglicky a odkažte v něm se na tento dokument.
 
 Novější síťové karty podporují zavádění metodou PXE, což je
 reimplementace TFTP od <trademark class="trade">Intel</trademark>u.
-
-</para><para condition="FIXME">
-
-Pokud máte zkušenosti s tímto typem zavádění, neváhejte nám poslat
-vaše poznatky na adresu <email>&email-debian-boot-list;</email>.
-Text pište anglicky a odkažte v něm se na tento dokument.
+Zde by mělo stačit příslušně nastavit BIOS.
 
 </para>
    </sect3>
@@ -408,14 +320,21 @@ Text pište anglicky a odkažte v něm se na tento dokument.
   <sect2 arch="i386"><title>Zaváděcí parametry pro i386</title>
 <para>
 
-Pokud zavádíte systém z diskety nebo z CD-ROM, objeví se
-vám tzv. boot prompt (zaváděcí výzva), <prompt>boot:</prompt>.
-Podrobnosti o použití zaváděcích parametrů naleznete
-v <xref linkend="floppy-boot"/>.
-Pokud systém zavádíte ze stávajícího operačního systému, budete muset
-použít jiné způsoby, jak parametry nastavit. Například při instalaci z
-DOSu lze parametry změnit editací souboru
-<filename>install.bat</filename>.
+Po startu instalačního programu se objeví tzv. zaváděcí výzva (boot
+prompt) <prompt>boot:</prompt>. Zde se můžete porozhlédnout po
+nápovědě, která se skrývá pod klávesami <keycap>F1</keycap> až
+<keycap>F10</keycap>, nebo můžete stisknout &enterkey; a zavést
+systém.
+
+</para><para>
+
+Pokud chcete zadat některé z parametrů, o kterých jste se dočetli
+v nápovědě pod klávesami <keycap>F3</keycap> až <keycap>F7</keycap>,
+nezapomeňte na prvním místě zadat název jádra, které chcete zavést
+(implicitní je <userinput>linux</userinput>).  Celý řádek by tedy
+vypadal třeba takto: <userinput>linux floppy=thinkpad</userinput>.
+Jestliže stisknete pouze &enterkey;, je to stejné, jako kdyby jste
+zadali <userinput>linux</userinput> bez dalších parametrů.
 
 </para><para>
 

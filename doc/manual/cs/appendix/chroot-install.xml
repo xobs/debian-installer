@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 15442 -->
+<!-- original version: 18773 -->
 
  <sect1 id="linux-upgrade">
  <title>Instalace Debianu ze stávajícího unixového/linuxového systému</title>
@@ -88,7 +88,7 @@ nezáleží.
 
 <command>debootstrap</command> je program, kterým se v Debianu
 instaluje základní systém. Má minimum závislostí (pouze
-<classname>glibc</classname> a <command>wget</command>), takže se dá
+<classname>/bin/sh</classname> a <command>wget</command>), takže se dá
 použít na téměř libovolném systému. Pokud ještě
 <command>wget</command> nemáte, nainstalujte si ho.
 
@@ -130,8 +130,7 @@ binární soubory. K instalaci souborů musíte mít rootovská práva.
   </sect2>
 
   <sect2>
-  <title>Spuštění <command>debootstrap</command>u
-  (stažení ze sítě)</title>
+  <title>Spuštění <command>debootstrap</command>u</title>
 <para>
 
 <command>debootstrap</command> si umí stáhnout potřebné soubory přímo
@@ -166,7 +165,7 @@ V ukázkovém příkazu <command>debootstrap</command> nahraďte
 
 <informalexample><screen>
 
- $ /usr/sbin/debootstrap --arch ARCH woody \
+ $ /usr/sbin/debootstrap --arch ARCH sarge \
      /mnt/debinst http://http.us.debian.org/debian
 
 </screen></informalexample>
@@ -175,46 +174,6 @@ V ukázkovém příkazu <command>debootstrap</command> nahraďte
 
   </sect2>
 
-  <sect2>
-  <title>Spuštění <command>debootstrap</command>u
-  (využití <filename>basedebs.tar</filename>)</title>
-<para>
-
-<command>debootstrap</command> umí využít již stažený
-<filename>basedebs.tar</filename>, takže se během instalace nemusíte
-připojovat k síti.
-
-</para><para>
-
-Soubor <filename>basedebs.tar</filename> naleznete na debianích
-zrcadlech příslušné architektury v adresáři
-<filename>base-images-current</filename>, například:
-<ulink url="http://http.us.debian.org/debian/dists/woody/main/disks-&architecture;/base-images-current/basedebs.tar"></ulink>
-
-</para><para>
-
-V ukázkovém příkazu <command>debootstrap</command> nahraďte 
-<replaceable>ARCH</replaceable> jedním z následujících:
-
-<userinput>alpha</userinput>, 
-<userinput>arm</userinput>,
-<userinput>hppa</userinput>, 
-<userinput>i386</userinput>, 
-<userinput>ia64</userinput>, 
-<userinput>m68k</userinput>,
-<userinput>mips</userinput>, 
-<userinput>mipsel</userinput>, 
-<userinput>powerpc</userinput>, 
-<userinput>s390</userinput> nebo
-<userinput>sparc</userinput>.
-<informalexample><screen>
- 
-$ /usr/sbin/debootstrap --arch ARCH --unpack-tarball \
-    /cesta-ke-stazenemu/basedebs.tar woody /mnt/debinst
-
-</screen></informalexample>
-</para>
-  </sect2>
 
   <sect2>
   <title>Nastavení základního systému</title>
@@ -289,16 +248,6 @@ systém <filename>/proc</filename>. Pokud tomu tak není, připojte jej:
 <informalexample><screen>
 
  # mount -t proc proc /proc
-
-</screen></informalexample>
-
-</para><para>
-
-Jeden uživatel RedHatu nás upozornil, že musel na svém systému použít:
-
-<informalexample><screen>
-
- # mount -t none proc /proc
 
 </screen></informalexample>
 
@@ -421,7 +370,7 @@ Nastavení časové zóny, přidání obyčejného uživatele a výběr zdrojů pro
 
 <informalexample><screen>
 
- # /usr/sbin/base-config
+ # /usr/sbin/base-config new
 
 </screen></informalexample>
 </para>
@@ -482,16 +431,20 @@ Vybrané jádro nainstalujte:
 <para>
 
 Abyste mohli zavádět svůj Debian, nastavte v zavaděči, aby nahrál
-instalované jádro s novou kořenovou oblastí.
+instalované jádro s novou kořenovou oblastí. Pamatujte, že debootstrap
+zavaděč neinstaluje, takže jej budete muset doinstalovat zvlášť
+(např. pomocí apt-get uvnitř chrootovaného prostředí).
 
 </para><para arch="i386">
 
-Návod k nastavení zavaděče prozradí příkaz <userinput>man
-lilo.conf</userinput>. Pokud si ponecháte původní operační systém,
-stačí do stávajícího <filename>lilo.conf</filename> přidat
-příslušnou položku. Tento soubor si také můžete zkopírovat do nového
-systému, zde ho upravit a spustit <command>lilo</command> (použije
-konfigurační soubor systému, ze kterého jej spouštíte).
+Návod k nastavení zavaděče prozradí příkaz <userinput>info
+grub</userinput> nebo <userinput>man lilo.conf</userinput>. Pokud si
+ponecháte původní operační systém, stačí do stávajícího <filename>grub
+menu.lst</filename> nebo <filename>lilo.conf</filename> přidat
+příslušnou položku. <filename>lilo.conf</filename> si také můžete
+zkopírovat do nového systému, zde ho upravit a spustit
+<command>lilo</command> (použije konfigurační soubor systému, ze
+kterého jej spouštíte).
 
 </para><para arch="i386">
 
@@ -537,12 +490,6 @@ label=Debian
 
 Na některých počítačích musíte místo <userinput>hd:</userinput> použít
 <userinput>ide0:</userinput>.
-
-</para><para arch="not-i386;not-powerpc">
-
-<phrase condition="FIXME">
-FIXME: Someone may eventually supply an example for this architecture.
-</phrase>
 
 </para>
   </sect2>

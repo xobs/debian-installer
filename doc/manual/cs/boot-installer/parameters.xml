@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 17333 -->
+<!-- original version: 18672 -->
 
  <sect1 id="boot-parms"><title>Zaváděcí parametry</title>
 <para>
@@ -49,12 +49,6 @@ zakončená znakem <quote>k</quote> pro kilobajty nebo <quote>m</quote> pro megaba
 Například, obě hodnoty <userinput>mem=65536k</userinput> a
 <userinput>mem=64m</userinput> znamenají 64MB RAM.
 
-</para><para>
-
-Pokud váš monitor umožňuje zobrazovat pouze černou a bílou barvu,
-zadejte zaváděcí parametr <userinput>mono</userinput>. Pokud tak
-neučiníte, instalační proces bude (standardně) používat barvy.
-
 </para><para condition="supports-serial-console">
 
 Jádro <phrase arch="mipsel">(kromě počítačů DECstation)</phrase> by
@@ -84,7 +78,7 @@ Instalační systém rozpoznává několik užitečných parametrů.
 
 <variablelist>
 <varlistentry>
-<term>DEBCONF_PRIORITY</term>
+<term>debconf/priority</term>
 <listitem><para>
 
 Nastavením tohoto parametru můžete změnit prioritu zobrazených
@@ -93,7 +87,7 @@ otázek.
 </para><para>
 
 Standardní instalace používá nastavení
-<userinput>DEBCONF_PRIORITY=high</userinput>.  To znamená, že se
+<userinput>debconf/priority=high</userinput>, což znamená, že se
 zobrazí jak kritické, tak důležité hlášky, ale normální a nevýznamné
 zprávy jsou přeskočeny. Jestliže se vyskytne problém, instalátor
 upraví priority otázek podle potřeb.
@@ -101,12 +95,12 @@ upraví priority otázek podle potřeb.
 </para><para>
 
 Když použijete parametr
-<userinput>DEBCONF_PRIORITY=medium</userinput>, zobrazí se instalační
+<userinput>debconf/priority=medium</userinput>, zobrazí se instalační
 menu a získáte nad instalací větší kontrolu. Při použití
-<userinput>DEBCONF_PRIORITY=low</userinput>, nic se nepřeskakuje
+<userinput>debconf/priority=low</userinput>, nic se nepřeskakuje
 a zobrazí se všechny hlášky instalačního programu (to je ekvivalentní
 zaváděcí metodě <userinput>expert</userinput>).  Hodnotou
-<userinput>DEBCONF_PRIORITY=critical</userinput> se potlačí všechny
+<userinput>debconf/priority=critical</userinput> se potlačí všechny
 zprávy a otázky se stupněm důležitosti menším než kritickým.  Pro tyto
 potlačené otázky se použijí přednastavené hodnoty.
 
@@ -114,7 +108,7 @@ potlačené otázky se použijí přednastavené hodnoty.
 </varlistentry>
 
 <varlistentry>
-<term>DEBCONF_FRONTEND</term>
+<term>debconf/frontend</term>
 <listitem><para>
 
 Ovlivňuje uživatelské rozhraní, ve kterém bude instalace
@@ -122,27 +116,27 @@ probíhat. Dostupné volby jsou:
 
 <itemizedlist>
 <listitem>
-<para><userinput>DEBCONF_FRONTEND=noninteractive</userinput></para>
+<para><userinput>debconf/frontend=noninteractive</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=text</userinput></para>
+<para><userinput>debconf/frontend=text</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=newt</userinput></para>
+<para><userinput>debconf/frontend=newt</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=slang</userinput></para>
+<para><userinput>debconf/frontend=slang</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=ncurses</userinput></para>
+<para><userinput>debconf/frontend=ncurses</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=bogl</userinput></para>
+<para><userinput>debconf/frontend=bogl</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=gtk</userinput></para>
+<para><userinput>debconf/frontend=gtk</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=corba</userinput></para>
+<para><userinput>debconf/frontend=corba</userinput></para>
 </listitem>
 </itemizedlist>
 
-Standardní rozhraní je <userinput>DEBCONF_FRONTEND=newt</userinput>.
+Standardní rozhraní je <userinput>debconf/frontend=newt</userinput>.
 Pro instalaci přes sériovou konzolu může být vhodnější
-<userinput>DEBCONF_FRONTEND=text</userinput>. Standardní instalační
+<userinput>debconf/frontend=text</userinput>. Standardní instalační
 média momentálně podporují pouze rozhraní <userinput>newt</userinput>,
 tudíž je tato volba spíše příslibem do budoucna.
 
@@ -270,6 +264,16 @@ o ruční nastavení síťových údajů.
 Pokud chcete zabránit startu PCMCIA služeb, nastavte tento parametr na
 hodnotu <userinput>false</userinput>. Některé notebooky jsou totiž
 nechvalně známé tím, že při startu PCMCIA služeb zaseknou celý systém.
+ 
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>ramdisk_size</term>
+<listitem><para>
+
+Používáte-li ještě jádro řady 2.2.x, budete možná muset zadat
+&ramdisksize;.
  
 </para></listitem>
 </varlistentry>

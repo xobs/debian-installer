@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 16407 -->
+<!-- original version: 18639 -->
 
  <chapter id="d-i-intro">
  <title>Používáme instalační program Debianu</title>
@@ -11,28 +11,51 @@
 Instalační program Debianu se skládá z mnoha malých, jednoúčelových
 komponent. Každá komponenta má na starosti jeden krok instalace (od
 úvodního dialogu pro výběr jazyka až po závěrečný restart do nového
-systému). Když jedna komponenta skončí svou práci, převezme plynule
-řízení následující komponenta v pořadí. Pokud se vyskytne problém,
-zobrazí se chybová obrazovka s popisem problému a následně se objeví
-hlavní menu instalačního programu, kde můžete situaci napravit.
-V ideálním případě uživatel menu vůbec neuvidí a bude pouze odpovídat
-na otázky jednotlivých komponent.
+systému). Komponenty se snaží pracovat samostatně, ale pokud je to
+nutné, zeptají se uživatele na další postup.
 
 </para><para>
 
 Otázky samotné mají přiřazeny různé priority. Uživatel si může
 nastavit úroveň zobrazených otázek, takže uživatel začátečník se
 nemusí zatěžovat nepodstatnými věcmi (instalační program dosadí
-<quote>rozumné</quote> hodnoty). Oznámení o vážných problémech mají
-nastavenou <quote>kritickou</quote> prioritu, tudíž budou zobrazeny
-vždy.
+<quote>rozumné</quote> hodnoty). Implicitně se &d-i; ptá pouze na
+otázky s vysokou prioritou, což vede k poměrně automatickému procesu
+s minimemm uživatelských zásahů.
+
+</para><para>
+
+Pokud se vyskytne problém, zobrazí se chybová obrazovka s popisem
+problému a následně se objeví hlavní menu instalačního programu, kde
+můžete situaci napravit.  V ideálním případě uživatel menu vůbec
+neuvidí a bude pouze odpovídat na otázky jednotlivých
+komponent. Oznámení o vážných problémech mají nastavenou
+<quote>kritickou</quote> prioritu, tudíž budou zobrazeny vždy.
+
+</para><para>
+
+Některá výchozí nastavení instalačního programu lze změnit pomocí
+zaváděcích paramterů při startu &d-i;u. Například pokud si chcete
+vynutit statické nastavení sítě (implicitně se používá DHCP), použijte
+parametr <userinput>netcfg/disable_dhcp=true</userinput>.  Seznam
+dostupných parametrů naleznete v kapitole <xref
+linkend="installer-args"/>.
 
 </para><para>
 
 Pokročilí uživatelé jistě ocení přístup do (standardně skrytého) menu,
 ve kterém mohou kontrolovat každý krok instalace. Menu vyvoláte tak,
 že při startu přidáte zaváděcí parametr
-<userinput>DEBCONF_PRIORITY=medium</userinput>.
+<userinput>debconf/priority=medium</userinput>.
+
+</para><para>
+
+Jestliže váš hardware vyžaduje zadat při instalaci jaderných modulů
+nějaké parametry, je nutné spustit instalační program
+v <quote>expertním</quote> režimu. Toho docílíte tak, že spustíte
+instalátor příkazem <command>expert</command>, nebo použijete zaváděcí
+parametr <userinput>debconf/priority=low</userinput>. Expertní režim
+vám dá plnou kontrolu nad instalačním procesem.
 
 </para><para>
 
@@ -53,8 +76,7 @@ Volby se potvrzují klávesou &enterkey;.
 </para><para arch="s390">
 
 Protože S/390 nepodporuje virtuální konzoly, musíte si logovací
-soubory (viz dále) prohlížet ve druhé (nebo i třetí) telnetové
-seanci.
+soubory (viz dále) prohlížet ve druhé (nebo i třetí) ssh seanci.
 
 </para><para>
 
@@ -69,11 +91,11 @@ klávesami
 </para><para>
 
 Hlášky ze třetí konzoly se také ukládají do souboru
-<filename>/var/log/messages</filename>. Po instalaci jej naleznete v
-novém systému pod jménem <filename>/var/log/installer.log</filename>.
-Další hlášky instalace můžete najít v adresáři
-<filename>/target/var/log/debian-installer/</filename>, nebo po
-instalaci ve <filename>/var/log/debian-installer/</filename>.
+<filename>/var/log/messages</filename>. Po instalaci jej naleznete
+v novém systému pod jménem
+<filename>/var/log/debian-installer/messages</filename>.  Další hlášky
+instalace můžete najít v adresáři <filename>/var/log/</filename>, nebo
+po instalaci ve <filename>/var/log/debian-installer/</filename>.
 
 </para>
  </sect1>
@@ -100,6 +122,11 @@ prioritě. Pokud se vyskytne problém, který vyžaduje zásah uživatele,
 je priorita otázek dočasně snížena a objeví se menu, ve kterém můžete
 problém odstranit.
 
+</para><para>
+
+Zpět do menu se můžete dostat opakovaným stiskem tlačítka
+<userinput>Zpět</userinput>.
+
 </para></listitem>
 </varlistentry>
 <varlistentry>
@@ -123,26 +150,27 @@ nacházíte.
 </varlistentry>
 <varlistentry>
 
-<term>ddetect</term><listitem><para>
-
-Rozpozná pevné disky připojené k počítači.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
-<term>pcmcia</term><listitem><para>
-
-Pomůže vám s nastavením PCMCIA karet.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
 <term>kbd-chooser</term><listitem><para>
 
 Zobrazí seznam klávesnic, ze kterých si můžete vybrat nejvhodnější
 model odpovídající připojené klávesnici.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>hw-detect</term><listitem><para>
+
+Automaticky rozpozná většinu zařízení připojených k počítači (síťové
+karty, pevné disky, PCMCIA).
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>cdrom-detect</term><listitem><para>
+
+Vyhledá a připojí instalační CD Debianu.
 
 </para></listitem>
 </varlistentry>
@@ -169,8 +197,7 @@ pevném disku v podobě ISO obrazů.
 <term>choose-mirror</term><listitem><para>
 
 Předloží seznam zrcadel s debianími archívy, ze kterého si můžete
-vybrat, odkud se balíky stáhnou. Obvyklou volbou bývá CD-ROM nebo
-zrcadlo na síti.
+vybrat, odkud se balíky stáhnou.
 
 </para></listitem>
 </varlistentry>
@@ -180,14 +207,6 @@ zrcadlo na síti.
 
 Zkontroluje integritu CD-ROM. Takto si můžete ověřit, že istalační
 CD-ROM nejsou poškozená.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
-<term>cdrom-detect</term><listitem><para>
-
-Rozpozná CD-ROM mechaniky připojené k počítači.
 
 </para></listitem>
 </varlistentry>
@@ -279,15 +298,6 @@ samostatný běh Debianu.
 </varlistentry>
 <varlistentry>
 
-<term>kernel-chooser</term><listitem><para>
-
-Pokud je k dispozici více než jedna verze jádra, nabídne vám jejich
-seznam, ze kterého si můžete vybrat svou oblíbenou verzi.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
 <term>os-prober</term><listitem><para>
 
 Umí rozpoznat operační systémy nainstalované na počítači. Tuto
@@ -310,7 +320,7 @@ při startu nabídne možnost zavést i jiné operační systémy.
 </varlistentry>
 <varlistentry>
 
-<term>baseconfig</term><listitem><para>
+<term>base-config</term><listitem><para>
 
 Provede vás prvotním přizpůsobením nového systému. Obvykle se
 spouští až po restartu počítače a bývá to <quote>první skutečný

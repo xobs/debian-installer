@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id: components.xml 14975 2004-05-08 13:28:15Z mck-guest $ -->
-<!-- original version: 17510 -->
+<!-- original version: 18640 -->
 
  <sect1 id="module-details">
  <title>Použití jednotlivých komponent</title>
@@ -24,7 +24,7 @@ a nepoužitelný. Neví nic o hardwaru vašeho počítače, nezná váš
 preferovaný jazyk a dokonce ani netuší, jaký úkol mu byl přidělen. Ale
 nebojte se. Jako správný průzkumník začne &d-i; zkoumat své okolí a po
 nějaké době bude mít slušný přehled o okolním hardwaru. Poté se pokusí
-nalézt zbytek svých komponent a sám sebe přemění v moderní, dobře
+nalézt zbytek svých komponent a sám sebe přemění ve schopný, dobře
 vychovaný program.
 
 Bohužel, stále existují věci, se kterými si &d-i; nedokáže poradit
@@ -48,14 +48,12 @@ rozpoznáváním ještě nemusí být k dispozici všechny ovladače.
 &module-kbd-chooser.xml;
 &module-s390-netdevice.xml;
 &module-s390-dasd.xml;
-&module-pcmcia.xml;
-&module-cdrom-detect.xml;
 &module-ddetect.xml;
+&module-cdrom-detect.xml;
 &module-iso-scan.xml;
-<!-- &module-load-components; -->
+&module-anna.xml;
 &module-netcfg.xml;
 &module-choose-mirror.xml;
-&module-anna.xml;
   </sect2>
 
   <sect2>
@@ -92,26 +90,25 @@ máte pomalý počítač a/nebo síťové připojení, můžet to chvíli trvat.
 </para>
 
 &module-base-installer.xml;
-&module-kernel-chooser.xml;
   </sect2>
 
   <sect2>
   <title>Nastavení zavádění systému</title>
-<para>
+<para condition="supports-nfsroot">
+
+Pokud instalujete bezdiskovou stanici, zavádění systému z lokálního
+disku evidentně nebude nejsmysluplnější volba - tento krok přeskočte.
+<phrase arch="sparc"> Možná budete chtít nastavit OpenBoot tak, aby
+implicitně zaváděl systém ze sítě, viz <xref
+linkend="boot-dev-select-sun"/>.</phrase>
+
+</para><para>
 
 Zavádění více operačních systémů na jednom počítači je stále něco jako
 černá magie. Tento dokument se ani nesnaží pokrýt všechny možné
 zavaděče, které se liší na jednotlivých architekturách a dokonce i na
 jejich podarchitekturách. Měli byste si dobře prostudovat dokumentaci
 vašeho zavaděče a pamatujete: třikrát měř a jednou řež.
-
-</para><para condition="supports-nfsroot">
-
-Pokud instalujete bezdiskovou stanici, zavádění systému z lokálního
-disku evidentně nebude nejsmysluplnější volba - tento krok přeskočte.
-<phrase arch="sparc"> Možná budete chtít nastavit OpenBoot tak, aby
-standardně zaváděl systém ze sítě, viz <xref
-linkend="boot-dev-select-sun"/>.</phrase>
 
 </para>
 
@@ -153,9 +150,9 @@ pokazí.
 
 </para>
 
-&module-baseconfig.xml;
 &module-bugreporter.xml;
 &module-cdrom-checker.xml;
 &module-shell.xml;
+&module-baseconfig.xml;
   </sect2>
  </sect1>

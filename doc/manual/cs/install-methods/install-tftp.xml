@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 17795 -->
+<!-- original version: 18630 -->
 
  <sect1 condition="supports-tftp" id="install-tftp">
  <title>Příprava souborů pro zavedení ze sítě pomocí TFTP</title>
@@ -13,7 +13,7 @@ specifických adresářů a povolit zavádění vaší stanice.
 
 </para><para>
 
-Musíte nastavit TFTP server a pro CATS stroje BOOTP server
+Musíte nastavit TFTP server a často i BOOTP server
 <phrase condition="supports-rarp"> nebo RARP </phrase>
 <phrase condition="supports-dhcp"> nebo DHCP </phrase> server.
 
@@ -119,7 +119,7 @@ Na jiných systémech musíte zjistit ID běžícího procesu
 Abyste mohli využít PXE (Pre-boot Execution Environment) metodu TFTP
 zavádění, musíte mít TFTP server s podporou
 <userinput>tsize</userinput>, například <command>tftp-hpa</command>
-nebo <classname>atftpd</classname>.
+nebo <classname>atftpd</classname> (doporučujeme první zmíněný).
 
 </para></note><para arch="mips">
 
@@ -152,7 +152,7 @@ echo "2048 32767" > /proc/sys/net/ipv4/ip_local_port_range
 <para>
 
 Dále je potřeba umístit příslušný TFTP obraz (viz
-<xref linkend="where-descs"/>) do adresáře, kde má
+<xref linkend="where-files"/>) do adresáře, kde má
 <command>tftpd</command> uloženy obrazy, obvykle
 <filename>/tftpboot</filename>. Bohužel TFTP klient očekává jméno
 souboru v určitém tvaru, pro který neexistují žádné závazné
@@ -168,50 +168,12 @@ RAMdisku. Pro zavádění ze sítě použijte soubor
 <filename>yaboot-netboot.conf</filename>, který v TFTP adresáři
 přejmenujete na <filename>yaboot.conf</filename>.
 
-</para><para arch="not-powerpc">
-
-TFTP klient často hledá soubor
-<replaceable>hex-ip-adresa-klienta-architektura</replaceable>.
-Tento název se spočítá relativně jednoduše: K části
-<replaceable>hex-ip-adresa-klienta</replaceable> dojdete tak, že
-vyjádříte každý bajt IP adresy klienta v šestnáctkové soustavě. 
-Pokud máte po ruce program <command>bc</command> klidně jej použijte.
-Příkazem <userinput>obase=16</userinput> nastavíte výstup na
-hexadecimální a potom už jen zadáte jednotlivé části IP adresy.
-Pro proměnnou <replaceable>architektura</replaceable> vyzkoušejte
-různé hodnoty.
-
 </para><para arch="i386">
 
-Pro PXE zavádění můžete použít zavaděč
-<filename>pxelinux.0</filename>, jež je součástí balíku
-<classname>syslinux</classname>. Zavaděč nakopírujte do adresáře
-<filename>/tftpboot</filename>. Tamtéž vytvořte podadresář
-<filename>/tftpboot/pxelinux.cfg</filename>, který bude obsahovat
-textový soubor <filename>default</filename>. Možný obsah souboru:
-
-<informalexample><screen>
-
-default lanlinux
-prompt 1
-
-label lanlinux
-  kernel vmlinuz
-  append initrd=initrd.gz devfs=mount root=/dev/ram
-
-</screen></informalexample>
-
-Parametr <userinput>devfs=mount</userinput> je nezbytný, protože bez
-něj by nešlo připojit kořenový souborový systém ze souboru
-<filename>initrd.gz</filename>. Možná také budete potřebovat dodatečný
-parametr <userinput>ramdisk_size=<replaceable>velikost
-v KB</replaceable></userinput>.
-
-</para><para arch="i386">
-
-Závěrem nakopírujte do adresáře <filename>/tftpboot</filename> soubory
-<filename>vmlinuz</filename> a <filename>initrd.gz</filename> určené
-pro zavádění ze sítě (naleznete je na ftp archivech Debianu).
+Pro PXE zavádění by mělo být vše potřebné v souboru
+<filename>netboot/pxeboot.tar.gz</filename>. Tento archiv stačí
+rozbalit do adresáře, kde <command>tftpd</command> uchovává zaváděcí
+obrazy.
 
 </para>
 
@@ -354,6 +316,9 @@ U počítačů SGI Indy se můžete spolehnout na <command>bootpd</command>,
    </sect3>
   </sect2>
 
+<!-- FIXME: commented out since it seems too old to be usable and a current
+            way is not known
+
   <sect2 id="tftp-low-memory">
   <title>TFTP instalace na systémech s nedostatkem paměti</title>
 <para>
@@ -454,4 +419,7 @@ stanice &mdash; <xref linkend="boot-tftp"/>.
 </para>
 
   </sect2>
+
+END FIXME -->
+
  </sect1>

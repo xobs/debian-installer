@@ -64,7 +64,7 @@ k zavedení pou¾ít nìkteré z CD.)
 Zavedete instalaèní systém.
 
 </para></listitem>
-<listitem><para>
+<listitem arch="not-s390"><para>
 
 Zvolíte jazyk pro instalaci.
 
@@ -82,7 +82,7 @@ Nastavíte sí»ové rozhraní.
 </para></listitem>
 <listitem arch="s390"><para>
 
-Otevøete telnetové spojení na nový systém.
+Otevøete ssh spojení na nový systém.
 
 </para></listitem>
 <listitem arch="s390"><para>
@@ -114,6 +114,11 @@ Spustíte svùj novì nainstalovaný systém a provedete základní
 nastavení. 
 
 </para></listitem>
+<listitem arch="s390"><para>
+
+Otevøete ssh spojení na nový systém.
+
+</para></listitem>
 <listitem><para>
 
 Doinstalujete dal¹í software podle svého uvá¾ení
@@ -132,24 +137,25 @@ hlavní softwarové role v tomto instalaèním dramatu:
 </para><para>
 
 <classname>debian-installer</classname> (instalaèní program) je hlavní
-náplní této pøíruèky. Spou¹tí dìlicí program, instaluje linuxové jádro
-a dohlí¾í na programy <classname>modconf</classname>, aby nahrál
-správné ovladaèe, <classname>dhclient</classname>, aby nastavil sí»ové
-pøipojení, <classname>debootstrap</classname>, aby nainstaloval balíky
-základního systému a &boot-loader-installer;, instalátor zavadìèe.
-V této fázi instalace hraje své epizodní role mnohem více hercù, ale
-úloha <classname>debian-installer</classname> konèí s prvním zavedením
-nového systému.
+náplní této pøíruèky. Rozpoznává hardware a nahrává správné ovladaèe,
+rozdìluje disky, instaluje linuxové jádro a dohlí¾í na programy
+<classname>dhcp-client</classname>, aby nastavil sí»ové pøipojení
+a <classname>debootstrap</classname>, aby nainstaloval balíky
+základního systému.  V této fázi instalace hraje své epizodní role
+mnohem více hercù, ale úloha <classname>debian-installer</classname>u
+konèí s prvním zavedením nového systému.
 
 </para><para>
 
 Po zavedení nového systému pøebírá hlavní roli
 <classname>base-config</classname>, který se stará o nastavení èasové
-zóny, pøidávání u¾ivatelù a nastavení systému pro instalaci balíèkù.
-Je¹tì pøed odchodem ze scény vám nabídne spu¹tìní programu
-<classname>tasksel</classname>, který umí instalovat celé skupiny
-spøíznìných programù, a poté programu <classname>aptitude</classname>,
-kterým mù¾ete vybírat jednotlivé balíky.
+zóny (pomocí <classname>tzsetup</classname>), pøidávání u¾ivatelù
+(pøes balík <classname>shadow</classname>) a nastavení systému pro
+instalaci balíèkù (programem <classname>apt-setup</classname>).  Je¹tì
+pøed odchodem ze scény spustí program <classname>tasksel</classname>,
+kterým si mù¾ete doinstalovat celé skupiny spøíznìných programù,
+a poté volitelnì program <classname>aptitude</classname>, kterým
+mù¾ete vybírat jednotlivé balíky.
 
 </para><para>
 
@@ -162,7 +168,7 @@ pøi spu¹tìní programù <classname>tasksel</classname> nebo
 proto, proto¾e hodnì systémù &debian; slou¾í jako servery, a ty ke své
 èinnosti grafické rozhraní nepotøebují.
 
-</para><para>
+</para><para arch="not-s390">
 
 Vezmìte, prosím, na vìdomí, ¾e X Window System je od instalaèního
 systému úplnì oddìlen a proto¾e je mnohem více komplikovaný,
