@@ -308,12 +308,15 @@ ifdef USERDEVFS
 	# Create initial /dev entries -- only those that are absolutely
 	# required to boot sensibly, though.
 	mknod $(TREE)/dev/console c 5 1
-	mknod $(TREE)/dev/tty0 c 4 0
-	mknod $(TREE)/dev/tty1 c 4 1
-	mknod $(TREE)/dev/tty2 c 4 2
-	mknod $(TREE)/dev/tty3 c 4 3
-	mknod $(TREE)/dev/tty4 c 4 4
-	mknod $(TREE)/dev/tty5 c 4 5
+	mkdir -p $(TREE)/dev/vc
+	mknod $(TREE)/dev/vc/0 c 4 0
+	mknod $(TREE)/dev/vc/1 c 4 1
+	mknod $(TREE)/dev/vc/2 c 4 2
+	mknod $(TREE)/dev/vc/3 c 4 3
+	mknod $(TREE)/dev/vc/4 c 4 4
+	mknod $(TREE)/dev/vc/5 c 4 5
+	mkdir -p $(TREE)/dev/rd
+	mknod $(TREE)/dev/rd/0 b 1 0
 endif
 	# Set up modules.dep, ensure there is at least one standard dir (kernel
 	# in this case), so depmod will use its prune list for archs with no
