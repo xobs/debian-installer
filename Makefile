@@ -113,7 +113,7 @@ $(DRIVER1_IMAGE): driver1-stamp
 	rm -f $(DRIVER1_IMAGE)
 	install -d $(TEMP)
 	install -d $(DEST)
-	if [ $(INITRD_FS) = ext2 ]; then \
+	set -e; if [ $(INITRD_FS) = ext2 ]; then \
 		genext2fs -d $(DRIVER1) -b `expr $$(du -s $(DRIVER1) | cut -f 1) + $$(expr $$(find $(DRIVER1) | wc -l) \* 2)` $(DRIVER1_IMAGE); \
         elif [ $(INITRD_FS) = romfs ]; then \
                 genromfs -d $(DRIVER1) -f $(DRIVER1_IMAGE); \
@@ -454,11 +454,13 @@ unifont-reduced-$(TYPE).bdf: all-$(TYPE).utf
 	# reduce-font is part of package libbogl-dev
 	# unifont.bdf is part of package bf-utf-source
 	# The locale must be generated after installing the package locales
-	LC_ALL=en_IN.UTF-8 reduce-font /usr/src/unifont.bdf < all-$(TYPE).utf > $@
+	LC_ALL=en_IN.UTF-8 reduce-font /usr/src/unifont.bdf < all-$(TYPE).utf > $@.tmp
+	mv $@.tmp $@
 
 $(TREE)/unifont.bgf: unifont-reduced-$(TYPE).bdf
 	# bdftobogl is part of package libbogl-dev
-	bdftobogl -b unifont-reduced-$(TYPE).bdf > $@
+	bdftobogl -b unifont-reduced-$(TYPE).bdf > $@.tmp
+	mv $@.tmp $@
 
 tarball: tree
 	tar czf $(DEST)/$(TYPE)-debian-installer.tar.gz $(TREE)
@@ -486,7 +488,8 @@ $(INITRD):  $(TYPE)-tree-stamp $(TREE)/unifont.bgf
 		echo "Unsupported filesystem type"; \
 		exit 1; \
 	fi;
-	gzip -vc9 $(TMP_FILE) > $(INITRD)
+	gzip -vc9 $(TMP_FILE) > $(INITRD).tmp
+	mv $(INITRD).tmp $(INITRD)
 
 # Write image to floppy
 boot_floppy: $(IMAGE)
