@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 11648 -->
+<!-- original version: 23683 -->
 
   <sect2 arch="alpha"><title>Particionamento para &arch-title;</title>
 <para>
 
-Caso tenha selecionado inicializar através do console SRM, você deverá
-usar o <command>fdisk</command> para particionar seu disco, como ele é o 
-único programa de particionamento capaz de manipular volumes de disco
-BSD requeridos pelo programa <command>aboot</command> (lembre-se, o bloco de
-inicialização do SRM é incompatível com tabelas de partição do MS-DOS - veja
-<xref linkend="alpha-firmware"/>).
-O <command>debian-installer</command> executará o <command>fdisk</command>
-por padrão caso não tenha inicializado através do <command>MILO</command>.
+A inicialização da Debian através do console SRM (o único método de 
+discos de inicialização suportados pela &releasename;) requer que você
+tenha um volume de discos BSD, não uma tabela de partições do DOS, em seu 
+disco de inicialização. (Lembre-se, o bloco de partida do SRM é 
+incompatível com tabelas de partições MS-DOS - Veja
+<xref linkend="alpha-firmware"/>.) Como resultado o <command>partman</command>
+cria volumes de discos BSD quando é executado na &architecture;, mas se seu 
+disco já possui uma tabela de partições DOS existente, as partições existentes
+precisarão ser apagadas antes do partman poder converte-las para usar o 
+volume de discos.
 
 </para><para>
 
-Caso o disco que selecionou para particionamento já tenha um volume de 
-disco BSD. O comando <command>fdisk</command> usara o modo de volume 
-BSD como padrão. Caso contrário você deverá usar o comando "b" para 
-entrar no modo de volume de discos.
+Caso tenha escolhido usar o <command>fdisk</command> para particionar seu 
+disco, e o disco que selecionou para o particionamento não possui um 
+volume de disco BSD, você deverá usar o comando "b" para entrar no modo
+de volume de disco.
 
 </para><para>
 
@@ -38,10 +40,12 @@ setores do disco (atualmente ele ocupa em torno de 70 kilobytes, ou 150
 setores), você <emphasis>deverá</emphasis> deixar espaço livre o bastante
 no inicio do disco para ele. No passado, era sugerido que você fizesse uma 
 pequena partição no inicio do disco e deixa-la desformatada. Pela mesma
-razão mencionada acima, nós agora sugerimos que você não faça isto em discos que
-serão somente usados pelo GNU/Linux.
+razão mencionada acima, nós agora sugerimos que você não faça isto em 
+discos que serão somente usados pelo GNU/Linux. Quanod utiliza o 
+<command>partman</command> uma pequena partição ainda será criada para
+o <command>aboot</command> por razões de conveniência.
 
-</para><para>
+</para><para condition="FIXME">
 
 Para instalações ARC, você deverá fazer uma partição FAT pequena no 
 inicio do disco que armazenará o <command>MILO</command> e o

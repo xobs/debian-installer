@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 16990 -->
+<!-- original version: 25152 -->
 
  <sect1 id="kernel-baking"><title>Compilando um Novo Kernel</title>
 <para>
@@ -23,12 +23,6 @@ como APM ou SMP
 
 </para></listitem>
 
-<listitem arch="i386"><para>
-
-O tipo compact e idepci não vem com som. Entretanto, o vanilla 
-vem, ele pode também não funcionar por outras razões.
-
-</para></listitem>
 <listitem><para>
 
 otimizar o kernel removendo controladores desnecessários e
@@ -38,7 +32,7 @@ deixar a inicialização mais rápida
 <listitem><para>
 
 utilizar opções do kernel que não suportados no kernel padrão
-(tal como o firewall de rede)
+(como suporte a grande quantidade de memória RAM)
 
 </para></listitem>
 <listitem><para>
@@ -82,9 +76,9 @@ System.map e um log do arquivo de configuração ativo da compilação.
 </para><para>
 
 Note que você não <emphasis>precisará</emphasis> compilar seu kernel usando
-o "Método da Debian"; mas nós achamos que o uso do sistema de empacotamento
-para gerenciamento do kernel é seguro e fácil. De fato, você poderá pegar 
-os fontes do kernel do Linus ao invés do
+o <quote>Método da Debian</quote>; mas nós achamos que o uso do sistema de 
+empacotamento para gerenciamento do kernel é seguro e fácil. De fato, você 
+poderá pegar os fontes do kernel do Linus ao invés do
 <classname>kernel-source-&kernelversion;</classname> e ainda usar o método
 de compilação do <classname>kernel-package</classname>. 
 
@@ -95,55 +89,45 @@ Você encontrará a documentação completa sobre o uso do
 <filename>/usr/share/doc/kernel-package</filename>. Esta seção
 contém somente um breve tutorial.
 
-</para><para arch="sparc">
-
-Se estiver compilando um kernel para a UltraSPARC, você precisará ter 
-certeza de ter instalado o pacote <classname>egcs64</classname>. Este é 
-o compilador preferido para kernels 64bits da SPARC. O <command>gcc</command> 
-padrão também compilará kernels 64 bits, mas ele não é estável. Mais ainda,
-se você não usar o <classname>egcs64</classname> e encontrar problemas
-nos kernels, você será perguntado para recompilar o kernel usando o 
-<classname>egcs64</classname> para verificar se o seu problema ainda persiste.
-Após instalar o <classname>egcs64</classname> tenha certeza de executar o 
-comando <userinput>update-alternatives --config
-sparc64-linux-gcc</userinput> como usuário root, e ter certeza 
-que o <classname>egcs64</classname> está sendo usado por este programa. 
-
 </para><para>
 
-Nós assumiremos que o fonte do kernel está localizado em 
-<filename>/usr/local/src</filename> e que a versão do seu kernel é
-&kernelversion;. Como root, crie um diretório sob
-<filename>/usr/local/src</filename> e altere o dono deste diretório para 
-sua conta não-root. Com sua conta normal não-root, altere o diretório
-para onde deseja descompactar os fontes do kernel 
-(<userinput>cd /usr/local/src</userinput>), descompacte os fontes do 
-kernel (<userinput>tar xjf /usr/src/kernel-source-&kernelversion;.tar.bz2</userinput>), 
-mude seu diretório para ele (<userinput>cd
-kernel-source-&kernelversion;/</userinput>). 
+Para mais adiante, nós assumiremos que tem controle completo sobre sua máquina
+e descompactará seu fonte do kernel em algum lugar dentro do seu diretório
+de usuário<footnote>
+ 
+<para>
+
+Existem outras localizações onde pode descompactar os fontes do kernel
+e construir seu próprio kernel personalizado, mas isto é fácil pois não
+requer permissões especiais.
+
+</para>
+
+</footnote>. Nós assumiremos que sua versão do kernel é
+&kernelversion;. Tenha certeza que está no diretório que deseja descompactar os
+fontes do kernel, descompacte-os usando <userinput>tar xjf
+/usr/src/kernel-source-&kernelversion;.tar.bz2</userinput> e mude para 
+aquele diretório <filename>kernel-source-&kernelversion;</filename>
+que foi criado.
 
 </para><para>
 
 Agora você poderá configurar seu kernel. Execute o comando <userinput>make
 xconfig</userinput> caso o X11 esteja instalado, configurado e 
 sendo executado, <userinput>make menuconfig</userinput> (será necessário o pacote
-<classname>ncurses-dev</classname> instalado). Leve algum tempo lendo as 
+<classname>libncurses5-dev</classname> instalado). Leve algum tempo lendo as 
 mensagens de ajuda on-line e selecione as opções cuidadosamente. Quando 
 estiver em dúvida, é melhor incluir o controlador de dispositivo 
 (o programa que gerencia periféricos de hardware, tal como placas 
 Ethernet, controladores SCSI e outras). Benha cuidado: outras opções
 não relacionadas a hardwares específicos, devem ser deixadas no 
 valor padrão caso não as entenda. Não se esqueça de selecionar a 
-opção "Kernel module loader" em "Loadable module support".
-
-<phrase arch="alpha"> e  "Enhanced Real Time
-Clock Support" em "Character devices" (eles não serão selecionados </phrase>
-<phrase arch="not-alpha"> (ele não será selecionado  </phrase>
-
-por padrão). Caso não estejam incluídos, sua instalação Debian poderá apresentar
-problemas.
+opção <quote>Kernel module loader</quote> em <quote>Loadable module support</quote>
+(esta opção não é selecionada por padrão). Caso não estiver incluida, as 
+instalações usando a Debian podem apresentar problemas.
 
 </para><para>
+
 Limpe a árvore de fontes e resete os parâmetros do pacote <classname>kernel-package</classname>.
 Para fazer isto, execute o comando <userinput>make-kpkg clean</userinput>.
 
@@ -151,11 +135,11 @@ Para fazer isto, execute o comando <userinput>make-kpkg clean</userinput>.
 
 Agora, compile o kernel: 
 <userinput>fakeroot make-kpkg --revision=custom.1.0 kernel_image</userinput>. 
-O número de verão "1.0" poderá ser modificado se desejar; este é somente
-um número de versão que usará para ter controle sobre as construções do 
+O número de verão <quote>1.0</quote> poderá ser modificado se desejar; este é 
+somente um número de versão que usará para ter controle sobre as construções do 
 seu kernel. De forma parecida, você poderá colocar uma palavra no lugar
-de "custom" (e.g., um nome de máquina). A compilação do Kernel poderá 
-levar um tempo, dependendo do poder de processamento da sua máquina.
+de <quote>custom</quote> (e.g., um nome de máquina). A compilação do Kernel 
+poderá levar um tempo, dependendo do poder de processamento da sua máquina.
 
 </para><para condition="supports-pcmcia">
 
@@ -173,7 +157,7 @@ personalizado como qualquer pacote. Como root, execute o comando <userinput>dpkg
 ../kernel-image-&kernelversion;-<replaceable>sub-arquitetura</replaceable>_custom.1.0_&architecture;.deb</userinput>.
 A parte <replaceable>sub-arquitetura</replaceable> é uma sub-arquitetura 
 opcional,
-<phrase arch="i386"> tal como "i586", </phrase>
+<phrase arch="i386"> tal como <quote>i586</quote>, </phrase>
 dependendo das opções do kernel que escolheu.
 O comando <userinput>dpkg -i kernel-image...</userinput> instalará o kernel,
 junto com outros arquivos de suporte. Por exemplo, o 

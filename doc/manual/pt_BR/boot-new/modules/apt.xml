@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 18642 -->
+<!-- original version: 23845 -->
 
  <sect2 id="configure-apt">
  <title>Configurando o APT</title>
@@ -14,14 +14,23 @@ com o pacote <classname>apt</classname>.<footnote>
 
 Note que o programa atual que instala pacote é chamado 
 <command>dpkg</command>. No entanto, este pacote é uma ferramenta de 
-baixo nível. O <command>apt-get</command> executará o <command>dpkg</command>
-de forma apropriada; ele é uma ferramenta de alto-nível também, no entanto, 
-ele sabe instalar outros pacotes que também são requeridos pelo pacote que esta 
-tentando instalar, assim como obter pacotes através do CD, da rede, ou de outros 
-métodos.
+baixo nível. O <command>apt-get</command> é uma ferramenta de alto nível
+que executará o <command>dpkg</command> quando for apropriado e também
+porque ele sabe como instalar outros pacotes que são requeridos pelo 
+pacote que está tentando isntalar, assim como obter pacotes através do CD, 
+da rede, ou de outros métodos.
 
 </para>
 </footnote>
+
+Outras interfaces amigáveis para o gerenciamento de pacote, como o 
+<command>aptitude</command>, <command>synaptic</command> e o antigo 
+<command>dselect</command> também usam e dependem do <command>apt-get</command>. 
+Estas interfaces são recomendadas para novos usuários, pois elas integram
+algumas características adicionais (como pesquisa de pacotes e checagem 
+de status) em uma interface agradável ao usuário.
+
+</para><para>
 
 O APT deve ser configurado para saber de onde pegar os pacotes. A aplicação
 que te auxilia nesta tarefa é chamada <command>apt-setup</command>.
@@ -68,7 +77,7 @@ de checagem de arquivos da rede lento enquanto procura por novas versões.
 Caso planeja instalar o resto do seu sistema via rede, o método mais
 comum é selecionar a origem <userinput>http</userinput>. A origem 
 <userinput>ftp</userinput> também é aceitável, mas tende a ser um 
-pouco mais lento para faze as conexões.
+pouco mais lento para fazer as conexões de rede.
 
 </para><para>
 
@@ -77,19 +86,30 @@ dizer ao <command>apt-setup</command> que país reside. Isto configura
 que mirror oficial da Debian na Internet se conectará. Dependendo de 
 que país selecionar, Você terá uma lista de máquinas possíveis. É 
 geralmente uma boa prática pegar o primeiro no topo da lista, mas
-qualquer um deles deverá funcionar.
+qualquer um deles deverá funcionar. Note no entanto que a 
+lista de mirror oferecida durante a instalação foi gerada quando esta
+versão da Debian foi lançada e alguns mirrors podem não existir mais.
 
 </para><para>
 
-Se estiver instalando através de HTTP, você será perguntado se precisa
-configurar seu servidor proxy. Isto algumas vezes é requerido pro pessoas
-que estão acessando através de firewalls, em redes corporativas, etc.
+Após selecionar um mriror, você será perguntado se um servidor proxy
+deverá ser usado. Um servidor proxy é um servidor que redireciona todas 
+suas conexões HTTP e/ou FTP para a Internet e é mais frequentemente usado
+para regular e otimizar o acesso a internet em redes corporativas. Em algumas
+redes somente o servidor proxy tem permissão para se conectar a Internet, 
+neste caso você deverá entrar com o nome do seu servidor proxy. Você 
+também poderá ter que incluir o nome de usuário e senha. A maioria dos usuários
+domésticos não precisam especificar um servidor proxy, no entanto alguns provedores
+podem fornecer servidores proxy para seus usuários.
 
 </para><para>
 
-Finalmente, sua nova fonte de pacotes através da rede será testada. Se tudo
-correr bem, você será perguntado se deseja configurar outra origem para os
-pacotes na rede.
+Após selecionar um mirror, sua nova origem de pacotes de rede será 
+testada. Se tudo correr bem, você será perguntado se deseja adicionar outra
+fonte de pacotes. Se tiver quaisquer problemas usando a fonte de pacotes
+que selecionou, tente usar um mirror diferente (ou da lista de seu país ou 
+da lista global) ou tente usar uma origem de rede diferente para se obter os 
+pacotes.
 
 </para>
   </sect3>

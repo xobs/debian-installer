@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 18647 -->
+<!-- original version: 24840 -->
 
  <sect1 id="linuxdevices"><title>Dispositivos do Linux</title>
 <para>
@@ -124,13 +124,12 @@ O mouse pode ser usado em ambos o console do Linux (com o gpm) e no
 ambiente X window. Os dois podem se tornar compatíveis caso o repetidor
 gpm é usado para permitir que o sinal vá para o servidor X como 
 mostrado:
+
 <informalexample><screen>
-mouse =&#62; /dev/psaux  =&#62; gpm =&#62; /dev/gpmdata -&#62; /dev/mouse =&#62; X
+mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; X
          /dev/ttyS0             (repetidor)        (link simbólico)
          /dev/ttyS1
 </screen></informalexample>
-
-</para><para>
 
 Ajuste o protocolo de repetição para ser raw (no arquivo <filename>/etc/gpm.conf</filename>) 
 enquanto ajustando o protocolo original do mouse do X no arquivo 
@@ -142,9 +141,11 @@ enquanto ajustando o protocolo original do mouse do X no arquivo
 Esta forma de usar o gpm até no X tem vantagens que se o mouse 
 for desconectado inadvertidamente, você poderá simplesmente reiniciar o 
 gpm com 
+
 <informalexample><screen>
-user@debian:# /etc/init.d/gpm restart
+# /etc/init.d/gpm restart
 </screen></informalexample>
+
 para reativar o mouse sem reiniciar o X.
 
 </para><para>
@@ -172,7 +173,6 @@ seguinte linhas no seu arquivo
 <filename>/etc/sysctl.conf</filename>:
 
 <informalexample><screen>
-
 # Emulação de mouse 3-button
 # ativa a emulação
 /dev/mac_hid/mouse_button_emulation = 1
@@ -181,7 +181,6 @@ seguinte linhas no seu arquivo
 # Envia o sinal do botão direito do mouse com a tecla F12
 /dev/mac_hid/mouse_button3_keycode = 88
 # Para teclas diferentes, use o atalho para lhe dizer que código é.
-
 </screen></informalexample>  
 </para>
   </sect2>
@@ -203,17 +202,60 @@ ser menos que o total obtido pela adição dos números.
 
 </para><para>
 
-<informalexample><screen>
-Task                              Installed  Download   Space Needed 
-                                  Size (MB)  Size (MB)  To Install (MB)
+<informaltable><tgroup cols="4">
+<thead>
+<row>
+  <entry>Tarefa</entry>
+  <entry>Tamanho instalado (MB)</entry>
+  <entry>Tamanho do Download (MB)</entry>
+  <entry>Espaço requerido para instalação (MB)</entry>
+</row>
+</thead>
 
-Desktop                            1537        521        2058
-Servidor Web                         71         21          92
-Servidor de Impressão               240         83         323
-Servidor de Mensagens                41         12          53
-Servidor de Arquivos                 85         34         119
-Banco de Dados SQL                  108         33         141
+<tbody>
+<row>
+  <entry>Desktop</entry>
+  <entry>1537</entry>
+  <entry>521</entry>
+  <entry>2058</entry>
+</row>
 
-</screen></informalexample>
+<row>
+  <entry>Servidor Web</entry>
+  <entry>71</entry>
+  <entry>21</entry>
+  <entry>92</entry>
+</row>
+
+<row>
+  <entry>Servidor de Impressão</entry>
+  <entry>240</entry>
+  <entry>83</entry>
+  <entry>323</entry>
+</row>
+
+<row>
+  <entry>Servidor de E-mails</entry>
+  <entry>41</entry>
+  <entry>12</entry>
+  <entry>53</entry>
+</row>
+
+<row>
+  <entry>Servidor de Arquivos</entry>
+  <entry>85</entry>
+  <entry>34</entry>
+  <entry>119</entry>
+</row>
+
+<row>
+  <entry>Banco de dados SQL</entry>
+  <entry>108</entry>
+  <entry>33</entry>
+  <entry>141</entry>
+</row>
+
+</tbody>
+</tgroup></informaltable>
 </para>
  </sect1>

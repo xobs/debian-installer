@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 22232 -->
+<!-- original version: 24663 -->
 
  <sect1 condition="supports-tftp" id="install-tftp">
  <title>Preparando os arquivos para inicialização via rede usando TFTP</title>
@@ -92,16 +92,13 @@ que o <command>tftpd</command> está ativado. Ele normalmente é ativado
 através da seguinte linha no seu arquivo <filename>/etc/inetd.conf</filename>:
 
 <informalexample><screen>
-
 tftp dgram udp wait nobody /usr/sbin/tcpd in.tftpd /tftpboot
-
 </screen></informalexample>
 
 Os pacotes da Debian geralmente configurarão isto corretamente por padrão
 quando forem instalados.
 
 </para><para>
-
 
 Olhe neste arquivo e lembre-se do diretório que é usado como 
 argumento para o <command>in.tftpd</command>; você irá precisa dele
@@ -133,9 +130,7 @@ TFTP é uma máquina GNU/Linux executando o kernel do Linux 2.4, você precisará
 configurar o seguinte em seu servidor:
 
 <informalexample><screen>
-
-echo 1 > /proc/sys/net/ipv4/ip_no_pmtu_disc
-
+# echo 1 &gt; /proc/sys/net/ipv4/ip_no_pmtu_disc
 </screen></informalexample>
 
 para desligar a descoberta de caminho MTU, caso contrário
@@ -146,9 +141,7 @@ primeiro pacote. Novamente o Linux 2.4.x causando bugs na PROM
 você poderá evitar isto fazendo
 
 <informalexample><screen>
-
-echo "2048 32767" > /proc/sys/net/ipv4/ip_local_port_range
-
+echo "2048 32767" &gt; /proc/sys/net/ipv4/ip_local_port_range
 </screen></informalexample>
 
 para ajustar a faixa de portas de origem que o servidor TFTP
@@ -207,12 +200,7 @@ Tenha certeza que seu servidor dhcp está configurado para passar o arquivo
 Para as DECstations, existem arquivos tftpimage para cada 
 sub-arquitetura. que contém ambos os kernels e o programa de 
 instalação em um arquivo. A convenção de nomes é 
-tftpimage-<replaceable>subarchitecture</replaceable> ou
-tftpimage-<replaceable>subarchitecture</replaceable>.gz. Se a imagem
-tftpimage estiver compactada com gzip (o nome termina com .gz), você 
-precisa descompacta-la primeiro com <userinput>gunzip
-tftpimage-<replaceable>subarchitecture</replaceable>.gz</userinput>,
-como máquinas DECstations não podem compactar arquivos usando o TFTP. 
+<replaceable>subarquitetura</replaceable>/netboot-boot.img.
 Copie o arquivo tftpimage que deseja usar para
 <userinput>/tftpboot/tftpboot.img</userinput> caso você utilize o 
 exemplo BOOTP/DHCP descritos acima.
@@ -296,7 +284,17 @@ As arquiteturas SPARC usam os nomes de sub-arquiteturas, tais como
 branco, assim o arquivo que o cliente procura é simplesmente
 <filename>client-ip-in-hex</filename>. Assim, caso a sub-arquitetura 
 do seu sistema seja SUN4C e seu endereço IP 192.168.1.3, o nome 
-de arquivo deverá ser <filename>C0A80103.SUN4C</filename>.
+de arquivo deverá ser <filename>C0A80103.SUN4C</filename>. 
+Um método fácil de determinar isto é entrar com o seguinte comando
+no interpretador de comandos (assumindo que o IP da máquina 
+é 10.0.0.4):
+<informalexample><screen>
+$ printf '%.2x%.2x%.2x%.2x\n' 10 0 0 4
+</screen></informalexample>
+
+Isto mostrará o IP em hexadecimal; para obter o nome do arquivo correto, você 
+precisará mudar todas as letras para maiúsculas e, se necessário, adicionar o 
+nome da sub-arquitetura.
 
 </para><para>
 
@@ -384,10 +382,8 @@ Descompacte o arquivo raíz tar em seu servidor NFS (pode ser o mesmo
 sistema que seu servidor TFTP): 
 
 <informalexample><screen>
-
 # cd /tftpboot
 # tar xvzf root.tar.gz
-
 </screen></informalexample>
 
 Tenha certeza de utilizar o comando <command>tar</command> da GNU (ao invés
@@ -403,13 +399,11 @@ ao seu arquivo <filename>/etc/exports</filename> (sintaxe do GNU/Linux,
 deverá ser similar no SunOS):
 
 <informalexample><screen>
-
-/tftpboot/debian-sparc-root cliente(rw,no_root_squash)
-
+/tftpboot/debian-sparc-root <replaceable>client</replaceable>(rw,no_root_squash)
 </screen></informalexample>
 
-NOTA: "cliente" é o nome de estação ou endereço IP reconhecido pelo
-servidor para o sistema que deseja inicializar.
+NOTA: <replaceable>cliente</replaceable> é o nome de estação ou endereço IP 
+reconhecido pelo servidor para o sistema que deseja inicializar.
 
 </para></listitem>
 <listitem><para>
@@ -420,9 +414,7 @@ diretório <filename>/tftpboot</filename> directory. Por exemplo,
 caso o endereço IP do cliente seja 192.168.1.3, faça
 
 <informalexample><screen>
-
 # ln -s debian-sparc-root 192.168.1.3
-
 </screen></informalexample>
 
 </para></listitem>

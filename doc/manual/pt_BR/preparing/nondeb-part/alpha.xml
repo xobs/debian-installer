@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 11648 -->
+<!-- original version: 23681 -->
 
 
   <sect2 arch="alpha"><title>Particionamento no UNIX Tru64</title>
@@ -17,13 +17,18 @@ Linux 2.2 e superiores, a correspondência é sempre "1" para "a",
 
 </para><para>
 
-As partições no volume de disco podem se subscrever. Ainda em tempo, 
-a partição "c" é requerida para armazenar todo o disco (assim substituindo
-todas as partições não vazias). Sob o Linux isso torna 
-<filename>sda3</filename> idêntico a <filename>sda</filename> 
-(<filename>sdb3</filename> a <filename>sdb</filename>, se presente
-e assim por diante). Como forma de satisfazer este requerimento, você deverá 
-evitar cuidadosamente a criação de partições que possam se sobrescrever.
+As partições em um volume de disco Tru64 podem se sobrescrever. 
+No entanto, caso este disco serja usado pelo Tru64, a partição 
+"c" é requerida para sobrescrever todo o disco (assim, subrescrevendo
+todas as outras partições não vazias). Sob o Linux, isto torna 
+<filename>sda3</filename> identico a <filename>sda</filename> 
+(<filename>sdb3</filename> a
+<filename>sdb</filename>, se presente, e assim por diante). No entanto, 
+a ferramenta de particionamento partman, usada pelo &d-i;, atualmente 
+não trabalha com partições que se sobrepoem. Como resultado, não é 
+recomendado compartilhar um disco entre o Tru64 e a Debian. As partições
+em discos Tru64 podem ser montadas sob a Debian após a instalação ser 
+completada.
 
 </para><para>
 
@@ -32,26 +37,8 @@ inicio do disco, assim ela sempre incluirá o bloco de partida
 com o volume de disco. Se tiver a intenção de iniciar a Debian a
 partir deste disco, você precisará de um tamanho de pelo menos 2MB
 para o aboot e talvez um kernel.
-
-</para><para>
-
-Note que estas duas partições são somente requeridas por compatibilidade;
-nenhum arquivo deverá ser gravado nelas ou poderá destruir dados. Caso
-não esteja pensando em compartilhar o disco com o Unix Tru64 ou um 
-dos sistemas livres derivados do BSD 4.4 Lite (FreeBSD, OpenBSD ou 
-NetBSD), poderá ignorar estes requerimentos e usar a ferramenta de 
-particionamento a partir dos discos de partida da Debian. Veja 
-<xref linkend="partition-programs"/> para detalhes.
-
-</para><para>
-
-Os discos podem ser particionados com a ferramenta de configuração gráfica
-de discos que está disponível a partir do Gerenciador de Aplicações ou 
-com o utilitário de linha de comando <command>disklabel</command>. O 
-tipo de partição para o sistema de arquivos Linux deverá ser ajustado para
-"resrvd8". Isto somente pode ser feito via <command>disklabel</command>; 
-no entanto, todas as outras configurações podem ser feitas facilmente
-com a ferramenta gráfica.
+Note que esa partição é somente requerida por compatibilidade; você não 
+deverá colocar lá um sistema de arquivos, ou terá perda de dados.
 
 </para><para>
 
@@ -94,7 +81,10 @@ Se planeja inicializar o Linux através de uma console
 ARC/AlphaBIOS/ARCSBIOS, você precisará de uma partição 
 (pequena) para o MILO. 5MB é o suficiente. Caso o Windows NT seja
 instalado, sua partição de inicialização de 6MB deverá servir este
-propósito.
+propósito. A Debian &releasename; não suporta a instalação do MILO. 
+Se já possui o MILO instalado me seu sistema ou instalou o 
+MILO através de outra mídia, a Debian ainda pode ser inicializada 
+através do ARC.
 
 </para>
   </sect2>
