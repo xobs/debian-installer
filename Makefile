@@ -70,18 +70,7 @@ ARCH = $(DEB_HOST_ARCH)
 # By default, we just advertise what we can do.
 #
 .PHONY: all
-all:
-	@echo "Useful targets:"
-	@echo
-	@echo "all_build"
-	@echo "all_stats"
-	@echo "all_clean"
-	@echo "reallyclean"
-	@echo
-	@echo "demo"
-	@echo "shell"
-	@echo
-	@$(submake) all_list
+all: list
 
 #
 # Configurations for the varying ARCH, SUBARCH, MEDIUM, FLAVOUR.
@@ -191,10 +180,26 @@ finish_validate:
 #
 # List all targets useful for direct invocation.
 #
+.PHONY: list
+list:
+	@echo "Useful targets:"
+	@echo
+	@echo "list"
+	@echo "all_build"
+	@echo "stats"
+	@echo "all_clean"
+	@echo "reallyclean"
+	@echo
+	@echo "demo"
+	@echo "shell"
+	@echo
+	@$(submake) all_list
+
 .PHONY: _list
 _list:
 	@set -e; \
 	echo build_$(targetstring); \
+	echo stats_$(targetstring); \
 	$(if $(findstring $(MEDIUM),$(WRITE_MEDIA)),echo write_$(targetstring);) \
 	echo clean_$(targetstring)
 
@@ -663,13 +668,13 @@ _checkedwrite: _write
 
 #
 # generate statistics
-#
 # Suitable for a cron job, you'll only see the stats unless a build fails.
-.PHONY: all_stats
-all_stats:
+#
+.PHONY: stats
+stats:
 	@echo "Image size stats"
 	@echo
-	$(call recurse,SUBARCH,subarch,stats)
+	$(submake) all_stats
 
 # For manual invocation we provide a generic stats rule.
 .PHONY: stats_%
