@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 -->
+<!-- original version: 19009 -->
 
 
   <sect2 arch="i386"><title>DOS や Windows からのパーティション分割</title>
@@ -56,13 +56,13 @@ LBA アドレスも、オーバーレイドライバ
 One of the most common installations is onto a system that already
 contains DOS (including Windows 3.1), Win32 (such as Windows 95, 98, Me,
 NT, 2000, XP), or OS/2, and it is desired to put Debian onto the same disk
-without destroying the previous system.  As explained in the 
-<xref linkend="partition-sizing"/>, decreasing the size 
-of an existing partition
-will almost certainly damage the data on that partition unless certain
-precautions are taken.  The method described here, while not
-guaranteed to protect your data, works extremely well in practice.  As
-a precaution, you should <emphasis>make a backup</emphasis>.
+without destroying the previous system. Note that the installer supports
+resizing of FAT filesystems as used by DOS and older versions of Windows,
+and in most cases you should not need to use the method described below,
+unless you need to move the start of the FAT filesystem. Newer versions of
+Windows typically use the NTFS filesystem, and the method below will not
+work. To resize NTFS filesystems you will need to find an use the "ntfsresize"
+program.
 -->
 よくあるインストールのかたちとして、
 すでに DOS (Windows3.1 も含む)、
@@ -71,13 +71,14 @@ OS/2 などが入っているシステムに、
 新たに Debian をインストールするような場合があり、
 既存のシステムを壊すことなく、
 同じディスクに Debian を入れるという要望があります。
-<xref linkend="partition-sizing"/> で説明されているように、
-事前に何らかの処理を行わない限り、
-不用意に既存のパーティションのサイズを減らすと、
-まず間違いなくそのパーティションのデータを壊してしまうでしょう。
-以下に述べる方法は、データを完全に護る保証はありませんが、
-実際には非常にうまく動作するはずです。
-ただ用心のために、<emphasis>バックアップは取るべきです</emphasis>。
+DOS や Windows の古いバージョンで使用された、
+FAT ファイルシステムのリサイズをインストーラがサポートしており、
+ほとんどの場合、FAT ファイルシステムの開始位置を移動させる必要がなければ、
+下に記述された方法を使用する必要がないことに注意してください。
+Windows の新しいバージョンでは、典型的に NTFS ファイルシステムを使用します。
+また、下記の方法はうまくいきません。
+NTFSファイルシステムをリサイズするために、
+"ntfsresize" プログラムを使用する必要があります。
 
 </para><para>
 
