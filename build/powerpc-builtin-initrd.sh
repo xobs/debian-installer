@@ -1,6 +1,6 @@
 #!/bin/bash -e
 # powerpc initrd inbuilder script.
-# Sven Luther, MArch 2004
+# Sven Luther, March 2004
 # This is free software under the GNU General Public License.
 
 # May also be set in Makefile
@@ -51,7 +51,7 @@ done
 # Make sure the directories are available
 for file in "$builddir" "$destdir"; do
 	if [ ! -d $file ]; then
-		echo "error: $file inexistand or not a directory"
+		echo "error: $file nonexistent or not a directory"
 		exit 1
 	fi
 done

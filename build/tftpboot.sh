@@ -1,5 +1,5 @@
 #!/bin/bash -e
-# Boot Disk maker for TFTP prototcol.
+# Boot Disk maker for TFTP protocol.
 # Eric Delaunay, February 1998.
 # Ben Collins, March 2000,2002
 # Thiemo Seufer, 2003-12-10
