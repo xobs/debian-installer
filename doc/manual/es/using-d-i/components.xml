@@ -1,59 +1,79 @@
-<!-- retain these comments for translator revision tracking -->
-<!-- original version: 14975 untranslated -->
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 17510 -->
 
  <sect1 id="module-details">
- <title>Using Individual Components</title>
+ <title>Usando componentes individuales</title>
 <para>
 
-In this section we will describe each installer component in
-detail. The components are logically grouped together to
-a user-recognisable parts as they appear during the install.
+En esta sección describiremos cada componente del instalador en
+detalle. Los componentes han sido agrupados en etapas que serán
+reconocibles por los usuarios. Estas se presentan en el orden en
+el que aparecen durante la instalación. Note que no todos los módulos
+serán usados en cada instalación; los módulos que realmente son
+usados dependen del método de instalación que use y de su hardware.
 
 </para>
 
   <sect2>
-  <title>Setting up Debian Installer and Hardware Configuration</title>
+  <title>Configurar el instalador de Debian y configuración de hardware</title>
 <para>
 
-Let's assume the Debian Installer has booted and you are facing its
-first screen.  At this time, &d-i; is still quite incapable. It
-doesn't know much about your computer hardware, preferred language, or
-even the task it should fulfil. Don't worry. Because &d-i; is quite
-clever, it can automatically probe for your hardware, locate the rest
-of its components and upgrade itself to a modern, well-built program.
+Asumamos que el instalador de Debian ha arrancado y esta visualizando
+su pantalla inicial. En este momento, las capacidades del &d-i; son
+todavía algo limitadas. Éste no conoce mucho sobre su hardware, idioma
+preferido, o incluso la tarea que deberá realizar. No se preocupe.
+Porque &d-i; es algo hábil, puede explorar automáticamente su hardware, 
+ubicar el resto de sus componentes y auto-actualizarse a un programa
+moderno y bien construido.
 
-However, you still need to help &d-i; with some tasks it can't guess
-easily (like selecting your preferred language, keyboard layout or
-desired network mirror).
+Sin embargo, todavía deberá ayudar a &d-i; proveiendo alguna información
+que no puede determinar automáticamente (como elegir su idioma preferido,
+el mapa del teclado o el servidor de réplica deseado).
+
+</para><para>
+
+Notará que &d-i; realiza la <firstterm>detección de hardware</firstterm> 
+varias veces durante esta etapa. La primera vez se enfoca específicamente
+en el hardware requerido para cargar los componentes del instalador (como
+su CD-ROM o tarjeta de red). En vista de que no todos los controladores
+podrían estar disponibles en esta primera ejecución, la detección de
+hardware se necesita repetir después, durante el proceso.
 
 </para>
 
+&module-lowmem.xml;
 &module-languagechooser.xml;
 &module-countrychooser.xml;
+&module-kbd-chooser.xml;
 &module-s390-netdevice.xml;
 &module-s390-dasd.xml;
-&module-ddetect.xml;
 &module-pcmcia.xml;
-&module-kbd-chooser.xml;
-&module-netcfg.xml;
-&module-iso-scan.xml;
-&module-choose-mirror.xml;
 &module-cdrom-detect.xml;
-&module-lowmem.xml;
-&module-anna.xml;
+&module-ddetect.xml;
+&module-iso-scan.xml;
+<!--
+&module-load-components;
+Insert Load installer components here; mention that it is executed later
+(after netcfg and choose mirror) if netboot installation.
+-->
+&module-netcfg.xml;
+&module-choose-mirror.xml;
+&module-anna.xml; <!-- should probably not be included -->
+
   </sect2>
 
   <sect2>
-  <title>Partitioning and Mount Point Selection</title>
+  <title>Particionar y elección de punto de montaje</title>
 <para>
 
-At this time, &d-i; should be in its full strength, customized for
-user's needs and ready to do some real work.
+En este momento, después de que ha sido ejecutada la detección de hardware
+por última vez, &d-i; deberá estar en su total capacidad, adaptado para
+las necesidades del usuario y listo para realizar el trabajo real.
 
-As the title of this chapter states, the main task of the next few
-components lies in partitioning your disks, creating filesystems,
-assigning mountpoints and configuring closely related issues like LVM
-or RAID devices.
+Como lo indica el título de esta sección, la tarea principal de los
+próximos componentes radica en particionar sus discos, crear sistemas
+de ficheros, asignar puntos de montaje y opcionalmente configurar
+temas estrechamente relacionados como LVM o dispositivos RAID.
 
 </para>
 
@@ -66,13 +86,13 @@ or RAID devices.
   </sect2>
 
   <sect2>
-  <title>Installing the Base System</title>
+  <title>Instalar el sistema base</title>
 <para>
 
-Albeit this part is the least problematic, it consumes most time of
-the install, because it downloads, verifies and unpacks the whole base
-system. If you have a slow computer or network connection, this could
-take some time.
+Aunque esta etapa es la menos problemática, consume la mayor parte del
+tiempo de instalación debido a que descarga, verifica y desempaqueta
+el sistema base completo. Si usted tiene un ordenador o conexión de
+red lentos, esto podría tomar algún tiempo.
 
 </para>
 
@@ -81,22 +101,22 @@ take some time.
   </sect2>
 
   <sect2>
-  <title>Making Your System Bootable</title>
+  <title>Hacer su sistema arrancable</title>
 <para>
 
-Note that multiple operating systems booting on a single machine is
-still something of a black art.  This document does not even attempt
-to document the various boot managers, which vary by architecture and
-even by subarchitecture.  You should see your boot manager's
-documentation for more information.
+Note que el arrancar múltiples sistemas operativos en una misma máquina
+todavía es un arte oscuro. Este documento no intenta documentar
+los diferentes gestores de arranque, que varían por arquitectura e
+incluso por sub-arquitectura. Deberá consultar la documentación de
+su gestor de arranque para mayor información.
 
 </para><para condition="supports-nfsroot">
 
-If you are installing a diskless workstation, obviously, booting off
-the local disk isn't a meaningful option, and this step will be
-skipped. <phrase arch="sparc">You may wish to set the OpenBoot to boot
-from the network by default; see <xref
-linkend="boot-dev-select-sun"/>.</phrase>
+Si esta instalando una estación de trabajo sin disco, obviamente, 
+arrancar desde el disco local no es una opción significativa, de modo
+que esta etapa se saltará. <phrase arch="sparc">Tal vez quiera
+configurar OpenBoot para arrancar desde red en forma predeterminada,
+vea <xref linkend="boot-dev-select-sun"/>.</phrase>
 
 </para>
 
@@ -117,11 +137,11 @@ linkend="boot-dev-select-sun"/>.</phrase>
   </sect2>
 
   <sect2>
-  <title>Finishing the First Stage</title>
+  <title>Finalizar la primera etapa</title>
 <para>
 
-These are the last bits to do before rebooting to your new Debian. It
-mostly consists of tidying up after the &d-i;.
+Estas son las últimas cosas a hacer antes de reiniciar su nuevo
+sistema Debian. Básicamente consiste en ordenar después al &d-i;. 
 
 </para>
 
@@ -129,12 +149,12 @@ mostly consists of tidying up after the &d-i;.
   </sect2>
 
   <sect2>
-  <title>Miscellaneous</title>
+  <title>Miscelánea</title>
 <para>
 
-Following components are usually not involved in the installation
-process, but they are awaiting in the background to help the user in
-case something goes wrong.
+Los componentes listados en esta sección usualmente no están involucrados
+en el proceso de instalación, pero están esperando en el segundo plano
+para ayudar al usuario en caso de que algo falle.
 
 </para>
 
