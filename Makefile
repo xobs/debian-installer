@@ -199,7 +199,7 @@ tree-stamp:
 	# not listed in the status file. This nasty thing puts them in,
 	# and alters their names to end in -reduced to indicate that
 	# they have been modified.
-	for package in $$(dpkg -S `find debian-installer/lib -type f -not -name '*.o'| \
+	for package in $$(dpkg -S `find $(TREE)/lib -type f -not -name '*.o'| \
 			sed s:debian-installer::` | cut -d : -f 1 | \
 			sort | uniq); do \
 		dpkg -s $$package >> $(DPKGDIR)/status; \
@@ -252,7 +252,7 @@ $(INITRD):
 # 2. copy over kernel, initrd
 # 3. install syslinux
 floppy_image: Makefile initrd tmp_mount $(FLOPPY_IMAGE)
-$(FLOPPY_IMAGE): Makefile initrd tmp_mount
+$(FLOPPY_IMAGE):
 	dh_testroot
 	
 	dd if=/dev/zero of=$(FLOPPY_IMAGE) bs=1k count=$(FLOPPY_SIZE)
@@ -272,6 +272,11 @@ $(FLOPPY_IMAGE): Makefile initrd tmp_mount
 # Write image to floppy
 boot_floppy: floppy_image
 	dd if=$(FLOPPY_IMAGE) of=/dev/fd0
+
+# If you're paranoid, you can check the floppy to make sure it wrote
+# properly.
+boot_floppy_check:
+	cmp /dev/fd0 $(FLOPPY_IMAGE)
 
 COMPRESSED_SZ=$(shell expr $(shell tar cz $(TREE) | wc -c) / 1024)
 stats: tree
