@@ -1,60 +1,68 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 14602 -->
+<!-- original version: 18640 -->
 
  <sect1 id="module-details">
  <title>Utilisation des composants</title>
 <para>
 
 Dans cette section, nous décrirons en détail chaque composant de 
-l'installateur. 
-The components are logically grouped together to
-a user-recognisable parts as they appear during the install.
-
+l'installateur. Ces composants sont groupés en étapes reconnaissables par les
+utilisateurs. Ils sont présentés selon l'ordre d'apparition dans le 
+processus d'installation. Notez que tous les modules ne sont pas utilisés dans
+toutes les installations. Les modules utilisés dépendent du type 
+d'installation choisi et du matériel.
 </para>
 
   <sect2>
-  <title>Setting up Debian Installer and Hardware Configuration</title>
+  <title>L'installateur Debian et la configuration du matériel</title>
 <para>
 
-Let's assume the Debian Installer has booted and you are facing its
-first screen.  At this time, &d-i; is still quite incapable. It
-doesn't know much about your computer hardware, preferred language, or
-even the task it should fulfil. Don't worry. Because &d-i; is quite
-clever, it can automatically probe for your hardware, locate the rest
-of its components and upgrade itself to a modern, well-built program.
+Supposons que l'installateur Debian a démarré et vous propose son
+premier écran. Les fonctionnalités de &d-i; sont à ce moment très limitées.
+Il ne connaît pas votre matériel, la langue voulue, ni même ce qu'il doit
+faire. Ne vous inquiétez pas ! &d-i; est un programme intelligent et il peut
+explorer votre matériel, trouver ses composants et se transformer en un
+système d'installation opérationnel.
 
-However, you still need to help &d-i; with some tasks it can't guess
-easily (like selecting your preferred language, keyboard layout or
-desired network mirror).
-
+Cependant certaines informations, la langue choisie, la carte clavier ou le
+miroir sur le réseau par exemple, doivent lui être données.
 </para>
 
+<para>
+Il faut noter que &d-i; procède à plusieurs détections de matériel pendant
+cette étape. La première recherche particulièrement le matériel nécessaire à
+l'installation des composants de l'installateur (le lecteur de cédérom ou la 
+carte réseau par exemple). Comme tous les pilotes ne sont pas disponibles
+lors de cette première recherche, d'autres détections de matériel seront
+nécessaires.
+</para>
+
+&module-lowmem.xml;
 &module-languagechooser.xml;
 &module-countrychooser.xml;
+&module-kbd-chooser.xml;
 &module-s390-netdevice.xml;
 &module-s390-dasd.xml;
 &module-ddetect.xml;
-&module-pcmcia.xml;
-&module-kbd-chooser.xml;
-&module-netcfg.xml;
-&module-iso-scan.xml;
-&module-choose-mirror.xml;
 &module-cdrom-detect.xml;
-&module-lowmem.xml;
+&module-iso-scan.xml;
 &module-anna.xml;
+&module-netcfg.xml;
+&module-choose-mirror.xml;
+
   </sect2>
 
   <sect2>
-  <title>Partitioning and Mount Point Selection</title>
+  <title>Partitionnement et points de montage</title>
 <para>
 
-At this time, &d-i; should be in its full strength, customized for
-user's needs and ready to do some real work.
+Après la dernière détection de matériel, &d-i; est pleinement opérationnel et
+il connaît les besoins de l'utilisateur.
 
-As the title of this chapter states, the main task of the next few
-components lies in partitioning your disks, creating filesystems,
-assigning mountpoints and configuring closely related issues like LVM
-or RAID devices.
+Comme l'indique le titre de cette section, la tâche des composants de cette
+étape est de partitionner les disques, créer les systèmes de fichier et
+déclarer les points de montage. Des tâches proches, comme la configuration de
+périphériques LVM ou RAID peuvent aussi être menées à bien.
 
 </para>
 
@@ -67,38 +75,39 @@ or RAID devices.
   </sect2>
 
   <sect2>
-  <title>Installing the Base System</title>
+  <title>L'installation du système de base</title>
 <para>
 
-Albeit this part is the least problematic, it consumes most time of
-the install, because it downloads, verifies and unpacks the whole base
-system. If you have a slow computer or network connection, this could
-take some time.
+Quoique cette étape de l'installation soit la moins problématique, elle
+consomme la plus grande partie du temps d'une installation&nbsp;; elle
+télécharge, vérifie et dépaquette tous les paquets du système de base. Si
+votre ordinateur est lent ou si vous avez une connexion réseau, cela peut
+prendre du temps.
 
 </para>
 
 &module-base-installer.xml;
-&module-kernel-chooser.xml;
+
   </sect2>
 
   <sect2>
-  <title>Making Your System Bootable</title>
-<para>
+  <title>Rendre le système amorçable</title>
 
-Note that multiple operating systems booting on a single machine is
-still something of a black art.  This document does not even attempt
-to document the various boot managers, which vary by architecture and
-even by subarchitecture.  You should see your boot manager's
-documentation for more information.
 
 </para><para condition="supports-nfsroot">
 
-If you are installing a diskless workstation, obviously, booting off
-the local disk isn't a meaningful option, and this step will be
-skipped. <phrase arch="sparc">You may wish to set the OpenBoot to boot
-from the network by default; see <xref
-linkend="boot-dev-select-sun"/>.</phrase>
+Si vous installez Debian sur un poste de travail sans disque, amorcer le
+disque n'est pas une option valable et cette étape sera évitée.
+<phrase arch="sparc">Il est possible de régler l'<quote>OpenBoot</quote> pour
+qu'il s'amorce sur le réseau&nbsp;: voyez <xref linkend="boot-dev-select-sun"/>.</phrase>
+</para>
 
+<para>
+Il faut remarquer que la possibilité d'amorcer différents systèmes sur une
+seule machine relève encore de la magie noire. Ce document ne se veut pas
+une information sur les programmes d'amorçage qui sont différents d'une
+architecture à l'autre. Voyez la documentation propre à votre programme 
+d'amorçage.
 </para>
 
 &module-os-prober.xml;
@@ -111,16 +120,19 @@ linkend="boot-dev-select-sun"/>.</phrase>
 &module-mipsel-colo-installer.xml;
 &module-mipsel-delo-installer.xml;
 &module-powerpc-yaboot-installer.xml;
+&module-powerpc-quik-installer.xml;
 &module-s390-zipl-installer.xml;
 &module-sparc-silo-installer.xml;
+&module-nobootloader.xml;
   </sect2>
 
   <sect2>
-  <title>Finishing the First Stage</title>
+  <title>Comment terminer la première étape ?</title>
 <para>
 
-These are the last bits to do before rebooting to your new Debian. It
-mostly consists of tidying up after the &d-i;.
+Voici les dernières choses à faire avant de relancer la machine pour amorcer
+votre système Debian. Cela consiste essentiellement à nettoyer après le 
+&d-i;.
 
 </para>
 
@@ -131,15 +143,13 @@ mostly consists of tidying up after the &d-i;.
   <title>Miscellaneous</title>
 <para>
 
-Following components are usually not involved in the installation
-process, but they are awaiting in the background to help the user in
-case something goes wrong.
+Les composants suivants ne participent pas au processus d'installation, ils
+attendent en silence que l'utilisateur ait besoin d'aide.
 
 </para>
-
-&module-baseconfig.xml;
 &module-bugreporter.xml;
 &module-cdrom-checker.xml;
 &module-shell.xml;
+&module-baseconfig.xml;
   </sect2>
  </sect1>
