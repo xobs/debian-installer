@@ -1,17 +1,28 @@
 #!/bin/sh
 
-languages="en" # cs fr pt_BR ja ...
-architectures="alpha arm hppa i386 ia64 m68k mips mipsel powerpc s390 sparc"
+languages="en" # cs fr pt_BR ...
 
-destination="/tmp/manual"
+if [ -z "$architectures" ]; then
+	architectures="alpha arm hppa i386 ia64 m68k mips mipsel powerpc s390 sparc"
+fi
 
-[ -e "$destination" ] || mkdir "$destination"
+if [ -z "$destination" ]; then
+	destination="/tmp/manual"
+fi
+
+if [ -z "$noarchdir" ]; then
+	destsuffix="$lang"
+else
+	destsuffix="${lang}.${arch}"
+fi
+
+[ -e "$destination" ] || mkdir -p "$destination"
 
 for lang in $languages; do
     for arch in $architectures; do
 	./buildone.sh "$arch" "$lang"
-	mkdir "${destination}/${lang}.${arch}"
-	mv *.html "${destination}/${lang}.${arch}"
+	mkdir "$destination/$destsuffix"
+	mv *.html "$destination/$destsuffix"
 	./clear.sh
     done
 done
