@@ -4,41 +4,8 @@
 <chapter id="boot-new">
  <title>Booting Into Your New Debian System</title>
 
- <sect1><title>Make System Bootable</title>
-<para>
-
-Note that multiple operating systems booting on a single machine is
-still something of a black art.  This document does not even attempt
-to document the various boot managers, which vary by architecture and
-even by subarchitecture.   You should see your boot manager's
-documentation for more information.
-
-</para>
-
-&bootloader-i386.xml;
 &bootloader-m68k.xml;
-&bootloader-alpha.xml;
-&bootloader-sparc.xml;
 &bootloader-powerpc.xml;
-&bootloader-hppa.xml;
-&bootloader-s390.xml;
-&bootloader-arm.xml;
-&bootloader-mipsel.xml;
-
-  <sect2 condition="supports-nfsroot"><title>Diskless Workstations</title>
-<para>
-
-If you are installing a diskless workstation, obviously, booting off
-the local disk isn't a meaningful option, and this step will be
-skipped. <phrase arch="sparc">You may wish to set the OpenBoot to boot
-from the network by default; see <xref
-linkend="boot-dev-select-sun"/>.</phrase>
-
-</para>
-
-  </sect2>
-</sect1>
-
 
  <sect1 id="base-boot"><title>The Moment of Truth</title>
 <para>
@@ -48,7 +15,8 @@ call the <quote>smoke test</quote>.
 
 </para><para arch="s390">
 
-Select the ``Reboot the System'' menu item which will halt the system
+Select the <guimenuitem>Reboot the System</guimenuitem> menu item
+which will halt the system
 because rebooting is not supported on &arch-title; in this case. You
 then need to IPL GNU/Linux from the DASD which you selected for the
 root filesystem during the first steps of the installation.
@@ -56,14 +24,11 @@ root filesystem during the first steps of the installation.
 </para><para>
 
 If you are booting directly into Debian, and the system doesn't start
-up, either use your original installation boot media (for instance,
-the rescue floppy), or insert the custom boot floppy if you created
-one, and reset your system.  If you are <emphasis>not</emphasis> using
-the custom boot floppy, you will probably need to add some boot
-arguments.  If booting with the rescue floppy or similar technique,
-you need to specify
-<userinput>rescue root=<replaceable>root</replaceable></userinput>,
-where <replaceable>root</replaceable> is your root partition, such as
+up, either use your original installation boot media, or insert the
+custom boot floppy if you have one, and reset your system.  This way,
+you will probably need to add some boot arguments like
+<userinput>root=<replaceable>root</replaceable></userinput>, where
+<replaceable>root</replaceable> is your root partition, such as
 <filename>/dev/sda1</filename>.
 
 </para>
