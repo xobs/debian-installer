@@ -1,0 +1,99 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 24663 untranslated -->
+
+   <sect3 arch="i386">
+   <title>USB stick partitioning on &arch-title;</title>
+<para>
+
+We will show how to setup the memory stick to use the first partition,
+instead of the entire device.
+
+</para><note><para>
+
+Since most USB sticks come pre-configured with a single FAT16
+partition, you probably won't have to repartition or reformat the
+stick.  If you have to do that anyway, use <command>cfdisk</command>
+or any other partitioning tool for creating a FAT16 partition and then
+create the filesystem using:
+
+<informalexample><screen>
+# mkdosfs /dev/<replaceable>sda1</replaceable>
+</screen></informalexample>
+
+Take care that you use the correct device name for your USB stick. The
+<command>mkdosfs</command> command is contained in the
+<classname>dosfstools</classname> Debian package.
+
+</para></note><para>
+
+In order to start the kernel after booting from the USB stick, we will
+put a boot loader on the stick. Although any boot loader
+(e.g. <command>LILO</command>) should work, it's convenient to use
+<command>SYSLINUX</command>, since it uses a FAT16 partition and can
+be reconfigured by just editing a text file. Any operating system
+which supports the FAT file system can be used to make changes to the
+configuration of the boot loader.
+
+</para><para>
+
+To put <command>SYSLINUX</command> on the FAT16 partition on your USB
+stick, install the <classname>syslinux</classname> and
+<classname>mtools</classname> packages on your system, and do:
+
+<informalexample><screen>
+# syslinux /dev/<replaceable>sda1</replaceable>
+</screen></informalexample>
+
+Again, take care that you use the correct device name. The partition
+must not be mounted when starting <command>SYSLINUX</command>. This
+procedure writes a boot sector to the partition and creates the file
+<filename>ldlinux.sys</filename> which contains the boot loader code.
+
+</para><para>
+
+Mount the partition (<userinput>mount /dev/sda1 /mnt</userinput>) and
+copy the following files from the Debian archives to the stick:
+
+<itemizedlist>
+<listitem><para>
+
+<filename>vmlinuz</filename> (kernel binary)
+
+</para></listitem>
+<listitem><para>
+
+<filename>initrd.gz</filename> (initial ramdisk image)
+
+</para></listitem>
+<listitem><para>
+
+<filename>syslinux.cfg</filename> (SYSLINUX configuration file)
+
+</para></listitem>
+<listitem><para>
+
+Optional kernel modules
+
+</para></listitem>
+</itemizedlist>
+
+If you want to rename the files, please note that
+<command>SYSLINUX</command> can only process DOS (8.3) file names.
+
+</para><para>
+
+The <filename>syslinux.cfg</filename> configuration file should
+contain the following two lines:
+
+<informalexample><screen>
+default vmlinuz
+append initrd=initrd.gz ramdisk_size=12000 root=/dev/rd/0 init=/linuxrc rw
+</screen></informalexample>
+
+Please note that the <userinput>ramdisk_size</userinput> parameter
+may need to be increased, depending on the image you are booting.
+If the boot fails, you can try adding <userinput>devfs=mount,dall</userinput>
+to the <quote>append</quote> line.
+
+</para>
+   </sect3>
