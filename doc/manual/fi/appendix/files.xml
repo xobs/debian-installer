@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23058 untranslated -->
+<!-- original version: 24840 untranslated -->
 
 
  <sect1 id="linuxdevices"><title>Linux Devices</title>
@@ -123,13 +123,12 @@ files listed.
 The mouse can be used in both the Linux console (with gpm) and the X window
 environment. The two uses can be made compatible if the gpm repeater is used
 to allow the signal to flow to the X server as shown:
+
 <informalexample><screen>
-mouse =&#62; /dev/psaux  =&#62; gpm =&#62; /dev/gpmdata -&#62; /dev/mouse =&#62; X
+mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; X
          /dev/ttyS0             (repeater)        (symlink)
          /dev/ttyS1
 </screen></informalexample>
-
-</para><para>
 
 Set the repeater protocol to be raw (in <filename>/etc/gpm.conf</filename>) while
 setting X to the original mouse protocol in <filename>/etc/X11/XF86Config</filename>
@@ -139,9 +138,11 @@ or <filename>/etc/X11/XF86Config-4</filename>.
 
 This approach to use gpm even in X has advantages when the mouse is
 unplugged inadvertently.  Simply restarting gpm with
+
 <informalexample><screen>
-user@debian:# /etc/init.d/gpm restart
+# /etc/init.d/gpm restart
 </screen></informalexample>
+
 will re-connect the mouse in software without restarting X.
 
 </para><para>
@@ -167,7 +168,6 @@ when your mouse only has one button. Just add the following lines to
 <filename>/etc/sysctl.conf</filename> file.
 
 <informalexample><screen>
-
 # 3-button mouse emulation 
 # turn on emulation
 /dev/mac_hid/mouse_button_emulation = 1
@@ -176,8 +176,8 @@ when your mouse only has one button. Just add the following lines to
 # Send right mouse button signal with the F12 key
 /dev/mac_hid/mouse_button3_keycode = 88
 # For different keys, use showkey to tell you what the code is.
+</screen></informalexample>
 
-</screen></informalexample>  
 </para>
   </sect2>
  </sect1>
@@ -198,17 +198,61 @@ adding the numbers up.
 
 </para><para>
 
-<informalexample><screen>
-Task                              Installed  Download   Space Needed 
-                                  Size (MB)  Size (MB)  To Install (MB)
+<informaltable><tgroup cols="4">
+<thead>
+<row>
+  <entry>Task</entry>
+  <entry>Installed size (MB)</entry>
+  <entry>Download size (MB)</entry>
+  <entry>Space needed to install (MB)</entry>
+</row>
+</thead>
 
-Desktop                            1537        521        2058
-Web server                           71         21          92
-Print server                        240         83         323
-Mail server                          41         12          53
-File server                          85         34         119
-SQL database                        108         33         141
+<tbody>
+<row>
+  <entry>Desktop</entry>
+  <entry>1537</entry>
+  <entry>521</entry>
+  <entry>2058</entry>
+</row>
 
-</screen></informalexample>
+<row>
+  <entry>Web server</entry>
+  <entry>71</entry>
+  <entry>21</entry>
+  <entry>92</entry>
+</row>
+
+<row>
+  <entry>Print server</entry>
+  <entry>240</entry>
+  <entry>83</entry>
+  <entry>323</entry>
+</row>
+
+<row>
+  <entry>Mail server</entry>
+  <entry>41</entry>
+  <entry>12</entry>
+  <entry>53</entry>
+</row>
+
+<row>
+  <entry>File server</entry>
+  <entry>85</entry>
+  <entry>34</entry>
+  <entry>119</entry>
+</row>
+
+<row>
+  <entry>SQL database</entry>
+  <entry>108</entry>
+  <entry>33</entry>
+  <entry>141</entry>
+</row>
+
+</tbody>
+</tgroup></informaltable>
+
 </para>
  </sect1>
