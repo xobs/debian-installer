@@ -55,10 +55,10 @@ UDEBS = \
 ifeq ($(TYPE),floppy)
 # List of additional udebs for driver floppy(ies). At the moment there is only one additional driver floppy needed
 DRIVERFD_UDEBS = \
-	$(shell  grep --no-filename -v ^\# \
-		pkg-lists/net_drivers/common \
-		`if [ -f pkg-lists/net_drivers/$(DEB_HOST_ARCH) ]; then echo pkg-lists/net_drivers/$(DEB_HOST_ARCH); fi` \
-		| sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2\n)/g' )
+	$(shell for target in $(EXTRA_FLOPPIES) ; do  grep --no-filename -v ^\# \
+		pkg-lists/$$target/common \
+		`if [ -f pkg-lists/$$target/$(DEB_HOST_ARCH) ]; then echo pkg-lists/$$target/$(DEB_HOST_ARCH); fi` \
+		| sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2\n)/g'  ; done )
 endif
 
 # Scratch directory.
@@ -102,25 +102,6 @@ else
 	-@sudo chroot $(TREE) /usr/bin/update-dev
 endif
 
-# Build the net_drivers fd image
-net_drivers-stamp net_drivers: floppy-get_udebs-stamp
-	mkdir -p $(NETDRIVERS)
-	for file in $(DRIVERFD_UDEBS) ; do \
-		cp $(EXTRAUDEBDIR)/$$file*.udeb $(NETDRIVERS) ; done
-	touch net_drivers-stamp
-
-$(NETDRIVERS_IMAGE): net_drivers-stamp
-	rm -f $(NETDRIVERS_IMAGE)
-	install -d $(TEMP)
-	install -d $(DEST)
-	set -e; if [ $(INITRD_FS) = ext2 ]; then \
-		genext2fs -d $(NETDRIVERS) -b `expr $$(du -s $(NETDRIVERS) | cut -f 1) + $$(expr $$(find $(NETDRIVERS) | wc -l) \* 2)` $(NETDRIVERS_IMAGE); \
-        elif [ $(INITRD_FS) = romfs ]; then \
-                genromfs -d $(NETDRIVERS) -f $(NETDRIVERS_IMAGE); \
-        else \
-                echo "Unsupported filesystem type"; \
-                exit 1; \
-        fi;
 
 
 
@@ -462,6 +443,30 @@ $(TREE)/unifont.bgf: unifont-reduced-$(TYPE).bdf
 	bdftobogl -b unifont-reduced-$(TYPE).bdf > $@.tmp
 	mv $@.tmp $@
 
+# Build the driver floppy image
+$(EXTRA_TARGETS) : %-stamp : floppy-get_udebs-stamp
+	mkdir -p  ${TEMP}/$*
+	for file in $(shell grep --no-filename -v ^\#  pkg-lists/$*/common \
+		`if [ -f pkg-lists/$*/$(DEB_HOST_ARCH) ]; then echo pkg-lists/$*/$(DEB_HOST_ARCH); fi` \
+	  	| sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2\n)/g' ) ; do \
+			cp $(EXTRAUDEBDIR)/$$file* ${TEMP}/$*  ;	done
+	touch $@
+
+
+$(EXTRA_IMAGES) : $(DEST)/%-image.img :  $(EXTRA_TARGETS)
+	rm -f $@
+	install -d $(TEMP)
+	install -d $(DEST)
+	set -e; if [ $(INITRD_FS) = ext2 ]; then \
+		genext2fs -d $(TEMP)/$* -b $(FLOPPY_SIZE) -r 0  $@; \
+        elif [ $(INITRD_FS) = romfs ]; then \
+                genromfs -d $(TEMP)/$* -f $@; \
+        else \
+                echo "Unsupported filesystem type"; \
+                exit 1; \
+        fi;
+
+
 tarball: tree
 	tar czf $(DEST)/$(TYPE)-debian-installer.tar.gz $(TREE)
 
@@ -496,10 +501,10 @@ boot_floppy: $(IMAGE)
 	install -d $(DEST)
 	dd if=$(IMAGE) of=$(FLOPPYDEV)
 
-# Write net_drivers to floppy
-net_drivers_floppy: $(NETDRIVERS_IMAGE)
+# Write drivers  floppy
+%_floppy: $(DEST)/%-image.img
 	install -d $(DEST)
-	dd if=$(NETDRIVERS_IMAGE) of=$(FLOPPYDEV)
+	dd if=$< of=$(FLOPPYDEV)
 
 # If you're paranoid (or things are mysteriously breaking..),
 # you can check the floppy to make sure it wrote properly.
@@ -507,9 +512,11 @@ net_drivers_floppy: $(NETDRIVERS_IMAGE)
 boot_floppy_check: floppy_image
 	cmp $(FLOPPYDEV) $(IMAGE)
 
+stats: tree $(EXTRA_TARGETS) general-stats $(EXTRA_STATS)
+
 COMPRESSED_SZ=$(shell expr $(shell tar czf - $(TREE) | wc -c) / 1024)
 KERNEL_SZ=$(shell expr \( $(foreach NAME,$(KERNELNAME),$(shell du -b $(TEMP)/$(NAME) | cut -f 1) +) 0 \) / 1024)
-stats: tree $(EXTRA_TARGETS)
+general-stats:
 	@echo
 	@echo "System stats for $(TYPE)"
 	@echo "-------------------------"
@@ -525,21 +532,19 @@ endif
 	@echo "Disk usage per package:"
 	@sed 's/^/  /' < diskusage-$(TYPE).txt
 # Add your interesting stats here.
-	@$(MAKE) stats-$(EXTRA_TARGETS)
 
-NETDRIVERS_SZ=$(shell expr $(shell du -b $(NETDRIVERS) | cut -f 1) / 1024)
-stats-net_drivers:
+SZ=$(shell expr $(shell du -b $(TEMP)/$*  | cut -f 1 ) / 1024)
+$(EXTRA_STATS) : %-stats:  
+	echo Calculating spec stats
 	@echo
-	@echo "Driver1 size: $(NETDRIVERS_SZ)k"
+	@echo "$* size: $(SZ)k"
 ifneq (,$(FLOPPY_SIZE))
-	@echo "Free space: $(shell expr $(FLOPPY_SIZE) - $(NETDRIVERS_SZ))k"
+	@echo "Free space: $(shell expr $(FLOPPY_SIZE) - $(SZ))k"
 endif
 	@echo "Disk usage per package on net_drivers:"
-	@ls -l $(EXTRAUDEBDIR)/*.udeb
+	@ls -l $(TEMP)/$*/*.udeb
 	@echo
 
-stats-:
-	@echo
 
 # Upload a daily build to peope.debian.org. If you're not Joey Hess,
 # you probably don't want to use this grungy code, at least not without
