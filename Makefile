@@ -105,7 +105,7 @@ endif
 $(DRIVER1_IMAGE) driver1: floppy-get_udebs-stamp
 	mkdir -p $(DRIVER1)
 	for file in $(DRIVERFD_UDEBS) ; do \
-		cp $(APTDIR)/cache/archives/$$file*.udeb $(DRIVER1) ; done
+		cp $(EXTRAUDEBDIR)/$$file*.udeb $(DRIVER1) ; done
 	rm -f $(DRIVER1_IMAGE)
 	install -d $(TEMP)
 	install -d $(DEST)
