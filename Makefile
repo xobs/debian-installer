@@ -76,7 +76,6 @@ demo:
 	sudo chroot $(DEST) bin/sh -c "export DEBCONF_FRONTEND=text DEBCONF_DEBUG=5; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; /usr/share/debconf/frontend /usr/bin/main-menu"
 	$(MAKE) demo_clean
 
-
 shell:
 	mkdir -p $(DEST)/proc 
 	sudo chroot $(DEST) bin/sh -c "if ! mount | grep ^proc ; then bin/mount proc -t proc /proc; fi"
@@ -167,7 +166,7 @@ tree: get_udebs
 	depmod -q -a -b $(DEST)/ $(KVER) 
 	# TODO: configure some of the packages?
 
-UPX=true
+UPX=
 #UPX=~davidw/bin/upx
 # the beta version of upx can be used to make the kernel a lot smaller
 # it shaved 75k off our kernel. That allows us to put a lot more on
@@ -178,13 +177,27 @@ UPX=true
 
 KVER=2.4.0-di
 # FIXME, KERNEL_DEB, need to handle the version number intelligently
-KDEB=../kernel-image-$(KVER)_0.001_i386.deb
+KDEB=../kernel-image-$(KVER)_0.003_i386.deb
 KTREE=kernel_tree
 # Take a kernel-image-*.deb and extract needed information
 kernel:
 	mkdir -p $(KTREE)
 	dpkg-deb -X $(KDEB) $(KTREE) 
-	$(UPX) $(KTREE)/boot/vmlinux-$(KVER)
+	if [ "$(UPX)" ]; then \
+		$(UPX) $(KTREE)/boot/vmlinux-$(KVER); \
+	fi
+
+TMP_MNT=./mnt/$(DEST)
+
+# Make sure that the temporary mountpoint is not occupied,
+# and make it.
+tmp_mount:
+	dh_testroot
+	if mount | grep $(TMP_MNT) && ! umount $(TMP_MNT) ; then \
+		echo "Error unmounting $(TMP_MNT)" 2>&1 ; \
+		exit 1; \
+	fi
+	mkdir -p $(TMP_MNT)
 
 # Create a compressed image of the root filesystem.
 # 1. make a temporary file large enough to fit the filesystem.
@@ -194,63 +207,49 @@ kernel:
 
 INITRD=initrd.gz
 TMP_FILE=$(TMPDIR)/$(DEST)
-TMP_MNT=./mnt/$(DEST)
 
-initrd:
+# TODO: get rid of this damned fuzz factor!
+FUZZ=127
+
+initrd: tmp_mount
 	dh_testroot
 	rm -f $(TMP_FILE)
-	if mount | grep $(TMP_MNT) ; then \
-		if ! umount $(TMP_MNT) ; then \
-			echo "Error unmounting $(TMP_MNT)" ; \
-	        exit 1; \
-		fi; \
-	fi; \
-
-	mkdir -p $(TMP_MNT)
 	install -d $(TMPDIR)
-	dd if=/dev/zero of=$(TMP_FILE) bs=1k count=`du -s $(DEST) | cut -f 1`
+	dd if=/dev/zero of=$(TMP_FILE) bs=1k count=`expr $$(du -s $(DEST) | cut -f 1) + $(FUZZ)`
 	# FIXME: 2000 bytes/inode (choose that better?)
-	mke2fs -F -m 0 -i 2000 $(TMP_FILE)
+	mke2fs -F -m 0 -i 2000 -O sparse_super $(TMP_FILE)
 	mount -t ext2 -o loop $(TMP_FILE) $(TMP_MNT)
 	cp -a $(DEST)/* $(TMP_MNT)/
 	umount $(TMP_MNT)
-	dd if=$(TMP_FILE)  bs=1k | gzip -v9 > $(INITRD)
-
+	dd if=$(TMP_FILE) bs=1k | gzip -v9 > $(INITRD)
 
 # This is the kernel which will be used on the boot disk.
 KERNEL=$(KTREE)/boot/vmlinuz-$(KVER)
 
-FD_DEV=/dev/fd0
-FD_MNT=/floppy
+# How big a floppy image should I make? (in kilobytes)
+FLOPPY_SIZE=1440
+# The floppy image to create.
+FLOPPY_IMAGE=floppy.img
 
-# Create a bootable floppy
-# 1. mount the floppy, make filesystem
-# 2. copy over kernel, initrd, etc.
-# 3. run lilo
+# Create a bootable floppy image. i386 specific. FIXME
+# 1. make a dos filesystem image
+# 2. copy over kernel, initrd
+# 3. install syslinux
 
-di_floppy: initrd $(KERNEL)
+floppy_image: initrd kernel tmp_mount
 	dh_testroot
-	if mount | grep $(FD_MNT) ; then \
-		if ! umount $(FD_MNT) ; then \
-			echo "Error unmounting $(FD_MNT)" ; \
-	        exit 1; \
-		fi; \
-	fi; \
-
-	mkdir -p $(FD_MNT)
-	mke2fs $(FD_DEV) 
-	mount $(FD_DEV) $(FD_MNT)
-	rm -rf $(FD_MNT)/lost+found
-	# FIXME : do we need these dirs?
-	mkdir $(FD_MNT)/{boot,dev}
-	cp -R /dev/{null,fd0} $(FD_MNT)/dev
-	cp /boot/boot.b $(FD_MNT)/boot
-	cp $(KERNEL) $(FD_MNT)/vmlinuz-di
-	cp lilo.conf $(FD_MNT)/lilo.conf
-	cp initrd.gz $(FD_MNT)/
-	lilo -v -C lilo.conf -r $(FD_MNT)
-	umount $(FD_MNT)
-
+	
+	dd if=/dev/zero of=$(FLOPPY_IMAGE) bs=1k count=$(FLOPPY_SIZE)
+	mkfs.msdos -i deb00001 -n 'Debian Installer' $(FLOPPY_IMAGE)
+	mount -t msdos -o loop $(FLOPPY_IMAGE) $(TMP_MNT)
+	
+	cp $(KERNEL) $(TMP_MNT)/LINUX
+	cp initrd.gz $(TMP_MNT)/
+	
+	cp syslinux.cfg $(TMP_MNT)/
+	todos $(TMP_MNT)/syslinux.cfg
+	umount $(TMP_MNT)
+	syslinux $(FLOPPY_IMAGE)
 
 # Library reduction.
 lib_reduce:
