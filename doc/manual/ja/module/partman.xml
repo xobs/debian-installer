@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
 <!-- $Id$ -->
-<!-- original version: 11648 -->
+<!-- original version: 14033 -->
 
    <sect2 id="partman"><title>ディスクのパーティション分割</title>
 <para>
@@ -19,28 +19,73 @@ linkend="partitioning"/>.
 
 <!--
 First you will be given the opportunity to automatically partition
-either an entire drive, or free space on a drive. If you do not want
-to autopartition, choose <guimenuitem>Manually edit partition
+either an entire drive, or free space on a drive. This is also called
+<quote>guided</quote> partitioning. If you do not want to
+autopartition, choose <guimenuitem>Manually edit partition
 table</guimenuitem> from the menu and skip to the next
 paragraph. Otherwise you will be asked if you want <guimenuitem>All
-files in one partition</guimenuitem>, or if you rather like to have
-a <guimenuitem>Separate partition for the home
-directories</guimenuitem>. Both schemes have their pros and cons, some
-of which are discussed in <xref linkend="partitioning"/>. If you are
-unsure, choose the first one.
+files in one partition</guimenuitem>, <guimenuitem>Separate partition
+for home directories</guimenuitem>, or if you rather plan to have
+a <guimenuitem>Multi-user system</guimenuitem>. All schemes have their
+pros and cons, some of which are discussed in <xref
+linkend="partitioning"/>. If you are unsure, choose the first
+one. Bear in mind, that guided partitioning needs certain minimal
+amount of free space to operate with. If you don't give it at least
+about 1GB of space (depends on chosen scheme), guided partitioning
+will fail.
 -->
 最初に、自動的にドライブのすべての領域を分割するか、
 またはドライブを自由に分割するかを、選択する機会が与えられます。
+これを<quote>ガイド</quote>パーティション分割とも呼びます。
 自動分割を望まなければ、
 <guimenuitem>Manually edit partition table</guimenuitem> を選び、
 次の段落にスキップしてください。
 そうでなければ、<guimenuitem>All files in one partition</guimenuitem> や、
-<guimenuitem>Separate partition for the home directories</guimenuitem>
-と尋ねられるでしょう。
-どちらの案でも賛否両論あり、<xref linkend="partitioning"/> で議論されています。
+<guimenuitem>Separate partition for the home directories</guimenuitem>、
+<guimenuitem>Multi-user system</guimenuitem> と尋ねられるでしょう。
+どの案でも賛否両論あり、<xref linkend="partitioning"/> で議論されています。
 よくわからなければ、最初の項目を選択してください。
+ガイドパーティション分割は、最低限動作する空き領域が必要なことを、
+心に留めておいてください。
+少なくとも1GBの空き領域 (選択した方法に依存します) がなければ、
+ガイドパーティション分割は失敗してしまいます。
 
-</para><para>
+</para>
+
+<informaltable>
+<tgroup cols="3">
+<thead>
+<row>
+  <entry>パーティション分割方法</entry>
+  <entry>最低要領</entry>
+  <entry>作成するパーティション</entry>
+</row>
+</thead>
+
+<tbody>
+<row>
+  <entry>All files in one partition</entry>
+  <entry>600MB</entry>
+  <entry><filename>/</filename>, swap</entry>
+</row><row>
+  <entry>Separate partition for home directories</entry>
+  <entry>500MB</entry>
+  <entry>
+    <filename>/</filename>, <filename>/home</filename>, swap
+  </entry>
+</row><row>
+  <entry>Multi-user system</entry>
+  <entry>1GB</entry>
+  <entry>
+    <filename>/</filename>, <filename>/home</filename>,
+    <filename>/usr</filename>, <filename>/var</filename>,
+    <filename>/tmp</filename>, swap
+  </entry>
+</row>
+
+</tbody></tgroup></informaltable>
+
+<para>
 
 <!--
 On the next screen you will see your partition table, how the
@@ -60,21 +105,23 @@ what it set up.
 Select partititons from the list to modify or delete them. If you have
 free space it will also show up under a drive, and you can select it
 to create new partitions. When modifying a partition you will have the
-opportunity to choose the file system to use, and where to mount
-it. The partitioning menu also has a choice at the bottom that can be
-used to automatically partition a drive or existing free space on
-a drive, if you'd rather go that route. Be sure to create at least two
-partitions, one for <emphasis>swap</emphasis> and one for the
-<emphasis>root</emphasis> filesystem (which must be mounted as
-<filename>/</filename>). If you forget to mount the root filesystem,
-<command>partman</command> won't let you continue until you correct
-this issue.
+opportunity to choose how to use the partition, the file system to
+use, and where to mount it. The partitioning menu also has a choice at
+the bottom that can be used to automatically partition a drive or
+existing free space on a drive, if you'd rather go that route. Be sure
+to create at least two partitions, one for <emphasis>swap</emphasis>
+and one for the <emphasis>root</emphasis> filesystem (which must be
+mounted as <filename>/</filename>). If you forget to mount the root
+filesystem, <command>partman</command> won't let you continue until
+you correct this issue. However, this situation should not happen,
+because <command>partman</command> by default offers reasonable
+defaults.
 -->
 修正・削除するパーティションをリストから選択してください。
 ドライブに空き領域があれば、
 新しいパーティションを作成するのに選択することができます。
-パーティションを修正する場合、使用するファイルシステムやマウントする場所を、
-選択することができます。
+パーティションを修正する場合、パーティションの使い方や、
+使用するファイルシステム、マウントする場所を選択することができます。
 あえて行うなら、ドライブやドライブ上の空き領域を自動的に分割する選択肢が、
 パーティション分割メニューの一番下にあります。
 少なくとも 2 つのパーティションを必ず作成してください。
@@ -83,6 +130,9 @@ this issue.
 <emphasis>ルート</emphasis>ファイルシステムです。
 ルートファイルシステムをマウントし忘れると、
 この問題を修正するまで <command>partman</command> は先に進みません。
+しかし、<command>partman</command> のデフォルトでは、
+妥当なものを採用していますので、
+そのような状況にはならないでしょう。
 
 </para><para>
 
@@ -94,7 +144,7 @@ you have loaded all required modules
 <filename>partman-xfs</filename>, or
 <filename>partman-lvm</filename>).
 -->
-<command>partman</command> の能力は、インストーラモジュールで拡張できます。
+<command>partman</command> の機能は、インストーラモジュールで拡張できます。
 あるはずの機能を確認できなければ、すべての必要なモジュールが読み込まれているか
 確認してください。
 (例: <filename>partman-ext3</filename>,
@@ -104,13 +154,17 @@ you have loaded all required modules
 </para><para>
 
 <!--
-After finishing partitioning, select <guimenuitem>Finished
-partitioning</guimenuitem> from the menu, and confirm that the
-filesystems should be created as requested.
+After you are satisfied with partitioning, select <guimenuitem>Finished
+partitioning</guimenuitem> from the partitioning menu. You will be
+presented with a summary of changes made to the disks and asked to
+confirm that the filesystems should be created as requested.
 -->
-パーティション分割が完了したら、メニューから 
-<guimenuitem>Finished partitioning</guimenuitem> を選択し、
-指定したファイルシステムが作成されているか確認してください。
+パーティション分割に満足したら、パーティション分割メニューから 
+<guimenuitem>Finished partitioning</guimenuitem> を選択してください。
+ディスクに行われる変更内容が表示され、
+その通りファイルシステムを作成するかどうか確認することになります。
+
+
 
 </para>
    </sect2>
