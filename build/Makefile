@@ -671,6 +671,8 @@ pkg-lists/standard-udebs:
 		-sPackage apt.udeb/state/lists/*_Packages* | \
 		grep -v kernel-image | grep -v -- -modules | \
 		cut -d " " -f 2 > $@
+	# Add any local udebs to the list, skipping kernel stuff
+	find localudebs/*.udeb -printf '%f\n' | grep -v kernel-image | grep -v -- -modules- | sed 's/_.*//' >> $@
 
 # Get a list of all kernel modules matching the kernel version.
 pkg-lists/kernel-module-udebs:
@@ -678,6 +680,8 @@ pkg-lists/kernel-module-udebs:
 	grep-dctrl -P -e '.*-modules-$(KERNELVERSION)-$(KERNEL_FLAVOUR)' \
 		-sPackage apt.udeb/state/lists/*_Packages* | \
 		cut -d " " -f 2 > $@
+	# Add any local kernel modules to the list.
+	find localudebs/*-modules-$(KERNELVERSION)-$(KERNEL_FLAVOUR)_*.udeb -printf '%f\n' | sed 's/_.*//' >> $@
 
 #
 # Write (floppy) images
