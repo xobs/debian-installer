@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version; 11573  -->
+<!-- original version; 19099  -->
 
  <sect1 id="install-overview">
  <title>Vue générale du processus d'installation</title>
@@ -27,7 +27,8 @@ avec les versions successives du système. Quand la nouvelle version d'un
 programme exige d'autres logiciels, le système d'empaquetage fait en sorte
 que tous les logiciels nécessaires soient listés et installés. Beaucoup 
 d'efforts ont été déployés pour éviter le besoin d'une réinstallation&nbsp;:
-c'est la dernière option ! Et l'installateur <emphasis>n'est pas</emphasis> 
+c'est la dernière option&nbsp;! Et l'installateur 
+<emphasis>n'est pas</emphasis> 
 conçu pour faire une installation sur un système existant.
 
 </para><para>
@@ -39,25 +40,25 @@ Voici les étapes qui composent le processus d'installation&nbsp;:
 <orderedlist>
 <listitem><para>
 
-Rassembler au préalable les informations concernant votre ordinateur, ainsi 
+Rassembler au préalable les informations concernant l'ordinateur, ainsi 
 que la documentation nécessaire&nbsp;;
 
 </para></listitem>
 <listitem><para>
 
-Sauvegarder toutes les données ou documents du disque dur sur lequel vous 
-prévoyez de faire l'installation&nbsp;;
+Sauvegarder toutes les données ou documents du disque dur sur lequel 
+l'installation sera faite&nbsp;;
 
 </para></listitem>
 <listitem><para>
 
-Préparer de l'espace libre sur votre disque dur&nbsp;;
+Préparer de l'espace libre sur le disque dur&nbsp;;
 
 </para></listitem>
 <listitem><para>
 
-Télécharger l'installateur et tous les pilotes nécessaires à votre ordinateur 
-(si vous n'utilisez pas les cédéroms Debian)&nbsp;;
+Télécharger l'installateur et tous les pilotes nécessaires à l'ordinateur 
+(quand on n'utilise pas les cédéroms Debian)&nbsp;;
 
 </para></listitem>
 <listitem><para>
@@ -91,7 +92,7 @@ Configurer une interface réseau&nbsp;;
 </para></listitem>
 <listitem arch="s390"><para>
 
-Ouvrir une connexion telnet au nouveau système&nbsp;;
+Ouvrir une connexion ssh au nouveau système&nbsp;;
 
 </para></listitem>
 <listitem arch="s390"><para>
@@ -113,7 +114,7 @@ du <firstterm>système de base</firstterm>&nbsp;;
       </para></listitem>
 <listitem><para>
 
-Installer un <firstterm>gestionnaire de démarrage</firstterm> qui puisse 
+Installer un <firstterm>programme d'amorçage</firstterm> qui puisse 
 démarrer &debian; ou un autre système&nbsp;;
 
       </para></listitem>
@@ -123,6 +124,11 @@ Charger le nouveau système pour la première fois et faire les premiers
 réglages&nbsp;;
 
       </para></listitem>
+<listitem arch="s390"><para>
+
+Ouvrir une connexion ssh au nouveau système.
+
+</para></listitem>
 
 <listitem><para>
 
@@ -140,21 +146,20 @@ les principaux acteurs de ce drame&nbsp;:
 
 </para><para>
 
-L'installateur, <classname>debian-installer</classname>, est le sujet 
-principal de ce manuel. Il commande le partitionneur propre à chaque
-architecture, il installe le noyau linux, il charge des pilotes pour le 
-matériel avec l'utilitaire <classname>modconf</classname>, il met en place la
-connexion au réseau avec <classname>dhclient</classname>, il installe les
-paquets du système de base et le gestionnaire de démarrage 
-&boot-loader-installer; avec <classname>debootstrap</classname>. Il y a bien 
-d'autres acteurs mineurs, mais leur rôle est terminé quand vous installez 
-pour la première fois le nouveau système.
+L'<classname>installateur Debian</classname> est le sujet 
+principal de ce manuel. Il détecte le matériel et charge les pilotes  
+nécessaires, il met en place la connexion au réseau avec 
+<classname>dhcp-client</classname> et il installe les paquets du système de 
+base avec <classname>debootstrap</classname>. Il y a bien d'autres acteurs 
+mineurs, mais l'<classname>installateur Debian</classname> a terminé sa 
+tâche quand vous installez pour la première fois le nouveau système.
 
 </para><para>
 
 En chargeant le nouveau système, <classname>base-config</classname> ajoute
-les utilisateurs, règle le fuseau horaire et met en place le système
-d'installation des paquets. Il propose ensuite de lancer 
+les utilisateurs, règle le fuseau horaire  avec <classname>tzsetup</classname>
+et met en place le système d'installation des paquets, avec 
+<classname>apt-setup</classname>. Il propose ensuite de lancer 
 <classname>tasksel</classname> qui peut installer des ensembles thématiques 
 de paquets, ou <classname>aptitude</classname> qui permet de choisir les
 paquets individuellement.
@@ -171,7 +176,7 @@ installée que si vous l'avez demandé avec <classname>tasksel</classname> ou
 beaucoup de systèmes Debian sont des serveurs qui n'ont pas vraiment besoin
 d'une interface graphique pour être opérationnels.
 
-</para><para>
+</para><para arch="not-s390">
 
 L'installateur ne prend pas en charge le système X. Son installation et les
 problèmes liés ne sont pas du ressort de ce manuel.
