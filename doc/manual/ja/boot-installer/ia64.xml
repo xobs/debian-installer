@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 22919 -->
+<!-- original version: 24321 -->
 
   <sect2 arch="ia64"><title>CD-ROM からの起動</title>
 
@@ -304,9 +304,9 @@ and press <command>ENTER</command>.
 The EFI Shell will scan all of the bootable devices and display
 them to the console before displaying its command prompt.
 The recognized bootable partitions on devices will show a device name of
-<filename>fs<emphasis>n</emphasis>:</filename>.
+<filename>fs<replaceable>n</replaceable>:</filename>.
 All other recognized partitions will be named
-<filename>blk<emphasis>n</emphasis>:</filename>.
+<filename>blk<replaceable>n</replaceable>:</filename>.
 If you inserted the CD just before entering the shell, this may
 take a few extra seconds as it initializes the CD drive.
 -->
@@ -315,11 +315,10 @@ take a few extra seconds as it initializes the CD drive.
 EFI シェルは起動可能なデバイスをすべて読むことができ、
 コマンドプロンプトを表示する前にそのデバイスをコンソールに表示する。
 認識したそのデバイスの起動可能パーティションは、
-<filename>fs<emphasis>n</emphasis>:</filename>
+<filename>fs<replaceable>n</replaceable>:</filename>
 というデバイス名で表し、
 その他の認識したパーティションは、
-<filename>blk<emphasis>n</emphasis>:</filename>
-と表す。
+<filename>blk<replaceable>n</replaceable>:</filename> と表す。
 シェルが起動する前に CD を挿入した場合、
 CD ドライブを初期化するのに数秒よけいにかかる可能性がある。
 </para>
@@ -330,25 +329,25 @@ CD ドライブを初期化するのに数秒よけいにかかる可能性がある。
 Examine the output from the shell looking for the CDROM drive.
 It is most likely the <filename>fs0:</filename> device although
 other devices with bootable partitions will also show up as
-<filename>fs<emphasis>n</emphasis></filename>.
+<filename>fs<replaceable>n</replaceable></filename>.
 -->
 CDROM ドライブを探すシェルからの出力を検討する。
 <filename>fs0:</filename> デバイスとなる可能性が高いが、
-<filename>fs<emphasis>n</emphasis></filename> という、
+<filename>fs<replaceable>n</replaceable></filename> という、
 起動可能パーティションを持つ他のデバイスとして表される。
 
 </para></listitem>
 
 <listitem><para>
 <!--
-Enter <command>fs<emphasis>n</emphasis>:</command> and press
+Enter <command>fs<replaceable>n</replaceable>:</command> and press
 <command>ENTER</command> to select that
-device where <emphasis>n</emphasis> is the partition number for the
+device where <replaceable>n</replaceable> is the partition number for the
 CDROM.  The shell will now display the partition number as its prompt.
 -->
-デバイスを選ぶのに <command>fs<emphasis>n</emphasis>:</command> と入力し、
-<command>ENTER</command> を押す。
-<emphasis>n</emphasis> には CDROM のパーティション番号を指定する。
+デバイスを選ぶのに <command>fs<replaceable>n</replaceable>:</command> 
+と入力し、<command>ENTER</command> を押す。
+<replaceable>n</replaceable> には CDROM のパーティション番号を指定する。
 シェルのプロンプトにパーティション番号が表示される。
 
 </para></listitem>
@@ -370,7 +369,7 @@ This will start the boot load sequence.
 As with option 1, these steps start the Debian boot loader which will
 display a menu page for you to select a boot kernel and options.
 You can also enter the shorter 
-<command>fs<emphasis>n</emphasis>:elilo</command> command at
+<command>fs<replaceable>n</replaceable>:elilo</command> command at
 the shell prompt.
 Proceed to selecting the boot kernel and options.
 -->
@@ -378,43 +377,19 @@ Proceed to selecting the boot kernel and options.
 以上の手順で起動カーネルやオプションを選択するメニューを表示する 
 Debian ブートローダを起動します。
 シェルプロンプトでもっと短く、
-<command>fs<emphasis>n</emphasis>:elilo</command> と入力することもできます。
+<command>fs<replaceable>n</replaceable>:elilo</command> 
+と入力することもできます。
 起動カーネルやオプションの選択に進んでください。
 
 </para>
 
   </sect3>
 
-  <sect3 arch="ia64" id="kernel-option-menu">
-  <title>起動カーネルやオプションの選択</title>
+  <sect3 arch="ia64" id="serial-console">
+  <title>シリアルコンソールを用いたインストール</title>
 
 <para>
 
-<!--
-The boot loader will display a form with a menu list and a text
-window with a <classname>Boot:</classname> prompt.
-The arrow keys select an item from the menu and any text typed
-at the keyboard will appear in the text window.
-There are also help screens which can be displayed by pressing
-the appropriate function key.
-The <classname>General</classname> help screen explains the menu
-choices and the <classname>Params</classname> screen explains
-the common command line options.
--->
-ブートローダを、メニューリストを備えた形式や、
-<classname>Boot:</classname> プロンプトがあるテキストウィンドウの形式で
-表示します。
-矢印キーでメニューからアイテムを選べますし、
-キーボードで入力したテキストを、テキストウィンドウに表示できるでしょう。
-また、適切なファンクションキーを押して、ヘルプ画面を表示することもできます。
-<classname>General</classname> ヘルプ画面はメニューの選択肢を、
-<classname>Params</classname> 画面は、
-共通のコマンドラインオプションを説明します。
-
-</para>
-
-   <title>シリアルコンソール</title>
-<para>
 <!--
 You may choose to perform an install using a monitor and keyboard
 or using a serial connection.  To use a monitor/keyboard setup,
@@ -435,8 +410,9 @@ device are preconfigured.
 ここで <replaceable>BAUD</replaceable> にはシリアルコンソールの通信速度です。
 メニュー項目には、
 ttyS0 デバイスの一般的なボーレート (通信速度) があらかじめ設定されています。
-</para>
-<para>
+
+</para><para>
+
 <!--
 In most circumstances, you will want the installer to use the same
 baud rate as your connection to the EFI console.  If you aren't
@@ -447,8 +423,9 @@ sure what this setting is, you can obtain it using the command
 インストーラを動かすことになります。
 この設定がよくわからなければ、
 EFI シェルで <command>baud</command> コマンドを使って取得できます。
-</para>
-<para>
+
+</para><para>
+
 <!--
 If there is not an option available that is configured for the serial
 device or baud rate you would like to use, you may override the console setting
@@ -462,6 +439,7 @@ the <classname>Boot:</classname> text window.
 例えば、ttyS1 デバイスを 57600 ボーのコンソールとして使用する場合、
 <classname>Boot:</classname> テキストウィンドウに 
 <command>console=ttyS1,57600n8</command> と入力してください。
+
 </para>
 
 <note><para>
@@ -495,8 +473,35 @@ requiring you to reboot before you can begin the installation.
 カーネルが起動すると同時に入出力が死んでしまいます。
 インストールを始める前に、再起動する必要があるでしょう。
 </para></warning>
+  </sect3>
+
+  <sect3 arch="ia64" id="kernel-option-menu">
+  <title>起動カーネルやオプションの選択</title>
 
 <para>
+
+<!--
+The boot loader will display a form with a menu list and a text
+window with a <classname>Boot:</classname> prompt.
+The arrow keys select an item from the menu and any text typed
+at the keyboard will appear in the text window.
+There are also help screens which can be displayed by pressing
+the appropriate function key.
+The <classname>General</classname> help screen explains the menu
+choices and the <classname>Params</classname> screen explains
+the common command line options.
+-->
+ブートローダを、メニューリストを備えた形式や、
+<classname>Boot:</classname> プロンプトがあるテキストウィンドウの形式で
+表示します。
+矢印キーでメニューからアイテムを選べますし、
+キーボードで入力したテキストを、テキストウィンドウに表示できるでしょう。
+また、適切なファンクションキーを押して、ヘルプ画面を表示することもできます。
+<classname>General</classname> ヘルプ画面はメニューの選択肢を、
+<classname>Params</classname> 画面は、
+共通のコマンドラインオプションを説明します。
+
+</para><para>
 
 <!--
 Consult the <classname>General</classname> help screen for the
@@ -560,8 +565,6 @@ by the first screen of the Debian Installer.
 
 </itemizedlist>
 
-  </sect3>
-
 <para>
 
 <!--
@@ -572,6 +575,7 @@ set up the language locale, network, and disk partitions.
 インストールを続けるのには、次章に進んでください。
 
 </para>
+  </sect3>
   </sect2>
 
   <sect2 arch="ia64" id="boot-tftp"><title>TFTP での起動</title>
