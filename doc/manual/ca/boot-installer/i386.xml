@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 21617 -->
+<!-- original version: 23061 -->
 
   <sect2 arch="i386"><title>Arrencant des d'un CD-ROM</title>
 
@@ -172,7 +172,7 @@ A continuació trobareu un exemple del fitxer
 image=/boot/newinstall/vmlinuz
        label=newinstall
        initrd=/boot/newinstall/initrd.gz
-       root=/dev/ram
+       root=/dev/ram0
        append="devfs=mount,dall ramdisk_size=17000"
 
 </screen></informalexample>
@@ -194,7 +194,7 @@ i afegiu-hi les línies següents:
 <informalexample><screen>
 
 title  New Install
-kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram devfs=mount,dall ramdisk_size=17000
+kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram0 devfs=mount,dall ramdisk_size=17000
 initrd (hd0,0)/boot/newinstall/initrd.gz
 
 </screen></informalexample>
@@ -222,11 +222,11 @@ els paràmetres d'arrencada opcionals o únicament prémer &enterkey;
 
 En el cas que el vostre ordinador no permeti l'arrencada des d'un
 dispositiu de memòria USB, podeu utilitzar un disquet per fer
-l'arrencada inicial i posteriorment commutar a l'USB. Segons
-<xref linkend="floppy-boot"/>; el nucli del disquet d'arrencada
-hauria de detectar automàticament el llapis USB. Quan se us demani
-el disquet arrel, premeu &enterkey;. Hauríeu de veure com s'inicialitza
-el &d-i;.
+l'arrencada inicial i posteriorment commutar a l'USB. Arrenqueu el
+vostre ordinador tal com està descrit a <xref linkend="floppy-boot"/>;
+el nucli del disquet d'arrencada hauria de detectar automàticament el
+llapis USB. Quan se us demani el disquet arrel, premeu &enterkey;.
+Hauríeu de veure com s'inicialitza el &d-i;.
 
 </para>
   </sect2>
@@ -303,12 +303,14 @@ Hi ha diversos mètodes per a arrencar via TFTP en i386.
 
 </para>
 
-   <sect3><title>Etherboot</title>
+   <sect3><title>Tarja de xarxa o placa mare que suporta PXE</title>
 <para>
 
-El <ulink url="http://www.etherboot.org">projecte etherboot</ulink>
-proporciona disquets d'arrencada i fins hi tot roms d'arrencada
-que permeten l'arrencada via TFTP.
+És possible que la vostra tarja de xarxa o la placa mare proporcionin
+la possibilitat d'arrencada via PXE. Es tracta d'una reimplementació
+d'<trademark class="trade">Intel</trademark> de l'arrencada via TFTP.
+Si és el vostre cas podeu configurar la BIOS perquè arrenqui via la
+xarxa.
 
 </para>
    </sect3>
@@ -326,14 +328,12 @@ Informeu-nos (<email>&email-debian-boot-list;</email>) de com us ha anat.
 </para>
    </sect3>
 
-   <sect3><title>Tarja de xarxa o placa mare que suporta PXE</title>
+   <sect3><title>Etherboot</title>
 <para>
 
-És possible que la vostra tarja de xarxa o la placa mare proporcionin
-la possibilitat d'arrencara via PXE. Es tracta d'una reimplementació
-d'<trademark class="trade">Intel</trademark> de l'arrencada via TFTP.
-Si és el vostre cas podeu configurar la BIOS perquè arrenqui via la
-xarxa.
+El <ulink url="http://www.etherboot.org">projecte etherboot</ulink>
+proporciona disquets d'arrencada i fins hi tot roms d'arrencada
+que permeten l'arrencada via TFTP.
 
 </para>
    </sect3>
