@@ -1,10 +1,13 @@
-<!-- original version: 11648 -->
+<!-- original version: 22232 -->
 
 
   <sect2 arch="mips" id="boot-tftp"><title>Arrancar con TFTP</title>
+
+   <sect3>
+   <title>Arranque TFTP de Indys SGI</title>
 <para>
 
-Después de acceder al monitor de ordenes, use
+Después de acceder al monitor de órdenes, use
 <informalexample><screen>
 
 bootp(): root=/dev/ram0
@@ -18,13 +21,47 @@ desactivar la variable de entorno <envar>netaddr</envar>. Escriba
 unsetenv netaddr
 
 </screen></informalexample>
-en el monitor de ordenes para efectuarlo.
+en el monitor de órdenes para efectuarlo.
 
 </para>
+  </sect3>
+
+   <sect3>
+   <title>Arranque TFTP de Broadcom BCM91250A</title>
+<para>
+
+En la placa de evaluación Broadcom BCM91250A, tiene que cargar el gestor de
+arranque SiByl mediante TFTP, y este cargará y arrancará el instalador de
+Debian. En la mayoría de los casos, primero obtendrá una dirección mediante
+DHCP, pero también es posible configurarla estáticamente. Para usar DHCP, puede
+introducir la siguiente orden en el prompt CFE:
+
+<informalexample><screen>
+
+ifconfig eth0 -auto
+
+</screen></informalexample>
+
+Una vez que tiene la dirección IP, puede cargar SiByl con la siguiente orden:
+
+<informalexample><screen>
+
+boot 192.168.1.1:/boot/sibyl
+
+</screen></informalexample>
+
+Tiene que substituir la dirección IP de este ejemplo con la dirección IP de su
+servidor TFTP. Cuando ejecute esta orden, el instalador se cargará
+automáticamente.
+
+</para>
+</sect3>
+
   </sect2>
 
-
   <sect2 arch="mips"><title>Parámetros de arranque</title>
+   <sect3>
+   <title>Arranque TFTP de Indys SGI</title>
 <para>
 
 En máquinas Indy SGI puede añadir parámetros de arranque a
@@ -38,4 +75,18 @@ explícitamente a través de su servidor bootp/dhcp. Ejemplo:
 <command>bootp():/boot/tftpboot.img</command>
 
 </para>
+  </sect3>
+
+   <sect3>
+   <title>Arranque TFTP de Broadcom BCM91250A</title>
+<para>
+
+No puede pasar directamente ningún parámetro de arranque directamente desde el
+prompt CFE. En su lugar, tiene que editar el fichero
+<filename>/boot/sibyl.conf</filename> del servidor TFTP y añadir sus parámetros
+a la variable <replaceable>extra_args</replaceable>.
+
+</para>
+  </sect3>
+
   </sect2>

@@ -1,4 +1,4 @@
-<!-- original version: 20335 -->
+<!-- original version: 22664 -->
 
   <sect2 arch="i386"><title>Arrancar desde un CD-ROM</title>
 
@@ -92,7 +92,7 @@ cd c:\install
 </screen></informalexample>.  
 
 Seguidamente, ejecute <command>install.bat</command>.
-Se cargará el núcleo y despuÃ©s el sistema de instalación.
+Se cargará el núcleo y después el sistema de instalación.
 
 </para><para>
 
@@ -119,7 +119,7 @@ descargar los ficheros necesarios como se describe en
 <para>
 Si intenta usar el disco duro solamente para arrancar y descargar
 todo a través de la red, deberá descargar el fichero
-<filename>netboot/debian-installer/i386//initrd.gz</filename> y su
+<filename>netboot/debian-installer/i386/initrd.gz</filename> y su
 núcleo correspondiente.
 Esto le permite reparticionar el disco duro desde donde arrancó el
 instalador, aunque debe tener cuidado.
@@ -212,9 +212,9 @@ ingresar argumentos de arranque adicionales o simplemente presionar
 
 En caso que su ordenador no soporte el arranque desde dispositivos de
 memoria USB, todavía puede usar un disquete para efectuar el arranque
-inicial y luego cambiar a USB. Prosiga conforme se explica en
-<xref linkend="floppy-boot"/>; el núcleo en el disquete detectará su
-dispositivo de memoria USB automáticamente. Cuando le pregunte por
+inicial y luego cambiar a USB. Arranque su sistema como se describe en
+<xref linkend="floppy-boot"/>; el núcleo en el disquete de arranque debería
+detectar su dispositivo de memoria USB automáticamente. Cuando le pregunte por
 el disquete raíz, simplemente presione &enterkey;. Debería iniciarse
 el &d-i;.
 
@@ -294,12 +294,14 @@ Existen varias formas de realizar un arranque con TFTP en i386.
 
 </para>
 
-   <sect3><title>Etherboot</title>
+   <sect3><title>Tarjetas de red o placas base que soportan PXE</title>
 <para>
 
-El <ulink url="http://www.etherboot.org">proyecto etherboot</ulink>
-provee disquetes de arranque e incluso bootroms que efectúan un
-arranque usando TFTP.
+Podría darse que su tarjeta de red o placa base provea la 
+funcionalidad de arranque PXE. Lo que es una reimplementación
+de <trademark class="trade">Intel</trademark> del arranque TFTP.
+De ser su caso podría tener la posibilidad de configurar su BIOS
+para arrancar desde la red.
 
 </para>
    </sect3>
@@ -312,23 +314,22 @@ de arranque usando TFTP.
 
 </para><para condition="FIXME">
 
-Dejenos (<email>&email-debian-boot-list;</email>) saber como 
+Déjenos (<email>&email-debian-boot-list;</email>) saber como 
 lo efectuó. Por favor haga referencia a este documento.
 
 </para>
    </sect3>
 
-   <sect3><title>Tarjetas de red o placas base que soportan PXE</title>
+   <sect3><title>Etherboot</title>
 <para>
 
-Podría darse que su tarjeta de red o placa base provea la 
-funcionalidad de arranque PXE. Lo que es una reimplementación
-de <trademark class="trade">Intel</trademark> del arranque TFTP.
-De ser su caso podría tener la posibilidad de configurar su BIOS
-para arrancar desde la red.
+El <ulink url="http://www.etherboot.org">proyecto etherboot</ulink>
+provee disquetes de arranque e incluso bootroms que efectúan un
+arranque usando TFTP.
 
 </para>
    </sect3>
+
   </sect2>
 
   <sect2 arch="i386"><title>Parámetros de arranque de i386</title>
@@ -366,7 +367,8 @@ de disquete ST-506), la unidad IDE podría no ser reconocida adecuadamente.
 Nuevamente, primero intente sin parámetros para ver si la unidad IDE
 es reconocida correctamente. Si no es así, determine la geometría de
 su unidad (cilindros, cabezales y sectores), y use el parámetro
-<userinput>hd=<replaceable>cilindros</replaceable>,<replaceable>cabezales</replaceable>,<replaceable>sectores</replaceable></userinput>.
+<userinput>hd=<replaceable>cilindros</replaceable>,<replaceable>cabezales</replaceable>,
+<replaceable>sectores</replaceable></userinput>.
 
 </para><para>
 
