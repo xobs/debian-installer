@@ -1,25 +1,18 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 22285 untranslated -->
+<!-- original version: 23805 untranslated -->
+
+<sect1 id="example-preseed">
+<title>Preconfiguration File Example</title>
+
+<para>
+
+This is a complete working example of a preconfiguration file for an automated
+install. Its use is explained in <xref linkend="automatic-install"/>. You
+may want to uncomment some of the lines before using the file.
+
+</para>
 
 <informalexample><screen>
-# d-i preseed file, version 0.1. Copyright 2004 by Joey Hess.
-#
-# Use with care! This will make d-i install Debian without warnings or
-# confirmation.
-#
-# THIS SOFTWARE IS PROVIDED BY AUTHORS AND CONTRIBUTORS ``AS IS'' AND
-# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-# ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHORS OR CONTRIBUTORS BE LIABLE
-# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-# OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-# OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-# SUCH DAMAGE. In other words, if you destroy your computer with this, it's
-# your own tough luck.
-
 #### Modifying syslinux.cfg.
 
 # Edit the syslinux.cfg (or similar) file, and add parameters to the end
@@ -48,6 +41,14 @@
 #    languagechooser/language-name=English
 #    countrychooser/shortlist=US
 #    console-keymaps-at/keymap=us
+#
+# Note that the kernel accepts a maximum of 8 command line options and
+# 8 environment options (including any options added by default for the
+# installer). If these numbers are exceeded, 2.4 kernels will drop any
+# excess options and 2.6 kernels will panic.
+# Some of the default options, like 'vga=normal' and 'devfs=mount' may be
+# safely removed for most installations, which may allow you to add more
+# options for preseeding.
 
 #### Shell commands.
 
@@ -78,9 +79,9 @@
 # also pass network config parameters in on the kernel params if you are
 # loading preseed files from the network.
 
-# Force netcfg to use a specific interface. Normally not needed, since it
-# uses whichever interface is connected.
-#d-i	netcfg/choose_interface	select eth0
+# netcfg will choose an interface that has link if possible. This makes it
+# skip displaying a list if there is more than one interface.
+d-i	netcfg/choose_interface select auto
 
 # If you prefer to configure the network manually, here's how:
 #d-i	netcfg/disable_dhcp	boolean true
@@ -149,6 +150,7 @@ d-i	partman-auto/choose_recipe	select All files in one partition (recommended fo
 #	.
 
 # This makes partman automatically partition without confirmation.
+d-i	partman/confirm_write_new_label	boolean true
 d-i	partman/choose_partition	select Finish partitioning and write changes to disk
 d-i	partman/confirm			boolean	true
 
@@ -170,8 +172,6 @@ d-i	grub-installer/with_other_os	boolean true
 #d-i	grub-installer/only-debian	boolean false
 #d-i	grub-installer/with_other_os	boolean false
 
-# TODO how to preseed lilo-installer? Its questions make this difficult.
-
 ##### Finishing up the first stage install.
 
 # Avoid that last message about the install being complete.
@@ -182,7 +182,7 @@ d-i	prebaseconfig/reboot_in_progress	note
 # XXX: Note that most of this will not work right until base-config 2.40.4
 # is available.
 
-# Avoid the intorductory message.
+# Avoid the introductory message.
 base-config	base-config/intro	note 
 
 # Avoid the final message.
@@ -227,11 +227,9 @@ base-config	tzconfig/choose_country_zone_single boolean true
 
 # If you want to skip creation of a normal user account.
 #passwd		passwd/make-user		boolean false
-# Alternatively, you can preseed the user's name. Note that the username
-# will be derived from this; it cannot be overridden currently. The
-# username will be the (lowercase) first name of the full name.
+# Alternatively, you can preseed the user's name and login.
 #passwd		passwd/user-fullname		string Debian User
-#passwd		passwd/username			string 
+#passwd		passwd/username			string debian
 # And their password, but use caution!
 #passwd		passwd/user-password		password insecure
 #passwd		passwd/user-password-again	password insecure
@@ -326,3 +324,5 @@ xserver-xfree86	xserver-xfree86/config/monitor/mode-list	select 1024x768 @ 60 Hz
 # on a particular usb storage device (in this case, a built-in card reader):
 #d-i	preseed/include_command	string if $(grep -q "GUID: 0aec3050aec305000001a003"  /proc/scsi/usb-storage-*/*); then echo kraken.cfg; else echo otherusb.cfg; fi
 </screen></informalexample>
+
+</sect1>
