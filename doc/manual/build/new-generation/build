@@ -29,7 +29,6 @@ if [ -z $destination ]; then
 fi
 
 tempdir=${language}.temp
-
 dynamic="${tempdir}/dynamic.ent"
 
 
@@ -66,7 +65,9 @@ create_profiled () {
     echo "<!ENTITY kernelversion \"${kernelversion}\">" >> $dynamic
     echo "<!ENTITY altkernelversion \"${altkernelversion}\">" >> $dynamic
 
-    sed "s:##SRCPATH##:$source_path:" templates/docstruct.ent >> $dynamic
+    #sed "s:##SRCPATH##:$source_path:" entities/docstruct.ent >> $dynamic
+    sed "s:##SRCPATH##:$source_path:" entities/docstruct.ent |
+    sed "s/\"en/\"..\\/..\/..\/${language}/" >> $dynamic
     sed "s/##LANG##/$language/g" templates/install.xml.template | \
     sed "s:##ENTPATH##:$entities_path:g" | \
     sed "s:##SRCPATH##:$source_path:" > $tempdir/install.${language}.xml
