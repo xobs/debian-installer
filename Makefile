@@ -367,6 +367,11 @@ $(FLOPPY_IMAGE):
 	# Make the floppy bootable. This command must run as root
 	syslinux $(SYSLINUX_OPTS) $(FLOPPY_IMAGE)
 
+# Copy files somewhere the CD build scripts can find them
+cd_content: floppy_image
+	cp $(KERNEL) $(DEST)/$(TYPE)-linux
+	cp syslinux.cfg $(DEST)/$(TYPE)-syslinux.cfg
+
 # Write image to floppy
 boot_floppy: floppy_image
 	install -d $(DEST)
