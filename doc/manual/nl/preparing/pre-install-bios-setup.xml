@@ -1,17 +1,18 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- retain these comments for translator revision tracking -->
 <!-- $Id: pre-install-bios-setup.xml 11568 2004-03-21 12:12:18Z waldi $ -->
 
  <sect1 id="pre-install-bios-setup">
- <title>Pre-Installation Hardware and Operating System Setup</title>
+ <title>Configuratie van apparatuur en besturingssysteem voor de installatie</title>
 <para>
 
-This section will walk you through pre-installation hardware setup, if
-any, that you will need to do prior to installing Debian.  Generally,
-this involves checking and possibly changing firmware settings for
-your system.  The ``firmware'' is the core software used by the
-hardware; it is most critically invoked during the bootstrap process
-(after power-up). Known hardware issues affecting the reliability of
-&debian; on your system are also highlighted.
+In deze sectie wordt ingegaan op eventuele hardwareconfiguratie die u moet
+uitvoeren voordat u Debian installeert. In het algemeen betreft dit controle
+en mogelijk aanpassing van 'firmware'-instellingen voor uw systeem. De
+firmware is de basisprogrammatuur die door de apparatuur wordt gebruikt;
+het meest kritieke moment waarop deze wordt gebruikt is tijdens het opstarten
+van uw systeem. Ook wordt ingegaan op bekende problemen met apparatuur die
+de betrouwbaarheid van &debian; op uw systeem kunnen beïnvloeden.
 
 </para>
 
@@ -21,32 +22,36 @@ hardware; it is most critically invoked during the bootstrap process
 &bios-setup-sparc.xml; 
 &bios-setup-s390.xml; 
 
-  <sect2><title>Hardware Issues to Watch Out For</title>
+  <sect2><title>Aandachtspunten ten aanzien van apparatuur</title>
 <para arch="not-s390">
 
-Many people have tried operating their 90 MHz CPU at 100 MHz, etc.  It
-sometimes works, but is sensitive to temperature and other factors and
-can actually damage your system. One of the authors of this document
-over-clocked his own system for a year, and then the system started
-aborting the <command>gcc</command> program with an unexpected signal
-while it was compiling the operating system kernel. Turning the CPU
-speed back down to its rated value solved the problem.
+Velen hebben geprobeerd om bijvoorbeeld hun 90 MHz CPU op 100 MHz te laten
+werken. Soms werkt dit, maar het is gevoelig voor temperatuur en andere
+factoren en kan uw systeem beschadigen. Eén van de auteurs van dit document
+heeft zijn systeem een jaar lang op verhoogde snelheid laten draaien waarna
+het systeem tijdens de compilatie van het besturingssysteem plotseling begon
+het <command>gcc</command>-programma af te breken met een onverwachte fout.
+Het probleem kon worden opgelost door de CPU weer op zijn normale snelheid te
+laten werken.
 
 </para><para arch="not-s390">
 
-The <command>gcc</command> compiler is often the first thing to die
-from bad memory modules (or other hardware problems that change data
-unpredictably) because it builds huge data structures that it
-traverses repeatedly.  An error in these data structures will cause it
-to execute an illegal instruction or access a non-existent
-address. The symptom of this will be <command>gcc</command> dying from
-an unexpected signal.
+De <command>gcc</command>-compiler vertoont vaak als eerste problemen door
+slechte geheugenmodules (of andere hardwareproblemen die onvoorspelbare
+veranderingen van gegevens veroorzaken) omdat het enorme gegevensstructuren
+opbouwt die herhaaldelijk worden doorlopen. Een fout in deze gegevensstructuren
+resulteert in een ongeldige instructie of het lezen van een onbestaand
+geheugenadres. Het symptoom hiervan is dat <command>gcc</command> afbreekt met
+een onverwachte fout.
 
 </para><para arch="m68k">
 
-Atari TT RAM boards are notorious for RAM problems under Linux; if you
-encounter any strange problems, try running at least the kernel in
-ST-RAM.  Amiga users may need to exclude RAM using a booter memfile.
+Atari TT RAM moederborden zijn berucht om hun problemen met RAM onder
+Linux; probeer, als u vreemde problemen tegenkomt, om tenminste de kernel
+in ST-RAM te laden. Gebruikers van een Amiga moeten mogelijk RAM uitsluiten
+met behulp van een 'booter memfile'.
+<!-- FJP Is moederborden juist of zijn dit (insteek)kaarten? //-->
+<!-- FJP What the f*ck is een booter memfile? //-->
 
 <phrase condition="FIXME"><emphasis>
 
@@ -56,115 +61,122 @@ FIXME: more description of this needed.
 
 </para><para arch="i386">
 
-The very best motherboards support parity RAM and will actually tell
-you if your system has a single-bit error in RAM. Unfortunately, they
-don't have a way to fix the error, thus they generally crash
-immediately after they tell you about the bad RAM. Still, it's better
-to be told you have bad memory than to have it silently insert errors
-in your data. Thus, the best systems have motherboards that support
-parity and true-parity memory modules; see 
-<xref linkend="Parity-RAM"/>.
+De betere moederborden ondersteunen RAM met pariteitscontrole en kunnen u
+melden als uw systeem een fout van één bit in het geheugen heeft. Helaas
+kunnen ze deze fout niet herstellen en zullen ze over het algemeen stuklopen
+direct na de melding van de geheugenfout. Het is echter nog altijd beter
+om verteld te worden dat er geheugenproblemen zijn dan dat er ongemerkt
+fouten in uw gegevens ontstaan. Daarom beschikken de betere systemen over
+moederborden die geheugenmodules met 'parity' en 'true-parity' ondersteunen;
+zie ook <xref linkend="Parity-RAM"/>.
 
 </para><para arch="i386">
 
-If you do have true-parity RAM and your motherboard can handle it, be
-sure to enable any BIOS settings that cause the motherboard to
-interrupt on memory parity errors.
+Als u 'true-parity' RAM heeft en als dit door uw moederbord wordt ondersteund,
+activeer dan eventuele BIOS-instellingen die ervoor zorgen dat het moederbord
+een interrupt genereert bij pariteitsfouten in het geheugen.
 
 </para>
 
-   <sect3 arch="i386"><title>The Turbo Switch</title>
+   <sect3 arch="i386"><title>De turboschakelaar</title>
 <para>
 
-Many systems have a <emphasis>turbo</emphasis> switch that controls
-the speed of the CPU.  Select the high-speed setting. If your BIOS
-allows you to disable software control of the turbo switch (or
-software control of CPU speed), do so and lock the system in
-high-speed mode. We have one report that on a particular system, while
-Linux is auto-probing (looking for hardware devices) it can
-accidentally touch the software control for the turbo switch.
-
-</para>
-   </sect3>
-
-   <sect3 arch="i386"><title>Cyrix CPUs and Floppy Disk Errors</title>
-<para>
-
-Many users of Cyrix CPUs have had to disable the cache in their
-systems during installation, because the floppy disk has errors if
-they do not.  If you have to do this, be sure to re-enable your cache
-when you are finished with installation, as the system runs
-<emphasis>much</emphasis> slower with the cache disabled.
-
-</para><para>
-
-We don't think this is necessarily the fault of the Cyrix CPU. It may
-be something that Linux can work around. We'll continue to look into
-the problem.  For the technically curious, we suspect a problem with
-the cache being invalid after a switch from 16-bit to 32-bit code.
+Veel systemen hebben een <emphasis>turboschakelaar</emphasis> die de
+snelheid van de CPU reguleert. Selecteer de hoogste snelheid. Als uw
+BIOS de mogelijkheid biedt om softwarematige besturing van de
+turboschakelaar (of CPU-snelheid) uit te schakelen, kunt u dit het beste
+doen en het systeem vastzetten in de hoogste snelheid. Er is één melding
+van een systeem waarbij Linux, tijdens het automatisch zoeken naar aanwezige
+apparatuur, per ongeluk de softwarematige besturing van de turboschakelaar raakte.
 
 </para>
    </sect3>
 
-   <sect3 arch="i386"><title>Peripheral Hardware Settings</title>
+   <sect3 arch="i386"><title>Cyrix-CPU's en diskettefouten</title>
 <para>
 
-You may have to change some settings or jumpers on your computer's
-peripheral cards.  Some cards have setup menus, while others rely on
-jumpers.  This document cannot hope to provide complete information on
-every hardware device; what it hopes to provide is useful tips.
+Bij systemen met een Cyrix-CPU kan het noodzakelijk zijn om tijdens de
+installatie het cache-geheugen uit te schakelen omdat anders
+diskettefouten optreden. Vergeet niet om na de installatie de cache weer
+te activeren omdat het systeem <emphasis>veel</emphasis> trager werkt als
+de cache uitgeschakeld is.
 
 </para><para>
 
-If any cards provide ``mapped memory'', the memory should be mapped
-somewhere between 0xA0000 and 0xFFFFF (from 640K to just below 1
-megabyte) or at an address at least 1 megabyte greater than the total
-amount of RAM in your system.
+We denken dat dit niet noodzakelijk een fout van de Cyrix-CPU is. Mogelijk
+kan dit probleem binnen Linux worden opgelost; we blijven hieraan werken.
+(Voor technisch geïnteresseerde lezers: we vermoeden dat het probleem is dat
+de cache ongeldig wordt na een omschakeling van instructies van 16-bit
+naar 32-bit.)
 
 </para>
    </sect3>
 
-   <sect3 arch="i386" id="usb-keyboard-config"><title>USB keyboards</title>
+   <sect3 arch="i386"><title>Instellingen van randapparatuur</title>
 <para>
 
-If you have no AT-style keyboard and only a USB model, you will need
-to enable legacy AT keyboard emulation in your BIOS setup. Consult
-your main board manual and look in the BIOS for "Legacy keyboard
-emulation" or "USB keyboard support" options. It must be enabled in
-order to boot the installation system.  If you enabled this option and
-it is working for you, you are fine and can go ahead.
+Mogelijk moet u instellingen of jumpers op in uw computer aanwezige kaarten
+van randapparatuur wijzigen. Sommige kaarten beschikken over
+configuratiemenu's terwijl andere gebruik maken van jumpers. Het is helaas
+niet mogelijk om in dit document volledige informatie te verschaffen over elk
+apparaat; wel proberen we nuttige tips te geven.
 
 </para><para>
 
-If you cannot find this option, it might be that it is always enabled
-and you can continue. It also might mean that the BIOS does not
-provide any emulation support (bad luck here).
-
-</para><para>
-
-If you find the option and enable it, but the emulation stops working
-soon after the kernel started, then you have bad luck too. You could
-try the "bf2.4" flavor where the root floppy brings USB modules. If
-you are installing with floppy disks, you would need the keyboard once
-before the USB modules can be loaded. Specifying the "keytimer" option
-at boot prompt may help in this case.
-
-</para><para>
-
-Sometimes, the emulation hangs but it wakes up after few minutes, so
-you could wait some time and try to continue. To fix this behavior,
-you could load Linux' own drivers for USB keyboards. For this, use
-"modconf" (Step "Configure Device Driver Modules") and load usb-uhci
-or usb-ohci modules.
+Als u kaarten heeft die gebruik maken van 'mapped memory', dan dient dit
+geconfigureerd te worden ergens tussen 0xA0000 en 0xFFFFF (van 640K tot net
+onder 1 megabyte) of een adres tenminste 1 megabyte groter dan de totale
+hoeveelheid RAM in uw systeem.
 
 </para>
    </sect3>
 
-   <sect3><title>More than 64 MB RAM</title>
+   <sect3 arch="i386" id="usb-keyboard-config"><title>USB-toetsenborden</title>
 <para>
 
-The Linux Kernel can not always detect what amount of RAM you have.  If
-this is the case please look at <xref linkend="boot-parms"/>.
+Als u geen AT- maar alleen een USB-toetsenbord heeft, zult u in uw
+BIOS-configuratie de 'legacy AT keyboard'-emulatie moeten activeren.
+Raadpleeg hiervoor de handleiding van uw moederbord en zoek in het BIOS
+naar opties voor "Legacy keyboard emulation" of "USB keyboard support".
+Dit moet geactiveerd zijn om het installatiesysteem te kunnen opstarten.
+<!-- FJP: Laatste zin is lastig te vertalen en voegt volgens mij niets toe ;-) //-->
+
+</para><para>
+
+Als u een dergelijke optie niet kunt vinden, is het mogelijk dat deze standaard
+geactiveerd is en dat u verder kunt met de installatie. Het kan echter ook
+betekenen dat emulatie niet door het BIOS wordt ondersteund (in dat geval heeft
+u pech gehad).
+
+</para><para>
+
+Als u de optie heeft gevonden en geactiveerd, maar de emulatie stopt te
+werken kort nadat de kernel is gestart, dan heeft u ook pech. U kunt dan
+wel de "bf2.4"-variant proberen; bij deze variant beschikt de root-diskette
+over USB-modules. Als u vanaf diskettes installeert, heeft u het toetsenbord
+één keer nodig voordat de USB-modules geladen kunnen worden. Het kan in dit
+geval helpen om bij de bootprompt de "keytimer"-optie op te geven.
+<!-- FJP: vertaling 'bootprompt'? //-->
+
+</para><para>
+
+Soms hangt de emulatie maar kan deze na enkele minuten weer spontaan actief
+worden; u kunt dan proberen om enige tijd te wachten en vervolgens te proberen
+verder te gaan met de installatie. Om dit gedrag te verhelpen, kunt u de Linux
+stuurprogramma's voor USB-toetsenborden laden. Gebruik hiervoor "modconf"
+(Stap "Configure Device Driver Modules") en laadt de modules usb-uhci of
+usb-ohci.
+<!-- FJP: Hoe is "Configure Device Driver Modules" vertaald in d-i? //-->
+<!-- FJP: modconf markeren als <command> //-->
+
+</para>
+   </sect3>
+
+   <sect3><title>Meer dan 64 MB RAM</title>
+<para>
+
+De Linux kernel kan niet in alle gevallen bepalen over hoeveel RAM u beschikt.
+Raadpleeg in dat geval <xref linkend="boot-parms"/>.
 
 </para>
    </sect3>

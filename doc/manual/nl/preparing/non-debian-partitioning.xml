@@ -1,24 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- retain these comments for translator revision tracking -->
 <!-- $Id: non-debian-partitioning.xml 11568 2004-03-21 12:12:18Z waldi $ -->
 
  <sect1 id="non-debian-partitioning">
- <title>Pre-Partitioning for Multi-Boot Systems</title>
+ <title>Uw harde schijf vooraf indelen voor een multi-boot systeem</title>
 <para>
 
-Partitioning your disk simply refers to the act of breaking up your
-disk into sections. Each section is then independent of the others.
-It's roughly equivalent to putting up walls inside a house; if you add
-furniture to one room it doesn't affect any other room.
+Met 'het indelen van uw harde schijf' wordt bedoeld het verdelen van de
+totale capaciteit van uw schijf in parten. Elk part is vervolgens
+onafhankelijk van de andere. Het is enigszins vergelijkbaar met het bouwen
+van muren in een huis; als u daarna meubelen in één kamer plaatst, heeft
+dit geen invloed op de andere kamers.
 
 </para><para arch="s390">
 
+<!-- FJP Nog onvertaald! -->
 Whenever this section talks about ``disks'' you should translate this
 into a DASD or VM minidisk in the &arch-title; world. Also a machine means
 an LPAR or VM guest in this case.
 
 </para><para>
 
-If you already have an operating system on your system
+Als er al een besturingssysteem op uw systeem aanwezig is
 
 <phrase arch="i386">
 (Windows 9x, Windows NT/2000/XP, OS/2, MacOS, Solaris, FreeBSD, &hellip;)
@@ -32,38 +35,40 @@ If you already have an operating system on your system
 (VM, z/OS, OS/390, &hellip;)
 </phrase>
 
-and want to stick Linux on the same disk, you will need to repartition
-the disk. Debian requires its own hard disk partitions. It cannot be
-installed on Windows or MacOS partitions. It may be able to share some
-partitions with other Linux systems, but that's not covered here. At
-the very least you will need a dedicated partition for the Debian
-root.
+en u wilt Linux op dezelfde harde schijf installeren, dan zult u de schijf
+moeten herindelen. Debian vereist eigen partities op de harde schijf.
+Het kan niet worden geïnstalleerd op Windows- of MacOS-partities. Sommige
+partities zouden kunnen worden gedeeld met andere Linux systemen, maar dit
+valt buiten de scope van deze handleiding. U zult tenminste een afzonderlijke
+partitie nodig hebben voor het root-bestandssysteem van Debian.
 
 </para><para>
 
-You can find information about your current partition setup by using
-a partitioning tool for your current operating system
+U kunt informatie over uw huidige partitie-indeling vinden door gebruik te
+maken van een schijfindelingsprogramma voor uw huidige besturingssysteem
 
-<phrase arch="i386">, such as fdisk or PartitionMagic</phrase>
+<phrase arch="i386">, zoals fdisk of PartitionMagic</phrase>
 
-<phrase arch="powerpc">, such as Drive Setup, HD Toolkit, or MacTools</phrase>
+<phrase arch="powerpc">, zoals Drive Setup, HD Toolkit of MacTools</phrase>
 
-<phrase arch="m68k">, such as HD SC Setup, HDToolBox, or SCSITool</phrase>
+<phrase arch="m68k">, zoals HD SC Setup, HDToolBox of SCSITool</phrase>
 
-<phrase arch="s390">, such as the VM diskmap</phrase>
+<phrase arch="s390">, zoals de VM diskmap</phrase>
 
-. Partitioning tools always provide a way to show existing partitions
-without making changes.
+. Schijfindelingsprogramma's beschikken altijd over een functie om bestaande
+partities te tonen zonder wijzigingen aan te brengen.
+<!-- FJP: op deze manier in HTML spatie voor de ',' na <phrase> en voor de '.' voor </phrase> //-->
 
 </para><para>
 
-In general, changing a partition with a file system already on
-it will destroy any information there. Thus you should always make
-backups before doing any repartitioning.  Using the analogy of the
-house, you would probably want to move all the furniture out of the
-way before moving a wall or you risk destroying it.
+Algemeen geldt dat het wijzigen van een partititie waarop reeds een bestandssysteem
+aanwezig is, de daarop aanwezige informatie zal vernietigen. Het is daarom raadzaam
+om altijd reservekopieën te maken voordat u een schijf gaat herindelen. Als we nogmaals
+de analogie van het huis gebruiken: waarschijnlijk zou u eerst alle meubelen opzij
+zetten voordat u een muur uitbreekt om het risico dat meubelen worden beschadigd uit te
+sluiten.
 
-<phrase arch="i386"> Luckily, there is an alternative for some users; see 
+<phrase arch="i386">Gelukkig bestaat er voor sommige gebruikers een alternatief; zie
 <xref linkend="lossless"/>. </phrase>
 </para>
 
@@ -73,116 +78,122 @@ way before moving a wall or you risk destroying it.
 
 </para><para>
 
-If your computer has more than one hard disk, you may want to dedicate
-one of the hard disks completely to Debian. If so, you don't need to
-partition that disk before booting the installation system; the
-installer's included partitioning program can handle the job nicely.
+Als uw computer over meer dan één harde schijf beschikt, zou u één daarvan
+volledig kunnen reserveren voor Debian. Als dat het geval is, hoeft u deze
+harde schijf niet in te delen voordat u het installatiesysteem opstart; het
+schijfindelingsprogramma van het installatiesysteem kan dit zonder problemen
+verzorgen.
 
 </para><para>
 
-If your machine has only one hard disk, and you would like to
-completely replace the current operating system with Debian GNU/Linux,
-you also can wait to partition as part of the installation process
-(<xref linkend="partman"/>), after you have booted the
-installation system.  However this only works if you plan to boot the
-installer system from tapes, CD-ROM or files on a connected machine.
-Consider: if you boot from files placed on the hard disk, and then
-partition that same hard disk within the installation system, thus
-erasing the boot files, you'd better hope the installation is
-successful the first time around.  At the least in this case, you
-should have some alternate means of reviving your machine like the
-original system's installation tapes or CDs.
+Als uw machine over slechts één harde schijf beschikt en u het bestaande
+besturingssysteem volledig wilt vervangen door &debian;, kunt u eveneens het
+indelen van de schijf uitstellen tot tijdens de installatieprocedure 
+(<xref linkend="partman"/>), dus nadat u de computer heeft opgestart met het
+installatiesysteem. Dit kan echter alleen als u van plan bent om het
+installatiesysteem op te starten vanaf magneetband, CD of vanaf een andere met uw
+computer verbonden machine. Bedenk het volgende: als u de computer opstart met
+behulp van bestanden op de harde schijf en vervolgens deze harde schijf opnieuw
+indeelt vanuit het installatiesysteem en daarmee de opstartbestanden verwijdert,
+dan moet u maar hopen dat de installatie in één keer goed gaat. U zou in deze
+situatie tenminste moeten beschikken over een alternatieve methode om uw
+machine weer tot leven te wekken, zoals de originele installatietapes of -CDs
+van het systeem.
+<!-- FJP: naast tape, CD ook diskette als opstartbron noemen (2 maal). //-->
 
 </para><para>
 
-If your machine already has multiple partitions, and enough space can
-be provided by deleting and replacing one or more of them, then you
-too can wait and use the Debian installer's partitioning program. You
-should still read through the material below, because there may be
-special circumstances like the order of the existing partitions within
-the partition map, that force you to partition before installing
-anyway.
+Als op uw machine reeds meerdere partities aanwezig zijn en er kan voldoende
+ruimte worden vrijgemaakt door één of meerdere daarvan te verwijderen en
+vervangen, dan kunt u eveneens gebruik maken van het schijfindelingsprogramma
+van het Debian installatiesysteem. U wordt echter aangeraden om toch de
+informatie hieronder door te lezen omdat er bijzondere omstandigheden kunnen
+zijn &mdash; zoals de volgorde van bestaande partities in de partitie-index
+&mdash; waardoor u alsnog wordt gedwongen om te herindelen vóór de installatie.
 
 </para><para>
 
-In all other cases, you'll need to partition your hard disk before
-starting the installation to create partition-able space for
-Debian. If some of the partitions will be owned by other operating
-systems, you should create those partitions using native operating
-system partitioning programs. We recommend that you do
-<emphasis>not</emphasis> attempt to create Debian Linux partitions
-using another operating system's tools. Instead, you should just
-create the native operating system's partitions you will want to
-retain.
+In alle andere gevallen zult u, om ruimte te creëren voor Debian-partities, uw
+harde schijf moeten herindelen voordat u met de installatie begint. Als sommige
+van de partities bestemd zijn voor andere besturingssystemen, zou u deze
+moeten creëren met behulp van de eigen schijfindelingsprogrammatuur van
+die besturingssystemen. Wij adviseren u <emphasis>niet</emphasis> te proberen
+om partities voor Debian Linux te maken met de programma's van een ander
+besturingssysteem. Beperkt u zich tot het maken van de partities die u wilt
+behouden voor het oorspronkelijke besturingssysteem.
 
 </para><para>
 
-If you are going to install more than one operating system on the same
-machine, you should install all other system(s) before proceeding with
-Linux installation. Windows and other OS installations may destroy
-your ability to start Linux, or encourage you to reformat non-native
-partitions.
+Als u meerdere besturingssystemen op dezelfde machine wilt installeren, wordt
+aangeraden om eerst alle andere systemen te installeren voordat u verder gaat
+met de installatie van Linux. Windows en andere besturingssystemen kunnen de
+mogelijkheid om Linux op te starten verstoren, of kunnen u aanmoedigen om
+'vreemde' partities opnieuw te fomateren.
 
 </para><para>
 
-You can recover from these actions or avoid them, but installing
-the native system first saves you trouble.
+Het is mogelijk om dergelijke problemen te herstellen of te voorkomen, maar u
+bespaart uzelf moeite door het oorspronkelijke besturingssysteem eerst te
+installeren.
 
 </para><para arch="powerpc">
 
-In order for OpenFirmware to automatically boot &debian; the Linux
-partitions should appear before all other partitions on the disk,
-especially MacOS boot partitions. This should be kept in mind when
-pre-partitioning; you should create a Linux placeholder partition to
-come <emphasis>before</emphasis> the other bootable partitions on the
-disk. (The small partitions dedicated to Apple disk drivers are not
-bootable.) You can delete the placeholder with the Linux partition
-tools later during the actual install, and replace it with Linux
-partitions.
+Om &debian; automatisch te laten opstarten door OpenFirmware, dienen de
+Linux partities zich te bevinden vóór alle andere partities, in het
+bijzonder MacOS opstartpartities. U dient hiermee rekening te houden
+wanneer u de schijfindeling voorbereidt: u zou  ten behoeve van Linux een
+dummy-partitie moeten maken die <emphasis>voor</emphasis> de andere
+opstartpartities op de harde schijf komt. (De kleine partities die zijn
+gereserveerd voor de besturingsprogramma's van de harde schijven van Apple
+zijn geen opstartpartities.) U kunt deze dummy-partitie later, tijdens de
+eigenlijke installatie, verwijderen en vervangen door de Linux partities.
 
 </para><para>
 
-If you currently have one hard disk with one partition (a common setup
-for desktop computers), and you want to multi-boot the native
-operating system and Debian, you will need to:
+Als u op dit moment beschikt over een harde schijf met één partitie (een
+gebruikelijke situatie voor desktop systemen) en u wilt kunnen opstarten met
+zowel het huidige besturingssysteem als met Debian, dan zult u de volgende
+stappen moeten doorlopen.
 
   <orderedlist>
 <listitem><para>
 
-Back up everything on the computer.
+Maak een reservekopie van alles op de computer.
+</para></listitem>
+<listitem><para>
+
+Start de computer op met behulp van het installatiemedium (zoals een CD of
+magneetband) van het oorspronkelijke besturingssysteem.
+
+<phrase arch="powerpc">Als u de computer opstart vanaf een MacOS CD, houd dan
+de <keycap>c</keycap> toets ingedrukt tijdens het opstarten om af te dwingen
+dat de CD het actieve MacOS systeem wordt.</phrase>
 
 </para></listitem>
 <listitem><para>
 
-Boot from the native operating system installer media such as CD-ROM
-or tapes.
-
-<phrase arch="powerpc">When booting from a MacOS CD, hold the
-<keycap>c</keycap> key while 
-booting to force the CD to become the active MacOS system.</phrase>
+Gebruik de schijfindelingsprogramma's behorend bij het oorspronkelijke
+besturingssysteem om partities daarvoor te maken. Maak ten behoeve van &debian;
+een dummy-partitie of laat ongebruikte ruimte vrij.
 
 </para></listitem>
 <listitem><para>
 
-Use the native partitioning tools to create native system
-partition(s). Leave either a place holder partition or free space for
-Debian GNU/Linux.
+Installeer het oorspronkelijke besturingssysteem op haar nieuwe partitie.
 
 </para></listitem>
 <listitem><para>
 
-Install the native operating system on its new partition.
+Start het oorspronkelijke besturingssysteem opnieuw om te controleren dat
+alles in orde is en om de opstartbestanden van Debian te downloaden.
+<!-- FJP: Waarom nu opeens downloaden? Is helemaal geen onderdeel van dit traject!
+Het lijkt me logischer om eerst een restore te doen. //-->
 
 </para></listitem>
 <listitem><para>
 
-Boot back into the native system to verify everything's OK,
-    and to download the Debian installer boot files.
-
-</para></listitem>
-<listitem><para>
-
-Boot the Debian installer to continue installing Debian.
+Start het Debian installatiesysteem op om te vervolgen met de installatie
+van Debian.
 
 </para></listitem>
 </orderedlist>
