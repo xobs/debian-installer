@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 11648 -->
+<!-- original version: 18767 -->
 
 
  <sect1 id="pre-install-bios-setup">
@@ -8,7 +8,7 @@
 
 Cette section va parcourir les réglages matériels que vous devrez peut-être
 effectuer avant d'installer Debian. En général,
-cela implique de vérifier, et parfois de modifier, des réglages du
+cela implique de vérifier, et parfois de modifier, les réglages du
 micrologiciel (BIOS, etc.) sur votre système. Le micrologiciel est le logiciel
 de base utilisé par le matériel&nbsp;; il est plus spécifiquement exécuté
 pendant le processus d'amorçage (après la mise sous tension). Les
@@ -39,7 +39,7 @@ processeur à sa valeur de départ a résolu le problème.
 </para><para arch="not-s390">
 
 Le compilateur <command>gcc</command> est souvent le premier à subir des
-dysfonctionnements à cause d'une mauvaise mémoire RAM (ou d'autres problèmes
+dysfonctionnements à cause d'une mémoire RAM défectueuse (ou d'autres problèmes
 matériels qui changent les données de manière imprévisible), parce qu'il
 construit des structures de données gigantesques qu'il traverse plusieurs
 fois. Une erreur dans ces structures de données le fera exécuter une
@@ -63,12 +63,11 @@ FIXME: description plus poussée nécessaire.
 </para><para arch="i386">
 
 Les meilleures cartes mères supportent la mémoire à parité et vous 
-indiqueront si votre système possède une erreur sur un simple bit dans la 
-mémoire.
+indiqueront si votre système possède une telle mémoire.
 Malheureusement, elles n'ont pas le moyen de corriger l'erreur, ainsi elles
 planteront en général aussitôt après vous avoir prévenu du problème sur la
-mémoire vive. Mais il est préférable d'être averti de la présence de mauvaise
-mémoire vive plutôt que d'avoir des erreurs s'insérant silencieusement dans
+mémoire vive. Mais il est préférable d'être averti de la présence de mémoire 
+vive défectueuse plutôt que d'avoir des erreurs s'insérant silencieusement dans
 vos données. En conclusion, les meilleurs systèmes ont des cartes mères qui
 supportent la mémoire à parité et des barrettes SIMM à parité réelle&nbsp;;
 voir&nbsp;: <xref linkend="Parity-RAM"/>.
@@ -89,7 +88,7 @@ contrôle la vitesse du processeur. Choisissez le réglage haute vitesse. Si
 votre BIOS vous permet de désactiver le contrôle logiciel du bouton-poussoir
 turbo (ou le contrôle logiciel de la vitesse du processeur), faites-le
 et verrouillez le système dans le mode haute vitesse. On nous a
-signalé une fois que Linux, pendant qu'il recherche des périphériques
+signalé que Linux, pendant qu'il recherche des périphériques
 matériels, peut modifier accidentellement le contrôle logiciel du
 bouton-poussoir turbo.
 </para>
@@ -99,7 +98,7 @@ bouton-poussoir turbo.
 <para>
 
 Beaucoup d'utilisateurs de processeur Cyrix ont dû désactiver le cache dans
-leurs systèmes pendant l'installation, car sinon le lecteur de disquettes
+leur système pendant l'installation, car sinon le lecteur de disquettes
 rencontrait des erreurs. Si vous devez le faire, activez à
 nouveau votre cache lorsque vous aurez fini l'installation, puisque le
 système fonctionne <emphasis>beaucoup</emphasis> plus lentement avec le cache 
@@ -128,9 +127,9 @@ moins fournir des indices utiles.
 
 </para><para>
 
-Si l'une de vos cartes vous offre de la mémoire du type «&nbsp;mapped
+Si l'une de vos cartes offre de la mémoire du type «&nbsp;mapped
 memory&nbsp;», utilisez une valeur comprise entre 0xA0000 et 0xFFFFF (de
-640&nbsp;Ko à la limite avec 1&nbsp;Mo) ou une adresse au moins 1&nbsp;Mo plus
+640&nbsp;Ko jusqu'à 1&nbsp;Mo) ou une adresse au moins 1&nbsp;Mo plus
 haute que le total de votre mémoire RAM (ou mémoire vive) de votre système.
 
 </para>
@@ -140,44 +139,20 @@ haute que le total de votre mémoire RAM (ou mémoire vive) de votre système.
 <para>
 
 Si vous n'avez pas de clavier de type AT, mais seulement un modèle USB,
-vous devrez certainement activer l'émulation AT dans la configuration du
-BIOS. Consultez le manuel de votre carte mère et regardez dans le BIOS
+vous devrez peut-être activer l'émulation AT dans la configuration du
+BIOS. Ne l'activez que si l'installateur n'a pu utiliser le clavier en mode
+USB. Consultez le manuel de votre carte mère et regardez dans le BIOS
 pour une option «&nbsp;Legacy keyboard emulation&nbsp;» ou «&nbsp;USB
-keyboard support&nbsp;». Elle doit être activée pour pouvoir démarrer
-l'installation du système. Si vous l'avez activé et que cela
-fonctionne, vous n'aurez pas de soucis.
-</para><para>
-
-Si vous ne trouvez pas cette option, il se peut qu'elle soit activée et
-que vous puissiez continuer. Il se peut aussi que votre BIOS ne
-fournisse pas d'émulation (si vous êtes malchanceux).
-
-</para><para>
-
-Si vous trouvez cette option et l'activez, et si l'émulation s'arrête
-peu après le chargement du noyau, alors vous êtes aussi malchanceux.
-Vous devriez essayer la saveur «&nbsp;bf2.4&nbsp;» dans laquelle la
-disquette avec la racine du système de fichiers contient les modules
-USB. Si vous installez à partir des disquettes, vous aurez besoin du
-clavier une fois avant que les modules USB ne soient chargés. Spécifier
-l'option «&nbsp;keytimer&nbsp;» à l'invite de démarrage pourrait aider
-dans ce cas.
-
-</para><para>
-
-Parfois, l'émulation se bloque puis redémarre après quelques minutes,
-vous pouvez donc attendre un peu et essayer de continuer. Pour corriger
-ce problème, vous pouvez charger les pilotes Linux pour les claviers
-USB. Pour cela, utilisez modconf (étape «&nbsp;Configurer les modules
-de pilotes&nbsp;») et chargez les modules usb-uhci ou usb-ohci.
+keyboard support&nbsp;».
 
 </para>
    </sect3>
+
    <sect3><title>Plus de 64 Mo de mémoire vive</title>
 <para>
 
-Le noyau Linux peut ne pas toujours détecter la quantité de mémoire vive
-que vous avez. Si c'est le cas, veuillez regarder&nbsp;: <xref linkend="boot-parms"/>.
+Le noyau Linux peut ne pas toujours détecter la quantité de mémoire vive. 
+Si c'est le cas, veuillez regarder&nbsp;: <xref linkend="boot-parms"/>.
 
 </para>
    </sect3>
