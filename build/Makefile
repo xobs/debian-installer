@@ -323,7 +323,7 @@ ifdef KERNELVERSION
 		else \
 			[ ! -e $(TREE)/boot/System.map ] || sysmap_name="$(TREE)/boot/System.map"; \
 		fi; \
-		[ -n "$$sysmap_name" ] || sysmap_opt="-F $$sysmap_name"; \
+		[ -z "$$sysmap_name" ] || sysmap_opt="-F $$sysmap_name"; \
 		if [ -d $(TREE)/lib/modules/$(VERSION) ]; then \
 			mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
 			$(shell ./choose-subarch-env $(VERSION)) depmod $$sysmap_opt -q -a -b $(TREE)/ $(VERSION); \
