@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 14362 untranslated -->
+<!-- original version: 16313 untranslated -->
 
   <sect2 arch="i386"><title>Booting from a CD-ROM</title>
 
@@ -516,48 +516,16 @@ resource range causing the problems.
 
 </para><para>
 
-Alternatively you can try the following workaround:
-
-<itemizedlist>
-<listitem><para>
-
-boot the installation system in expert mode, choose your language and country,
-but stop before hardware detection
-
-</para></listitem>
-<listitem><para>
-
-enter the system shell (see <xref linkend="shell"/> for details)
-
-</para></listitem>
-<listitem><para>
-
-execute this command:
-<userinput>echo exclude port <replaceable>0x810-0x81f</replaceable> >>
-/etc/pcmcia/config.opts</userinput><footnote>
-<para>
-
-The address range in this example is for the Dell problem cited above; you may
-have to exclude other address range(s) in your situation.
-See section <quote>System resource settings</quote> in the
-<ulink url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO.html">PCMCIA
-HOWTO</ulink> for other examples.
-
-</para>
-</footnote>
-
-</para></listitem>
-<listitem><para>
-
-now return to the main menu and continue with the installation process
-
-</para></listitem>
-</itemizedlist>
-
-You will also have to exclude the same address range(s) in
-<userinput>/target/etc/pcmcia/config.opts</userinput> before you reboot the
-computer to avoid running into the same problem when you boot into your new
-Debian system.
+Alternatively, you can boot the installer in expert mode. You will
+then be asked to enter the resource range options your hardware
+needs. For example, if you have one of the Dell laptops mentioned
+above, you should enter <userinput>exclude port
+0x800-0x8ff</userinput> here. There is also a list of some common
+resource range options in the <ulink
+url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-2.html#ss2.5">System
+resource settings section of the PCMCIA HOWTO</ulink>. Note that you
+have to omit the commas, if any, when you enter this value in the
+installer.
 
 </para>
   </sect2>
