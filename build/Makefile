@@ -528,6 +528,7 @@ sources.list.udeb:
 		echo "deb $(MIRROR) $(SUITE) main/debian-installer"; \
 	else \
 		grep '^deb[ \t]' $(SYSTEM_SOURCES_LIST) \
+		|grep -v '^deb[ \t]cdrom:' \
 		|grep -v '\(non-US\|non-us.debian.org\|security.debian.org\)' \
 		|grep '[ \t]main' \
 		|awk '{print $$1 " " $$2}' \
