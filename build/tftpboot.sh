@@ -70,10 +70,8 @@ case "$arch" in
 	$piggyback $tftpimage $tmp $rootimage
 	;;
     arm)
-	if (grep -q "ARCH_CATS=y" $tmp); then
-		catsboot $tftpimage $tftpimage.tmp $rootimage
-	fi
-	cat $rootimage >>$tftpimage
+	cat $rootimage >>$tftpimage.tmp
+	mv $tftpimage.tmp $tftpimage
 	;;
     mipsel) t-rex -k $tftpimage.tmp -r $rootimage -o $tftpimage ;;
     mips) tip22 $tftpimage.tmp $rootimage $tftpimage ;;
