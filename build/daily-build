@@ -44,7 +44,7 @@ for t in $TARGETS; do
     fakeroot make $t
     ) 2>&1 | tee dest/$t.log # This is allowed to fail
 done
-fakeroot make all_stats | 2>&1 tee dest/stats.txt # This is allowed to fail
+fakeroot make $(echo $TARGETS | sed 's/build_/stats_/g') | 2>&1 tee dest/stats.txt # This is allowed to fail
 
 echo
 echo UPLOADING FILES
