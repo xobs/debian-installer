@@ -121,7 +121,7 @@ lib_reduce:
 
 # Reduce a status file to contain only the elements we care about.
 status_reduce:
-	egrep -i '^((Depends|Package|Description|installer-menu-item):|$$)' \
+	egrep -i '^((Provides|Depends|Package|Description|installer-menu-item):|$$)' \
 		$(DPKGDIR)/status > $(DPKGDIR)/status.new
 	mv -f $(DPKGDIR)/status.new $(DPKGDIR)/status
 
