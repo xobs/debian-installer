@@ -13,28 +13,32 @@ format=${3:-html}
 ## Function to check result of executed programs and exit on error
 checkresult () {
     if [ ! "$1" = "0" ]; then
-	exit $1
+        exit $1
     fi
 }
 
 create_profiled () {
 
+    dynamic="${tempdir}/dynamic.ent"
+
     if [ ! "$official_build" ]; then
-	unofficial_build="FIXME;unofficial-build"
+        unofficial_build="FIXME;unofficial-build"
     else
-	unofficial_build=""
+        unofficial_build=""
     fi
 
+    ## Now we source the profiling information for the selected architecture
     if [ ! -f arch-options/${arch} ]
     then
         echo "Unknown architecture ${arch}! Please elaborate."
         exit 1 ;
     fi
-
     . arch-options/${arch}
 
+    ## Join all gathered info into one big variable
     cond="$fdisk;$network;$boot;$smp;$other;$goodies;$unofficial_build"
 
+    ## Write dynamic non-profilable entities into the file
     echo "<!-- arch- and lang-specific non-profilable entities -->" > $dynamic
     echo "<!ENTITY langext \".${language}\">" >> $dynamic
     echo "<!ENTITY architecture \"${arch}\">" >> $dynamic
@@ -45,6 +49,7 @@ create_profiled () {
 
     sed "s/##LANG##/${language}/" templates/install.xml.template > $tempdir/install.${language}.xml
 
+    ## Create the profiles xml file
     $xsltprocessor \
     --xinclude \
     --stringparam profile.arch "$archspec" \
@@ -60,14 +65,15 @@ create_profiled () {
 create_html () {
 
     $xsltprocessor \
-	--xinclude \
-	--stringparam chunker.output.encoding "UTF-8" \
-	--stringparam base.dir ./${language}.${arch}.html/ \
-	$stylesheet_html \
-	$tempdir/install.${language}.xml
+        --xinclude \
+        --stringparam base.dir ./${language}.${arch}.html/ \
+        $stylesheet_html \
+        $tempdir/install.${language}.xml
     checkresult $?
 
 }
+
+#### MAINLINE ####
 
 ## First we define some paths to various xsl stylesheets
 
@@ -81,10 +87,10 @@ xsltprocessor=/usr/bin/xsltproc
 tempdir=${language}.temp
 mkdir -p $tempdir
 
-dynamic="${tempdir}/dynamic.ent"
-
+## Create the profiled XML file...
 create_profiled
 
+## Create the requested format...
 case ${format} in
 
     html) create_html;;
