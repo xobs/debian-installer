@@ -1,0 +1,41 @@
+#!/bin/sh
+set -e
+
+TMPDIR=/tmp/debian-installer-demo.$$
+
+fail () {
+	echo "$0: $@" >&2
+	if [ "$PROC_MOUNTED" = 1 ]; then
+		umount $TMPDIR/proc || echo "$0: $TMPDIR/proc is still mounted!" >&2
+	fi
+	exit 1
+}
+
+if [ "`whoami`" != root ]; then
+	fail "Only root can run this program."
+fi
+
+echo "Setting up the chroot in $TMPDIR .."
+mkdir $TMPDIR || fail "failed to make temp directory $TMPDIR"
+cp -a /usr/lib/debian-installer-demo/* $TMPDIR
+cd $TMPDIR || fail "cd failed"
+mount -t proc proc ./proc || fail "could not mount proc"
+PROC_MOUNTED=1
+if mount -t devfs dev ./dev; then
+	DEVFS_MOUNTED=1
+else
+	DEVFS_MOUNTED=0
+	echo "(Unable to mount devfs, continuing..)" >&2
+	# TODO try: sudo chroot $(TREE) /usr/bin/update-dev
+fi
+
+echo "Entering the installer .."
+chroot . sbin/debian-installer || fail "chroot exited with status code $?"
+
+echo "Installer exited. Cleaning up the chroot .."
+umount ./proc || fail "could not unmount $TMPDIR/proc; leaving $TMPDIR"
+PROC_MOUNTED=0
+if [ "$DEVFS_MOUNTED" = 1 ]; then
+	umount ./dev || fail "could not unmount devfs $TMPDIR/dev; leaving $TMPDIR"
+fi
+rm -rf $TMPDIR || fail "failed to clean up $TMPDIR"

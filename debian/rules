@@ -1,91 +1,58 @@
-#! /usr/bin/make -f
-
-TYPES=cdrom cdrom144 net netboot
-# Where to place the files in the pkg
-INSTALL_ROOT=var\/www\/debian
-# Where to fetch old files from the woody ftp tree
-DEBIAN_ARCHIVE=http://localhost/debian
-# The URL with the http:// stripped and backslashes quoted
-DEBIAN_ARCHIVE_Q=localhost\/debian
-#
-# Iterate over each kernel 
-#
-KERNELS_alpha    := 2.4.20-generic
-KERNELS_arm      :=
-KERNELS_hppa     := 2.4.20-32 2.4.20-64
-KERNELS_i386     := 2.4.20-1-386
-KERNELS_ia64	 := 2.4.20-ia64
-KERNELS_m68k     := 2.2.20-mac
-KERNELS_mips     := 
-KERNELS_mipsel   :=
-# FIXME uncomment when the infinite loop bug #172828 is fixed
-# KERNELS_mips   := 2.4.19-r4k-ip22
-# KERNELS_mipsel := 2.4.19-r3k-kn02 2.4.19-r4k-kn04
-KERNELS_powerpc  := 2.4.19-powerpc
-KERNELS_s390     := 2.4.17-s390-tape 2.4.19-s390
-KERNELS_sparc    := 2.2.20-sun4cdm
-
+#!/usr/bin/make -f
 
 ARCH=$(shell dpkg-architecture -qDEB_BUILD_ARCH)
-VERSION=$(shell LC_ALL=C dpkg-parsechangelog | grep ^Version: | sed 's/^Version: *//')
-DIST=$(shell LC_ALL=C dpkg-parsechangelog | grep ^Distribution: | sed 's/^Distribution: *//')
-PACKAGE=debian-installer-$(ARCH)
-DISKS_ROOT=$(INSTALL_ROOT)\/dists\/$(DIST)\/main\/disks-$(ARCH)\/$(VERSION)
-WOODY_DISKS_ROOT=$(DEBIAN_ARCHIVE_Q)\/dists\/woody\/main\/disks-$(ARCH)\/current
+VERSION=$(shell LC_ALL=C dpkg-parsechangelog | grep ^Version: | cut -d ' ' -f 2)
+DISTRIBUTION=$(shell LC_ALL=C dpkg-parsechangelog | grep ^Distribution: | cut -d ' ' -f 2)
+
+ARCHIVEDIR=installer-$(ARCH)
+IMAGEDIR=$(ARCHIVEDIR)/$(VERSION)/images
+TARNAME=debian-installer-images_$(VERSION)_$(ARCH).tar.gz
+
+# Work out the name(s) of the kernel that the demo deb should depend on.
+DEB_HOST_GNU_CPU = $(shell dpkg-architecture -qDEB_HOST_GNU_CPU)
+DEB_HOST_GNU_SYSTEM = $(shell dpkg-architecture -qDEB_HOST_GNU_SYSTEM)
+include config/main
+include config/arch/$(DEB_HOST_GNU_SYSTEM)
+include config/arch/$(DEB_HOST_GNU_SYSTEM)-$(DEB_HOST_GNU_CPU)
+KERNELPACKAGE=$(shell perl -e 'print join(" | ", @ARGV)' \
+              $(foreach VERSION,${KERNELVERSION},kernel-image-$(VERSION)))
 
 clean:
 	dh_testdir
 	dh_testroot
-	for TYPE in $(TYPES) ; do \
-		$(MAKE) TYPE=$$TYPE clean ; \
-	done
-	rm -rf  debian/build debian/$(PACKAGE)  *-stamp wget-cache
-	rm -rf debian/*.install debian/*.dirs
-	rm -rf localudebs/*
-	dh_clean missing.txt
+#	$(MAKE) reallyclean
+	$(MAKE) all_clean
+	dh_clean
 
-configure: configure-stamp debian/$(PACKAGE).dirs debian/$(PACKAGE).install
-configure-stamp:
-	# Fetch some files from woody, that are not built but useful.
-	mkdir -p wget-cache
-	(cd wget-cache ; wget --base=$(DEBIAN_ARCHIVE) -x -i ../debian/wget-files )
-	touch configure-stamp
-	
 build:
-	mkdir -p debian/build
-	for KERNEL in $(KERNELS_$(ARCH)) ; do \
-		for TYPE in $(TYPES) ; do \
-			$(MAKE) KERNELVERSION=$$KERNEL TYPE=$$TYPE stats cd_content ; \
-			mkdir -p debian/build/$$KERNEL ; \
-			cp -R dest/* debian/build/$$KERNEL ; \
-		done ; \
-	done
+	fakeroot $(MAKE) all_images all_stats SUITE=$(DISTRIBUTION)
 
-binary-indep:
-
-binary-arch: install
-
-install: configure  
+install: build
 	dh_testdir
 	dh_testroot
 	dh_clean -k
-	dh_installdirs       --package $(PACKAGE)
-	dh_installchangelogs --package $(PACKAGE)
-	./debian/fixup-missing touch
-	dh_installdocs       --package $(PACKAGE)
-	dh_install           --package $(PACKAGE)
-	./debian/fixup-missing remove
-	dh_compress          --package $(PACKAGE)
-	dh_installdocs       --package $(PACKAGE) missing.txt
-	( cd debian/$(PACKAGE)/$(DISKS_ROOT) ; md5sum `find . -type f` > md5sum.txt )
-	dh_gencontrol --package $(PACKAGE)  -- -n$(PACKAGE)_$(VERSION)_${ARCH}.deb 
-	dh_builddeb   --package $(PACKAGE)  --filename=$(PACKAGE)_$(VERSION)_${ARCH}.deb
+	dh_install
+	install -d debian/tmp/$(IMAGEDIR)
+	# This initrd is useless (TODO and should not really be built)
+	# so remove it, do not put in tarball.
+	rm dest/*demo*
+	cp -p dest/* debian/tmp/$(IMAGEDIR)
+	ln -s $(VERSION) debian/tmp/$(ARCHIVEDIR)/current
+
+binary-arch: install  
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs
+	dh_installdocs
+	dh_installman debian/d-i-demo.8
+	dh_compress
+	dh_fixperms -X usr/lib/debian-installer-demo
+	dh_gencontrol -- -Vkernel:Package='$(KERNELPACKAGE)'
+	dh_builddeb
+	cd debian/tmp && tar czvf ../../../$(TARNAME) .
+	dpkg-distaddfile $(TARNAME) byhand standard
+
+binary-indep:
 
 binary: binary-indep binary-arch 
 .PHONY: build clean binary-indep binary-arch binary install 
-
-debian/$(PACKAGE).dirs: debian/$(PACKAGE).dirs.in
-	sed  's/@DISKS_ROOT@/$(DISKS_ROOT)/' < $< > $@
-
-debian/$(PACKAGE).install: debian/$(PACKAGE).install.in
-	sed  's/@DISKS_ROOT@/$(DISKS_ROOT)/' < $< | sed 's/@WOODY_DISKS_ROOT@/$(WOODY_DISKS_ROOT)/'  > $@
