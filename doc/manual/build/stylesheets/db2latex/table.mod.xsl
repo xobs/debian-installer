@@ -1192,16 +1192,6 @@
 
 
 	<xsl:template name="combineTwoClines">
-<!--		<xsl:if test="$start = 0">
-			<xsl:message>
-				<xsl:text>combineTwoClines: '</xsl:text>
-				<xsl:value-of select="$first"/>
-				<xsl:text>' - '</xsl:text>
-				<xsl:value-of select="$second"/>
-				<xsl:text>'</xsl:text>
-			</xsl:message>
-		</xsl:if>
--->
 		<xsl:if test="$start &gt; 0">
 			<xsl:choose>
 				<xsl:when test="$i &gt; 0">
@@ -1252,31 +1242,6 @@
 			</xsl:choose>
 		</xsl:if>
 	
-	</xsl:template>
-	
-	<xsl:template name="addTwoClines">
-		<xsl:if test="$start = 0">
-			<xsl:message>
-				<xsl:text>addTwoClines: '</xsl:text>
-				<xsl:value-of select="$first"/>
-				<xsl:text>' - '</xsl:text>
-				<xsl:value-of select="$second"/>
-				<xsl:text>'</xsl:text>
-			</xsl:message>
-		</xsl:if>
-		<xsl:if test="$start &gt; 0">
-			<xsl:value-of select="string($i + $j)"/>
-			<xsl:text> </xsl:text>
-		</xsl:if>
-		<xsl:if test="string-length($first) &gt; 0">
-			<xsl:call-template name="addTwoClines">
-			<xsl:with-param name="start" select="$start+1"/>
-			<xsl:with-param name="i" select="number(substring-before($first, ' '))" />
-			<xsl:with-param name="first" select="substring-after($first, ' ')" />
-			<xsl:with-param name="j" select="number(substring-before($second, ' '))" />
-			<xsl:with-param name="second" select="substring-after($second, ' ')" />
-			</xsl:call-template>
-		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template name="initializeArray">
@@ -1466,11 +1431,6 @@
 			<xsl:with-param name="count" select="0"/>
 		</xsl:call-template>
 	</xsl:variable>
-	<xsl:message>
-		<xsl:value-of select="$desc"/>
-		<xsl:text>: </xsl:text>
-		<xsl:value-of select="$FirstZero"/>
-	</xsl:message>
 	<xsl:if test="position()=1">
 	<xsl:call-template name="generate.ampersands">
 		<xsl:with-param name="number" select="$FirstZero - 1"/>
@@ -1544,13 +1504,6 @@
 		</xsl:call-template>
 		</xsl:variable>
 	<xsl:variable name="PostAmper" select="number($NewCount) - number($OldCount)"/>
-	<xsl:message>
-		<xsl:value-of select="$PostAmper"/>
-		<xsl:text>=</xsl:text>
-		<xsl:value-of select="$NewCount"/>
-		<xsl:text>-</xsl:text>
-		<xsl:value-of select="$OldCount"/>
-	</xsl:message>
 	<xsl:call-template name="generate.ampersands">
 		<xsl:with-param name="number" select="$PostAmper -1 "/>
 	</xsl:call-template>
