@@ -220,12 +220,10 @@ endif
 	# and alters their names to end in -reduced to indicate that
 	# they have been modified.
 	for package in $$(dpkg -S `find $(TREE)/lib -type f -not -name '*.o'| \
-			sed s:debian-installer::` | cut -d : -f 1 | \
+			sed s:$(TREE)::` | cut -d : -f 1 | \
 			sort | uniq); do \
-		dpkg -s $$package >> $(DPKGDIR)/status; \
-		sed "s/$$package/$$package-reduced/g" \
-			< $(DPKGDIR)/status > $(DPKGDIR)/status-new; \
-		mv -f $(DPKGDIR)/status-new $(DPKGDIR)/status; \
+		dpkg -s $$package | sed "s/$$package/$$package-reduced/g" \
+			>> $(DPKGDIR)/status; \
 	done
 
 	# Reduce status file to contain only the elements we care about.
