@@ -1,47 +1,47 @@
 #!/bin/sh
 
+# Uncomment to debugging
 #set -x
 
-if [ "$1" = "--help" ]; then
-    echo "$0: Generate the Debian Installer Manual in several different formats"
-    echo "Usage: $0 [arch] [lang] [format]"
-    echo "[format] may consist of multiple formats provided they are quoted (e.g. \"html pdf\")"
-    echo "Supported formats: html, ps, pdf, txt"
-    exit 0
-fi
+usage() {
 
-arch=${1:-i386}
-language=${2:-en}
-formats=${3:-html}
 
-## Configuration
-basedir="$(cd "$(dirname $0)"; pwd)"
-manual_path="$(echo $basedir | sed "s:/build$::")"
-build_path="$manual_path/build"
-cd $build_path
+	cat <<END
 
-stylesheet_dir="$build_path/stylesheets"
-stylesheet_profile="$stylesheet_dir/style-profile.xsl"
-stylesheet_html="$stylesheet_dir/style-html.xsl"
-stylesheet_html_single="$stylesheet_dir/style-html-single.xsl"
-stylesheet_fo="$stylesheet_dir/style-fo.xsl"
-stylesheet_dsssl="$stylesheet_dir/style-print.dsl"
+$0: Generate the Debian Installer Manual in several different formats
 
-entities_path="$build_path/entities"
-source_path="$manual_path/$language"
+Usage: $0 [params]
 
-if [ -z "$destdir" ]; then
-    destdir="build.out"
-fi
+[params] can be any combination of the following:
 
-tempdir="build.tmp"
-dynamic="${tempdir}/dynamic.ent"
+- 'debug' to make debug output appear and skip removing old files
+- '--help' or 'help' to print this usage help
+- a language name (see below)
+- an architecture name (see below)
+- a file format (see below)
+- '-d <dir>' to produce output in the <dir>-directory
 
-create_profiled () {
+Example: $0 ru en i386 sparc pdf
+
+Defaults: $default_language $default_format $default_arch
+
+Available languages: 		$LANGUAGES
+Available architectures: 	$ARCHS
+Available formats:		$FORMATS
+
+END
+
+exit 0
+
+
+}
+
+create_ProfiledXML () {
 
     [ -x /usr/bin/xsltproc ] || return 9
 
-    echo "Info: creating temporary profiled .xml file..."
+    entities_path="$build_path/entities"
+    source_path="$manual_path/$cur_lang"
 
     if [ ! "$official_build" ]; then
         unofficial_build="FIXME;unofficial-build"
@@ -49,70 +49,65 @@ create_profiled () {
         unofficial_build=""
     fi
 
-    # Now we source the profiling information for the selected architecture
-    [ -f "arch-options/${arch}" ] || {
-        echo "Error: unknown architecture '$arch'"
-        return 1
-    }
-    . arch-options/$arch
+    . arch-options/$cur_arch
 
     # Join all architecture options into one big variable
     condition="$fdisk;$network;$boot;$smp;$other;$goodies;$unofficial_build;$status"
 
     # Write dynamic non-profilable entities into the file
     echo "<!-- arch- and lang-specific non-profilable entities -->" > $dynamic
-    echo "<!ENTITY langext \".${language}\">" >> $dynamic
-    echo "<!ENTITY architecture \"${arch}\">" >> $dynamic
+    echo "<!ENTITY langext \".$cur_lang\">" >> $dynamic
+    echo "<!ENTITY architecture \"$cur_arch\">" >> $dynamic
     echo "<!ENTITY kernelversion \"${kernelversion}\">" >> $dynamic
     echo "<!ENTITY altkernelversion \"${altkernelversion}\">" >> $dynamic
     sed "s:##SRCPATH##:$source_path:" templates/docstruct.ent >> $dynamic
 
-    sed "s:##LANG##:$language:g" templates/install.xml.template | \
+    sed "s:##LANG##:$cur_lang:g" templates/install.xml.template | \
         sed "s:##TEMPDIR##:$tempdir:g" | \
         sed "s:##ENTPATH##:$entities_path:g" | \
-        sed "s:##SRCPATH##:$source_path:" > $tempdir/install.${language}.xml
+        sed "s:##SRCPATH##:$source_path:" > $tempdir/install.$cur_lang.xml
 
     # Create the profiled xml file
     /usr/bin/xsltproc \
         --xinclude \
         --stringparam profile.arch "$archspec" \
         --stringparam profile.condition "$condition" \
-        --output $tempdir/install.${language}.profiled.xml \
+        --output $tempdir/install.$cur_lang.profiled.xml \
         $stylesheet_profile \
-        $tempdir/install.${language}.xml
+        $tempdir/install.$cur_lang.xml
     RET=$?; [ $RET -ne 0 ] && return $RET
 
     return 0
 }
 
-create_html () {
-
-    echo "Info: creating .html files..."
+create_HTML () {
 
     /usr/bin/xsltproc \
         --xinclude \
-        --stringparam base.dir $destdir/html/ \
+        --stringparam base.dir $tempdir/$cur_lang.$cur_arch.html/ \
         $stylesheet_html \
-        $tempdir/install.${language}.profiled.xml
+        $tempdir/install.${cur_lang}.profiled.xml
+
     RET=$?; [ $RET -ne 0 ] && return $RET
+
+	output_files="$output_files $tempdir/$cur_lang.$cur_arch.html/"
 
     return 0
 }
 
-create_text () {
-
-    [ -x /usr/bin/w3m ] || return 9
-
-    echo "Info: creating temporary .html file..."
+create_SingleHTML () {
 
     /usr/bin/xsltproc \
         --xinclude \
-        --output $tempdir/install.${language}.html \
+        --output $tempdir/install.$cur_lang.html \
         $stylesheet_html_single \
-        $tempdir/install.${language}.profiled.xml
+        $tempdir/install.${cur_lang}.profiled.xml
+
     RET=$?; [ $RET -ne 0 ] && return $RET
-exit
-    # Replace some unprintable characters
+
+    mv $tempdir/install.$cur_lang.html $tempdir/install.$cur_lang.uncorr.html
+    
+	# Replace some unprintable characters
     sed "s:–:-:g        # n-dash
          s:—:--:g       # m-dash
          s:“:\&quot;:g  # different types of quotes
@@ -120,13 +115,21 @@ exit
          s:„:\&quot;:g
          s:…:...:g      # ellipsis
          s:™: (tm):g    # trademark" \
-        $tempdir/install.${language}.html >$tempdir/install.${language}.corr.html
-    RET=$?; [ $RET -ne 0 ] && return $RET
+        $tempdir/install.$cur_lang.uncorr.html >$tempdir/install.$cur_lang.html
+	
+	rm $tempdir/install.$cur_lang.uncorr.html
+	
+#	output_files="$output_files $tempdir/install.$cur_lang.html"
+    
+	
+}
 
-    echo "Info: creating .txt file..."
+create_Text () {
+
+    [ -x /usr/bin/w3m ] || return 9
 
     # Set encoding for output file
-    case "$language" in
+    case "$cur_lang" in
         cs)
             CHARSET=ISO-8859-2
             ;;
@@ -137,19 +140,28 @@ exit
             CHARSET=KOI8-R
             ;;
         *)
-            CHARSET=ISO-8859-1
+            CHARSET=UTF-8
             ;;
     esac
     
-    /usr/bin/w3m -dump $tempdir/install.${language}.corr.html \
+    echo /usr/bin/w3m -dump $tempdir/install.$cur_lang.html \
         -o display_charset=$CHARSET \
-        >$destdir/install.${language}.txt
+        >$tempdir/install.$cur_lang.txt
+
+    /usr/bin/w3m -dump $tempdir/install.$cur_lang.html \
+        -o display_charset=$CHARSET \
+        >$tempdir/install.$cur_lang.txt
+
     RET=$?; [ $RET -ne 0 ] && return $RET
+    
+    
+
+    output_files="$output_files $tempdir/install.${cur_lang}.txt"
 
     return 0
 }
 
-create_dvi () {
+create_JadeDVI () {
     
     [ -x /usr/bin/openjade ] || return 9
     [ -x /usr/bin/jadetex ] || return 9
@@ -189,7 +201,8 @@ create_dvi () {
     return 0
 }
 
-create_texnew() {
+
+create_newtex () {
 
     echo "Info: creating .tex file..."
 
@@ -205,7 +218,7 @@ create_texnew() {
 
 }
 
-create_dvinew() {
+create_newdvi () {
 
 
     [ -f "$tempdir/install.${language}.new.dvi" ] && return
@@ -222,7 +235,7 @@ create_dvinew() {
 
 }
 
-create_pdfnew() {
+create_pdfnew () {
 
     [ -x /usr/bin/dvipdf ] || return 9
 
@@ -244,7 +257,7 @@ create_pdfnew() {
 
 }
 
-create_psnew() {
+create_newps () {
 
 
     create_dvinew
@@ -297,65 +310,221 @@ create_ps() {
     return 0
 }
 
+debug_echo () {
+	if [ ! -z "$debug" ]; then
+		echo "DEBUG: $1"
+	fi
+}
+
+create_toolchain () {
+
+	echo -n "$((($BUILD_NO-1)*100/$TOTAL_BUILDS))	 $cur_lang	$cur_arch	$cur_format	Docbook "
+	for i in $1; do
+		echo -n "-> $i "
+		create_$i;
+    	RET=$?; [ $RET -ne 0 ] && break
+	done
+	
+}
+
+create_file () {
+
+	case $cur_format in
+		singlehtml) create_toolchain "ProfiledXML SingleHTML" ;;
+		html) create_toolchain "ProfiledXML HTML" ;;
+		ps) create_toolchain "ProfiledXML JadeTeX JadeDVI PS" ;;
+		pdf)  create_toolchain "ProfiledXML JadeTeX JadeDVI PS PDF" ;;
+		dvi)  create_toolchain "ProfiledXML JadeTeX JadeDVI" ;;
+		text)  create_toolchain "ProfiledXML SingleHTML Text" ;;
+		psnew) create_toolchain "ProfiledXML LaTeX DVI newPS" ;;
+		pdfnew) create_toolchain "ProfiledXML LaTeX DVI newPS newPDF" ;;
+		tex) create_toolchain "ProfiledXML LaTeX" ;;
+		dvinew) create_toolchain "ProfiledXML LaTeX DVI"  ;;
+	esac
+
+	return $RET
+}
+
+handle_errors () {
+
+	RET=$?
+	case $RET in
+		0)
+			BUILD_OK="$BUILD_OK $cur_lang/$cur_arch/$cur_format"
+			;;
+		1)
+			BUILD_FAIL="$BUILD_FAIL $cur_lang/$cur_arch/$cur_format"
+			ERROR="execution error"
+			;;
+		9)
+			BUILD_FAIL="$BUILD_FAIL $cur_lang/$cur_arch/$cur_format"
+			ERROR="missing build dependencies"
+			;;
+		*)
+			BUILD_FAIL="$BUILD_FAIL $cur_lang/$cur_arch/$cur_format"
+			ERROR="unknown, code $RET"
+			;;
+	esac
+	if [ $RET -ne 0 ]; then
+		echo "-- failed ($ERROR)!"
+		return 1
+	else
+		echo "-- OK!"
+		return 0
+	fi
+}
+
+#################
+# CONFIGURATION #
+#################
+
+# Define all possible languages, formats and archs.
+
+LANGUAGES=`find .. -type d -maxdepth 1 -printf "%f \n" | grep -v "^\." | grep -v "historic" | grep -v "build"  | grep -v "scripts" | tr -d "\n" `
+ARCHS=`find arch-options -type f -maxdepth 1 -printf "%f "`
+FORMATS="html text pdf ps new.pdf new.ps"
+
+# Defaults 
+
+language=""
+arch=""
+format=""
+default_language="en"
+default_format="html"
+default_arch="i386"
+debug=""
+
+# Paths
+
+basedir="$(cd "$(dirname $0)"; pwd)"
+manual_path="$(echo $basedir | sed "s:/build$::")"
+build_path="$manual_path/build"
+tempdir="build.tmp"
+dynamic="${tempdir}/dynamic.ent"
+
+stylesheet_dir="$build_path/stylesheets"
+stylesheet_profile="$stylesheet_dir/style-profile.xsl"
+stylesheet_html="$stylesheet_dir/style-html.xsl"
+stylesheet_html_single="$stylesheet_dir/style-html-single.xsl"
+stylesheet_fo="$stylesheet_dir/style-fo.xsl"
+stylesheet_dsssl="$stylesheet_dir/style-print.dsl"
+
+
+# Parse command line
+
+while [ "$1" != "" ]
+do
+	case $LANGUAGES in
+	*$1*) language="$language $1"
+		;;
+	*);;
+	esac
+	
+	case $ARCHS in
+	*$1*) arch="$arch $1"
+		;;
+	*);;
+	esac
+	
+	case $FORMATS in
+	*$1*) format="$format $1"
+		;;
+	*);;
+	esac
+	
+	if [ "$1" == "--help" ]; then
+		usage
+	fi
+
+	if [ "$1" == "debug" ]; then
+		debug="yes"
+	fi
+	
+	if [ "$1" == "-d" ]; then
+		shift
+		destdir="$1"
+	fi
+	
+	shift
+	
+done
+
+if [ -z "$language" ]; then
+	language="$default_language"
+fi
+
+if [ -z "$format" ]; then
+	format="$default_format"
+fi
+
+if [ -z "$arch" ]; then
+	arch="$default_arch"
+fi
+
+debug_echo "Languages '$language'"
+debug_echo "Formats '$format'"
+debug_echo "Archs '$arch'"
+	
+# End parsing
+
+cd $build_path
+
+if [ -z "$destdir" ]; then
+    destdir="build.out"
+fi
+
+
+debug_echo "Output into: $destdir"
+
+
+
+
 ## MAINLINE
 
 # Clean old builds
-rm -rf $tempdir
-rm -rf $destdir
 
-[ -d "$manual_path/$language" ] || {
-    echo "Error: unknown language '$language'"
-    exit 1
-}
+if [ ! -z "$debug" ]; then
+	rm -rf $tempdir
+	rm -rf $destdir
+fi
 
 mkdir -p $tempdir
 mkdir -p $destdir
 
 # Create profiled XML. This is needed for all output formats.
-create_profiled
-RET=$?; [ $RET -ne 0 ] && exit 1
+#create_profiled
+#RET=$?; [ $RET -ne 0 ] && exit 1
 
 BUILD_OK=""
 BUILD_FAIL=""
-for format in $formats ; do
-#    if [ "$language" = "ja" ] && [ "$format" = "pdf" -o "$format" = "ps" ] ; then
-#        echo "Warning: pdf and ps formats are currently not supported for Japanese"
-#        BUILD_SKIP="$BUILD_SKIP $format"
-#        continue
-#    fi
+BUILD_NO="0"
 
-    case $format in
-        html)  create_html;;
-        ps)    create_ps;;
-        pdf)   create_pdf;;
-        txt)   create_text;;
-	new.ps) create_psnew;;
-	new.pdf) create_pdfnew;;
-	new.tex) create_texnew;;
-        *)
-            echo "Error: format $format unknown or not yet supported!"
-            exit 1
-            ;;
-    esac
+output_files=""
 
-    RET=$?
-    case $RET in
-        0)
-            BUILD_OK="$BUILD_OK $format"
-            ;;
-        9)
-            BUILD_FAIL="$BUILD_FAIL $format"
-            echo "Error: build of $format failed because of missing build dependencies"
-            ;;
-        *)
-            BUILD_FAIL="$BUILD_FAIL $format"
-            echo "Error: build of $format failed with error code $RET"
-            ;;
-    esac
+TOTAL_BUILDS="$((`echo $language | wc -w`*`echo $arch | wc -w`*`echo $format | wc -w`))"
+
+debug_echo "$TOTAL_BUILDS builds"
+
+echo "% Done	Lang	Arch	Format	Status "
+
+for cur_lang in $language; do
+
+	for cur_arch in $arch; do
+
+		for cur_format in $format ; do
+			BUILD_NO=$(($BUILD_NO+1))
+			create_file
+			handle_errors
+			mv $output_files "$destdir"
+		done
+	done
 done
 
-# Clean up
-rm -r $tempdir
+echo "100% done."
+
+if [ ! -z "$debug" ]; then
+	rm -r $tempdir
+fi
 
 # Evaluate the overall results
 [ -n "$BUILD_SKIP" ] && echo "Info: The following formats were skipped:$BUILD_SKIP"

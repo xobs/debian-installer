@@ -19,20 +19,16 @@
 
 	<xsl:param name="latex.hyperref.param.common">bookmarksnumbered,colorlinks,backref,bookmarks,breaklinks,linktocpage,plainpages=false,unicode</xsl:param>
 	<xsl:variable name="latex.document.font">default</xsl:variable>
+	<xsl:param name="tfoot.frame">1</xsl:param>
 	<xsl:param name="latex.math.support">0</xsl:param>
 	<xsl:param name="latex.use.ltxtable">1</xsl:param>
 <!--	<xsl:param name="latex.use.longtable">1</xsl:param> -->
 	<xsl:param name="latex.book.preamble.post.l10n"/>
 	<xsl:param name="latex.book.preamble.post">
-
-\usepackage[sf,bf,compact,medium]{titlesec}
-%\renewcommand{\thechapter}{\Roman{chapter}}
-\titleformat{\chapter}[display]{\sffamily\bfseries\Large}{\filleft{\chaptertitlename} {\thechapter}}{4ex}{\titlerule\vspace{2ex}\filright}[\vspace{2ex}\titlerule]
-
-\usepackage{lmodern}
-
-	    <xsl:value-of select="$latex.book.preamble.post.l10n" />
-   
+	    <xsl:text>\usepackage[sf,bf,compact,medium]{titlesec}&#10;</xsl:text>
+    	    <xsl:text>\titleformat{\chapter}[display]{\sffamily\bfseries\Large}{\filleft{\chaptertitlename} {\thechapter}}{4ex}{\titlerule\vspace{2ex}\filright}[\vspace{2ex}\titlerule]</xsl:text>
+	    <xsl:text>\usepackage{lmodern}</xsl:text>
+	    <xsl:value-of select="$latex.book.preamble.post.l10n"/>
         </xsl:param>
 	<xsl:param name="latex.book.title.style" />
 	<xsl:template name="latex.fancyvrb.options">
@@ -93,6 +89,7 @@
 		<xsl:text>\newlength{\leftskiplength}</xsl:text>
 		<xsl:text>\newenvironment{admonition}[2]</xsl:text>
 		<xsl:text>{</xsl:text>
+		<xsl:text> \hspace{0mm}\newline&#10;</xsl:text>
 		<xsl:text> \noindent </xsl:text>
 		<xsl:text>\rule{\textwidth}{.5pt}\vspace{1em} </xsl:text>
 		<xsl:text> \setlength{\admlength}{\textwidth}</xsl:text>

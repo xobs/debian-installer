@@ -773,6 +773,9 @@
 							</xsl:otherwise>
 						</xsl:choose>
 						<xsl:apply-templates select="tbody"/>
+						<xsl:if test="$tfoot.frame=1 and not(tfoot)">
+							<xsl:text>\hline &#10;</xsl:text>
+						</xsl:if>
 					</xsl:otherwise>
 				</xsl:choose>
 			</xsl:when>

@@ -523,7 +523,7 @@
 		<xsl:text>% ---------------------- &#10;</xsl:text>
 		<xsl:text>% Most Common Packages   &#10;</xsl:text>
 		<xsl:text>% ---------------------- &#10;</xsl:text>
-		<xsl:if test="$latex.use.varioref=1">
+		<xsl:if test="$latex.use.varioref='1'">
 			<xsl:text>\usepackage[</xsl:text>
 			<xsl:value-of select="$latex.varioref.options"/>
 			<xsl:text>]{varioref} &#10;</xsl:text>
