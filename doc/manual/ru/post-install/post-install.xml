@@ -254,7 +254,7 @@
 <!--   End of file post-install/further-reading.xml -->
 
 <!-- Start of file post-install/kernel-baking.xml -->
-<!-- $Id: kernel-baking.xml 23058 2004-10-12 23:51:17Z cjwatson $ -->
+<!-- $Id: kernel-baking.xml 23678 2004-11-08 07:07:16Z vorlon $ -->
 
  <sect1 id="kernel-baking"
 ><title
@@ -327,22 +327,6 @@
 > вы найдёте в <filename
 >/usr/share/doc/kernel-package</filename
 >. Это раздел описывает лишь краткое руководство. </para
-><para arch="sparc"
->Если вы собираете ядро для UltraSPARC, убедитесь, что установили пакет<classname
->egcs64</classname
->. Это наиболее предпочтительный компилятор для 64-битных ядер SPARC. По умолчанию <command
->gcc</command
-> также компилирует 64-битные ядра, но они нестабильны. Плюс, если вы не использовали <classname
->egcs64</classname
-> и столкнулись с проблемой, то вас, вероятней всего, попросят пересобрать ядро с помощью<classname
->egcs64</classname
->, чтобы убедиться, что проблема осталась. После установки <classname
->egcs64</classname
-> не забудьте запустить<userinput
->update-alternatives --config sparc64-linux-gcc</userinput
-> от суперпользователя, и проверьте, что <classname
->egcs64</classname
-> стала использоваться в качестве этой программы. </para
 ><para
 >Дальше, мы предполагаем, что исходный текст ядра располагается в каталоге <filename
 >/usr/local/src</filename
@@ -356,17 +340,13 @@
 >cd kernel-source-&kernelversion;/</userinput
 >). </para
 ><para
->Теперь вы можете настроить ядро. Запустите <userinput
+>Now, you can configure your kernel. Run <userinput
 >make xconfig</userinput
->, если установлены, настроены и запущены X11, иначе <userinput
+> if X11 is installed, configured and being run, <userinput
 >make menuconfig</userinput
-> (вам потребуется установить пакет <classname
+> otherwise (you'll need <classname
 >ncurses-dev</classname
->). Внимательно прочитайте интерактивную документацию и осторожно выберите нужные параметры. Если про что-то вам непонятно, обычно лучше включить драйвер устройства(программное обеспечение, которое управляет установленным оборудованием, например карты Ethernet, SCSI контроллеры и так далее). Будьте осторожны: для других параметров, не относящиеся к определённому аппаратному обеспечению, нужно оставить значения по умолчанию, если вы не понимаете что они делают. Не забудьте выбрать ``Kernel module loader'' в ``Loadable module support'' <phrase arch="alpha"
-> и ``Enhanced Real Time Clock Support'' в ``Character devices'' (они </phrase
-> <phrase arch="not-alpha"
-> (</phrase
-> не выключены по умолчанию). Если их не включить, возникнутпроблемы с установкой Debian. </para
+> installed). Take the time to read the online help and choose carefully. When in doubt, it is typically better to include the device driver (the software which manages hardware peripherals, such as Ethernet cards, SCSI controllers, and so on) you are unsure about. Be careful: other options, not related to a specific hardware, should be left at the default value if you do not understand them. Do not forget to select ``Kernel module loader'' in ``Loadable module support'' (it is not selected by default). If not included, your Debian installation will experience problems. </para
 ><para
 >Очистите дерево исходных текстов и сбросьте параметры <classname
 >kernel-package</classname

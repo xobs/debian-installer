@@ -14,7 +14,7 @@
 
 
 <!-- Start of file boot-installer/alpha.xml -->
-<!-- $Id: alpha.xml 23576 2004-11-02 06:27:32Z vorlon $ -->
+<!-- $Id: alpha.xml 23664 2004-11-07 21:59:02Z vorlon $ -->
 
  <sect2 arch="alpha" id="alpha-firmware">
  <title
@@ -52,7 +52,11 @@
 ></footnote
 > Поскольку Tru64 Unix использует BSD-формат метки диска, это ``родной'' формат разделов для установок SRM. </para
 ><para
->Поскольку операционная система GNU/Linux на Alpha может грузиться из обоих типов консоли, выбор будет зависеть от того, какие прочие системы вы захотите запускать на этой же машине. Все остальные Unix-подобные операционные системы (Tru64 Unix, FreeBSD, OpenBSD и NetBSD) и OpenVMS могут загружаться только из SRM, в то время как Windows NT может загружаться только из ARC. </para
+>GNU/Linux is the only operating system on Alpha that can be booted from both console types, but &debian; &release; only supports booting on SRM-based systems. If you have an Alpha for which no version of SRM is available, if you will be dual-booting the system with Windows NT, or if your boot device requires ARC console support for BIOS initialization, you will not be able to use the &debian; &release; installer. You can still run &debian; &release; on such systems by using other install media; for instance, you can install Debian woody with MILO and upgrade. </para
+><para
+>Because <command
+>MILO</command
+> is not available for any of the Alpha systems currently in production (as of February 2000), and because it is no longer necessary to buy an OpenVMS or Tru64 Unix license to have SRM firmware on your older Alpha, it is recommended that you use SRM when possible. </para
 ><para
 >Следующая таблица объединяет доступные и поддерживаемые комбинации типов системы/консоли (смотрите имена типов систем в <xref linkend="alpha-cpus"/> ). Ниже слово `ARC' означает любые ARC-совместимые консоли. </para
 ><para>
@@ -157,11 +161,11 @@
   <entry
 >nautilus</entry>
   <entry
->Только ARC (смотрите руководство к материнской плате)</entry>
+>ARC (see motherboard manual) or SRM</entry>
 </row
 ><row>
   <entry
->noname</entry>
+>без имени</entry>
   <entry
 >ARC или SRM</entry>
 </row
@@ -238,12 +242,22 @@
 
 </para
 ><para
+>Generally, none of these consoles can boot Linux directly, so the assistance of an intermediary bootloader is required. For the SRM console, <command
+>aboot</command
+>, a small, platform-independent bootloader, is used. See the (unfortunately outdated) <ulink url="&url-srm-howto;"
+>SRM HOWTO</ulink
+> for more information on <command
+>aboot</command
+>. </para
+><para condition="FIXME"
+>The following paragraphs are from the woody install manual, and are included here for reference; they may be useful to someone at a later date when Debian supports MILO-based installs again. </para
+><para condition="FIXME"
 >Вообще-то, ни одна из этих консолей не сможет напрямую загрузить Linux, так что требуется содействие промежуточного системного загрузчика. Существует два основных загрузчика Linux: <command
 >MILO</command
 > и <command
 >aboot</command
 >. </para
-><para
+><para condition="FIXME"
 ><command
 >MILO</command
 > сам по себе является консолью, которая заменяет ARC или SRM в памяти. <command
@@ -255,7 +269,7 @@
 > требуется для каждого типа системы) и существует только для тех систем, для которых указана поддержка ARC в вышеприведенной таблице. Смотрите также (к сожалению, устаревшее) <ulink url="&url-milo-howto;"
 >MILO HOWTO</ulink
 >. </para
-><para
+><para condition="FIXME"
 ><command
 >aboot</command
 > это маленький, платформо-независимый системный загрузчик, который запускается только из SRM. Смотрите также (тоже, к сожалению, устаревшее) <ulink url="&url-srm-howto;"
@@ -263,7 +277,7 @@
 > для более полной информации про <command
 >aboot</command
 >. </para
-><para
+><para condition="FIXME"
 >Таким образом, всего возможно три сценария, в зависимости от прошивки системной консоли и доступности или недоступности <command
 >MILO</command
 >: <informalexample
@@ -276,9 +290,7 @@ ARC -> MILO
 ></informalexample>
 
 </para
-><para
->Материнская плата UP1000 (имя суб-архитектуры`nautilus') от Alpha Processor, Inc. отличается от всех остальных тем, что она использует API-зависимый системный загрузчик, который запускается под прошивкой AlphaBIOS. </para
-><para
+><para condition="FIXME"
 >Поскольку <command
 >MILO</command
 > не доступен для всех типов систем Alpha, которые сейчас выпускаются (по состоянию на февраль 2000), и поскольку теперь не требуется покупать лицензию OpenVMS или Tru64 Unix чтобы получить прошивку SRM на вашей старой Alpha, рекомендуется использовать SRM и <command
@@ -303,70 +315,80 @@ ARC -> MILO
 
   <sect2 arch="alpha"
 ><title
->Booting with TFTP</title>
+>Загрузка по TFTP</title>
 <para
->In SRM, Ethernet interfaces are named with the <userinput
+>В SRM, названия  интерфейсов Ethernet начинается на <userinput
 >ewa</userinput
-> prefix, and will be listed in the output of the <userinput
+>, а их наличие можно посмотреть в результатах команды <userinput
 >show dev</userinput
-> command, like this (edited slightly): <informalexample
-><screen
->
+>, например таком (немного отредактирован): <informalexample
+><screen>
 
->>> show dev
+
+>
+>
+> show dev
 ewa0.0.0.9.0               EWA0              08-00-2B-86-98-65
 ewb0.0.0.11.0              EWB0              08-00-2B-86-98-54
 ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
 
 </screen
 ></informalexample
-> You first need to set the boot protocol: <informalexample
-><screen
->
+> Сначала вам нужно задать протокол загрузки: <informalexample
+><screen>
 
->>> set ewa0_protocol bootp
+
+>
+>
+> set ewa0_protocol bootp
 
 </screen
 ></informalexample
-> Then check the medium type is correct: <informalexample
-><screen
->
+> Затем, установить правильный тип среды передачи: <informalexample
+><screen>
 
->>> set ewa0_mode <replaceable>mode</replaceable>
+
+>
+>
+> set ewa0_mode <replaceable
+>тип</replaceable>
 
 </screen
 ></informalexample
-> You can get a listing of valid modes with <userinput
+> Список возможных типов можно получить командой<userinput
 >
 >
 >
 >set ewa0_mode</userinput
 >. </para
 ><para
->Then, to boot from the first Ethernet interface, you would type: <informalexample
+>Теперь, чтобы загрузиться через первый Ethernet интерфейс, введите: <informalexample
 ><screen
->>>> boot ewa0 -flags ""
+>
+>
+>
+> boot ewa0 -flags ""
 
 </screen
 ></informalexample>
 
 </para
 ><para
->This will boot using the default kernel parameters as included in the netboot image. </para
+>Далее произойдёт загрузка с параметрами ядра по умолчанию как они настроены в netboot образе. </para
 ><para
->If you wish to use a serial console, you <emphasis
->must</emphasis
-> pass the <userinput
+>Если вы хотите использовать консоль на последовательном порту, то вам <emphasis
+>нужно</emphasis
+> передать ядру параметр <userinput
 >console=</userinput
-> parameter to the kernel. This can be done using the <userinput
+>. Это можно сделать с помощьюаргумента <userinput
 >-flags</userinput
-> argument to the SRM <userinput
+> в SRM команде <userinput
 >boot</userinput
-> command. The serial ports are named the same as their corresponding files in <userinput
+>. Последовательные порты называются как и им соответствующие файлы в <userinput
 >/dev</userinput
->. Also, when specifying additional kernel parameters, you must repeat certain default options that are needed by the &d-i; images. For example, to boot from <userinput
+>. Когда определяются дополнительные параметрыядра, вы должны также передавать параметры по умолчанию, которые нужныобразам &d-i;. Например, при загрузки с <userinput
 >ewa0</userinput
-> and use a console on the first serial port, you would type: <informalexample
+> и использовании консоли на первом последовательном порту, введите: <informalexample
 ><screen
 >&gt;&gt;&gt; boot ewa0 -flags &quot;root=/dev/ram ramdisk_size=16384 console=ttyS0&quot;
 
@@ -378,132 +400,110 @@ ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
 
   <sect2 arch="alpha"
 ><title
->Booting from CD-ROM with the SRM Console</title>
+>Загрузка с CD-ROM в SRM консоли</title>
 <para
->Type <informalexample
-><screen
->
+>Наберите <informalexample
+><screen>
 
 &gt;&gt;&gt; boot xxxx -flags 0
 
 </screen
 ></informalexample
-> where <replaceable
+> где <replaceable
 >xxxx</replaceable
-> is your CD-ROM drive in SRM notation. </para>
+> &mdash; это привод CD-ROM в SRM виде. </para>
   </sect2>
 
-  <sect2 arch="alpha">
+  <sect2 arch="alpha" condition="FIXME">
   <title
->Booting from CD-ROM with the ARC or AlphaBIOS Console</title>
+>Загрузка с CD-ROM в ARC или AlphaBIOS консоли</title>
 <para
->To boot a CD-ROM from the ARC console, find your sub-architecture code name (see <xref linkend="alpha-cpus"/>), then enter <filename
+>Чтобы загрузиться с CD-ROM из ARC консоли, определите кодовое имя вашей субархитектуры (смотрите <xref linkend="alpha-cpus"/>), затем введите имя системного загрузчика <filename
 >\milo\linload.exe</filename
-> as the boot loader and <filename
+> и <filename
 >\milo\<replaceable
 >subarch</replaceable
 ></filename
-> (where <replaceable
+> (где <replaceable
 >subarch</replaceable
-> is the proper subarchitecture name) as the OS Path in the `OS Selection Setup' menu. Ruffians make an exception: You need to use <filename
+> &mdash; имя субархитектуры) вместо OS Path в меню `OS Selection Setup'. Для Ruffian в качестве системного загрузчика нужно использовать <filename
 >\milo\ldmilo.exe</filename
-> as boot loader. </para>
+>. </para>
   </sect2>
 
 
-  <sect2 arch="alpha">
+  <sect2 arch="alpha" condition="supports-floppy-boot">
   <title
->Booting from Floppies with the SRM Console</title>
+>Загрузка с дискет из SRM консоли</title>
 <para
->At the SRM prompt (<prompt
+>В приглашении SRM консоли (<prompt
 >&gt;&gt;&gt;</prompt
->), issue the following command: <informalexample
-><screen
->
+>), введите следующю команду: <informalexample
+><screen>
 
 &gt;&gt;&gt; boot dva0 -flags 0
         
 </screen
 ></informalexample
-> possibly replacing <filename
+>, возможно изменив <filename
 >dva0</filename
-> with the actual device name. Usually, <filename
+> на нужное имя устройства. Обычно, <filename
 >dva0</filename
-> is the floppy; type <informalexample
-><screen
->
+> &mdash; это дискета; введите <informalexample
+><screen>
 
 &gt;&gt;&gt; show dev
         
 </screen
 ></informalexample
-> to see the list of devices (e.g., if you want to boot from a CD). Note that if you are booting via MILO, <command
+> чтобы увидеть список устройств (например, если вы хотите загрузиться с CD). Заметим, что если вы загружаетесь с помощью MILO, аргумент <command
 >-flags</command
-> argument is ignored, so you can just type <command
+> игнорируется, тоэтому вы можете вводить просто <command
 >boot dva0</command
->. If everything works OK, you will eventually see the Linux kernel boot. </para
+>. Если всё прошло хорошо, в конечном счёте увидите загрузку ядра Linux. </para
 ><para
->If you want to specify kernel parameters when booting via <command
+>Если вы хотите задать параметры ядру при загрузке с помощью <command
 >aboot</command
->, use the following command: <informalexample
-><screen
->
+>, используйте следующую команду: <informalexample
+><screen>
 
 &gt;&gt;&gt; boot dva0 -file linux.bin.gz -flags "root=/dev/fd0 load_ramdisk=1 arguments"
         
 </screen
 ></informalexample
-> (typed on one line), substituting, if necessary, the actual SRM boot device name for <filename
+> (набирается в одной строке), заместив, если нужно, имя устройства загрузки в SRM на <filename
 >dva0</filename
->, the Linux boot device name for <filename
+>, в Linux на <filename
 >fd0</filename
->, and the desired kernel parameters for <filename
+>, и желаемые параметры вместо<filename
 >arguments</filename
 >. </para
 ><para
->If you want to specify kernel parameters when booting via <command
+>Если вы хотите задать параметры ядру при загрузке с помощью <command
 >MILO</command
->, you will have to interrupt bootstrap once you get into MILO. See <xref linkend="booting-from-milo"/>. </para>
+>, то вам нужно прервать загрузку чтобы попасть в MILO. Смотрите <xref linkend="booting-from-milo"/>. </para>
   </sect2>
 
 
-  <sect2 arch="alpha">
+  <sect2 arch="alpha" condition="supports-floppy-boot">
   <title
->Booting from Floppies with the ARC or AlphaBIOS Console</title>
+>Загрузка с дискет из ARC или AlphaBIOS консоли</title>
 
 <para
->In the OS Selection menu, set <command
+>В меню OS Selection установите <command
 >linload.exe</command
-> as the boot loader, and <command
+> в качестве загрузчика системы, а <command
 >milo</command
-> as the OS Path. Bootstrap using the newly created entry. </para>
+> как OS Path. Загрузитесь, используя только что созданную запись. </para>
   </sect2>
 
-  <sect2 arch="alpha">
-  <title
->Booting from Floppies with the APB Boot Loader (UP1000)</title>
-
-<para
->To boot on this platform, run <command
->\apb\apb.exe</command
-> from the `Utility/Run Maintenance Program' menu, and type <informalexample
-><screen
->
-
-boot debian_install
-      
-</screen
-></informalexample
-> at the APB prompt. </para>
-  </sect2>
-
- <sect2 arch="alpha" id="booting-from-milo"
+ <sect2 arch="alpha" condition="FIXME" id="booting-from-milo"
 ><title
->Booting with MILO</title>
+>Загрузка с помощью MILO</title>
 <para
->MILO contained on the bootstrap media is configured to proceed straight to Linux automatically. Should you wish to intervene, all you need is to press space during MILO countdown. </para
+>MILO, находящийся на установочном носителе, настроен на автоматическое продолжение загрузки Linux. Чтобы вмешаться в процесс, вам нужно нажать клавишу пробел во время отсчёта MILO. </para
 ><para
->If you want to specify all the bits explicitly (for example, to supply additional parameters), you can use a command like this: <informalexample
+>Если вы хотите что-то изменить в загрузке (например, передать дополнительные параметры), вы можете воспользоваться командой: <informalexample
 ><screen
 >MILO&gt; boot fd0:linux.bin.gz root=/dev/fd0 load_ramdisk=1 <!-- arguments -->
         
@@ -512,11 +512,11 @@ boot debian_install
 
 </para
 ><para
->If you are booting from something other than a floppy, substitute <filename
+>Если вы загружаетесь не с дискеты, замените <filename
 >fd0</filename
-> in the above example with the appropriate device name in Linux notation. The <command
+> в приведённом выше примере на соответствующее имя устройства в Linux. Команда <command
 >help</command
-> command would give you a brief MILO command reference. </para>
+> выводит краткую справку о командах MILO. </para>
  </sect2>
 
 <!--   End of file boot-installer/alpha.xml -->
@@ -641,7 +641,7 @@ boot debian_install
 
   <sect2 arch="arm"
 ><title
->Booting from CD-ROM</title>
+>Загрузка с CD-ROM</title>
 
 
 <!-- Start of file boot-installer/intro-cd.xml -->
@@ -652,15 +652,15 @@ boot debian_install
 > настройте ваш компьютер для загрузки с компакт-диска как описано в <xref linkend="boot-dev-select"/>, </phrase
 > вставьте компакт-диск, перезагрузите компьютер и смотрите далее следующую главу. </para
 ><para
->Note that certain CD drives may require special drivers, and thus be inaccessible in the early installation stages. If it turns out the standard way of booting off a CD doesn't work for your hardware, revisit this chapter and read about alternate kernels and installation methods which may work for you. </para
+>Заметим, что некоторым CD приводам нужны специальные драйверы, и поэтому они недоступны на ранних стадиях установки. Если производимая стандартная последовательнось загрузки с CD не работает на вашем аппаратном обеспечении, обратитесь к этой главе снова и прочитайте об альтернативный ядрах и методах установки, которые могут вам подойти. </para
 ><para
->Even if you cannot boot from CD-ROM, you can probably install the Debian system components and any packages you want from CD-ROM. Simply boot using a different media, such as floppies. When it's time to install the operating system, base system, and any additional packages, point the installation system at the CD-ROM drive. </para
+>Даже если вы не смогли загрузиться с CD-ROM, вероятно вы сможете установить компоненты системы Debian и пакеты с CD-ROM. Просто загрузитесь с другого носителя, например с дискет. Когда прийдёт время установки операционной системы, базовой системы или дополнительных пакетов, укажите программе установки на привод CD-ROM. </para
 ><para
->If you have problems booting, see <xref linkend="boot-troubleshooting"/>. </para>
+>Если у вас возникли проблемы с загрузкой, смотрите <xref linkend="boot-troubleshooting"/>. </para>
 <!--   End of file boot-installer/intro-cd.xml -->
 
 <para
->To boot a CD-ROM from the Cyclone console prompt, use the command <command
+>Чтобы загрузиться с CD-ROM из консоли Cyclone, используйте команду <command
 >boot cd0:cats.bin</command
 > </para>
   </sect2>
@@ -671,7 +671,7 @@ boot debian_install
 
   <sect2 arch="i386"
 ><title
->Запуск с компакт-диска</title>
+>Загрузка с CD-ROM</title>
 
 
 <!-- Start of file boot-installer/intro-cd.xml -->
@@ -682,11 +682,11 @@ boot debian_install
 > настройте ваш компьютер для загрузки с компакт-диска как описано в <xref linkend="boot-dev-select"/>, </phrase
 > вставьте компакт-диск, перезагрузите компьютер и смотрите далее следующую главу. </para
 ><para
->Note that certain CD drives may require special drivers, and thus be inaccessible in the early installation stages. If it turns out the standard way of booting off a CD doesn't work for your hardware, revisit this chapter and read about alternate kernels and installation methods which may work for you. </para
+>Заметим, что некоторым CD приводам нужны специальные драйверы, и поэтому они недоступны на ранних стадиях установки. Если производимая стандартная последовательнось загрузки с CD не работает на вашем аппаратном обеспечении, обратитесь к этой главе снова и прочитайте об альтернативный ядрах и методах установки, которые могут вам подойти. </para
 ><para
->Even if you cannot boot from CD-ROM, you can probably install the Debian system components and any packages you want from CD-ROM. Simply boot using a different media, such as floppies. When it's time to install the operating system, base system, and any additional packages, point the installation system at the CD-ROM drive. </para
+>Даже если вы не смогли загрузиться с CD-ROM, вероятно вы сможете установить компоненты системы Debian и пакеты с CD-ROM. Просто загрузитесь с другого носителя, например с дискет. Когда прийдёт время установки операционной системы, базовой системы или дополнительных пакетов, укажите программе установки на привод CD-ROM. </para
 ><para
->If you have problems booting, see <xref linkend="boot-troubleshooting"/>. </para>
+>Если у вас возникли проблемы с загрузкой, смотрите <xref linkend="boot-troubleshooting"/>. </para>
 <!--   End of file boot-installer/intro-cd.xml -->
 
 <!-- We'll comment the following section until we know exact layout -->
@@ -842,9 +842,9 @@ END FIXME -->
 
   <sect2 arch="i386" id="boot-initrd">
   <title
->Booting from linux using <command
+>Загрузка из linux с помощью <command
 >LILO</command
-> or <command
+> или <command
 >GRUB</command
 ></title>
 
@@ -852,9 +852,9 @@ END FIXME -->
 >To boot the installer from hard disk, you must first download and place the needed files as described in <xref linkend="boot-drive-files"/>. </para>
 
 <para
->If you intend to use the hard drive only for booting and then download everything over the network, you should download the <filename
+>Если вы намереваетес использовать жёсткий диск только для загрузки, а затем получить всё по сети, то вы должны получить файл <filename
 >netboot/debian-installer/i386/initrd.gz</filename
-> file and its corresponding kernel. This will allow you to repartition the hard disk from which you boot the installer, although you should do so with care. </para>
+> и соответствующее ему ядро. Он позволит вам раметить жёсткий диск с которого вы загрузились, хотя вы должны делать это осторожно. </para>
 
 <para
 >Alternatively, if you intend to keep an existing partition on the hard drive unchanged during the install, you can download the <filename
@@ -951,7 +951,7 @@ initrd (hd0,0)/boot/newinstall/initrd.gz
 
   <sect2 arch="i386" id="floppy-boot">
   <title
->Booting from Floppies</title>
+>Загрузка с дискет</title>
 <para
 >You will have already downloaded the floppy images you needed and created floppies from the images in <xref linkend="create-floppy"/>. </para
 ><para
@@ -990,7 +990,7 @@ initrd (hd0,0)/boot/newinstall/initrd.gz
   
   <sect2 arch="i386" id="boot-tftp"
 ><title
->Booting with TFTP</title>
+>Загрузка по TFTP</title>
  
 
 <!-- Start of file boot-installer/intro-net.xml -->
@@ -1124,7 +1124,7 @@ initrd (hd0,0)/boot/newinstall/initrd.gz
 
   <sect2 arch="ia64"
 ><title
->Запуск с компакт-диска</title>
+>Загрузка с CD-ROM</title>
 
 
 <!-- Start of file boot-installer/intro-cd.xml -->
@@ -1135,11 +1135,11 @@ initrd (hd0,0)/boot/newinstall/initrd.gz
 > настройте ваш компьютер для загрузки с компакт-диска как описано в <xref linkend="boot-dev-select"/>, </phrase
 > вставьте компакт-диск, перезагрузите компьютер и смотрите далее следующую главу. </para
 ><para
->Note that certain CD drives may require special drivers, and thus be inaccessible in the early installation stages. If it turns out the standard way of booting off a CD doesn't work for your hardware, revisit this chapter and read about alternate kernels and installation methods which may work for you. </para
+>Заметим, что некоторым CD приводам нужны специальные драйверы, и поэтому они недоступны на ранних стадиях установки. Если производимая стандартная последовательнось загрузки с CD не работает на вашем аппаратном обеспечении, обратитесь к этой главе снова и прочитайте об альтернативный ядрах и методах установки, которые могут вам подойти. </para
 ><para
->Even if you cannot boot from CD-ROM, you can probably install the Debian system components and any packages you want from CD-ROM. Simply boot using a different media, such as floppies. When it's time to install the operating system, base system, and any additional packages, point the installation system at the CD-ROM drive. </para
+>Даже если вы не смогли загрузиться с CD-ROM, вероятно вы сможете установить компоненты системы Debian и пакеты с CD-ROM. Просто загрузитесь с другого носителя, например с дискет. Когда прийдёт время установки операционной системы, базовой системы или дополнительных пакетов, укажите программе установки на привод CD-ROM. </para
 ><para
->If you have problems booting, see <xref linkend="boot-troubleshooting"/>. </para>
+>Если у вас возникли проблемы с загрузкой, смотрите <xref linkend="boot-troubleshooting"/>. </para>
 <!--   End of file boot-installer/intro-cd.xml -->
 
   <note>
@@ -1401,7 +1401,7 @@ initrd (hd0,0)/boot/newinstall/initrd.gz
 
   <sect2 arch="ia64" id="boot-tftp"
 ><title
->Booting with TFTP</title>
+>Загрузка по TFTP</title>
 
 <para
 >Booting an IA64 system from the network is similar to a CD boot. The only difference is how the installation kernel is loaded. The EFI Boot Manager can load and start programs from a server on the network. Once the installation kernel is loaded and starts, the system install will proceed thru the same steps as the CD install with the exception that the packages of the base install will be loaded from the network rather than the CD drive. </para>
@@ -1425,7 +1425,7 @@ initrd (hd0,0)/boot/newinstall/initrd.gz
 
   <sect3 arch="ia64" id="boot-tftp-server">
   <title
->Configuring the Server</title>
+>Настройка сервера</title>
 <para
 >A suitable TFTP entry for network booting an ia64 system looks something like this: <informalexample
 ><screen
@@ -1481,7 +1481,7 @@ host mcmuffin {
 
   <sect3 arch="ia64" id="boot-tftp-client">
   <title
->Configuring the Client</title>
+>Настройка клиента</title>
 <para
 >To configure the client to support TFTP booting, start by booting to EFI and entering the <guimenu
 >Boot Option Maintenance Menu</guimenu
@@ -1515,7 +1515,7 @@ host mcmuffin {
 <!--   End of file boot-installer/ia64.xml -->
 
 <!-- Start of file boot-installer/m68k.xml -->
-<!-- $Id: m68k.xml 22935 2004-10-09 18:36:20Z fjpop-guest $ -->
+<!-- $Id: m68k.xml 23627 2004-11-04 21:16:53Z smarenka $ -->
 
   <sect2 arch="m68k"
 ><title
@@ -1524,9 +1524,9 @@ host mcmuffin {
 <para
 >На некоторых суб-архитектурах &arch-title; есть вариант загрузки с использованием либо ядра linux 2.4.x, либо 2.2.x. Когда такой выбор существует, попробуйте ядро 2.4.x. Программа установки должна требовать меньше памяти, когда используется ядро 2.4.x, потому что поддержка 2.2.x требует ramdisk фиксированного размера, а 2.4.x использует tmpfs. </para
 ><para
->Если вы используете ядро 2.2.x, то должны убедиться, что поддержка ramdisk в нём включена, подробности описаны в <ulink url="&disturl;/main/installer-&architecture;/current/images/MANIFEST"
+>If you are using a 2.2.x linux kernel, then you must make sure you are using a ramdisk built to accommodate it, see the <ulink url="&disturl;/main/installer-&architecture;/current/images/MANIFEST"
 >MANIFEST</ulink
->. Вам также надо использовать параметр ядра &ramdisksize;. </para
+>. You will also need to use the &ramdisksize; kernel parameter. In general, this means you need to use the initrd22.gz ramdisk from the respective directory. </para
 ><para
 >Убедитесь, что одним из параметров вашего ядра является <userinput
 >root=/dev/ram</userinput
@@ -1591,7 +1591,13 @@ host mcmuffin {
 <para
 >Единственным способом установки на mac является жесткий диск (смотрите <xref linkend="m68k-boot-hd"/>). <emphasis
 >Другими словами, компакт-диск не загрузочный.</emphasis
-> Для mac нет работоспособного ядра 2.4.x. </para>
+> Для mac нет работоспособного ядра 2.4.x. </para
+><para
+>If your hardware uses a 53c9x-based scsi bus, then you may need to include the kernel parameter <userinput
+>mac53c9x=1</userinput
+>. Hardware with two such scsi buses, such as the Quadra 950, will need <userinput
+>mac53c9x=2</userinput
+> instead. </para>
     </sect3>
 
     <sect3 arch="m68k" id="m68k-boot-mvme"
@@ -1616,7 +1622,7 @@ host mcmuffin {
 
   <sect2 arch="m68k" id="m68k-boot-hd"
 ><title
->Booting from a Hard Disk</title>
+>Загрузка с жёсткого диска</title>
 
 
 <!-- Start of file boot-installer/intro-hd.xml -->
@@ -1661,7 +1667,7 @@ host mcmuffin {
 
     <sect3 arch="m68k" id="m68k-boothd-amiga"
 ><title
->Booting from AmigaOS</title>
+>Загрузка из AmigaOS</title>
 <para
 >In the <command
 >Workbench</command
@@ -1770,7 +1776,7 @@ host mcmuffin {
 
   <sect2 arch="m68k" id="m68k-boot-cdrom"
 ><title
->Запуск с компакт-диска</title>
+>Загрузка с CD-ROM</title>
 <para
 >Currently, the only &arch-title; subarchitecture that supports CD-ROM booting is the BVME6000. </para>
 
@@ -1783,11 +1789,11 @@ host mcmuffin {
 > настройте ваш компьютер для загрузки с компакт-диска как описано в <xref linkend="boot-dev-select"/>, </phrase
 > вставьте компакт-диск, перезагрузите компьютер и смотрите далее следующую главу. </para
 ><para
->Note that certain CD drives may require special drivers, and thus be inaccessible in the early installation stages. If it turns out the standard way of booting off a CD doesn't work for your hardware, revisit this chapter and read about alternate kernels and installation methods which may work for you. </para
+>Заметим, что некоторым CD приводам нужны специальные драйверы, и поэтому они недоступны на ранних стадиях установки. Если производимая стандартная последовательнось загрузки с CD не работает на вашем аппаратном обеспечении, обратитесь к этой главе снова и прочитайте об альтернативный ядрах и методах установки, которые могут вам подойти. </para
 ><para
->Even if you cannot boot from CD-ROM, you can probably install the Debian system components and any packages you want from CD-ROM. Simply boot using a different media, such as floppies. When it's time to install the operating system, base system, and any additional packages, point the installation system at the CD-ROM drive. </para
+>Даже если вы не смогли загрузиться с CD-ROM, вероятно вы сможете установить компоненты системы Debian и пакеты с CD-ROM. Просто загрузитесь с другого носителя, например с дискет. Когда прийдёт время установки операционной системы, базовой системы или дополнительных пакетов, укажите программе установки на привод CD-ROM. </para
 ><para
->If you have problems booting, see <xref linkend="boot-troubleshooting"/>. </para>
+>Если у вас возникли проблемы с загрузкой, смотрите <xref linkend="boot-troubleshooting"/>. </para>
 <!--   End of file boot-installer/intro-cd.xml -->
 
   </sect2>
@@ -1795,7 +1801,7 @@ host mcmuffin {
 
   <sect2 arch="m68k" id="boot-tftp"
 ><title
->Booting with TFTP</title>
+>Загрузка по TFTP</title>
 
 
 <!-- Start of file boot-installer/intro-net.xml -->
@@ -1845,7 +1851,7 @@ host mcmuffin {
 
   <sect2 arch="m68k" id="boot-from-floppies">
   <title
->Booting from Floppies</title>
+>Загрузка с дискет</title>
 <para
 >For most &arch-title; architectures, booting from a local filesystem is the recommended method. </para
 ><para
@@ -1860,7 +1866,7 @@ host mcmuffin {
 
   <sect2 arch="mips" id="boot-tftp"
 ><title
->Booting with TFTP</title>
+>Загрузка по TFTP</title>
 
    <sect3>
    <title
@@ -1982,7 +1988,7 @@ boot 192.168.1.1:/boot/sibyl
 
   <sect2 arch="powerpc" id="boot-cd"
 ><title
->Запуск с компакт-диска</title>
+>Загрузка с CD-ROM</title>
 
 
 <!-- Start of file boot-installer/intro-cd.xml -->
@@ -1993,11 +1999,11 @@ boot 192.168.1.1:/boot/sibyl
 > настройте ваш компьютер для загрузки с компакт-диска как описано в <xref linkend="boot-dev-select"/>, </phrase
 > вставьте компакт-диск, перезагрузите компьютер и смотрите далее следующую главу. </para
 ><para
->Note that certain CD drives may require special drivers, and thus be inaccessible in the early installation stages. If it turns out the standard way of booting off a CD doesn't work for your hardware, revisit this chapter and read about alternate kernels and installation methods which may work for you. </para
+>Заметим, что некоторым CD приводам нужны специальные драйверы, и поэтому они недоступны на ранних стадиях установки. Если производимая стандартная последовательнось загрузки с CD не работает на вашем аппаратном обеспечении, обратитесь к этой главе снова и прочитайте об альтернативный ядрах и методах установки, которые могут вам подойти. </para
 ><para
->Even if you cannot boot from CD-ROM, you can probably install the Debian system components and any packages you want from CD-ROM. Simply boot using a different media, such as floppies. When it's time to install the operating system, base system, and any additional packages, point the installation system at the CD-ROM drive. </para
+>Даже если вы не смогли загрузиться с CD-ROM, вероятно вы сможете установить компоненты системы Debian и пакеты с CD-ROM. Просто загрузитесь с другого носителя, например с дискет. Когда прийдёт время установки операционной системы, базовой системы или дополнительных пакетов, укажите программе установки на привод CD-ROM. </para
 ><para
->If you have problems booting, see <xref linkend="boot-troubleshooting"/>. </para>
+>Если у вас возникли проблемы с загрузкой, смотрите <xref linkend="boot-troubleshooting"/>. </para>
 <!--   End of file boot-installer/intro-cd.xml -->
 
 <para
@@ -2130,7 +2136,7 @@ boot:
 
   <sect2 arch="powerpc" id="boot-tftp"
 ><title
->Booting with TFTP</title>
+>Загрузка по TFTP</title>
 
 
 <!-- Start of file boot-installer/intro-net.xml -->
@@ -2163,7 +2169,7 @@ boot:
 
   <sect2 arch="powerpc">
   <title
->Booting from Floppies</title>
+>Загрузка с дискет</title>
 <para
 >Booting from floppies is supported for &arch-title;, although it is generally only applicable for OldWorld systems. NewWorld systems are not equipped with floppy drives, and attached USB floppy drives are not supported for booting. </para
 ><para
@@ -2212,7 +2218,7 @@ boot:
 
   <sect2 arch="sparc" id="boot-tftp"
 ><title
->Booting with TFTP</title>
+>Загрузка по TFTP</title>
 
 
 <!-- Start of file boot-installer/intro-net.xml -->
@@ -2241,7 +2247,7 @@ boot:
 
   <sect2 arch="sparc"
 ><title
->Запуск с компакт-диска</title>
+>Загрузка с CD-ROM</title>
 
 
 <!-- Start of file boot-installer/intro-cd.xml -->
@@ -2252,11 +2258,11 @@ boot:
 > настройте ваш компьютер для загрузки с компакт-диска как описано в <xref linkend="boot-dev-select"/>, </phrase
 > вставьте компакт-диск, перезагрузите компьютер и смотрите далее следующую главу. </para
 ><para
->Note that certain CD drives may require special drivers, and thus be inaccessible in the early installation stages. If it turns out the standard way of booting off a CD doesn't work for your hardware, revisit this chapter and read about alternate kernels and installation methods which may work for you. </para
+>Заметим, что некоторым CD приводам нужны специальные драйверы, и поэтому они недоступны на ранних стадиях установки. Если производимая стандартная последовательнось загрузки с CD не работает на вашем аппаратном обеспечении, обратитесь к этой главе снова и прочитайте об альтернативный ядрах и методах установки, которые могут вам подойти. </para
 ><para
->Even if you cannot boot from CD-ROM, you can probably install the Debian system components and any packages you want from CD-ROM. Simply boot using a different media, such as floppies. When it's time to install the operating system, base system, and any additional packages, point the installation system at the CD-ROM drive. </para
+>Даже если вы не смогли загрузиться с CD-ROM, вероятно вы сможете установить компоненты системы Debian и пакеты с CD-ROM. Просто загрузитесь с другого носителя, например с дискет. Когда прийдёт время установки операционной системы, базовой системы или дополнительных пакетов, укажите программе установки на привод CD-ROM. </para
 ><para
->If you have problems booting, see <xref linkend="boot-troubleshooting"/>. </para>
+>Если у вас возникли проблемы с загрузкой, смотрите <xref linkend="boot-troubleshooting"/>. </para>
 <!--   End of file boot-installer/intro-cd.xml -->
 
 <para
@@ -2268,7 +2274,7 @@ boot:
 
   <sect2 arch="sparc">
   <title
->Booting from Floppies</title>
+>Загрузка с дискет</title>
 <para
 >To boot from floppy on a Sparc, use <informalexample
 ><screen

@@ -633,28 +633,20 @@ chmod 660 hda21
 
 
 <!-- Start of file partitioning/partition/alpha.xml -->
-<!-- $Id: alpha.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
+<!-- $Id: alpha.xml 23676 2004-11-08 06:43:30Z vorlon $ -->
 
 
   <sect2 arch="alpha"
 ><title
 >Разметка для &arch-title;</title>
 <para
->Если вы выбрали загрузкуиз SRM консоли, то вы должны использовать <command
->fdisk</command
-> для разметки диска, так как это единственная программа, поддерживающая работу с BSD disk labels, который требуется для <command
->aboot</command
-> (помните, загрузочный блок SRM несовместим с таблицей разделов MS-DOS - смотрите <xref linkend="alpha-firmware"/>). <command
->debian-installer</command
-> запускает <command
->fdisk</command
-> по умолчанию, если вы не загружаетесь с помощью <command
->MILO</command
->. </para
+>Booting Debian from the SRM console (the only disk boot method supported by &releasename;) requires you to have a BSD disk label, not a DOS partition table, on your boot disk. (Remember, the SRM boot block is incompatible with MS-DOS partition tables - see <xref linkend="alpha-firmware"/>.) As a result, <command
+>partman</command
+> creates BSD disk labels when running on &arch;, but if your disk has an existing DOS partition table the existing partitions will need to be deleted before partman can convert it to use a disk label. </para
 ><para
->Если диск, который вы выбрали для разметки, уже содержит BSD disk label, то <command
+>If you have chosen to use <command
 >fdisk</command
-> по умолчанию запускается в режиме BSD disk label. Иначе, вы должны воспользоваться командой `b', чтобы войти в режим disk label. </para
+> to partition your disk, and the disk that you have selected for partitioning does not already contain a BSD disk label, you must use the `b' command to enter disk label mode. </para
 ><para
 >Если вы не хотите использовать диск с разметкой для Tru64 Unix или одного из свободных 4.4BSD-Lite клонов операционных систем (FreeBSD, OpenBSD, или NetBSD), советуем вам <emphasis
 >не</emphasis
@@ -666,12 +658,16 @@ chmod 660 hda21
 >aboot</command
 > в загрузочный сектор, пожалуется на раздел, который перекрывается с загрузочным сектором. </para
 ><para
->Также, так как <command
+>Also, because <command
 >aboot</command
-> записывается в несколько первых секторов диска (в данный момент, он занимает около 70 килобайт или 150 секторов), вы <emphasis
->должны</emphasis
-> для него оставить достаточно пустого места в начале диска. Раньше, предлагалось сделать маленький раздел в начале диска, и оставить его неотформатированным. По причине, упомянутой выше, теперь мы предлагаем не делать этого на диске, который будет использоваться только из GNU/Linux. </para
-><para
+> is written to the first few sectors of the disk (currently it occupies about 70 kilobytes, or 150 sectors), you <emphasis
+>must</emphasis
+> leave enough empty space at the beginning of the disk for it. In the past, it was suggested that you make a small partition at the beginning of the disk, to be left unformatted. For the same reason mentioned above, we now suggest that you do not do this on disks that will only be used by GNU/Linux. When using <command
+>partman</command
+>, a small partition will still be created for <command
+>aboot</command
+> for convenience reasons. </para
+><para condition="FIXME"
 >Для установки на ARC, вы должны сделать маленький раздел FAT в начале диска для хранения <command
 >MILO</command
 > и <command
@@ -816,31 +812,31 @@ chmod 660 hda21
 
   <sect2 arch="ia64"
 ><title
->Boot Loader Partition Requirements</title>
+>Требования к разделу системного загрузчика</title>
 
 <para
->ELILO, the ia64 boot loader, requires a partition containing a FAT file system with the <userinput
->boot</userinput
-> flag set. The partition must be big enough to hold the boot loader and any kernels or RAMdisks you may wish to boot. A minimum size would be about 20MB, but if you expect to run with multiple kernels, then 128MB might be a better size. </para
+>ELILO, системному загрузчику на ia64, требуется раздел, содержащий файловую систему FAT с установленным флагом <userinput
+>загрузочный</userinput
+>. Раздел должен быть достаточно большим, чтобы вместить системный загрузчик и какое-нибудь ядро или RAMдиск, который вы хотели бы загрузить. Минимальный размер должен быть около 20МБ, но если вы хотите загружать разные ядра, то лучше чтобы было 128МБ. </para
 ><para
->The EFI Boot Manager and the EFI Shell fully support the GPT table so the boot partition does not necessarily have to be the first partition or even on the same disk. This is convenient if you should forget to allocate the partition and only find out after you have formatted the other partitions on your disk(s). The <command
+>Системный загрузчик EFI и оболочка EFI полностью поддерживают GPT таблицу, поэтому загрузочный раздел необязательно должен быть первым разделом или даже на первом диске. Это удобно, если вы забыли создать раздел, и выяснили это только после того как уже отформатировали другие разделы на жёстком диске(ах). Программа разметки <command
 >partman</command
-> partitioner checks for an EFI partition at the same time it checks for a properly set up <emphasis
->root</emphasis
-> partition. This gives you an opportunity to correct the disk layout before the package install begins. The easiest way to correct this omission is to shrink the last partition of the disk to make enough free space for adding an EFI partition. </para
+> проверяет EFI раздел одновременно с проверкой правильности <emphasis
+>корневого</emphasis
+> раздела. Это даёт вам возможность исправить разметку диска перед началом установки пакетов. Самый лёгкий способ исправить это упущение &mdash; уменьшить последный раздел диска, освободив достаточно свободного места для добавления раздела EFI. </para
 ><para
->It is strongly recommended that you allocate the EFI boot partition on the same disk as the <emphasis
->root</emphasis
-> filesystem. </para>
+>Настоятельно рекомендуется создавать загрузочный раздел EFI на одном диске с <emphasis
+>корневой</emphasis
+> файловой системой. </para>
 
   </sect2>
 
   <sect2 arch="ia64"
 ><title
->EFI Diagnostic Partitions</title>
+>Разделы диагностики EFI</title>
 
 <para
->The EFI firmware is significantly more sophisticated than the usual BIOS seen on most x86 PCs. Some system vendors take advantage of the ability of the EFI to access files and run programs from a hard disk filesystem to store diagnostics and EFI based system management utilities on the hard disk. This is a separate FAT format filesystem on the system disk. Consult the system documentation and accessories that come with the system for details. The easiest time to set up a diagnostics partition is at the same time you set up the EFI boot partition. </para>
+>Микропрограмма EFI значительно более сложна чем обычный BIOS на большинствекомпьютеров x86. Некоторые поставщики систем пользуются способностями EFI доступа к файлам и запуском программы с файловой системы жёсткого диска для хранения утилит диагностики иуправления основанных на EFI на жёстком диске. Это отдельный раздел с файловой системой FAT  на системном диске. Подробней мотрите документацию на систему и принадлежности, которые идут вместе с системой. Правильней будет создать раздел диагностики в тоже время что и загрузочный раздел EFI. </para>
 
    </sect2>
 <!--   End of file partitioning/partition/ia64.xml -->

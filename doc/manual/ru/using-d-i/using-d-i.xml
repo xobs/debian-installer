@@ -1242,26 +1242,26 @@
 
   <sect3 arch="ia64">
   <title
->EFI Partition Contents</title>
+>Содержимое EFI раздела</title>
 
 <para
->The EFI partition is a FAT filesystem format partition on one of the hard disks of the system, usually the same disk that contains the <emphasis
+>Раздел EFI &mdash; раздел с файловой системой FAT на одном из жёстких дисков системы, обычно на том же диске, который содержит файловую систему <emphasis
 >root</emphasis
-> filesystem. It is normally not mounted on a running system as it is only needed by the <quote
->EFI Boot Manager</quote
-> to load the system and the installer part of the <command
+>. Обычно, он не монтируется в работающую систему, а только требуется <quote
+>менеджеру загрузки EFI</quote
+> для загрузки системы, а часть программы установки <command
 >elilo</command
-> writes to the filesystem directly. The <command
+> производит запись в файловую систему напрямую. Утилита <command
 >/usr/sbin/elilo</command
-> utility writes the following files into the <filename
+> записывает следующие файлыв каталог <filename
 >efi/debian</filename
-> directory of the EFI partition during the installation. Note that the <quote
->EFI Boot Manager</quote
-> would find these files using the path <filename
+> на EFI раздел во время установки. Заметим, что <quote
+>менеджер загрузки EFI </quote
+> будет искать эти файлы согласно пути <filename
 >fs<emphasis
 >n</emphasis
 >:\efi\debian</filename
->. There may be other files in this filesystem as well over time as the system is updated or re-configured. </para>
+>. В файловой системе могут находиться другие файлы на время обновления или настройки системы. </para>
 
 <variablelist>
 
@@ -1272,9 +1272,9 @@
 ></term>
 <listitem
 ><para
->This is the configuration file read by the boot loader when it starts. It is a copy of the <filename
+>Данный конфигурационный файл читается системным загрузчиком при запуске. Это копия <filename
 >/etc/elilo.conf</filename
-> with the filenames re-written to refer to files in the EFI partition. </para
+> с изменёнными путями, указывающими на файлы в EFI разделе. </para
 ></listitem
 ></varlistentry>
 
@@ -1285,13 +1285,13 @@
 ></term>
 <listitem
 ><para
->This is the boot loader program that the <quote
->EFI Boot Manager</quote
-> runs to boot the system. It is the program behind the <guimenuitem
+>Это файл программы системного загрузчика, который <quote
+>менеджер загрузки EFI</quote
+> стартует для запуска системы. Эта программа также скрывается за элементом меню <guimenuitem
 >Debian GNU/Linux</guimenuitem
-> menu item of the <quote
->EFI Boot Manager</quote
-> command menu. </para
+> в меню команд <quote
+>менеджер загрузки EFI</quote
+>. </para
 ></listitem
 ></varlistentry>
 
@@ -1302,11 +1302,11 @@
 ></term>
 <listitem
 ><para
->This is the initial root filesystem used to boot the kernel. It is a copy of the file referenced in the <filename
+>Это файл начальной корневой файловой системы(initial root filesystem), используемой для загрузки ядра. Это копия файла, на который есть ссылка из <filename
 >/etc/elilo.conf</filename
->. In a standard Debian installation it would be the file in <filename
+>. В стандартной установке Debian этот файл находится в <filename
 >/boot</filename
-> pointed to by the symbolic link <filename
+>, и на него указывает символическая ссылка <filename
 >/initrd.img</filename
 >. </para
 ></listitem
@@ -1319,11 +1319,11 @@
 ></term>
 <listitem
 ><para
->This is a small text file warning you that the contents of the directory are managed by the <command
+>Это маленький текстовый файл, предупреждающий, что содержимое каталога управляется из <command
 >elilo</command
-> and that any local changes would be lost at the next time <filename
+> и что любые локальные изменения будут уничтожены при следующем запуске <filename
 >/usr/sbin/elilo</filename
-> is run. </para
+>. </para
 ></listitem
 ></varlistentry>
 
@@ -1334,11 +1334,11 @@
 ></term>
 <listitem
 ><para
->This is the compressed kernel itself. It is a copy of the file referenced in the <filename
+>Это файл с сжатым ядром. Это копия файла, на который естьссылка в <filename
 >/etc/elilo.conf</filename
->. In a standard Debian installation it would be the file in <filename
+>. В стандартной установке Debian этот файл находится в <filename
 >/boot</filename
-> pointed to by the symbolic link <filename
+>, и на него указывает символическая ссылка <filename
 >/vmlinuz</filename
 >. </para
 ></listitem
@@ -1657,7 +1657,7 @@
 <!--   End of file using-d-i/modules/sparc/silo-installer.xml -->
 
 <!-- Start of file using-d-i/modules/nobootloader.xml -->
-<!-- $Id: nobootloader.xml 21579 2004-09-13 22:57:14Z fjpop-guest $ -->
+<!-- $Id: nobootloader.xml 23662 2004-11-07 21:29:33Z fjpop-guest $ -->
 
    <sect3 id="nobootloader">
    <title
@@ -1666,7 +1666,19 @@
 <para
 >Эта опция может быть использована для завершения установки даже без установленного системного загрузчика, по причине или для этой архитектуры/субархитектуры его нет или потомучто он вам не нужен (например, чтобы использовать существующий системный загрузчик). <phrase arch="m68k"
 >Эта опция особенно полезна для машин Macintosh, Atari, и Amiga, где родная операционная система должна управлять компьютером и использоваться для загрузки GNU/Linux.</phrase
-> </para>
+> </para
+><para
+>Если вы планируете настраивать системный загрузчик вручную, то должны проверить имя устанавливаемого ядра из <filename
+>/target/boot</filename
+>. Также, проверьте существование каталога <firstterm
+>initrd</firstterm
+>; если он есть, то вероятно, нужно указать это в системном загрузчике, чтобы он использовал его. Ещё вам потребуется знать диск и раздел, который выбран в качестве <filename
+>/</filename
+> файловой системы и, если вы выбрали установку с отдельным разделом <filename
+>/boot</filename
+>, то также и файловую систему <filename
+>/boot</filename
+>. </para>
    </sect3>
 <!--   End of file using-d-i/modules/nobootloader.xml -->
   </sect2>
