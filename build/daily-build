@@ -29,9 +29,14 @@ fi
 unset LANG LC_ALL LANGUAGE || true
 svn up || true
 
+# Override $TARGETS with custom makefile targets.
+if [ -z "$TARGETS" ]; then
+	TARGETS="$(make all_list |grep '^build')"
+fi
+
 make reallyclean
 mkdir dest
-for t in $(make all_list |grep '^build'); do
+for t in $TARGETS; do
     (
     echo
     echo BUILDING IMAGE FOR $t
