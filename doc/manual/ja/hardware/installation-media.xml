@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 16467 -->
+<!-- original version: 18606 -->
 
  <sect1 id="installation-media">
  <title>インストールに利用できるメディア</title>
@@ -11,8 +11,7 @@
 This section will help you determine which different media types you can use to
 install Debian. For example, if you have a floppy disk drive on your machine, 
 it can be used to install Debian. There is a whole chapter devoted to each
-media type here:
-<xref linkend="install-methods"/>, which lists the advantages and
++media type, <xref linkend="install-methods"/>, which lists the advantages and
 disadvantages of each media type. You may want to refer back to this page once
 you reach that section.
 -->
@@ -21,8 +20,8 @@ you reach that section.
 例えば、マシンにフロッピーディスクドライブがあれば、
 Debian をインストールするのに使用することができます。
 各メディアに対して利点と欠点を挙げた、
-熱心な全体の章があります (<xref linkend="install-methods"/>)。
-一度そこへ行ったら、このページを参照したいと思うかもしれません。
+熱心な全体の章 (<xref linkend="install-methods"/>) があります。
+一度そこへ行ったら、このページを参照したくなるかもしれません。
 
 </para>
 
@@ -124,12 +123,11 @@ Linux 上で CD-ROM を利用するための詳細な情報は、
 </para><para arch="i386"> 
 
 <!--
-Supported are also external USB CD-ROM drives. FireWire devices that
-are supported by the ohci1394 and sbp2 drivers may also be useable.
+USB CD-ROM drives are also supported, as are FireWire devices that
+are supported by the ohci1394 and sbp2 drivers.
 -->
-外付 USB CD-ROM ドライブもサポートしています。
-ohci1394 や sbp2 ドライバでサポートしている FireWire デバイスも
-使用できるでしょう。
+ohci1394 や sbp2 ドライバでサポートしている FireWire デバイスと同様、
+USB CD-ROM ドライブもサポートしています。
 
 </para><para arch="arm"> 
 
@@ -205,11 +203,14 @@ param1=value1 param2=value2 ...</userinput>
 <para>
 
 <!--
-Installation system booting from a hard disk is another option for
-many architectures.
+Booting the installation system directly from a hard disk is another option
+for many architectures. This will require some other operating system
+to load the installer onto the hard disk.
 -->
-ハードディスクから起動してインストールするのも、
+ハードディスクからインストールシステムを直接ブートするのは、
 多くのアーキテクチャで使える方法です。
+これは他の OS に、
+ハードディスク上にあるインストーラをロードするよう要求します。
 
 </para><para arch="m68k">
 
@@ -270,26 +271,22 @@ Mips.</phrase>
 
 <!--
 Diskless installation, using network booting from a local area network
-and NFS-mounting of all local filesystems, is another option &mdash;
-you'll probably need at least &minimum-memory-with-nfsroot; of RAM for
-a diskless installation.
+and NFS-mounting of all local filesystems, is another option.
 -->
 ネットワーク越しに起動を行い、
 すべてのローカルファイルシステムを NFS でマウントして、
 ディスクレスインストールをすることも一つの選択です。
-ただ、この方法を用いる場合は、
-少なくとも &minimum-memory-with-nfsroot; の RAM が必要になるでしょう。
 
 </para><para>
 
 <!--
 After the operating system kernel is installed, you can install the
 rest of your system via any sort of network connection (including
-PPP after installation of the base system), via FTP, HTTP, or NFS.
+PPP after installation of the base system), via FTP or HTTP.
 -->
 オペレーティングシステムのカーネルをインストールした後は 
 (基本システムインストール後の PPP を含め)
-残りのシステムは FTP、HTTP、NFS 経由でネットワークインストールできます。
+残りのシステムは FTP、HTTP 経由でネットワークインストールできます。
 
 </para>
   </sect2>
@@ -339,21 +336,16 @@ Debian の起動ディスクには、さまざまなシステムに最大限対応したカーネルが
 </para><para arch="i386">
 
 <!--
-Generally, the Debian installation system includes support for
-floppies, IDE drives, IDE floppies, parallel port IDE devices, SCSI
-controllers and drives.  The file systems supported include MINIX,
-FAT, Win-32 FAT extensions (VFAT), among others (note that NTFS is not
-supported by the installation system; you can add it later, as
-described in <xref linkend="kernel-baking"/>).
+Generally, the Debian installation system includes support for floppies,
+IDE drives, IDE floppies, parallel port IDE devices, SCSI controllers and
+drives, USB, and FireWire.  The file systems supported include FAT,
+Win-32 FAT extensions (VFAT), and NTFS, among others.
 -->
 一般的に Debian のインストーラは、
 フロッピー、IDE ドライブ、IDE フロッピー、パラレルポートの IDE デバイス、
-SCSI コントローラとドライブをサポートしています。
-またファイルシステムは、MINIX、FAT、Win-32 拡張 FAT (VFAT)
+SCSI コントローラとドライブ、USB、FireWire をサポートしています。
+またファイルシステムは、FAT、Win-32 拡張 FAT (VFAT)、NTFS
 などがサポートされています
-(NTFS はインストーラではサポートされていませんのでご注意ください。
-ただ <xref linkend="kernel-baking"/> の説明にしたがって、インストール後に
-利用することは可能です)。
 
 </para><para arch="i386">
 
@@ -377,37 +369,6 @@ SCSI ディスクコントローラもサポートされています。詳細は
 をご覧ください。
 
 </para><para arch="i386">
-
-<!--
-Not supported are IDE SCSI drives and some SCSI controllers, including
--->
-サポートされていないのは、以下にあげるものを含む IDE SCSI
-ドライブといくつかの SCSI コントローラです。
-<itemizedlist>
-  <listitem><para>
-
-<!--
-EATA-DMA protocol compliant SCSI Host Adapters like the SmartCache
-III/IV, SmartRAID controller families and the DPT PM2011B and PM2012B
-controllers.
--->
-SmartCache III/IV のような EATA-DMA プロトコル対応 SCSI ホストアダプタや、
-SmartRAID コントローラ群、DPT PM2011B および PM2012B コントローラ
-
-</para></listitem>
-  <listitem><para>
-
-<!--
-The 53c7 NCR family of SCSI controllers (but 53c8 and 5380 controllers
-are supported)
--->
-53c7 NCR ファミリーの SCSI コントローラ (ただし 53c8 と 5380
-コントローラはサポートされています)
-
-</para></listitem>
-</itemizedlist>
-
-</para><para arch="m68k">
 
 <!--
 Pretty much all storage systems supported by the Linux kernel are
