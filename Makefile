@@ -74,11 +74,17 @@ build: tree_umount tree stats
 endif
 
 tree_mount: tree
-	-@sudo /bin/mount -t devfs dev $(TREE)/dev
 	-@sudo /bin/mount -t proc proc $(TREE)/proc
+ifndef USERDEVFS
+	-@sudo /bin/mount -t devfs dev $(TREE)/dev
+else
+	-@sudo chroot $(TREE) /usr/bin/update-dev
+endif
 
 tree_umount:
+ifndef USERDEVFS
 	-@if [ -d $(TREE)/dev ] ; then sudo /bin/umount $(TREE)/dev 2>/dev/null ; fi
+endif
 	-@if [ -d $(TREE)/proc ] ; then sudo /bin/umount $(TREE)/proc 2>/dev/null ; fi
 
 demo: tree
