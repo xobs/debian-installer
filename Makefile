@@ -115,7 +115,8 @@ clean: demo_clean
 	rm -rf $(TREE) $(APTDIR) $(UDEBDIR) $(TEMP)
 
 # Get all required udebs and put in UDEBDIR.
-get_udebs:
+get_udebs: get_udebs-stamp
+get_udebs-stamp:
 	mkdir -p $(APTDIR)/state/lists/partial
 	mkdir -p $(APTDIR)/cache/archives/partial
 	$(APT_GET) update
@@ -158,12 +159,14 @@ get_udebs:
 		fi; \
 	done
 
+	touch get_udebs-stamp
+
 # This is a list of the devices we want to create
 DEVS=console kmem mem null ram0 ram tty0 tty1 tty2 tty3 tty4 hda hdb hdc hdd fd0
 
 # Build the installer tree.
-tree: tree-stamp
-tree-stamp: get_udebs
+tree: get_udebs tree-stamp
+tree-stamp:
 	dh_testroot
 
 	# This build cannot be restarted, because dpkg gets confused.
@@ -230,15 +233,13 @@ tmp_mount:
 # 3. copy over the root filesystem
 # 4. unmount the file, compress it
 #
-# TODO: get rid of this damned fuzz factor!
-initrd: $(INITRD)
-$(INITRD): FUZZ=150
+initrd: Makefile tmp_mount tree $(INITRD)
 $(INITRD): TMP_FILE=$(TEMP)/image.tmp
-$(INITRD): Makefile tmp_mount tree
+$(INITRD):
 	dh_testroot
 	rm -f $(TMP_FILE)
 	install -d $(TEMP)
-	dd if=/dev/zero of=$(TMP_FILE) bs=1k count=`expr $$(du -s $(TREE) | cut -f 1) + $(FUZZ)`
+	dd if=/dev/zero of=$(TMP_FILE) bs=1k count=`expr $$(du -s $(TREE) | cut -f 1) + 1500`
 	# FIXME: 2000 bytes/inode (choose that better?)
 	mke2fs -F -m 0 -i 2000 -O sparse_super $(TMP_FILE)
 	mount -t ext2 -o loop $(TMP_FILE) $(TMP_MNT)
@@ -250,7 +251,7 @@ $(INITRD): Makefile tmp_mount tree
 # 1. make a dos filesystem image
 # 2. copy over kernel, initrd
 # 3. install syslinux
-floppy_image: $(FLOPPY_IMAGE)
+floppy_image: Makefile initrd tmp_mount $(FLOPPY_IMAGE)
 $(FLOPPY_IMAGE): Makefile initrd tmp_mount
 	dh_testroot
 	
@@ -269,9 +270,8 @@ $(FLOPPY_IMAGE): Makefile initrd tmp_mount
 	syslinux $(FLOPPY_IMAGE)
 
 # Write image to floppy
-boot_floppy: $(FLOPPY_IMAGE)
+boot_floppy: floppy_image
 	dd if=$(FLOPPY_IMAGE) of=/dev/fd0
-
 
 COMPRESSED_SZ=$(shell expr $(shell tar cz $(TREE) | wc -c) / 1024)
 stats: tree
@@ -293,9 +293,10 @@ stats: tree
 # this:
 UPLOAD_DIR=klecker.debian.org:~/public_html/debian-installer/daily/
 daily_build:
-	fakeroot $(MAKE) tarball > log 2>&1
-	scp -q -B log $(UPLOAD_DIR)
-	scp -q -B ../debian-installer.tar.gz \
-		$(UPLOAD_DIR)/debian-installer-$(shell date +%Y%m%d).tar.gz
+	fakeroot $(MAKE) tarball > tmp/log 2>&1
+	scp -q -B tmp/log $(UPLOAD_DIR)
+	scp -q -B $(TYPE)-debian-installer.tar.gz \
+		$(UPLOAD_DIR)/$(TYPE)-debian-installer-$(shell date +%Y%m%d).tar.gz
 	rm -f log
 
+.PHONY: tree
