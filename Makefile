@@ -200,6 +200,8 @@ tree: get_udebs tree-stamp
 tree-stamp:
 	dh_testroot
 
+	dpkg-checkbuilddeps
+
 	# This build cannot be restarted, because dpkg gets confused.
 	rm -rf $(TREE)
 	# Set up the basic files [u]dpkg needs.
