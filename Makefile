@@ -170,7 +170,7 @@ clean: demo_clean tmp_mount debian/control
 
 reallyclean: clean
 	rm -rf $(APTDIR) $(DEST) $(BASE_TMP) wget-cache $(SOURCEDIR)
-	rm -rf diskusage*.txt missing.txt all-*.utf
+	rm -f diskusage*.txt missing.txt all-*.utf *.bdf
 
 # prefetch udebs
 # If we are building a correct debian-installer source tree, we will want all the
