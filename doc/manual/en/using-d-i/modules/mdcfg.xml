@@ -55,11 +55,16 @@ The typical use for RAID0 is a partition for video editing.
 
 Is suitable for setups where reliability is the first concern.  It
 consists of several (usualy two) equaly sized partitions where every
-partition contains exactly the same data. This essentialy means two
+partition contains exactly the same data. This essentialy means three
 things.  First, if one of your disks fails, you still have the data
 mirrored on the remaining disks. Second, you can use only a fraction
-of the available capacity. (More precisely, it is the size of the
-smallest partition in the RAID.)
+of the available capacity (more precisely, it is the size of the
+smallest partition in the RAID). Third, the read process use only 
+one disk, and if that disk is really busy, your system will use 
+the anoter disk (the free disk) to get requested data (while the another 
+disk continue it's read work process). This result in more performance in 
+server types that uses most read than write operations (e.g. like a 
+fileserver).
 
 </para><para>
 
