@@ -416,27 +416,16 @@ $(INITRD): $(TYPE)-tree-stamp
 	fi;
 	gzip -vc9 $(TMP_FILE) > $(INITRD)
 
-# Copy files somewhere the CD build scripts can find them
-# XXX Will only use the last kernel if there are several
-cd_content: floppy_image
-	$(foreach NAME,$(KERNELNAME), \
-		cp -f $(TEMP)/$(NAME) $(DEST)/$(TYPE)-linux; )
-	cp syslinux.cfg $(DEST)/$(TYPE)-syslinux.cfg
-
-cd_image: cd_content
-	mkisofs -r -J -b `basename $(FLOPPY_IMAGE)` -o $(TYPE).iso $(DEST)
-	mv $(TYPE).iso $(DEST)
-
 # Write image to floppy
-boot_floppy: floppy_image
+boot_floppy: $(IMAGE)
 	install -d $(DEST)
-	dd if=$(FLOPPY_IMAGE) of=$(FLOPPYDEV)
+	dd if=$(IMAGE) of=$(FLOPPYDEV)
 
 # If you're paranoid (or things are mysteriously breaking..),
 # you can check the floppy to make sure it wrote properly.
 # This target will fail if the floppy doesn't match the floppy image.
 boot_floppy_check: floppy_image
-	cmp $(FLOPPYDEV) $(FLOPPY_IMAGE)
+	cmp $(FLOPPYDEV) $(IMAGE)
 
 COMPRESSED_SZ=$(shell expr $(shell tar czf - $(TREE) | wc -c) / 1024)
 KERNEL_SZ=$(shell expr \( $(foreach NAME,$(KERNELNAME),$(shell du -b $(TEMP)/$(NAME) | cut -f 1) +) 0 \) / 1024)
@@ -490,7 +479,7 @@ sub_daily_build:
 	scp -q -B $(DEST)/$(TYPE).log $(UPLOAD_DIR)
 	scp -q -B $(DEST)/$(TYPE)-debian-installer.tar.gz \
 		$(UPLOAD_DIR)/$(TYPE)-debian-installer-$(shell date +%Y%m%d).tar.gz
-	scp -q -B $(FLOPPY_IMAGE) $(INITRD) $(UPLOAD_DIR)/images/
+	scp -q -B $(IMAGE) $(INITRD) $(UPLOAD_DIR)/images/
 	scp -q -B $(DEST)/$(TYPE).info \
 		$(UPLOAD_DIR)/$(TYPE).info-$(shell date +%Y%m%d)
 	echo "Type: $(TYPE)" >> $(DEST)/info

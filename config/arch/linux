@@ -3,9 +3,6 @@
 # INITRD_FS=ext2
 INITRD_FS=ext2
 
-# The floppy image to create.
-FLOPPY_IMAGE=$(DEST)/$(TYPE)-$(FLOPPY_SIZE).img
-
 # Creating floppy images requires mounting the image to copy files to it.
 # This generally needs root permissions. To let a user mount the floppy
 # image, add something like this to /etc/fstab:
@@ -17,7 +14,7 @@ FLOPPY_IMAGE=$(DEST)/$(TYPE)-$(FLOPPY_SIZE).img
 # that file could perhaps provide a maliciously constructed file that might
 # crash the kernel or worse.. Note that this line points to the temporary
 # image file to create, and MUST be an absolute path. Finally, when calling
-# the floppy_image target, you must *not* use fakeroot, or syslinux will
+# the image target, you must *not* use fakeroot, or syslinux will
 # fail.
 #USER_MOUNT_HACK=$(shell pwd)/$(DEST)/tmp-mnt.img
 
@@ -25,4 +22,3 @@ FLOPPY_IMAGE=$(DEST)/$(TYPE)-$(FLOPPY_SIZE).img
 FLOPPYDEV=/dev/fd0
 
 TYPES_SUPPORTED = cdrom cdrom144 net netboot
-
