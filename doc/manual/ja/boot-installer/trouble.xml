@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 18637 -->
+<!-- original version: 20466 -->
 
  <sect1 id="boot-troubleshooting">
  <title>インストールプロセスのトラブルシューティング</title>
@@ -227,92 +227,65 @@ after the computer has been booted into the installed system.
   </sect2>
 
   <sect2 id="submit-bug">
-  <title>バグ報告の送信</title>
+  <title>インストールレポートの送信</title>
 <para>
 
 <!--
-If you still have problems, please submit a bug report.  Send an email
-to <email>submit@bugs.debian.org</email>.  You
-<emphasis>must</emphasis> include the following as the first lines of
-the email:
+If you still have problems, please submit an installation report. We also
+encourage installation reports to be sent even if the installation is
+successful, so that we can get as much information as possible on the largest
+number of hardware configurations. Please use this template when filling out
+installation reports, and file the report as a bug report against the
+"installation-reports" pseudo package, by sending it to
+<email>submit@bugs.debian.org</email>.
 -->
-まだ何か問題がある場合は、バグ報告を送ってください。
-<email>submit@bugs.debian.org</email>
-宛に電子メールで送ってください。
-その電子メールの先頭には、
-<emphasis>必ず</emphasis> 以下の記述を付け加えてください。
+まだ問題がある場合には、インストールレポートをお送りください。
+また、インストールが成功したときのインストールレポートもお送りください。
+そうすると、たくさんのハードウェア設定情報を手に入れることができます。
+インストールレポートを記入する際には、以下のテンプレートをお使いください。
+そのファイルを、"installation-reports" pseudo パッケージのバグ報告として、
+<email>submit@bugs.debian.org</email> 宛にお送りください。
 
 <informalexample><screen>
 
 Package: installation-reports
-Version: <replaceable>version</replaceable>
+
+Debian-installer-version: &lt;イメージを取得した場所と日付&gt;
+
+uname -a: &lt;シェルプロンプトで uname -a を実行した結果&gt;
+Date: &lt;インストールした日時&gt;
+Method: &lt;どのようにインストールしたか? どのように起動したか? 
+       ネットワークインストールならどこからか? プロキシは?&gt;
+
+Machine: &lt;マシンの説明 (例 IBM Thinkpad R32)&gt;
+Processor:
+Memory:
+Root Device: &lt;IDE?  SCSI?  デバイス名は?&gt;
+Root Size/partition table: &lt;どこにマウントしたかの注をつけて、
+      全パーティションテーブルを自由に張り付けてください。&gt;
+Output of lspci and lspci -n:
+
+Base System Installation Checklist:
+[O] = OK, [E] = Error (please elaborate below), [ ] = didn't try it
+
+Initial boot worked:    [ ]
+Configure network HW:   [ ]
+Config network:         [ ]
+Detect CD:              [ ]
+Load installer modules: [ ]
+Detect hard drives:     [ ]
+Partition hard drives:  [ ]
+Create file systems:    [ ]
+Mount partitions:       [ ]
+Install base system:    [ ]
+Install boot loader:    [ ]
+Reboot:                 [ ]
+
+Comments/Problems:
+
+&lt;簡単なインストールの説明、初期インストールの考察、コメント、アイデアなど&gt;
 
 </screen></informalexample>
-
-<!--
-Be sure to fill in <replaceable>version</replaceable> with the
-version of the debian-installer that you used. The version number can
-be found if you press <keycap>F1</keycap> key on the
-<prompt>boot:</prompt> prompt of your installation media. You should
-also mention from where you downloaded the installation media, or the
-source of a CD you bought.
--->
-<replaceable>version</replaceable> のところに、
-利用した debian-installer のバージョンを書くのを忘れないようにしてください。
-バージョンはそのインストールメディアの <prompt>boot:</prompt> で、
-<keycap>F1</keycap> キーを押すとわかりますし、
-インストールメディアのダウンロード元や CD の販売元でも言及しています。
-
-</para><para>
-
-<!--
-You should also include the following information in your bug report.
-If you use the program <command>reportbug</command> to submit your 
-report, this information will be included automatically.
--->
-バグ報告には以下のような情報も添えてください。
-報告を送る際に <command>reportbug</command> プログラムを使用すると、
-自動的にこの情報を追加してくれます。
-
-<informalexample><screen>
-
-<!--
-<phrase arch="i386">
-flavor:        <replaceable>flavor of image you are using</replaceable>
-</phrase>
-architecture:  &architecture; 
-model:         <replaceable>your general hardware vendor and model</replaceable>
-memory:        <replaceable>amount of RAM</replaceable>
-scsi:          <replaceable>SCSI host adapter, if any</replaceable>
-cd-rom:        <replaceable>CD-ROM model and interface type, e.g., ATAPI</replaceable>
-network card:  <replaceable>network interface card, if any</replaceable>
-pcmcia:        <replaceable>details of any PCMCIA devices</replaceable>
--->
-<phrase arch="i386">
-flavor:        <replaceable>使用したイメージのフレーバー</replaceable>
-</phrase>
-architecture:  &architecture; 
-model:         <replaceable>ハードウェアのメーカーやモデル名</replaceable>
-memory:        <replaceable>RAM の量</replaceable>
-scsi:          <replaceable>(あれば) SCSI ホストアダプタ</replaceable>
-cd-rom:        <replaceable>CD-ROM のモデル名とインターフェースの種類 (ATAPI 等)</replaceable>
-network card:  <replaceable>(あれば) ネットワークインターフェースカード</replaceable>
-pcmcia:        <replaceable>PCMCIA デバイスの詳細</replaceable>
-
-</screen></informalexample>
-
-</para><para>
-
-<!--
-Depending on the nature of the bug, it also might be useful to report
-whether you are installing to IDE or SCSI disks, other peripheral
-devices such as audio, disk capacity, and the model of video card.
--->
-問題の性質にもよりますが、
-インストール先のディスクが IDE ディスクなのか SCSI ディスクなのか、
-さらにオーディオのような他の周辺機器、
-ディスク容量、ビデオカードのモデル名などの情報を
-書き添えることも有益でしょう。
 
 </para><para>
 

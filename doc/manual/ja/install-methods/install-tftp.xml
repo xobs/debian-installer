@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 18630 -->
+<!-- original version: 20465 -->
 
  <sect1 condition="supports-tftp" id="install-tftp">
  <title>TFTP ネットブート用ファイルの準備</title>
@@ -299,16 +299,38 @@ TFTP のディレクトリに置いてください。
 
 <!--
 For PXE booting, everything you should need is set up in the
-<filename>netboot/pxeboot.tar.gz</filename> tarball. Simply extract this
-tarball into the <command>tftpd</command> boot image directory.
+<filename>netboot/netboot.tar.gz</filename> tarball. Simply extract this
+tarball into the <command>tftpd</command> boot image directory. Make sure
+your dhcp server is configured to pass <filename>/pxelinux.0</filename>
+to <command>tftpd</command> as the filename to boot.
 -->
-PXE 起動では、必要なことがすべて <filename>netboot/pxeboot.tar.gz</filename> 
+PXE 起動では、必要なことがすべて <filename>netboot/netboot.tar.gz</filename> 
 tarball の中にセットアップされています。
 単にこの tarball を、
-<command>tftpd</command> ブートイメージディレクトリに展開してください
+<command>tftpd</command> ブートイメージディレクトリに展開してください。
+<filename>/pxelinux.0</filename> を、
+起動するファイル名として <command>tftpd</command> へ渡すよう、
+dhcp サーバが設定されていることを確認してください。
+
+</para><para arch="ia64">
+
+<!--
+For PXE booting, everything you should need is set up in the
+<filename>netboot/netboot.tar.gz</filename> tarball. Simply extract this
+tarball into the <command>tftpd</command> boot image directory. Make sure
+your dhcp server is configured to pass
+<filename>/debian-installer/ia64/elilo.efi</filename>
+to <command>tftpd</command> as the filename to boot.
+-->
+PXE 起動では、必要なことがすべて <filename>netboot/netboot.tar.gz</filename> 
+tarball の中にセットアップされています。
+単にこの tarball を、
+<command>tftpd</command> ブートイメージディレクトリに展開してください。
+<filename>/debian-installer/ia64/elilo.efi</filename> を、
+起動するファイル名として <command>tftpd</command> へ渡すよう、
+dhcp サーバが設定されていることを確認してください。
 
 </para>
-
 
    <sect3 arch="mipsel">
    <title>DECstation TFTP イメージ</title>
