@@ -39,22 +39,6 @@ fi
 tempdir="build.tmp"
 dynamic="${tempdir}/dynamic.ent"
 
-# Note: this routine assumes that the integrated XML files for English
-#       and the POT files have already been generated c.q. updated.
-generate_xml () {
-
-    sh -c "cd $manual_path; ./scripts/update_po $language"
-    RET=$?; [ $RET -ne 0 ] && return $RET
-
-    sh -c "cd $manual_path; ./scripts/create_xml $language"
-    RET=$?; [ $RET -ne 0 ] && return $RET
-
-    echo "Info: generation of XML files complete"
-    echo
-
-    return 0
-}
-
 create_profiled () {
 
     [ -x /usr/bin/xsltproc ] || return 9
@@ -240,21 +224,6 @@ create_ps() {
 rm -rf $tempdir
 rm -rf $destdir
 
-# Check whether language uses PO files for translation
-USES_PO=""
-if [ -f "$manual_path/po/bookinfo.$language.po" ] ; then
-    if [ -d "$manual_path/$language/.svn" ] ; then
-        echo "Warning: both PO files and XML files are present; ignoring PO files"
-    else
-        USES_PO="1"
-        if [ -d "$manual_path/$language/" ] ; then
-            echo "Info: cleaning old XML files"
-            rm -r $manual_path/$lang/
-        fi
-        mkdir $manual_path/$language
-    fi
-fi
-
 [ -d "$manual_path/$language" ] || {
     echo "Error: unknown language '$language'"
     exit 1
@@ -262,12 +231,6 @@ fi
 
 mkdir -p $tempdir
 mkdir -p $destdir
-
-# Update PO files and create XML files
-if [ -n "$USES_PO" ] ; then
-    generate_xml
-    RET=$?; [ $RET -ne 0 ] && exit 1
-fi
 
 # Create profiled XML. This is needed for all output formats.
 create_profiled
@@ -311,7 +274,6 @@ done
 
 # Clean up
 rm -r $tempdir
-[ -n "$USES_PO" ] && rm -r $manual_path/$language
 
 # Evaluate the overall results
 [ -n "$BUILD_SKIP" ] && echo "Info: The following formats were skipped:$BUILD_SKIP"
