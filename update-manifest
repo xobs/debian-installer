@@ -1,0 +1,52 @@
+#!/usr/bin/perl
+# Add an item to the manifest, or update an existing item.
+# Also cleans manifest of any items that do not exist any longer.
+# May be run with no parameters to only clear old stuff.
+my $file=shift;
+my $desc=shift;
+
+if (length $file && ! length $desc) {
+	print STDERR "warning: no manifest info for $file\n";
+	exit;
+}
+
+
+my $sep=" -- ";
+
+my %manifest;
+if (-e "dest/MANIFEST") {
+	open (IN, "dest/MANIFEST") || die $!;
+	while (<IN>) {
+		chomp;
+		my ($key, $value)=split(/\s*$sep/, $_, 2);
+		$manifest{$key}=$value;
+	}
+	close IN;
+}
+
+if (length $file) {
+	$file=~s!(\./)?dest/!!;
+	$manifest{$file}=$desc;
+}
+
+my $longest=0;
+foreach my $item (keys %manifest) {
+	if (! -e "dest/$item") {
+		delete $manifest{$item};
+		next;
+	}
+	if (length $item > $longest) {
+		$longest=length $item;
+	}
+}
+
+if (! %manifest) {
+	unlink "dest/MANIFEST";
+	exit;
+}
+
+open (OUT, ">dest/MANIFEST") || die "write dest/MANIFEST: $!";
+foreach my $item (sort keys %manifest) {
+	print OUT $item.(" " x ($longest - length $item))."$sep$manifest{$item}\n";
+}
+close OUT;

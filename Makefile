@@ -221,6 +221,7 @@ reallyclean: all_clean
 .PHONY: clean_%
 clean_%:
 	@$(submake) _clean $(shell $(submake) $(subst clean_,validate_,$@))
+	./update-manifest
 
 # The general clean rule.
 .PHONY: _clean
@@ -232,7 +233,6 @@ _clean: tree_umount
 	rm -f $(TEMP)/unifont.bdf $(TREE)/unifont.bgf
 	rm -f $(INITRD) $(KERNEL) $(BOOT) $(ROOT) $(EXTRA) $(MINIISO) $(DEBIAN_CD_INFO)
 	rm -rf $(TEMP)
-
 
 #
 # all_build is provided automagically, but for manual invocation
@@ -558,7 +558,7 @@ $(TREE)/unifont.bgf: $(TEMP)/all.utf
 # Create a compressed image of the root filesystem by way of genext2fs.
 $(INITRD): $(TEMP_INITRD)
 	install -m 644 -D $< $@
-	$(if MANIFEST-INITRD,echo $(MANIFEST-INITRD) >> $(BASE_DEST)MANIFEST)
+	./update-manifest $@ $(MANIFEST-INITRD)
 
 $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 	# Only build the font if we have rootskel-locale
@@ -584,32 +584,32 @@ $(TEMP_BOOT_SCREENS): arch_boot_screens
 # raw kernel images
 $(KERNEL): $(STAMPS)tree-$(targetstring)-stamp
 	install -m 644 -D $(TEMP)/$(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,') $@
-	$(if MANIFEST-KERNEL,echo $(MANIFEST-KERNEL) >> $(BASE_DEST)MANIFEST)
+	./update-manifest $@ $(MANIFEST-KERNEL)
 
 # bootable images
 $(BOOT): $(TEMP_BOOT)
 	install -m 644 -D $(TEMP_BOOT)$(GZIPPED) $@
-	$(if MANIFEST-BOOT,echo $(MANIFEST-BOOT) >> $(BASE_DEST)MANIFEST)
+	./update-manifest $@ $(MANIFEST-BOOT)
 
 # non-bootable root images
 $(ROOT): $(TEMP_INITRD) arch_root
 	install -m 644 -D $(TEMP_ROOT)$(GZIPPED) $@
-	$(if MANIFEST-ROOT,echo $(MANIFEST-ROOT) >> $(BASE_DEST)MANIFEST)
+	./update-manifest $@ $(MANIFEST-ROOT)
 
 # miniature ISOs with only a boot image
 $(MINIISO): $(TEMP_INITRD) arch_miniiso
 	install -m 644 -D $(TEMP_MINIISO) $@
-	$(if MANIFEST-MINISO,echo $(MANIFEST-MINIISO) >> $(BASE_DEST)MANIFEST)
+	./update-manifest $@ $(MANIFEST-MINIISO)
 
 # various kinds of information, for use on debian-cd isos.
 $(DEBIAN_CD_INFO): $(TEMP_BOOT_SCREENS)
 	(cd $(TEMP_BOOT_SCREENS); tar cz .) > $@
-	$(if MANIFEST-DEBIAN_CD_INFO,echo $(MANIFEST-DEBIAN_CD_INFO) >> $(BASE_DEST)MANIFEST)
+	./update-manifest $@ $(MANIFEST-DEBIAN_CD_INFO)
 
 # Other images, e.g. driver floppies. Those are simply handled as flavours
 $(EXTRA): $(TEMP_EXTRA)
 	install -m 644 -D $(TEMP_EXTRA)$(GZIPPED) $@
-	$(if MANIFEST-EXTRA,echo $(MANIFEST-EXTRA) >> $(BASE_DEST)MANIFEST)
+	./update-manifest $@ $(MANIFEST-EXTRA)
 
 $(TEMP_EXTRA): $(STAMPS)extra-$(targetstring)-stamp
 	install -d $(shell dirname $@)
