@@ -306,7 +306,7 @@ stats: tree
 # don't want to use this grungy code, at least not without overrideing
 # this:
 UPLOAD_DIR=klecker.debian.org:~/public_html/debian-installer/daily/
-daily_build:
+daily_build: clean
 	install -d $(DEST)
 	fakeroot $(MAKE) tarball > $(DEST)/log 2>&1
 	scp -q -B $(DEST)/log $(UPLOAD_DIR)
