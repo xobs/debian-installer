@@ -57,9 +57,13 @@
 # Add to PATH so dpkg will always work, and so local programs will be found.
 PATH := $(PATH):/usr/sbin:/sbin:.
 
+# We don't want this to be run each time we re-enter.
+ifndef DEB_HOST_ARCH
 DEB_HOST_ARCH = $(shell dpkg-architecture -qDEB_HOST_ARCH)
 DEB_HOST_GNU_CPU = $(shell dpkg-architecture -qDEB_HOST_GNU_CPU)
 DEB_HOST_GNU_SYSTEM = $(shell dpkg-architecture -qDEB_HOST_GNU_SYSTEM)
+export DEB_HOST_ARCH DEB_HOST_GNU_CPU DEB_HOST_GNU_SYSTEM
+endif
 
 # We loop over all needed combinations of ARCH, SUBARCH, MEDIUM, FLAVOUR
 # via recursive make calls. ARCH is constant, we don't support
