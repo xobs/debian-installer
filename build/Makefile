@@ -364,6 +364,11 @@ ifdef KERNELNAME
 	rmdir $(TREE)/boot/
 endif
 
+ifdef PRESEED
+	# Copy in preseed file.
+	cp -a $(PRESEED) $(TREE)/preseed.cfg
+endif
+
 ifdef EXTRAFILES
 	# Copy in any extra files.
 	set -e; \

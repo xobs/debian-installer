@@ -17,6 +17,12 @@
 # or just something extra on a floppy.
 #EXTRAFILES = /usr/bin/strace
 
+# This variable can be used to add a preseed file to the initrd itself.
+# It will be loaded by the initrd-preseed udeb.
+# Right now we want all d-i development and daily builds to use udebs from
+# unstable, so load the unstable.cfg.
+PRESEED ?= unstable.cfg
+
 # The library reducer to use. Can be mklibs.sh or mklibs.py.
 MKLIBS = mklibs 
 
@@ -26,9 +32,8 @@ MKLIBS = mklibs
 #MIRROR = http://www.us.debian.org/debian
 
 # Define here if debian-installer should be built with modules from
-# stable, testing or unstable. Note that currently only unstable
-# contains installer modules
-SUITE = unstable
+# stable, testing or unstable.
+SUITE ?= unstable
 
 # Options to pass to dpkg when it is unpacking the udebs to create the
 # image. None should be needed, but --force-overwrite might need to be
