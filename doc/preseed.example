@@ -67,10 +67,12 @@
 # This command is run just before the install finishes, but when there is
 # still a usable /target directory.
 #d-i	preseed/late_command		string for deb in /hd-media/*.deb; do cp $deb /target/tmp; chroot /target dpkg -i /tmp/$(basename $deb); done
+# This command is run just as base-config is starting up.
+#base-config	base-config/early_command	string echo hi mom
 # This command is run after base-config is done, just before the login:
 # prompt. This is a good way to install a set of packages you want, or to
 # tweak the configuration of the system.
-#base-config	base-config/command	string apt-get install zsh; chsh -s /bin/zsh
+#base-config	base-config/late_command	string apt-get install zsh; chsh -s /bin/zsh
 
 #### Network configuration.
 
@@ -154,6 +156,10 @@ d-i	partman/confirm			boolean	true
 
 #### Boot loader installation.
 
+# Grub is the default boot loader (for x86). If you want lilo installed
+# instead, uncomment this:
+#d-i	grub-installer/skip		boolean true
+
 # This is fairly safe to set, it makes grub install automatically to the MBR
 # if no other operating system is detected on the machine.
 d-i	grub-installer/only_debian	boolean true
@@ -166,6 +172,8 @@ d-i	grub-installer/with_other_os	boolean true
 #d-i	grub-installer/only-debian	boolean false
 #d-i	grub-installer/with_other_os	boolean false
 
+# TODO how to preseed lilo-installer? Its questions make this difficult.
+
 ##### Finishing up the first stage install.
 
 # Avoid that last message about the install being complete.
@@ -173,8 +181,8 @@ d-i	prebaseconfig/reboot_in_progress	note
 
 
 ##### Preseeding base-config.
-# XXX: Note that most of this will not work right until base-config 2.45 is
-# available.
+# XXX: Note that most of this will not work right until base-config 2.40.4
+# is available.
 
 # Avoid the intorductory message.
 base-config	base-config/intro	note 
