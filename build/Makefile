@@ -67,7 +67,7 @@ endif
 
 # We loop over all needed combinations of ARCH, SUBARCH, MEDIUM, FLAVOUR
 # via recursive make calls. ARCH is constant, we don't support
-# cosscompiling.
+# crosscompiling.
 ARCH = $(DEB_HOST_ARCH)
 
 #
