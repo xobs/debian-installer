@@ -3,7 +3,7 @@
 
 <chapter id="boot-installer"
 ><title
->Запуск программы установки</title>
+>Загрузка системы</title>
 
  <sect1
 ><title
@@ -52,11 +52,11 @@
 ></footnote
 > Поскольку Tru64 Unix использует BSD-формат метки диска, это ``родной'' формат разделов для установок SRM. </para
 ><para
->GNU/Linux is the only operating system on Alpha that can be booted from both console types, but &debian; &release; only supports booting on SRM-based systems. If you have an Alpha for which no version of SRM is available, if you will be dual-booting the system with Windows NT, or if your boot device requires ARC console support for BIOS initialization, you will not be able to use the &debian; &release; installer. You can still run &debian; &release; on such systems by using other install media; for instance, you can install Debian woody with MILO and upgrade. </para
+>Операционная система GNU/Linux является единставенной на Alpha, которая может загружаться с обоих типов консолей, но &debian; &release; поддерживает загрузку только для SRM-основанных консолей. Если у вас Alpha, для версии SRM которой загрузка невозможна, и если вы не будете делать двойную загрузку системы с Windows NT, или если загрузочному устройству нужна поддержка ARC консоли для инициализации BIOS, то вы можете использовать  программу установки &debian; &release;. Всё равно возможно запустить &debian; &release; на таких системах с помощью другого установочного носителя; например, мы можете установить Debian woody с MILO и обновиться. </para
 ><para
->Because <command
+>Поскольку <command
 >MILO</command
-> is not available for any of the Alpha systems currently in production (as of February 2000), and because it is no longer necessary to buy an OpenVMS or Tru64 Unix license to have SRM firmware on your older Alpha, it is recommended that you use SRM when possible. </para
+> не доступен для всех типов систем Alpha, которые сейчас выпускаются (по состоянию на февраль 2000), и поскольку теперь не требуется покупать лицензию OpenVMS или Tru64 Unix, чтобы получить прошивку SRM на старой Alpha, рекомендуется использовать SRM, когда возможно. </para
 ><para
 >Следующая таблица объединяет доступные и поддерживаемые комбинации типов системы/консоли (смотрите имена типов систем в <xref linkend="alpha-cpus"/> ). Ниже слово `ARC' означает любые ARC-совместимые консоли. </para
 ><para>
@@ -161,7 +161,7 @@
   <entry
 >nautilus</entry>
   <entry
->ARC (see motherboard manual) or SRM</entry>
+>ARC (смотрите руководство к материнской плате) или SRM</entry>
 </row
 ><row>
   <entry
@@ -242,15 +242,15 @@
 
 </para
 ><para
->Generally, none of these consoles can boot Linux directly, so the assistance of an intermediary bootloader is required. For the SRM console, <command
+>Вообще, ни одна из этих консолей не способно загрузить Linux самостоятельно, поэтому для этого требуется промежуточный системный загрузчик. Для SRM консоли &mdash; это <command
 >aboot</command
->, a small, platform-independent bootloader, is used. See the (unfortunately outdated) <ulink url="&url-srm-howto;"
+> маленький, кросплатформенный системный загрузчик. Смотрите (к сожалению, устаревшее) <ulink url="&url-srm-howto;"
 >SRM HOWTO</ulink
-> for more information on <command
+> для более полной информации про <command
 >aboot</command
 >. </para
 ><para condition="FIXME"
->The following paragraphs are from the woody install manual, and are included here for reference; they may be useful to someone at a later date when Debian supports MILO-based installs again. </para
+>Следующие параграфы взяты из руководства установки по woody, и содержат на него ссылки; они могут быть полезны несколько позже, когда поддержка Debian MILO будет включена снова. </para
 ><para condition="FIXME"
 >Вообще-то, ни одна из этих консолей не сможет напрямую загрузить Linux, так что требуется содействие промежуточного системного загрузчика. Существует два основных загрузчика Linux: <command
 >MILO</command
@@ -533,11 +533,11 @@ ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
 <!-- $Id: intro-net.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
 
 <para
->Загрузка по сети требует наличия сетевого подключения и сетевого сервера загрузки TFTP (DHCP, RARP, или BOOTP). </para
+>Загрузка по сети требует наличия сетевого подключения и сетевого загрузочного сервера TFTP (DHCP, RARP или BOOTP). </para
 ><para arch="hppa"
->Older systems such as the 715 might require the use of an RBOOT server instead of a BOOTP server. </para
+>Для старых систем, например 715-х, может потребоваться использование RBOOT сервера вместо сервера BOOTP. </para
 ><para
->The installation method to support network booting is described in <xref linkend="install-tftp"/>. </para>
+>Метод установки с загрузкой из сети описан в <xref linkend="install-tftp"/>. </para>
 <!--   End of file boot-installer/intro-net.xml -->
 
   <sect3 arch="arm"
@@ -545,14 +545,14 @@ ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
 >Загрузка по TFTP на NetWinder</title>
 
 <para
->На NetWinder есть два сетевых интерфейса: 10Mbps NE2000-совместимая карта <filename
+>NetWinder имеет два сетевых интерфейса: 10-Мегабитную NE2000-совместимую карту <filename
 >eth0</filename
-> и 100Mbps Tulip карта <filename
+> и 100-Мегабитную карту <filename
 >eth1</filename
->. </para
+> на чипе Tulip. </para
 ><note
 ><para
->Вам потребуется NeTTrom 2.2.1 или новее для загрузки системы установки. Рекомендуем NeTTrom 2.3.3: получите эти файты с <ulink url="ftp://ftp.netwinder.org/pub/netwinder/firmware/"
+>Вам потребуется NeTTrom версии 2.2.1 или новее для загрузки системы. Рекомендуется NeTTrom версии 2.3.3: загрузите следующие файты с <ulink url="ftp://ftp.netwinder.org/pub/netwinder/firmware/"
 ></ulink
 >: <itemizedlist>
 <listitem
@@ -584,14 +584,14 @@ ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
 </para
 ></note
 ><para
->После перезагрузки и прерывания процесса загрузки по время отсчета, вы должны сперва настроить сеть, задав либо статический адрес: <informalexample
+>После перезагрузки и прерывания процесса загрузки во время паузы перед загрузкой, сначала настройте сеть, указав либо статический адрес: <informalexample
 ><screen>
 
     команда NeTTrom -> setenv eth0_ip 192.168.0.10/24
 
 </screen
 ></informalexample
-> где 24 это число битов в сетевой маске, либо динамический адрес: <informalexample
+> где 24 &mdash; это число битов в сетевой маске, либо динамический адрес: <informalexample
 ><screen
 >команда NeTTrom-> boot diskless
 
@@ -600,7 +600,7 @@ ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
 
 </para
 ><para
->Возможно вам потребуется сконфигурировать настройки <userinput
+>Возможно вам потребуется настроить переменную <userinput
 >route1</userinput
 >, если сервер TFTP расположен не в локальной подсети. Оставшаяся часть настроек достаточно стандартная (шаг save-all необязателен): <informalexample
 ><screen
@@ -615,15 +615,15 @@ ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
 
 </para
 ><para
->Только две последние их них мешают нормальному процессу загрузки с диска, так что безопаснее сделать <command
+>Только две последние из них предотвращают загрузку с диска, так что безопаснее сделать <command
 >save-all</command
 > прямо перед ними, это сохранит сетевые настройки на случай, если вам понадобится снова загрузиться по сети. Используйте команду <command
 >printenv</command
-> для просмотра настроек вашего окружения. И наконец, если переменная <envar
+> для просмотра переменных среды. И наконец, если переменная <envar
 >cmdappend</envar
-> вашего NeTTrom содержит опцию <option
+> в NeTTrom содержит команду <option
 >noinitrd</option
-> (которая необходима для загрузки ядер 2.4), вы должны убрать ее, чтобы закачанное ядро смогло загрузиться со своим встроенным ram-диском. </para>
+> (которая необходима для загрузки ядер 2.4), уберите её, для того чтобы загружаемое ядро смогло загрузиться со своим встроенным ram-диском. </para>
   </sect3>
 
   <sect3 arch="arm"
@@ -631,9 +631,9 @@ ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
 >Загрузка по TFTP на CATS</title>
 
 <para
->На машинах CATS используйте <command
+>На машинах CATS в приглашении Cyclone введите <command
 >boot de0:</command
-> или нечто подобное в подсказке Cyclone. </para>
+> или нечто подобное. </para>
    </sect3>
   </sect2>
 
@@ -648,15 +648,15 @@ ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
 <!-- $Id: intro-cd.xml 22664 2004-10-06 15:49:49Z fjpop-guest $ -->
 
 <para
->Для большинства пользователей проще всего будет использовать набор компакт-дисков Debian. Если у вас есть набор компакт-дисков и ваш компьютер поддерживает загрузку с компакт-диска, прекрасно!. Просто <phrase arch="i386"
+>Для большинства пользователей проще всего будет использовать набор компакт-дисков Debian. Если у вас есть набор компакт-дисков и ваш компьютер поддерживает загрузку с компакт-диска, прекрасно! Просто <phrase arch="i386"
 > настройте ваш компьютер для загрузки с компакт-диска как описано в <xref linkend="boot-dev-select"/>, </phrase
-> вставьте компакт-диск, перезагрузите компьютер и смотрите далее следующую главу. </para
+> вставьте компакт-диск, перезагрузите компьютер и переходите к следующей главе. </para
 ><para
->Заметим, что некоторым CD приводам нужны специальные драйверы, и поэтому они недоступны на ранних стадиях установки. Если производимая стандартная последовательнось загрузки с CD не работает на вашем аппаратном обеспечении, обратитесь к этой главе снова и прочитайте об альтернативный ядрах и методах установки, которые могут вам подойти. </para
+>Заметим, что некоторым приводам компакт-дисков нужны специальные драйверы и поэтому, они недоступны на ранних стадиях установки. Если производимая стандартная последовательнось загрузки с CD не работает, обратитесь к этой главе снова и прочитайте об альтернативных ядрах и методах установки, которые доступны для вашей машины. </para
 ><para
->Даже если вы не смогли загрузиться с CD-ROM, вероятно вы сможете установить компоненты системы Debian и пакеты с CD-ROM. Просто загрузитесь с другого носителя, например с дискет. Когда прийдёт время установки операционной системы, базовой системы или дополнительных пакетов, укажите программе установки на привод CD-ROM. </para
+>Даже если не удалось загрузиться с CD-ROM, вероятно, вы ещё сможете установить с CD-ROM компоненты системы Debian и пакеты. Просто загрузитесь с другого носителя, например с дискет. Когда придёт время установки операционной системы, базовой системы или дополнительных пакетов, укажите программе установки на привод CD-ROM. </para
 ><para
->Если у вас возникли проблемы с загрузкой, смотрите <xref linkend="boot-troubleshooting"/>. </para>
+>При возникновении проблем с загрузкой смотрите <xref linkend="boot-troubleshooting"/>. </para>
 <!--   End of file boot-installer/intro-cd.xml -->
 
 <para
@@ -678,15 +678,15 @@ ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
 <!-- $Id: intro-cd.xml 22664 2004-10-06 15:49:49Z fjpop-guest $ -->
 
 <para
->Для большинства пользователей проще всего будет использовать набор компакт-дисков Debian. Если у вас есть набор компакт-дисков и ваш компьютер поддерживает загрузку с компакт-диска, прекрасно!. Просто <phrase arch="i386"
+>Для большинства пользователей проще всего будет использовать набор компакт-дисков Debian. Если у вас есть набор компакт-дисков и ваш компьютер поддерживает загрузку с компакт-диска, прекрасно! Просто <phrase arch="i386"
 > настройте ваш компьютер для загрузки с компакт-диска как описано в <xref linkend="boot-dev-select"/>, </phrase
-> вставьте компакт-диск, перезагрузите компьютер и смотрите далее следующую главу. </para
+> вставьте компакт-диск, перезагрузите компьютер и переходите к следующей главе. </para
 ><para
->Заметим, что некоторым CD приводам нужны специальные драйверы, и поэтому они недоступны на ранних стадиях установки. Если производимая стандартная последовательнось загрузки с CD не работает на вашем аппаратном обеспечении, обратитесь к этой главе снова и прочитайте об альтернативный ядрах и методах установки, которые могут вам подойти. </para
+>Заметим, что некоторым приводам компакт-дисков нужны специальные драйверы и поэтому, они недоступны на ранних стадиях установки. Если производимая стандартная последовательнось загрузки с CD не работает, обратитесь к этой главе снова и прочитайте об альтернативных ядрах и методах установки, которые доступны для вашей машины. </para
 ><para
->Даже если вы не смогли загрузиться с CD-ROM, вероятно вы сможете установить компоненты системы Debian и пакеты с CD-ROM. Просто загрузитесь с другого носителя, например с дискет. Когда прийдёт время установки операционной системы, базовой системы или дополнительных пакетов, укажите программе установки на привод CD-ROM. </para
+>Даже если не удалось загрузиться с CD-ROM, вероятно, вы ещё сможете установить с CD-ROM компоненты системы Debian и пакеты. Просто загрузитесь с другого носителя, например с дискет. Когда придёт время установки операционной системы, базовой системы или дополнительных пакетов, укажите программе установки на привод CD-ROM. </para
 ><para
->Если у вас возникли проблемы с загрузкой, смотрите <xref linkend="boot-troubleshooting"/>. </para>
+>При возникновении проблем с загрузкой смотрите <xref linkend="boot-troubleshooting"/>. </para>
 <!--   End of file boot-installer/intro-cd.xml -->
 
 <!-- We'll comment the following section until we know exact layout -->
@@ -849,40 +849,40 @@ END FIXME -->
 ></title>
 
 <para
->To boot the installer from hard disk, you must first download and place the needed files as described in <xref linkend="boot-drive-files"/>. </para>
+>Для загрузки программы установки с жёсткого диска, у вас уже должны быть полностью полученные и положенные требуемые файлы: <xref linkend="boot-drive-files"/>. </para>
 
 <para
->Если вы намереваетес использовать жёсткий диск только для загрузки, а затем получить всё по сети, то вы должны получить файл <filename
+>Если вы намереваетесь использовать жёсткий диск только для загрузки, а затем получить всё по сети, то вы должны получить файл <filename
 >netboot/debian-installer/i386/initrd.gz</filename
 > и соответствующее ему ядро. Он позволит вам раметить жёсткий диск с которого вы загрузились, хотя вы должны делать это осторожно. </para>
 
 <para
->Alternatively, if you intend to keep an existing partition on the hard drive unchanged during the install, you can download the <filename
+>Или же, если вы намереваетесь сохранить существующий раздел жёсткого диска неизменным, то можете получить файл <filename
 >hd-media/initrd.gz</filename
-> file and its kernel, as well as copy a CD iso to the drive (make sure the file is named ending in ".iso". The installer can then boot from the drive and install from the CD image, without needing the network. </para>
+> и его ядро, а также скопироватьCD iso на жёсткий диск (проверьте, что имя заканчивается на ".iso". Затем программу установки можно загрузить с диска и установить из образа CD, без использования сети. </para>
 
 <para
->For <command
+>Для <command
 >LILO</command
->, you will need to configure two essential things in <filename
+> вам нужно настроить две важные вещи в файле <filename
 >/etc/lilo.conf</filename
 >: <itemizedlist
 > <listitem
 ><para
-> to load the <filename
+> загружать программу установки из <filename
 >initrd.gz</filename
-> installer at boot time; </para
+>; </para
 ></listitem
 > <listitem
 ><para
-> have the <filename
+> ядро <filename
 >vmlinuz</filename
-> kernel use a RAM disk as its root partition. </para
+> используетRAM диск в качестве корневого раздела. </para
 ></listitem
 > </itemizedlist
-> Here is a <filename
+> Вот пример<filename
 >/etc/lilo.conf</filename
-> example: </para
+>: </para
 ><para>
 
 <informalexample
@@ -895,33 +895,32 @@ END FIXME -->
 
 </screen
 ></informalexample
-> For more details, refer to the <citerefentry
+> Подробней смотрите на страницах руководства <citerefentry
 ><refentrytitle
 >initrd</refentrytitle
 > <manvolnum
 >4</manvolnum
 ></citerefentry
-> and <citerefentry
+> и <citerefentry
 ><refentrytitle
 >lilo.conf</refentrytitle
 > <manvolnum
 >5</manvolnum
 ></citerefentry
-> man pages. Now run <userinput
+>. Теперь запустите <userinput
 >lilo</userinput
-> and reboot. </para
+> и перезагрузите машину. </para
 ><para
->The procedure for <command
+>Процедура для <command
 >GRUB</command
-> is quite similar. Locate your <filename
+> очень похожа. Найдите файл<filename
 >menu.lst</filename
-> in the <filename
+>в каталоге <filename
 >/boot/grub/</filename
-> directory (sometimes in the <filename
+> (иногда в <filename
 >/boot/boot/grub/</filename
->), add the following lines: <informalexample
-><screen
->
+>), добавьте следующие строчки: <informalexample
+><screen>
 
 title  New Install
 kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram0 devfs=mount,dall ramdisk_size=17000
@@ -929,41 +928,41 @@ initrd (hd0,0)/boot/newinstall/initrd.gz
 
 </screen
 ></informalexample
-> and reboot. Note that the value of the <userinput
+> и перезагрузите машину. Заметим, что значение<userinput
 >ramdisksize</userinput
-> may need to be adjusted for the size of the initrd image. From now on, there should be no difference between <command
+> может потребоваться привести в соответствие с размером образа initrd. Далее, не должно быть разницы между <command
 >GRUB</command
-> or <command
+> и <command
 >LILO</command
 >. </para>
   </sect2>
 
   <sect2 arch="i386" id="usb-boot">
   <title
->Booting from USB memory stick</title>
+>Загрузка с карты памяти USB</title>
 <para
->Lets assume you have prepared everything from <xref linkend="boot-dev-select"/> and <xref linkend="boot-usb-files"/>. Now just plug your USB stick into some free USB connector and reboot the computer. The system should boot up, and you should be presented with the <prompt
+>Предположим, что вы уже приготовили всё как написано в <xref linkend="boot-dev-select"/> and <xref linkend="boot-usb-files"/>. Теперь вставьте карту памяти USB в свободное USB гнездо и перезагрзите компьютер. Система должна загрузиться и вы должны увидеть приглашение <prompt
 >boot:</prompt
-> prompt. Here you can enter optional boot arguments, or just hit &enterkey;. </para
+>. Сейчас вы можете ввести необязательные параметры загрузки, или просто нажать &enterkey;. </para
 ><para
->In case your computer doesn't support booting from USB memory devices, you can still use a single floppy to do the initial boot and then switch to USB. Boot your system as described in <xref linkend="floppy-boot"/>; the kernel on the boot floppy should detect your USB stick automatically. When it asks for the root floppy, simply press &enterkey;. You should see &d-i; starting. </para>
+>Если компьютер не поддерживает загрузку с устройств USB с памятью, вы можете воспользоваться одной дискетой для начальной загрузки, а затем перейти к использованию USB. Загрузитесь как описано в <xref linkend="floppy-boot"/>; ядро на загрузочной дискете должно обнаружить устройство USB автоматически. Когда вас попросят дискету с корневой файловой системой, просто нажмите &enterkey;. Вы должны увидеть запуск &d-i;. </para>
   </sect2>
 
   <sect2 arch="i386" id="floppy-boot">
   <title
 >Загрузка с дискет</title>
 <para
->You will have already downloaded the floppy images you needed and created floppies from the images in <xref linkend="create-floppy"/>. </para
+>Вы уже загрузили образы дискет и сделали из них загрузочные дискеты как описано в <xref linkend="create-floppy"/>. </para
 ><para
->To boot from the installer boot floppy, place it in the primary floppy drive, shut down the system as you normally would, then turn it back on. </para
+>Для загрузки программы установки с дискет, вставьте первую из них в дисковод, выключите систему как обычно и включите питание. </para
 ><para
->For installing from a LS-120 drive (ATAPI version) with a set of floppies, you need to specify the virtual location for the floppy device. This is done with the <emphasis
+>При установке с привода LS-120 (ATAPI версия) с набора дискет, вам нужно задать виртуальное положение устройства гибких дисков. Это указывается в параметре загрузки <emphasis
 >root=</emphasis
-> boot argument, giving the device that the ide-floppy driver maps the device to. For example, if your LS-120 drive is connected as the first IDE device (master) on the second cable, you enter <userinput
+>, определяющим устройство, на которое драйвер ide-floppy отобразил привод. Например, если привод LS-120 подключён как первое IDE устройство (мастер) на второй кабель, введите в загрузочном приглашении <userinput
 >linux root=/dev/hdc</userinput
-> at the boot prompt. Installation from LS-120 is only supported by 2.4 and later kernels. </para
+>. Установка с LS-120 поддерживается только для ядер верии 2.4 и выше. </para
 ><para
->Note that on some machines, <keycombo
+>Заметим, что на некоторых машинах, комбинация клавиш <keycombo
 ><keycap
 >Control</keycap
 > <keycap
@@ -971,21 +970,21 @@ initrd (hd0,0)/boot/newinstall/initrd.gz
 > <keycap
 >Delete</keycap
 ></keycombo
-> does not properly reset the machine, so a ``hard'' reboot is recommended. If you are installing from an existing operating system (e.g., from a DOS box) you don't have a choice. Otherwise, please do a hard reboot when booting. </para
+> не по-настоящему перезагружают машину, поэтому рекомендуется ``аппаратная'' перезагрузка. Если вы производите установку из существующей операционной системы (например, из DOS), то у вас нет выбора. Иначе, пользуйтесь аппаратной перезагрузкой перед загрузкой. </para
 ><para
->The floppy disk will be accessed, and you should then see a screen that introduces the boot floppy and ends with the <prompt
+>Будет произведён доступ к дискете, и далее вы должны увидеть экран, который показывает загрузку с дискеты и в конце появляется приглашение <prompt
 >boot:</prompt
-> prompt. </para
+>. </para
 ><para
->Once you press &enterkey;, you should see the message <computeroutput
+>После нажатия &enterkey;, вы должны увидеть сообщение<computeroutput
 >Loading...</computeroutput
->, followed by <computeroutput
+>, потом <computeroutput
 >Uncompressing Linux...</computeroutput
->, and then a screenfull or so of information about the hardware in your system. More information on this phase of the boot process can be found below in <xref linkend="kernel-msgs"/>. </para
+>, и затем несколько экранов с информацией о найденом оборудовании. Подробную информацию об этом этапе процесса загрузки можно найти в <xref linkend="kernel-msgs"/>. </para
 ><para
->After booting from the boot floppy, the root floppy is requested. Insert the root floppy and press &enterkey;, and the contents are loaded into memory. The installer program <command
+>После загрузки с загрузочной дискеты, вас попросят дискету с корневой файловой системой. Вставьте нужную дискету, нажмите &enterkey;, и её содержимое загрузится в память. Автоматически запустится программа установки <command
 >debian-installer</command
-> is automatically launched. </para>
+>. </para>
   </sect2>
   
   <sect2 arch="i386" id="boot-tftp"
@@ -997,125 +996,125 @@ initrd (hd0,0)/boot/newinstall/initrd.gz
 <!-- $Id: intro-net.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
 
 <para
->Загрузка по сети требует наличия сетевого подключения и сетевого сервера загрузки TFTP (DHCP, RARP, или BOOTP). </para
+>Загрузка по сети требует наличия сетевого подключения и сетевого загрузочного сервера TFTP (DHCP, RARP или BOOTP). </para
 ><para arch="hppa"
->Older systems such as the 715 might require the use of an RBOOT server instead of a BOOTP server. </para
+>Для старых систем, например 715-х, может потребоваться использование RBOOT сервера вместо сервера BOOTP. </para
 ><para
->The installation method to support network booting is described in <xref linkend="install-tftp"/>. </para>
+>Метод установки с загрузкой из сети описан в <xref linkend="install-tftp"/>. </para>
 <!--   End of file boot-installer/intro-net.xml -->
  
 <para
->There are various ways to do a TFTP boot on i386. </para>
+>Есть несколько возможностей выполнить загрузку по TFTP на i386. </para>
 
    <sect3
 ><title
->NIC or Motherboard that support PXE</title>
+>NIC или материская плата с поддержкой PXE</title>
 <para
->It could be that your Network Interface Card or Motherboard provides PXE boot functionality. This is a <trademark class="trade"
+>Возможно, ваша сетевая карта (NIC) или материнская плата предоставляют возможность загрузки через PXE. Так названа реализация TFTP загрузки от компании <trademark class="trade"
 >Intel</trademark
-> re-implemention of TFTP boot. If so you may be able to configure your BIOS to boot from the network. </para>
+>. Если это есть, то вы можете настроить BIOS на загрузку по сети. </para>
    </sect3>
    
    <sect3
 ><title
->NIC with network bootROM</title>
+>NIC с сетевым bootROM</title>
 <para
->It could be that your Network Interface Card provides TFTP boot functionality. </para
+>Возможно, что сетевая карта (NIC) предоставляет возможность загрузки по TFTP. </para
 ><para condition="FIXME"
->Let us (<email
+>Напишите нам (<email
 >&email-debian-boot-list;</email
->) know how did you manage it. Please refer to this document. </para>
+>) как вы делаете это. Укажите этот документ как источник. </para>
    </sect3>
 
    <sect3
 ><title
 >Etherboot</title>
 <para
->The <ulink url="http://www.etherboot.org"
->etherboot project</ulink
-> provides bootdiskettes and even bootroms that do a TFTPboot. </para>
+><ulink url="http://www.etherboot.org"
+>Проект etherboot</ulink
+> предоставляет загрузочные дискеты и даже прошивки (bootrom) для TFTPboot. </para>
    </sect3>
   </sect2>
 
   <sect2 arch="i386"
 ><title
->i386 Boot Parameters</title>
+>Параметры загрузки i386</title>
 <para
->When the installer boots, you will be presented with the boot prompt, <prompt
+>После загрузки программы установки, вы увидите загрузочное проглашение, <prompt
 >boot:</prompt
->. You can do two things at the <prompt
+>. Вы можете делать две вещи в приглашении <prompt
 >boot:</prompt
-> prompt. You can press the function keys <keycap
+>. Вы можете понажимать функциональные клавишы от <keycap
 >F1</keycap
-> through <keycap
+> по <keycap
 >F10</keycap
-> to view a few pages of helpful information, or you can press <keycap
+> чтобы увидеть несколько страниц полезной информации, или нажать <keycap
 >Enter</keycap
-> to boot the system. </para
+> для загрузки системы. </para
 ><para
->Information on boot parameters which might be useful can be found by pressing <keycap
+>Информация о полезных параметрах загрузки можно увидеть нажав клавиши с <keycap
 >F3</keycap
-> through <keycap
+> по <keycap
 >F7</keycap
->. If you add any parameters to the boot command line, be sure to type the boot method (the default is <userinput
+>. Если вы добавляете какие-то параметры загрузки в командную строку, убедитесь, что ввели метода загрузки (по умолчанию <userinput
 >linux</userinput
->) and a space before the first parameter (e.g., <userinput
+>) и пробел перед первым параметром (например, <userinput
 >linux floppy=thinkpad</userinput
->). If you simply press &enterkey;, that's the same as typing <userinput
+>). Если вы просто нажимаете&enterkey;, то это равносильно вводу <userinput
 >linux</userinput
-> without any special parameters. </para
+> без дополнительных параметров. </para
 ><para
->Some systems have floppies with ``inverted DCLs''. If you receive errors reading from the floppy, even when you know the floppy is good, try the parameter <userinput
+>Некоторые системы имеют дисковод гибких дисков с ``обратными DCL''. Если вы получаете ошибки чтения с дискеты, даже когда знаете, что она хорошая, попробуйте задать параметр <userinput
 >floppy=thinkpad</userinput
 >. </para
 ><para
->On some systems, such as the IBM PS/1 or ValuePoint (which have ST-506 disk drivers), the IDE drive may not be properly recognized. Again, try it first without the parameters and see if the IDE drive is recognized properly. If not, determine your drive geometry (cylinders, heads, and sectors), and use the parameter <userinput
+>На некоторых системах, таких как IBM PS/1 или ValuePoint (имеющих дисковый драйвер ST-506), привод IDE может быть распознан неправильно. Ещё раз, сначала попробуйте без параметров и посмотрите, правильно ли определяется привод IDE. Если нет, выясните геометрию диска (количество цилиндров, головок и секторов) и воспользуйтесь параметром<userinput
 >hd=<replaceable
->cylinders</replaceable
+>количество цилиндров</replaceable
 >,<replaceable
->heads</replaceable
+>количество головок</replaceable
 >,<replaceable
->sectors</replaceable
+>количество секторов</replaceable
 ></userinput
 >. </para
 ><para
->If you have a very old machine, and the kernel hangs after saying <computeroutput
+>Если у вас очень старая машина и ядро виснет после надписи <computeroutput
 >Checking 'hlt' instruction...</computeroutput
->, then you should try the <userinput
+>, то вы должны попробовать параметр загрузки <userinput
 >no-hlt</userinput
-> boot argument, which disables this test. </para
+>, который выключает этот тест. </para
 ><para
->If your screen begins to show a weird picture while the kernel boots, eg. pure white, pure black or colored pixel garbage, your system may contain a problematic video card which does not switch to the framebuffer mode properly. Then you can use the boot parameter <userinput
+>Если во время загрузки ядра на экране возникают странные картины, напримерэкран полностью белый, чёрный или замусорен разными цветами, то ваша система имеет проблемную видеокарту, которая неправильно переключается в режим фрейм-буфера. В этом случае, вы можете попробовать параметр загрузки <userinput
 >debian-installer/framebuffer=false</userinput
-> or <userinput
+> или <userinput
 >video=vga16:off</userinput
-> to disable the framebuffer console. Only the English language will be available during the installation due to limited console features. See <xref linkend="boot-parms"/> for details. </para>
+> чтобы выключить консоль фрейм-буфера. Из-за этого консольного ограничения установка будет доступна только на английском языке.Детали смотрите в <xref linkend="boot-parms"/>. </para>
   </sect2>
 
 
   <sect2 arch="i386">
   <title
->System freeze during the PCMCIA configuration phase</title>
+>Система подвисает во время настройки PCMCIA</title>
 
 <para
->Some laptop models produced by Dell are known to crash when PCMCIA device detection tries to access some hardware addresses. Other laptops may display similar problems. If you experience such a problem and you don't need PCMCIA support during the installation, you can disable PCMCIA using the <userinput
+>Про некоторые модели ноутбуков Dell известно, что они виснут когда при определении PCMCIA устройства производится попытка доступа по некоторым аппаратным адресам. Другие ноутбуки могут иметь похожие проблемы. Если у вас возникла такая проблема и вам ненужна поддержка PCMCIA на время установки, то вы можете выключить PCMCIA с помощью параметра загрузки <userinput
 >hw-detect/start_pcmcia=false</userinput
-> boot parameter. You can then configure PCMCIA after the installation is completed and exclude the resource range causing the problems. </para
+>. После установки вы сможете настроить PCMCIA, исключив ресурсный диапазон, с которым возникают проблемы. </para
 ><para
->Alternatively, you can boot the installer in expert mode. You will then be asked to enter the resource range options your hardware needs. For example, if you have one of the Dell laptops mentioned above, you should enter <userinput
+>Другой вариант: вы можете загрузить программу установки в экспертном режиме. Вас попросят указать параметр ресурсного диапазона, который использует аппаратное обеспечение.Например, если у вас один из ноутбуков Dell, упомянутых выше, то вы должны ввести<userinput
 >exclude port 0x800-0x8ff</userinput
-> here. There is also a list of some common resource range options in the <ulink url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-2.html#ss2.5"
+>. Также, есть список распространённых ресурсных диапазонов в <ulink url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-2.html#ss2.5"
 >System resource settings section of the PCMCIA HOWTO</ulink
->. Note that you have to omit the commas, if any, when you enter this value in the installer. </para>
+>. Заметим, что при вводе значений в программу установки вы не должны указывать запятых, если они есть. </para>
   </sect2>
 
   <sect2 arch="i386">
   <title
->System freeze while loading the USB modules</title>
+>Система подвисает во время загрузки USB модулей</title>
 <para
->The kernel normally tries to install USB modules and the USB keyboard driver in order to support some non-standard USB keyboards. However, there are some broken USB systems where the driver hangs on loading. A possible workaround may be disabling the USB controller in your mainboard BIOS setup. Another option is passing the <userinput
+>Обычно, ядро пытается установить модули USB и драйвер USB клавиатуры, чтобы обеспечить поддержку некоторых нестандартных клавиатур USB. Однако, есть несколько сломанныз USB систем, где драйвер подвисает при загрузке. Возможно, обходным решением может быть выключение контроллера USB в настройке BIOS материнской платы. Другим решением может служитьпередача параметра <userinput
 >debian-installer/probe/usb=false</userinput
-> parameter at the boot prompt, which will prevent the modules from being loaded. </para>
+> в приглашении загрузки, который запрещает загрузку модулей. </para>
   </sect2>
 <!--   End of file boot-installer/i386.xml -->
 
@@ -1131,15 +1130,15 @@ initrd (hd0,0)/boot/newinstall/initrd.gz
 <!-- $Id: intro-cd.xml 22664 2004-10-06 15:49:49Z fjpop-guest $ -->
 
 <para
->Для большинства пользователей проще всего будет использовать набор компакт-дисков Debian. Если у вас есть набор компакт-дисков и ваш компьютер поддерживает загрузку с компакт-диска, прекрасно!. Просто <phrase arch="i386"
+>Для большинства пользователей проще всего будет использовать набор компакт-дисков Debian. Если у вас есть набор компакт-дисков и ваш компьютер поддерживает загрузку с компакт-диска, прекрасно! Просто <phrase arch="i386"
 > настройте ваш компьютер для загрузки с компакт-диска как описано в <xref linkend="boot-dev-select"/>, </phrase
-> вставьте компакт-диск, перезагрузите компьютер и смотрите далее следующую главу. </para
+> вставьте компакт-диск, перезагрузите компьютер и переходите к следующей главе. </para
 ><para
->Заметим, что некоторым CD приводам нужны специальные драйверы, и поэтому они недоступны на ранних стадиях установки. Если производимая стандартная последовательнось загрузки с CD не работает на вашем аппаратном обеспечении, обратитесь к этой главе снова и прочитайте об альтернативный ядрах и методах установки, которые могут вам подойти. </para
+>Заметим, что некоторым приводам компакт-дисков нужны специальные драйверы и поэтому, они недоступны на ранних стадиях установки. Если производимая стандартная последовательнось загрузки с CD не работает, обратитесь к этой главе снова и прочитайте об альтернативных ядрах и методах установки, которые доступны для вашей машины. </para
 ><para
->Даже если вы не смогли загрузиться с CD-ROM, вероятно вы сможете установить компоненты системы Debian и пакеты с CD-ROM. Просто загрузитесь с другого носителя, например с дискет. Когда прийдёт время установки операционной системы, базовой системы или дополнительных пакетов, укажите программе установки на привод CD-ROM. </para
+>Даже если не удалось загрузиться с CD-ROM, вероятно, вы ещё сможете установить с CD-ROM компоненты системы Debian и пакеты. Просто загрузитесь с другого носителя, например с дискет. Когда придёт время установки операционной системы, базовой системы или дополнительных пакетов, укажите программе установки на привод CD-ROM. </para
 ><para
->Если у вас возникли проблемы с загрузкой, смотрите <xref linkend="boot-troubleshooting"/>. </para>
+>При возникновении проблем с загрузкой смотрите <xref linkend="boot-troubleshooting"/>. </para>
 <!--   End of file boot-installer/intro-cd.xml -->
 
   <note>
@@ -1404,32 +1403,31 @@ initrd (hd0,0)/boot/newinstall/initrd.gz
 >Загрузка по TFTP</title>
 
 <para
->Booting an IA64 system from the network is similar to a CD boot. The only difference is how the installation kernel is loaded. The EFI Boot Manager can load and start programs from a server on the network. Once the installation kernel is loaded and starts, the system install will proceed thru the same steps as the CD install with the exception that the packages of the base install will be loaded from the network rather than the CD drive. </para>
+>Загрузка системы IA64 по сети похожа на загрузку с CD. Единственное отличие &mdash; это способ загрузки ядра. Менеджер загрузки EFI может загружать и запускать программы с сервера из сети. Как только ядро установки загружено и запустилось, установка системы происходит также как и с CD за исключением, того что пакеты базовой установки будут получены по сети, а не с привода CD. </para>
 
 
 <!-- Start of file boot-installer/intro-net.xml -->
 <!-- $Id: intro-net.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
 
 <para
->Загрузка по сети требует наличия сетевого подключения и сетевого сервера загрузки TFTP (DHCP, RARP, или BOOTP). </para
+>Загрузка по сети требует наличия сетевого подключения и сетевого загрузочного сервера TFTP (DHCP, RARP или BOOTP). </para
 ><para arch="hppa"
->Older systems such as the 715 might require the use of an RBOOT server instead of a BOOTP server. </para
+>Для старых систем, например 715-х, может потребоваться использование RBOOT сервера вместо сервера BOOTP. </para
 ><para
->The installation method to support network booting is described in <xref linkend="install-tftp"/>. </para>
+>Метод установки с загрузкой из сети описан в <xref linkend="install-tftp"/>. </para>
 <!--   End of file boot-installer/intro-net.xml -->
 
 <para
->Network booting an ia64 system requires two architecture-specific actions. On the boot server, DHCP and TFTP must be configured to deliver <command
+>Сетевая загрузка системы ia64 требует два специальных действия. Она загрузочном сервере, DHCP и TFTP должны быть настроены на доставку <command
 >elilo</command
->. On the client a new boot option must be defined in the EFI boot manager to enable loading over a network. </para>
+>. На клиенте должен быть задан дополнительный параметр загрузки в менеджере загрузки EFI, чтобы включить загрузку по сети. </para>
 
   <sect3 arch="ia64" id="boot-tftp-server">
   <title
 >Настройка сервера</title>
 <para
->A suitable TFTP entry for network booting an ia64 system looks something like this: <informalexample
-><screen
->
+>Соответствующая пункт TFTP для загрузки по сети системы ia64 выглядит так: <informalexample
+><screen>
 
 host mcmuffin {
         hardware ethernet 00:30:6e:1e:0e:83;
@@ -1439,19 +1437,19 @@ host mcmuffin {
 
 </screen
 ></informalexample
-> Note that the goal is to get <command
+> Заметим, что цель &mdash; получить запущенный <command
 >elilo.efi</command
-> running on the client. </para
+> на клиенте. </para
 ><para
->Extract the <filename
+>Распакуйте файл <filename
 >netboot.tar.gz</filename
-> file into the directory used as the root for your tftp server. Typical tftp root directories include <filename
+> в каталог, используемый как корневой на tftp сервере. Обычно корень tftp содержится в <filename
 >/var/lib/tftp</filename
-> and <filename
+> или <filename
 >/tftpboot</filename
->. This will create a <filename
+>. Создастся дерево каталога <filename
 >debian-installer</filename
-> directory tree containing the boot files for an IA-64 system. </para
+>, содержащего загрузочные файлы для системы IA-64. </para
 ><para>
 
 <informalexample
@@ -1464,26 +1462,24 @@ host mcmuffin {
 [...]
 </screen
 ></informalexample
-> The <filename
+> Файл <filename
 >netboot.tar.gz</filename
-> contains an <filename
+> содержит файл <filename
 >elilo.conf</filename
-> file that should work for most configurations. However, should you need to make changes to this file, you can find it in the <filename
+>, который должен работать на большинстве машин. Однако, если вам нужно изменить этот файл, то он находится в каталоге <filename
 >debian-installer/ia64/</filename
-> directory. It is possible to have different config files for different clients by naming them using the client's IP address in hex with the suffix <filename
+>. Возможно иметь различные конфигурационные файлы для различных клиентов, назвав их по IP адресу клиента, записанном в шестнадцатеричной системе и с суффиксом <filename
 >.conf</filename
-> instead of <filename
->elilo.conf</filename
->. See documentation provided in the <classname
+>. Подробней смотрите документацию в пакете <classname
 >elilo</classname
-> package for details. </para>
+>. </para>
   </sect3>
 
   <sect3 arch="ia64" id="boot-tftp-client">
   <title
 >Настройка клиента</title>
 <para
->To configure the client to support TFTP booting, start by booting to EFI and entering the <guimenu
+>Для настройки клиента на загрузку по TFTP, загрузитесь в EFI ивойдите в <guimenu
 >Boot Option Maintenance Menu</guimenu
 >. <itemizedlist
 > <listitem
@@ -1492,24 +1488,24 @@ host mcmuffin {
 ></listitem
 > <listitem
 ><para
-> You should see one or more lines with the text <guimenuitem
+> Там вы должны увидеть одну или более строк с текстом <guimenuitem
 >Load File [Acpi()/.../Mac()]</guimenuitem
->. If more than one of these entries exist, choose the one containing the MAC address of the interface from which you'll be booting. Use the arrow keys to highlight your choice, then press enter. </para
+>. Если есть более одной строки, выбериту ту, которая содержит MAC адрес интерфейса с которого вы будете загружаться. Используйте клавиши стрелок, затем нажмите enter. </para
 ></listitem
 > <listitem
 ><para
-> Name the entry <userinput
+> Введите имя записи <userinput
 >Netboot</userinput
-> or something similar, save, and exit back to the boot options menu. </para
+> и нечто подобное, сохраните, и выйдите обратно в загрузочное меню. </para
 ></listitem
 > </itemizedlist
-> You should see the new boot option you just created, and selecting it should initiate a DHCP query, leading to a TFTP load of <filename
+> Вы должны увидеть только что созданную запись, а её выбор должен инициировать DHCP запрос, после чего загрузку по TFTP файла <filename
 >elilo.efi</filename
-> from the server. </para
+> с сервера. </para
 ><para
->The boot loader will display its prompt after it has downloaded and processed its configuration file. At this point, the installation proceeds with the same steps as a CD install. Select a boot option as in above and when the kernel has completed installing itself from the network, it will start the Debian Installer. </para
+>Системный загрузчик покажет своё приглашие после получения и обработки свое файла настройки. С этого момента установка продолжится также как и установка с CD. Выберите пункт загрузки, который приведён выше и когда ядро полностью установится из сети, запустится программа установки Debian. </para
 ><para
->Proceed to the next chapter to continue the installation where you will set up the language locale, network, and the disk partitions. </para>
+>Переходите к следующей главе, чтобы продолжить процесс установки, где вы настроите язык, сеть и дисковые разделы. </para>
   </sect3>
   </sect2>
 <!--   End of file boot-installer/ia64.xml -->
@@ -1524,9 +1520,9 @@ host mcmuffin {
 <para
 >На некоторых суб-архитектурах &arch-title; есть вариант загрузки с использованием либо ядра linux 2.4.x, либо 2.2.x. Когда такой выбор существует, попробуйте ядро 2.4.x. Программа установки должна требовать меньше памяти, когда используется ядро 2.4.x, потому что поддержка 2.2.x требует ramdisk фиксированного размера, а 2.4.x использует tmpfs. </para
 ><para
->If you are using a 2.2.x linux kernel, then you must make sure you are using a ramdisk built to accommodate it, see the <ulink url="&disturl;/main/installer-&architecture;/current/images/MANIFEST"
+>Если вы используете ядро 2.2.x, то должны убедиться, что поддержка ramdisk в нём включена, смотрите <ulink url="&disturl;/main/installer-&architecture;/current/images/MANIFEST"
 >MANIFEST</ulink
->. You will also need to use the &ramdisksize; kernel parameter. In general, this means you need to use the initrd22.gz ramdisk from the respective directory. </para
+>. Вам также надо использовать параметр ядра &ramdisksize;.В общем, это означает, что вам нужно использоватьinitrd22.gz ramdisk из соответствующего каталога. </para
 ><para
 >Убедитесь, что одним из параметров вашего ядра является <userinput
 >root=/dev/ram</userinput
@@ -1593,11 +1589,11 @@ host mcmuffin {
 >Другими словами, компакт-диск не загрузочный.</emphasis
 > Для mac нет работоспособного ядра 2.4.x. </para
 ><para
->If your hardware uses a 53c9x-based scsi bus, then you may need to include the kernel parameter <userinput
+>Если в вашем аппаратном обеспечениии используется scsi шина, основанная на 53c9x, то вам может понадобиться добавить параметр ядра <userinput
 >mac53c9x=1</userinput
->. Hardware with two such scsi buses, such as the Quadra 950, will need <userinput
+>. Для аппаратуры с двумя подобными scsi шинами, например Quadra 950, нужно указать <userinput
 >mac53c9x=2</userinput
-> instead. </para>
+>. </para>
     </sect3>
 
     <sect3 arch="m68k" id="m68k-boot-mvme"
@@ -1635,23 +1631,23 @@ host mcmuffin {
 <!--   End of file boot-installer/intro-hd.xml -->
 
 <para
->At least six different ramdisks may be used to boot from the hard drive, three different types each with and without support for a 2.2.x linux kernel (see <ulink url="&disturl;/main/installer-&architecture;/current/images/MANIFEST"
+>Как минимум шесть различных ramdisk могут быть использованы для загрузки с жёсткого диска, каждый из них имеет три разичных типа с поддержкой и без ядра версии 2.2.x (смотрите <ulink url="&disturl;/main/installer-&architecture;/current/images/MANIFEST"
 >MANIFEST</ulink
-> for details). </para
+>). </para
 ><para
->The three different types of ramdisks are <filename
+>Есть три различных типа ramdisk: <filename
 >cdrom</filename
 >, <filename
 >hd-media</filename
->, and <filename
+> и <filename
 >nativehd</filename
->. These ramdisks differ only in their source for installation packages. The <filename
+>. Они отличаются только источниками установки пакетов. <filename
 >cdrom</filename
-> ramdisk uses a cdrom to get debian-installer packages. The <filename
+> ramdisk использует cdrom для получения пакетов debian-installer .<filename
 >hd-media</filename
-> ramdisk uses an iso image file of a cdrom currently residing on a hard disk. Finally, the <filename
+> ramdisk использует файл iso образаcdrom, расположённого на жёстком диске. И наконец, <filename
 >nativehd</filename
-> ramdisk uses the net to install packages. </para>
+> ramdisk использует сеть для получения пакетов. </para>
 
 <itemizedlist>
 	<listitem
@@ -1669,106 +1665,106 @@ host mcmuffin {
 ><title
 >Загрузка из AmigaOS</title>
 <para
->In the <command
+>В <command
 >Workbench</command
->, start the Linux installation process by double-clicking on the <guiicon
+>, запустите процесс установки Linux двойным нажатием на иконку <guiicon
 >StartInstall</guiicon
-> icon in the <filename
+> в каталоге <filename
 >debian</filename
-> directory. </para
+>. </para
 ><para
->You may have to press the &enterkey; key twice after the Amiga installer program has output some debugging information into a window. After this, the screen will go grey, there will be a few seconds' delay. Next, a black screen with white text should come up, displaying all kinds of kernel debugging information. These messages may scroll by too fast for you to read, but that's OK. After a couple of seconds, the installation program should start automatically, so you can continue down at <xref linkend="d-i-intro"/>. </para>
+>Возможно, вам придётся дважды нажать клавишу &enterkey; после того как Amiga программа устатовки выведет некоторую отладочную информацию в окно. После этого, через несколько секунд, экран станет серым. Затем, должен появиться чёрный экран с белым текстом отладочной информации ядра. Эти экраны могут проскочить очень быстро и вы не сможете их прочесть, но это нормально. Пару секунд, и автоматически должна загрузиться программа установки, поэтому вы может продолжить чтение руководства отсюда <xref linkend="d-i-intro"/>. </para>
     </sect3>
 
 
     <sect3 arch="m68k" id="m68k-boothd-atari"
 ><title
->Booting from Atari TOS</title>
+>Загрузка из Atari TOS</title>
 <para
->At the GEM desktop, start the Linux installation process by double-clicking on the <guiicon
+>На рабочем столе GEM, процесс установки Linux запускается двойным нажатием на иконку <guiicon
 >bootstra.prg</guiicon
-> icon in the <filename
+> в каталоге <filename
 >debian</filename
-> directory and clicking <guibutton
+> и нажатием <guibutton
 >Ok</guibutton
-> at the program options dialog box. </para
+> в окне диалога выбора параметров. </para
 ><para
->You may have to press the &enterkey; key after the Atari bootstrap program has output some debugging information into a window. After this, the screen will go grey, there will be a few seconds' delay. Next, a black screen with white text should come up, displaying all kinds of kernel debugging information. These messages may scroll by too fast for you to read, but that's OK. After a couple of seconds, the installation program should start automatically, so you can continue below at <xref linkend="d-i-intro"/>. </para>
+>Возможно, вам придётся дважды нажать клавишу &enterkey; после того как Atari программа устатовки выведет некоторую отладочную информацию в окно. После этого, через несколько секунд, экран станет серым. Затем, должен появиться чёрный экран с белым текстом отладочной информации ядра. Эти экраны могут проскочить очень быстро и вы не сможете их прочесть, но это нормально. Пару секунд, и автоматически должна загрузиться программа установки, поэтому вы может продолжить чтение руководства отсюда <xref linkend="d-i-intro"/>. </para>
     </sect3>
 
 
     <sect3 arch="m68k" id="m68k-boothd-mac"
 ><title
->Booting from MacOS</title>
+>Загрузка из MacOS</title>
 <para
->You must retain the original Mac system and boot from it. It is <emphasis
->essential</emphasis
-> that, when booting MacOS in preparation for booting the Penguin linux loader, you hold the <keycap
+>Вы должны оставить изначальную Mac систему и загрузиться из неё. <emphasis
+>Существенная</emphasis
+> деталь: когда MacOS приготовится загрузить загрузчик Penguin linux, держите нажатой клавишу <keycap
 >shift</keycap
-> key down to prevent extensions from loading. If you don't use MacOS except for loading linux, you can accomplish the same thing by removing all extensions and control panels from the Mac's System Folder. Otherwise extensions may be left running and cause random problems with the running linux kernel. </para
+>, чтобы предотвратить загрузку расширений. Если вы не используете MacOS кроме как для загрузки linux, то можете добиться того же удалив все расширения изMac System Folder. Иначе, расширения могут оказаться загруженными, что вызовет проблемы запуска ядра linux. </para
 ><para
->Macs require the <command
+>Для Mac нужен системный загрузчик <command
 >Penguin</command
-> bootloader. If you do not have the tools to handle a <command
+>. Если у вас нет программ для работы с архивом <command
 >Stuffit</command
-> archive, &penguin19.hfs; is an hfs disk image with <command
+>, то есть &penguin19.hfs; &mdash;  образ диска hfs с распакованным <command
 >Penguin</command
-> unpacked. <xref linkend="create-floppy"/> describes how to copy this image to a floppy. </para
+>. В <xref linkend="create-floppy"/> описано, как скопировать этот образ на дискету. </para
 ><para
->At the MacOS desktop, start the Linux installation process by double-clicking on the <guiicon
+>Для запуска процесса установки Linux на рабочем столе MacOS , выполните двойной щелчок по иконке <guiicon
 >Penguin Prefs</guiicon
-> icon in the <filename
+> в каталоге <filename
 >Penguin</filename
-> directory. The <command
+>. Запустится загрузчик <command
 >Penguin</command
-> booter will start up. Go to the <guimenuitem
+>. Выберите <guimenuitem
 >Settings</guimenuitem
-> item in the <guimenu
+> из меню <guimenu
 >File</guimenu
-> menu, click the <guilabel
+>, щёклните по вкладке <guilabel
 >Kernel</guilabel
-> tab. Select the kernel (<filename
+>. Выберите образы ядра (<filename
 >vmlinuz</filename
->) and ramdisk (<filename
+>) и ramdisk (<filename
 >initrd.gz</filename
->) images in the <filename
+>) в каталоге <filename
 >install</filename
-> directory by clicking on the corresponding buttons in the upper right corner, and navigating the file select dialogs to locate the files. </para
+>, нажав соответствующие кнопки в верхнем правом углу, чтобы добраться до диалогового окна выбора файлов. </para
 ><para
->To set the boot parameters in Penguin, choose <guimenu
+>Для задания параметров в Penguin, выберите <guimenu
 >File</guimenu
 > -&gt; <guimenuitem
 >Settings...</guimenuitem
->, then switch to the <guilabel
+>, затем перейдите на вкладку <guilabel
 >Options</guilabel
-> tab. Boot parameters may be typed in to the text entry area. If you will always want to use these settings, select <guimenu
+>. Параметры загрузки можно ввести в текстовом поле. Если вы всегда хотите передавать эти параметры, то выберите <guimenu
 >File</guimenu
 > -&gt; <guimenuitem
 >Save Settings as Default</guimenuitem
 >. </para
 ><para
->Close the <guilabel
+>Закройте диалог <guilabel
 >Settings</guilabel
-> dialog, save the settings and start the bootstrap using the <guimenuitem
+>, сохраните настройки и запустите процедуру начала загрузки с помощью <guimenuitem
 >Boot Now</guimenuitem
-> item in the <guimenu
+>из меню <guimenu
 >File</guimenu
-> menu. </para
+>. </para
 ><para
->The <command
+>Загрузчик <command
 >Penguin</command
-> booter will output some debugging information into a window. After this, the screen will go grey, there will be a few seconds' delay. Next, a black screen with white text should come up, displaying all kinds of kernel debugging information. These messages may scroll by too fast for you to read, but that's OK. After a couple of seconds, the installation program should start automatically, so you can continue below at <xref linkend="d-i-intro"/>. </para>
+> выдаст некоторую отладочную информацию в окно. После этого через несколько секунд, экран станет серым. Затем, должен появиться чёрный экран с белым текстом отладочной информации ядра. Эти экраны могут проскочить очень быстро и вы не сможете их прочесть, но это нормально. Пару секунд, и автоматически должна загрузиться программа установки, поэтому вы может продолжить чтение руководства отсюда <xref linkend="d-i-intro"/>. </para>
 
     </sect3>
 
     <sect3 arch="m68k" id="m68k-boothd-q40"
 ><title
->Booting from Q40/Q60</title>
+>Загрузка из Q40/Q60</title>
 
 <para
 >FIXME </para
 ><para
->The installation program should start automatically, so you can continue below at <xref linkend="d-i-intro"/>. </para>
+>Программа должна запуститься автоматически, поэтому вы можете продолжить читать с <xref linkend="d-i-intro"/>. </para>
 
     </sect3>
   </sect2>
@@ -1778,22 +1774,22 @@ host mcmuffin {
 ><title
 >Загрузка с CD-ROM</title>
 <para
->Currently, the only &arch-title; subarchitecture that supports CD-ROM booting is the BVME6000. </para>
+>В настоящий момент, единственной субархитектурой &arch-title;, поддерживающей загрузку с CD-ROM является BVME6000. </para>
 
 
 <!-- Start of file boot-installer/intro-cd.xml -->
 <!-- $Id: intro-cd.xml 22664 2004-10-06 15:49:49Z fjpop-guest $ -->
 
 <para
->Для большинства пользователей проще всего будет использовать набор компакт-дисков Debian. Если у вас есть набор компакт-дисков и ваш компьютер поддерживает загрузку с компакт-диска, прекрасно!. Просто <phrase arch="i386"
+>Для большинства пользователей проще всего будет использовать набор компакт-дисков Debian. Если у вас есть набор компакт-дисков и ваш компьютер поддерживает загрузку с компакт-диска, прекрасно! Просто <phrase arch="i386"
 > настройте ваш компьютер для загрузки с компакт-диска как описано в <xref linkend="boot-dev-select"/>, </phrase
-> вставьте компакт-диск, перезагрузите компьютер и смотрите далее следующую главу. </para
+> вставьте компакт-диск, перезагрузите компьютер и переходите к следующей главе. </para
 ><para
->Заметим, что некоторым CD приводам нужны специальные драйверы, и поэтому они недоступны на ранних стадиях установки. Если производимая стандартная последовательнось загрузки с CD не работает на вашем аппаратном обеспечении, обратитесь к этой главе снова и прочитайте об альтернативный ядрах и методах установки, которые могут вам подойти. </para
+>Заметим, что некоторым приводам компакт-дисков нужны специальные драйверы и поэтому, они недоступны на ранних стадиях установки. Если производимая стандартная последовательнось загрузки с CD не работает, обратитесь к этой главе снова и прочитайте об альтернативных ядрах и методах установки, которые доступны для вашей машины. </para
 ><para
->Даже если вы не смогли загрузиться с CD-ROM, вероятно вы сможете установить компоненты системы Debian и пакеты с CD-ROM. Просто загрузитесь с другого носителя, например с дискет. Когда прийдёт время установки операционной системы, базовой системы или дополнительных пакетов, укажите программе установки на привод CD-ROM. </para
+>Даже если не удалось загрузиться с CD-ROM, вероятно, вы ещё сможете установить с CD-ROM компоненты системы Debian и пакеты. Просто загрузитесь с другого носителя, например с дискет. Когда придёт время установки операционной системы, базовой системы или дополнительных пакетов, укажите программе установки на привод CD-ROM. </para
 ><para
->Если у вас возникли проблемы с загрузкой, смотрите <xref linkend="boot-troubleshooting"/>. </para>
+>При возникновении проблем с загрузкой смотрите <xref linkend="boot-troubleshooting"/>. </para>
 <!--   End of file boot-installer/intro-cd.xml -->
 
   </sect2>
@@ -1808,42 +1804,42 @@ host mcmuffin {
 <!-- $Id: intro-net.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
 
 <para
->Загрузка по сети требует наличия сетевого подключения и сетевого сервера загрузки TFTP (DHCP, RARP, или BOOTP). </para
+>Загрузка по сети требует наличия сетевого подключения и сетевого загрузочного сервера TFTP (DHCP, RARP или BOOTP). </para
 ><para arch="hppa"
->Older systems such as the 715 might require the use of an RBOOT server instead of a BOOTP server. </para
+>Для старых систем, например 715-х, может потребоваться использование RBOOT сервера вместо сервера BOOTP. </para
 ><para
->The installation method to support network booting is described in <xref linkend="install-tftp"/>. </para>
+>Метод установки с загрузкой из сети описан в <xref linkend="install-tftp"/>. </para>
 <!--   End of file boot-installer/intro-net.xml -->
 
 <para
->After booting the VMEbus systems you will be presented with the LILO <prompt
+>После загрузки системы VMEbus появляется приглашение LILO <prompt
 >Boot:</prompt
-> prompt. At that prompt enter one of the following to boot Linux and begin installation proper of the Debian software using vt102 terminal emulation: <itemizedlist>
+>. Для загрузки Linux и начала установки соответствующего программного обеспечения Debian с помощью эмулирующего vt102 терминала, в приглашении введите одно из: <itemizedlist>
 <listitem
 ><para
->type <screen
+><screen
 >i6000 &enterkey;</screen
-> to install a BVME4000/6000 </para
+> для установки на BVME4000/6000 </para
 ></listitem>
 <listitem
 ><para
->type <screen
+><screen
 >i162 &enterkey;</screen
-> to install an MVME162 </para
+> для установки на MVME162 </para
 ></listitem>
 <listitem
 ><para
->type <screen
+><screen
 >i167 &enterkey;</screen
-> to install an MVME166/167 </para
+> для установки на MVME166/167 </para
 ></listitem>
     </itemizedlist>
 
 </para
 ><para
->You may additionally append the string <screen
+>Вы можете дополнительно добавить строку <screen
 >TERM=vt100</screen
-> to use vt100 terminal emulation, e.g., <screen
+> , чтобы использовать эмуляцию терминала vt100, например, <screen
 >i6000 TERM=vt100 &enterkey;</screen
 >. </para>
   </sect2>
@@ -1853,9 +1849,9 @@ host mcmuffin {
   <title
 >Загрузка с дискет</title>
 <para
->For most &arch-title; architectures, booting from a local filesystem is the recommended method. </para
+>Для большинства архитектур &arch-title; рекомендуется загрузка с локальной файловой системы. </para
 ><para
->Booting from the boot floppy is supported only for Atari and VME (with a SCSI floppy drive on VME) at this time. </para>
+>На данный момент, загрузка с загрузочной дискеты поддерживается только для Atari и VME (с дисководом гибких дисков SCSI на VME). </para>
  </sect2>
 
 <!--   End of file boot-installer/m68k.xml -->
@@ -1915,19 +1911,19 @@ boot 192.168.1.1:/boot/sibyl
 
   <sect2 arch="mips"
 ><title
->Boot Parameters</title>
+>Параметры загрузки</title>
 
    <sect3>
    <title
 >Загрузка по TFTP SGI Indys</title>
 <para
->On SGI Indys you can append boot parameters to the <command
+>На SGI Indys вы можете добавить параметры в команду <command
 >bootp():</command
-> command in the command monitor. </para
+> в мониторе команд. </para
 ><para
->Following the <command
+>После команды <command
 >bootp():</command
-> command you can give the path and name of the file to boot if you did not give an explicit name via your bootp/dhcp server - Example: <informalexample
+> вы можете задать путь и имя загружаемого файла, если вы не получаете это имя явно с bootp/dhcp сервера. Пример: <informalexample
 ><screen
 >bootp():/boot/tftpboot.img
 
@@ -1935,7 +1931,7 @@ boot 192.168.1.1:/boot/sibyl
 ></informalexample>
 </para
 ><para
->Further kernel parameters can be passed via <command
+>Остальные параметры ядра можно передать через <command
 >append</command
 >: <informalexample
 ><screen
@@ -1950,11 +1946,11 @@ boot 192.168.1.1:/boot/sibyl
    <title
 >Загрузка по TFTP Broadcom BCM91250A</title>
 <para
->You cannot pass any boot parameters directly from the CFE prompt. Instead, you have to edit the <filename
+>Вы не можете передавать параметры прямо из приглашения CFE. Вместо этого, вы должны отредактировать файл <filename
 >/boot/sibyl.conf</filename
-> file on the TFTP server and add your parameters to the <replaceable
+> на TFTP сервере и добавить ваши параметры в переменную <replaceable
 >extra_args</replaceable
-> variable. </para>
+>. </para>
   </sect3>
 
   </sect2>
@@ -1975,11 +1971,11 @@ boot 192.168.1.1:/boot/sibyl
 
   <sect2 arch="s390"
 ><title
->s390 Boot Parameters</title>
+>Параметры загрузки s390</title>
 <para
->On S/390 you can append boot parameters in the parm file. This file can either be in ASCII or EBCDIC format. Please read <ulink url="&url-s390-devices;"
+>На S/390 вы можете добавить параметры загрузки в файле parm. Этот файл может быть какв ASCII так и в EBCDIC формате. Подробную информацию о параметрах загрузки для S/390 читайте в <ulink url="&url-s390-devices;"
 >Device Drivers and Installation Commands</ulink
-> for more information about S/390-specific boot parameters. </para>
+>. </para>
   </sect2>
 <!--   End of file boot-installer/s390.xml -->
 
@@ -1995,15 +1991,15 @@ boot 192.168.1.1:/boot/sibyl
 <!-- $Id: intro-cd.xml 22664 2004-10-06 15:49:49Z fjpop-guest $ -->
 
 <para
->Для большинства пользователей проще всего будет использовать набор компакт-дисков Debian. Если у вас есть набор компакт-дисков и ваш компьютер поддерживает загрузку с компакт-диска, прекрасно!. Просто <phrase arch="i386"
+>Для большинства пользователей проще всего будет использовать набор компакт-дисков Debian. Если у вас есть набор компакт-дисков и ваш компьютер поддерживает загрузку с компакт-диска, прекрасно! Просто <phrase arch="i386"
 > настройте ваш компьютер для загрузки с компакт-диска как описано в <xref linkend="boot-dev-select"/>, </phrase
-> вставьте компакт-диск, перезагрузите компьютер и смотрите далее следующую главу. </para
+> вставьте компакт-диск, перезагрузите компьютер и переходите к следующей главе. </para
 ><para
->Заметим, что некоторым CD приводам нужны специальные драйверы, и поэтому они недоступны на ранних стадиях установки. Если производимая стандартная последовательнось загрузки с CD не работает на вашем аппаратном обеспечении, обратитесь к этой главе снова и прочитайте об альтернативный ядрах и методах установки, которые могут вам подойти. </para
+>Заметим, что некоторым приводам компакт-дисков нужны специальные драйверы и поэтому, они недоступны на ранних стадиях установки. Если производимая стандартная последовательнось загрузки с CD не работает, обратитесь к этой главе снова и прочитайте об альтернативных ядрах и методах установки, которые доступны для вашей машины. </para
 ><para
->Даже если вы не смогли загрузиться с CD-ROM, вероятно вы сможете установить компоненты системы Debian и пакеты с CD-ROM. Просто загрузитесь с другого носителя, например с дискет. Когда прийдёт время установки операционной системы, базовой системы или дополнительных пакетов, укажите программе установки на привод CD-ROM. </para
+>Даже если не удалось загрузиться с CD-ROM, вероятно, вы ещё сможете установить с CD-ROM компоненты системы Debian и пакеты. Просто загрузитесь с другого носителя, например с дискет. Когда придёт время установки операционной системы, базовой системы или дополнительных пакетов, укажите программе установки на привод CD-ROM. </para
 ><para
->Если у вас возникли проблемы с загрузкой, смотрите <xref linkend="boot-troubleshooting"/>. </para>
+>При возникновении проблем с загрузкой смотрите <xref linkend="boot-troubleshooting"/>. </para>
 <!--   End of file boot-installer/intro-cd.xml -->
 
 <para
@@ -2025,7 +2021,8 @@ boot 192.168.1.1:/boot/sibyl
 >yaboot</command
 > на компакт-диске в подсказке OF, такой как <informalexample
 ><screen
->0 > boot cd:,\install\yaboot
+>0 
+> boot cd:,\install\yaboot
 
 </screen
 ></informalexample>
@@ -2034,7 +2031,7 @@ boot 192.168.1.1:/boot/sibyl
 
   <sect2 arch="powerpc" id="install-drive">
   <title
->Booting from Hard Disk</title>
+>Загрузка с жёсткого диска</title>
 
 
 <!-- Start of file boot-installer/intro-hd.xml -->
@@ -2048,89 +2045,90 @@ boot 192.168.1.1:/boot/sibyl
 
   <sect3
 ><title
->Booting CHRP from OpenFirmware</title>
+>Загрузка CHRP из OpenFirmware</title>
 
 <para>
 
   <emphasis
->Not yet written.</emphasis>
+>Ещё не написано.</emphasis>
 
 </para>
    </sect3>
 
    <sect3
 ><title
->Booting OldWorld PowerMacs from MacOS</title>
+>Загрузка OldWorld PowerMac из MacOS</title>
 <para
->If you set up BootX in <xref linkend="files-oldworld"/>, you can use it to boot into the installation system. Double click the <guiicon
+>Если вы настроите BootX в <xref linkend="files-oldworld"/>, то можете использовать его для загрузки системы установки. Выполните двойной щелчок на иконке приложения <guiicon
 >BootX</guiicon
-> application icon. Click on the <guibutton
+>. Нажмите кнопку <guibutton
 >Options</guibutton
-> button and select <guilabel
+> и выберите <guilabel
 >Use Specified RAM Disk</guilabel
->. This will give you the chance to select the <filename
+>. Это позволит выбратьфайл <filename
 >ramdisk.image.gz</filename
-> file. You may need to select the <guilabel
+>. Вам может понадобиться установить галку в <guilabel
 >No Video Driver</guilabel
-> checkbox, depending on your hardware. Then click the <guibutton
+>, в зависимости от аппаратного обеспечения. Затем нажмите кнопку <guibutton
 >Linux</guibutton
-> button to shut down MacOS and launch the installer. </para>
+> для выключения MacOS и запуска программы установки. </para>
    </sect3>
 
 
   <sect3 id="boot-newworld">
   <title
->Booting NewWorld Macs from OpenFirmware</title>
+>Загрузка NewWorld Mac из OpenFirmware</title>
 <para
->You will have already placed the <filename
+>Вы уже скопировали файлы <filename
 >vmlinux</filename
 >, <filename
 >initrd.gz</filename
 >, <filename
 >yaboot</filename
->, and <filename
+> и <filename
 >yaboot.conf</filename
-> files at the root level of your HFS partition in <xref linkend="files-newworld"/>. Restart the computer, and immediately (during the chime) hold down the <keycap
+> в корень раздела HFS как описано в <xref linkend="files-newworld"/>. Перезагрузите компьютер, и быстро(во время звукового сигнала) одновременно зажмите клавиши <keycap
 >Option</keycap
 >, <keycap
 >Command (cloverleaf/Apple)</keycap
 >, <keycap
 >o</keycap
->, and <keycap
+> и <keycap
 >f</keycap
-> keys all together. After a few seconds you will be presented with the Open Firmware prompt. At the prompt, type <informalexample
-><screen
->
+>. Через несколько секунд вы увидите приглашение Open Firmware. Наберите<informalexample
+><screen>
 
-0 > boot hd:<replaceable>x</replaceable>,yaboot
+0 
+> boot hd:<replaceable
+>x</replaceable
+>,yaboot
 
 </screen
 ></informalexample
-> replacing <replaceable
+> заменив <replaceable
 >x</replaceable
-> with the partition number of the HFS partition where the kernel and yaboot files were placed, followed by a &enterkey;. On some machines, you may need to use <userinput
+> номером раздела HFS, на котором лежать файлы ядра и yaboot и нажмите &enterkey;. На некоторых машинах, вам нужно использовать <userinput
 >ide0:</userinput
-> instead of <userinput
+>, а не <userinput
 >hd:</userinput
->. In a few more seconds you will see a yaboot prompt <informalexample
-><screen
->
+>. Ещё через несколько секунд вы увидите приглашение yaboot <informalexample
+><screen>
 
 boot:
 
 </screen
 ></informalexample
-> At yaboot's <prompt
+> В приглашении yaboot <prompt
 >boot:</prompt
-> prompt, type either <userinput
+> введите или <userinput
 >install</userinput
-> or <userinput
+> или <userinput
 >install video=ofonly</userinput
-> followed by a &enterkey;. The <userinput
+> и нажмите &enterkey;. Параметр <userinput
 >video=ofonly</userinput
-> argument is for maximum compatibility; you can try it if <userinput
+> нужен для максимальной совместимости; вы можете попробовать указать его, если <userinput
 >install</userinput
-> doesn't work. The Debian installation program should start. </para>
+> не сработает. После должна запуститься программа установки Debian. </para>
    </sect3>
   </sect2>
 
@@ -2143,19 +2141,19 @@ boot:
 <!-- $Id: intro-net.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
 
 <para
->Загрузка по сети требует наличия сетевого подключения и сетевого сервера загрузки TFTP (DHCP, RARP, или BOOTP). </para
+>Загрузка по сети требует наличия сетевого подключения и сетевого загрузочного сервера TFTP (DHCP, RARP или BOOTP). </para
 ><para arch="hppa"
->Older systems such as the 715 might require the use of an RBOOT server instead of a BOOTP server. </para
+>Для старых систем, например 715-х, может потребоваться использование RBOOT сервера вместо сервера BOOTP. </para
 ><para
->The installation method to support network booting is described in <xref linkend="install-tftp"/>. </para>
+>Метод установки с загрузкой из сети описан в <xref linkend="install-tftp"/>. </para>
 <!--   End of file boot-installer/intro-net.xml -->
 
 <para
->Currently, PReP and New World PowerMac systems support netbooting. </para
+>В настоящий момент, для систем PReP и New World PowerMac поддерживается загрузка по сети. </para
 ><para
->On machines with Open Firmware, such as NewWorld Power Macs, enter the boot monitor (see <xref linkend="invoking-openfirmware"/>) and use the command <command
+>На машинах с Open Firmware, например NewWorld Power Mac, войдите в загрузочный монитор (смотрите <xref linkend="invoking-openfirmware"/>) и воспользуйтесь командой <command
 >boot enet:0</command
->. PReP and CHRP boxes may have different ways of addressing the network. On a PReP machine, you should try <userinput
+>. Машины PReP и CHRP могут загружаться по сети другим способом. На машине PReP, вы должны попробовать <userinput
 >boot <replaceable
 >server_ipaddr</replaceable
 >,<replaceable
@@ -2171,50 +2169,38 @@ boot:
   <title
 >Загрузка с дискет</title>
 <para
->Booting from floppies is supported for &arch-title;, although it is generally only applicable for OldWorld systems. NewWorld systems are not equipped with floppy drives, and attached USB floppy drives are not supported for booting. </para
+>Для &arch-title; поддерживается загрузка с дискет, хотя она применяется только для систем OldWorld. Системы NewWorld не имеют приводы гибких дисков, а с подключённых по USB приводов гибких дисков загрузка не поддерживается. </para
 ><para
->You will have already downloaded the floppy images you needed and created floppies from the images in <xref linkend="create-floppy"/>. </para
+>Вы уже загрузили образы дискет и сделали из них загрузочные дискеты как описано в <xref linkend="create-floppy"/>. </para
 ><para
->To boot from the <filename
+>Для загрузки с помощью дискеты <filename
 >boot-floppy-hfs.img</filename
-> floppy, place it in floppy drive after shutting the system down, and before pressing the power-on button. </para
+>, вставьте её в дисковод после выключения системы и перед нажатием питания. </para
 ><note
 ><para
->For those not familiar with Macintosh floppy operations: a floppy placed in the machine prior to boot will be the first priority for the system to boot from. A floppy without a valid boot system will be ejected, and the machine will then check for bootable hard disk partitions. </para
+>Для тех, кто не знает как работать с дискетами на Macintosh: дискета вставленая в машину перед загрузкой, будет иметь приоритет при загрузке системы. Незагрузочная дискета будет извлечена из дисковода, а затем машина проверит на заружаемость разделы жёсткого диска. </para
 ></note
 ><para
->After booting, the <filename
+>После загрузки дискеты <filename
 >root.bin</filename
-> floppy is requested. Insert the root floppy and press &enterkey;. The installer program is automatically launched after the root system has been loaded into memory. </para>
+> появится запрос дискеты с корневой файловой системой. Вставьте соответствующую дискету и нажмите &enterkey;. Программа установки запустится автоматически после загрузки корневой файловой системы в память. </para>
   </sect2>
 
 
   <sect2 arch="powerpc"
 ><title
->PowerPC Boot Parameters</title>
+>Параметры загрузки PowerPC</title>
 <para
->Many older Apple monitors used a 640x480 67Hz mode. If your video appears skewed on an older Apple monitor, try appending the boot argument <userinput
+>Многие старые мониторы Apple работают в режиме 640x480 67Гц. Если на старом мониторе Apple изображение выводится перекошенным, попробуйте добавить параметр загрузки <userinput
 >video=atyfb:vmode:6</userinput
-> , which will select that mode for most Mach64 and Rage video hardware. For Rage 128 hardware, this changes to <userinput
+> , который включает этот режим на большинстве видеокарт Mach64 и Rage. Для Rage 128 нужно использовать параметр <userinput
 >video=aty128fb:vmode:6</userinput
-> . </para>
+>. </para>
   </sect2>
 <!--   End of file boot-installer/powerpc.xml -->
 
 <!-- Start of file boot-installer/sparc.xml -->
-<!-- $Id: sparc.xml 21994 2004-09-24 08:40:10Z fjpop-guest $ -->
-
-  <sect2 arch="sparc"
-><title
->Загрузка по NFS</title>
-<para
->Для установки системы через NFS, просто выберите <userinput
->NFS</userinput
-> в качестве места расположения образов и файлов и следуйте инструкциям. Когда вас спросят, где расположены образы, укажите правильный <filename
->сервер:/директорию</filename
->. </para>
-  </sect2>
-
+<!-- $Id: sparc.xml 23797 2004-11-11 04:46:04Z joshk $ -->
 
   <sect2 arch="sparc" id="boot-tftp"
 ><title
@@ -2225,23 +2211,23 @@ boot:
 <!-- $Id: intro-net.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
 
 <para
->Загрузка по сети требует наличия сетевого подключения и сетевого сервера загрузки TFTP (DHCP, RARP, или BOOTP). </para
+>Загрузка по сети требует наличия сетевого подключения и сетевого загрузочного сервера TFTP (DHCP, RARP или BOOTP). </para
 ><para arch="hppa"
->Older systems such as the 715 might require the use of an RBOOT server instead of a BOOTP server. </para
+>Для старых систем, например 715-х, может потребоваться использование RBOOT сервера вместо сервера BOOTP. </para
 ><para
->The installation method to support network booting is described in <xref linkend="install-tftp"/>. </para>
+>Метод установки с загрузкой из сети описан в <xref linkend="install-tftp"/>. </para>
 <!--   End of file boot-installer/intro-net.xml -->
 
 <para
->On machines with OpenBoot, simply enter the boot monitor on the machine which is being installed (see <xref linkend="invoking-openboot"/>). Use the command <userinput
+>На машинах с OpenBoot, просто войдите в загрузочный монитор машины, на которую производится установка (смотрите <xref linkend="invoking-openboot"/>). Используйте команду <userinput
 >boot net</userinput
-> to boot from a TFTP and RARP server, or try <userinput
+> для загрузки с TFTP и RARP сервера, или попробуйте <userinput
 >boot net:bootp</userinput
-> or <userinput
+> или <userinput
 >boot net:dhcp</userinput
-> to boot from a TFTP and BOOTP or DHCP server. Some older OpenBoot revisions require using the device name, such as <userinput
+> для загрузки с TFTP и BOOTP или DHCP сервера. Некоторые старые версии OpenBoot требуют указывать имя устройства, например <userinput
 >boot le()</userinput
->; these probably don't support BOOTP nor DHCP. </para>
+>; вероятно, на них не работает поддержка BOOTP и DHCP. </para>
   </sect2>
 
 
@@ -2254,21 +2240,21 @@ boot:
 <!-- $Id: intro-cd.xml 22664 2004-10-06 15:49:49Z fjpop-guest $ -->
 
 <para
->Для большинства пользователей проще всего будет использовать набор компакт-дисков Debian. Если у вас есть набор компакт-дисков и ваш компьютер поддерживает загрузку с компакт-диска, прекрасно!. Просто <phrase arch="i386"
+>Для большинства пользователей проще всего будет использовать набор компакт-дисков Debian. Если у вас есть набор компакт-дисков и ваш компьютер поддерживает загрузку с компакт-диска, прекрасно! Просто <phrase arch="i386"
 > настройте ваш компьютер для загрузки с компакт-диска как описано в <xref linkend="boot-dev-select"/>, </phrase
-> вставьте компакт-диск, перезагрузите компьютер и смотрите далее следующую главу. </para
+> вставьте компакт-диск, перезагрузите компьютер и переходите к следующей главе. </para
 ><para
->Заметим, что некоторым CD приводам нужны специальные драйверы, и поэтому они недоступны на ранних стадиях установки. Если производимая стандартная последовательнось загрузки с CD не работает на вашем аппаратном обеспечении, обратитесь к этой главе снова и прочитайте об альтернативный ядрах и методах установки, которые могут вам подойти. </para
+>Заметим, что некоторым приводам компакт-дисков нужны специальные драйверы и поэтому, они недоступны на ранних стадиях установки. Если производимая стандартная последовательнось загрузки с CD не работает, обратитесь к этой главе снова и прочитайте об альтернативных ядрах и методах установки, которые доступны для вашей машины. </para
 ><para
->Даже если вы не смогли загрузиться с CD-ROM, вероятно вы сможете установить компоненты системы Debian и пакеты с CD-ROM. Просто загрузитесь с другого носителя, например с дискет. Когда прийдёт время установки операционной системы, базовой системы или дополнительных пакетов, укажите программе установки на привод CD-ROM. </para
+>Даже если не удалось загрузиться с CD-ROM, вероятно, вы ещё сможете установить с CD-ROM компоненты системы Debian и пакеты. Просто загрузитесь с другого носителя, например с дискет. Когда придёт время установки операционной системы, базовой системы или дополнительных пакетов, укажите программе установки на привод CD-ROM. </para
 ><para
->Если у вас возникли проблемы с загрузкой, смотрите <xref linkend="boot-troubleshooting"/>. </para>
+>При возникновении проблем с загрузкой смотрите <xref linkend="boot-troubleshooting"/>. </para>
 <!--   End of file boot-installer/intro-cd.xml -->
 
 <para
->Most OpenBoot versions support the <userinput
+>Большинство версий OpenBoot поддерживают команду <userinput
 >boot cdrom</userinput
-> command which is simply an alias to boot from the SCSI device on ID 6 (or the secondary master for IDE based systems). You may have to use the actual device name for older OpenBoot versions that don't support this special command. Note that some problems have been reported on Sun4m (e.g., Sparc 10s and Sparc 20s) systems booting from CD-ROM. </para>
+>, которая является простым псевдонимом загрузки с устройства SCSI с ID 6 (или вторичного мастера для систем с IDE). Возможно придётся использовать настоящее имя устройства в старых версиях OpenBoot, которые не поддерживают эту специальную команду. Заметим, что о некоторых проблемах было сообщено на системах Sun4m (например, Sparc 10s и Sparc 20s) при загрузке с CD-ROM. </para>
   </sect2>
 
 
@@ -2276,7 +2262,7 @@ boot:
   <title
 >Загрузка с дискет</title>
 <para
->To boot from floppy on a Sparc, use <informalexample
+>Для загрузки с дискеты на Sparc, используйте <informalexample
 ><screen
 >Stop-A -> OpenBoot: "boot floppy"
 
@@ -2284,33 +2270,32 @@ boot:
 ></informalexample>
 </para
 ><para
->Be warned that the newer Sun4u (ultra) architecture does not support floppy booting. A typical error message is <computeroutput
+>Не забудьте, что новая архитектура Sun4u (ultra) не поддерживает загрузку с дискет. Обычно, показывается сообщение об ошибке: <computeroutput
 >Bad magic number in disk label - Can't open disk label package</computeroutput
->. Furthermore, a number of Sun4c models (such as the IPX) do not support the compressed images found on the disks, so also are not supported. </para
+>. Кроме того, некоторые моделиSun4c (такие как IPX) не поддерживают сжатые образы дисков, поэтому они также не поддерживаются. </para
 ><para
->Several Sparcs (e.g. Ultra 10) have an OBP bug that prevents them from booting (instead of not supporting booting at all). The appropriate OBP update can be downloaded as product ID 106121 from <ulink url="http://sunsolve.sun.com"
+>Некоторые Sparc (например Ultra 10) имеют ошибку OBP, которая не даёт им загрузиться (они вообще отказываются загружаться). Соответствующее обновление OBP можно загрузить как продукт с ID 106121 с <ulink url="http://sunsolve.sun.com"
 ></ulink
 >. </para
 ><para
->If you are booting from the floppy, and you see messages such as <informalexample
-><screen
->
+>Если вы загружаетесь с дискеты и видите такое сообщение<informalexample
+><screen>
 
 Fatal error: Cannot read partition
 Illegal or malformed device name
 
 </screen
 ></informalexample
-> then it is possible that floppy booting is simply not supported on your machine. </para>
+>, то возможно, загрузка с дискет просто не поддерживается на этой машине. </para>
   </sect2>
 
   <sect2 arch="sparc"
 ><title
->IDPROM Messages</title>
+>Сообщения IDPROM</title>
 <para
->If you cannot boot because you get messages about a problem with ``IDPROM'', then it's possible that your NVRAM battery, which holds configuration information for you firmware, has run out. See the <ulink url="&url-sun-nvram-faq;"
+>Если вы не можете загрузиться и получаете сообщение о проблеме с ``IDPROM'', то возможно, это из-за севшей батарейки NVRAM, который содержит конфигурационную информацию микропрограммы. Подробней смотрите в <ulink url="&url-sun-nvram-faq;"
 >Sun NVRAM FAQ</ulink
-> for more information. </para>
+>. </para>
   </sect2>
 <!--   End of file boot-installer/sparc.xml -->
 
@@ -2322,50 +2307,50 @@ Illegal or malformed device name
 
  <sect1 id="boot-parms"
 ><title
->Boot Parameters</title>
+>Параметры загрузки</title>
 <para
->Параметры загрузки это параметры ядра Linux, которые обычно используются для того, чтобы быть уверенным, что периферийные устройства правильно работают. В большинстве случаев ядро может определить информацию о вашей периферии автоматически. Однако, иногда вы должны немножко помочь ядру. </para
+>Параметры загрузки &mdash; это параметры ядра Linux, которые обычно используются для того, чтобы быть уверенным, что периферийные устройства работают правильно. В большинстве случаев ядро может определить периферийные устройства автоматически. Однако, иногда вы должны немножко помочь ядру. </para
 ><para
->Если вы в первый раз загружаете систему, попробуйте параметры загрузки по умолчанию (т.е. не пытайтесь их установить) и посмотрите, корректно ли все работает. Возможно, все так и будет. Если нет, можете позже перезагрузиться и поискать специальные параметры, которые известят вашу систему о вашей аппаратуре. </para
+>Если вы в первый раз загружаете систему, попробуйте параметры загрузки по умолчанию (т.е. не пытайтесь их изменять) и посмотрите, корректно ли всё работает. Возможно, это так и будет. Если нет, вы сможете позже перезагрузиться и поискать специальные параметры, которые помогут системе определить аппаратуру вашего компьютера. </para
 ><para
->Информацию а многих параметрах загрузки можно найти в <ulink url="http://www.tldp.org/HOWTO/BootPrompt-HOWTO.html"
+>Информацию о многих параметрах загрузки можно найти в <ulink url="http://www.tldp.org/HOWTO/BootPrompt-HOWTO.html"
 > Linux BootPrompt HOWTO</ulink
->, включая советы по неопознанному оборудованию. В этом разделе содержатся только краткие сведения о наиболее заметных параметрах. Некоторые распространенные ловушки включены ниже в <xref linkend="boot-troubleshooting"/>. </para
+>, включая советы по нераспознанному оборудованию. В этом разделе содержатся только краткие сведения о наиболее важных параметрах. Некоторые распространённые ошибки включены ниже в <xref linkend="boot-troubleshooting"/>. </para
 ><para
->Когда загружается ядро, в начале процесса должно появиться сообщение <informalexample
+>В самом начале при загрузке ядра должно появиться сообщение <informalexample
 ><screen>
 
 Memory:<replaceable
->доступно</replaceable
+>avail</replaceable
 >k/<replaceable
->всего</replaceable
+>total</replaceable
 >k available 
 
 </screen
 ></informalexample
->. Где <replaceable
->всего</replaceable
-> должно совпадать с общим количеством ОЗУ, в килобайтах. Если это не соответствует действительному установленному объему ОЗУ, вам надо использовать параметр <userinput
+>. Значение <replaceable
+>total</replaceable
+> должно совпадать с общим количеством ОЗУ в килобайтах. Если это не соответствует действительно установленному объёму ОЗУ, вам надо использовать параметр <userinput
 >mem=<replaceable
->озу</replaceable
+>ram</replaceable
 ></userinput
 >, где <replaceable
->озу</replaceable
-> равно объему памяти, дополненному буквой ``k'', если объем задан в килобайтах или ``m'', если в мегабайтах. Например, и <userinput
+>ram</replaceable
+> равно объёму памяти, дополненному буквой ``k'', если объём задан в килобайтах или ``m'', если в мегабайтах. Например, <userinput
 >mem=65536k</userinput
-> , и <userinput
+> или <userinput
 >mem=64m</userinput
-> означают 64MB ОЗУ. </para
+> означают 64МБ ОЗУ. </para
 ><para condition="supports-serial-console"
->Если вы загружаетесь через последовательную консоль, в общем случае ядро автоматически обнаружит это <phrase arch="mipsel"
->(но не на DEC-станциях)</phrase
-> Если у вас есть видеокарта (framebuffer) и клавиатура, подключенные к компьютеру, который вы хотите загрузить через последовательную консоль, вам надо передать ядру аргумент <userinput
+>Если вы загружаетесь через последовательную консоль, обычно ядро обнаруживает этоавтоматически <phrase arch="mipsel"
+>(кроме DECstations)</phrase
+>. Если у вас есть видеокарта (framebuffer) и клавиатура, подключённые к компьютеру, а вы хотите загрузиться через последовательную консоль, вам надо передать ядру аргумент <userinput
 >console=<replaceable
->устройство</replaceable
+>device</replaceable
 ></userinput
 >, где <replaceable
->устройство</replaceable
-> это ваше последовательно устройство, обычно это нечто вроде <filename
+>device</replaceable
+> &mdash; это ваше последовательно устройство, обычно <filename
 >ttyS0</filename
 >. </para
 ><para arch="sparc"
@@ -2737,19 +2722,19 @@ Memory:<replaceable
 ><screen
 >Package: installation-reports
 
-Debian-installer-version: &lt;Fill in date and from where you got the image&gt;
-uname -a: &lt;The result of running uname -a on a shell prompt&gt;
-Date: &lt;Date and time of the install&gt;
-Method: &lt;How did you install?  What did you boot off?  If network
-      install, from where?  Proxied?&gt;
+Debian-installer-version: &lt;Укажите дату и где вы взяли образ&gt;
+uname -a: &lt;Результат выполнения команды uname -a в оболочке&gt;
+Date: &lt;Дата и время установки&gt;
+Method: &lt;Каким способом вы производили установку?  Откуда вы загружались?  Если по сети,
+      по откуда?  Через прокси?&gt;
 
-Machine: &lt;Description of machine (eg, IBM Thinkpad R32)&gt;
+Machine: &lt;Описание машины (например, IBM Thinkpad R32)&gt;
 Processor:
 Memory:
-Root Device: &lt;IDE?  SCSI?  Name of device?&gt;
-Root Size/partition table: &lt;Feel free to paste the full partition
-      table, with notes on which partitions are mounted where.&gt;
-Output of lspci and lspci -n:
+Root Device: &lt;IDE?  SCSI?  Имя устройства?&gt;
+Root Size/partition table: &lt;Информация о таблице разделов в любой форме
+      с пометкой какой раздел куда монтировался.&gt;
+Результат команд lspci и lspci -n:
 
 Base System Installation Checklist:
 [O] = OK, [E] = Error (please elaborate below), [ ] = didn't try it
@@ -2767,10 +2752,10 @@ Install base system:    [ ]
 Install boot loader:    [ ]
 Reboot:                 [ ]
 
-Comments/Problems:
+Комментарии/Проблемы:
 
-&lt;Description of the install, in prose, and any thoughts, comments
-      and ideas you had during the initial install.&gt;
+&lt;Описание установки, комментарии, предложения
+      возникшие в процессе.&gt;
 
 </screen
 ></informalexample>
