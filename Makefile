@@ -73,7 +73,7 @@ TREE=$(TEMP)/tree
 CD_IMAGE_TREE=$(TEMP)/cd_image_tree
 
 DPKGDIR=$(TREE)/var/lib/dpkg
-DRIVEREXTRASDIR=$(TREE)/tmp-drivers
+DRIVEREXTRASDIR=$(TREE)/
 DRIVEREXTRASDPKGDIR=$(DRIVEREXTRASDIR)/var/lib/dpkg
 
 TMP_MNT:=$(shell pwd)/mnt
@@ -428,9 +428,9 @@ endif
 	# has been made yet.
 	cp graphic.utf all-$(TYPE).utf
 ifeq ($(TYPE),floppy)
-	cat $(DPKGDIR)/info/*.templates >> all-$(TYPE).utf
-endif
 	cat $(DRIVEREXTRASDPKGDIR)/info/*.templates >> all-$(TYPE).utf
+endif
+	cat $(DPKGDIR)/info/*.templates >> all-$(TYPE).utf
 	find $(TREE) -type f | xargs strings >> all-$(TYPE).utf
 
 ifeq ($(TYPE),floppy)
