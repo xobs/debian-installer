@@ -23,7 +23,7 @@ endif
 TYPE=net
 
 # The library reducer to use. Can be mklibs.sh or mklibs.py.
-MKLIBS=mklibs.py
+MKLIBS=mklibs
 
 # List here any libraries that need to be put on the system. Generally
 # this is not needed except for libnss_* libraries, which will not be
