@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 16407 -->
+<!-- original version: 17333 -->
 
 
  <chapter id="d-i-intro"><title>Debian Installer の使用法</title>
@@ -11,42 +11,64 @@
 <!--
 The Debian Installer consists of a number of special-purpose
 components to perform each installation task. Each component performs
-its task, asking the user questions as necessary to do its job. If
-there is no problem, the next component in the sequence takes over
-without any user interaction (other than various progress messages).
-When there is a problem, the user will see an error screen, and the
-installer menu may be shown in order to select some alternative
-action. If there are no problems, the user will never see the
-installer menu, but will simply answer questions for each component
-in turn. 
+its task, asking the user questions as necessary to do its job.
+The questions themselves are given priorities, and the priority
+of questions to be asked is set when the installer is started.
 -->
 Debian Installer は各インストールタスクを実行するために、
 たくさんの特定用途コンポーネントから成ります。
 各コンポーネントは、必要ならユーザに質問をして、そのタスクを実行します。
-問題なければ、(様々な進捗メッセージ以外の) ユーザとのやりとりをせずに、
-次のコンポーネントへ引き継ぎます。
-問題がある場合はエラー画面を表示し、
-インストーラメニューへ、代替アクションを選択するように表示するかもしれません。
-いずれも問題なければ、ユーザはインストールメニューを目にすることはなく、
-単に順番に各コンポーネントの質問に答えて行くだけでしょう。
+この質問には優先度が設定されており、
+この優先度はインストーラの起動時に設定することができます。
 
 </para><para>
 
 <!--
-The questions themselves are given priorities, and the priority
-of questions to be asked can be set. Thus if the installer knows
-what to do, and the user need not be aware of other choices which
-are available, then the installer will make the choice and not
-display the question. Serious error notifications are set to 
-priority 'critical' so the user will always be notified.
+When a default installation is performed, only essential (high priority)
+questions will be asked. This results in a highly automated installation
+process with little user interaction. Components are automatically run
+in sequence; which components are run depends mainly on the installation
+method you use and on your hardware. The installer will use default values
+for questions that are not asked.
 -->
-質問にはそれぞれ優先度が与えられています。
-また、出される質問の優先度を設定しておくことができます。
-そのため、インストーラが何を行うべきか知っており、
-利用可能な他の選択肢を、ユーザが気にする必要がない場合、
-質問を表示しないで、インストーラが選択を行います。
-重大なエラーの通知は、優先度が 'critical' に設定されています。
-そのため、ユーザに常に通知されます。
+デフォルトのインストールでは、不可欠な (優先度が高い) 質問しかしません。
+これにより、ユーザの入力をほとんど行わず、
+高度な自動インストールを行うことができます。
+コンポーネントは自動的に順番に実行されます。
+どのコンポーネントを実行するかは、
+主に使用するインストール法やハードウェアに左右されます。
+インストーラは、質問しない項目についてはデフォルト値を使用します。
+
+</para><para>
+<!--
+If there is a problem, the user will see an error screen, and the
+installer menu may be shown in order to select some alternative
+action. If there are no problems, the user will never see the
+installer menu, but will simply answer questions for each component
+in turn. Serious error notifications are set to priority 'critical'
+so the user will always be notified.
+-->
+問題がある場合はエラー画面を表示し、
+インストーラメニューに、代替アクションを選択するように表示するかもしれません。
+いずれも問題なければ、ユーザはインストールメニューを目にすることはなく、
+単に順番に各コンポーネントの質問に答えて行くだけでしょう。
+重大なエラー通知は優先度を「重大」に設定されているため、常に表示されます。
+
+</para><para>
+
+<!--
+Some of the defaults that the installer uses can be influenced by passing
+boot arguments when &d-i; is started. If, for example, you wish to
+force static network configuration (DHCP is used by default if available),
+you could add the boot parameter <userinput>netcfg/disable_dhcp=true</userinput>.
+See <xref linkend="installer-args"/> for available options.
+-->
+インストーラが使用するデフォルト値は、
+&d-i; の起動時にパラメータで渡して指定できます。
+たとえば、強制的に静的ネットワーク設定をしたい場合、
+(デフォルトでは可能ならDHCPを利用します) 起動パラメータに 
+<userinput>netcfg/disable_dhcp=true</userinput> を加えることができます。
+利用できるオプションは <xref linkend="installer-args"/> を参照してください。
 
 </para><para>
 
@@ -57,11 +79,35 @@ performing each step automatically in sequence. To use the installer
 in a manual, menu-driven way, add the boot argument
 <userinput>DEBCONF_PRIORITY=medium</userinput>.
 -->
-パワーユーザは、メニュー駆動インターフェース 
+パワーユーザは、メニュードリブンインターフェース 
 (自動で順に各ステップを実行するインストーラではなく、
 ユーザが各ステップを制御する) の方が、満足するかもしれません。
 手動 (メニュー駆動) でインストーラを使用するには、
-boot 引数に <userinput>DEBCONF_PRIORITY=medium</userinput> を加えてください。
+起動引数に <userinput>DEBCONF_PRIORITY=medium</userinput> を加えてください。
+
+</para><para>
+
+<!--
+If your hardware requires you to pass options to kernel modules as
+they are installed, you will need to start the installer in
+<quote>expert</quote> mode. This can be done by either using the
+<command>expert</command> command to start the installer or by adding
+the boot argument <userinput>DEBCONF_PRIORITY=low</userinput>.
+Expert mode gives you full control over &d-i;.
+-->
+ハードウェアをインストールする際に、
+オプションをカーネルモジュールへ渡す必要がある場合、
+<quote>エキスパート</quote>モードでインストーラを起動する必要があります。
+これは、インストーラを起動するコマンドに <command>expert</command> を使用する、
+あるいは起動引数に <userinput>DEBCONF_PRIORITY=low</userinput>
+を加えることで行います。
+エキスパートモードでは &d-i; をフルコントロールできます。
+
+</para><para condition="FIXME">
+
+<emphasis>
+FIXME: Should we add something here about starting d-i with the 2.6 kernel?
+</emphasis>
 
 </para><para>
 
@@ -69,10 +115,10 @@ boot 引数に <userinput>DEBCONF_PRIORITY=medium</userinput> を加えてください。
 The normal installer display is character-based (as opposed to the now
 more familiar graphical interface). The mouse is not operational in
 this environment. Here are the keys you can use to navigate within the
-various dialogs.  The <keycap>right</keycap> arrow or
-<keycap>Tab</keycap> key move `forward', and <keycap>left</keycap>
-arrow or <keycombo> <keycap>Shift</keycap> <keycap>Tab</keycap>
-</keycombo> move `backward' between displayed buttons and selections.
+various dialogs.  The <keycap>Tab</keycap> or <keycap>right</keycap>
+arrow keys move `forward', and the <keycombo> <keycap>Shift</keycap>
+<keycap>Tab</keycap> </keycombo> or <keycap>left</keycap> arrow keys
+move `backward' between displayed buttons and selections.
 The <keycap>up</keycap> and <keycap>down</keycap> arrow select
 different items within a scrollable list, and also scroll the list
 itself. In addition, in long lists, you can type a letter to cause the
@@ -87,10 +133,9 @@ letter you typed and use <keycap>Pg-Up</keycap> and
 マウスはこの環境では使用できません。
 ここでは、様々なダイアログでナビゲートするキーを紹介します。
 ボタンや選択肢が表示している間は、
-<keycap>右</keycap>矢印や <keycap>Tab</keycap> キーは「前方」へ、
-<keycap>左</keycap>矢印や
- <keycombo> <keycap>Shift</keycap> <keycap>Tab</keycap>
-</keycombo> は「後方」へ移動します。
+<keycap>Tab</keycap> キーや<keycap>右</keycap>矢印は「前方」へ、
+<keycombo><keycap>Shift</keycap> <keycap>Tab</keycap></keycombo> や
+<keycap>左</keycap>矢印は「後方」へ移動します。
 <keycap>上</keycap><keycap>下</keycap>矢印は、
 スクロールするリスト内の項目を選択し、またリスト自体もスクロールさせます。
 さらに、長いリストでは、タイプした文字で始まる項目に直接スクロールしますし、
@@ -114,7 +159,7 @@ S/390 は仮想コンソールをサポートしません。以下で説明するように、
 Error messages are redirected to the third console (known as
 <userinput>tty3</userinput>).  You can access this console by
 pressing <keycombo><keycap>Left Alt</keycap><keycap>F3</keycap></keycombo>
-(hold the <keycap>Alt</keycap> key while pressing the
+(hold the left <keycap>Alt</keycap> key while pressing the
 <keycap>F3</keycap> function key); get back to
 the main installer process with 
 <keycombo><keycap>Left Alt</keycap><keycap>F1</keycap></keycombo>.
@@ -122,8 +167,8 @@ the main installer process with
 エラーメッセージは第 3 コンソール (<userinput>tty3</userinput>) に
 リダイレクトされます。このコンソールへは
 <keycombo><keycap>左 Alt</keycap><keycap>F3</keycap></keycombo> 
-(<keycap>Alt</keycap> キーを押しながら<keycap>F3</keycap> ファンクションキーを
-押す) を押してアクセスしてください。
+(左 <keycap>Alt</keycap> キーを押しながら
+<keycap>F3</keycap> ファンクションキーを押す) を押してアクセスしてください。
 <keycombo><keycap>左 Alt</keycap><keycap>F1</keycap></keycombo> で、
 メインのインストーラプロセスに戻ります。
 

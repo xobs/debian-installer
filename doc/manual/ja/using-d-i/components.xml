@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 14975 -->
+<!-- original version: 17510 -->
 
  <sect1 id="module-details">
  <title>それぞれのコンポーネントの使用法</title>
@@ -8,12 +8,21 @@
 
 <!--
 In this section we will describe each installer component in
-detail. The components are logically grouped together to
-a user-recognisable parts as they appear during the install.
+-detail. The components are logically grouped together to
+-a user-recognisable parts as they appear during the install.
+detail. The components have been grouped into stages that should
+be recognisable for users. They are presented in the order they
+appear during the install. Note that not all modules will be used
+for every installation; which modules are actually used depends on
+the installation method you use and on your hardware.
 -->
 本節では、各インストーラコンポーネントの詳細について述べていきます。
-コンポーネントは、インストール中に現れるユーザが認識する部分で、
-論理的にグループ化されます。
+コンポーネントは、ユーザに認識できる段階へグループ化されました。
+それらは、install中に現われる命令の形で示されます。
+すべてのモジュールを、インストール時に使用するとは限らない、
+ということに注意してください。
+どのモジュールを実際に使用するかは、
+使用するインストール法やハードウェアに左右されます。
 
 </para>
 
@@ -23,46 +32,66 @@ a user-recognisable parts as they appear during the install.
 
 <!--
 Let's assume the Debian Installer has booted and you are facing its
-first screen.  At this time, &d-i; is still quite incapable. It
-doesn't know much about your computer hardware, preferred language, or
-even the task it should fulfil. Don't worry. Because &d-i; is quite
-clever, it can automatically probe for your hardware, locate the rest
+first screen.  At this time, the capabilities of &d-i; are still quite
+limited. It doesn't know much about your hardware, preferred language,
+or even the task it should perform. Don't worry. Because &d-i; is quite
+clever, it can automatically probe your hardware, locate the rest
 of its components and upgrade itself to a modern, well-built program.
 -->
 Debian Installer が起動して、最初の画面が表示されていると仮定しましょう。
-このとき、&d-i; はまだなにもできません。
-あなたのコンピュータのハードウェア、希望する言語、
-完了すべきタスクなどに関してあまり知りません。
-心配しないでください。
+このとき、&d-i; の機能はまだ制限されています。
+ハードウェア、希望する言語、実行するタスクなどに関しても、まだ知りません。
+しかし心配しないでください。
 &d-i; は非常に賢いので、ハードウェアの自動検出をしたり、
 コンポーネントの残りを見つけたり、
 新しくよくできたプログラムに自分自身をアップグレードすることができます。
 
 <!--
-However, you still need to help &d-i; with some tasks it can't guess
-easily (like selecting your preferred language, keyboard layout or
-desired network mirror).
+However, you still need to help &d-i; with some information it can't
+determine automatically (like selecting your preferred language, keyboard
+layout or desired network mirror).
 -->
 しかし、
 (希望する言語、キーボードレイアウト、使用するネットワークミラーの選択のように)
-いくつかのタスクで簡単には推測できないので、
+いくつかのタスクでは自動的に決定することができないので、
 &d-i; を助けてあげる必要があります。
 
+</para><para>
+
+<!--
+You will notice that &d-i; performs <firstterm>hardware detection</firstterm>
+several times during this stage. The first time is targeted specifically
+at the hardware needed to load installer components (e.g. your CD-ROM or
+network card). As not all drivers may be available during this first run,
+hardware detection needs to be repeated later in the process.
+-->
+この段階で &d-i; が<firstterm>ハードウェア検出</firstterm>を
+数回行うことに気がつくでしょう。
+最初は、特にインストーラコンポーネントが必要とするハードウェア
+(例: CD-ROM やネットワークカード) をロードするのが目的です。
+初回実行中にすべてのドライバが使用可能であるわけではないので、
+ハードウェア検出をそのプロセス中の後で繰り返す必要があります。
 </para>
 
+&module-lowmem.xml;
 &module-languagechooser.xml;
 &module-countrychooser.xml;
+&module-kbd-chooser.xml;
 &module-s390-netdevice.xml;
 &module-s390-dasd.xml;
-&module-ddetect.xml;
 &module-pcmcia.xml;
-&module-kbd-chooser.xml;
-&module-netcfg.xml;
-&module-iso-scan.xml;
-&module-choose-mirror.xml;
 &module-cdrom-detect.xml;
-&module-lowmem.xml;
-&module-anna.xml;
+&module-ddetect.xml;
+&module-iso-scan.xml;
+<!--
+&module-load-components;
+Insert Load installer components here; mention that it is executed later
+(after netcfg and choose mirror) if netboot installation.
+-->
+&module-netcfg.xml;
+&module-choose-mirror.xml;
+&module-anna.xml; <!-- should probably not be included -->
+
   </sect2>
 
   <sect2>
@@ -70,22 +99,24 @@ desired network mirror).
 <para>
 
 <!--
-At this time, &d-i; should be in its full strength, customized for
-user's needs and ready to do some real work.
+At this time, after hardware detection has been executed a final time,
+&d-i; should be at its full strength, customized for the user's needs
+and ready to do some real work.
 -->
-この時点で、&d-i; はユーザのニーズ通りにカスタマイズされ、
+最後のハードウェア検出が完了した時点で、
+&d-i; はユーザのニーズ通りにカスタマイズされ、
 実際の作業ができるような、準備万端の状態にあります．
 
 <!--
-As the title of this chapter states, the main task of the next few
+As the title of this section indicates, the main task of the next few
 components lies in partitioning your disks, creating filesystems,
-assigning mountpoints and configuring closely related issues like LVM
-or RAID devices.
+assigning mountpoints and optionally configuring closely related issues
+like LVM or RAID devices.
 -->
-本章のタイトルにあるように、
+本節のタイトルが表すように、
 次の少数のコンポーネントの主要なタスクは、ディスクのパーティションを分割し、
 ファイルシステムを作成し、マウントポイントを割り当てて、
-LVM や RAID 装置のような密接に関係する件の設定を行うことです。
+LVM や RAID 装置のような密接に関係する件のオプション設定を行うことです。
 
 </para>
 
@@ -102,12 +133,12 @@ LVM や RAID 装置のような密接に関係する件の設定を行うことです。
 <para>
 
 <!--
-Albeit this part is the least problematic, it consumes most time of
-the install, because it downloads, verifies and unpacks the whole base
+Although this stage is the least problematic, it consumes most time of
+the install because it downloads, verifies and unpacks the whole base
 system. If you have a slow computer or network connection, this could
 take some time.
 -->
-この部分が最も問題でないとはいえ、全体の基本システムをダウンロード、確認、
+この段階が最重要問題でないとはいえ、全体の基本システムをダウンロード、確認、
 展開にインストールのほとんどの時間を費やします。
 遅いコンピュータや遅いネットワーク接続しか持っていなければ、
 ある程度時間がかかるかもしれません。
@@ -190,13 +221,12 @@ mostly consists of tidying up after the &d-i;.
 <para>
 
 <!--
-Following components are usually not involved in the installation
-process, but they are awaiting in the background to help the user in
-case something goes wrong.
+The components listed in this section are usually not involved in the
+installation process, but are waiting in the background to help the
+user in case something goes wrong.
 -->
-以下のコンポーネントは、通常インストールプロセスに関係ありません。
-しかし、何かがうまく行かない時にユーザを助けるように、
-バックグラウンドで待っています。
+本節で挙げたコンポーネントは、通常インストールプロセスに関係しませんが、
+何かがうまく行かない時にユーザを助けられるようバックグラウンドで待っています。
 
 </para>
 
