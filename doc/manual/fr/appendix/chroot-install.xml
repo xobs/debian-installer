@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 11648 -->
+<!-- original version: 12756 -->
 
  <sect1 id="linux-upgrade">
- <title>Installer Debian GNU/Linux à partir d'un système Unix/Linux</title>
+ <title>Installer &debian; à partir d'un système Unix/Linux</title>
 
 <para>
 
-Cette partie explique comment installer Debian GNU/Linux à partir d'un système
-Unix ou Linux existant, sans utiliser le système d'installation basé
-sur ncurses, tel qu'expliqué dans la suite de ce manuel. Ce mode d'emploi
-d'installation croisée a été réclamé par des utilisateurs qui changeaient
-leurs distribution Redhat, Mandrake et Suse pour Debian GNU/Linux. Dans cette 
-partie, on suppose que le lecteur est familiarisé avec les commandes *nix et 
-qu'il sait parcourir le système de fichiers. Dans cette partie, 
-<prompt>$</prompt> symbolise une commande qui devra être entrée par 
-l'utilisateur dans le système actuel, alors que <prompt>#</prompt> fera 
-référence à une commande qui devra être entrée dans le chroot Debian.
+Cette partie explique comment installer &debian; à partir d'un système
+Unix ou Linux existant, sans utiliser le système d'installation avec menu et 
+basé sur ncurses, tel qu'expliqué dans la suite de ce manuel. Un guide
+d'installation était réclamé par les utilisateurs qui changeaient
+leur distribution Redhat, Mandrake et Suse pour &debian;. Dans cette 
+partie, on suppose que le lecteur a acquis une certaine familiarité avec 
+les commandes *nix et qu'il sait parcourir le système de fichiers. Dans cette 
+partie, <prompt>$</prompt> symbolise une commande qui devra être saisie dans 
+le système actuel, alors que <prompt>#</prompt> fera référence à une commande 
+qui devra être saisie dans le chroot Debian.
 
 </para><para>
 
-Une fois que vous aurez configuré le nouveau système Debian à votre goût,
-vous pourrez y migrer les données utilisateurs existantes (s'il y en a),
-et continuer normalement à les exploiter. Il n'y aura aucun temps
-d'indisponibilité lors de l'installation&nbsp;; c'est l'installation
-«&nbsp;zero downtime&nbsp;» &debian;. C'est également une façon intelligente
-de résoudre les problèmes d'équipements qui d'ordinaire donnent du fil à
-retordre aux systèmes d'installation et autre systèmes d'amorce.
+Une fois que vous aurez configuré le nouveau système Debian,
+vous pourrez y installer les données des utilisateurs (s'il y en a),
+et continuer à travailler. &debian; s'installe sans aucune interruption de
+service. C'est également une façon intelligente de résoudre les problèmes 
+d'équipement qui d'ordinaire donnent du fil à retordre aux systèmes 
+d'installation ou aux systèmes d'amorçage.
 
 </para>
 
@@ -34,14 +33,14 @@ retordre aux systèmes d'installation et autre systèmes d'amorce.
 <para>
 
 Avec votre outil habituel de partitionnement *nix, partitionnez le disque
-dur pour vos besoins. Créez au moins un système de fichiers ainsi qu'une
-zone d'échange (swap). Vous devez disposer d'au moins 150 Mo pour
+dur et créez au moins un système de fichiers ainsi qu'une zone d'échange 
+(swap). Vous devez disposer d'au moins 150 Mo pour
 l'installation d'un système en mode console et d'au moins 300 Mo si vous
 avez l'intention d'installer X.
 
 </para><para>
 
-créez un système de fichiers sur vos partitions. Par exemple, pour créer
+Pour créer un système de fichiers sur vos partitions, par exemple, pour créer
 un système de fichiers ext3 sur la partition <filename>/dev/hda6</filename>
 (ce sera la partition root dans notre exemple), il suffit de faire&nbsp;:
 
@@ -89,10 +88,10 @@ suite.
   <title>Installer <command>debootstrap</command></title>
 <para>
 
-L'outil que le logiciel d'installation de Debian utilise, qui est connu
-pour être le moyen officiel d'installation d'un système Debian élémentaire, est
-<command>debootstrap</command>. Il utilise <command>wget</command>, à part 
-cela, il dépend uniquement de la <classname>glibc</classname>. Installez
+L'outil utilisé par l'installateur de Debian et reconnu comme outil officiel 
+pour installer un système Debian de base s'appelle 
+<command>debootstrap</command>. Il utilise <command>wget</command>, mais ne 
+dépend que de la <classname>glibc</classname>. Installez
 <command>wget</command> s'il n'est pas déjà installé sur votre système,
 puis téléchargez et installez <command>debootstrap</command>.
 
@@ -105,7 +104,7 @@ rpm-isée&nbsp;» depuis
 
 </para><para>
 
-Ou, vous pouvez utiliser la procédure qui suit pour l'installer manuellement.
+Ou, vous pouvez utiliser la procédure qui suit pour l'installer vous-même.
 Créez un répertoire pour y décompresser le .deb&nbsp;:
 
 <informalexample><screen>
@@ -121,8 +120,8 @@ Le programme <command>debootstrap</command> se trouve dans l'archive Debian
 architecture). Téléchargez le <command>debootstrap</command> .deb à partir de
 <ulink url="http://ftp.debian.org/debian/pool/main/d/debootstrap/">pool</ulink>,
 copiez le paquet dans le répertoire work, et décompressez les fichiers 
-binaires.
-Vous aurez besoin d'avoir les permissions de root pour installer le binaire.
+binaires. Vous aurez besoin d'avoir les droits du super-utilisateur pour 
+installer le binaire.
 
 <informalexample><screen>
 
@@ -139,8 +138,8 @@ Vous aurez besoin d'avoir les permissions de root pour installer le binaire.
   <title>Lancer <command>debootstrap</command> (connecté au réseau)</title>
 <para>
 
-<command>debootstrap</command> peut télécharger les fichiers nécessaires directement
-depuis l'archive debian. Vous pouvez remplacer toutes les
+<command>Debootstrap</command> peut télécharger les fichiers nécessaires 
+directement depuis l'archive debian. Vous pouvez remplacer toutes les
 références à <userinput>http.us.debian.org/debian</userinput> dans les 
 commandes ci-dessous, par un miroir de l'archive Debian qui se trouve à 
 proximité de vous relativement au réseau. Les miroirs sont listés sur
@@ -149,7 +148,7 @@ proximité de vous relativement au réseau. Les miroirs sont listés sur
 </para><para>
 
 Si vous possédez une version cédérom de &debian; Woody, attachée sur /cdrom,
-vous pouvez remplacer l'url http par l'url d'un fichier&nbsp;:
+vous pouvez remplacer l'URL http par l'URL d'un fichier&nbsp;:
 <userinput>file:/cdrom/debian/</userinput>
 
 </para><para>
@@ -166,7 +165,7 @@ Dans la commande <command>debootstrap</command> remplacez
 <userinput>mips</userinput>, 
 <userinput>mipsel</userinput>, 
 <userinput>powerpc</userinput>, 
-<userinput>s390</userinput>, or
+<userinput>s390</userinput>, ou
 <userinput>sparc</userinput>.
 
 <informalexample><screen>
@@ -185,10 +184,10 @@ Dans la commande <command>debootstrap</command> remplacez
   (En utilisant <filename>basedebs.tar</filename>)</title>
 <para>
 
-<command>debootstrap</command> peut se servir du fichier 
-<filename>basedebs.tar</filename> file, si vous l'aviez téléchargé 
-auparavant. Le fichier <filename>basedebs.tar</filename>
- est systématiquement généré en une seule fois, ainsi, vous obtiendrez
+<command>Debootstrap</command> peut se servir du fichier 
+<filename>basedebs.tar</filename>, si vous l'aviez téléchargé auparavant. 
+Le fichier <filename>basedebs.tar</filename> est systématiquement 
+généré en une seule fois, ainsi, vous obtiendrez
  la dernière version d'un système de base en faisant pointer
 <command>debootstrap</command> directement sur une archive Debian comme nous
  l'avons évoqué dans la partie précédente.
@@ -214,12 +213,12 @@ Dans la commande <command>debootstrap</command>, remplacez
 <userinput>mips</userinput>, 
 <userinput>mipsel</userinput>, 
 <userinput>powerpc</userinput>, 
-<userinput>s390</userinput>, or
+<userinput>s390</userinput>, ou
 <userinput>sparc</userinput>.
 <informalexample><screen>
  
 $ /usr/sbin/debootstrap --arch ARCH --unpack-tarball \
-    /path-to-downloaded/basedebs.tar woody /mnt/debinst
+    /adresse-du-fichier/basedebs.tar woody /mnt/debinst
 
 </screen></informalexample>
 </para>
@@ -231,7 +230,7 @@ $ /usr/sbin/debootstrap --arch ARCH --unpack-tarball \
 <para>
 
 Maintenant, que vous disposez d'un vrai système Debian, autant l'utiliser.
-Lancez-y le programme <command>Chroot</command>&nbsp;:
+Lancez le programme <command>Chroot</command>&nbsp;:
 
 <informalexample><screen>
 
@@ -279,7 +278,7 @@ proc             /proc         proc    defaults                 0    0
 
 </para><para>
 
-Utiliser <userinput>mount -a</userinput> pour monter l'ensemble des systèmes 
+Utilisez <userinput>mount -a</userinput> pour monter l'ensemble des systèmes 
 de fichiers que vous avez indiqué dans votre fichier 
 <filename>/etc/fstab</filename>, ou alors
 pour monter un à un chaque système de fichiers utilisez&nbsp;:
@@ -293,7 +292,7 @@ pour monter un à un chaque système de fichiers utilisez&nbsp;:
 </para><para>
 
 Vous pouvez monter le système de fichiers proc plusieurs fois et à divers
-endroits, though /proc is customary. Si vous n'utilisez pas
+endroits, cependant on choisit d'habitude /proc. Si vous n'utilisez pas
 <userinput>mount -a</userinput>, assurez-vous d'avoir monté proc avant 
 d'aller plus loin&nbsp;:
 
@@ -307,7 +306,7 @@ d'aller plus loin&nbsp;:
 
 <para>
 
-A Red Hat user reports that on his system, this should be 
+Un utilisateur de Red Hat signale que, sur son système, c'est&nbsp;: 
 
 <informalexample><screen>
 
@@ -383,7 +382,7 @@ iface lo inet loopback
 
 </para><para>
 
-Entrez vos serveurs de nom et les directives search dans le fichier
+Indiquez vos serveurs de noms et les directives search dans le fichier
 <filename>/etc/resolv.conf</filename>&nbsp;:
 
 <informalexample><screen>
@@ -406,7 +405,7 @@ Un simple <filename>/etc/resolv.conf</filename>&nbsp;:
 
 </para><para>
 
-Entrez le nom d'hôte de votre système (de 2 à 63 caractères)&nbsp;:
+Indiquez le nom de votre système (de 2 à 63 caractères)&nbsp;:
 
 <informalexample><screen>
 
@@ -416,11 +415,11 @@ Entrez le nom d'hôte de votre système (de 2 à 63 caractères)&nbsp;:
 
 </para><para>
 
-Si vous possédez plusieurs interfaces réseau, faîtes en sorte d'indiquer
-par ordre les modules que vous voulez charger
-dans le fichier <filename>/etc/modules</filename>. De cette façon, lors du 
-démarrage, chaque carte sera associée avec le nom d'interface (eth0, eth1, 
-etc.) que vous souhaitiez.
+Si vous possédez plusieurs cartes réseau, faites en sorte d'indiquer
+par ordre les modules que vous voulez charger dans le fichier 
+<filename>/etc/modules</filename>. De cette façon, lors du démarrage, chaque 
+carte sera associée avec le nom d'interface (eth0, eth1, etc.) que vous 
+souhaitiez.
 
 </para>
    </sect3>
@@ -445,8 +444,7 @@ vos sources <command>apt</command> en exécutant
    <title>Configurer les locales</title>
 <para>
 Pour configurer les paramètres locaux, pour l'utilisation d'une autre langue
-que l'anglais, installez le paquet des locales puis
-configurez-le&nbsp;:
+que l'anglais, installez le paquet des locales puis configurez-le&nbsp;:
 
 <informalexample><screen>
 
@@ -455,10 +453,10 @@ configurez-le&nbsp;:
 
 </screen></informalexample>
 
-NOTE&nbsp;: Vous devez au préalable configurer apt, c'est à dire lors
+NOTE&nbsp;: Vous devez au préalable configurer apt, c'est-à-dire lors
 de l'étape de configuration du système de base. Avant d'utiliser les locales
 avec un jeu de caractère différent de l'ASCII ou de latin1, veuillez consulter
-les HOWTO qui s'y rapportent.
+les HOWTO sur la localisation.
 
 </para>
    </sect3>
@@ -481,7 +479,7 @@ les versions «&nbsp;pré-packagées&nbsp;» des noyaux avec&nbsp;:
 
 </para><para>
 
-Puis installez celui de votre choix en utilisant son nom de paquet.
+Puis installez celui que vous voulez en utilisant son nom de paquet.
 
 <informalexample><screen>
 
@@ -503,13 +501,12 @@ root.
 </para><para arch="i386">
 
 Consultez le <userinput>man lilo.conf</userinput> pour les instructions de 
-configuration du
-gestionnaire de démarrage. Si vous souhaitez conserver le système dont vous
-vous êtes servi pour installer Debian, ajoutez simplement une entrée pour
-l'installation de Debian dans votre lilo.conf actuel. Vous pouvez également
-le copier sur le nouveau système et l'éditer. Une fois que vous l'aurez
-édité, lancez lilo (souvenez-vous qu'il utilise le lilo.conf qui se trouve
-dans le système à partir duquel vous lui faites appel).
+configuration du gestionnaire de démarrage. Si vous souhaitez conserver le 
+système dont vous vous êtes servi pour installer Debian, ajoutez simplement 
+une entrée pour l'installation de Debian dans votre lilo.conf actuel. Vous 
+pouvez également le copier sur le nouveau système et l'éditer. Une fois que 
+vous l'aurez modifié, lancez lilo (souvenez-vous que lilo utilise le fichier 
+lilo.conf qui se trouve dans le même système que lui).
 
 </para><para arch="i386">
 
@@ -535,8 +532,8 @@ gestionnaire de démarrage. Si vous souhaitez conserver le système dont vous
 vous êtes servi pour installer Debian, ajoutez simplement une entrée pour
 l'installation de Debian dans votre yaboot.conf actuel. Vous pouvez également
 le copier sur le nouveau système et l'éditer. Une fois que vous l'aurez
-édité, lancé ybin (souvenez-vous qu'il utilise le yaboot.conf qui se trouve
-dans le système à partir duquel vous lui faites appel).
+modifié, lancez ybin (souvenez-vous que ybin utilise le yaboot.conf qui se 
+trouve dans le même système que lui).
 </para><para arch="powerpc">
 
 Voici un exemple simple de fichier&nbsp;:
