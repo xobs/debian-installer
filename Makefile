@@ -184,9 +184,13 @@ compiled-stamp: $(SOURCEDIR)/udeb-sources-stamp
 
 # Generate a sources.list from configuration
 
-sources.list: config/main
-	echo "deb $(MIRROR) $(SUITE) main/debian-installer" > sources.list
-	echo "deb-src $(MIRROR) $(SUITE) main" >> sources.list
+sources.list:
+	if [[ "$(MIRROR)x" != "x" ]]; then \
+		echo "deb $(MIRROR) $(SUITE) main/debian-installer" > sources.list; \
+	else \
+	cat $(SYSTEM_SOURCES_LIST) | grep ^deb\  |grep -v file:/ | grep -v debian-non-US | \
+		awk '{print $$1 " " $$2}' | sed s/\\/*\ *$$/\ $(SUITE)\ main\\/debian-installer/ | uniq > sources.list; \
+	fi
 
 # 
 # Get all required udebs and put in UDEBDIR.
