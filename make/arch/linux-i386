@@ -5,6 +5,7 @@ arch-image: $(IMAGE)
 # 2. copy over kernel, initrd
 # 3. install syslinux
 $(IMAGE): $(INITRD) tmp_mount
+ifeq ($(TYPE),floppy)
 	if [ "$(UPX)" ] ; then \
 		$(foreach NAME,$(KERNELNAME), \
 			$(UPX) -9 $(TEMP)/$(NAME); ) \
@@ -23,6 +24,7 @@ $(IMAGE): $(INITRD) tmp_mount
 
 	# Finalize the image.
 	mv $@.new $@
+endif
 
 # Copy files somewhere the CD build scripts can find them
 # XXX Will only use the last kernel if there are several
