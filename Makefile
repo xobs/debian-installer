@@ -69,6 +69,7 @@ get_udebs:
 	mkdir -p $(APTDIR)/state/lists/partial
 	mkdir -p $(APTDIR)/cache/archives/partial
 	$(APT_GET) update
+	$(APT_GET) autoclean
 	# If there are local udebs, remove them from the list of things to
 	# get. Then get all the udebs that are left to get.
 	needed="$(UDEBS)"; \
