@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 untranslated -->
+<!-- original version: 22285 untranslated -->
 
  <sect1 id="automatic-install">
  <title>Automatic Installation</title>
@@ -10,58 +10,74 @@ automatic installations. Debian packages intended for this include
 <classname>fai</classname> (which uses an install server),
 <classname>replicator</classname>,
 <classname>systemimager</classname>,
-<classname>autoinstall</classname>, and
-<classname>debian-installer</classname>.
+<classname>autoinstall</classname>, and 
+the Debian Installer itself.
 
 </para>
 
 <sect2>
-<title>debian-installer</title>
-<!-- the information from Sesse
-> IIRC you are the person that did various automated installs with d-i.
->
-> Where do I read more about it?
-
-Well, there isn't really much to read; I think I've summarized my experiences
-a few times, but of course I can do it again (a bit short, though):
-
-- cdebconf preseeding works very well; the latest cdebconf should also work
-  correctly wrt. automated installs (debconf/showold = false by default), it
-  was broken for a while. I just add the cdebconf database to the
-  installation media, and use a custom udeb or two (which can be found at
-  http://people.debian.org/~sesse/, but should probably be cleaned up some).
-  The simplest way to get this database is to install manually once, then
-  prune the cdebconf database manually and just insert it in the right place.
-- Partitioning is done with autopartkit, also works well at least for my
-  purposes. I think partman can do something like this as well.
-- Likewise, debconf preseeding works well; one of my udebs drop some
-  base-config fragments in the right place which skip the root password
-  generation etc. and pop the right info into the debconf database, as well
-  as install a metapackage depending on whatever I want. (In the future, I'll
-  probably use pkgsync for this; see my ITP on `pkgsync'. :-) )
-
-Let me know if you're wondering about something more specific. Note that I
-haven't been able to touch d-i in a month or two, so I don't know how
-broken/working automated installs are ATM. :-)
-
-/* Steinar */
--->
-
-<para>this section needs love &amp; care</para>
+<title>Automatic installation using the Debian Installer</title>
 
 <para>
-Do a Manual install
-</para>
+The Debian Installer supports automating installs via preconfiguration
+files. A preconfiguration file can be loaded from the network or from
+removable media, and used to fill in answers to question asked during the
+installation process.
 
-<para>
-Save the answers from the debconf database,
- <filename>/var/log/debian-installer/cdebconf</filename>,
- into a file.
-</para>
+</para><para>
 
-<para>
-Put the file in <filename>preseeding udeb</filename>
+The preconfiguration file is in the format used by the
+debconf-set-selections command. One easy way to generate a
+complete preconfiguration file is to do a manual install,
+and then use <filename>debconf-get-selections</filename>,
+from the <classname>debconf-utils</classname> package,
+to dump both the debconf database and the cdebconf
+database in /var/log/debian-installer/cdebconf to a single file:
+
+<informalexample><screen>
+debconf-get-selections --installer > file
+debconf-get-selections >> file
+</screen></informalexample>
+
+</para><para>
+
+Alternatively, this file is a good and well documented starting point that
+you can edit:
+
+&example-preseed.xml;
+
+</para><para>
+
+Once you have a preconfiguation file, you can edit it if necessary, and
+place it on a web server, or copy it onto the installer's boot media. Wherever
+you place the file, you need to pass a parameter to the installer at boot
+time to tell it to use the file.
+
+</para><para>
+
+To make the installer use a preconfiguration file download from the
+network, add preseed/url=http://url/to/preseed.cfg to the kernel boot
+parameters. Of course the preconfiguration will not take effect until the
+installer manages to set up the network to download the file, so this is
+most useful if the installer can set up the network via DHCP without asking
+any questions. You may want to set the installation priority to critical to
+avoid any questions while the network is being configured. See 
+<xref linkend="installer-args"/>.
+
+</para><para>
+
+To place a preconfiguration file on a CD, you would need to remaster the
+ISO image to include your preconfiguraton file. See the manual page for
+mkisofs for details. Alternatively, put the preseed file on a floppy, and
+use preseed/file=/floppy/preseed.cfg
+
+</para><para arch="i386">
+
+If you'll be booting from a USB memory stick, then you can simply copy your
+preconfiguration file onto the memory stick's filesystem, and edit the
+syslinux.cfg file to add preseed/file=/hd-media/preseed.cfg to the kernel boot
+parameters.
+
 </para>
 </sect2>
-
  </sect1>

@@ -1,63 +1,70 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 16407 untranslated -->
+<!-- original version: 19074 untranslated -->
 
 
-<!-- <chapter id="d-i-intro"><title>Using the Debian Installer</title> -->
- <chapter id="d-i-intro"><title>Luso di Debian Installer</title>
+ <chapter id="d-i-intro"><title>Using the Debian Installer</title>
 
-<!-- <sect1><title>How the Installer Works</title>-->
-  <sect1><title>Come funziona l'installatore</title>
+ <sect1><title>How the Installer Works</title>
 <para>
 
-<!-- The Debian Installer consists of a number of special-purpose
+The Debian Installer consists of a number of special-purpose
 components to perform each installation task. Each component performs
-its task, asking the user questions as necessary to do its job. If
-there is no problem, the next component in the sequence takes over
-without any user interaction (other than various progress messages).
-When there is a problem, the user will see an error screen, and the
-installer menu may be shown in order to select some alternative
-action. If there are no problems, the user will never see the
-installer menu, but will simply answer questions for each component
-in turn. -->
-
-Debian Installer consiste in un insieme di componenti dedicati a compiti
-speciali che eseguono ogni compito di installazione. Ogni componente esegue
-la sua azione, fa domande all'utente se necessario per eseguire il suo compito.
-Se non ci sono problemi il componente successivo acquisisce il controllo senza
-interazione con l'utente (diversa da vari messaggi di progresso). Quando c'&egrave;
-un problema, l'utente vedr&agrave; una schermata di errore e il men&ugrave;
-dell'installatore pu&ograve; essere mostrato per selezionare alcune azioni
-alternative. Se non ci sono problemi, l'utente non vedr&agrave; mai il men&ugrave;
-di installazione ma risponder&agrave; semplicemente alle domande di ogni
-componente uno dopo l'altro.
+its task, asking the user questions as necessary to do its job.
+The questions themselves are given priorities, and the priority
+of questions to be asked is set when the installer is started.
 
 </para><para>
 
-<!-- The questions themselves are given priorities, and the priority
-of questions to be asked can be set. Thus if the installer knows
-what to do, and the user need not be aware of other choices which
-are available, then the installer will make the choice and not
-display the question. Serious error notifications are set to 
-priority 'critical' so the user will always be notified. -->
+When a default installation is performed, only essential (high priority)
+questions will be asked. This results in a highly automated installation
+process with little user interaction. Components are automatically run
+in sequence; which components are run depends mainly on the installation
+method you use and on your hardware. The installer will use default values
+for questions that are not asked.
 
-Le domande da sole hanno priorit&agrave; e 
+</para><para>
+
+If there is a problem, the user will see an error screen, and the
+installer menu may be shown in order to select some alternative
+action. If there are no problems, the user will never see the
+installer menu, but will simply answer questions for each component
+in turn. Serious error notifications are set to priority 'critical'
+so the user will always be notified.
+
+</para><para>
+
+Some of the defaults that the installer uses can be influenced by passing
+boot arguments when &d-i; is started. If, for example, you wish to
+force static network configuration (DHCP is used by default if available),
+you could add the boot parameter <userinput>netcfg/disable_dhcp=true</userinput>.
+See <xref linkend="installer-args"/> for available options.
+
 </para><para>
 
 Power users may be more comfortable with a menu-driven interface,
 where each step is controlled by the user rather than the installer
 performing each step automatically in sequence. To use the installer
 in a manual, menu-driven way, add the boot argument
-<userinput>DEBCONF_PRIORITY=medium</userinput>.
+<userinput>debconf/priority=medium</userinput>.
+
+</para><para>
+
+If your hardware requires you to pass options to kernel modules as
+they are installed, you will need to start the installer in
+<quote>expert</quote> mode. This can be done by either using the
+<command>expert</command> command to start the installer or by adding
+the boot argument <userinput>debconf/priority=low</userinput>.
+Expert mode gives you full control over &d-i;.
 
 </para><para>
 
 The normal installer display is character-based (as opposed to the now
 more familiar graphical interface). The mouse is not operational in
 this environment. Here are the keys you can use to navigate within the
-various dialogs.  The <keycap>right</keycap> arrow or
-<keycap>Tab</keycap> key move `forward', and <keycap>left</keycap>
-arrow or <keycombo> <keycap>Shift</keycap> <keycap>Tab</keycap>
-</keycombo> move `backward' between displayed buttons and selections.
+various dialogs.  The <keycap>Tab</keycap> or <keycap>right</keycap>
+arrow keys move `forward', and the <keycombo> <keycap>Shift</keycap>
+<keycap>Tab</keycap> </keycombo> or <keycap>left</keycap> arrow keys
+move `backward' between displayed buttons and selections.
 The <keycap>up</keycap> and <keycap>down</keycap> arrow select
 different items within a scrollable list, and also scroll the list
 itself. In addition, in long lists, you can type a letter to cause the
@@ -70,14 +77,14 @@ letter you typed and use <keycap>Pg-Up</keycap> and
 </para><para arch="s390">
 
 S/390 does not support virtual consoles. You may open a second and third
-telnet session to view the logs described below.
+ssh session to view the logs described below.
 
 </para><para>
 
-Error messages are redirected to the third console (known as
-<userinput>tty3</userinput>).  You can access this console by
+Error messages are redirected to the third console.
+You can access this console by
 pressing <keycombo><keycap>Left Alt</keycap><keycap>F3</keycap></keycombo>
-(hold the <keycap>Alt</keycap> key while pressing the
+(hold the left <keycap>Alt</keycap> key while pressing the
 <keycap>F3</keycap> function key); get back to
 the main installer process with 
 <keycombo><keycap>Left Alt</keycap><keycap>F1</keycap></keycombo>.
@@ -86,9 +93,9 @@ the main installer process with
 
 These messages can also be found in
 <filename>/var/log/messages</filename>.  After installation, this log
-is copied to <filename>/var/log/installer.log</filename> on your new
-system. Other installation messages may be found in
-<filename>/target/var/log/debian-installer/</filename> during the
+is copied to <filename>/var/log/debian-installer/messages</filename> on your
+new system. Other installation messages may be found in
+<filename>/var/log/</filename> during the
 installation, and <filename>/var/log/debian-installer/</filename>
 after the computer has been booted into the installed system.
 
@@ -111,12 +118,17 @@ using a particular component are in <xref linkend="module-details"/>.
 <term>main-menu</term><listitem><para>
 
 Shows the list of components to the user during installer operation,
-and starts a selected component when it is selected. Main-menu's
-questions are set to priority MEDIUM, so if your priority is set to
-HIGH or CRITICAL (HIGH is the default), you will not see the menu. On
+and starts a component when it is selected. Main-menu's
+questions are set to priority medium, so if your priority is set to
+high or critical (high is the default), you will not see the menu. On
 the other hand, if there is an error which requires your intervention,
 the question priority may be downgraded temporarily to allow you
 to resolve the problem, and in that case the menu may appear.
+
+</para><para>
+
+You can get to the main menu by selecting the "Back" button
+repeatedly to back all the way out of the currently running component.
 
 </para></listitem>
 </varlistentry>
@@ -142,27 +154,27 @@ in.
 </varlistentry>
 <varlistentry>
 
-<term>ddetect</term><listitem><para>
-
-Detects hard disks, either installed or attached to the computer.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
-<term>pcmcia</term><listitem><para>
-
-Allows the user to configure PCMCIA cards used in laptops for 
-networking.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
 <term>kbd-chooser</term><listitem><para>
 
 Shows a list of keyboards, from which the user chooses the model which
 matches his own.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>hw-detect</term><listitem><para>
+
+Automatically detects most of the system's hardware, including network
+cards, disk drives, and PCMCIA.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>cdrom-detect</term><listitem><para>
+
+Looks for and mounts a Debian installation CD.
 
 </para></listitem>
 </varlistentry>
@@ -189,8 +201,7 @@ hard drive.
 <term>choose-mirror</term><listitem><para>
 
 Presents a list of Debian archive mirrors. The user may choose
-the source of his installation packages. Commonly, a CD-ROM or 
-network mirror are chosen.
+the source of his installation packages.
 
 </para></listitem>
 </varlistentry>
@@ -200,14 +211,6 @@ network mirror are chosen.
 
 Checks integrity of a CD-ROM. This way the user may assure him/herself
 that the installation CD-ROM was not corrupted.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
-<term>cdrom-detect</term><listitem><para>
-
-Detects CD-ROM drives, either installed or attached to the computer.
 
 </para></listitem>
 </varlistentry>
@@ -226,7 +229,7 @@ cost of some features).
 <term>anna</term><listitem><para>
 
 Anna's Not Nearly APT. Installs packages which have been retrieved
-from the chosen mirror.
+from the chosen mirror or CD.
 
 </para></listitem>
 </varlistentry>
@@ -236,7 +239,7 @@ from the chosen mirror.
 
 Allows the user to partition disks attached to the system, create file
 systems on the selected partitions, and attach them to the
-mountpoins. Included are also interesting features like a fully
+mountpoints. Included are also interesting features like a fully
 automatic mode or LVM support. This is the preferred partitioning tool
 in Debian.
 
@@ -301,15 +304,6 @@ the computer to operate under Linux when rebooted.
 </varlistentry>
 <varlistentry>
 
-<term>kernel-chooser</term><listitem><para>
-
-Allows the user to choose an operating system kernel version,
-if there is more than one version available.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
 <term>os-prober</term><listitem><para>
 
 Detects currently installed operating systems on the computer and
@@ -333,7 +327,7 @@ operating system each time the computer boots.
 </varlistentry>
 <varlistentry>
 
-<term>baseconfig</term><listitem><para>
+<term>base-config</term><listitem><para>
 
 Provides dialogs for setting up the base system packages according
 to user preferences. This is normally done after rebooting the 
