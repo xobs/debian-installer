@@ -22,6 +22,9 @@ endif
 # override this on the command line.
 TYPE=net
 
+# The library reducer to use. Can be mklibs.sh or mklibs.py.
+MKLIBS=./mklibs.sh
+
 # List here any libraries that need to be put on the system. Generally
 # this is not needed except for libnss_* libraries, which will not be
 # automatically pulled in by the library reduction code. Wildcards are
@@ -215,6 +218,10 @@ tree-stamp:
 	# Set up modules.dep
 	mkdir -p $(TREE)/lib/modules/$(KVERS)-$(FLAVOUR)/
 	depmod -q -a -b $(TREE)/ $(KVERS)-$(FLAVOUR)
+	# These files depmod makes are used by hotplug, and we shouldn't
+	# need them, yet anyway.
+	find $(TREE)/lib/modules/$(KVERS)-$(FLAVOUR)/ -name 'modules*' \
+		-not -name modules.dep | xargs rm -f
 	# Install /dev devices (but not too much)
 	mkdir -p $(TREE)/dev
 	cd $(TREE)/dev && /sbin/MAKEDEV std console
@@ -253,7 +260,7 @@ endif
 
 	# Library reduction.
 	mkdir -p $(TREE)/lib
-	mklibs.sh -v -d $(TREE)/lib `find $(TREE) -type f -perm +0111 -o -name '*.so'`
+	$(MKLIBS) -d $(TREE)/lib `find $(TREE) -type f -perm +0111 -o -name '*.so'`
 
 	# Remove any libraries that are present in both usr/lib and lib,
 	# from lib. These were unnecessarily copied in by mklibs, and
@@ -285,9 +292,10 @@ endif
 	    strip -R .comment -R .note -g -x $$module; \
 	done
 	
-	# Remove some unnecessary files
+	# Remove some unnecessary dpkg files.
 	for file in `find $(TREE)/var/lib/dpkg/info -name '*.md5sums' -o \
-	    -name '*.postrm' -o -name '*.prerm' -o -name '*.preinst'`; do \
+	    -name '*.postrm' -o -name '*.prerm' -o -name '*.preinst' -o \
+	    -name '*.list'`; do \
 	    rm $$file; \
 	done
 
