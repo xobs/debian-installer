@@ -25,11 +25,11 @@ chomp $deb_host_arch;
 my ($collect, $exclude)=getlists($type);
 my ($parentcollect, $parentexclude)=getlists($driver_for) if length $driver_for;
 foreach my $p (sort keys %$collect) {
-	print "$p\n" unless $exclude->{$p};
+	print "$p\n" unless $exclude->{$p} || $parentcollect->{$p};
 
 	# Warn about missing deps. This is not perfect, in since pkgdeps
 	# ignores dependencies on virtual packages and does not support
-	# alternates (which are not really allowed for udebs anyway). 
+	# alternates (which are not really allowed for udebs anyway).
 	# Still, it will catch most common mistakes.
 	foreach my $dep (pkgdeps($p)) {
 		if (! $collect->{$dep} && ! $exclude->{$dep} && ! $parentcollect->{$dep}) {
