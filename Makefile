@@ -46,11 +46,13 @@ APT_GET=apt-get --assume-yes \
 
 # Get the list of udebs to install. Comments are allowed in the lists.
 UDEBS = \
-	$(shell grep --no-filename -v ^\# \
+	$(shell (\
+		if [ ! "${NO_KERNEL}" ]; then echo 'kernel-image-$${kernel:Version}-udeb'; fi; \
+		grep --no-filename -v ^\# \
 			`if [ ! "${NO_BASE}" ]; then echo pkg-lists/base; fi` \
 			pkg-lists/$(TYPE)/common \
 			`if [ -f pkg-lists/$(TYPE)/$(DEB_HOST_ARCH) ]; then echo pkg-lists/$(TYPE)/$(DEB_HOST_ARCH); fi` \
-		| sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2\n)/g' \
+		) | sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2\n)/g' \
 	) $(EXTRAS)
 
 ifeq ($(TYPE),floppy)
@@ -325,11 +327,13 @@ endif
 	# Create a dev tree
 	mkdir -p $(TREE)/dev
 
+ifndef NO_KERNEL
 	# Move the kernel image out of the way, into a temp directory
 	# for use later. We don't need it bloating our image!
 	$(foreach NAME,$(KERNELNAME), \
 		mv -f $(TREE)/boot/$(NAME) $(TEMP); )
 	-rmdir $(TREE)/boot/
+endif
 
 	# Copy terminfo files for slang frontend
 	# TODO: terminfo.udeb?
@@ -528,9 +532,10 @@ $(INITRD):  $(TYPE)-tree-stamp
 	mv $(INITRD).tmp $(INITRD)
 
 # Write image to floppy
+floppy: boot_floppy
 boot_floppy: $(IMAGE)
 	install -d $(DEST)
-	dd if=$(IMAGE) of=$(FLOPPYDEV)
+	dd if=$(IMAGE) of=$(FLOPPYDEV) bs=$(FLOPPY_SIZE)k
 
 # Write drivers  floppy
 %_floppy: $(DEST)/%-image.img
