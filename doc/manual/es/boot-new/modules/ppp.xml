@@ -1,67 +1,70 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- original version: 23660 -->
 <!-- actualizado rudy, 5 diciembre 2004 -->
+<!-- revisado jfs, 6 diciembre 2004 -->
 
  <sect2 arch="not-s390" id="PPP">
  <title>Configuración de PPP</title>
 
 <para>
 
-Si no se ha configurado la red durante la primera fase de la
-instalación, se le preguntará si desea instalar el resto del sistema 
-usando PPP. PPP es un protocolo usado para establecer conexiones
-telefónicas usando modems. Si configura el modem en este momento,
-el sistema de instalación podrá descargar paquetes adicionales o
-actualizaciones de seguridad desde la Internet durante las siguientes
-fases de la instalación.
-Si no tiene un modem en su ordenador o si prefiere configurarlo
-después de la instalación, puede obviar este paso.
+Se le preguntará si desea instalar el resto del sistema 
+usando PPP si no se ha configurado la red durante la primera fase de la
+instalación. PPP es un protocolo usado para establecer conexiones
+telefónicas usando módems. 
+El sistema de instalación podrá descargar paquetes adicionales o
+actualizaciones de seguridad desde Internet durante las siguientes
+fases de la instalación si configura el módem en este momento.
+Puede obviar este paso 
+si no tiene un módem en su ordenador o si prefiere configurarlo
+después de la instalación.
 
 </para><para>
 
-Para configurar su conexión PPP, necesitará algunos datos de su
-proveedor de acceso a Internet (ISP), los cuales incluyen: el número
-telefónico, nombre de usuario, clave y servidores DNS (opcionales).
+Necesitará algunos datos de su proveedor de acceso a Internet (en adelante, ISP, «Internet Service Provider»)
+para configurar su conexión PPP. Estos datos son: un número
+de teléfono al que llamar, un nombre de usuario, una clave y los 
+servidores DNS (opcionalmente).
 Algunos ISPs ofrecen guías de instalación para distribuciones Linux.
-Puede usar esta información incluso si no están orientadas a Debian
-en específico, puesto que la gran mayoría de parámetros de configuración
-(y software) son similares entre las distribuciones de Linux.
+Puede usar esta información incluso si no está específicamente orientada a Debian,
+puesto que la gran mayoría de parámetros de configuración
+(y software) son similares entre las distintas distribuciones de Linux.
 
 </para><para>
 
-Si elije configurar PPP en este momento, se ejecutará un
-programa llamado <command>pppconfig</command>. Este programa le
-ayudará a configurar su conexión PPP. <emphasis>Asegúrese de que
-cuando le pregunte el nombre de su conexión de acceso telefónico,
-éste sea <userinput>provider</userinput> (no lo traduzca).</emphasis>
+Se ejecutará un programa llamado <command>pppconfig</command>
+si elije configurar PPP en este momento. Este programa le
+ayudará a configurar su conexión PPP. <emphasis>Asegúrese de utilizar
+<userinput>provider</userinput> (del inglés, proveedor, no debe traducirlo)
+como nombre de su conexión de acceso telefónico cuando se le solicite.</emphasis>
 
 </para><para>
 
 Con un poco de suerte, el programa <command>pppconfig</command> le
 guiará a través de una configuración de PPP libre de problemas. Sin
-embargo, si esto no funciona para su caso, consulte a algunas 
-instrucciones detalladas de instalación.
+embargo, si esto no funciona para su caso, puede consultar a continuación algunas 
+instrucciones detalladas de la instalación.
 
 </para><para>
 
-Para configurar PPP, necesitará saber lo básico sobre cómo editar
-y ver ficheros en GNU/Linux. Para ver ficheros, deberá usar 
+Para configurar PPP, necesitará saber realizar las operaciones básicas de edición
+y visualización de ficheros en GNU/Linux. Para ver ficheros, deberá usar 
 <command>more</command>, y <command>zmore</command>, en el caso de ficheros 
 comprimidos con extensión <userinput>.gz</userinput>. Por ejemplo,
 para ver <filename>README.debian.gz</filename>, escriba <userinput>zmore
 README.Debian.gz</userinput>. El sistema base dispone de un editor llamado
-<command>nano</command>,que es muy simple de usar pero que tiene pocas
+<command>nano</command>, que es muy simple de usar pero que no tiene muchas
 características. Es posible que desee instalar después editores 
-y visores con más funcionalidades, como <command>jed</command>, 
+y visores con más funcionalidades, como puedan ser <command>jed</command>, 
 <command>nvi</command>, <command>less</command> y <command>emacs</command>.
 
 </para><para>
 
-Edite el fichero <filename>/etc/ppp/peers/provider</filename> y sustituya
+Debe editar el fichero <filename>/etc/ppp/peers/provider</filename> y sustituir
 <userinput>/dev/modem</userinput> por
-<userinput>/dev/ttyS<replaceable>&num;</replaceable></userinput>
+<userinput>/dev/ttyS<replaceable>&num;</replaceable></userinput>,
 donde <replaceable>&num;</replaceable> es el número de su puerto
-serie. En Linux, los puertos serie se numeran desde el 0. Para
+serie. En Linux, los puertos serie se numeran desde el cero. Para
 Linux el primer puerto serie <phrase arch="i386">(es decir, 
 <userinput>COM1</userinput>)</phrase> es <filename>/dev/ttyS0</filename>.
 
@@ -71,33 +74,33 @@ la impresora es <filename>/dev/ttyS1</filename>.</phrase>
 
 El siguiente paso es editar <filename>/etc/chatscripts/provider</filename>
 e insertar el número telefónico de su proveedor, su nombre de usuario y
-clave. Por favor no elimine el caracter <quote>\q</quote> que precede a la 
+clave. Por favor, no elimine el caracter <quote>\q</quote> que precede a la 
 clave, evita que la clave aparezca en los ficheros de registro.
 
 </para><para>
 
 Muchos proveedores usan PAP ó CHAP para la secuencia de autenticación
-de acceso en modo texto. Otros usan ambos. Deberá realizar los siguientes
-pasos de si su proveedor requiere PAP ó CHAP.
+de acceso en modo texto. Otros usan ambos. Deberá seguir un procedimiento
+distinto en función de que su proveedor utilice PAP ó CHAP.
 Comente todo lo que hay después de la cadena de marcado (la que
 empieza con <quote>ATDT</quote>) en 
 <filename>/etc/chatscripts/provider</filename>, modifique
-<filename>/etc/ppp/peers/provider</filename> como se describe a 
-continuación, y añada <userinput>user <replaceable>nombre</replaceable>
-</userinput> donde <replaceable>nombre</replaceable> es el nombre de
-usuario para el proveedor al que se conecta. A continuación,
+<filename>/etc/ppp/peers/provider</filename> como se ha descrito
+anteriormente, y añada <userinput>user <replaceable>nombre</replaceable>
+</userinput> donde <replaceable>nombre</replaceable> es su nombre de
+usuario para el proveedor al va a conectarse. A continuación,
 edite <filename>/etc/ppp/pap-secrets</filename> o
 <filename>/etc/ppp/chap-secrets</filename> y ponga allí su clave de acceso.
 
 </para><para>
 
-También necesitará editar <filename>/etc/resolv.conf</filename> y
+También deberá editar <filename>/etc/resolv.conf</filename> y
 añadir las direcciones IP de los servidores de nombres (DNS) de su proveedor.
-Las líneas en <filename>/etc/resolv.conf</filename> tienen el siguiente
-formato:
+El formato de las líneas de <filename>/etc/resolv.conf</filename> es
+el siguiente:
 <userinput>nameserver
 <replaceable>xxx.xxx.xxx.xxx</replaceable></userinput> donde las
-<replaceable>x</replaceable>s son los números en la dirección IP.
+<replaceable>x</replaceable>s son los números de la dirección IP.
 Opcionalmente, puede añadir la opción <userinput>usepeerdns</userinput>
 al fichero <filename>/etc/ppp/peers/provider</filename>, el cual 
 habilitará la elección automática de los servidores DNS apropiados,
@@ -105,16 +108,16 @@ usando la configuración que generalmente proporcionará el sistema remoto.
 
 </para><para>
 
-A menos de que su proveedor tenga una secuencia de acceso diferente de
-la mayoria de ISPs ¡usted habrá finalizado!. Inicie la conexión PPP
-escribiendo <command>pon</command> como superusuario, y revise
-el proceso usando <command>plog</command>. Para desconectarse, use
-<command>poff</command>, de nuevo, deberá ejecutarlo como superusuario.
+Vd. habrá terminado ya, a menos de que su proveedor tenga una secuencia de acceso diferente de
+la mayoria de ISPs. Inicie la conexión PPP
+escribiendo <command>pon</command> como superusuario, y supervise
+el proceso de conexión usando <command>plog</command>. Para desconectarse, use
+<command>poff</command> que deberá ejecutar, de nuevo, como superusuario.
 
 </para><para>
 
-Lea el fichero <filename>/usr/share/doc/ppp/README.Debian.gz</filename>
-para más información sobre el uso de PPP en Debian.
+Consulte el fichero <filename>/usr/share/doc/ppp/README.Debian.gz</filename>
+para leer más información sobre el uso de PPP en Debian.
 
 </para><para>
 
@@ -127,15 +130,15 @@ paquete <classname>gnudip</classname>.
 </para>
 
   <sect3 id="PPOE">
-  <title>Configurar PPP a través de Ethernet (PPPOE)</title>
+  <title>Configuración de PPP a través de Ethernet (PPPOE)</title>
 
 <para>
 
-PPPOE es un protocolo relacionado a PPP usado para algunas conexiones
+PPPOE es un protocolo relacionado con PPP que se utiliza en algunas conexiones
 de banda ancha. Actualmente no existe soporte de base para asistirle
-en su configuración. Sin embargo, se ha instalado el software necesario,
-lo cual significa en este momento de la instalación puede configurar 
-PPPOE manualmente al cambiar a VT2 (segunda consola virtual) y ejecutar
+en su configuración. Sin embargo, el software necesario está instalado,
+lo que significa que puede configurar 
+PPPOE manualmente en este momento de la instalación si cambia a VT2 (segunda consola virtual) y ejecuta la orden
 <command>pppoeconf</command>.
 
 </para>
