@@ -52,7 +52,7 @@
 # "vga=normal", and "devfs=mount,dall" and the installer will still boot
 # ok. We'll probably remove these from the shipped file eventually.
 
-#### Misc.
+#### Shell commands.
 
 # d-i preseeding is inherently not secure. Nothing in the installer checks
 # for attempts at buffer overflows or other exploits of the values of a
@@ -60,7 +60,17 @@
 # locations! To drive that home, and because it's generally useful, here's
 # a way to run any shell command you'd like inside the installer,
 # automatically.
-#d-i	preseed/command		string wget http://url/to/my.udeb -O /tmp/my.udeb ; udpkg -i /tmp/my.udeb
+
+# This first command is run as early as possible, just after
+# preseeding is read.
+#d-i	preseed/early_command		string wget http://url/to/my.udeb -O /tmp/my.udeb ; udpkg -i /tmp/my.udeb
+# This command is run just before the install finishes, but when there is
+# still a usable /target directory.
+#d-i	preseed/late_command		string for deb in /hd-media/*.deb; do cp $deb /target/tmp; chroot /target dpkg -i /tmp/$deb; done
+# This command is run after base-config is done, just before the login:
+# prompt. This is a good way to install a set of packages you want, or to
+# tweak the configuration of the system.
+#base-config	base-config/command	string apt-get install zsh; chsh -s /bin/zsh
 
 #### Network configuration.
 
@@ -96,7 +106,7 @@ d-i	netcfg/wireless_wep	string
 d-i	mirror/country		string enter information manually
 d-i	mirror/http/hostname	string http.us.debian.org
 d-i	mirror/http/directory	string /debian
-d-i	mirror/suite		string unstable
+d-i	mirror/suite		string testing
 #d-i	mirror/http/proxy	string http://192.168.1.1:3128/
 
 ### Partitioning.
@@ -156,9 +166,132 @@ d-i	grub-installer/with_other_os	boolean true
 #d-i	grub-installer/only-debian	boolean false
 #d-i	grub-installer/with_other_os	boolean false
 
-##### Finishing up.
+##### Finishing up the first stage install.
 
 # Avoid that last message about the install being complete.
-d-i	prebaseconfig/reboot_in_progress	boolean true
+d-i	prebaseconfig/reboot_in_progress	note 
 
-# TODO: base-config preseeding
+
+##### Preseeding base-config.
+# XXX: Note that most of this will not work right until base-config 2.45 is
+# available.
+
+# Avoid the intorductory message.
+base-config	base-config/intro	note 
+
+# Avoid the final message.
+base-config	base-config/login	note 
+
+# If you installed a display manager, but don't want to start it immediately
+# after base-config finishes.
+#base-config	base-config/start-display-manager	boolean false
+
+###### Time zone setup.
+
+# Controls whether or not the hardware clock is set to GMT.
+tzconfig	tzconfig/gmt		boolean true
+
+# If you told the installer that you're in the United States, then you
+# can set the time zone using this variable.
+# (Choices are: Eastern, Central, Mountain, Pacific, Alaska, Hawaii,
+# Aleutian, Arizona East-Indiana, Indiana-Starke, Michigan, Samoa, other)
+tzconfig	tzconfig/choose_country_zone/US	select Eastern
+# If you told it you're in Canada.
+# (Choices are: Newfoundland, Atlantic, Eastern, Central,
+# East-Saskatchewan, Saskatchewan, Mountain, Pacific, Yukon, other)
+tzconfig	tzconfig/choose_country_zone/CA	select Eastern
+# If you told it you're in Brazil. (Choices are: East, West, Acre,
+# DeNoronha, other)
+tzconfig	tzconfig/choose_country_zone/BR	select East
+# Many countries have only one time zone. If you told the installer you're
+# in one of those countries, you can choose its standard time zone via this
+# question.
+tzconfig	tzconfig/choose_country_zone_single boolean true
+# This question is asked as a fallback for countries other than those
+# listed above, which have more than one time zone. You can preseed one of
+# the time zones, or "other".
+#tzconfig	tzconfig/choose_country_zone_multiple select 
+
+###### Account setup.
+
+# To preseed the root password, you have to put it in the clear in this
+# file. That is not a very good idea, use caution!
+# (XXX: In fact, this won't work, because passwd clears the settings
+# before asking for a root password. This may not be fixed before the sarge
+# release, if it's fixed at all.)
+#passwd		passwd/root-password		password r00tme
+#passwd		passwd/root-password-again	password r00tme
+
+# If you want to skip creation of a normal user account.
+#passwd		passwd/make-user		boolean false
+# Alternatively, you can preseed the user's name.
+#passwd		passwd/user-fullname		string Joey Hess
+#passwd		passwd/username			string joey
+# And their password, but use caution!
+#passwd		passwd/user-password		password insecure
+#passwd		passwd/user-password-again	password insecure
+
+###### Apt setup.
+
+# This question controls what source the second stage installation uses
+# for packages. Choices are cdrom, http, ftp, filesystem, edit sources list
+# by hand
+apt-setup	apt-setup/uri_type	select http
+
+# If you choose ftp or http, you'll be asked for a country and a mirror.
+apt-setup	apt-setup/country	select enter information manually
+apt-setup	apt-setup/hostname	string http.us.debian.org
+apt-setup	apt-setup/directory	string /debian
+# Stop after choosing one mirror.
+apt-setup	apt-setup/another	boolean false
+
+# You can choose to install non-free and contrib software.
+#apt-setup	apt-setup/non-free	boolean true
+#apt-setup	apt-setup/contrib	boolean true
+
+# Do enable security updates.
+apt-setup	apt-setup/security-updates	boolean true
+
+###### Package selection.
+
+# You can choose to install any combination of tasks that are available.
+# Available tasks as of this writing include: Desktop environment,
+# Web server, Print server, DNS server, File server, Mail server, 
+# SQL database, manual package selection. The last of those will run
+# aptitude. You can also choose to install no tasks, and force the
+# installation of a set of packages in some other way.
+# XXX: this will not work until tasksel 2.12 is available
+tasksel		tasksel/first	multiselect Desktop environment
+#tasksel	tasksel/first	multiselect Web server, Mail server, DNS server
+
+###### Mailer configuration.
+
+# During a normal install, exim asks only two questions. Here's how to
+# avoid even those. More complicated preseeding is possible.
+exim4-config	exim4/dc_eximconfig_configtype	select no configuration at this time
+# It's a good idea to set this to whatever user account you choose to
+# create. Leaving the value blank results in postmaster mail going to
+# /var/mail/mail.
+exim4-config	exim4/dc_postmaster		string 
+
+###### X Configuration.
+
+# TODO
+# Standard questions asked during a high priority install are:
+#Select the desired X server driver.
+#Attempt mouse device autodetection?
+#Attempt monitor autodetectio?.
+#Is your monitor a LCD device?
+#Choose a method for selecting your monitor characteristics.
+#Enter your monitor's horizontal sync range.
+#Enter your monitor's vertical refresh range.
+
+###### Everything else.
+
+# Depending on what software you choose to install, or if things go wrong
+# during the installation process, it's possible that other questions may
+# be asked. You can preseed those too, of course. To get a list of every
+# possible question that could be asked during an install, do an
+# installation, and then run these commands:
+#   debconf-get-selections --installer > file
+#   debconf-get-selections >> file
