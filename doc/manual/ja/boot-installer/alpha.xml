@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 19466 -->
+<!-- original version: 23576 -->
 
  <sect2 arch="alpha" id="alpha-firmware">
  <title>Alpha コンソールファームウェア</title>
@@ -456,9 +456,10 @@ pass the <userinput>console=</userinput> parameter to the kernel.
 This can be done using the <userinput>-flags</userinput> argument to
 the SRM <userinput>boot</userinput> command.  The serial ports are
 named the same as their corresponding files in
-<userinput>/dev</userinput>.  For example, to boot from
-<userinput>ewa0</userinput> and use a console on the first serial
-port, you would type: 
+<userinput>/dev</userinput>.  Also, when specifying additional kernel
+parameters, you must repeat certain default options that are needed by
+the &d-i; images.  For example, to boot from <userinput>ewa0</userinput>
+and use a console on the first serial port, you would type: 
 -->
 シリアルコンソールを使いたい場合は、カーネルに <userinput>console=</userinput> 
 パラメータを渡さなければ<emphasis>なりません</emphasis>。
@@ -466,13 +467,15 @@ port, you would type:
 <userinput>-flags</userinput> 引数を使います。
 シリアルポートの名前は、
 <userinput>/dev</userinput> 以下に置かれているファイルのものと同じです。
+また、追加のカーネルパラメータを指定するときには、
+&d-i; イメージに必要なデフォルトオプションを必ず繰り返さなければなりません。
 例えば <userinput>ewa0</userinput> から起動し、
 1 番目のシリアルポートからコンソールを利用するには、
 以下のように入力します。
 
 <informalexample><screen>
 
->>> boot ewa0 -flags console=ttyS0
+&gt;&gt;&gt; boot ewa0 -flags &quot;root=/dev/ram ramdisk_size=16384 console=ttyS0&quot;
 
 </screen></informalexample>
 

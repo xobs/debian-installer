@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 -->
+<!-- original version: 23579 -->
 
 
   <sect2 arch="alpha"><title>Tru64 UNIX でのパーティション分割</title>
@@ -30,26 +30,33 @@ UNIX では `a' から `h' までの「文字」で識別されます。
 Linux からはまず間違いなく <filename>sda5</filename>
 という名前になります。
 
-
 </para><para>
 
 <!--
-Partitions in the disk label may overlap.  Moreover, the `c' partition
-is required to span the entire disk (thus overlapping all other
-non-empty partitions).  Under Linux this makes <filename>sda3</filename>
-identical to <filename>sda</filename> (<filename>sdb3</filename> to <filename>sdb</filename>, if
-present, and so on).  Apart from satisfying this requirement, you
-should carefully avoid creating overlapping partitions.
+Partitions in a Tru64 disk label may overlap.  Moreover, if this disk
+will be used from Tru64, the `c' partition is required to span the
+entire disk (thus overlapping all other non-empty partitions).  Under
+Linux this makes <filename>sda3</filename> identical to
+<filename>sda</filename> (<filename>sdb3</filename> to
+<filename>sdb</filename>, if present, and so on).  However, the partman
+partitioning tool used by &d-i; cannot handle overlapping partitions at
+present.  As a result, it is currently not recommended to share disks
+between Tru64 and Debian.  Partitions on Tru64 disks can be mounted
+under Debian after installation has been completed.
 -->
-ディスクラベルにおけるパーティションは互いに重なっている場合があります。
-さらに、パーティション `c' はディスク全体を表現すると決められています
+Tru64 ディスクラベルにおけるパーティションは互いに重なっている場合があります。
+さらに、このディスクが Tru64 で使用されていたのなら、
+パーティション `c' はディスク全体を表現すると決められています
 (つまり空ではないすべてのパーティションと重なっているのです)。
 Linux では、これは <filename>sda3</filename> が <filename>sda</filename>
-と等しいことを意味します
+と等しいことを意味します。
 (もし 2 台目の SCSI ディスクがあれば
-<filename>sdb3</filename> は <filename>sdb</filename> と等しい。以降同様)。
-この条件は満たさなければなりませんが、
-それ以外では、パーティションを互いに重ねないよう注意してください。
+<filename>sdb3</filename> は <filename>sdb</filename> と等しい。以降同様)
+しかし、&d-i; が使用するパーティション分割ツール partman では、
+重なったパーティションを扱えません。
+そのため、Tru64 と Debian とで共有するのは、現在お奨めしません。
+Tru64 ディスクのパーティションは、インストールがすべて完了した後に
+Debian  でマウントできます。
 
 </para><para>
 
@@ -58,6 +65,8 @@ Another conventional requirement is for the `a' partition to start from
 the beginning of the disk, so that it always includes the boot block
 with the disk label. If you intend to boot Debian from that disk, you
 need to size it at least 2MB to fit aboot and perhaps a kernel.
+Note that this partition is only required for compatibility; you must
+not put a file system onto it, or you'll destroy data.
 -->
 もうひとつの伝統的な決まりは、
 パーティション `a' が、ディスクの最初から始まり、
@@ -65,42 +74,9 @@ need to size it at least 2MB to fit aboot and perhaps a kernel.
 Debian をこのようなディスクから起動したい場合は、
 これら (とおそらくはカーネル) を収めるために、
 このパーティションのサイズを最低 2MB 確保する必要があるでしょう。
-
-</para><para>
-
-<!--
-Note that these two partitions are only required for compatibility;
-you must not put a file system onto them, or you'll destroy data.  If
-you're not going to share the disk with Tru64 Unix or one of the free
-4.4BSD-Lite derived operating systems (FreeBSD, OpenBSD, or NetBSD),
-you can ignore these requirements, and use the partitioning tool from
-the Debian boot disks.  See <xref linkend="partition-programs"/> for details.
--->
-互換性に必要とされるのはこれらの 2 つのパーティションだけですから、
-ここにファイルシステムは置かないようにしてください。データを壊してしまいます。
-このディスクを Tru64 Unix や 4.4BSD-Lite 派生の OS
-(FreeBSD, OpenBSD, NetBSD) と共有する予定がなければ、
-これらの制限は無視できます。Debian ブートディスクの
-パーティション分割ツールを使いましょう。
-詳細は <xref linkend="partition-programs"/> をご覧ください。
-
-</para><para>
-
-<!--
-Disks can be partitioned with the graphical disk configuration tool that
-is accessible through the Application Manager, or with the command-line
-<command>disklabel</command> utility.  Partition type for the Linux file
-system should be set to `resrvd8'.  This can only be done via
-<command>disklabel</command>; however, all other configuration can easily be
-performed with the graphical tool.
--->
-ディスクのパーティション分割は、
-アプリケーションマネージャから起動するグラフィカルなディスク設定ツールか、
-コマンドラインから起動する <command>disklabel</command> ユーティリティによって
-実行できます。
-Linux ファイルシステム用のパーティションのタイプは `resrvd8' に設定します。
-この設定は <command>disklabel</command> でしかできませんが、
-これ以外のすべての操作はグラフィカルなツールから簡単に行えます。
+互換性に必要とされるのはこのパーティションだけですから、
+ここにファイルシステムは置かないようにしてください。
+さもなくばデータを壊してしまいます。
 
 </para><para>
 
@@ -148,8 +124,9 @@ repartition your disk from the AlphaBIOS setup menu).  Otherwise, it
 is not really necessary to partition from Windows; the Linux
 partitioning tools will generally do a better job.  Note that when you
 run NT, the Disk Administrator may offer you to write a ``harmless
-signature'' on non-Windows disks if you have any.  <emphasis>Never</emphasis> let
-it do that, as this signature will destroy the partition information.
+signature'' on non-Windows disks if you have any.  <emphasis>Never</emphasis>
+let it do that, as this signature will destroy the partition
+information.
 -->
 Windows NT は PC スタイルのパーティションテーブルを使用します。
 既存の FAT や NTFS のパーティションを操作する場合には、
@@ -172,12 +149,18 @@ Windows 以外のディスクに
 If you plan to boot Linux from an ARC/AlphaBIOS/ARCSBIOS console, you
 will need a (small) FAT partition for MILO.  5 Mb is quite
 sufficient.  If Windows NT is installed, its 6 Mb bootstrap partition
-can be employed for this purpose.
+can be employed for this purpose.  Debian &releasename; does not support
+installing MILO.  If you already have MILO installed on your system, or
+install MILO from other media, Debian can still be booted from ARC.
 -->
 Linux を ARC/AlphaBIOS/ARCSBIOS コンソールから起動するつもりなら、
 MILO を入れておくための (小さな) FAT パーティションが必要になります。
 5MB もあれば充分です。Windows NT がインストールされている場合は、
 その 6MB の起動パーティションをこちらの目的にも流用できます。
+Debian &releasename; は MILO のインストールををサポートしていません。
+既にシステムに MILO がインストールされていたり、
+他のメディアから MILO をインストールする場合、
+Debian は ARC から起動できます。
 
 </para>
   </sect2>
