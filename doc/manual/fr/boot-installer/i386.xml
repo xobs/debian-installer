@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 1.7 -->
+<!-- original version: 11648 -->
 
 
   <sect2 arch="i386"><title>Amorcer depuis un cédérom</title>
@@ -17,6 +17,8 @@ s'amorcer et vous devriez apercevoir l'invite <prompt>boot:</prompt>. À
 
 </para><para>
 
+<!-- We'll comment the following section until we know exact layout -->
+<!-- 
 Le cédérom n°&nbsp;1 du jeu officiel de cédéroms pour
       &arch-title; vous présentera une invite <prompt>boot:</prompt> sur la
       plupart des matériels. Appuyez sur <keycap>F3</keycap> pour afficher la
@@ -82,6 +84,8 @@ Amorce la saveur «&nbsp;bf2.4&nbsp;».
 
 </para><para>
 
+-->
+
 Si votre système ne peut s'amorcer directement depuis un cédérom
       ou tout simplement ne semble pas fonctionner, ne désespérez
       pas&nbsp;; vous pouvez simplement lancer
@@ -89,8 +93,7 @@ Si votre système ne peut s'amorcer directement depuis un cédérom
 <userinput>E:</userinput> par la lettre que MS-DOS assigne à votre lecteur 
 de cédérom)
       pour lancer le processus d'installation.
-Thenn, skip down
-to <xref linkend="init-config"/>.
+      Sautez ensuite à <xref linkend="init-config"/>.
 
 </para><para>
 
@@ -99,12 +102,6 @@ Si vous tentez aussi d'installer depuis une partition FAT
 depuis le disque dur voir <xref linkend="install-from-dos"/>
       plus bas pour plus d'informations sur l'installation via cette
       méthode.
-
-</para><para>
-
-USB CD-ROM drives are supported by the `bf2.4' flavor. FireWire devices that
-are supported by the ohci1394 and sbp2 drivers may also be useable with the
-`bf2.4' flavor.
 
 </para>
      </sect2>
@@ -146,7 +143,8 @@ loadlin (bogue n°142421) qui empêche le fichier
 
 
   <sect2 arch="i386" id="boot-initrd">
-  <title>Démarrer à partir de linux en utilisant <command>LILO</command></title>
+  <title>Démarrer à partir de linux en utilisant <command>LILO</command>
+  ou <command>GRUB</command></title>
 <para>
 
 Une ligne <emphasis>initrd=</emphasis> dans le fichier 
@@ -156,12 +154,12 @@ Une ligne <emphasis>initrd=</emphasis> dans le fichier
 <listitem><para>
 
 Dites à <command>LILO</command> de charger le programme d'installation
-<filename>root.bin</filename> comme un disque virtuel en mémoire au cours
+<filename>initrd.gz</filename> comme un disque virtuel en mémoire au cours
         du démarrage&nbsp;;
 </para></listitem>
 <listitem><para>
 
-Dites au noyau <filename>linux.bin</filename> d'utiliser cette image virtuelle
+Dites au noyau <filename>vmlinuz</filename> d'utiliser cette image virtuelle
         en mémoire comme sa partition racine.
 </para></listitem>
 </itemizedlist>
@@ -174,13 +172,13 @@ Dites au noyau <filename>linux.bin</filename> d'utiliser cette image virtuelle
 
 <informalexample><screen>
 
-image=/boot/newinstall/linux.bin
+image=/boot/newinstall/vmlinuz
        label=newinstall
-       initrd=/boot/newinstall/root.bin
+       initrd=/boot/newinstall/initrd.gz
 
 </screen></informalexample>
 
-dans ce cas, l'option <emphasis>root=/dev/hdXYZ</emphasis> du fichier
+Dans ce cas, l'option <emphasis>root=/dev/hdXYZ</emphasis> du fichier
 <filename>lilo.conf</filename> sera ignorée.
         Pour plus de détails, référez-vous aux pages de manuel
 <citerefentry><refentrytitle>initrd</refentrytitle>
@@ -188,6 +186,23 @@ dans ce cas, l'option <emphasis>root=/dev/hdXYZ</emphasis> du fichier
 <citerefentry><refentrytitle>lilo.conf</refentrytitle>
 <manvolnum>5</manvolnum></citerefentry>. Lancez maintenant
 <userinput>lilo</userinput> et relancez la machine.
+
+</para><para>
+La procédure pour <command>GRUB</command> est relativement similaire.
+Cherchez le fichier <filename>menu.lst</filename> dans le répertoire
+<filename>/boot/grub/</filename> (parfois dans
+<filename>/boot/boot/grub/</filename>), ajoutez les lignes suivantes
+
+<informalexample><screen>
+
+title  New Install
+kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram ramdisk_size=8192 devfs=mount,dall
+initrd (hd0,0)/boot/newinstall/initrd.gz
+
+</screen></informalexample>
+
+et redémarrez. À partir de là, il ne devrait plus y avoir de différences
+entre <command>GRUB</command> et <command>LILO</command>.
 
 </para><para>
 
@@ -199,7 +214,7 @@ Vous pouvez voir à plusieurs reprises le magique
 
 Avant que le noyau n'ait été chargé, <command>LILO</command> affiche
 une ligne <computeroutput>Loading <replaceable>imagelabel</replaceable>......</computeroutput> 
-bien plus longue, avec plus de point que d'ordinaire, ce qui montre
+bien plus longue, avec plus de points que d'ordinaire, ce qui montre
         la progression du chargement de l'image virtuelle en mémoire&nbsp;;
 
 </para></listitem>
@@ -256,7 +271,7 @@ Ensuite passez à un autre terminal virtuel et utilisez un shell
 
 </para><para>
 
-Rendez-vous à <xref linkend="configure-network"/> dans les menus
+Rendez-vous à <xref linkend="netcfg"/> dans les menus
         d'installation de <command>debian-installer</command>, et essayez de 
 contacter votre miroir Debian favori à l'aide de la commande 
 <userinput>ping</userinput>.
@@ -278,13 +293,36 @@ Utilisez <userinput>Démonter une partition</userinput> si vous en avez monté
   </sect2>
 
 
-  <sect2 arch="i386"><title>Amorcer depuis des disquettes</title>
+  <sect2 arch="i386" id="usb-boot">
+  <title>Démarrer à partir d'une clé USB</title>
+<para>
+Lets assume you have prepared everything from <xref
+linkend="boot-dev-select"/> and <xref linkend="boot-usb-files"/>.  Now
+just plug your USB stick into some free USB connector and reboot the
+computer.  The system should boot up, and you should be presented with
+the <prompt>boot:</prompt> prompt.  Here you can enter optional boot
+arguments, or just hit &enterkey;.
+
+</para><para>
+
+In case your computer doesn't support booting from USB memory devices,
+you can still use a single floppy to do the initial boot and then
+switch to USB. Advance according to <xref linkend="floppy-boot"/>; the
+kernel on boot floppy should detect your USB stick automatically. When
+it asks for the root floppy, simply press &enterkey;. You should see
+&d-i; starting.
+
+</para>
+  </sect2>
+
+  <sect2 arch="i386" id="floppy-boot">
+  <title>Amorcer depuis des disquettes</title>
 <para>
 
 Vous devez avoir déjà téléchargé les images de disquettes dont
       vous aurez besoin et créé les disquettes à partir des images
 de&nbsp;: <xref linkend="create-floppy"/>. Si vous le désirez, vous pouvez 
-aussi modifier la disquette de secours&nbsp;; voir
+aussi modifier la disquette d'amorçage&nbsp;; voir
 <xref linkend="rescue-replace-kernel"/>.
 
 </para><para>
@@ -321,19 +359,8 @@ proprement à zéro la
 </para><para>
 
       On suppose la disquette fonctionnelle&nbsp;; vous devriez
-      apercevoir un écran introduisant la disquette de secours avec
+      apercevoir un écran introduisant la disquette d'amorçage avec
       à la fin une invite <prompt>boot:</prompt>.
-
-</para><para>
-
-Si vous amorcez le système d'une autre manière,
-      suivez les instructions et attendez l'apparition de l'invite
-      <prompt>boot:</prompt>. Si vous amorcez depuis des disquettes plus
-      petites que 1,44&nbsp;Mo, <phrase condition="rescue-needs-root-disk"> 
-ou, en fait, chaque fois que vous amorcez depuis des disquettes sur
-      votre architecture, </phrase> vous aurez à utiliser une méthode
-      d'amorçage sur disque virtuel et vous aurez besoin de la
-      disquette Root.
 
 </para><para>
 
@@ -357,16 +384,6 @@ la touche
 
 </para><para>
 
-Cette disquette est appelée disquette de secours parce que vous
-      pouvez l'utiliser pour amorcer votre système et le réparer si
-      par hasard un problème rendait le disque dur non
-      amorçable. Ainsi, vous devez sauvegarder cette disquette une
-      fois votre système installé. Presser sur <keycap>F3</keycap> vous
-      fournira plus d'informations sur l'utilisation de cette
-      disquette de secours.
-
-</para><para>
-
       Une fois que vous avez appuyé sur &enterkey;, vous devez voir le
       message <computeroutput>Loading...</computeroutput> suivi par 
 <computeroutpu>Uncompressing Linux...</computeroutpu> et ensuite un écran 
@@ -377,16 +394,7 @@ linkend="kernel-msgs"/>.
 
 </para><para>
 
-      Si vous ne choisissez pas la méthode par défaut, par exemple le
-      disque virtuel ou la disquette, il vous sera demandé d'insérer
-      la disquette Root. Insérez cette disquette dans le premier
-      lecteur de disquette puis appuyez sur &enterkey; (si vous avez
-      choisi «&nbsp;floppy1&nbsp;», insérez la disquette Root dans le
-      second lecteur de disquettes).
-
-</para><para>
-
-      Après avoir amorcé la disquette de secours, la disquette Root est
+      Après avoir démarré depuis la disquette d'amorçage, la disquette Root est
       démandée. Insérez-la puis pressez la touche &enterkey; et le
       contenu est chargé en mémoire. Le programme d'installation
 <command>debian-installer</command> est automatiquement lancé.
@@ -394,15 +402,95 @@ linkend="kernel-msgs"/>.
 </para>
   </sect2>
   
+  <sect2 arch="i386" id="boot-tftp"><title>Booting with TFTP</title>
+ 
+&boot-installer-intro-net.xml;
+ 
+<para>
+
+There are various ways to do a TFTP boot on i386.
+
+</para>
+
+   <sect3><title>Etherboot</title>
+<para>
+
+The <ulink url="http://www.etherboot.org">etherboot project</ulink>
+provides bootdiskettes and even bootroms that do a TFTPboot.
+
+</para>
+   </sect3>
+
+   <sect3><title>NIC with network bootROM</title>
+<para>
+
+It could be that your Network Interface Card provides
+TFTP boot functionality.
+
+</para><para condition="FIXME">
+
+Let us (<email>&email-debian-boot-list;</email>) know how did you
+manage it.
+Please refer to this document.
+
+</para>
+   </sect3>
+
+   <sect3><title>NIC or Motherboard that support PXE</title>
+<para>
+
+It could be that your Network Interface Card or Motherboard provides
+PXE boot functionality.
+Which is a <trademark class="trade">Intel</trademark> re-implemention
+of TFTP boot.
+
+</para><para condition="FIXME">
+
+Let us (<email>&email-debian-boot-list;</email>) know how did you
+manage it.
+Please refer to this document.
+
+<!-- from #debian-boot 2004-03-13
+06:37 -!- SuperQ [ben@trogdor.likes.to.burninate.net] has joined
+#debian-boot
+06:38 < SuperQ> anyone done much with d-i on pxe boot?
+06:39 < SuperQ> I got it all setup, daily build from sjogren's files
+06:39 < joshk> yes, it works
+06:39 < SuperQ> "Warning: unable to open an initial console."
+06:39 < SuperQ> Kernel panic: Attempted to kill init!
+06:39 < joshk> pass devfs=mount to the kernel
+06:40 < joshk> in pxelinux.cfg/whatever
+06:40 < SuperQ> oh.. that's changed since the bug tracking post
+06:40 < SuperQ>
+http://lists.debian.org/debian-testing/2003/debian-testing-200311/msg00098.html
+06:40 < SuperQ> that says to devfs=nomount
+06:41 < SuperQ> should probably copy the bulk of that message into
+debian/dists/sarge/main/installer-i386/current/doc/INSTALLATION-HOWTO
+06:41 < SuperQ> :) )
+06:41 < joshk> that's from months ago
+06:41 < joshk> :P
+06:41 < SuperQ> I know
+06:42 < SuperQ> but it's still referanced in the howto
+06:42 < SuperQ> yay! it works now
+06:42  * SuperQ gives his new ThinkPad X31 some sarge love
+06:42 < SuperQ> I'll have to write up a page on Sarge/D-I and things
+for
+                linux-laptops.net
+06:45 < SuperQ> thanks joshk
+-->
+</para>
+   </sect3>
+  </sect2>
+
   <sect2 arch="i386"><title>i386 Boot Parameters</title>
 <para>
 
-Si vous amorcez à partir de la disquette de secours ou du cédérom il vous 
+Si vous amorcez à partir de la disquette d'amorçage ou du cédérom il vous 
 sera présenté une invite d'amorçage, <prompt>boot:</prompt>. Plus de détails 
 sur
       l'utilisation des paramètres de démarrage avec la
-      disquette de secours peuvent être trouvés dans&nbsp;: <xref
-     linkend="boot-from-floppies"/>. Si vous amorcez à partir d'un système
+      disquette d'amorçage peuvent être trouvés dans&nbsp;: <xref
+     linkend="floppy-boot"/>. Si vous amorcez à partir d'un système
       d'exploitation pré-installé, vous aurez à utiliser une autre
       méthode pour spécifier les paramètres d'amorçage. 
       Si vous installez à partir de DOS, par exemple, vous pouvez
@@ -489,7 +577,7 @@ Retournez maintenant au dbootstrap et lancez l'outil de
   <title>System freeze while loading the USB modules</title>
 <para>
 
-     La saveur bf2.4 essaye normalement d'installer les pilotes
+     Le noyau essaye normalement d'installer les pilotes
      de claviers USB afin de permettre l'installation de quelques claviers 
      USB non standards. Cependant, sur certains systèmes USB, le pilote
      provoque un blocage lors du démarrage. Il est possible d'éviter ces
