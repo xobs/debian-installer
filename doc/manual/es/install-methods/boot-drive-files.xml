@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 20054 -->
+<!-- original version: 23151 -->
+<!-- revisado por nahoo, 4 noviembre 2004 -->
 
  <sect1 condition="bootable-disk" id="boot-drive-files">
- <title>Preparar ficheros para arranque desde disco duro</title>
+ <title>Preparación de los ficheros para arranque desde el disco duro</title>
 <para>
 
-El instalador puede ser arrancado usando los ficheros de arranque
-en una partición existente del disco duro, ya sea cargados desde
-otro sistema operativo o al ejecutar directamente un gestor de arranque
+El instalador puede arrancarse usando ficheros de arranque colocados
+en una partición existente del disco duro, ya sea cargándolos desde
+otro sistema operativo o ejecutando directamente un gestor de arranque
 desde la BIOS.
 
 </para><para>
@@ -26,12 +27,12 @@ ficheros NTFS.
 
 El instalador no puede arrancar desde ficheros en un sistema de
 ficheros HFS+. MacOS System 8.1 y superiores podrían usar sistema
-de ficheros HFS+; todas las PowerMac NewWorld usan HFS+. Para determinar
+de ficheros HFS+; todas las PowerMac «NewWorld» usan HFS+. Para determinar
 si su sistema existente usa HFS+, elija <userinput>Get Info</userinput> 
 para el volumen en cuestión. Los sistemas de ficheros HFS aparecen como
 <userinput>Mac OS Standard</userinput>, mientras que los sistemas de
-ficheros HFS+ dicen <userinput>Mac OS Extended</userinput>. Deberá tener
-una partición HFS a modo de intercambiar ficheros entre MacOS y Linux,
+ficheros HFS+ aparecen como <userinput>Mac OS Extended</userinput>. Deberá tener
+una partición HFS para intercambiar ficheros entre MacOS y Linux,
 en particular los ficheros de instalación que descargue.
 
 </para><para arch="powerpc"> 
@@ -43,19 +44,19 @@ desde disco duro, dependiendo de si el sistema es un modelo «NewWorld» u
 </para>
 
   <sect2 arch="i386" id="files-lilo">
-  <title>Arranque desde disco duro usando <command>LILO</command> o
+  <title>Arranque desde el disco duro usando <command>LILO</command> o
   <command>GRUB</command></title>
 <para>
 
 Esta sección explica como añadir o incluso reemplazar una instalación
-de Linux existente usando, ya sea <command>LILO</command> o
+de Linux existente usando <command>LILO</command> o
 <command>GRUB</command>.
 
 </para><para>
 
-En el momento de arranque, ambos gestores soportan el cargar en memoria
-no solamente el núcleo, sino también una imagen de disco. Este disco RAM
-puede ser usado por el núcleo como el sistema de ficheros raíz.
+En el momento de arranque, ambos gestores soportan la carga en memoria
+no solamente el núcleo, sino también de una imagen de disco. El núcleo puede
+usar este disco RAM como sistema de ficheros raíz.
 
 </para><para>
 
@@ -71,7 +72,7 @@ ubicación conveniente en su disco duro, por ejemplo a
 </para></listitem>
 <listitem><para>
 
-<filename>initrd.gz</filename> (imagen de disco ram)
+<filename>initrd.gz</filename> (imagen de disco RAM)
 
 </para></listitem>
 </itemizedlist>
@@ -86,33 +87,33 @@ Finalmente, para configurar el gestor de arranque continúe en
 
 
   <sect2 arch="powerpc" id="files-oldworld">
-  <title>Arranque del instalador desde disco duro en Macs OldWorld</title>
+  <title>Arranque del instalador desde el disco duro en Macs OldWorld</title>
 <para>
 
 El disquete <filename>boot-floppy-hfs</filename> usa 
 <application>miBoot</application> para cargar la instalación de Linux,
-pero <application>miBoot</application> no puede ser usado para arranque
-desde disco duro. <application>BootX</application>, cargado desde MacOS,
+pero <application>miBoot</application> no puede usarse para el arranque
+desde el disco duro. <application>BootX</application>, cargado desde MacOS,
 soporta el arranque desde ficheros ubicados en el disco duro.
-<application>BootX</application> también puede ser usado para arranque
-dual de MacOS y Linux después de finalizada su instalación Debian.
-Para la Performa 6360, aparentemente <command>quik</command> no puede
-hacer el disco arrancable. De modo que se requiere 
+<application>BootX</application> también puede usarse para un arranque
+dual de MacOS y Linux después de finalizar su instalación de Debian.
+Para Performa 6360, aparentemente <command>quik</command> no puede
+hacer el disco duro arrancable. Así que se necesita 
 <application>BootX</application> en ese modelo.
 
 </para><para>
 
-Descargue y desempaquete la distribución de <application>BootX</application>
+Descargue y desempaquete la distribución <application>BootX</application>
 disponible en <ulink url="&url-powerpc-bootx;"></ulink>, 
 o en el directorio
 <filename>dists/woody/main/disks-powerpc/current/powermac</filename>
 de las réplicas http/ftp y los CDs oficiales de Debian. Use
 <application>Stuffit Expander</application> para extraerlo desde su
-archivo. Con el paquete, existe una carpeta vacía llamada
+archivo. Dentro del paquete, existe una carpeta vacía llamada
 <filename>Linux Kernels</filename>. Descargue 
 <filename>linux.bin</filename> y
 <filename>ramdisk.image.gz</filename> desde el directorio
-<filename>disks-powerpc/current/powermac</filename>, y luego coloquelos
+<filename>disks-powerpc/current/powermac</filename>, y luego colóquelos
 en la carpeta <filename>Linux Kernels</filename>. Luego localice la
 carpeta <filename>Linux Kernels</filename> en la carpeta «System» activa.
 
@@ -120,35 +121,35 @@ carpeta <filename>Linux Kernels</filename> en la carpeta «System» activa.
   </sect2>
 
   <sect2 arch="powerpc" id="files-newworld">
-  <title>Arranque del instalador desde disco duro en Macs NewWorld</title>
+  <title>Arranque del instalador desde el disco duro en Macs NewWorld</title>
 <para>
 
 Las PowerMac NewWorld soportan arranque desde red o desde un CD-ROM
-ISO9660, así como cargar binarios ELF directamente desde el disco 
+ISO9660, así como la carga de binarios ELF directamente desde el disco 
 duro. Estas máquinas arrancarán Linux directamente a través de
 <command>yaboot</command>, que soporta la carga de núcleo y disco RAM
-directamente desde una partición ext2, así como arranque dual con
+directamente desde una partición ext2, así como el arranque dual con
 MacOS. El arranque del instalador desde el disco duro es particularmente
 apropiado para máquinas nuevas sin unidades de disquete.  
-<command>BootX</command> no está soportado y no debe ser usado en
+<command>BootX</command> no está soportado y no debe usarse en
 PowerMacs NewWorld.
 
 </para><para>
 
-<emphasis>Copie</emphasis> (no mueva) los siguientes cuatro ficheros desde
-los archivos de Debian, vaya al nivel superior de su disco duro (esto se
+<emphasis>Copie</emphasis> (no mueva) los cuatro ficheros siguientes desde
+los archivos de Debian, al nivel superior de su disco duro (esto se
 puede hacer al arrastrar con <keycap>option</keycap> cada fichero al 
 icono del disco duro).
 
 <itemizedlist>
 <listitem><para>
 
-<filename>linux.bin</filename>
+<filename>vmlinuz</filename>
 
 </para></listitem>
 <listitem><para>
 
-<filename>root.bin</filename> (desde la carpeta images-1.44)
+<filename>initrd.gz</filename>
 
 </para></listitem>
 <listitem><para>
