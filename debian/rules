@@ -13,12 +13,6 @@ DESTDIR=$(ARCHIVEDIR)/$(DATE)
 IMAGEDIR=$(DESTDIR)/images
 TARNAME=debian-installer-images_$(VERSION)_$(ARCH).tar.gz
 
-# Work out the name(s) of the kernel that the demo deb should depend on.
-DEB_HOST_GNU_CPU = $(shell dpkg-architecture -qDEB_HOST_GNU_CPU)
-DEB_HOST_GNU_SYSTEM = $(shell dpkg-architecture -qDEB_HOST_GNU_SYSTEM)
-KERNELPACKAGE=$(shell perl -e 'print join(" | ", @ARGV)' \
-              $(foreach KVERS,${KERNELVERSION},kernel-image-$(KVERS)))
-
 clean:
 	dh_testdir
 	dh_testroot
@@ -55,10 +49,10 @@ binary-arch: install
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs
-	dh_installdocs
-	dh_installman debian/d-i-demo.8
+	dh_installdocs debian/tmp/$(DESTDIR)/doc/manual
+	dh_installdocs -X historic doc/*
 	dh_compress
-	dh_fixperms -X usr/lib/debian-installer-demo
+	dh_fixperms
 	dh_gencontrol -- -Vkernel:Package='$(KERNELPACKAGE)'
 	dh_builddeb
 	cd debian/tmp && tar czvf ../../../$(TARNAME) .

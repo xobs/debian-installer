@@ -198,9 +198,6 @@ list:
 	@echo "all_clean"
 	@echo "reallyclean"
 	@echo
-	@echo "demo"
-	@echo "shell"
-	@echo
 	@$(submake) all_list
 
 .PHONY: _list
@@ -209,7 +206,11 @@ _list:
 	echo build_$(targetstring); \
 	echo stats_$(targetstring); \
 	$(if $(findstring $(MEDIUM),$(WRITE_MEDIA)),echo write_$(targetstring);) \
-	echo clean_$(targetstring)
+	echo clean_$(targetstring); \
+	echo rebuild_$(targetstring); \
+	echo demo_$(targetstring); \
+	echo shell_$(targetstring); \
+	echo
 
 
 #
@@ -753,13 +754,13 @@ endif
 	-@[ ! -L $(TREE)/proc/self ] || sudo /bin/umount $(TREE)/proc
 
 # For manual invocation, we provide a demo rule. This starts the
-# d-i demo from the tree in tmp/demo.
-.PHONY: demo
-demo:
+# d-i demo from the tree in tmp.
+.PHONY: demo_%
+demo_%:
 	@set -e; \
 	export SUBARCH=; \
-	export MEDIUM=demo; \
 	export FLAVOUR=; \
+	export MEDIUM=$(subst demo_,,$@); \
 	$(submake) demo1
 
 .PHONY: demo1
@@ -769,11 +770,11 @@ demo1: $(STAMPS)tree-demo-stamp
 	sudo chroot $(TREE) bin/sh -c "export DEBCONF_DEBUG=5 ; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; exec /usr/share/debconf/frontend /usr/bin/main-menu" ; \
 	$(submake) tree_umount
 
-.PHONY: shell
-shell:
+.PHONY: shell_%
+shell_%:
 	@export SUBARCH=; \
-	export MEDIUM=demo; \
 	export FLAVOUR=; \
+	export MEDIUM=$(subst shell_,,$@); \
 	$(submake) shell1
 
 .PHONY: shell1
