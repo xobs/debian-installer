@@ -424,13 +424,14 @@ $(TREE)/unifont.bgf: unifont-reduced-$(TYPE).bdf
 
 # Build the driver floppy image
 $(EXTRA_TARGETS) : %-stamp : $(TYPE)-get_udebs-stamp
-	mkdir -p  ${TEMP}/$*
+	mkdir -p ${TEMP}/$*
 	for file in $(shell grep --no-filename -v ^\#  pkg-lists/$*/common \
 		`if [ -f pkg-lists/$*/$(DEB_HOST_ARCH) ]; then echo pkg-lists/$*/$(DEB_HOST_ARCH); fi` \
 	  	| sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2\n)/g' ) ; do \
 			cp $(EXTRAUDEBDIR)/$$file* ${TEMP}/$*  ; \
 	done
 	./pkg-list $* $(KERNEL_FLAVOUR) $(KERNELIMAGEVERSION) > ${TEMP}/$*/udeb_include
+	./makelabel ${DISK_LABEL_$*} > ${TEMP}/$*/disk.lbl
 	touch $@
 
 $(EXTRA_IMAGES) : $(DEST)/%-image.img :  $(EXTRA_TARGETS)
