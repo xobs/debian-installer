@@ -5,38 +5,38 @@
  <title>Automatische Installation</title>
 <para>
 
-Um Debian auf einer größeren Anzahl von Rechnern zu installieren, kann 
-man vollautomatische Installationen durchführen. Debian-Pakete, die dafür 
+Um Debian auf einer größeren Anzahl von Rechnern zu installieren, kann
+man vollautomatische Installationen durchführen. Debian-Pakete, die dafür
 vorgesehen sind: <classname>fai</classname> (benutzt einen Installationsserver),
 <classname>replicator</classname>,
 <classname>systemimager</classname>,
-<classname>autoinstall</classname> und der Debian Installer selbst.
+<classname>autoinstall</classname> und der <classname>Debian-Installer</classname> selbst.
 
 </para>
 
 <sect2>
-<title>Automatische Installation mit dem Debian Installer</title>
+<title>Automatische Installation mit dem Debian-Installer</title>
 
 <para>
-Der Debian Installer bietet automatische Installationen über 
-Voreinstellungs-Dateien an. Eine solche Voreinstellungs-Datei kann über das Netzwerk oder 
+Der Debian-Installer bietet automatische Installationen über
+Voreinstellungs-Dateien an. Eine solche Voreinstellungs-Datei kann über das Netzwerk oder
 von einem Wechselmedium geladen werden und wird benutzt, um Fragen zu beantworten,
 die während des Installationsprozesses auftreten.
 
 </para><para>
 
-Die Voreinstellungs-Dateien haben das gleiche Format, das auch 
+Die Voreinstellungs-Dateien haben das gleiche Format, das auch
 von dem »debconf-set-selections«-Befehl genutzt wird. Eine gut dokumentierte
-und funktionierende Beispieldatei, die Sie sich selbst anpassen können, 
+und funktionierende Beispieldatei, die Sie sich selbst anpassen können,
 finden Sie unter <xref linkend="example-preseed"/>.
 
 </para><para>
 
-Alternativ gibt es die Möglichkeit, eine komplette Liste aller möglichen 
-voreinstellbaren Werte zu bekommen, indem Sie eine manuelle Installation 
-durchführen und danach den Befehl <filename>debconf-get-selections</filename> 
-aus dem <classname>debconf-utils</classname>-Paket benutzen; hierdurch wird 
-sowohl die debconf-Datenbank wie auch die cdebconf-Datenbank 
+Alternativ gibt es die Möglichkeit, eine komplette Liste aller möglichen
+voreinstellbaren Werte zu bekommen, indem Sie eine manuelle Installation
+durchführen und danach den Befehl <filename>debconf-get-selections</filename>
+aus dem <classname>debconf-utils</classname>-Paket benutzen; hierdurch wird
+sowohl die debconf-Datenbank wie auch die cdebconf-Datenbank
 (aus /var/log/debian-installer/cdebconf) in eine einfache Datei geladen:
 
 <informalexample><screen>
@@ -46,47 +46,47 @@ debconf-get-selections >> file
 
 </para><para>
 
-Allerdings enthält eine so erstellte Datei einige Einträge, die besser nicht 
-voreingestellt sein sollten; die Datei im <xref linkend="example-preseed"/> 
+Allerdings enthält eine so erstellte Datei einige Einträge, die besser nicht
+voreingestellt sein sollten; die Datei im <xref linkend="example-preseed"/>
 ist deshalb für die meisten Benutzer wohl ein besserer Ausgangspunkt.
 
 </para><para>
 
-Wenn Sie einmal eine Voreinstellungs-Datei haben, können Sie sie bei Bedarf 
-verändern und auf einem Web-Server speichern oder auf das Boot-Medium des 
-Installers kopieren. Wo immer Sie die Datei auch ablegen, Sie müssen dem 
-Installer auf jeden Fall einen Boot-Parameter mitgeben, so dass er die Datei 
-benutzt. 
+Wenn Sie einmal eine Voreinstellungs-Datei haben, können Sie sie bei Bedarf
+verändern und auf einem Web-Server speichern oder auf das Boot-Medium des
+Installers kopieren. Wo immer Sie die Datei auch ablegen, Sie müssen dem
+Installer auf jeden Fall einen Boot-Parameter mitgeben, so dass er die Datei
+benutzt.
 
 </para><para>
 
-Um zu erreichen, dass der Installer eine Voreinstellungs-Datei nutzt, 
-die per Netzwerk heruntergeladen werden muss, 
-fügen Sie <userinput>preseed/url=http://url/to/preseed.cfg</userinput> 
-zu den Kernel-Bootparametern hinzu. Die Voreinstellungen werden natürlich 
-keine Wirkung haben, wenn 
-der Installer das Netzwerk nicht erfolgreich konfigurieren kann, um dann 
-die Datei herunterzuladen; deshalb ist dies eigentlich nur sinnvoll, wenn 
+Um zu erreichen, dass der Installer eine Voreinstellungs-Datei nutzt,
+die per Netzwerk heruntergeladen werden muss,
+fügen Sie <userinput>preseed/url=http://url/to/preseed.cfg</userinput>
+zu den Kernel-Bootparametern hinzu. Die Voreinstellungen werden natürlich
+keine Wirkung haben, wenn
+der Installer das Netzwerk nicht erfolgreich konfigurieren kann, um dann
+die Datei herunterzuladen; deshalb ist dies eigentlich nur sinnvoll, wenn
 die Netzwerkkonfiguration per DHCP erfolgt, so dass der Installer dazu keine
-Fragen stellen muss. Sie sollten vielleicht die Priorität für die Installation 
+Fragen stellen muss. Sie sollten vielleicht die Priorität für die Installation
 auf »critical« setzen, um Fragen während der Netzwerkkonfiguration zu vermeiden.
 Siehe dazu auch <xref linkend="installer-args"/>.
 
 </para><para>
 
-Wenn Sie eine Voreinstellungs-Datei auf einer CD abspeichern wollen, 
-müssen Sie das ISO-Image remastern, um Ihre Datei einzufügen. Lesen Sie die 
-Handbuchseite von <command>mkisofs</command> bezüglich weiterer Einzelheiten. 
-Alternativ dazu können Sie die Datei auf einer Floppy-Disk speichern 
-und den Boot-Parameter <userinput>preseed/file=/floppy/preseed.cfg</userinput> 
+Wenn Sie eine Voreinstellungs-Datei auf einer CD abspeichern wollen,
+müssen Sie das ISO-Image remastern, um Ihre Datei einzufügen. Lesen Sie die
+Handbuchseite von <command>mkisofs</command> bezüglich weiterer Einzelheiten.
+Alternativ dazu können Sie die Datei auf einer Floppy-Disk speichern
+und den Boot-Parameter <userinput>preseed/file=/floppy/preseed.cfg</userinput>
 benutzen.
 
 </para><para arch="i386">
 
-Wenn Sie von einem USB-Speicher booten, können Sie die 
-Voreinstellungs-Datei einfach auf dem Dateisystem des Memory-Sticks speichern 
-und dann die Datei <filename>syslinux.cfg</filename> editieren, um 
-<userinput>preseed/file=/hd-media/preseed.cfg</userinput> 
+Wenn Sie von einem USB-Speicher booten, können Sie die
+Voreinstellungs-Datei einfach auf dem Dateisystem des Memory-Sticks speichern
+und dann die Datei <filename>syslinux.cfg</filename> editieren, um
+<userinput>preseed/file=/hd-media/preseed.cfg</userinput>
 zu den Kernel-Bootparametern hinzuzufügen.
 
 </para>
