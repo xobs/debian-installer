@@ -53,8 +53,8 @@ powerpc
         48 mb ram					
 
 sparc
-	sparc32 install from CD				
-	sparc64 install from CD				
+	sparc32 install from CD				probably broken
+	sparc64 install from CD				probably broken
 	sparc32 netboot					ok			
 	sparc64 netboot
 
@@ -88,7 +88,7 @@ mipsel
 	Cobalt software raid install			ok
 
 m68k
-	?
+	broken images
 
 hppa
 	?
@@ -97,13 +97,19 @@ arm
 	Netwinder netboot via serial			ok
 	Netwinder netboot via graphics			ok
 
-Errata:
+Important fixes:
 
-    * 2.6 lvm and raid segfaults and hangs (fixed by new lvm2 package)
-    * airport module not available post-reboot on powerpc
-    * m68k has broken images (genext2fs problem?)
-    * sparc64 module loading broken
-    * mips Installs on r4k-ip22 with 32 MB fails, it needs 36 MB until
-      swap is available, lowmem assumes 25 MB
-    * alpha doesn't install, needs new images
-    * messed up line drawing characters in base-config #253211
+ - some broken m68k images (fix: mke2fs fix needed; UNNOWN)
+ - broken sparc64 module loading (fix: busybox-cvs 20040415-3)
+ - broken support for 100 gb partitions on i386 (fix: base-installer 0.083)
+ - the above problem seems to affect nearly any size partitions on alpha
+   and probably other 64 bit systems workaround: base-installer 0.083)
+ - messed up line drawing characters in base-config (fix: base-config 2.29)
+ - broken ataraid and ida support (fix: libdebian-installer 0.26.really.0.22)
+
+Less important fixes:
+
+ - 2.6 lvm and raid segfaults and hangs (fix: lvm2 2.00.16-2)
+ - airport module not available post-reboot on powerpc (fix: ddetect 0.101)
+ - firewire cd support (fix: ddetect 0.101)
+ - mips Installs on r4k-ip22 needs 36 mb ram (fix: unknown -- new glibc?)
