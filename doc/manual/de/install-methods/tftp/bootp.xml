@@ -1,25 +1,25 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 16879 untranslated -->
+<!-- original version: 16879 -->
 
 
   <sect2 condition="supports-bootp" id="tftp-bootp">
-  <title>Setting up BOOTP server</title>
+  <title>BOOTP-Server einrichten</title>
 <para>
 
-There are two BOOTP servers available for GNU/Linux, the CMU
-<command>bootpd</command> and the other is actually a DHCP server, ISC
-<command>dhcpd</command>, which are contained in the
-<classname>bootp</classname> and <classname>dhcp</classname> packages
-in &debian;.
+Es gibt für GNU/Linux zwei BOOTP-Server, den <command>bootpd</command> (CMU)
+und der andere ist vielmehr ein DHCP-Server, der <command>dhcpd</command> (ISC).
+Sie sind in den &debian;-Paketen <classname>bootp</classname> und 
+<classname>dhcp</classname> enthalten.
 
 </para><para>
 
-To use CMU <command>bootpd</command>, you must first uncomment (or
-add) the relevant line in <filename>/etc/inetd.conf</filename>.  On
-&debian;, you can run <userinput>update-inetd --enable
-bootps</userinput>, then <userinput>/etc/init.d/inetd
-reload</userinput> to do so. Elsewhere, the line in question should
-look like: 
+Um den <command>bootpd</command> (CMU) zu nutzen, müssen Sie als erstes
+für die entsprechende Zeile in <filename>/etc/inetd.conf</filename>
+das Kommentarzeichen entfernen (bzw. die Zeile hinzufügen, falls noch
+nicht vorhanden). Unter &debian; erledigen Sie das mit
+<userinput>update-inetd --enable bootps</userinput> und anschließendem
+<userinput>/etc/init.d/inetd reload</userinput>. Ansonsten sollte die
+fragliche Zeile so aussehen:
 
 <informalexample><screen>
 
@@ -29,14 +29,13 @@ bootps  dgram  udp  wait  root  /usr/sbin/bootpd  bootpd -i -t 120
 
 </para><para>
 
-Now, you must create an <filename>/etc/bootptab</filename> file.  This
-has the same sort of familiar and cryptic format as the good old BSD
-<filename>printcap</filename>, <filename>termcap</filename>, and
-<filename>disktab</filename> files.  See the
-<filename>bootptab</filename> manual page for more information.  For
-CMU <command>bootpd</command>, you will need to know the hardware
-(MAC) address of the client.  Here is an example
-<filename>/etc/bootptab</filename>:
+Jetzt müssen Sie die Datei <filename>/etc/bootptab</filename> erstellen.
+Sie hat das gewohnte kryptische Format wie die guten alten BSD-Dateien
+<filename>printcap</filename>, <filename>termcap</filename> und
+<filename>disktab</filename>. Mehr Informationen bekommen Sie auf der
+Handbuchseite von <filename>bootptab</filename>. Beim CMU-<command>bootpd</command>
+müssen Sie die Hardware-(MAC-)Adresse des Clients kennen. Hier ein Beispiel
+für <filename>/etc/bootptab</filename>:
 
 <informalexample><screen>
 
@@ -50,29 +49,29 @@ client:\
 
 </screen></informalexample>
 
-You will need to change at least the "ha" option, which specifies the
-hardware address of the client.  The "bf" option specifies the file a
-client should retrieve via TFTP; see 
-<xref linkend="tftp-images"/> for more details.
+Sie müssen zumindest den Eintrag "ha" anpassen, der die Hardwareadresse
+des Clients angibt. Der Eintrag "bf" legt fest, welche Datei der Client
+per TFTP bezieht; <xref linkend="tftp-images"/> enthält mehr Details.
 
 <phrase arch="mips"> 
-On SGI Indys you can just enter the command monitor and type
-<userinput>printenv</userinput>.  The value of the
-<userinput>eaddr</userinput> variable is the machine's MAC address.
+Auf SGI-Indys können Sie einfach den Befehl <command>monitor</command>
+benutzen und geben dort <userinput>printenv</userinput> ein.
+Der Wert der Variable <userinput>eaddr</userinput> ist die MAC-Adresse
+des Rechners.
 </phrase>
 
 </para><para>
 
-By contrast, setting up BOOTP with ISC <command>dhcpd</command> is
-really easy, because it treats BOOTP clients as a moderately special
-case of DHCP clients.  Some architectures require a complex
-configuration for booting clients via BOOTP.  If yours is one of
-those, read the section <xref linkend="dhcpd"/>.  Otherwise, you
-will probably be able to get away with simply adding the
-<userinput>allow bootp</userinput> directive to the configuration
-block for the subnet containing the client, and restart
-<command>dhcpd</command> with <userinput>/etc/init.d/dhcpd
-restart</userinput>.
+Im Unterschied dazu ist es wirklich einfach, den ISC-<command>dhcpd</command>
+einzurichten, da dieser BOOTP-Clients gewissermaßen als Spezialfall von
+DHCP-Clients behandelt. Einige Architekturen erfordern eine komplexe
+Konfiguration, um Clients per BOOTP zu starten. Wenn Sie solch einen Fall
+haben, lesen Sie <xref linkend="dhcpd"/>. Andernfalls könnte es vielleicht
+reichen, in <filename>/etc/dhcpd.conf</filename> den Eintrag
+<userinput>allow bootp</userinput> zu dem Block der Datei hinzuzufügen,
+der das Subnetz konfiguriert, zu dem Ihr Client gehört. Danach muss der
+<command>dhcpd</command> mit <userinput>/etc/init.d/dhcpd restart</userinput>
+neu gestartet werden.
 
 </para>
   </sect2>
