@@ -8,9 +8,9 @@ if ! which madison 2>&1 >/dev/null; then
 	exit 1
 fi
 
-PACKAGES="anna main-menu retriever/cdrom retriever/choose-mirror retriever/file retriever/net rootskel libdebian-installer tools/autopartkit tools/ddetect tools/base-installer tools/grub-installer tools/lilo-installer tools/cdebconf tools/netcfg tools/partkit tools/prebaseconfig tools/cdrom-detect tools/selectdevice tools/udpkg utils tools/disk-detect"
-
 cd ..
+
+PACKAGES=`find . |grep debian/rules|rev|cut -d/ -f3-|rev|cut -d/ -f2-`
 
 printf "%-25s %-15s %-15s %s\n" udeb "version in cvs" "version in sid" "needs upload"
 
