@@ -17,16 +17,16 @@ vez parece ser la confiabilidad de los disquetes.
 
 El disquete de arranque es el que tiene los peores problemas, debido 
 a que es leído directamente por el hardware, antes de que arranque 
-Linux. A menudo, el hardware no lee tan confiablemente como el
+Linux. A menudo, el hardware no lee tan confiablemente como lo hace el
 controlador de disquetes de Linux, y podría parar sin mostrar ningún
-mensaje de error si éste lee datos incorrectos. También podrían
+mensaje de error si lee datos incorrectos. También podrían
 haber fallos en el lector de disquetes los cuales se indican por
 medio de una gran cantidad de mensajes sobre errores E/S del
 disquete.
 
 </para><para>
 
-Si tiene una instalación que se para en un disquete en particular,
+Si su instalación se estanca o para en un disquete en particular,
 lo primero que debe hacer es volver a descargar la imagen de disquete
 y escribirla en un disquete <emphasis>distinto</emphasis>. El simple
 reformateo del antiguo no es suficiente, incluso si es que aparentemente
@@ -35,14 +35,14 @@ es útil intentar escribir el disquete en un sistema diferente.
 
 </para><para>
 
-Un usuario informa que el tuvo que escribir las imágenes a disquetes
+Un usuario informa que tuvo que escribir las imágenes a disquetes
 <emphasis>tres</emphasis> veces antes que uno funcione y luego
 no tuvo problemas con el tercer disquete.
 
 </para><para>
 
 Otros usuarios han informado que simplemente el reiniciar algunas 
-veces con el mismo disquete en la unidad de disquete puede conducir
+veces con el mismo disquete en la unidad de disquete puede llevar
 a un arranque exitoso. Esto se debe al hardware con fallos o los
 controladores de firmware de la unidad.
 
@@ -54,15 +54,15 @@ controladores de firmware de la unidad.
 <para>
 
 Si ocurren problemas y el núcleo colapsa durante el proceso de
-arranque, no reconoce los dispositivos que tiene, o las unidades
+arranque, no reconoce los dispositivos que tiene o las unidades
 no son reconocidas adecuadamente, entonces lo primero que debe
 verificar son los parámetros de arranque, como se explica en
 <xref linkend="boot-parms"/>.
 
 </para><para>
 
-Si esta arrancando con su propio núcleo en lugar de provisto
-con el instalador, asegúrese de que <userinput>CONFIG_DEVFS</userinput>
+Si esta arrancando con su propio núcleo en lugar de que provee
+el instalador, asegúrese de que la opción <userinput>CONFIG_DEVFS</userinput>
 se haya configurado en su núcleo. El instalador requiere
 <userinput>CONFIG_DEVFS</userinput>.
 
@@ -70,7 +70,7 @@ se haya configurado en su núcleo. El instalador requiere
 
 A menudo, los problemas se pueden solucionar al desconectar los
 periféricos y accesorios, y luego intentar arrancar nuevamente.
-<phrase arch="i386">Los módem internos, tarjetas de sonido, y 
+<phrase arch="i386">Los módems internos, tarjetas de sonido, y 
 los dispositivos "Plug-n-Play" pueden ser especialmente problemáticos.
 </phrase>
 
@@ -78,7 +78,7 @@ los dispositivos "Plug-n-Play" pueden ser especialmente problemáticos.
 
 Si tiene una buena cantidad de memoria en su máquina, más de 512MB, y
 el instalador colapsa cuando arranca el núcleo, podría necesitar 
-incluir el argumento de arranque para limitar la cantidad de 
+incluir un argumento de arranque para limitar la cantidad de 
 memoria que reconocerá el núcleo, tal como 
 <userinput>mem=512m</userinput>.
 
@@ -100,13 +100,13 @@ de la forma
 on <replaceable>algo</replaceable> </computeroutput>.
 Muchos de estos mensajes no son graves. Son mostrados debido a que
 el sistema de instalación esta construido para ejecutarse en ordenadores
-con diversos dispositivos. Obviamente, ninguno de estos tendrá cada uno
+con diversos dispositivos. Obviamente, ninguno de ellos tendrá cada uno
 de todos los posibles dispositivos, de modo que el sistema operativo 
 emite algunos mensajes de advertencia mientras intenta buscar dispositivos
 que usted no tiene. Podría observar que el sistema hace una pausa por
-unos momentos. Esto ocurre debido a que esta esperando que un dispositivo
+unos momentos. Esto ocurre debido a que está esperando que un dispositivo
 responda, y éste no esta presente en su sistema. Si encuentra que
-el tiempo que toma el arrancar el sistema es inaceptablemente largo,
+el tiempo que toma el arrancar el sistema es inaceptablemente amplio,
 puede crear un núcleo adaptado después (vea <xref linkend="kernel-baking"/>).
 
 </para>
@@ -122,7 +122,7 @@ la instalación, la opción de informe de fallos podría ser útil.
 Ésta copia los registros de fallos de sistema y la información de 
 configuración a un disquete que deberá colocar en la unidad.
 Esta información puede darle pistas sobre lo que ha fallado y como
-solucionarlo. Si esta enviando un informe de fallos podría querer
+solucionarlo. Si está enviando un informe de fallos podría querer
 adjuntar esta información.
 
 </para><para>
@@ -136,54 +136,54 @@ que el ordenador ha sido arrancado con el sistema instalado.
   </sect2>
 
   <sect2 id="submit-bug">
-  <title>Enviar informes de fallos</title>
+  <title>Enviar informes de instalación</title>
 <para>
 
-Si todavía tiene problemas, por favor envíe un informa de fallo. Envíe
-un correo electrónico a <email>submit@bugs.debian.org</email>.  
-<emphasis>Deberá</emphasis> incluir lo siguiente como las primeras
-líneas del correo electrónico:
+Si todavía tiene problemas, por favor envíe un informe de instalación.
+Le animamos a que lo haga incluso si la instalación es exitosa, de
+modo que podamos obtener toda la información posible sobre la
+mayor cantidad de configuraciones de hardware. Por favor use esta
+plantilla cuando haga un informe de instalación, y envíelo como
+un informe de fallo para el pseudo paquete «installation-reports»
+enviándolo a <email>submit@bugs.debian.org</email>.
 
 <informalexample><screen>
 
 Package: installation-reports
-Version: <replaceable>versión</replaceable>
+Debian-installer-version: &lt;Escriba la fecha y desde donde obtuvo la imagen&gt; uname -a &lt;El resultado de ejecutar uname -a en el cursor de shell&gt;
+Date: &lt;Fecha y hora de la instalación&gt;
+Method: &lt;¿Cómo lo instaló? ¿Qué arrancó? Si fue una instalación a través 
+        de red, ¿desde donde? ¿a través de un servidor proxy?&gt;
+Machine: &lt;Descripción de la máquina (ejm: IBM Thinkpad R32)&gt;
+Processor:
+Memory:
+Root Device: &lt;¿IDE o SCSI? Nombre del dispositivo&gt;
+Root Size/partition table: &lt;Puede pegar toda la tabla de particiones ,
+     con notas sobre que particiones están montadas y donde.&gt;
+Output of lspci and lspci -n:
+
+Base System Installation Checklist:
+[O] = OK, [E] = Error (describalo a continuación), [ ] = didn't try it
+
+Initial boot worked:    [ ]
+Configure network HW:   [ ]
+Config network:         [ ]
+Detect CD:              [ ]
+Load installer modules: [ ]
+Detect hard drives:     [ ]
+Partition hard drives:  [ ]
+Create file systems:    [ ]
+Mount partitions:       [ ]
+Install base system:    [ ]
+Install boot loader:    [ ]
+Reboot:                 [ ]
+
+Comments/Problems:
+
+&lt;Descripción de la instalación, en detalle y con cualquier pensamiento,
+comentario e ideas que tuvo durante la instalación.&gt;
 
 </screen></informalexample>
-
-Asegúrese de reemplazar <replaceable>versión</replaceable> con la
-versión del instalador de Debian que ha usado. El número de versión
-se puede ubicar al presionar <keycap>F1</keycap> en el cursor de
-arranque <prompt>boot:</prompt> de su medio de instalación. También
-deberá mencionar desde donde descargo el medio de instalación o
-la fuente de donde adquirió CD.
-
-</para><para>
-
-También deberá incluir la siguiente información en su informe de fallo.
-Si usa el programa <command>reportbug</command> para enviar su informe,
-esta información será incluida automáticamente.
-
-<informalexample><screen>
-
-<phrase arch="i386">
-flavor:        <replaceable>variante de la imagen que esta usando</replaceable>
-</phrase>
-architecture:  &architecture; 
-model:         <replaceable>fabricante y modelo de su hardware</replaceable>
-memory:        <replaceable>cantidad de memoria RAM</replaceable>
-scsi:          <replaceable>Adaptador de concentrador SCSI, si fuese su caso</replaceable>
-cd-rom:        <replaceable>modelo y tipo de interfaz de CD-ROM, ejm., ATAPI</replaceable>
-network card:  <replaceable>tarjeta de red, si fuese su caso</replaceable>
-pcmcia:        <replaceable>detalles de cualquier dispositivo PCMCIA</replaceable>
-
-</screen></informalexample>
-
-</para><para>
-
-Dependiendo de la naturaleza del fallos, podría ser útil informar
-donde esta instalado, en discos IDE o SCSI, otros dispositivos
-periféricos como sonido, capacidad de disco, y modelo de la tarjeta de vídeo.
 
 </para><para>
 

@@ -1,23 +1,22 @@
-<!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 untranslated -->
+<!-- original version: 11648 -->
 
-  <sect2 arch="arm" id="boot-tftp"><title>Booting from TFTP</title>
+  <sect2 arch="arm" id="boot-tftp"><title>Arrancar desde TFTP</title>
 
 &boot-installer-intro-net.xml;
 
-  <sect3 arch="arm"><title>Booting from TFTP on NetWinder</title>
+  <sect3 arch="arm"><title>Arrancar desde TFTP en NetWinder</title>
 
 <para>
 
-NetWinders have two network interfaces: The 10Mbps NE2000-compatible
-card is <filename>eth0</filename> and the 100Mbps Tulip card is
-<filename>eth1</filename>.
+Las máquinas NetWinder tienen dos interfaces de red: La tarjeta de
+10Mbps compatible con NE2000 es <filename>eth0</filename> y la tarjeta
+Tulip de 100Mbps es <filename>eth1</filename>.
 
 </para><note><para>
 
-You need NeTTrom 2.2.1 or later to boot the
-installation system. NeTTrom 2.3.3 is recommended: get these files
-from 
+Necesita NeTTrom 2.2.1 o superior para arrancar el sistema de
+instalación. Se recomienda NeTTrom 2.3.3: Puede obtener estos
+ficheros en
 <ulink url="ftp://ftp.netwinder.org/pub/netwinder/firmware/"></ulink>:
 <itemizedlist>
 <listitem><para>
@@ -39,14 +38,16 @@ from
 
 </para></note><para>
 
-After rebooting and interrupting the boot process during the countdown, you 
-must first configure the network either with a static address:
+Después de reiniciar e interrumpir el proceso de arranque durante la
+cuenta regresiva, primero debe configurar la red con una dirección
+estática:
 <informalexample><screen>
 
     NeTTrom command-> setenv eth0_ip 192.168.0.10/24
 
 </screen></informalexample>
-where 24 is the number of set bits in the netmask, or a dynamic address:
+donde 24 es el número de conjunto de bits en la máscara de red, o
+una dirección dinámica:
 <informalexample><screen>
 
     NeTTrom command-> boot diskless
@@ -55,10 +56,10 @@ where 24 is the number of set bits in the netmask, or a dynamic address:
 
 </para><para>
 
-You may also need to configure the <userinput>route1</userinput>
-settings if the TFTP
-server is not on the local subnet.  The rest of the config is pretty 
-standard (the save-all step is optional):
+También podría necesitar configurar los valores de 
+<userinput>route1</userinput> en el servidor TFTP, si es que no está
+en la misma subred. El resto de la configuración es bastante estándar
+(el paso save-all es opcional):
 <informalexample><screen>
 
     NeTTrom command-> setenv kerntftpserver 192.168.0.1
@@ -71,24 +72,25 @@ standard (the save-all step is optional):
 
 </para><para>
 
-Only the last two of these interfere with normal disk booting, so it is 
-safe to <command>save-all</command> right before it, which will
-store the network settings in case you need to boot from the network
-again. Use the <command>printenv</command> command to review your
-environment settings. Finally, if your <envar>cmdappend</envar>
-NeTTrom variable has the <option>noinitrd</option> option (which is  
-necessary to boot 2.4 kernels), you must remove it so the downloaded 
-kernel can boot with its attached ramdisk.
+Solamente los últimos dos pasos interfieren con el arranque de disco
+normal, de modo que es seguro ejecutar <command>save-all</command>
+antes de esto, lo que guardará la configuración de red en caso de que
+necesite arrancar desde la red nuevamente. Use la orden 
+<command>printenv</command> para revisar los valores de entorno.
+Finalmente, si la variable <envar>cmdappend</envar> de NeTTrom
+tiene la opción <option>noinitrd</option> (la cual es necesaria 
+para arrancar núcleos 2.4), debe eliminarla para que el núcleo que
+ha descargado puede arrancar con su disco ram adjunto.
 
 </para>
   </sect3>
 
-  <sect3 arch="arm"><title>Booting from TFTP on CATS</title>
+  <sect3 arch="arm"><title>Arrancar desde TFTP en CATS</title>
 
 <para>
 
-On CATS machines, use <command>boot de0:</command> or similar at the
-Cyclone prompt.
+En máquinas CATS, use <command>boot de0:</command> o similar en el
+cursor Cyclone.
 
 </para>
    </sect3>
@@ -96,14 +98,14 @@ Cyclone prompt.
 
 
 
-  <sect2 arch="arm"><title>Booting from CD-ROM</title>
+  <sect2 arch="arm"><title>Arrancar desde CD-ROM</title>
 
 &boot-installer-intro-cd.xml;
 
 <para>
 
-To boot a CD-ROM from the Cyclone console prompt, use the command
-<command>boot cd0:cats.bin</command>
+Para arrancar desde CD-ROM desde el cursor de la consola Cyclone,
+use la orden <command>boot cd0:cats.bin</command>
 
 </para>
   </sect2>
