@@ -69,7 +69,7 @@ endif
 # the system. See the .list files for various types. You may want to
 # override this on the command line.
 #TYPE=net
-TYPE=net
+TYPE=cdrom
 
 # The library reducer to use. Can be mklibs.sh or mklibs.py.
 MKLIBS=mklibs
@@ -184,6 +184,9 @@ APT_GET=apt-get --assume-yes \
 # Get the list of udebs to install. Comments are allowed in the lists.
 UDEBS=$(shell grep --no-filename -v ^\# pkg-lists/base pkg-lists/$(TYPE)/common `if [ -f pkg-lists/$(TYPE)/$(architecture) ]; then echo pkg-lists/$(TYPE)/$(architecture); fi` | sed -e 's/$${kernel:Version}/$(KERNELIMAGEVERSION)/g' -e 's/$${kernel_second:Version}/$(KERNELIMAGEVERSION_SECOND)/g') $(EXTRAS)
 
+# udebs for the first driver1 floppy. Mostly Essential driver modules that don't fit on the first floppy
+# DRIVER1_UDEBS=$(shell grep --no-filename -v ^\# pkg-lists/driver1/common `if [ -f pkg-lists/$(TYPE)/$(architecture) ]; then echo pkg-lists/driver1/$(architecture); fi` | sed -e 's/$${kernel:Version}/$(KERNELIMAGEVERSION)/g' -e 's/$${kernel_second:Version}/$(KERNELIMAGEVERSION_SECOND)/g') 
+
 # Scratch directory.
 BASE_TMP=./tmp/
 # Per-type scratch directory.
@@ -244,7 +247,7 @@ $(TYPE)-get_udebs-stamp:
 	$(APT_GET) autoclean
 	# If there are local udebs, remove them from the list of things to
 	# get. Then get all the udebs that are left to get.
-	needed="$(UDEBS)"; \
+	needed="$(UDEBS) $(DRIVER1_UDEBS)"; \
 	for file in `find $(LOCALUDEBDIR) -name "*_*" -printf "%f\n" 2>/dev/null`; do \
 		package=`echo $$file | cut -d _ -f 1`; \
 		needed=`echo " $$needed " | sed "s/ $$package */ /"`; \
@@ -324,7 +327,8 @@ $(TYPE)-tree-stamp:
 		usedsize=`echo $$newsize - $$oldsize | bc`; \
 		usedblocks=`echo $$newblocks - $$oldblocks | bc`; \
 		usedcount=`echo $$newcount - $$oldcount | bc`; \
-		echo $$usedsize B - $$usedblocks blocks - $$usedcount files used by pkg $$pkg >>diskusage-$(TYPE).txt;\
+		version=`dpkg-deb --info $$udeb | grep Version: | awk '{print $$2}'` ; \
+		echo " $$usedsize B - $$usedblocks blocks - $$usedcount files used by pkg $$pkg (version $$version )" >>diskusage-$(TYPE).txt;\
 		oldsize=$$newsize ; \
 		oldblocks=$$newblocks ; \
 		oldcount=$$newcount ; \
