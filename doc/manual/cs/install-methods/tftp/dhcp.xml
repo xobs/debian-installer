@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 22664 -->
+<!-- original version: 24663 -->
 
   <sect2 condition="supports-dhcp" id="dhcpd">
    <title>Nastavení DHCP serveru</title>
@@ -12,7 +12,6 @@ Jednním ze svobodných DHCP serverů je ISC
 konfiguračního souboru (obvykle <filename>/etc/dhcpd.conf</filename>):
 
 <informalexample><screen>
-
 option domain-name "priklad.cz";
 option domain-name-servers ns1.priklad.cz;
 option subnet-mask 255.255.255.0;
@@ -28,11 +27,10 @@ subnet 192.168.1.0 netmask 255.255.255.0 {
 host clientname {
   filename "/tftpboot/tftpboot.img";
   server-name "karel";
-  next-server servername;
+  next-server dalsiserver.priklad.cz;
   hardware ethernet 01:23:45:67:89:AB; 
   fixed-address 192.168.1.90;
 }
-
 </screen></informalexample>
 
 Poznámka: novější (a preferovaný) balík <classname>dhcp3</classname>
@@ -63,7 +61,6 @@ Další příklad souboru <filename>dhcp.conf</filename> tentokrát využívá
 metodu PXE (Pre-boot Execution Environment) protokolu TFTP.
 
 <informalexample><screen>
-
 option domain-name "priklad.cz";
 
 default-lease-time 6048;
@@ -99,7 +96,6 @@ group {
   filename "/tftpboot/pxelinux.0";
  }
 }
-
 </screen></informalexample>
 
 Při PXE zavádění není soubor <filename>pxelinux.0</filename> obraz

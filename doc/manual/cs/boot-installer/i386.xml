@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 23061 -->
+<!-- original version: 24663 -->
 
   <sect2 arch="i386"><title>Zavedení z CD-ROM</title>
 
@@ -88,9 +88,7 @@ bezpečném módu''.) Přesuňte se do podadresáře s preferovanou variantou
 jádra, např.
 
 <informalexample><screen>
-
 cd c:\install
-
 </screen></informalexample>.  
 
 a spusťte dávku <command>install.bat</command>. Jádro nahraje a spustí
@@ -158,13 +156,11 @@ Následuje příklad <filename>/etc/lilo.conf</filename>:
 </para><para>
 
 <informalexample><screen>
-
 image=/boot/newinstall/vmlinuz
        label=newinstall
        initrd=/boot/newinstall/initrd.gz
        root=/dev/ram0
-       append="devfs=mount,dall ramdisk_size=17000"
-
+       append="devfs=mount,dall ramdisk_size=12000"
 </screen></informalexample>
 
 Pokud vás zajímají pikantní detaily, prozkoumejte manuálové stránky
@@ -182,16 +178,20 @@ Postup pro <command>GRUB</command> je velmi podobný. Do souboru
 <filename>/boot/boot/grub/</filename>) přidejte následující řádky:
 
 <informalexample><screen>
-
-title  New Install
-kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram0 devfs=mount,dall ramdisk_size=17000
+title  Instalace Debianu
+kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram0 ramdisk_size=12000
 initrd (hd0,0)/boot/newinstall/initrd.gz
-
 </screen></informalexample>
 
-a restartujte počítač. Je možné, že budete muset upravit hodnotu
-parametru <userinput>ramdisk_size</userinput> podle skutečné velikosti
-obrazu <filename>initrd.gz</filename>. Od teď by neměl být mezi oběma
+a restartujte počítač. Pokud zavádění selže, zkuste na konec řádku
+<quote>kernel</quote> přidat parametr
+<userinput>devfs=mount,dall</userinput>.
+
+</para><para>
+
+Také je možné, že budete muset upravit hodnotu parametru
+<userinput>ramdisk_size</userinput> podle skutečné velikosti obrazu
+<filename>initrd.gz</filename>. Od teď by neměl být mezi oběma
 zavaděči žádný rozdíl.
 
 </para>
@@ -399,7 +399,7 @@ vyžaduje. Například pokud máte jeden z výše zmíněných Dellů, měli
 byste zde zadat <userinput>exclude port
 0x800-0x8ff</userinput>. Seznam obvyklých rozsahů se nachází například
 v <ulink
-url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-2.html#ss2.5">System
+url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-1.html#ss1.12">System
 resource settings section of the PCMCIA HOWTO</ulink>.
 Při zadávání rozsahů do instalačního programu vynechejte všechny
 čárky (pokud se v rozsazích nachází).

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 23059 -->
+<!-- original version: 24677 -->
 
  <sect1 id="linux-upgrade">
  <title>Instalace Debianu ze stávajícího unixového/linuxového systému</title>
@@ -43,9 +43,7 @@ systém ext3 na oblasti <filename>/dev/hda6</filename> vytvoříte
 příkazem:
 
 <informalexample><screen>
-
- $ mke2fs -j /dev/hda6
-
+<prompt>#</prompt> <userinput>mke2fs -j /dev/hda6</userinput>
 </screen></informalexample>
 
 (Ve zbytku návodu budeme předpokládat, že kořenový oddíl je
@@ -59,24 +57,18 @@ Inicializujte a aktivujte odkládací oddíl (nezapomeňte změnit číslo
 oblasti podle skutečnosti):
 
 <informalexample><screen>
-
- $ mkswap /dev/hda5
- $ sync; sync; sync
- $ swapon /dev/hda5
-
+<prompt>#</prompt> <userinput>mkswap /dev/hda5</userinput>
+<prompt>#</prompt> <userinput>sync; sync; sync</userinput>
+<prompt>#</prompt> <userinput>swapon /dev/hda5</userinput>
 </screen></informalexample>
-
-</para><para>
 
 Připojte budoucí kořenovou oblast (<filename>/</filename>) do adresáře
 <filename>/mnt/debinst</filename>. Na jméně přípojného adresáře
 nezáleží.
 
 <informalexample><screen>
-
- $ mkdir /mnt/debinst
- $ mount /dev/hda6 /mnt/debinst
-
+<prompt>#</prompt> <userinput>mkdir /mnt/debinst</userinput>
+<prompt>#</prompt> <userinput>mount /dev/hda6 /mnt/debinst</userinput>
 </screen></informalexample>
 
 </para>
@@ -106,12 +98,9 @@ Poslední možností je ruční instalace. Vytvořte si pracovní adresář, do
 kterého později balík rozbalíte:
 
 <informalexample><screen>
-
- $ mkdir work
- $ cd work
-
+<prompt>#</prompt> <userinput>mkdir work</userinput>
+<prompt>#</prompt> <userinput>cd work</userinput>
 </screen></informalexample>
-</para><para>
 
 Z <ulink url="http://ftp.debian.org/debian/pool/main/d/debootstrap/">
 poolu</ulink> si stáhněte balík <command>debootstrap</command> pro
@@ -119,11 +108,9 @@ svou architekturu, uložte jej do pracovního adresáře a vybalte z něj
 binární soubory. K instalaci souborů musíte mít rootovská práva.
 
 <informalexample><screen>
-
- $ ar -xf debootstrap_0.X.X_arch.deb
- $ cd /
- $ zcat &#60; /cesta-k-pracovnimu-adresari/work/data.tar.gz | tar xv
-
+<prompt>#</prompt> <userinput>ar -xf debootstrap_0.X.X_arch.deb</userinput>
+<prompt>#</prompt> <userinput>cd /</userinput>
+<prompt>#</prompt> <userinput>zcat /cesta-k-pracovnimu-adresari/work/data.tar.gz | tar xv</userinput>
 </screen></informalexample>
 
 </para>
@@ -164,14 +151,11 @@ V ukázkovém příkazu <command>debootstrap</command> nahraďte
 <userinput>sparc</userinput>.
 
 <informalexample><screen>
-
- $ /usr/sbin/debootstrap --arch <replaceable>ARCH</replaceable> &releasename; \
-     /mnt/debinst http://http.us.debian.org/debian
-
+<prompt>#</prompt> <userinput>/usr/sbin/debootstrap --arch <replaceable>ARCH</replaceable> &releasename; \
+     /mnt/debinst http://http.us.debian.org/debian</userinput>
 </screen></informalexample>
 
 </para>
-
   </sect2>
 
 
@@ -184,10 +168,9 @@ V adresáři <filename>/mnt/debinst</filename> teď máte opravdový, i
 když minimální, systém Debian. Nastal čas se do něj přesunout:
 
 <informalexample><screen>
-
- $ chroot /mnt/debinst /bin/bash
-
+<prompt>#</prompt> <userinput>chroot /mnt/debinst /bin/bash</userinput>
 </screen></informalexample>
+
 </para>
 
    <sect3>
@@ -197,18 +180,13 @@ když minimální, systém Debian. Nastal čas se do něj přesunout:
 Nejprve musíte vytvořit soubor <filename>/etc/fstab</filename>.
 
 <informalexample><screen>
-
- # editor /etc/fstab
-
+<prompt>#</prompt> <userinput>editor /etc/fstab</userinput>
 </screen></informalexample>
-
-</para><para>
 
 Jako vzor můžete použít následující šablonu (místo
 <replaceable>XXX</replaceable> dosaďte vlastní oblasti):
 
 <informalexample><screen>
-
 # /etc/fstab: static file system information.
 #
 # file system    mount point   type    options                  dump pass
@@ -225,30 +203,21 @@ proc             /proc         proc    defaults                 0    0
 /dev/XXX         /var          ext2    rw,nosuid,nodev          0    2
 /dev/XXX         /usr          ext2    rw,nodev                 0    2
 /dev/XXX         /home         ext2    rw,nosuid,nodev          0    2
-
 </screen></informalexample>
-
-</para><para>
 
 Souborové systémy, které jste zadali do
 <filename>/etc/fstab</filename> můžete připojit všechny najednou
 příkazem <userinput>mount -a</userinput>, nebo individuálně příkazem:
 
 <informalexample><screen>
-
- # mount /cesta  # např.:  mount /usr
-
+<prompt>#</prompt> <userinput>mount /cesta</userinput> # např.:  mount /usr
 </screen></informalexample>
-
-</para><para>
 
 Před další prací si ověřte, že máte připojený virtuální souborový
 systém <filename>/proc</filename>. Pokud tomu tak není, připojte jej:
 
 <informalexample><screen>
-
- # mount -t proc proc /proc
-
+<prompt>#</prompt> <userinput>mount -t proc proc /proc</userinput>
 </screen></informalexample>
 
 </para>
@@ -256,15 +225,12 @@ systém <filename>/proc</filename>. Pokud tomu tak není, připojte jej:
 
    <sect3>
    <title>Nastavení klávesnice</title>
-
 <para>
 
 Klávesnici nastavíte:
 
 <informalexample><screen>
-
- # dpkg-reconfigure console-data
-
+<prompt>#</prompt> <userinput>dpkg-reconfigure console-data</userinput>
 </screen></informalexample>
 
 </para>
@@ -280,12 +246,8 @@ Síťování se nastavuje v souborech
 <filename>/etc/hostname</filename>.
 
 <informalexample><screen>
-
- # editor /etc/network/interfaces 
-
+<prompt>#</prompt> <userinput>editor /etc/network/interfaces</userinput>
 </screen></informalexample>
-
-</para><para>
 
 Pro začátek vám mohou pomoci ukázky z
 <filename>/usr/share/doc/ifupdown/examples</filename>:
@@ -318,15 +280,11 @@ iface lo inet loopback
 #     gateway 192.168.0.1
 </screen></informalexample>
 
-</para><para>
-
 Do <filename>/etc/resolv.conf</filename> zadejte nastavení jmenných
 serverů (DNS):
 
 <informalexample><screen>
-
- # editor /etc/resolv.conf
-
+<prompt>#</prompt> <userinput>editor /etc/resolv.conf</userinput>
 </screen></informalexample>
 
 </para><para>
@@ -334,24 +292,16 @@ serverů (DNS):
 Jednoduchý <filename>/etc/resolv.conf</filename>:
 
 <informalexample><screen>
-
-# search hqdom.local\000
-# nameserver 10.1.1.36
-# nameserver 192.168.9.100
-
+<prompt>#</prompt> <userinput>search hqdom.local\000</userinput>
+<prompt>#</prompt> <userinput>nameserver 10.1.1.36</userinput>
+<prompt>#</prompt> <userinput>nameserver 192.168.9.100</userinput>
 </screen></informalexample>
-
-</para><para>
 
 Zadejte název svého systému (délka aspoň 2 a nejvýše 63 znaky):
 
 <informalexample><screen>
-
- # echo JmenoPocitace &#62; /etc/hostname
-
+<prompt>#</prompt> <userinput>echo JmenoPocitace &gt; /etc/hostname</userinput>
 </screen></informalexample>
-
-</para><para>
 
 Jestliže máte více síťových karet, měli byste si pohrát s názvy modulů
 v <filename>/etc/modules</filename>, aby se karty vždy přiřadily ke
@@ -362,17 +312,15 @@ stejnému rozhraní (eth0, eth1, atd.)
 
    <sect3>
    <title>Nastavení časové zóny, uživatelů a programu APT</title>
-
 <para>
 
 Nastavení časové zóny, přidání obyčejného uživatele a výběr zdrojů pro
 <command>apt</command> zajistí program <command>baseconfig</command>:
 
 <informalexample><screen>
-
- # /usr/sbin/base-config new
-
+<prompt>#</prompt> <userinput>/usr/sbin/base-config new</userinput>
 </screen></informalexample>
+
 </para>
    </sect3>
 
@@ -384,10 +332,8 @@ Aby se s vámi systém bavil v jiném jazyce než je angličtina, musíte
 nainstalovat a nastavit balík pro podporu národních prostředí:
 
 <informalexample><screen>
-
- # apt-get install locales
- # dpkg-reconfigure locales
-
+<prompt>#</prompt> <userinput>apt-get install locales</userinput>
+<prompt>#</prompt> <userinput>dpkg-reconfigure locales</userinput>
 </screen></informalexample>
 
 POZNÁMKA: Před tímto krokem již musíte mít nastavený systém pro správu
@@ -400,7 +346,6 @@ dokumenty HOWTO.
 
   <sect2>
   <title>Instalace jádra</title>
-
 <para>
 
 Jestliže budete chtít tento systém i zavádět (na 99% ano), musíte si
@@ -408,19 +353,13 @@ nainstalovat jádro (a možná zavaděč). Následujícím příkazem zjistíte
 dostupná připravená jádra:
 
 <informalexample><screen>
-
- # apt-cache search kernel-image
-
+<prompt>#</prompt> <userinput>apt-cache search kernel-image</userinput>
 </screen></informalexample>
-
-</para><para>
 
 Vybrané jádro nainstalujte:
 
 <informalexample><screen>
-
- # apt-get install kernel-image-2.X.X-arch-atd
-
+<prompt>#</prompt> <userinput>apt-get install kernel-image-2.X.X-arch-atd</userinput>
 </screen></informalexample>
 
 </para>
@@ -451,7 +390,6 @@ kterého jej spouštíte).
 Pro inspiraci nabízíme minimální <filename>/etc/lilo.conf</filename>:
 
 <informalexample><screen>
-
 boot=/dev/hda6
 root=/dev/hda6
 install=/boot/boot-menu.b
@@ -459,7 +397,6 @@ delay=20
 lba32
 image=/vmlinuz
 label=Debian
-
 </screen></informalexample>
 
 </para><para arch="powerpc">
@@ -476,7 +413,6 @@ konfigurační soubor systému, ze kterého jej spouštíte).
 Pro inspiraci nabízíme minimální <filename>/etc/yaboot.conf</filename>:
 
 <informalexample><screen>
-
 boot=/dev/hda2
 device=hd:
 partition=6
@@ -485,7 +421,6 @@ magicboot=/usr/lib/yaboot/ofboot
 timeout=50
 image=/vmlinux
 label=Debian
-
 </screen></informalexample>
 
 Na některých počítačích musíte místo <userinput>hd:</userinput> použít

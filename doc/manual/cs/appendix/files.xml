@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 23058 -->
+<!-- original version: 24840 -->
 
  <sect1 id="linuxdevices"><title>Zařízení v Linuxu</title>
 <para>
@@ -135,13 +135,12 @@ V následujícím výpisu je uvedeno několik nejdůležitějších souborů.
 Myš můžete používat jak na konzoli, tak v prostředí X Window.
 Je toho dosaženo použitím gpm opakovače, který přeposílá signál z myši
 k X serveru.
+
 <informalexample><screen>
-myš =&#62; /dev/psaux  =&#62; gpm =&#62; /dev/gpmdata -&#62; /dev/mouse =&#62; X
+myš =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; X
        /dev/ttyS0             (opakovač)      (symbolický odkaz)
        /dev/ttyS1
 </screen></informalexample>
-
-</para><para>
 
 V souboru <filename>/etc/gpm.conf</filename> nastavte opakovací
 protokol na hodnotu <userinput>raw</userinput> a v X ponechte původní
@@ -152,8 +151,9 @@ myší protokol (soubory <filename>/etc/X11/XF86Config</filename> nebo
 
 Důvod použití gpm i pro X Window System je ten, že když se myš
 neočekávaně odpojí, stačí restartovat pouze gpm a ne celé X Window.
+
 <informalexample><screen>
-franta@debian:# /etc/init.d/gpm restart
+<prompt>#</prompt> <userinput>/etc/init.d/gpm restart</userinput>
 </screen></informalexample>
 
 </para><para>
@@ -180,7 +180,6 @@ jednotlačítkové. Stačí do souboru
 <filename>/etc/sysctl.conf</filename> přidat následující řádky.
 
 <informalexample><screen>
-
 # emulace 3 tlačítek
 # zapne emulaci
 /dev/mac_hid/mouse_button_emulation = 1
@@ -189,8 +188,8 @@ jednotlačítkové. Stačí do souboru
 # signál pravého tlačítka posílej klávesou  F12
 /dev/mac_hid/mouse_button3_keycode = 88
 # programem showkey můžete zjistit (a použít) kódy jiných kláves.
+</screen></informalexample>
 
-</screen></informalexample>  
 </para>
   </sect2>
  </sect1>
@@ -211,17 +210,61 @@ menší než součet jejich velikostí.
 
 </para><para>
 
-<informalexample><screen>
-Úloha                                Zabrané místo (v MB)
-                               po instalaci po stažení během instalace
+<informaltable><tgroup cols="4">
+<thead>
+<row>
+  <entry>Úloha</entry>
+  <entry>Instalovaná velikost (MB)</entry>
+  <entry>Stáhne se (MB)</entry>
+  <entry>Místo během instalace (MB)</entry>
+</row>
+</thead>
 
-Desktopový počítač                 1537        521        2058
-Webový server                        71         21          92
-Tiskový server                      240         83         323
-Poštovní server                      41         12          53
-Souborový server                     85         34         119
-SQL databáze                        108         33         141
+<tbody>
+<row>
+  <entry>Desktopový počítač</entry>
+  <entry>1537</entry>
+  <entry>521</entry>
+  <entry>2058</entry>
+</row>
 
-</screen></informalexample>
+<row>
+  <entry>Webový server</entry>
+  <entry>71</entry>
+  <entry>21</entry>
+  <entry>92</entry>
+</row>
+
+<row>
+  <entry>Tiskový server</entry>
+  <entry>240</entry>
+  <entry>83</entry>
+  <entry>323</entry>
+</row>
+
+<row>
+  <entry>Poštovní server</entry>
+  <entry>41</entry>
+  <entry>12</entry>
+  <entry>53</entry>
+</row>
+
+<row>
+  <entry>Souborový server</entry>
+  <entry>85</entry>
+  <entry>34</entry>
+  <entry>119</entry>
+</row>
+
+<row>
+  <entry>SQL databáze</entry>
+  <entry>108</entry>
+  <entry>33</entry>
+  <entry>141</entry>
+</row>
+
+</tbody>
+</tgroup></informaltable>
+
 </para>
  </sect1>

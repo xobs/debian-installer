@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 23664 -->
+<!-- original version: 24840 -->
 
  <sect2 arch="alpha" id="alpha-firmware">
  <title>Firmware Alpha konzoly</title>
@@ -223,11 +223,9 @@ V závislosti na firmwaru konzoly a na (ne)přítomnosti programu
 <command>MILO</command> jsou možné tři scénáře:
 
 <informalexample><screen>
-
-SRM -> aboot
-SRM -> MILO
-ARC -> MILO
-
+SRM -&gt; aboot
+SRM -&gt; MILO
+ARC -&gt; MILO
 </screen></informalexample>
 
 </para><para condition="FIXME">
@@ -263,28 +261,22 @@ V SRM konzoli jsou názvy Ethernet rozhraní pojmenovány s předponou
 <userinput>show dev</userinput> (mírně modifikováno):
 
 <informalexample><screen>
-
 &gt;&gt;&gt; show dev
 ewa0.0.0.9.0               EWA0              08-00-2B-86-98-65
 ewb0.0.0.11.0              EWB0              08-00-2B-86-98-54
 ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
-
 </screen></informalexample>
 
 Nejprve musíte nastavit zaváděcí protokol:
 
 <informalexample><screen>
-
 &gt;&gt;&gt; set ewa0_protocol bootp
-
 </screen></informalexample>
 
 Pak zkontrolujte typ média:
 
 <informalexample><screen>
-
 &gt;&gt;&gt; set ewa0_mode <replaceable>mode</replaceable>
-
 </screen></informalexample>
 
 Seznam platných módů získáte příkazem
@@ -295,9 +287,7 @@ Seznam platných módů získáte příkazem
 Pro zavedení z prvního ethernetového rozhraní byste napsali:
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot ewa0 -flags ""
-
 </screen></informalexample>
 
 což zavede systém s implicitními parametry tak, jak jsou uloženy
@@ -316,9 +306,7 @@ Například pro zavedení z <userinput>ewa0</userinput> a použití konzoly
 na prvním sériovém portu byste napsali:
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot ewa0 -flags "root=/dev/ram ramdisk_size=16384 console=ttyS0"
-
 </screen></informalexample>
 
 </para>
@@ -331,9 +319,7 @@ na prvním sériovém portu byste napsali:
 Napište
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot xxxx -flags 0
-
 </screen></informalexample>
 
 kde <replaceable>xxxx</replaceable> je vaše CD mechanika (v notaci SRM).
@@ -366,9 +352,7 @@ V SRM promptu (<prompt>&gt;&gt;&gt;</prompt>) zadejte následující
 příkaz:
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot dva0 -flags 0
-        
 </screen></informalexample>
 
 kde <filename>dva0</filename> nahradíte jménem příslušného zařízení.
@@ -376,9 +360,7 @@ kde <filename>dva0</filename> nahradíte jménem příslušného zařízení.
 Pro seznam zařízení (třeba když chcete zavést z CD) napište:
 
 <informalexample><screen>
-
 &gt;&gt;&gt; show dev
-        
 </screen></informalexample>
 
 Všimněte si, že pokud zavádíte systém přes MILO, parametr
@@ -392,9 +374,7 @@ Pokud chcete při zavádění přes <command>aboot</command> specifikovat
 parametry jádra, použijte následující příkaz:
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot dva0 -file linux.bin.gz -flags "root=/dev/fd0 load_ramdisk=1 param"
-
 </screen></informalexample>
 
 (vše napsáno na jednom řádku). Pokud je to nutné, nahraďte jméno
@@ -439,9 +419,7 @@ Pokud chcete kontrolovat všechny detaily sami (například zadat
 speciální parametry), můžete použít následující příkaz:
 
 <informalexample><screen>
-
 MILO&gt; boot fd0:linux.bin.gz root=/dev/fd0 load_ramdisk=1
-        
 </screen></informalexample>
 
 </para><para>
@@ -453,4 +431,3 @@ MILO příkazů.
 
 </para>
  </sect2>
-

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 23805 -->
+<!-- original version: 24841 -->
 
  <sect1 id="example-preseed">
  <title>Příklad předkonfiguračního souboru</title>
@@ -11,7 +11,14 @@ automatizované instalace. Způsob použití je vysvětlen v <xref
 linkend="automatic-install"/>. Před použitím souboru je vhodné
 odkomentovat některé řádky.
 
-</para>
+</para><note><para>
+
+Pro lepší zobrazení v tištěné příručce jsme některé řádky zalomili. To
+je indikováno znakem pro pokračování řádku <quote>\</quote> a poté
+větším odsazením následujícího řádku. V opravdovém souboru musí být
+takto rozdělené řádky pojeny do <emphasis>jediného</emphasis>.
+
+</para></note>
 
 <informalexample><screen>
 #### Úprava syslinux.cfg.
@@ -61,16 +68,20 @@ odkomentovat některé řádky.
 # Následuje ukázka, jak v d-i spustit automaticky nějaký shellový příkaz.
 
 # První příkaz je spuštěn co nejdříve - hned po načtení přednastavení.
-#d-i	preseed/early_command		string wget http://url/k/muj.udeb -O /tmp/muj.udeb ; udpkg -i /tmp/muj.udeb
+#d-i preseed/early_command              string \
+#    wget http://url/k/muj.udeb -O /tmp/muj.udeb ; udpkg -i /tmp/muj.udeb
 # Tento příkaz je spuštěn těsně před koncem instalace, ale ještě je
 # připojen adresář /target.
-#d-i	preseed/late_command		string for deb in /hd-media/*.deb; do cp $deb /target/tmp; chroot /target dpkg -i /tmp/$(basename $deb); done
+#d-i preseed/late_command               string \
+#    for deb in /hd-media/*.deb; do cp $deb /target/tmp; \
+#    chroot /target dpkg -i /tmp/$(basename $deb); done
 # Tento příkaz je spuštěn při startu base-config.
-#base-config	base-config/early_command	string echo ahoj mami
+#base-config base-config/early_command  string echo ahoj mami
 # Poslední příkaz je spuštěn po skončení base-config, těsně před
 # výzvou login:. Takto můžete doinstalovat balíky, nebo také doladit
-# nastavení systému. 
-#base-config	base-config/late_command	string apt-get install zsh; chsh -s /bin/zsh
+# nastavení systému.
+#base-config base-config/late_command   string \
+#    apt-get install zsh; chsh -s /bin/zsh
 
 #### Nastavení sítě.
 
@@ -81,178 +92,188 @@ odkomentovat některé řádky.
 
 # netcfg zkusí použít rozhraní, jehož druhý konec je aktivní.
 # Tím pádem přeskočí výběr ze seznamu nalezených rozhraní.
-d-i	netcfg/choose_interface	select auto
+d-i netcfg/choose_interface             select auto
 
 # Pokud dáváte přednost ručnímu nastavení sítě:
-#d-i	netcfg/disable_dhcp	boolean true
-#d-i	netcfg/get_nameservers	string 192.168.1.1
-#d-i	netcfg/get_ipaddress	string 192.168.1.42
-#d-i	netcfg/get_netmask	string 255.255.255.0
-#d-i	netcfg/get_gateway	string 192.168.1.1
-#d-i	netcfg/confirm_static	boolean true
+#d-i netcfg/disable_dhcp                boolean true
+#d-i netcfg/get_nameservers             string 192.168.1.1
+#d-i netcfg/get_ipaddress               string 192.168.1.42
+#d-i netcfg/get_netmask	string          255.255.255.0
+#d-i netcfg/get_gateway	string          192.168.1.1
+#d-i netcfg/confirm_static              boolean true
 
 # Název počítače a domény přiřazené přes DHCP mají větší prioritu než
 # hodnoty nastavené zde, nicméně takto máte jistotu, že tato otázka
 # nezobrazí (ať už nastavení z DHCP obdržíme nebo ne).
-d-i	netcfg/get_hostname	string unassigned-hostname
-d-i	netcfg/get_domain	string unassigned-domain
+d-i netcfg/get_hostname	                string  nenastavene-jmeno
+d-i netcfg/get_domain	                string  nenastavena-domena
 
 # Zakáže otravný dialog o WEP klíči.
-d-i	netcfg/wireless_wep	string 
+d-i netcfg/wireless_wep	                string
 # Praštěné DHCP jméno počítače, které používají někteří ISP jako heslo.
-#d-i	netcfg/dhcp_hostname	string radish
+#d-i netcfg/dhcp_hostname               string radish
 
 #### Nastavení zrcadla.
 
-d-i	mirror/country		string enter information manually
-d-i	mirror/http/hostname	string http.cz.debian.org
-d-i	mirror/http/directory	string /debian
-d-i	mirror/suite		string testing
-d-i	mirror/http/proxy	string 
+d-i mirror/country                      string enter information manually
+d-i mirror/http/hostname                string http.cz.debian.org
+d-i mirror/http/directory               string /debian
+d-i mirror/suite                        string testing
+d-i mirror/http/proxy                   string 
 
 ### Rozdělení disku.
 
 # Pokud má systém volné místo, můžete je vybrat k automatickému rozdělení.
-#d-i	partman-auto/init_automatically_partition	select Use the largest continuous free space
+#d-i partman-auto/init_automatically_partition \
+#    select Use the largest continuous free space
 # Alternativně můžete zadat k automatickému dělení celý disk. Název
 # zařízení může být v tradičním formátu nebo ve formátu devfs.
 # Například pro použití prvního disku, který devfs najde:
-d-i	partman-auto/disk	string /dev/discs/disc0/disc
+d-i partman-auto/disk                   string /dev/discs/disc0/disc
 
 # Můžete vybrat libovolný z přednastavených schémat dělení:
-d-i	partman-auto/choose_recipe	select All files in one partition (recommended for new users)
-#d-i	partman-auto/choose_recipe	select Desktop machine
-#d-i	partman-auto/choose_recipe	select Multi-user workstation
+d-i partman-auto/choose_recipe          select \
+    All files in one partition (recommended for new users)
+#d-i partman-auto/choose_recipe         select Desktop machine
+#d-i partman-auto/choose_recipe         select Multi-user workstation
 # Nebo zadat váš vlastní návod na dělení...
 # Formát návodu je popsán v souboru devel/partman-auto-recipe.txt.
 # Pokud umíte do prostředí d-i dostat soubor s návodem na dělení,
 # stačí na něj odkázat.
-#d-i	partman-auto/expert_recipe_file	string /hd-media/recipe
+#d-i partman-auto/expert_recipe_file    string /hd-media/recipe
 # V opačném případě můžete zadat celý návod na jednu řádku. Například
 # vytvoříme malou /boot oblast, vhodný swap a zbytek použijeme jako
 # kořenovou oblast:
-#d-i	partman-auto/expert_recipe	string boot-root :: 20 50 100 ext3 $primary{ } $bootable{ } method{ format } format{ } use_filesystem{ } filesystem{ ext3 } mountpoint{ /boot } .  500 10000 1000000000 ext3 method{ format } format{ } use_filesystem{ } filesystem{ ext3 } mountpoint{ / } .  64 512 300% linux-swap method{ swap } format{ } . 
+#d-i partman-auto/expert_recipe         string boot-root :: \
+#    20 50 100 ext3 $primary{ } $bootable{ } method{ format } format{ } \
+#    use_filesystem{ } filesystem{ ext3 } mountpoint{ /boot } .  \
+#    500 10000 1000000000 ext3 method{ format } format{ } \
+#    use_filesystem{ } filesystem{ ext3 } mountpoint{ / } . \
+#    64 512 300% linux-swap method{ swap } format{ } .
 # Pro jistotu zde uvádíme stejný recept v čitelnější podobě:
-# 	boot-root ::
-# 	40 50 100 ext3
-#		$primary{ } $bootable{ }
-#		method{ format } format{ }
-#		use_filesystem{ } filesystem{ ext3 }
-#		mountpoint{ /boot }
-#	.
-# 	500 10000 1000000000 ext3
-#		method{ format } format{ }
-#		use_filesystem{ } filesystem{ ext3 }
-#		mountpoint{ / }
-#	.
-# 	64 512 300% linux-swap
-#		method{ swap } format{ }
-#	.
+#    boot-root ::
+#        40 50 100 ext3
+#            $primary{ } $bootable{ }
+#            method{ format } format{ }
+#            use_filesystem{ } filesystem{ ext3 }
+#            mountpoint{ /boot }
+#        .
+#        500 10000 1000000000 ext3
+#            method{ format } format{ }
+#            use_filesystem{ } filesystem{ ext3 }
+#            mountpoint{ / }
+#        .
+#        64 512 300% linux-swap
+#            method{ swap } format{ }
+#        .
 
 # Následujícím řeknete partmanu, aby disk rozdělil bez potvrzení.
-d-i     partman/confirm_write_new_label boolean true
-d-i	partman/choose_partition	select Finish partitioning and write changes to disk
-d-i	partman/confirm			boolean	true
+d-i partman/confirm_write_new_label     boolean true
+d-i partman/choose_partition            select \
+    Finish partitioning and write changes to disk
+d-i partman/confirm                     boolean true
 
 #### Instalace zavaděče.
 
 # Implicitní zavaděč (pro x86) je Grub. Chcete-li místo něj instalovat
 # LILO, odkomentujte následující:
-#d-i	grub-installer/skip		boolean true
+#d-i grub-installer/skip                boolean true
 
 # Toto je bezpečné nastavení - pokud nenalezne jiný operační systém,
 # nainstaluje Grub do MBR.
-d-i	grub-installer/only_debian	boolean true
+d-i grub-installer/only_debian          boolean true
+
 # Toto nainstaluje Grub do MBR i když nalezne jiný operační systém,
 # což je méně bezpečné, protože se jiný systém nemusí zavést.
-d-i	grub-installer/with_other_os	boolean true
+d-i grub-installer/with_other_os        boolean true
+
 # Alternativně můžete instalovat jinam než do MBR - odkomentujete
 # a upravte tyto řádky:
-#d-i	grub-installer/bootdev		string (hd0,0)
-#d-i	grub-installer/only-debian	boolean false
-#d-i	grub-installer/with_other_os	boolean false
+#d-i grub-installer/bootdev             string (hd0,0)
+#d-i grub-installer/only-debian         boolean false
+#d-i grub-installer/with_other_os       boolean false
 
 ##### Finishing up the first stage install.
 
 # Vynechá poslední hlášku, že je instalace kompletní.
-d-i	prebaseconfig/reboot_in_progress	note 
+d-i prebaseconfig/reboot_in_progress    note 
 
 
 ##### Přednastavení base-config.
 # XXX: Většina nebude fungovat správně s base-configem nižším než 2.40.4.
 
 # Vynechá úvodní hlášku.
-base-config	base-config/intro	note 
+base-config base-config/intro           note 
 
 # Vynechá poslední hlášku.
-base-config	base-config/login	note 
+base-config base-config/login           note 
 
 # Pokud jste instalovali správce zobrazení, ale nechcete jej spustit
 # hned po dokončení base-config.
-#base-config	base-config/start-display-manager	boolean false
+#base-config base-config/start-display-manager      boolean false
 
 ###### Nastavení časového pásma.
 
 # Nastaví, zda jsou hardwarové hodiny v GMT.
-base-config	tzconfig/gmt		boolean true
+base-config tzconfig/gmt                boolean true
 
 # Pokud jste instalačnímu systému řekli, že žijete ve Spojených
 # státech, můžete vybrat časovou zónu následující proměnnou.
 # (Možnosti jsou: Eastern, Central, Mountain, Pacific, Alaska, Hawaii,
 # Aleutian, Arizona East-Indiana, Indiana-Starke, Michigan, Samoa, other)
-base-config	tzconfig/choose_country_zone/US	select Eastern
+base-config tzconfig/choose_country_zone/US         select Eastern
 # Pokud se nacházíte v Kanadě.
 # (Možnosti jsou: Newfoundland, Atlantic, Eastern, Central,
 # East-Saskatchewan, Saskatchewan, Mountain, Pacific, Yukon, other)
-base-config	tzconfig/choose_country_zone/CA	select Eastern
+base-config tzconfig/choose_country_zone/CA         select Eastern
 # Pokud se nacházíte v Brazílii.
 # (Možnosti jsou: East, West, Acre, DeNoronha, other)
-base-config	tzconfig/choose_country_zone/BR	select East
+base-config tzconfig/choose_country_zone/BR         select East
 # Mnoho zemí má pouze jedno časové pásmo (jako ČR). Pokud se nacházíte
 # v některé z těchto zemí, můžete vybrat časové pásmo následující
 # otázkou. 
-base-config	tzconfig/choose_country_zone_single boolean true
+base-config tzconfig/choose_country_zone_single     boolean true
 # Tato otázka slouží jako záchytný bod pro země, které mají více
 # časových pásem a které nevyhovují žádné předchozí otázce.
 # Můžete zadat některé z časových pásem nebo "other".
-#base-config	tzconfig/choose_country_zone_multiple select 
+#base-config tzconfig/choose_country_zone_multiple  select 
 
 ###### Nastavení uživatelských účtů.
 
 # Sem můžete zadat rootovo heslo, což není nejlepší nápad. S touto
 # volbou buďte velmi opatrní!
-#passwd		passwd/root-password		password jsem_r00t
-#passwd		passwd/root-password-again	password jsem_r00t
+#passwd passwd/root-password            password jsem_r00t
+#passwd passwd/root-password-again      password jsem_r00t
 
 # Chcete-li přeskočit vytváření běžného uživatelského účtu.
-#passwd		passwd/make-user		boolean false
+#passwd passwd/make-user                boolean false
 # Alternativně můžete přednastavit jméno uživatele.
-#passwd		passwd/user-fullname		string Uzivatel Debianu
-#passwd		passwd/username			string franta
+#passwd passwd/user-fullname            string Uzivatel Debianu
+#passwd passwd/username                 string franta
 # Uživatelovo heslo, opět buďte opatrní!
-#passwd		passwd/user-password		password nebezpecne
-#passwd		passwd/user-password-again	password nebezpecne
+#passwd passwd/user-password            password nebezpecne
+#passwd passwd/user-password-again      password nebezpecne
 
 ###### Nastavení APTu.
 
 # Tato otázka určuje, odkud se budou instalovat balíky ve druhé fázi
 # instalace. Možnosti jsou cdrom, http, ftp, filesystem, edit sources
 # list by hand.
-base-config	apt-setup/uri_type	select http
+base-config apt-setup/uri_type          select http
 
 # Zvolíte-li ftp nebo http, musíte zadat zemi a zrcadlo.
-base-config	apt-setup/country	select enter information manually
-base-config	apt-setup/hostname	string http.cz.debian.org
-base-config	apt-setup/directory	string /debian
+base-config apt-setup/country           select enter information manually
+base-config apt-setup/hostname          string http.cz.debian.org
+base-config apt-setup/directory         string /debian
 # Zastaví po výběru jednoho zrcadla.
-base-config	apt-setup/another	boolean false
+base-config apt-setup/another           boolean false
 
 # Můžete si nainstalovat software ze sekcí non-free a contrib.
-#base-config	apt-setup/non-free	boolean true
-#base-config	apt-setup/contrib	boolean true
+#base-config apt-setup/non-free         boolean true
+#base-config apt-setup/contrib          boolean true
 
 # Povolí bezpečnostní aktualizace.
-base-config	apt-setup/security-updates	boolean true
+base-config apt-setup/security-updates  boolean true
 
 ###### Výběr balíků.
 
@@ -262,18 +283,19 @@ base-config	apt-setup/security-updates	boolean true
 # manual package selection. Poslední možnost spustí aptitude.
 # Také můžete instalaci úloh vynechat a instalovat balíku nějakou
 # jinou cestou. 
-tasksel		tasksel/first	multiselect Desktop environment
-#tasksel	tasksel/first	multiselect Web server, Mail server, DNS server
+tasksel   tasksel/first   multiselect Desktop environment
+#tasksel  tasksel/first   multiselect Web server, Mail server, DNS server
 
 ###### Nastavení pošty.
 
 # Během normální instalace se exim ptá pouze dvě otázky. (Je možné
 # přednastavit i složitější nastavení.)
-exim4-config	exim4/dc_eximconfig_configtype	select no configuration at this time
+exim4-config  exim4/dc_eximconfig_configtype \
+    select no configuration at this time
 # Toto je vhodné nastavit na jméno uživatele, kterého jste vytvořili
 # dříve. Pokud necháte prázdné, půjde pošta pro uživatele postmaster
 # do /var/mail/mail.
-exim4-config	exim4/dc_postmaster		string 
+exim4-config exim4/dc_postmaster        string 
 
 ###### Nastavení X Window.
 
@@ -283,22 +305,24 @@ exim4-config	exim4/dc_postmaster		string
 
 # I když X rozpozná správný ovladač grafické karty, zde jej můžete
 # přepsat. Vesa bude fungovat ve většině případů.
-#xserver-xfree86	xserver-xfree86/config/device/driver	select vesa
+#xserver-xfree86 xserver-xfree86/config/device/driver select vesa
 
 # Pokud se automatické rozpoznání myši nezdaří, dostanete se do
 # nekonečné smyčky, protože nástroj se bude ptát znovu a znovu
 # a pokaždé (ne)nalezne stejnou nefunkční myš.
-#xserver-xfree86	xserver-xfree86/autodetect_mouse	boolean true
+#xserver-xfree86 xserver-xfree86/autodetect_mouse     boolean true
 
 # Automatické rozpoznání monitoru je doporučeno.
-xserver-xfree86		xserver-xfree86/autodetect_monitor	boolean true
+xserver-xfree86 xserver-xfree86/autodetect_monitor    boolean true
 # Odkomentujete pokud máte LCD displej.
-#xserver-xfree86	xserver-xfree86/config/monitor/lcd	boolean true
+#xserver-xfree86 xserver-xfree86/config/monitor/lcd   boolean true
 # X má tři metody nastavení monitoru. Ukážeme střední cestu
 # ("medium"), která je dostupná vždy.  Možnost "simple" nemusí být
 # dostupná a "advanced" se ptá příliš mnoho otázek.
-xserver-xfree86	xserver-xfree86/config/monitor/selection-method	select medium
-xserver-xfree86	xserver-xfree86/config/monitor/mode-list	select 1024x768 @ 60 Hz
+xserver-xfree86 xserver-xfree86/config/monitor/selection-method	\
+    select medium
+xserver-xfree86 xserver-xfree86/config/monitor/mode-list \
+    select 1024x768 @ 60 Hz
 
 ###### Vše ostatní.
 
@@ -311,7 +335,8 @@ xserver-xfree86	xserver-xfree86/config/monitor/mode-list	select 1024x768 @ 60 Hz
 
 # Přednastavení může být uloženo v několika souborech, načtete je
 # následovně:
-#d-i	preseed/include	string x.cfg
+#d-i preseed/include                    string x.cfg
+
 # Zadat můžete i více souborů najednou, stačí je oddělit mezerami.
 # Později uvedené volby přepisují volby uvedené dříve. Pokud cestu
 # zadáte relativně, hledají se soubory ve stejném adresáři, jako tento
@@ -320,7 +345,9 @@ xserver-xfree86	xserver-xfree86/config/monitor/mode-list	select 1024x768 @ 60 Hz
 # souborů, jež se mají nahrát. V našem příkladě se příkaz rozhoduje
 # mezi soubory podle konkrétního USB zařízení (zde vestavěné čtečky
 # karet):
-#d-i	preseed/include_command	string if $(grep -q "GUID: 0aec3050aec305000001a003"  /proc/scsi/usb-storage-*/*); then echo kraken.cfg; else echo otherusb.cfg; fi
+#d-i preseed/include_command            string \
+#    if $(grep -q "GUID: 0aec3050aec305000001a003" /proc/scsi/usb-storage-*/*); \
+#    then echo kraken.cfg; else echo otherusb.cfg; fi
 </screen></informalexample>
 
  </sect1>
