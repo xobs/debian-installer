@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 24663 -->
+<!-- original version: 26371 -->
 
   <sect2 arch="arm" id="boot-tftp"><title>Zavedení z TFTP</title>
 
@@ -43,13 +43,13 @@ Po restartu musíte během odpočítávání přerušit zaváděcí proces a
 nastavit síťovou adresu staticky:
 
 <informalexample><screen>
-    NeTTrom command-&gt; setenv eth0_ip 192.168.0.10/24
+<prompt>NeTTrom command-&gt;</prompt> <userinput>setenv eth0_ip 192.168.0.10/24</userinput>
 </screen></informalexample>
 
 kde 24 je počet nastavených bitů v síťové masce, nebo dynamicky:
 
 <informalexample><screen>
-    NeTTrom command-&gt; boot diskless
+<prompt>NeTTrom command-&gt;</prompt> <userinput>boot diskless</userinput>
 </screen></informalexample>
 
 Pokud TFTP server není na lokální podsíti, budete možná muset upravit
@@ -57,19 +57,28 @@ nastavení <userinput>route1</userinput>. Zbytek je už poměrně
 standardní (krok <command>save-all</command> je nepovinný):
 
 <informalexample><screen>
-    NeTTrom command-&gt; setenv kerntftpserver 192.168.0.1
-    NeTTrom command-&gt; setenv kerntftpfile tftpboot.img
-    NeTTrom command-&gt; save-all
-    NeTTrom command-&gt; setenv netconfig_eth0 flash
-    NeTTrom command-&gt; setenv kernconfig tftp
+<prompt>NeTTrom command-&gt;</prompt> <userinput>setenv kerntftpserver 192.168.0.1</userinput>
+<prompt>NeTTrom command-&gt;</prompt> <userinput>setenv kerntftpfile boot.img</userinput>
+<prompt>NeTTrom command-&gt;</prompt> <userinput>save-all</userinput>
+<prompt>NeTTrom command-&gt;</prompt> <userinput>setenv netconfig_eth0 flash</userinput>
+<prompt>NeTTrom command-&gt;</prompt> <userinput>setenv kernconfig tftp</userinput>
+<prompt>NeTTrom command-&gt;</prompt> <userinput>setenv rootdev /dev/ram</userinput>
+<prompt>NeTTrom command-&gt;</prompt> <userinput>setenv cmdappend root=/dev/ram</userinput>
 </screen></informalexample>
 
-S normálním zavedením z disku kolidují pouze poslední dva příkazy,
+S normálním zavedením z disku kolidují pouze poslední čtyři příkazy,
 takže je bezpečné a vhodné si uložit předchozí změny pro případ, že
-byste někdy opět museli zavádět ze sítě. Nastavení proměnných můžete
-zkontrolovat příkazem <command>printenv</command>. 
-Pokud NeTTrom proměnná <envar>cmdappend</envar> obsahuje volbu
-<option>noinitrd</option> (která je nutná pro zavedení 2.4 jader),
+byste někdy opět museli zavádět ze sítě. Chcete-li pro instalaci
+NetWinderu použít sériovou konzoli, budete také potřebovat následující
+nastavení:
+
+<informalexample><screen>
+<prompt>NeTTrom command-&gt;</prompt> <userinput>setenv cmdappend root=/dev/ram console=ttyS0,115200</userinput>
+</screen></informalexample>
+
+Nastavení proměnných můžete zkontrolovat příkazem
+<command>printenv</command>. Pokud NeTTrom proměnná
+<envar>cmdappend</envar> obsahuje volbu <option>noinitrd</option>,
 musíte ji odstranit, aby stažené jádro mohlo využít svůj připojený
 ramdisk.
 
