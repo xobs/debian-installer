@@ -649,7 +649,12 @@ $(TEMP_EXTRA): $(STAMPS)extra-$(targetstring)-stamp
 	install -d $(TREE)
 	set -e; case $(INITRD_FS) in \
 	ext2) \
-		genext2fs -d $(TREE) -b $(IMAGE_SIZE) -r 0 $@ ;; \
+		if [ "$(IMAGE_SIZE)" = 1440 ]; then \
+			genext2fs -d $(TREE) -b 1433 -r 0 $@; \
+		else \
+			genext2fs -d $(TREE) -b $(IMAGE_SIZE) -r 0 $@;\
+		fi \
+	;; \
 	cramfs) \
 		$(mkcramfs) $@ ;; \
 	*) \
