@@ -1,0 +1,51 @@
+This is a list of available hooks available for debian-installer
+modules and extentions.
+
+/etc/rcS.d/S[0-9][0-9]* [rootskel]
+    If this is an executable program, it is executed when d-i is
+    booting, before the main menu is presented.
+
+/cdrom/.disk/udeb_include [anna]
+/cdrom/.disk/udeb_exclude
+    List of packages (udebs) to install or not install in into the d-i
+    ramdisk.
+
+/etc/autopartkit.d/*.table [autopartkit]
+    Partition table instructions for autopartkit. The selection is
+    done using debconf.
+
+/cdrom/.disk/base_include [base-installer]
+/cdrom/.disk/base_exclude
+    The content of these files are taken as lists of packages to
+    install or not into the target area.
+
+/usr/lib/base-installer.d/* [base-installer]
+    The files in this directory are executed in sequence before
+    debootstrap is called.
+
+/usr/lib/prebaseconfig.d/* [prebaseconfig]
+    The files in this directory are executed in sequence at the end of
+    the installation.
+
+/var/lib/partconf/fstab.d/* [partconf?]
+    partconf and mkfstab read all files in this directory and append
+    the lines (with or without modification) to the generated
+    /target/etc/fstab.
+
+/usr/share/partitioner/${ARCH}.sh [partitioner?]
+/usr/share/partitioner/common.sh
+    partitioner first try to call the shell script for the current
+    architecture, and if this script doesn't exist it runs common.sh
+    with the selection harddisk as argument. The script can then do
+    whatever is needed to partition a harddisk on this arch (eg
+    running fdisk (text) or cfdisk (slang)).
+
+/var/lib/partconf/block.d/* [partconf?]
+    partconf execute for each partition every script in this
+    directory, so some udebs can place scripts here, and then block
+    the output of some partitions; very useful for raid/lvm support.
+    ( planned to included by Thorsten Sauter )
+
+apt-install [rootskel]
+    Program used in postinst scripts to ask for a package to be
+    installed into the installed system.
