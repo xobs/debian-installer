@@ -6,8 +6,8 @@
 
 <para>
 
-Actualmente la única sub-arquitectura &arch-title; que soporta 
-arranque desde CD-ROM son PReP y PowerMacs New World. En las
+Actualmente las únicas subarquitecturas &arch-title; que soportan 
+arranque desde CD-ROM son PReP y PowerMacs NewWorld. En las
 PowerMac, mantenga presionada la tecla <keycap>c</keycap>, o en
 su lugar la combinación de teclas <keycap>Option</keycap>, 
 <keycap>Shift</keycap> y <keycap>Delete</keycap> juntas para 
@@ -19,7 +19,7 @@ Las PowerMac OldWorld no arrancan un CD Debian, debido a que los
 ordenadores OldWorld dependen de que el controlador de arranque 
 de CD MacOSROM este presente en el CD, y no existe una versión
 de software libre para este controlador. Todos los sistemas
-OldWorld tienen unidades de disquete de modo que puede usar
+OldWorld tienen unidades de disquete, de modo que puede usar
 disquetes para cargar el instalador y luego indicar al 
 instalador que busque los ficheros necesarios en el CD.
 
@@ -50,7 +50,7 @@ en el CD en el cursor de OpenFirmware, similar a
 
 <para>
 
-  <emphasis>Todavía no ha sido escrito.</emphasis>
+  <emphasis>Todavía se ha escrito.</emphasis>
 
 </para>
    </sect3>
@@ -82,7 +82,7 @@ Deberá haber ubicado los ficheros
 <filename>root.bin</filename> en el nivel superior de su
 partición HFS en <xref linkend="files-newworld"/>. 
 Reinicie el ordenador e inmediatamente (durante la campanada)
-mantenga presionadas en simultáneo las teclas 
+mantenga presionadas simultáneamente las teclas 
 <keycap>Option</keycap>, <keycap>Command (cloverleaf/Apple)</keycap>,
 <keycap>o</keycap> y <keycap>f</keycap>. Después de algunos
 segundos se le presentará un cursor de Open Firmware. En el
@@ -94,7 +94,7 @@ cursor escriba
 
 </screen></informalexample>
 
-reemplace <replaceable>x</replaceable> con el número de partición
+y reemplace <replaceable>x</replaceable> con el número de partición
 de la partición HFS donde se ubican los ficheros del núcleo e 
 yaboot, seguido por un &enterkey;. En algunas máquinas, podría
 necesitar usar <userinput>ide0:</userinput> en lugar de 
@@ -110,9 +110,9 @@ boot:
 En el cursor de yaboot <prompt>boot:</prompt>, escriba ya sea
 <userinput>install</userinput> o <userinput>install video=ofonly</userinput>
 seguido por un &enterkey;. El argumento
-<userinput>video=ofonly</userinput> es para máxima compatibilidad;
-puede probarlo si <userinput>install</userinput> no funciona.
-Se deberá iniciar el programa de instalación de Debian.
+<userinput>video=ofonly</userinput> esta pensado para dar la máxima
+compatibilidad; puede probarlo si <userinput>install</userinput> no
+funciona. Se iniciará entonces el programa de instalación de Debian.
 
 </para>
    </sect3>
@@ -129,10 +129,10 @@ desde la red.
 
 </para><para>
 
-En máquinas con Open Firmware, como las PowerMacs NewWorld, ingrese
+En máquinas con Open Firmware, como las PowerMacs NewWorld, vaya
 al monitor de arranque (vea <xref linkend="invoking-openfirmware"/>) y
 use la orden <command>boot enet:0</command>. Las máquinas PReP y CHRP
-podrían tener diferentes modos de señalar la red. En una máquina
+podrían tener diferentes modos de tratar la red. En una máquina
 PReP, deberá usar
 <userinput>boot <replaceable>direcc_ip_servidor</replaceable>,<replaceable>fichero</replaceable>,<replaceable>direcc_ip_cliente</replaceable></userinput>.
 
@@ -146,35 +146,35 @@ PReP, deberá usar
 
 El arranque desde disquetes esta soportado por &arch-title;, aunque
 generalmente solo es aplicable para sistemas OldWorld. Los sistemas
-NewWorld no están equipados con unidades de disquete y las unidades
-de disquete conectadas a través de USB no están soportadas para
-arranque.
+NewWorld no están equipados con unidades de disquete, y no hay
+soporte para arrancar desde unidades de disquete conectadas a través
+de USB.
 
 </para><para>
 
-Deberá haber descargado las imágenes de disquete que necesite y
+Debería haber descargado las imágenes de disquete que necesite y
 creado los disquete desde éstas como se describe en
 <xref linkend="create-floppy"/>.
 
 </para><para>
 
 Para arrancar desde el disquete <filename>boot-floppy-hfs.img</filename>,
-ubique-lo en la unidad de disquete después de apagar la máquina y
+introdúzcalo en la unidad de disquete después de apagar la máquina y
 antes de presionar el botón de encendido.
 
 </para><note><para>
 Para los que no están familiarizados el manejo de disquetes en Macintosh:
 un disquete ubicado en la máquina antes del arranque, tendrá la 
 prioridad de arrancar el sistema desde éste. Un disquete sin un
-sistema de arranque válido, será expulsado y la máquina buscará
+sistema de arranque válido será expulsado y la máquina buscará
 particiones arrancables en el disco duro.
 
 </para></note><para>
 
-Después del arranque, el disquete <filename>root.bin</filename> es
-solicitado. Inserte el disquete root y presione &enterkey;. El
-programa instalador es cargado automáticamente después de que el
-sistema raíz ha sido cargado en memoria.
+Después del arranque, se solicita el disquete <filename>root.bin</filename>.
+Inserte el disquete marcado como «root» y presione &enterkey;. El
+programa instalador se carga automáticamente después de que el
+sistema raíz se ha cargado en memoria.
 
 </para>
   </sect2>
@@ -183,11 +183,11 @@ sistema raíz ha sido cargado en memoria.
   <sect2 arch="powerpc"><title>Parámetros de arranque de PowerPC</title>
 <para>
 
-Muchos monitores Apple usan el modo 640x480 67Hz. Si su vídeo
-aparece distorsionado en un monitor Apple antiguo, intente
+Muchos monitores Apple usan el modo 640x480 puntos a 67Hz. Si su imagen
+aparece distorsionada en un monitor Apple antiguo, intente
 añadir el argumento de arranque <userinput>video=atyfb:vmode:6</userinput> ,
 el cual elije este modo para la mayoría de hardware de vídeo
-Mach64 y Rage. Para hardware Rage 128, use
+Mach64 y Rage. Si tiene una tarjeta Rage 128, use
 <userinput>video=aty128fb:vmode:6</userinput> .
 
 </para>
