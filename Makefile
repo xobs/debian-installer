@@ -596,7 +596,7 @@ boot_floppy: floppy_image
 boot_floppy_check: floppy_image
 	cmp $(FLOPPYDEV) $(FLOPPY_IMAGE)
 
-COMPRESSED_SZ=$(shell expr $(shell tar cz $(TREE) | wc -c) / 1024)
+COMPRESSED_SZ=$(shell expr $(shell tar czf - $(TREE) | wc -c) / 1024)
 KERNEL_SZ=$(shell expr $(shell du -b $(KERNEL) | cut -f 1) / 1024)
 stats: tree
 	@echo
