@@ -10,16 +10,15 @@ if [ -z "$destination" ]; then
 	destination="/tmp/manual"
 fi
 
-if [ -z "$noarchdir" ]; then
-	destsuffix="$lang"
-else
-	destsuffix="${lang}.${arch}"
-fi
-
 [ -e "$destination" ] || mkdir -p "$destination"
 
 for lang in $languages; do
     for arch in $architectures; do
+	if [ -z "$noarchdir" ]; then
+		destsuffix="$lang"
+	else
+		destsuffix="${lang}.${arch}"
+	fi
 	./buildone.sh "$arch" "$lang"
 	mkdir "$destination/$destsuffix"
 	mv *.html "$destination/$destsuffix"
