@@ -37,7 +37,7 @@ echo
 
 ssh $HOST mkdir -p $BASEDIR/daily $BASEDIR/$DIR/RSYNC_IN_PROGRESS
 ssh $HOST cp -a $BASEDIR/daily/. $BASEDIR/$DIR/RSYNC_IN_PROGRESS/ || true
-rsync --stats -rv dest/ $HOST:$BASEDIR/$DIR/RSYNC_IN_PROGRESS/
+rsync --stats -rv -e ssh dest/ $HOST:$BASEDIR/$DIR/RSYNC_IN_PROGRESS/
 ssh $HOST mv $BASEDIR/$DIR/RSYNC_IN_PROGRESS/\* $BASEDIR/$DIR/
 ssh $HOST rmdir $BASEDIR/$DIR/RSYNC_IN_PROGRESS
 ssh $HOST rm -rf $BASEDIR/daily
