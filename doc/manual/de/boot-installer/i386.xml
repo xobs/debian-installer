@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 24601 -->
+<!-- original version: 24663 -->
 
   <sect2 arch="i386"><title>Von einer CD-ROM starten</title>
 
@@ -92,9 +92,7 @@ moment (and optionally select the `safe mode command prompt only'
 option).  Enter the subdirectory for the flavor you chose, e.g.,
 
 <informalexample><screen>
-
 cd c:\install
-
 </screen></informalexample>.  
 
 Next, execute <command>install.bat</command>.
@@ -162,13 +160,11 @@ Hier ein Beispiel für <filename>/etc/lilo.conf</filename>:
 </para><para>
 
 <informalexample><screen>
-
 image=/boot/newinstall/vmlinuz
        label=newinstall
        initrd=/boot/newinstall/initrd.gz
        root=/dev/ram0
-       append="devfs=mount,dall ramdisk_size=17000"
-
+       append="devfs=mount,dall ramdisk_size=12000"
 </screen></informalexample>
 
 Mehr Details finden Sie in den Handbuchseiten von
@@ -186,14 +182,17 @@ die Datei <filename>menu.lst</filename> im Verzeichnis
 <filename>/boot/boot/grub/</filename>) und fügen Sie die folgenden Zeilen ein:
 
 <informalexample><screen>
-
 title  New Install
-kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram0 devfs=mount,dall ramdisk_size=17000
+kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram0 ramdisk_size=12000
 initrd (hd0,0)/boot/newinstall/initrd.gz
-
 </screen></informalexample>
 
-Starten Sie danach den Rechner neu.
+Starten Sie danach den Rechner neu. Falls der Systemstart fehlschlägt, können
+Sie versuchen, <userinput>devfs=mount,dall</userinput> zu der
+<quote>kernel</quote>-Zeile hinzuzufügen.
+
+</para><para>
+
 Beachten Sie, dass der Wert für <userinput>ramdisksize</userinput>
 unter Umständen an die Größe des initrd-Images angepasst werden muss.
 Ab hier sollte es keinen Unterschied geben zwischen <command>GRUB</command>

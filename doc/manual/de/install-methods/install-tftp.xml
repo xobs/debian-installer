@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23213 -->
+<!-- original version: 24663 -->
 
  <sect1 condition="supports-tftp" id="install-tftp">
  <title>Dateien vorbereiten für TFTP-Netzwerk-Boot</title>
@@ -89,9 +89,7 @@ dass <command>tftpd</command> aktiv ist. Dies können Sie mit einer Zeile
 wie der folgenden in <filename>/etc/inetd.conf</filename> erreichen:
 
 <informalexample><screen>
-
 tftp dgram udp wait nobody /usr/sbin/tcpd in.tftpd /tftpboot
-
 </screen></informalexample>
 
 Debian-Pakete richten dies generell korrekt ein, wenn sie installiert werden.
@@ -128,9 +126,7 @@ TFTP-Server ist ein GNU/Linux-Rechner mit Linux 2.4, müssen Sie auf dem
 Server folgendes ausführen:
 
 <informalexample><screen>
-
-echo 1 > /proc/sys/net/ipv4/ip_no_pmtu_disc
-
+# echo 1 &gt; /proc/sys/net/ipv4/ip_no_pmtu_disc
 </screen></informalexample>
 
 um Path MTU discovery auszuschalten, andernfalls kann der PROM des Indy
@@ -141,9 +137,7 @@ der Linux-Kernel 2.4.x, der diesen Fehler im PROM auslöst, aber Sie können
 dies vermeiden, indem Sie
 
 <informalexample><screen>
-
-echo "2048 32767" > /proc/sys/net/ipv4/ip_local_port_range
-
+# echo "2048 32767" &gt; /proc/sys/net/ipv4/ip_local_port_range
 </screen></informalexample>
 
 ausführen; dies stellt den Bereich der Quellports ein, den der Linux-TFTP-Server
@@ -286,13 +280,9 @@ der Dateiname <filename>C0A80103.SUN4C</filename>. Eine einfache Art, dies
 herauszufinden, ist, den folgenden Befehl in eine Shell einzugeben
 (angenommen, die IP-Adresse der Maschine wäre 10.0.0.4):
 
-</para>
-
 <informalexample><screen>
-printf '%.2x%.2x%.2x%.2x\n' 10 0 0 4
+$ printf '%.2x%.2x%.2x%.2x\n' 10 0 0 4
 </screen></informalexample>
-
-<para>
 
 Es wird die IP-Adresse in hexadezimal ausgegeben; um den korrekten
 Dateinamen zu bekommen, müssen Sie alle Buchstaben in Großbuchstaben
@@ -385,10 +375,8 @@ Untar the root archive on your NFS server (can be the same system as
 your TFTP server): 
 
 <informalexample><screen>
-
 # cd /tftpboot
 # tar xvzf root.tar.gz
-
 </screen></informalexample>
 
 Be sure to use the GNU <command>tar</command> (other tar programs, like the
@@ -403,13 +391,11 @@ with root access to your client.  E.g., add the following line to
 for SunOS):
 
 <informalexample><screen>
-
-/tftpboot/debian-sparc-root client(rw,no_root_squash)
-
+/tftpboot/debian-sparc-root <replaceable>client</replaceable>(rw,no_root_squash)
 </screen></informalexample>
 
-NOTE: "client" is the host name or IP address recognized by the server for
-the system you are booting.
+NOTE: <replaceable>client</replaceable> is the host name or IP address recognized
+by the server for the system you are booting.
 
 </para></listitem>
 <listitem><para>
@@ -420,9 +406,7 @@ to <filename>debian-sparc-root</filename> in the
 IP address is 192.168.1.3, do
 
 <informalexample><screen>
-
 # ln -s debian-sparc-root 192.168.1.3
-
 </screen></informalexample>
 
 </para></listitem>

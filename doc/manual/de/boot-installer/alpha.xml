@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23664 -->
+<!-- original version: 24665 -->
 
  <sect2 arch="alpha" id="alpha-firmware">
  <title>Alpha Console-Firmware</title>
@@ -228,11 +228,9 @@ Es gibt also drei mögliche Szenarios, abhängig von der Konsolen-Firmware
 des Systems und ob <command>MILO</command> verfügbar ist oder nicht:
 
 <informalexample><screen>
-
-SRM -> aboot
-SRM -> MILO
-ARC -> MILO
-
+SRM -&gt; aboot
+SRM -&gt; MILO
+ARC -&gt; MILO
 </screen></informalexample>
 
 </para><para condition="FIXME">
@@ -278,30 +276,25 @@ benannt und können mit dem <userinput>show dev</userinput>-Befehl aufgelistet
 werden, wie hier (leicht verändert):
 
 <informalexample><screen>
-
->>> show dev
+&gt;&gt;&gt; show dev
 ewa0.0.0.9.0               EWA0              08-00-2B-86-98-65
 ewb0.0.0.11.0              EWB0              08-00-2B-86-98-54
 ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
-
 </screen></informalexample>
 
 Als erstes müssen Sie das Boot-Protokoll einstellen:
+
 <informalexample><screen>
-
->>> set ewa0_protocol bootp
-
+&gt;&gt;&gt; set ewa0_protocol bootp
 </screen></informalexample>
 
 Stellen Sie jetzt sicher, dass der richtige Medientyp eingestellt ist:
 
 <informalexample><screen>
-
->>> set ewa0_mode <replaceable>mode</replaceable>
-
+&gt;&gt;&gt; set ewa0_mode <replaceable>mode</replaceable>
 </screen></informalexample>
 
-Mit <userinput>>>> set ewa0_mode</userinput> bekommen Sie eine Auflistung der
+Mit <userinput>&gt;&gt;&gt;set ewa0_mode</userinput> bekommen Sie eine Auflistung der
 möglichen Modi.
 
 </para><para>
@@ -309,12 +302,8 @@ möglichen Modi.
 Um jetzt von der ersten Ethernet-Schnittstelle zu booten, geben Sie ein:
 
 <informalexample><screen>
-
->>> boot ewa0 -flags ""
-
+&gt;&gt;&gt; boot ewa0 -flags ""
 </screen></informalexample>
-
-</para><para>
 
 So wird mit den Standard-Kernel-Parametern gebootet, wie Sie im netboot-Image
 enthalten sind.
@@ -333,9 +322,7 @@ zu starten und die Konsole auf dem ersten seriellen Port zu nutzen,
 müssen Sie eintippen:
 
 <informalexample><screen>
-
-&gt;&gt;&gt; boot ewa0 -flags "root=/dev/ram ramdisk_size=16384 console=ttyS0"
-
+&gt;&gt;&gt; boot ewa0 -flags &quot;root=/dev/ram ramdisk_size=16384 console=ttyS0&quot;
 </screen></informalexample>
 
 </para>
@@ -347,9 +334,7 @@ müssen Sie eintippen:
 Tippen Sie
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot xxxx -flags 0
-
 </screen></informalexample>
 
 ein, wobei <replaceable>xxxx</replaceable> die SRM-Bezeichnung Ihres CD-ROM-Laufwerk ist.
@@ -382,9 +367,7 @@ eintragen.
 Geben Sie am SRM-Prompt (<prompt>&gt;&gt;&gt;</prompt>) Folgendes ein:
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot dva0 -flags 0
-        
 </screen></informalexample>
 
 Möglicherweise müssen Sie <filename>dva0</filename> durch die korrekte
@@ -392,9 +375,7 @@ Gerätebezeichnung ersetzen. Normalerweise ist <filename>dva0</filename>
 das Floppy-Laufwerk; tippen Sie
 
 <informalexample><screen>
-
 &gt;&gt;&gt; show dev
-        
 </screen></informalexample>
 
 ein, um eine Liste der Geräte zu bekommen (z.B. auch, wenn Sie von CD booten
@@ -410,10 +391,9 @@ Wenn Sie via <command>aboot</command> starten und Kernelparameter
 angeben wollen, nutzen Sie folgenden Befehl:
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot dva0 -file linux.bin.gz -flags "root=/dev/fd0 load_ramdisk=1 arguments"
-        
 </screen></informalexample>
+
 (alles in einer Zeile); ersetzen Sie dabei bei Bedarf
 <filename>dva0</filename> durch die korrekte SRM-Bezeichnung des Bootlaufwerks,
 <filename>fd0</filename> durch die Linux-Bezeichnung des Bootlaufwerks und
@@ -455,12 +435,8 @@ Wenn Sie alles explizit angeben möchten (z.B. um zusätzliche Parameter
 hinzuzufügen), nutzen Sie einen Befehl wie diesen:
 
 <informalexample><screen>
-
 MILO&gt; boot fd0:linux.bin.gz root=/dev/fd0 load_ramdisk=1 <!-- arguments -->
-        
 </screen></informalexample>
-
-</para><para>
 
 Wenn Sie von einem anderen Medium als von Floppy starten, ersetzen Sie
 in dem obigen Beispiel <filename>fd0</filename> durch die entsprechende
@@ -469,4 +445,3 @@ gibt eine kurze Einführung in die MILO-Kommandos.
 
 </para>
  </sect2>
-

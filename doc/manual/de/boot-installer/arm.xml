@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 -->
+<!-- original version: 24663 -->
 
   <sect2 arch="arm" id="boot-tftp"><title>Booten per TFTP</title>
 
@@ -42,39 +42,32 @@ herunter:
 Nach einem Rechnerneustart und Unterbrechen des Bootvorgangs während des
 Countdowns müssen Sie zunächst Ihr Netzwerk konfigurieren, und zwar entweder
 mit einer statischen IP-Adresse:
+
 <informalexample><screen>
-
-    NeTTrom-Befehl -> setenv eth0_ip 192.168.0.10/24
-
+    NeTTrom command-&gt; setenv eth0_ip 192.168.0.10/24
 </screen></informalexample>
+
 (wobei 24 die Anzahl der gesetzten Bits in der Netzmaske ist) oder mit einer
 dynamischen IP-Adresse:
+
 <informalexample><screen>
-
-    NeTTrom-Befehl -> boot diskless
-
+    NeTTrom command-&gt; boot diskless
 </screen></informalexample>
-
-</para><para>
 
 Unter Umständen müssen Sie noch die <userinput>route1</userinput>-Einstellungen
 ändern, falls sich der TFTP-Server nicht im lokalen Subnetz befindet.
 Der Rest der Konfiguration ist im Prinzip Standard (der "save-all"-Schritt ist
 optional):
 <informalexample><screen>
-
-    NeTTrom command-> setenv kerntftpserver 192.168.0.1
-    NeTTrom command-> setenv kerntftpfile tftpboot.img
-    NeTTrom command-> save-all
-    NeTTrom command-> setenv netconfig_eth0 flash
-    NeTTrom command-> setenv kernconfig tftp
-
+    NeTTrom command-&gt; setenv kerntftpserver 192.168.0.1
+    NeTTrom command-&gt; setenv kerntftpfile tftpboot.img
+    NeTTrom command-&gt; save-all
+    NeTTrom command-&gt; setenv netconfig_eth0 flash
+    NeTTrom command-&gt; setenv kernconfig tftp
 </screen></informalexample>
 
-</para><para>
-
 Die letzten beiden Schritte könnten sich störend auf einen normalen
-Bootvorgang per Festplatte auswirken; deshalb ist es besser, vorher den
+Bootvorgang von Festplatte auswirken; deshalb ist es besser, vorher den
 <command>save-all</command>-Befehl auszuführen. Die Netzwerkeinstellungen
 werden hierdurch gespeichert für den Fall, dass Sie noch einmal per Netzwerk
 booten müssen. Mit dem <command>printenv</command>-Kommando können Sie Ihre

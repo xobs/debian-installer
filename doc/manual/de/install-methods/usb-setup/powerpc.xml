@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 24628 -->
+<!-- original version: 24663 -->
 
    <sect3 arch="powerpc">
    <title>Partitionieren eines USB-Sticks auf &arch-title;-Systemen</title>
@@ -14,9 +14,7 @@ und dann eine neue Partition des Typs Apple_Bootstrap (mit dem
 immer die Partitionstabelle selbst ist. Geben Sie dann ein:
 
 <informalexample><screen>
-
-hformat /dev/<replaceable>sda2</replaceable>
-
+$ hformat /dev/<replaceable>sda2</replaceable>
 </screen></informalexample>
 
 Sorgen Sie dafür, dass Sie den richtigen Gerätenamen des USB-Sticks
@@ -40,13 +38,11 @@ dabei ist, unterstützt USB-Speicher-Geräte nicht, deshalb müssen wir
 installieren. Geben Sie ein:
 
 <informalexample><screen>
-
-hmount /dev/sda2
-hcopy -r /usr/lib/yaboot/yaboot :
-hattrib -c UNIX -t tbxi :yaboot
-hattrib -b :
-humount
-
++$ hmount /dev/sda2
++$ hcopy -r /usr/lib/yaboot/yaboot :
++$ hattrib -c UNIX -t tbxi :yaboot
++$ hattrib -b :
++$ humount
 </screen></informalexample>
 
 Hier wieder die Warnung, den richtigen Gerätenamen zu verwenden.
@@ -95,7 +91,6 @@ Die Konfigurationsdatei <filename>yaboot.conf</filename> sollte die
 folgenden Zeilen enthalten:
 
 <informalexample><screen>
-
 default=install
 root=/dev/ram
 
@@ -107,7 +102,6 @@ image=/vmlinux
         initrd-size=10000
         append="devfs=mount,dall --"
         read-only
-
 </screen></informalexample>
 
 Beachten Sie bitte, dass der Wert für den Parameter <userinput>initrd-size</userinput>
