@@ -41,52 +41,42 @@ Vous pouvez l'obtenir à partir de
 </para></note><para>
 
 Après avoir réamorcé et interrompu le processus d'amorçage pendant la phase 
-de compte à rebours, vous devez configurer le réseau avec l'adresse 
-statique&nbsp;:
-<informalexample><screen>
+de compte à rebours, vous devez configurer le réseau avec une adresse 
+précise&nbsp;:
 
+<informalexample><screen>
     NeTTrom command-&gt; setenv eth0_ip 192.168.0.10/24
-
 </screen></informalexample>
-où 24 est le nombre de bits du masque réseau, ou bien avec une
-        adresse dynamique&nbsp;:
+
+où 24 est le nombre de bits du masque réseau, ou bien sans adresse&nbsp;:
+
 <informalexample><screen>
-
     NeTTrom command-&gt; boot diskless
-
 </screen></informalexample>
-
-</para><para>
 
 Il se peut que vous ayez aussi à configurer les réglages de
 <userinput>route1</userinput> si le serveur TFTP n'est pas sur le
         sous-réseau local. Le reste de la configuration est tout à
         fait standard (l'étape de sauvegarde de l'ensemble est
-        optionnel)&nbsp;:
+        facultative)&nbsp;:
 
 <informalexample><screen>
-
     NeTTrom command-&gt; setenv kerntftpserver 192.168.0.1
     NeTTrom command-&gt; setenv kerntftpfile tftpboot.img
     NeTTrom command-&gt; save-all
     NeTTrom command-&gt; setenv netconfig_eth0 flash
     NeTTrom command-&gt; setenv kernconfig tftp
-
 </screen></informalexample>
 
-</para><para>
-
-Seules les deux dernières commandes interfèrent avec
-        l'amorçage normal des disques donc il est prudent de tout
-<command>save-all</command> sauvegarder soigneusement avant de le faire, ce qui permettra
-        de sauvegarder les réglages réseau au cas où vous auriez à
-        réamorcer depuis le réseau. Utilisez la commande
-<command>printenv</command> pour réafficher vos réglages
-        d'environnement. Finalement, si la variable de NeTTrom
-<envar>cmdappend</envar> a l'option <option>noinitrd</option> (qui
-        est nécessaire à l'amorçage des noyaux 2.4), vous devrez la
-        supprimer pour que le noyau puisse amorcer avec ses disques
-        virtuelles en attache.
+Seules les deux dernières commandes interfèrent avec l'amorçage normal des 
+disques. Il est donc prudent de tout sauvegarder avec
+<command>save-all</command> avant de le faire, ce qui permettra de 
+sauvegarder les réglages réseau au cas où vous auriez à réamorcer depuis le 
+réseau. Utilisez la commande <command>printenv</command> pour réafficher vos 
+réglages. Finalement, si la variable de NeTTrom <envar>cmdappend</envar> 
+a l'option <option>noinitrd</option> (qui est nécessaire à l'amorçage des 
+noyaux 2.4), vous devrez la supprimer pour que le noyau puisse amorcer avec 
+ses disques virtuels.
 
 </para>
   </sect3>
