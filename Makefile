@@ -388,14 +388,17 @@ daily_build:
 	$(MAKE) clean
 	install -d $(DEST)
 	fakeroot $(MAKE) tarball > $(DEST)/log 2>&1
-	./treecompare $(TYPE)-oldtree $(TREE) > $(DEST)/$(TYPE)-treecompare
+	$(MAKE) stats > $(DEST)/$(TYPE).info
+	echo "Tree comparison" >> $(DEST)/$(TYPE).info
+	echo "" >> $(DEST)/$(TYPE).info
+	./treecompare $(TYPE)-oldtree $(TREE) >> $(DEST)/$(TYPE).info
 	scp -q -B $(DEST)/log $(UPLOAD_DIR)
 	scp -q -B $(DEST)/$(TYPE)-debian-installer.tar.gz \
 		$(UPLOAD_DIR)/$(TYPE)-debian-installer-$(shell date +%Y%m%d).tar.gz
-	scp -q -B $(DEST)/$(TYPE)-treecompare \
-		$(UPLOAD_DIR)/$(TYPE)-treecompare-$(shell date +%Y%m%d)
+	scp -q -B $(DEST)/$(TYPE).info \
+		$(UPLOAD_DIR)/$(TYPE).info-$(shell date +%Y%m%d)
 	rm -rf $(TYPE)-oldtree
 	-mv $(TREE) $(TYPE)-oldtree && rm -f tree-stamp
-	mail $(shell whoami) -s "today's treecompare" $(DEST)/$(TYPE)-treecompare 
+	mail $(shell whoami) -s "today's build info" < $(DEST)/$(TYPE).info
 
 .PHONY: tree
