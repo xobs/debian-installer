@@ -147,12 +147,12 @@ clean: demo_clean tmp_mount debian/control
 reallyclean: clean
 	rm -rf $(APTDIR) $(DEST) $(BASE_TMP) wget-cache $(SOURCEDIR)
 	rm -f diskusage*.txt missing.txt all-*.utf *.bdf
-
+	rm -f sources.list
 # prefetch udebs
 # If we are building a correct debian-installer source tree, we will want all the
 # sources. So go fetch.
 fetch-sources: $(SOURCEDIR)/udeb-sources-stamp
-$(SOURCEDIR)/udeb-sources-stamp:
+$(SOURCEDIR)/udeb-sources-stamp: sources.list
 	mkdir -p $(APTDIR)/state/lists/partial
 	mkdir -p $(APTDIR)/cache/archives/partial
 	$(APT_GET) update
@@ -182,10 +182,16 @@ compiled-stamp: $(SOURCEDIR)/udeb-sources-stamp
 	mv $(SOURCEDIR)/*.udeb $(APTDIR)/cache/archives
 	touch compiled-stamp
 
+# Generate a sources.list from configuration
+
+sources.list: config/main
+	echo "deb $(MIRROR) $(SUITE) main/debian-installer" > sources.list
+	echo "deb-src $(MIRROR) $(SUITE) main" >> sources.list
+
 # 
 # Get all required udebs and put in UDEBDIR.
 get_udebs: $(TYPE)-get_udebs-stamp
-$(TYPE)-get_udebs-stamp:
+$(TYPE)-get_udebs-stamp: sources.list
 	mkdir -p $(APTDIR)/state/lists/partial
 	mkdir -p $(APTDIR)/cache/archives/partial
 	$(APT_GET) update
