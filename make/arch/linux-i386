@@ -1,4 +1,3 @@
-
 arch-image: $(IMAGE)
 
 # Create a bootable floppy image.
@@ -11,19 +10,20 @@ $(IMAGE): $(INITRD) tmp_mount
 			$(UPX) -9 $(TEMP)/$(NAME); ) \
 	fi
 
-	dd if=/dev/zero of=$@.new bs=$(FLOPPY_SIZE)k count=1
 	mkfs.msdos -i deb00001 -n 'Debian Installer' -C $@.new $(FLOPPY_SIZE)
+	# mkfs.msdos gets the mode wrong (bug filed)
+	chmod 644 $@.new
 
-	echo $(NO_KERNEL)
-
-ifndef NO_KERNEL
 	$(foreach NAME,$(KERNELNAME), \
 	   mcopy -i$@.new $(TEMP)/$(NAME) ::\linux)
-endif
+	
 	mcopy -i$@.new $(INITRD) ::\initrd.gz
-ifndef NO_KERNEL
+	
+ifdef KERNELNAME
 	# syslinux is used to make the floppy bootable
-	todos < boot/i386/syslinux.cfg | mcopy -i$@.new - ::\syslinux.cfg
+	sed 's/$$SYSLINUX_DEBCONF_PRIORITY/$(SYSLINUX_DEBCONF_PRIORITY)/' \
+		boot/i386/syslinux.cfg | todos | \
+		mcopy -i$@.new - ::\syslinux.cfg
 	syslinux $(SYSLINUX_OPTS) $@.new
 endif
 
@@ -40,4 +40,3 @@ cd_content: $(IMAGE)
 cd_image: cd_content
 	mkisofs -r -J -b `basename $(IMAGE)` -o $(TYPE).iso $(DEST)
 	mv $(TYPE).iso $(DEST)
-

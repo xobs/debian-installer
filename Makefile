@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 #
 # Debian Installer system makefile.
-# Copyright 2001, 2002 by Joey Hess <joeyh@debian.org>.
+# Copyright 2001-2003 by Joey Hess <joeyh@debian.org> and the d-i team.
 # Licensed under the terms of the GPL.
 #
 # This makefile builds a debian-installer system and bootable images from 
@@ -27,16 +27,14 @@ include config/arch/$(DEB_HOST_GNU_SYSTEM)-$(DEB_HOST_GNU_CPU)
 # Include directory config
 include config/dir
 
-ifeq (,$(filter $(TYPE),type $(TYPES_SUPPORTED)))
-ERROR_TYPE = 1
-endif
+# Local config override.
+-include config/local
 
-# Add to PATH so dpkg will always work, and so local programs will
-# be found.
+# Add to PATH so dpkg will always work, and so local programs will be found.
 PATH:=$(PATH):/usr/sbin:/sbin:.
 
-# All these options make apt read the right sources list, and
-# use APTDIR for everything so it need not run as root.
+# All these options make apt read the right sources list, and use APTDIR for
+# everything so it need not run as root.
 CWD:=$(shell pwd)/
 APT_GET=apt-get --assume-yes \
 	-o Dir::Etc::sourcelist=$(CWD)$(SOURCES_LIST) \
@@ -44,60 +42,33 @@ APT_GET=apt-get --assume-yes \
 	-o Debug::NoLocking=true \
 	-o Dir::Cache=$(CWD)$(APTDIR)/cache
 
-# Get the list of udebs to install. Comments are allowed in the lists.
-UDEBS = \
-	$(shell (\
-		if [ ! "${NO_KERNEL}" ]; then echo 'kernel-image-$${kernel:Version}-udeb'; fi; \
-		grep --no-filename -v ^\# \
-			`if [ ! "${NO_BASE}" ]; then echo pkg-lists/base; fi` \
-			pkg-lists/$(TYPE)/common \
-			`if [ -f pkg-lists/$(TYPE)/$(DEB_HOST_ARCH) ]; then echo pkg-lists/$(TYPE)/$(DEB_HOST_ARCH); fi` \
-		) | sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2\n)/g' \
-	) $(EXTRAS)
+# Get the list of udebs to install.
+UDEBS = $(shell ./pkg-list $(TYPE) $(KERNELIMAGEVERSION)) $(EXTRAS)
 
 ifeq ($(TYPE),floppy)
 # List of additional udebs for driver floppys.
 DRIVERFD_UDEBS = \
-	$(shell for target in $(EXTRA_FLOPPIES) ; do  grep --no-filename -v ^\# \
-		pkg-lists/$$target/common \
-		`if [ -f pkg-lists/$$target/$(DEB_HOST_ARCH) ]; then echo pkg-lists/$$target/$(DEB_HOST_ARCH); fi` \
-		| sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2\n)/g'  ; done )
+	$(shell for target in $(EXTRA_FLOPPIES) ; do \
+		./pkg-list $$target $(KERNELIMAGEVERSION); \
+	done)
 endif
 
-# Scratch directory.
-BASE_TMP=./tmp/
-# Per-type scratch directory.
-TEMP=$(BASE_TMP)$(TYPE)
-
-# Build tree location.
-TREE=$(TEMP)/tree
-
-LOCALE_PATH=$(TREE)/usr/lib/locale
-
-# CD Image tree location
-CD_IMAGE_TREE=$(TEMP)/cd_image_tree
-
-DPKGDIR=$(TREE)/var/lib/dpkg
-DRIVEREXTRASDIR=$(TREE)/driver-tmp
-DRIVEREXTRASDPKGDIR=$(DRIVEREXTRASDIR)/var/lib/dpkg
-
-TMP_MNT:=$(shell pwd)/mnt
-
-ifdef ERROR_TYPE
+# Sanity check TYPE against the list.
+ifeq (,$(filter $(TYPE),type $(TYPES_SUPPORTED)))
 %:
 	@echo "unsupported type"
 	@echo "type: $(TYPE)"
-	@echo "supported types: $(TYPES_SUPPORTED)"
+	$(MAKE) listtypes
 	@exit 1
 endif
-
-build: tree_umount tree $(EXTRA_TARGETS) stats
-
-image: arch-image $(EXTRA_IMAGES) 
 
 # Include arch targets
 -include make/arch/$(DEB_HOST_GNU_SYSTEM)
 include make/arch/$(DEB_HOST_GNU_SYSTEM)-$(DEB_HOST_GNU_CPU)
+
+build: tree_umount tree $(EXTRA_TARGETS) stats
+
+image: arch-image $(EXTRA_IMAGES) 
 
 tree_mount: tree
 	-@sudo /bin/mount -t proc proc $(TREE)/proc
@@ -130,12 +101,7 @@ uml: $(INITRD)
 demo_clean: tree_umount
 
 clean: demo_clean tmp_mount debian/control
-	if [ "$(USER_MOUNT_HACK)" ] ; then \
-	    if mount | grep -q "$(USER_MOUNT_HACK)"; then \
-	        umount "$(USER_MOUNT_HACK)";\
-	    fi ; \
-	fi
-	rm -rf $(TREE) $(TEMP)/modules $(NETDRIVERS) || sudo rm -rf $(TREE)
+	rm -rf $(TREE) || sudo rm -rf $(TREE)
 	dh_clean
 	rm -f *-stamp
 	rm -rf $(UDEBDIR) $(EXTRAUDEBDIR) $(TMP_MNT) debian/build
@@ -145,60 +111,28 @@ clean: demo_clean tmp_mount debian/control
 		rm -f $(TEMP)/$(NAME); )
 
 reallyclean: clean
-	rm -rf $(APTDIR) $(DEST) $(BASE_TMP) wget-cache $(SOURCEDIR)
+	rm -rf $(APTDIR) $(DEST) $(BASE_TMP) $(SOURCEDIR) $(DEBUGUDEBDIR)
 	rm -f diskusage*.txt missing.txt all-*.utf *.bdf
 	rm -f sources.list
-# prefetch udebs
-# If we are building a correct debian-installer source tree, we will want all the
-# sources. So go fetch.
-fetch-sources: $(SOURCEDIR)/udeb-sources-stamp
-$(SOURCEDIR)/udeb-sources-stamp: sources.list
-	mkdir -p $(APTDIR)/state/lists/partial
-	mkdir -p $(APTDIR)/cache/archives/partial
-	$(APT_GET) update
-	$(APT_GET) autoclean
-	needed="$(UDEBS) $(DRIVERFD_UDEBS)"; \
-        for file in `find $(LOCALUDEBDIR) -name "*_*" -printf "%f\n" 2>/dev/null`; do \
-		package=`echo $$file | cut -d _ -f 1`; \
-		needed=`echo " $$needed " | sed "s/ $$package */ /"` ; \
-	done; \
-	mkdir -p $(SOURCEDIR); \
-	cd $(SOURCEDIR); \
-	$(APT_GET) source --yes $$needed; \
-	rm -f *.dsc *.gz ; \
-	touch udeb-sources-stamp ; \
-	cd .. 
 
-
-#  From the sources, 
-#  Compile up all the udebs and place them in udebs
-#  This is used by build-installer to avoid downloading from net.
-compile-udebs: compiled-stamp
-compiled-stamp: $(SOURCEDIR)/udeb-sources-stamp
-	mkdir -p $(APTDIR)/cache/archives
-	for d in ` ls $(SOURCEDIR) | grep -v stamp ` ; do  \
-		 ( unset MAKEFLAGS ; unset MAKELEVEL ; cd $(SOURCEDIR)/$$d ; dpkg-buildpackage -uc -us || true  ) ; \
-	done 
-	mv $(SOURCEDIR)/*.udeb $(APTDIR)/cache/archives
-	touch compiled-stamp
-
-# Generate a sources.list from configuration
-
+# Auto-generate a sources.list.
 sources.list:
+	( \
+	echo "# This file is automatically generated, edit sources.list.local instead."; \
 	if [ "$(MIRROR)x" != "x" ]; then \
-		echo "deb $(MIRROR) $(SUITE) main/debian-installer" > sources.list; \
+		echo "deb $(MIRROR) $(SUITE) main/debian-installer"; \
 	else \
-	cat $(SYSTEM_SOURCES_LIST) | grep ^deb\  |grep -v file:/ | grep -v debian-non-US | \
-		awk '{print $$1 " " $$2}' | sed s/\\/*\ *$$/\ $(SUITE)\ main\\/debian-installer/ | uniq > sources.list; \
-	fi
+	cat $(SYSTEM_SOURCES_LIST) | grep ^deb\  |grep -v file:/ | grep -v debian-non-US | grep ' main' | \
+		awk '{print $$1 " " $$2}' | sed s/\\/*\ *$$/\ $(SUITE)\ main\\/debian-installer/ | uniq; \
+	fi; \
+	) > sources.list
 
-# 
 # Get all required udebs and put in UDEBDIR.
 get_udebs: $(TYPE)-get_udebs-stamp
 $(TYPE)-get_udebs-stamp: sources.list
 	mkdir -p $(APTDIR)/state/lists/partial
 	mkdir -p $(APTDIR)/cache/archives/partial
-	$(APT_GET) update
+	-$(APT_GET) update
 	$(APT_GET) autoclean
 	# If there are local udebs, remove them from the list of things to
 	# get. Then get all the udebs that are left to get.
@@ -224,7 +158,7 @@ $(TYPE)-get_udebs-stamp: sources.list
 
 	# Now the udebs are in APTDIR/cache/archives/ and maybe LOCALUDEBDIR
 	# or DEBUGUDEBDIR, but there may be other udebs there too besides those
-	# we asked for.  So link those we asked for to UDEBDIR, renaming them
+	# we asked for. So link those we asked for to UDEBDIR, renaming them
 	# to more useful names. Watch out for duplicates and missing files
 	# while doing that.
 	rm -rf $(UDEBDIR)
@@ -264,7 +198,6 @@ $(TYPE)-get_udebs-stamp: sources.list
 
 	touch $(TYPE)-get_udebs-stamp
 
-
 # Build the installer tree.
 tree: $(TYPE)-tree-stamp
 $(TYPE)-tree-stamp: $(TYPE)-get_udebs-stamp debian/control
@@ -273,7 +206,7 @@ $(TYPE)-tree-stamp: $(TYPE)-get_udebs-stamp debian/control
 	dpkg-checkbuilddeps
 
 	# This build cannot be restarted, because dpkg gets confused.
-	rm -rf $(TREE) $(TEMP)/modules
+	rm -rf $(TREE)
 	# Set up the basic files [u]dpkg needs.
 	mkdir -p $(DPKGDIR)/info
 	touch $(DPKGDIR)/status
@@ -307,6 +240,20 @@ $(TYPE)-tree-stamp: $(TYPE)-get_udebs-stamp debian/control
 	# Clean up after dpkg.
 	rm -rf $(DPKGDIR)/updates
 	rm -f $(DPKGDIR)/available $(DPKGDIR)/*-old $(DPKGDIR)/lock
+
+	# Set up modules.dep, ensure there is at least one standard dir (kernel
+	# in this case), so depmod will use its prune list for archs with no
+	# modules.
+	$(foreach VERSION,$(KERNELVERSION), \
+		mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
+		depmod -q -a -b $(TREE)/ $(VERSION); )
+	# These files depmod makes are used by hotplug, and we shouldn't
+	# need them, yet anyway.
+	find $(TREE)/lib/modules/ -name 'modules*' \
+		-not -name modules.dep -not -type d | xargs rm -f
+	
+	# Create a dev tree
+	mkdir -p $(TREE)/dev
 ifdef USERDEVFS
 	# Create initial /dev entries -- only those that are absolutely
 	# required to boot sensibly, though.
@@ -321,27 +268,14 @@ ifdef USERDEVFS
 	mkdir -p $(TREE)/dev/rd
 	mknod $(TREE)/dev/rd/0 b 1 0
 endif
-	# Set up modules.dep, ensure there is at least one standard dir (kernel
-	# in this case), so depmod will use its prune list for archs with no
-	# modules.
-	$(foreach VERSION,$(KERNELVERSION), \
-		mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
-		depmod -q -a -b $(TREE)/ $(VERSION); )
-	# These files depmod makes are used by hotplug, and we shouldn't
-	# need them, yet anyway.
-	find $(TREE)/lib/modules/ -name 'modules*' \
-		-not -name modules.dep -not -type d | xargs rm -f
-	# Create a dev tree
-	mkdir -p $(TREE)/dev
 
-ifndef NO_KERNEL
 	# Move the kernel image out of the way, into a temp directory
-	# for use later. We don't need it bloating our image!
+	# for use later.
 	$(foreach NAME,$(KERNELNAME), \
 		mv -f $(TREE)/boot/$(NAME) $(TEMP); )
 	-rmdir $(TREE)/boot/
-endif
 
+ifndef NO_TERMINFO
 	# Copy terminfo files for slang frontend
 	# TODO: terminfo.udeb?
 	for file in /etc/terminfo/a/ansi /etc/terminfo/l/linux \
@@ -349,6 +283,7 @@ endif
 		mkdir -p $(TREE)/`dirname $$file`; \
 		cp -a $$file $(TREE)/$$file; \
 	done
+endif
 
 ifdef EXTRAFILES
 	# Copy in any extra files
@@ -358,8 +293,8 @@ ifdef EXTRAFILES
 	done
 endif
 
-	# Copy in any extra libs.
 ifdef EXTRALIBS
+	# Copy in any extra libs.
 	cp -a $(EXTRALIBS) $(TREE)/lib/
 endif
 
@@ -373,15 +308,6 @@ ifeq ($(TYPE),floppy)
 		dpkg --force-overwrite --root=$(DRIVEREXTRASDIR) --unpack $$udeb; \
 	done
 endif
-	# If the image has pcmcia, reduce the config file to list only
-	# entries that there are modules on the image. This saves ~30k.
-	if [ -e $(TREE)/etc/pcmcia/config ]; then \
-		./pcmcia-config-reduce.pl $(TREE)/etc/pcmcia/config \
-			`if [ -d "$(DRIVEREXTRASDIR)" ]; then find $(DRIVEREXTRASDIR)/lib/modules -name \*.o; fi` \
-			`find $(TREE)/lib/modules/ -name \*.o` > \
-			$(TREE)/etc/pcmcia/config.reduced; \
-		mv -f $(TREE)/etc/pcmcia/config.reduced $(TREE)/etc/pcmcia/config; \
-	fi
 
 	# Library reduction.
 	mkdir -p $(TREE)/lib
@@ -403,7 +329,7 @@ endif
 	# not listed in the status file. This nasty thing puts them in,
 	# and alters their names to end in -reduced to indicate that
 	# they have been modified.
-	for package in $$(dpkg -S `find $(TREE)/lib -type f -not -name '*.o'| \
+	for package in $$(dpkg -S `find $(TREE)/lib -type f -not -name '*.o' -not -name '*.dep' | \
 			sed s:$(TREE)::` | cut -d : -f 1 | \
 			sort | uniq); do \
 		dpkg -s $$package | sed "s/$$package/$$package-reduced/g" \
@@ -424,6 +350,16 @@ ifdef NO_I18N
 		mv temp $$FILE; \
 	done
 endif
+	
+	# If the image has pcmcia, reduce the config file to list only
+	# entries that there are modules on the image. This saves ~30k.
+	if [ -e $(TREE)/etc/pcmcia/config ]; then \
+		./pcmcia-config-reduce.pl $(TREE)/etc/pcmcia/config \
+			`if [ -d "$(DRIVEREXTRASDIR)" ]; then find $(DRIVEREXTRASDIR)/lib/modules -name \*.o; fi` \
+			`find $(TREE)/lib/modules/ -name \*.o` > \
+			$(TREE)/etc/pcmcia/config.reduced; \
+		mv -f $(TREE)/etc/pcmcia/config.reduced $(TREE)/etc/pcmcia/config; \
+	fi
 
 	# Strip all kernel modules, just in case they haven't already been
 	for module in `find $(TREE)/lib/modules/ -name '*.o'`; do \
@@ -437,11 +373,9 @@ endif
 	    rm $$file; \
 	done
 
-	touch $(TYPE)-tree-stamp
-
 	# Collect the used UTF-8 strings, to know which glyphs to include in
-	# the font.  Using strings is not the best way, but no better suggestion
-	# has been made yet.
+	# the font.  Using strings is not the best way, but no better
+	# suggestion has been made yet.
 	cp graphic.utf all-$(TYPE).utf
 ifeq ($(TYPE),floppy)
 	if [ -n "`find $(DRIVEREXTRASDPKGDIR)/info/ -name \\*.templates`" ]; then \
@@ -458,8 +392,9 @@ ifeq ($(TYPE),floppy)
 	# them.
 	rm -rf $(DRIVEREXTRASDIR)
 endif
-	# Tree target ends here. Whew!
 
+	# Tree target ends here. Whew!
+	touch $(TYPE)-tree-stamp
 
 unifont-reduced-$(TYPE).bdf: all-$(TYPE).utf
 	# Use the UTF-8 locale in rootskel-locale. This target shouldn't
@@ -491,7 +426,6 @@ $(EXTRA_TARGETS) : %-stamp : $(TYPE)-get_udebs-stamp
 	done
 	touch $@
 
-
 $(EXTRA_IMAGES) : $(DEST)/%-image.img :  $(EXTRA_TARGETS)
 	rm -f $@
 	install -d $(TEMP)
@@ -504,7 +438,6 @@ $(EXTRA_IMAGES) : $(DEST)/%-image.img :  $(EXTRA_TARGETS)
                 echo "Unsupported filesystem type"; \
                 exit 1; \
         fi;
-
 
 tarball: tree
 	tar czf $(DEST)/$(TYPE)-debian-installer.tar.gz $(TREE)
@@ -521,7 +454,7 @@ tmp_mount:
 initrd: $(INITRD)
 $(INITRD): TMP_FILE=$(TEMP)/image.tmp
 $(INITRD):  $(TYPE)-tree-stamp
-# Only build the font if we have rootskel-locale
+	# Only build the font if we have rootskel-locale
 	if [ -d "$(LOCALE_PATH)/C.UTF-8" ]; then \
 	    $(MAKE) $(TREE)/unifont.bgf; \
 	fi
@@ -557,6 +490,10 @@ boot_floppy: $(IMAGE)
 boot_floppy_check: floppy_image
 	cmp $(FLOPPYDEV) $(IMAGE)
 
+listtypes:
+	@echo "supported types: $(TYPES_SUPPORTED)"
+
+
 stats: tree $(EXTRA_TARGETS) general-stats $(EXTRA_STATS)
 
 COMPRESSED_SZ=$(shell expr $(shell tar czf - $(TREE) | wc -c) / 1024)
@@ -579,7 +516,7 @@ endif
 # Add your interesting stats here.
 
 SZ=$(shell expr $(shell du -b $(TEMP)/$*  | cut -f 1 ) / 1024)
-$(EXTRA_STATS) : %-stats:  
+$(EXTRA_STATS) : %-stats:
 	@echo
 	@echo "$* size: $(SZ)k"
 ifneq (,$(FLOPPY_SIZE))
@@ -607,44 +544,3 @@ all_stats:
 	@for type in $(TYPES_SUPPORTED); do \
 		$(MAKE) -s stats TYPE=$$type; \
 	done
-
-# Upload a daily build to peope.debian.org. If you're not Joey Hess,
-# you probably don't want to use this grungy code, at least not without
-# overriding this:
-UPLOAD_DIR=people.debian.org:~/public_html/debian-installer/daily/
-ALL_TYPES=$(shell find pkg-lists -type d -maxdepth 1 -mindepth 1 -not -name CVS -printf '%f\n')
-daily_build:
-	-cvs update
-	dpkg-checkbuilddeps
-	$(MAKE) clean
-
-	install -d $(DEST)
-	rm -f $(DEST)/info
-	touch $(DEST)/info
-	set -e; \
-	for type in $(ALL_TYPES); do \
-		$(MAKE) sub_daily_build TYPE=$$type USER_MOUNT_HACK=$(shell pwd)/$(DEST)/tmp-mnt.img; \
-	done
-	scp -q -B $(KERNEL) $(UPLOAD_DIR)/images/
-	mail $(shell whoami) -s "today's build info" < $(DEST)/info
-
-sub_daily_build:
-	fakeroot $(MAKE) tarball > $(DEST)/$(TYPE).log 2>&1
-	$(MAKE) image >> $(DEST)/$(TYPE).log 2>&1
-	$(MAKE) stats | grep -v ^make > $(DEST)/$(TYPE).info
-	echo "Tree comparison" >> $(DEST)/$(TYPE).info
-	echo "" >> $(DEST)/$(TYPE).info
-	if [ -d $(TYPE)-oldtree ]; then \
-		./treecompare $(TYPE)-oldtree $(TREE) >> $(DEST)/$(TYPE).info; \
-	fi
-	scp -q -B $(DEST)/$(TYPE).log $(UPLOAD_DIR)
-	scp -q -B $(DEST)/$(TYPE)-debian-installer.tar.gz \
-		$(UPLOAD_DIR)/$(TYPE)-debian-installer-$(shell date +%Y%m%d).tar.gz
-	scp -q -B $(IMAGE) $(INITRD) $(UPLOAD_DIR)/images/
-	scp -q -B $(DEST)/$(TYPE).info \
-		$(UPLOAD_DIR)/$(TYPE).info-$(shell date +%Y%m%d)
-	echo "Type: $(TYPE)" >> $(DEST)/info
-	cat $(DEST)/$(TYPE).info >> $(DEST)/info
-	rm -rf $(TYPE)-oldtree
-	-mv $(TREE) $(TYPE)-oldtree && rm -f $(TYPE)-tree-stamp
-

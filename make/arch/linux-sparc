@@ -5,7 +5,6 @@ arch-image: $(IMAGE)
 $(IMAGE): $(INITRD)
 	tilo -o $@ $(foreach NAME,$(KERNELNAME),$(TEMP)/$(NAME)) $(INITRD)
 
-
 # Copy files somewhere the CD build scripts can find them
 cd_content:
 	for img in $(KERNELNAME); do \
@@ -16,4 +15,3 @@ cd_content:
 cd_image: cd_content
 	mkisofs -r -J -b `basename $(FLOPPY_IMAGE)` -o $(TYPE).iso $(DEST)
 	mv $(TYPE).iso $(DEST)
-

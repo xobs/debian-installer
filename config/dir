@@ -1,6 +1,15 @@
 # All output files will go here.
 DEST=dest
 
+# Build tree location.
+TREE=$(TEMP)/tree
+
+# Scratch directory.
+BASE_TMP=./tmp/
+
+# Per-type scratch directory.
+TEMP=$(BASE_TMP)$(TYPE)
+
 # Filename of initrd to create.
 INITRD=$(DEST)/$(TYPE)-initrd.gz
 
@@ -40,3 +49,14 @@ else
 SOURCES_LIST=sources.list
 endif
 
+# Used in the font reduction code.
+LOCALE_PATH=$(TREE)/usr/lib/locale
+
+# Used for building cd images, for eg, powerpc.
+CD_IMAGE_TREE=$(TEMP)/cd_image_tree
+
+DPKGDIR=$(TREE)/var/lib/dpkg
+DRIVEREXTRASDIR=$(TREE)/driver-tmp
+DRIVEREXTRASDPKGDIR=$(DRIVEREXTRASDIR)/var/lib/dpkg
+
+TMP_MNT:=$(shell pwd)/mnt
