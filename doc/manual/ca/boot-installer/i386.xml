@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23061 -->
+<!-- original version: 25149 -->
 
   <sect2 arch="i386"><title>Arrencant des d'un CD-ROM</title>
 
@@ -87,9 +87,7 @@ moment (and optionally select the `safe mode command prompt only'
 option).  Enter the subdirectory for the flavor you chose, e.g.,
 
 <informalexample><screen>
-
 cd c:\install
-
 </screen></informalexample>.  
 
 Next, execute <command>install.bat</command>.
@@ -137,7 +135,7 @@ Si durant la instal·lació preteneu mantenir sense modificacions una
 partició existent al disc dur, podeu baixar el fitxer
 <filename>hd-media/initrd.gz</filename> i el nucli corresponent, i
 també copiar una imatge iso del CD al dispositiu (assegureu-vos
-que el nom del fitxer acaba amb ".iso"). En aquest cas l'instal·lador
+que el nom del fitxer acaba amb «.iso»). En aquest cas l'instal·lador
 pot arrencar del dispositiu i instal·lar des de la imatge del CD sense
 necessitar la xarxa.
 
@@ -168,13 +166,11 @@ A continuació trobareu un exemple del fitxer
 </para><para>
 
 <informalexample><screen>
-
 image=/boot/newinstall/vmlinuz
        label=newinstall
        initrd=/boot/newinstall/initrd.gz
        root=/dev/ram0
-       append="devfs=mount,dall ramdisk_size=17000"
-
+       append="devfs=mount,dall ramdisk_size=12000"
 </screen></informalexample>
 
 Per a més informació vegeu les pàgines del manual
@@ -192,17 +188,19 @@ El procediment pel <command>GRUB</command> és similar. Cerqueu el fitxer
 i afegiu-hi les línies següents:
 
 <informalexample><screen>
-
 title  New Install
-kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram0 devfs=mount,dall ramdisk_size=17000
+kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram0 ramdisk_size=12000
 initrd (hd0,0)/boot/newinstall/initrd.gz
-
 </screen></informalexample>
 
-i reinicieu el sistema. Recordeu que el valor de
-<userinput>ramdisksize</userinput> s'hauria d'ajustar a la mida de
-la imatge initrd. A partir d'ara no hi hauria d'haver cap diferència
-entre el <command>GRUB</command> i el <command>LILO</command>.
+i reinicieu el sistema. Si l'arrencada falla, podeu provar afegint
+<userinput>devfs=mount,dall</userinput> a la línia <quote>kernel</quote>.
+
+</para><para>
+Recordeu que el valor de <userinput>ramdisk_size</userinput> s'hauria
+d'ajustar a la mida de la imatge initrd. A partir d'aquí no hi hauria
+d'haver cap diferència entre el <command>GRUB</command> i el
+<command>LILO</command>.
 
 </para>
   </sect2>
@@ -422,7 +420,7 @@ el vostre maquinari. Per exemple, si disposeu d'un dels ordinadors
 portàtils Dell anomenats anteriorment, hauríeu d'introduir-hi
 <userinput>exclude port 0x800-0x8ff</userinput>. Disposeu d'una llista
 de les opcions del rangs de recursos més habituals a
-<ulink url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-2.html#ss2.5">System
+<ulink url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-1.html#ss1.12">System
 resource settings section of the PCMCIA HOWTO</ulink>.
 Recordeu que heu d'evitar la utilització de les comes a l'hora
 d'introduir els valors a l'instal·lador.
