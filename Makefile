@@ -131,7 +131,7 @@ build: demo_clean tree stats
 
 demo: tree
 	sudo chroot $(TREE) bin/sh -c "if ! mount | grep ^proc ; then bin/mount proc -t proc /proc; fi"
-	sudo chroot $(TREE) bin/sh -c "export DEBCONF_FRONTEND=default_fe DEBCONF_DEBUG=5; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; /usr/share/debconf/frontend /usr/bin/main-menu"
+	sudo chroot $(TREE) bin/sh -c "export DEBCONF_DEBUG=5; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; /usr/share/debconf/frontend /usr/bin/main-menu"
 	$(MAKE) demo_clean
 
 shell: tree
