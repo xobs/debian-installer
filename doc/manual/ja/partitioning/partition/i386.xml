@@ -1,10 +1,13 @@
+<?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: i386.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+<!-- $Id$ -->
+<!-- original version: 11648 -->
 
 
-  <sect2 arch="i386"><title>Partitioning for &arch-title;</title>
+  <sect2 arch="i386"><title>&arch-title; でのパーティション分割</title>
 <para>
 
+<!--
 The PC BIOS generally adds additional constraints for disk
 partitioning.  There is a limit to how many <quote>primary</quote> and
 <quote>logical</quote> partitions a drive can contain.  Additionally, with pre
@@ -14,9 +17,22 @@ from.  More information can be found in the
 <ulink url="&url-phoenix-bios-faq-large-disk;">Phoenix BIOS FAQ</ulink>, but
 this section will include a brief overview to help you plan most
 situations.
+-->
+PC の BIOS は、
+一般にディスクパーティションに余分な制限を追加することになります。
+1 つのドライブに作成できる <quote>基本</quote> および
+<quote>論理</quote> パーティションの個数に制限があることもその一つです。
+さらに、1994 年から 1998 年の間の BIOS には、
+BIOS がドライブのどの場所を起動できるかについても制限があります。
+より詳細な情報については、
+<ulink url="&url-partition-howto;">Linux Partition HOWTO</ulink> や
+<ulink url="&url-phoenix-bios-faq-large-disk;">Phoenix BIOS FAQ</ulink>
+をご覧になっていただくとして、
+この節では、一般によくある状況下で役立つ概要を簡単に紹介します。
 
 </para><para>
 
+<!--
 <quote>Primary</quote> partitions are the original partitioning scheme for PC
 disks.  However, there can only be four of them.  To get past this
 limitation, <quote>extended</quote> and <quote>logical</quote> partitions were invented.  By
@@ -25,9 +41,22 @@ can subdivide all the space allocated to that partition into logical
 partitions.  You can create up to 60 logical partitions per extended
 partition; however, you can only have one extended partition per
 drive.
+-->
+<quote>基本</quote> パーティションは、PC ディスクに元々あった
+パーティションの仕組みです。
+しかし、その個数はたった 4 つに限られています。
+このような制限を乗り越えるため、
+<quote>拡張</quote> および <quote>論理</quote> パーティションが考案されました。
+基本パーティションの 1 つを拡張パーティションとして設定すると、
+そのパーティションの全領域を、
+いくつかの論理パーティションにさらに分割することができます。
+1 つの拡張パーティションには、論理パーティションを 
+60 個まで作成できます。
+ただし、1 つのディスクに作成できる拡張パーティションは 1 つだけです。
 
 </para><para>
 
+<!--
 Linux limits the partitions per drive to 15 partitions for SCSI disks
 (3 usable primary partitions, 12 logical partitions), and 63
 partitions on an IDE drive (3 usable primary partitions, 60 logical
@@ -35,17 +64,35 @@ partitions). However the normal &debian; system provides
 only 20 devices for partitions, so you may not install on partitions
 higher than 20 unless you first manually create devices for those
 partitions. 
+-->
+Linux におけるドライブあたりのパーティション数の制限は、
+SCSI ディスクの場合 15 個まで
+(基本パーティション 3 個と論理パーティション 12 個)、
+IDE ディスクの場合は 63 個まで
+(基本パーティション 3 個と論理パーティション 60 個) です。
+ただし通常の &debian; システムでは、
+パーティション用に 20 のデバイスしか用意していないので、
+20 以上のパーティションを持つディスクにインストールするには、
+最初にそれらのパーティション用のデバイスを自分で作成する必要があります。
 
 </para><para>
 
+<!--
 If you have a large IDE disk, and are using neither LBA addressing,
 nor overlay drivers (sometimes provided by hard disk manufacturers),
 then the boot partition (the partition containing your kernel image)
 must be placed within the first 1024 cylinders of your hard drive
 (usually around 524 megabytes, without BIOS translation).
+-->
+大きな IDE ディスクを使う場合に、そのディスクが
+LBA アドレスやオーバーレイドライバ (ハードディスクメーカーから提供されることがあります)
+を使っていなければ、ブートパーティション (カーネルイメージが置かれるパーティション)
+はハードドライブの先頭から 1024 シリンダ以内に置かなければなりません
+(BIOS 変換がないと、だいたい 524 メガバイトです)。
 
 </para><para>
 
+<!--
 This restriction doesn't apply if you have a BIOS newer than around
 1995-98 (depending on the manufacturer) that supports the <quote>Enhanced
 Disk Drive Support Specification</quote>.  Both Lilo, the Linux loader, and
@@ -57,9 +104,24 @@ be used to address any location on the disk higher than the 1023rd
 cylinder.  Once Linux is booted, no matter what BIOS your computer
 has, these restrictions no longer apply, since Linux does not use the
 BIOS for disk access.
+-->
+1995〜98 年あたり (メーカーによって異なります) 以降に製造され、
+<quote>Enhanced Disk Drive Support Specification</quote> をサポートしている
+BIOS には、この制限は当てはまりません。
+Lilo (Linux ローダ) と Debian の代替ローダ <command>mbr</command>
+は、カーネルをディスクから RAM に読み込む際に、
+いずれも BIOS を利用しなければなりません。
+BIOS の int 0x13 ラージディスクアクセス拡張が利用できるなら
+そちらが利用されますが、
+できない場合は旧式のアクセスインターフェースが利用されます。
+そして後者では 1023 シリンダまでしかアクセスできません。
+なお、一度 Linux が起動してしまえば、
+Linux は ディスクアクセスに BIOS を利用しませんから、
+お使いの BIOS が何であれ、この制限を気にする必要はありません。
 
 </para><para>
 
+<!--
 If you have a large disk, you might have to use cylinder translation
 techniques, which you can set from your BIOS setup program, such as
 LBA (Logical Block Addressing) or CHS translation mode (<quote>Large</quote>).
@@ -69,9 +131,21 @@ are using a cylinder translation scheme, and the BIOS does not support
 the large disk access extensions, then your boot partition has to fit
 within the <emphasis>translated</emphasis> representation of the
 1024th cylinder.
+-->
+大きなディスクをお持ちの場合は、
+シリンダ変換機構を使う必要があるかもしれません。
+これは BIOS の設定プログラムの LBA (Logical Block Addressing) とか
+CHS 変換モード (<quote>Large</quote>) といった項目から設定できるでしょう。
+大きなディスクに関する問題についての詳細な情報については、
+<ulink url="&url-large-disk-howto;">Large Disk HOWTO</ulink>
+をご覧ください。
+なお、シリンダ変換機構を使う場合は、
+ブートパーティションを <emphasis>変換後の</emphasis>
+第 1024 番シリンダより前に収めなければなりません。
 
 </para><para>
 
+<!--
 The recommended way of accomplishing this is to create a small (5-10MB
 should suffice) partition at the beginning of the disk to be used as
 the boot partition, and then create whatever other partitions you wish
@@ -81,6 +155,15 @@ since that is the directory where the Linux kernel(s) will be stored.
 This configuration will work on any system, regardless of whether LBA
 or large disk CHS translation is used, and regardless of whether your
 BIOS supports the large disk access extensions.
+-->
+お勧めは、起動用の小さなパーティション (5〜10MB あれば充分です)
+をディスクの先頭に作成し、
+残りの領域にお好みに合わせて他のパーティションを作成することです。
+このブートパーティションは、Linux カーネルが収められる
+<filename>/boot</filename> ディレクトリ にマウントしなければ<emphasis>なりません</emphasis>。
+この設定なら、LBA や ラージディスク CHS 変換を利用していたとしても、
+また、お使いの BIOS がラージディスクアクセス拡張をサポートしていたとしても、
+いずれのシステムでも問題ないでしょう。
 
 </para>
   </sect2>

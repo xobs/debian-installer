@@ -1,10 +1,13 @@
+<?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: ia64.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+<!-- $Id$ -->
+<!-- original version: 11648 -->
 
 
-  <sect2 arch="ia64"><title>Partitioning for &arch-title;</title>
+  <sect2 arch="ia64"><title>&arch-title; でのパーティション分割</title>
 <para>
 
+<!--
 ia64 EFI firmware supports two partition table (or disk label)
 formats, GPT and MS-DOS.  MS-DOS is the format typically used on i386
 PCs, and is no longer recommended for ia64 systems.  The installer
@@ -18,9 +21,25 @@ with a GPT table, and you now want to use MS-DOS tables, you must use
 <command>parted</command> to create the new partition table.  This is
 because the two tables use different areas of a disk, and
 <command>cfdisk</command> does not know how to remove a GPT table.
+-->
+ia64 EFI ファームウェアは、GPT と MS-DOS という
+2 種類のパーティションテーブル (ディスクラベル) をサポートしています。
+MS-DOS は i386 PC で一般に用いられている形式で、
+ia64 ではもう推奨されません。
+Debian のインストーラには 2 種類のパーティション分割プログラム、
+<ulink url="cfdisk.txt"><command>cfdisk</command></ulink> と
+<ulink url="parted.txt"><command>parted</command></ulink> が入っています。
+<command>parted</command> は GPT テーブルも MS-DOS テーブルも処理できますが、
+<command>cfdisk</command> は MS-DOS テーブルしか扱えません。
+これは非常に重要なことなのですが、すでにディスクが GPT テーブルで
+分割されており、それを MS-DOS テーブルに変えたい場合、
+新しいパーティションテーブルの作成には <command>parted</command> を使わなければなりません。
+これは 2 つのテーブルがディスク上の別々の領域を使っていて、
+<command>cfdisk</command> は GPT テーブルを削除する方法を知らないからです。
 
 </para><para>
 
+<!--
 An important difference between <command>cfdisk</command> and
 <command>parted</command> is the way they identify a partition
 ``type''.  <command>cfdisk</command> uses a byte in the partition
@@ -33,14 +52,34 @@ partition until you create a file system on it.
 <command>parted</command> does allow you to create file systems and
 format swap space, and you should do that from within
 <command>parted</command>.
+-->
+<command>cfdisk</command> と <command>parted</command> の重要な違いとして、
+パーティションの「タイプ」の認識のしかたが異なる点が挙げられます。
+<command>cfdisk</command> がパーティションテーブル中のバイトデータ
+(例えば linux ext2 パーティションなら 83) を用いるのに対し、
+<command>parted</command> はパーティションにあるデータを調べて、
+その「タイプ」を判定します。
+つまり <command>parted</command> は、まだパーティションがフォーマットされていなければ、
+それがスワップである、などとは考えないのです。
+同様に、まだファイルシステムが作成されていないパーティションに対して、
+これは ext2 である、などと考えることもないのです。
+<command>parted</command> はファイルシステムを作ることも
+スワップ用にフォーマットすることもできます。
+そしてそれは <command>parted</command> 内でしなければなりません。
 
 </para><para>
 
+<!--
 Unfortunately, <command>parted</command> is a command line driven
 program and so not as easy to use as <command>cfdisk</command>.
 Assuming that you want to erase your whole disk and create a GPT table
 and some partitions, then something similar to the following command
 sequence could be used:
+-->
+残念ながら、<command>parted</command> はコマンドラインで動作するプログラムで、
+<command>cfdisk</command> ほど簡単には使えません。現在のディスク全体を消去して
+GPT テーブルとパーティションをいくつか作りたい、という場合は
+次のようなコマンドシーケンスを使うことになるでしょう。
 
 </para><para>
 <informalexample><screen>
@@ -56,6 +95,7 @@ sequence could be used:
 </screen></informalexample>
 </para><para>
 
+<!--
 That creates a new partition table, and three partitions to be used as
 an EFI boot partition, swap space, and a root file system.  Finally it
 sets the boot flag on the EFI partition.  Partitions are specified in
@@ -64,6 +104,19 @@ So, for example, above we created a 1999MB ext2 file system starting
 at offset 1001MB from the start of the disk.  Note that formatting swap
 space with <command>parted</command> can take a few minutes to
 complete, as it scans the partition for bad blocks.
+-->
+こうすると新しいパーティションテーブルと 3 つのパーティション、
+すなわち EFI ブートパーティション、スワップスペース、
+ルートファイルシステム、が作成されます。
+最後に EFI パーティションの起動フラグを立てています。
+パーティションのサイズはメガバイト単位で指定し、
+その先頭と末尾の値をディスク先頭からのオフセットで与えます。
+したがって例えば上記では、
+ディスク先頭からのオフセット 1001MB から始まる、サイズ
+1999MB の ext2 パーティションを作成したことになります。
+なお <command>parted</command> からスワップスペースを作成すると、
+そのパーティション上で不良ブロックをスキャンするので、
+時間が数分間必要になります。
 
 </para>
   </sect2>
@@ -72,6 +125,7 @@ complete, as it scans the partition for bad blocks.
 
 <para>
 
+<!--
 ELILO, the ia64 boot loader, requires a partition containing a FAT
 file system.  If you used GPT partition tables, then that partition
 should have the <userinput>boot</userinput> flag set; if you used
@@ -81,6 +135,17 @@ kernels or RAMdisks you may wish to boot.  A minimum size would be
 about 16MB, but if you are likely to be doing development, or
 experimenting with different kernels, then 128MB might be a better
 size.
+-->
+ELILO (ia64 ブートローダ) は FAT ファイルシステムのパーティションを
+必要とします。GPT パーティションテーブルを使う場合、このパーティション
+には <userinput>boot</userinput> フラグをセットしなければなりません。
+MS-DOS パーティションテーブルを使う場合には、このパーティションの
+タイプは "EF" でなければなりません。このパーティションは、
+ブートローダ、カーネル全部、RAM ディスクなど、
+起動に必要なものを収めなければなりません。
+最小サイズはおよそ 16MB 程度でしょうが、
+開発をしていたり、いろいろなカーネルを試したりしたい場合には、
+128MB くらい取っておく方が良いでしょう。
 
 </para>
   </sect2>

@@ -1,10 +1,13 @@
+<?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: alpha.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+<!-- $Id$ -->
+<!-- original version: 11648 -->
 
 
-  <sect2 arch="alpha"><title>Partitioning for &arch-title;</title>
+  <sect2 arch="alpha"><title>&arch-title; でのパーティション分割</title>
 <para>
 
+<!--
 If you have chosen to boot from the SRM console, you must use
 <command>fdisk</command> to partition your disk, as it is the only
 partitioning program that can manipulate the BSD disk labels required
@@ -13,16 +16,32 @@ incompatible with MS-DOS partition tables - see
 <xref linkend="alpha-firmware"/>).
 <command>debian-installer</command> will run <command>fdisk</command>
 by default if you have not booted from <command>MILO</command>.
+-->
+SRM コンソールから起動する場合、ディスクのパーティション作成には
+<command>fdisk</command> を使わなければなりません。
+<command>aboot</command> に必要となる BSD ディスクラベルを操作できる
+パーティション作成プログラムはこれだけだからです (SRM ブートブロックと
+MS-DOS パーティションテーブルとに互換性がないことにご注意を。
+<xref linkend="alpha-firmware"/> をご覧ください)。
+<command>MILO</command> から起動されたのでなければ、
+<command>debian-installer</command> はデフォルトで <command>fdisk</command> を実行します。
 
 </para><para>
 
+<!--
 If the disk that you have selected for partitioning already contains a
 BSD disk label, <command>fdisk</command> will default to BSD disk
 label mode.  Otherwise, you must use the `b' command to enter disk
 label mode.
+-->
+パーティションを作成しようとするディスクにすでに BSD ディスクラベルが
+存在している場合、<command>fdisk</command> はデフォルトで BSD ディスク
+ラベルモードになります。そうならない場合は、`b' コマンドを使って
+ディスクラベルモードに入ってください。
 
 </para><para>
 
+<!--
 Unless you wish to use the disk you are partitioning from Tru64 Unix
 or one of the free 4.4BSD-Lite derived operating systems (FreeBSD,
 OpenBSD, or NetBSD), it is suggested that you do
@@ -31,9 +50,21 @@ disk.  This is not required by <command>aboot</command>, and in fact,
 it may lead to confusion since the <command>swriteboot</command>
 utility used to install <command>aboot</command> in the boot sector
 will complain about a partition overlapping with the boot block.
+-->
+Tru64 Unix やフリーな 4.4BSD-Lite 派生オペレーティングシステム
+(FreeBSD, OpenBSD, NetBSD)
+からパーティションを作成したディスクを使いたくない場合、
+ディスク全体を含む第 3 パーティションは
+<emphasis>作成しない</emphasis> ことをお勧めします。
+<command>aboot</command> はこのパーティションを必要としませんし、
+実は、<command>aboot</command> のブートセクタへのインストールに用いられる
+<command>swriteboot</command> ユーティリティが、
+ブートブロックにパーティションが重なっていると文句を言うので、
+混乱の元になるかもしれません。
 
 </para><para>
 
+<!--
 Also, because <command>aboot</command> is written to the first few
 sectors of the disk (currently it occupies about 70 kilobytes, or 150
 sectors), you <emphasis>must</emphasis> leave enough empty space at
@@ -41,9 +72,18 @@ the beginning of the disk for it.  In the past, it was suggested that
 you make a small partition at the beginning of the disk, to be left
 unformatted.  For the same reason mentioned above, we now suggest that
 you do not do this on disks that will only be used by GNU/Linux.
+-->
+また、<command>aboot</command> はディスクの最初の数セクタ
+(今のところ 70KB か 150KB 必要になります) に書き込まれるため、
+ディスクの先頭部分に充分な空きスペースを残しておかなければ<emphasis>なりません</emphasis>。
+以前は、ディスクの最初に小さなパーティションを作成し、
+フォーマットしないでおくことが勧められていました。
+同じ理由から、GNU/Linux のみで使うディスク上には
+この処置を行わないことをお勧めします。
 
 </para><para>
 
+<!--
 For ARC installations, you should make a small FAT partition at the
 beginning of the disk to contain <command>MILO</command> and
 <command>linload.exe</command> - 5 megabytes should be sufficient, see
@@ -51,6 +91,16 @@ beginning of the disk to contain <command>MILO</command> and
 file systems from the menu is not yet supported, so you'll have to do
 it manually from the shell using <command>mkdosfs</command> before
 attempting to install the boot loader.
+-->
+ARC インストーラを使う場合、
+<command>MILO</command> と <command>linload.exe</command> を収めるために、
+ディスクの先頭部分に小さな FAT パーティションを作成しなければなりません。
+5 MB もあれば充分です。
+こちらに関しては <xref linkend="non-debian-partitioning"/> をご覧ください。
+残念ながら、まだメニューから FAT ファイルシステムを作成することはできません。
+したがってブートローダをインストールする前に、
+シェルから <command>mkdosfs</command> を使うなどして、
+手動で作成しなければなりません。
 
 </para>
   </sect2>
