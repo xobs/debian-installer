@@ -1,10 +1,13 @@
+<?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: pre-install-bios-setup.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+<!-- $Id$ -->
+<!-- original version: 11648 -->
 
  <sect1 id="pre-install-bios-setup">
- <title>Pre-Installation Hardware and Operating System Setup</title>
+ <title>インストール前に行うハードウェア・OS の設定</title>
 <para>
 
+<!--
 This section will walk you through pre-installation hardware setup, if
 any, that you will need to do prior to installing Debian.  Generally,
 this involves checking and possibly changing firmware settings for
@@ -12,6 +15,15 @@ your system.  The ``firmware'' is the core software used by the
 hardware; it is most critically invoked during the bootstrap process
 (after power-up). Known hardware issues affecting the reliability of
 &debian; on your system are also highlighted.
+-->
+この節では、Debian のインストールに先立って必要となる
+ハードウェアの設定について見ていきます。
+通常この作業では、システムのファームウェアの設定をチェックし、
+場合によってはその設定を変更することになります。
+「ファームウェア」は、ハードウェアが利用する中核的なソフトウェアで、
+電源投入後のブートプロセスの間に起動される、最も重要なものです。
+あなたが使うことになる &debian; の信頼性に影響を与えうる、
+既知のハードウェアの諸問題についても、同様に取り扱っていく予定です。
 
 </para>
 
@@ -21,9 +33,10 @@ hardware; it is most critically invoked during the bootstrap process
 &bios-setup-sparc.xml; 
 &bios-setup-s390.xml; 
 
-  <sect2><title>Hardware Issues to Watch Out For</title>
+  <sect2><title>気をつけるべきハードウェアの問題</title>
 <para arch="not-s390">
 
+<!--
 Many people have tried operating their 90 MHz CPU at 100 MHz, etc.  It
 sometimes works, but is sensitive to temperature and other factors and
 can actually damage your system. One of the authors of this document
@@ -31,9 +44,19 @@ over-clocked his own system for a year, and then the system started
 aborting the <command>gcc</command> program with an unexpected signal
 while it was compiling the operating system kernel. Turning the CPU
 speed back down to its rated value solved the problem.
+-->
+多くの人たちが、例えば 90 MHz の CPU を 100 MHz
+で動作させるようなことに挑戦しています。
+これはうまくいく時もありますが、温度などの要因に敏感で、
+実際にシステムに損傷を与えることもあります。
+この文書の著者は、自分のシステムを 1 年間オーバークロックで動作させたことが
+ありますが、その後カーネルのコンパイル中に <command>gcc</command> が
+予期しないシグナル (unexpected signal) で中断するようになってしまいました。
+この問題は CPU の速度を普通に戻すことで解決しました。
 
 </para><para arch="not-s390">
 
+<!--
 The <command>gcc</command> compiler is often the first thing to die
 from bad memory modules (or other hardware problems that change data
 unpredictably) because it builds huge data structures that it
@@ -41,21 +64,36 @@ traverses repeatedly.  An error in these data structures will cause it
 to execute an illegal instruction or access a non-existent
 address. The symptom of this will be <command>gcc</command> dying from
 an unexpected signal.
+-->
+メモリモジュールの不良 (あるいはデータを改変してしまうその他のハードウェア障害)
+が起きた場合、最初にやられるのは <command>gcc</command> コンパイラであることが
+多いようです。
+<command>gcc</command> は膨大なデータ構造を構築し、それを繰り返し使うからです。
+このようなデータ構造にエラーが生じると、不正な命令が実行されてしまったり、
+存在しないアドレスへのアクセスを発生させたりします。
+この結果として、<command>gcc</command> が予期しないシグナルで中断するのです。
 
 </para><para arch="m68k">
 
+<!--
 Atari TT RAM boards are notorious for RAM problems under Linux; if you
 encounter any strange problems, try running at least the kernel in
 ST-RAM.  Amiga users may need to exclude RAM using a booter memfile.
+-->
+Atari TT RAM ボードは、Linux で RAM にまつわる問題を引き起こすことで有名です。
+なにか妙な問題が生じたら、まずは ST-RAM でカーネルを動作させてみてください。
+Amiga ユーザは、booter memfile を使う RAM を
+用いないようにするほうがいいでしょう。
 
 <phrase condition="FIXME"><emphasis>
 
-FIXME: more description of this needed.
+FIXME: もっと説明が必要。
 
 </emphasis></phrase>
 
 </para><para arch="i386">
 
+<!--
 The very best motherboards support parity RAM and will actually tell
 you if your system has a single-bit error in RAM. Unfortunately, they
 don't have a way to fix the error, thus they generally crash
@@ -64,18 +102,34 @@ to be told you have bad memory than to have it silently insert errors
 in your data. Thus, the best systems have motherboards that support
 parity and true-parity memory modules; see 
 <xref linkend="Parity-RAM"/>.
+-->
+本当に優れたマザーボードでは、パリティ付き RAM がサポートされており、
+システムがエラーを検出したときに教えてくれます。
+ただ残念なことに、これらもエラーを訂正する機能までは持っていません。
+したがって、一般的に RAM の不良を知らせた時点でクラッシュしてしまいます。
+それでも、黙ってデータにエラーを混ぜ込んでしまうよりは、
+知らせてくれた方がよいでしょう。
+結局最も良いシステムは、パリティをサポートしたマザーボードと
+本物のパリティ付きメモリモジュールの組合せ、ということになります。
+<xref linkend="Parity-RAM"/> をご覧ください。
 
 </para><para arch="i386">
 
+<!--
 If you do have true-parity RAM and your motherboard can handle it, be
 sure to enable any BIOS settings that cause the motherboard to
 interrupt on memory parity errors.
+-->
+本物のパリティ付き RAM を持っていて、マザーボードがそれに対応しているのなら、
+メモリがパリティエラーを起こしたときの割り込み発生を BIOS 設定で
+有効にしてください。
 
 </para>
 
-   <sect3 arch="i386"><title>The Turbo Switch</title>
+   <sect3 arch="i386"><title>ターボスイッチ</title>
 <para>
 
+<!--
 Many systems have a <emphasis>turbo</emphasis> switch that controls
 the speed of the CPU.  Select the high-speed setting. If your BIOS
 allows you to disable software control of the turbo switch (or
@@ -83,88 +137,166 @@ software control of CPU speed), do so and lock the system in
 high-speed mode. We have one report that on a particular system, while
 Linux is auto-probing (looking for hardware devices) it can
 accidentally touch the software control for the turbo switch.
+-->
+多くのシステムには <emphasis>ターボ</emphasis> スイッチがついており、
+これを用いると CPU の速度が制御できます。高速の設定を選んでください。
+ターボスイッチ (または CPU 速度のソフトウェア制御) を 
+BIOS で設定できるようなら、
+これは無効にして、常にシステムを高速モードで動作するようにしてください。
+ある特定のシステムでは、Linux がハードウェアの自動検出をしている間に、
+ターボスイッチのソフトウェア制御を間違って変更してしまう、
+という報告も受けています。
 
 </para>
    </sect3>
 
-   <sect3 arch="i386"><title>Cyrix CPUs and Floppy Disk Errors</title>
+   <sect3 arch="i386"><title>Cyrix CPU とフロッピーディスクのエラー</title>
 <para>
 
+<!--
 Many users of Cyrix CPUs have had to disable the cache in their
 systems during installation, because the floppy disk has errors if
 they do not.  If you have to do this, be sure to re-enable your cache
 when you are finished with installation, as the system runs
 <emphasis>much</emphasis> slower with the cache disabled.
+-->
+Cyrix の CPU を使っているユーザは、
+インストールの間はキャッシュを無効にしなければなりません。
+キャッシュを有効にしておくとフロッピーディスクのエラーが起こります。
+キャッシュが無効になっているとシステムが
+<emphasis>かなり</emphasis> 遅くなるので、
+この場合インストールが終了したら、
+忘れずに再びキャッシュを有効にしてください。
 
 </para><para>
 
+<!--
 We don't think this is necessarily the fault of the Cyrix CPU. It may
 be something that Linux can work around. We'll continue to look into
 the problem.  For the technically curious, we suspect a problem with
 the cache being invalid after a switch from 16-bit to 32-bit code.
+-->
+私たちは、
+この問題が必ずしも Cyrix の CPU の欠陥によるものだとは考えていません。
+もしかしたら、Linux 側で回避可能なことなのかもしれません。
+この問題は引き続き調査していきます。
+以下は技術的な好奇心をもつ人向け:
+おそらく 16 ビットから 32 ビットコードへ切り替わった後に、
+キャッシュが不正になる問題ではないかと想像しています。
 
 </para>
    </sect3>
 
-   <sect3 arch="i386"><title>Peripheral Hardware Settings</title>
+   <sect3 arch="i386"><title>周辺機器の設定</title>
 <para>
 
+<!--
 You may have to change some settings or jumpers on your computer's
 peripheral cards.  Some cards have setup menus, while others rely on
 jumpers.  This document cannot hope to provide complete information on
 every hardware device; what it hopes to provide is useful tips.
+-->
+コンピュータに搭載している拡張カードの設定やジャンパを、
+変更する必要もあるかもしれません。
+カードによっては設定メニューを持つものもありますし、
+ジャンパで設定するものもあります。
+この文書ではすべてのハードウェアデバイスに対する
+完全な情報を提供することはできませんが、
+有益な情報を提供できればと望んでいます。
 
 </para><para>
 
+<!--
 If any cards provide ``mapped memory'', the memory should be mapped
 somewhere between 0xA0000 and 0xFFFFF (from 640K to just below 1
 megabyte) or at an address at least 1 megabyte greater than the total
 amount of RAM in your system.
+-->
+``mapped memory'' のついたカードの場合、そのメモリをマップする場所は、
+0xA0000 - 0xFFFFF (640KB から 1MB の間) のどこかか、
+あるいはシステムの RAM の全容量より
+最低 1MB 上のアドレスにしなければなりません。
 
 </para>
    </sect3>
 
-   <sect3 arch="i386" id="usb-keyboard-config"><title>USB keyboards</title>
+   <sect3 arch="i386" id="usb-keyboard-config"><title>USB キーボード</title>
 <para>
 
+<!--
 If you have no AT-style keyboard and only a USB model, you will need
 to enable legacy AT keyboard emulation in your BIOS setup. Consult
 your main board manual and look in the BIOS for "Legacy keyboard
 emulation" or "USB keyboard support" options. It must be enabled in
 order to boot the installation system.  If you enabled this option and
 it is working for you, you are fine and can go ahead.
+-->
+AT 形式のキーボードがなく、USB のものしかない場合、
+BIOS 設定で legacy AT keyboard emulation を有効にする必要があります。
+マザーボードのマニュアルを調べて、"Legacy keyboard emulation" とか
+"USB keyboard support" といった BIOS 設定に入ってください。
+インストールシステムを起動するには、これを有効にしなければなりません。
+これを有効にしてうまく行くようなら、そのまま先に進んでください。
 
 </para><para>
 
+<!--
 If you cannot find this option, it might be that it is always enabled
 and you can continue. It also might mean that the BIOS does not
 provide any emulation support (bad luck here).
+-->
+このオプションがなければ、常に有効になっているのかもしれません。
+その場合は先に進めます。
+あるいは BIOS が、エミュレーションを一切サポートしていないのかもしれません
+(これは運が悪い場合)。
 
 </para><para>
 
+<!--
 If you find the option and enable it, but the emulation stops working
 soon after the kernel started, then you have bad luck too. You could
 try the "bf2.4" flavor where the root floppy brings USB modules. If
 you are installing with floppy disks, you would need the keyboard once
 before the USB modules can be loaded. Specifying the "keytimer" option
 at boot prompt may help in this case.
+-->
+オプションがあって、それを有効にしても、
+カーネルが起動してしばらくするとエミュレーションが効かなくなってしまう場合、
+これも運が悪かったことになります。
+"bf2.4" フレーバでは root フロッピーに USB モジュールが入っているので、
+これを試してみることもできます。
+フロッピーからインストールしている場合、
+USB モジュールのロード前にキーボード入力が必要となります。
+この場合は、ブートプロンプトに "keytimer" オプションを指定してください。
 
 </para><para>
 
+<!--
 Sometimes, the emulation hangs but it wakes up after few minutes, so
 you could wait some time and try to continue. To fix this behavior,
 you could load Linux' own drivers for USB keyboards. For this, use
 "modconf" (Step "Configure Device Driver Modules") and load usb-uhci
 or usb-ohci modules.
+-->
+場合によっては、エミュレーションがハングした後、
+数分経つとまた使えるようになることもあります。
+ですのでしばらく待って、もう一度試してみてください。
+この状態を治すには、Linux 自身の USB キーボードドライバをロードします。
+これには "modconf" ("Configure Device Driver Modules" の段階) を用いて、
+usb-uhci か usb-ohci モジュールをロードします。
 
 </para>
    </sect3>
 
-   <sect3><title>More than 64 MB RAM</title>
+   <sect3><title>64 MB 以上の RAM</title>
 <para>
 
+<!--
 The Linux Kernel can not always detect what amount of RAM you have.  If
 this is the case please look at <xref linkend="boot-parms"/>.
+-->
+Linux カーネルが、搭載されている RAM 容量の検出に失敗することがあります。
+この場合の対処については <xref linkend="boot-parms"/> をご覧ください。
 
 </para>
    </sect3>
