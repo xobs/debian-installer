@@ -1,0 +1,118 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: shadow.xml,v 1.1 2004/02/15 09:08:28 mck-guest Exp $ -->
+
+ <sect2 id="base-config-users">
+ <title>Configurando usuarios y claves</title>
+
+  <sect3 id="base-config-shadow">
+  <title>Claves shadow</title>
+
+<para>
+
+Dependiendo de la prioridad dada, el sistema podría preguntarle si
+usted desea habilitar las claves shadow. Este es un sistema por el
+que su sistema GNU/Linux se hace un poco más seguro. En un sistema
+sin claves shadow, las claves son almacenadas (cifradas) en un
+fichero con acceso de lectura para todos, <filename>/etc/passwd</filename>.
+Este fichero tiene que ser legible por cualquiera que pueda acceder
+al sistema porque contiene la información vital del usuario, por ejemplo,
+cómo mapear entre los identificadores numéricos de usuario y los
+nombres de usuario. Por lo tanto, alguien intencionalmente podría 
+obtener su fichero <filename>/etc/passwd</filename> y ejecutar un
+ataque de fuerza bruta (es decir, probar automáticamente todas las claves
+posibles) contra éste y tratar de determinar las claves.
+
+</para><para>
+
+Si usted tiene habilitado las claves shadow, las claves se almacenan
+en <filename>/etc/shadow</filename>, que es legible y escribible solamente
+por el superusuario, y legible por el grupo shadow. Por lo tanto, 
+recomendamos que usted habilite las claves shadow.
+
+</para><para>
+
+La reconfiguración del sistema de claves shadow puede hacerse en
+cualquier momento con el programa <command>shadowconfig</command>.
+Después de la instalación, vea 
+<filename>/usr/share/doc/passwd/README.debian.gz</filename> para
+más información.
+
+</para>
+  </sect3>
+
+  <sect3 id="base-config-root">
+  <title>Definir la clave del superusuario</title>
+
+<para>
+
+La cuenta <emphasis>root</emphasis> es también llamada el
+<emphasis>superusuario</emphasis>; éste es un usuario que
+sobrepasa todas las protecciones de seguridad en su sistema.
+La cuenta del superusuario solo debe ser usada para tareas de administración
+del sistema, y por el mas corto tiempo posible.
+
+</para><para>
+
+Cualquier clave que usted cree deberá contener por lo menos 6 
+caracteres, y deberá contener caractares en mayúsculas y minúsculas,
+así como caracteres de puntuación. Tome cuidado extra al definir
+la clave del superusuario, puesto que es un tipo de cuenta poderosa.
+Evite palabras de diccionario o usar cualquier información
+personal que pueda ser adivinada.
+
+</para><para>
+
+Si cualquier persona le dice que necesita su clave de superusuario, sea
+extremadamente precavido. Normalmente usted no deberá dar la clave del
+superusaurio, a menos que esté administrando una máquina con más
+de un administrador.
+
+</para>
+  </sect3>
+
+  <sect3 id="make-normal-user">
+  <title>Creación de un usuario común</title>
+
+<para>
+
+El sistema le preguntará si usted desea crear una cuenta de usuario común
+en este momento. Esta cuenta debería ser su principal método de acceso 
+personal.
+Usted <emphasis>no</emphasis> debe usar la cuenta del superusuario para uso 
+diario o como su acceso personal.
+
+</para><para>
+
+¿Por qué no? Bien, una razón es para evitar el uso de los privilegios
+del superusuario ya que es muy fácil hacer daño irreparable como root. Otra
+razón es que usted podría ser engañado y ejecutar un programa 
+<emphasis>Troyano</emphasis> &mdash; que es un programa que toma 
+ventaja de sus poderes de superusuario para comprometer la seguridad
+del sistema de forma traicionera. Cualquier buen libro sobre administración 
+de sistemas Unix cubrirá este tema con mas detalle &mdash; considere leer 
+uno si esto es nuevo para usted.
+
+</para><para>
+
+Nombre la cuenta de usuario como guste. Si su nombre es Fernando Gónzalez,
+podría usar <userinput>gonzalez</userinput>, <userinput>frenando</userinput>,
+<userinput>fgonzalez</userinput> o <userinput>fg</userinput>. También
+se le pedirá el nombre completo del usuario, y, como anteriormente,
+una clave.
+
+</para><para>
+
+Si en cualquier momento de la instalación usted desea crear otra
+cuenta, use la orden <command>adduser</command>.
+
+</para><para arch="s390">
+
+Usted necesita crear una cuenta de usuario en &arch-title; si desea
+acceder a través de la red usando telnet. El servidor telnet no
+permite el acceso del superusuario en la configuración predeterminada de
+Debian. Sin embargo, usted puede usar ssh (Secure Shell) para acceder
+remotamente como superusuario, pero esto no es recomendado.
+
+</para>
+  </sect3>
+ </sect2>

@@ -1,0 +1,105 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: apt.xml,v 1.2 2004/03/14 17:39:44 mck-guest Exp $ -->
+
+ <sect2 id="configure-apt">
+ <title>Configurando APT</title>
+
+<para>
+
+El principal medio que usa la gente para instalar paquetes en sus
+sistemas es a través de un programa llamado <command>apt-get</command>,
+del paquete <classname>apt</classname>.<footnote>
+
+<para>
+
+Note que el verdadero programa que instala los paquetes se llama
+<command>dpkg</command>. Sin embargo, este paquete es una herramienta
+de mas bajo nivel. <command>apt-get</command> invocará a 
+<command>dpkg</command> apropiadamente; esto también es alto nivel,
+sin embargo, éste sabe instalar otros paquetes que son
+requeridos por el paquete que usted esta tratando de instalar, asimismo
+cómo recuperar el paquete de su CD, la red, u otro lugar.
+
+</para>
+</footnote>
+
+APT debe ser configurado, de modo que sepa de donde recuperar los 
+paquetes. La aplicación de ayuda que asiste en esta tarea se llama
+<command>apt-setup</command>.
+
+</para><para>
+
+El siguiente paso en el proceso de su configuración es decirle a APT
+donde pueden encontrarse otros paquetes Debian. Note que usted puede
+volver a ejecutar esta herramienta en cualquier momento después de la
+instalación, ya sea ejecutando <command>apt-setup</command>, o editando
+manualmente el fichero <filename>/etc/apt/sources.list</filename>.
+
+</para><para>
+
+Si usted esta iniciando desde un CD-ROM oficial, entonces este CD-ROM
+deberá ser automáticamente configurado como fuente apt sin preguntarle.
+Usted notará esto porque verá que el CD-ROM esta siendo escaneado, y
+entonces le preguntará si usted desea configurar otro CD-ROM. Si usted 
+tiene un conjunto de múltiples CD-ROM &mdash; y la mayoría lo tendrá 
+&mdash; entonces usted deberá continuar y escanear cada uno de ellos 
+uno por uno.
+
+</para><para>
+
+Para usuarios sin un CD-ROM oficial, se le ofrecerá un arreglo de
+opciones de la manera en que se accede los paquetes Debian: FTP,
+HTTP, CD-ROM o un sistemas de ficheros local. Para los usuarios 
+de CD-ROM, pueden llegar a este paso indicando específicamente
+añadir otra fuente.
+
+</para><para>
+
+Usted debe saber que es perfectamente aceptable tener un número de
+diferentes fuentes APT, incluso para el mismo archivo de Debian.
+<command>apt-get</command> elegirá automáticamente el paquete con
+el número de versión mas alto de todas las versiones disponibles.
+O, por ejemplo, si usted tiene ambas fuentes, HTTP y CD-ROM, 
+<command>apt-get</command> deberá usar automáticamente el CD-ROM
+local en cuanto sea posible, y solamente recurrir a HTTP si una 
+nueva versión esta disponible allí. Sin embargo, no es una buena
+idea añadir fuentes de APT innecesarias, puesto que esto tenderá a
+desacelerar el proceso de verificación de nuevas versiones en los 
+archivos en la red.
+
+</para>
+
+  <sect3 id="configure-apt-net">
+  <title>Configurando las fuentes de paquetes de red</title>
+
+<para>
+
+Si usted planea instalar el resto del sistema vía red, la opción
+mas común es elegir la fuente <userinput>http</userinput>. La fuente
+<userinput>ftp</userinput> también es aceptable, pero tiende ser un
+poco mas lenta en establecer las conexiones.
+
+</para><para>
+
+El siguiente paso durante la configuración de las fuentes de paquetes
+de red es indicar a <command>apt-setup</command> en que país usted vive.
+Esto configura a cual de las redes espejo oficiales de Debian en Internet
+usted se conecta. Dependiendo el país que usted eligió, se le dará una
+lista de máquinas posibles. Es generalmente adecuado elegir el primero
+en la lista, pero cualquiera de ellos debería funcionar.
+
+</para><para>
+
+Si usted esta instalando vía HTTP, usted será solicitado para
+configurar su servidor proxy. Esto es requerido algunas veces por
+personas detrás de cortafuegos, o en redes corporativas, etc.
+
+</para><para>
+
+Finalmente, su nueva fuente de paquetes de red será probada. Si todo
+va bien, usted será preguntado si desea o no realizar el mismo proceso
+con otra fuente de red.
+
+</para>
+  </sect3>
+ </sect2>

@@ -1,0 +1,178 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: packages.xml,v 1.1 2004/02/15 09:08:28 mck-guest Exp $ -->
+
+ <sect2 id="install-packages">
+ <title>Instalación de paquetes: Simple o avanzada</title>
+
+<para>
+
+Seguidamente se le presentará una lista de programas que usted puede
+usar para seleccionar los paquetes que desea instalar. Usted puede
+elegir entre la forma simple, o la mas refinada, y avanzada forma de 
+seleccionar paquetes. Nosotros le recomendamos que empiece con la 
+forma simple, puesto que usted puede ejecutar la forma avanzada en 
+cualquier momento en el futuro.
+
+</para><para>
+
+Usted deberá saber que para una instalación simple,
+<command>base-config</command> simplemente esta invocando el programa
+<comand>tasksel</command>. Para instalación avanzada de paquetes,
+se ejecuta el programa <command>dselect</command> o 
+<command>aptitude</command>. Cualquiera de ellos puede ser ejecutado
+en cualquier momento después de la instalación para instalar (o
+eliminar) mas paquetes. Si usted esta buscando un paquete en 
+específico, luego de que la instalación se ha completado,
+simplemente ejecute <userinput>apt-get install
+<replaceable>paquete</replaceable></userinput>, donde 
+<replaceable>paquete</replaceable> es el nombre del paquete
+que usted esta buscando.
+
+</para>
+
+  <sect3 id="tasksel">
+  <title>Selección simple de paquetes &mdash; El instalador de tareas</title>
+
+<para>
+
+Si usted elije instalación <quote>simple</quote> con 
+<command>tasksel</command>, usted será direccionado al instalador
+de tareas. Esta técnica le ofrece un número de configuraciones
+pre-cargadas de software ofrecido por Debian. Usted siempre puede
+elegir, paquete por paquete, lo que desea instalar en su nueva máquina.
+Este es el propósito del programa <command>dselect</command> descrito
+a continuación. ¡Pero esta puede ser una tarea larga con cerca
+de &num-of-distrib-pkgs; paquetes disponibles en Debian!
+
+</para><para>
+
+Bien, usted ha elegido <emphasis>tareas</emphasis> primero, 
+y después añadir mas paquetes individuales. Estas tareas
+representan aproximadamente un número de diferentes tareas o cosas
+que usted querría hacer con un computador, como <quote>entorno de
+escritorio</quote>, <quote>desarrollo en C</quote>, o <quote>
+servidor de ficheros</quote>.
+
+</para><para>
+
+Por cada tarea, usted puede iluminarla y elegir 
+<guibutton>Información de tarea</guibutton> para ver mas información
+sobre esta tarea. Esto mostrará una descripción extendida y la
+lista de paquetes que serán instalados para esta tarea. Una tabla
+que muestra los tamaños aproximados de las diversas tareas para
+propósitos de planeamiento la encuentra en 
+<xref linkend="tasksel-size-list"/>.
+
+</para><para>
+
+Una vez que ha elegido sus tareas, seleccione 
+<guibutton>Finalizar</guibutton>. En este punto <command>apt-get</command>
+instalará los paquetes que usted ha elegido. Note, que si usted 
+no eligió ninguna tarea, cualquier paquete con prioridad standar,
+important o required que no este presente en su sistema será 
+instalado. Esta funcionalidad es la misma que ejecutar tasksel -s 
+en la línea de ordenes, y actualmente involucra descargar cerca 
+de 37M de los archivos. Se le mostrará el número de paquetes a ser 
+instalados y cuantos kilo-bytes de paquetes, en caso hubiese, 
+necesitan ser descargados.
+
+</para><para>
+
+De los &num-of-distrib-pkgs; paquetes disponibles en Debian, solamente
+una pequeña minoría son cubiertos por las tareas ofrecidas en el
+instalador de tareas. Para ver información sobre mas paquetes, use
+ya sea <userinput>apt-cache search <replaceable>cadena a buscar</replaceable>
+</userinput> para buscar alguna cadena ingresada (vea la página 
+de manual <citerefentry><manvolnum>8</manvolnum> de 
+<refentrytitle>apt-cache</refentrytitle></citerefentry>), o ejecute
+<command>dselect</command> o <command>aptitude</command> como se
+describe a continuación.
+
+</para>
+  </sect3>
+
+  <sect3 id="dselect">
+  <title>Selección avanzada de paquetes con <command>dselect</command></title>
+
+<para>
+
+Si usted es un usuario conservador probablemente elegirá el
+programa <command>dselect</command>. Es necesario que lea el <ulink 
+url="&url-dselect-beginner;">Tutorial de dselect</ulink> antes
+de que ejecute <command>dselect</command>.
+<command>dselect</command> le permite elegir <emphasis>paquetes</emphasis>
+individuales para ser instalados en su sistema. (Usted deberá
+ser superusuario (root) cuando ejecute <command>dselect</command>.)
+
+</para>
+ </sect3>
+
+ <sect3 id="aptitude">
+ <title>Selección avanzada de paquetes con <command>aptitude</command></title>
+
+<para>
+
+<command>Aptitude</command> es un programa moderno para administrar
+paquetes. Su interfaz gráfica de usuario y las combinaciones de teclas
+de alguna forma se parecen al famoso <command>dselect</command>,
+pero tiene mas campanas y pitidos incluidos, de modo que no 
+asustará tanto a los nuevos usuarios. (¡Usted debe probar el 
+busca minas integrado!) <command>aptitude</command> le permite
+elegir paquetes individuales, conjunto de paquetes que concuerdan
+con un criterio dado (para usuarios avanzados) o tareas completas.
+
+</para><para>
+
+Las combinaciones de teclas mas básicas son:
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+  <entry>Tecla</entry><entry>Acción</entry>
+</row>
+</thead>
+
+<tbody>
+<row>
+  <entry><keycap>Arriba</keycap>, <keycap>Abajo</keycap></entry>
+  <entry>Mueve la selección arriba o abajo.</entry>
+</row><row>
+  <entry>&enterkey;</entry>
+  <entry>Abre/colapsa/activa un ítem.</entry>
+</row><row>
+  <entry><keycap>+</keycap></entry>
+  <entry>Marca el paquete para instalación.</entry>
+</row><row>
+  <entry><keycap>-</keycap></entry>
+  <entry>Marca el paquete para eliminación.</entry>
+</row><row>
+  <entry><keycap>d</keycap></entry>
+  <entry>Muestra las dependencias del paquete.</entry>
+</row><row>
+  <entry><keycap>g</keycap></entry>
+  <entry>Descarga/instala/elimina paquetes.</entry>
+</row><row>
+  <entry><keycap>q</keycap></entry>
+  <entry>Sale de la vista actual.</entry>
+</row><row>
+  <entry><keycap>F10</keycap></entry>
+  <entry>Activa el menú.</entry>
+</row>
+</tbody></tgroup></informaltable>
+
+Para mas comandos vea la ayuda en línea usando la tecla <keycap>?</keycap>.
+
+</para><para>
+
+Aunque <command>aptitude</command> esta pensando para ser familiar a
+los usuarios de <command>dselect</command>, éste provee muchas mas
+características y puede ser adaptado en gran medida. (Usted puede
+definir sus propias combinaciones de teclas, colores y vistas de paquetes).
+Después de la instalación usted puede explorar las capacidades de 
+<command>aptitude</command> leyendo 
+<filename>/usr/share/doc/aptitude/README</filename>.
+
+</para>
+  </sect3>
+ </sect2>
