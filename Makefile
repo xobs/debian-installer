@@ -363,7 +363,7 @@ endif
 	touch $(TYPE)-tree-stamp
 
 # Collect the used UTF-8 strings, to know which glyphs to include in
-# the font.  Using strigs is not the best way, but no better suggestion
+# the font.  Using strings is not the best way, but no better suggestion
 # has been made yet.
 all-$(TYPE).utf: $(TYPE)-tree-stamp
 	cp graphic.utf all-$(TYPE).utf
