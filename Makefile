@@ -14,7 +14,7 @@ TYPE=net
 
 # List here any extra udebs that are not in the list file but that
 # should still be included on the system.
-EXTRAS="cdebconf-udeb"
+EXTRAS=""
 
 # Build tree location.
 DEST=debian-installer
@@ -51,14 +51,20 @@ UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE)) $(EXTRAS)
 
 DPKGDIR=$(DEST)/var/lib/dpkg
 
-build: tree lib_reduce status_reduce stats
+build: demo_clean tree lib_reduce status_reduce stats
 
 demo:
 	mkdir -p $(DEST)/proc 
 	sudo chroot $(DEST) bin/sh -c "if ! mount | grep ^proc ; then bin/mount proc -t proc /proc; fi"
-	sudo chroot $(DEST) usr/bin/debconf-loadtemplate /var/lib/dpkg/info/*.templates
-#	sudo chroot $(DEST) usr/share/debconf/frontend /usr/bin/main-menu
+	sudo chroot $(DEST) bin/sh -c "export DEBCONF_FRONTEND=text DEBCONF_DEBUG=5; /usr/bin/debconf-loadtemplate /var/lib/dpkg/info/*.templates; /usr/share/debconf/frontend /usr/bin/main-menu"
+
+shell:
 	sudo chroot $(DEST) bin/sh
+
+
+demo_clean:
+	-sudo chroot $(DEST) bin/sh -c "if mount | grep ^proc ; then bin/umount /proc ; fi" &> /dev/null
+	-sudo chroot $(DEST) bin/sh -c "rm -rf /etc /var"
 
 clean:
 	dh_clean
