@@ -1,8 +1,11 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: mips.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
+<!-- $Id: mips.xml 22232 2004-09-28 15:51:34Z tbm $ -->
 
 
   <sect2 arch="mips" id="boot-tftp"><title>Загрузка по TFTP</title>
+
+   <sect3>
+   <title>Загрузка по TFTP SGI Indys</title>
 <para>После входа в командный монитор используйте <informalexample><screen>
 
 bootp(): root=/dev/ram0
@@ -12,10 +15,26 @@ bootp(): root=/dev/ram0
 unsetenv netaddr
 
 </screen></informalexample> в командном мониторе. </para>
+  </sect3>
+
+   <sect3>
+   <title>Загрузка по TFTP Broadcom BCM91250A</title>
+<para>Для Broadcom BCM91250A evaluation по TFTP загружается системный загрузчик SiByl, который затем загружвает и запускается программу установки Debian. В большинстве случаев, сначала вам нужно получить IP адрес по DHCP, но также возможна настроить статический адрес. Чтобы использовать DHCP, вы можете ввести следующую командув строке приглашения CFE: <informalexample><screen>
+
+ifconfig eth0 -auto
+
+</screen></informalexample> После получения IP адреса, вы можете загрузить SiByl с помощью следующей команды: <informalexample><screen>
+
+boot 192.168.1.1:/boot/sibyl
+
+</screen></informalexample> Вместо приведённого в этом примере IP адреса вам нужно указать или имя или IP адреса TFTP сервера. После выполнения этой команды, программа установки будет загружена автоматически. </para>
+</sect3>
   </sect2>
 
-
   <sect2 arch="mips"><title>Boot Parameters</title>
+
+   <sect3>
+   <title>SGI Indys TFTP Booting</title>
 <para>
 
 On SGI Indys you can append boot parameters to the
@@ -29,4 +48,18 @@ via your bootp/dhcp server - Example:
 <command>bootp():/boot/tftpboot.img</command>
 
 </para>
+  </sect3>
+
+   <sect3>
+   <title>Broadcom BCM91250A TFTP Booting</title>
+<para>
+
+You cannot pass any boot parameters directly from the CFE prompt.  Instead,
+you have to edit the <filename>/boot/sibyl.conf</filename> file on the TFTP
+server and add your parameters to the <replaceable>extra_args</replaceable>
+variable.
+
+</para>
+  </sect3>
+
   </sect2>

@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: install-tftp.xml 20465 2004-08-31 22:37:38Z joeyh $ -->
+<!-- $Id: install-tftp.xml 22232 2004-09-28 15:51:34Z tbm $ -->
 
  <sect1 condition="supports-tftp" id="install-tftp">
  <title>Preparing Files for TFTP Net Booting</title>
@@ -11,7 +11,7 @@
 
 tftp dgram udp wait nobody /usr/sbin/tcpd in.tftpd /tftpboot
 
-</screen></informalexample> Debian packages will in general set this up correctly by default when they are installed. </para><para>Look in that file and remember the directory which is used as the argument of <command>in.tftpd</command>; you'll need that below. The <userinput>-l</userinput> argument enables some versions of <command>in.tftpd</command> to log all requests to the system logs; this is useful for diagnosing boot errors. If you've had to change <filename>/etc/inetd.conf</filename>, you'll have to notify the running <command>inetd</command> process that the file has changed. On a Debian machine, run <userinput>/etc/init.d/inetd reload</userinput>; on other machines, find out the process ID for <command>inetd</command>, and run <userinput>kill -HUP <replaceable>inetd-pid</replaceable></userinput>. </para><note arch="i386"><para>To use the Pre-boot Execution Environment (PXE) method of TFTP booting, you will need a TFTP server with <userinput>tsize</userinput> support. On a &debian; server, the <classname>atftpd</classname> and <classname>tftpd-hpa</classname> packages qualify; we recommend <classname>tftpd-hpa</classname>. </para></note><para arch="mips">If your TFTP server is a GNU/Linux box running Linux 2.4.X you'll need to set the following on your server: <informalexample><screen>
+</screen></informalexample> Debian packages will in general set this up correctly by default when they are installed. </para><para>Look in that file and remember the directory which is used as the argument of <command>in.tftpd</command>; you'll need that below. The <userinput>-l</userinput> argument enables some versions of <command>in.tftpd</command> to log all requests to the system logs; this is useful for diagnosing boot errors. If you've had to change <filename>/etc/inetd.conf</filename>, you'll have to notify the running <command>inetd</command> process that the file has changed. On a Debian machine, run <userinput>/etc/init.d/inetd reload</userinput>; on other machines, find out the process ID for <command>inetd</command>, and run <userinput>kill -HUP <replaceable>inetd-pid</replaceable></userinput>. </para><note arch="i386"><para>To use the Pre-boot Execution Environment (PXE) method of TFTP booting, you will need a TFTP server with <userinput>tsize</userinput> support. On a &debian; server, the <classname>atftpd</classname> and <classname>tftpd-hpa</classname> packages qualify; we recommend <classname>tftpd-hpa</classname>. </para></note><para arch="mips">If you intend to install Debian on an SGI machine and your TFTP server is a GNU/Linux box running Linux 2.4, you'll need to set the following on your server: <informalexample><screen>
 
 echo 1 > /proc/sys/net/ipv4/ip_no_pmtu_disc
 
@@ -54,6 +54,12 @@ echo "2048 32767" > /proc/sys/net/ipv4/ip_local_port_range
    <title>SGI Indys TFTP Booting</title>
 <para>On SGI Indys you can rely on the <command>bootpd</command> to supply the name of the TFTP file. It is given either as the <userinput>bf=</userinput> in <filename>/etc/bootptab</filename> or as the <userinput>filename=</userinput> option in <filename>/etc/dhcpd.conf</filename>. </para>
    </sect3>
+
+   <sect3 arch="mips">
+   <title>Broadcom BCM91250A TFTP Booting</title>
+<para>You don't have to configure DHCP in a special way because you'll pass the full path of the file to the loaded to CFE. </para>
+   </sect3>
+
   </sect2>
 
 <!-- FIXME: commented out since it seems too old to be usable and a current
