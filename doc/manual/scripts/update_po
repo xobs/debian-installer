@@ -32,7 +32,7 @@ for POT in `find $PODIR/pot -name "*.pot"` ; do
     SPO=$SPODIR/$language/$BASENAME.po
 
     if [ -f $SPO ] ; then
-        echo "- $BASENAME"
+        echo "- updating $BASENAME.po"
         if [ -z "$PO_USEBUILD" ] ; then
             # Update existing PO file
             msgmerge -q -U --backup=simple $PO $POT
@@ -44,10 +44,10 @@ for POT in `find $PODIR/pot -name "*.pot"` ; do
         fi
         if [ $RC -ne 0 ] ; then
             RET=$RC
-            echo "* $BASENAME: error $RC while executing msgmerge"
+            echo "Error: error $RC while executing msgmerge"
         fi
     else
-        echo "* No PO file found for '$BASENAME'."
+        echo "Warning: no PO file found for '$BASENAME'."
     fi
 done
 

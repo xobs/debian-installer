@@ -41,15 +41,15 @@ for ORIGXML in `find $SOURCEDIR -name "*.xml"` ; do
     mkdir -p $TARGETDIR/$BASEDIR
 
     if [ -f $PO ] ; then
-        echo "- $BASENAME: creating translated .xml"
+        echo "- creating $BASENAME.xml"
         po2xml $ORIGXML $PO > $XML
         RC=$?
         if [ $RC -ne 0 ] ; then
             RET=$RC
-            echo "* $BASENAME: error $RC while executing po2xml"
+            echo "Error: error $RC while executing po2xml"
         fi
     else
-        echo "* $BASENAME: no PO file found; copying English original"
+        echo "Warning: no PO file found for '$BASENAME'; copying English original"
         cp $ORIGXML $TARGETDIR/$BASEDIR
     fi
 done
