@@ -1,17 +1,25 @@
+<?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: apt.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+<!-- $Id$ -->
+<!-- original version: 11648 -->
 
  <sect2 id="configure-apt">
- <title>Configuring APT</title>
+ <title>APT の設定</title>
 
 <para>
 
+<!--
 The main means that people use to install packages on their system is
 via a program called <command>apt-get</command>, from the
 <classname>apt</classname> package.<footnote>
+-->
+一般にパッケージのインストールに使う主な手段は、
+<classname>apt</classname> パッケージに含まれている
+<command>apt-get</command> というプログラムを用いるやり方です。<footnote>
 
 <para>
 
+<!--
 Note that the actual program that installs packages is called
 <command>dpkg</command>.  However, this package is more of a low-level
 tool.  <command>apt-get</command> will invoke <command>dpkg</command>
@@ -19,39 +27,75 @@ as appropriate; it is a higher-level too, however, because it knows to
 install other packages which are required for the package you're
 trying to install, as well as how to retrieve the package from your
 CD, the network, or wherever.
+-->
+実際にパッケージをインストールするプログラムは <command>dpkg</command>
+です。しかしこのパッケージはむしろ低レベルなツールです。
+<command>apt-get</command> は、適切に <command>dpkg</command>
+を起動します。APT は高レベルなツールです。なぜなら APT は、
+あなたが今インストールしようとしているパッケージが必要とする
+別のパッケージをインストールしなければならないことを知っているからです。
+また、そのパッケージを CD やネットワークなどの媒体から取得する方法を
+知っているからです。
 
 </para>
 </footnote>
 
+<!--
 APT must be configured, however, so that it knows where to retrieve
 packages from.  The helper application which assists in this task is
 called <command>apt-setup</command>.
+-->
+しかし、パッケージの取得先を知るには、APT の設定が必要です。
+この作業を助けてくれるのが、<command>apt-setup</command> というツールです。
 
 </para><para>
 
+<!--
 The next step in your configuration process is to tell APT where other
 Debian packages can be found.  Note that you can re-run this tool at
 any point after installation by running <command>apt-setup</command>,
 or by manually editing <filename>/etc/apt/sources.list</filename>.
+-->
+設定作業における次の段階は、他の Debian パッケージがどこにあるかを
+APT に教えることです。この設定は、<command>apt-setup</command>
+を実行するか、<filename>/etc/apt/sources.list</filename> を編集すれば、
+インストール後の任意の時点で再設定できます。
 
 </para><para>
 
+<!--
 If you are booting from an official CD-ROM, then that CD-ROM should
 automatically be configured as an apt source without prompting.  You
 will notice this because you will see the CD-ROM being scanned, and
 then asked if you want to configure another CD-ROM.  If you have
 a multiple CD-ROM set &mdash; and most people will &mdash; then you
 should go ahead and scan each of them one by one.
+-->
+公式 CD-ROM から起動した場合は、ユーザへの質問は省略され、
+CD-ROM からパッケージを取得するよう自動的に設定されます。
+CD-ROM がスキャンされ、別の CD-ROM の設定をするかどうかを
+尋ねられますから、お気づきになるでしょう。複数の
+CD-ROM を持っている場合は (ほとんどの人はそうでしょうが)、
+すべての CD-ROM をスキャンしてください。
 
 </para><para>
 
+<!--
 For users without an official CD-ROM, you will be offered an array of
 choices for how Debian packages are accessed: FTP, HTTP, CD-ROM, or
 a local file system.  For CD-ROM users, you can get to this step by
 specifically asking to add another source.
+-->
+公式 CD-ROM を持っていない場合は、Debian パッケージへの
+アクセス方法を選ぶ必要があります。
+FTP、HTTP、CD-ROM、ローカルのファイルシステムから選択します。
+CD-ROM を使っている場合でも、
+別のパッケージ取得先を追加するように特に指示すれば、
+この段階に入ることができます。
 
 </para><para>
 
+<!--
 You should know that it's perfectly acceptable to have a number of
 different APT sources, even for the same Debian archive.
 <command>apt-get</command> will automatically pick the package with
@@ -62,39 +106,78 @@ when possible, and only resort to HTTP if a newer version is available
 there.  However, it is not a good idea to add unnecessary APT sources,
 since this will tend to slow down the process of checking the network
 archives for new versions.
+-->
+同じ Debian アーカイブに対して複数の APT ソースを
+指定することもできます。<command>apt-get</command>
+は、すべての取得可能なバージョンの中から、いちばん高い
+バージョン番号を持つパッケージを自動的に選択します。また、
+たとえばあなたが HTTP と CD-ROM の両方の APT ソースを使えるとき、
+<command>apt-get</command> は可能ならローカルの CD-ROM を自動的に
+選びますが、より新しいバージョンが HTTP で取得できる場合にのみ
+HTTP を使います。しかし不必要に APT ソースを追加すると
+ネットワークアーカイブから新しいバージョンを探す処理が
+遅くなってしまうので、不要な APT ソースを追加するのは良い考えではありま
+せん。
 
 </para>
 
   <sect3 id="configure-apt-net">
+<!--
   <title>Configuring Network Package Sources</title>
+-->
+  <title>ネットワーク上からのパッケージ取得の設定</title>
 
 <para>
 
+<!--
 If you plan on installing the rest of your system via the network, the
 most common option is to select the <userinput>http</userinput>
 source.  The <userinput>ftp</userinput> source is also acceptable, but
 tends to be a little slower making connections.
+-->
+システムの残りの部分をネットワーク経由でインストールするつもりでしたら、
+通常は <userinput>http</userinput> ソースを選択します。
+<userinput>ftp</userinput> ソースも使えますが、
+ftp は接続が少しだけ遅くなる傾向があります。
 
 </para><para>
 
+<!--
 The next step during the configuration of network packages sources is
 to tell <command>apt-setup</command> which country you live in.  This
 configures which of the official Debian Internet mirror network you
 connect to.  Depending on which country you select, you will be given
 a list of possible machines.  Its generally fine to pick the one on
 the top of the list, but any of them should work.
+-->
+ネットワーク上からのパッケージ取得設定の次の段階は、
+<command>apt-setup</command> にあなたが住んでいる国を教えることです。
+この情報を使って、Debian の公式ミラーサイトのうちどれに接続するかを
+決定します。国を選ぶと、利用可能なマシンの一覧が表示されます。
+一覧のうちの一番上を選べば良いはずですが、
+もちろんどれを選んでも構いません。
 
 </para><para>
 
+<!--
 If you are installing via HTTP, you will be asked to configure your
 proxy server.  This is sometimes required by people behind firewalls,
 on corporate networks, etc.
+-->
+HTTP 経由でインストールする場合は、プロキシサーバの設定を
+尋ねられます。この設定は、ファイアウォールの内側や会社の
+ネットワークを使用している場合に必要になることが多いです。
 
 </para><para>
 
+<!--
 Finally, your new network package source will be tested.  If all goes
 well, you will be prompted whether you want to do it all over again
 with another network source.
+-->
+最後に、設定した新しいパッケージ取得先がテストされます。
+テストが無事終了すれば、さらに別のパッケージ取得先を設定するか
+どうかを尋ねられます。
 
 </para>
   </sect3>

@@ -1,19 +1,32 @@
+<?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: packages.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+<!-- $Id$ -->
+<!-- original version: 11648 -->
 
  <sect2 id="install-packages">
+<!--
  <title>Package Installation: Simple or Advanced</title>
+-->
+ <title>パッケージのインストール: 簡単な方法と上級者向けの方法</title>
 
 <para>
 
+<!--
 You will next be presented with a list of programs you can use to
 select packages you wish to install. You can choose between the simple
 way of selecting packages, or the more fine-grained, advanced way.  We
 recommend you start with the simple way, since you can always run the
 more advanced way at any time.
+-->
+次に、インストールするパッケージを選択できるようにするプログラムリスト
+が示されるでしょう。パッケージの選択を簡単にする方法と、
+より細かく指定できる熟練者向けの方法のどちらかを選べます。
+もっと高度な方法はいつでも実行できるので、
+最初は簡単な方法で始めるようお勧めします。
 
 </para><para>
 
+<!--
 You should know that for simple installation,
 <command>base-config</command> is merely invoking the
 <command>tasksel</command> program.  For advanced package
@@ -25,14 +38,30 @@ installation is complete, simply run <userinput>apt-get install
 <replaceable>package</replaceable></userinput>, where
 <replaceable>package</replaceable> is the name of the package you are
 looking for.
+-->
+簡単な方法を選ぶと、<command>base-config</command> は単に
+<command>tasksel</command> プログラムを呼び出します。
+上級者向けの方法では、<command>dselect</command> あるいは
+<command>aptitude</command> を呼び出します。
+どちらの方法もインストールの終了後、いつでも追加パッケージの
+インストールに使えます。インストール終了後に
+ある特定のパッケージをインストールしたいときは、
+単に <userinput>apt-get install
+<replaceable>パッケージ</replaceable></userinput> を実行すれば良いです
+(ここで、<replaceable>パッケージ</replaceable> はインストールしたい
+パッケージの名前です)。
 
 </para>
 
   <sect3 id="tasksel">
+<!--
   <title>Simple Package Selection &mdash; The Task Installer</title>
+-->
+  <title>簡単なパッケージ選択: タスクインストーラ</title>
 
 <para>
 
+<!--
 If you chose <quote>simple</quote> installation with
 <command>tasksel</command>, you will next be thrown into the Task
 Installer.  This technique offers you a number of pre-rolled software
@@ -41,26 +70,51 @@ package, what you want to install on your new machine.  This is the
 purpose of the <command>dselect</command> program, described below.
 But this can be a long task with around &num-of-distrib-pkgs; packages
 available in Debian!
+-->
+<command>tasksel</command> で<quote>simple (簡単)</quote>なインストール
+を選んだ場合、タスクインストーラが起動します。タスクインストーラは、
+Debian によって前もってまとめられた多数のソフトウェア設定を提供します。
+もちろん、いつでも新しいマシンにインストールするパッケージを
+ひとつひとつ選ぶことができます。これは、以下で説明する
+<command>dselect</command> プログラムによるものです。しかし、Debian には
+&num-of-distrib-pkgs; 個ものパッケージがあるので、その方法は
+時間のかかる作業となるかもしれません!
 
 </para><para>
 
+<!--
 So, you have the ability to choose <emphasis>tasks</emphasis> first,
 and then add on more individual packages later.  These tasks loosely
 represent a number of different jobs or things you want to do with
 your computer, such as <quote>desktop environment</quote>,
 <quote>development in C</quote>, or <quote>file server</quote>.
+-->
+そこで、まず最初に<emphasis>タスク</emphasis>を選択し、そのあとで個々の
+パッケージを追加する、ということができるようになっています。
+タスクは、<quote>デスクトップ環境</quote>、<quote>C での開発</quote>、
+<quote>ファイルサーバ</quote>のように、コンピュータでしたいであろう、
+いろいろな仕事や物事を大まかに表しています。
 
 </para><para>
 
+<!--
 For each task, you can highlight that task and select <guibutton>Task
 Info</guibutton> to see more information on that task. This will show
 you an extended description and the list of packages which will be
 installed for that task. A table showing approximate sizes of the
 various tasks for planning purposes is in <xref
 linkend="tasksel-size-list"/>.
+-->
+それぞれのタスクを反転表示させて <guibutton>タスク情報 (Task Info)</guibutton>
+を選ぶと、そのタスクに関する詳しい情報を見ることができます。
+タスクの詳細とそのタスクを選択するとインストールされるパッケージの
+一覧が表示されます。いろいろなタスクの大まかなサイズの一覧が、<xref
+linkend="tasksel-size-list"/> にありますので、
+計画段階で利用すると良いでしょう。
 
 </para><para>
 
+<!--
 Once you've selected your tasks, select
 <guibutton>Finish</guibutton>. At this point,
 <command>apt-get</command> will install the packages you've
@@ -71,9 +125,20 @@ running tasksel -s at the command line, and currently involves
 a download of about 37M of archives. You will be shown the number of
 packages to be installed, and how many kilobytes of packages, if any,
 need to be downloaded.
+-->
+タスクを選び終わったら<guibutton>Finish</guibutton>を選択してください。すると
+<command>apt-get</command> が、あなたの選択したパッケージをインストールします。
+ひとつもタスクを選択しないと、standard、important、required の
+優先度を持つパッケージがインストールされます。この機能は、
+コマンドラインから tasksel -s を実行したのと同じで、
+今のところおよそ 37 メガバイトのアーカイブをダウンロードします。
+インストールされるパッケージの数と、
+(ダウンロードが必要なパッケージがある場合には)
+パッケージのキロバイト数が表示されます。
 
 </para><para>
 
+<!--
 Of the &num-of-distrib-pkgs; packages available in Debian, only
 a small minority are covered by tasks offered in the Task Installer.
 To see information on more packages, either use <userinput>apt-cache
@@ -82,15 +147,29 @@ given search string (see the <citerefentry>
 <refentrytitle>apt-cache</refentrytitle> <manvolnum>8</manvolnum>
 </citerefentry> man page), or run <command>dselect</command> or
 <command>aptitude</command> as described below.
+-->
+Debian には &num-of-distrib-pkgs; 個のパッケージがありますが、
+タスクインストーラのタスクでカバーされているのは、そのうちの
+ほんの少数に過ぎません。より多くのパッケージの情報を見るためには、
+何らかの検索文字列を使って<userinput>apt-cache
+search <replaceable>検索文字列</replaceable></userinput> を実行するか
+(<citerefentry>
+<refentrytitle>apt-cache</refentrytitle> <manvolnum>8</manvolnum>
+</citerefentry> のマニュアルページを参照)、以下で説明する
+<command>dselect</command> あるいは <command>aptitude</command> を実行してください。
 
 </para>
   </sect3>
 
   <sect3 id="dselect">
+<!--
   <title>Advanced Package Selection with <command>dselect</command></title>
+-->
+  <title><command>dselect</command> を使った上級者向けのパッケージ選択</title>
 
 <para>
 
+<!--
 If you are conservative user you'll probably choose the
 <command>dselect</command> program.  The <ulink
 url="&url-dselect-beginner;">dselect Tutorial</ulink> is required
@@ -99,15 +178,27 @@ reading before you run <command>dselect</command>.
 <emphasis>packages</emphasis> to be installed on your system. (You
 have to be the super-user (root) when you run
 <command>dselect</command>.)
+-->
+あなたが保守的なユーザならば、おそらく
+<command>dselect</command> プログラムを選ぶでしょう。<ulink
+url="&url-dselect-beginner;">dselect Tutorial</ulink> は、
+<command>dselect</command> を実行する前に必読です。
+<command>dselect</command> は、システムにインストールする
+<emphasis>パッケージ</emphasis>を個々に選択できるようにします
+(<command>dselect</command> を実行するにはスーパーユーザ (root) でなければなりません)。
 
 </para>
  </sect3>
 
  <sect3 id="aptitude">
+<!--
  <title>Advanced Package Selection with <command>aptitude</command></title>
+-->
+ <title><command>aptitude</command> を使った上級者向けのパッケージ選択</title>
 
 <para>
 
+<!--
 <command>Aptitude</command> is a modern program for managing
 packages. Its gui and keyboard commands somewhat resemble the famous
 <command>dselect</command>, but it has more bells and whistles
@@ -115,57 +206,105 @@ attached, so it should not scare new users so much. (You have to try
 the integrated minesweeper!) <command>aptitude</command> allows you to
 select individual packages, set of packages matching given criteria
 (for advanced users), or whole tasks.
+-->
+<command>aptitude</command> はパッケージを管理するための最新のプログラムです。
+その GUI とキーボードコマンドは、有名な <command>dselect</command> に
+いくらか似ていますが、より多くのオプション機能があるので新たなユーザを
+あまり脅えさせないはずです (あなたは完全なマインスイーパを試さなければ
+なりません!)。<command>aptitude</command> は、個々のパッケージや
+(上級ユーザのための) 与えられた基準と一致するパッケージセットおよび
+全タスクを選択できるようにします。
 
 </para><para>
 
+<!--
 The most basic keybindings are:
+-->
+最も基本的なキーバインドは以下の通りです。
 
 <informaltable>
 <tgroup cols="2">
 <thead>
 <row>
+<!--
   <entry>Key</entry><entry>Action</entry>
+-->
+  <entry>キー</entry><entry>動作</entry>
 </row>
 </thead>
 
 <tbody>
 <row>
   <entry><keycap>Up</keycap>, <keycap>Down</keycap></entry>
+<!--
   <entry>Move selection up or down.</entry>
+-->
+  <entry>選択項目を上下に移動する</entry>
 </row><row>
   <entry>&enterkey;</entry>
+<!--
   <entry>Open/collapse/activate item.</entry>
+-->
+  <entry>アイテムを 開く/折りたたむ/活性化 する</entry>
 </row><row>
   <entry><keycap>+</keycap></entry>
+<!--
   <entry>Mark package for installation.</entry>
+-->
+  <entry>パッケージに追加マークをつける</entry>
 </row><row>
   <entry><keycap>-</keycap></entry>
+<!--
   <entry>Mark package for removal.</entry>
+-->
+  <entry>パッケージに削除マークをつける</entry>
 </row><row>
   <entry><keycap>d</keycap></entry>
+<!--
   <entry>Show package dependencies.</entry>
+-->
+  <entry>パッケージの依存関係を表示する</entry>
 </row><row>
   <entry><keycap>g</keycap></entry>
+<!--
   <entry>Actually download/install/remove packages.</entry>
+-->
+  <entry>実際にパッケージを ダウンロード/インストール/削除 する</entry>
 </row><row>
   <entry><keycap>q</keycap></entry>
+<!--
   <entry>Quit current view.</entry>
+-->
+  <entry>終了</entry>
 </row><row>
   <entry><keycap>F10</keycap></entry>
+<!--
   <entry>Activate menu.</entry>
+-->
+  <entry>メニューを開く</entry>
 </row>
 </tbody></tgroup></informaltable>
 
+<!--
 For more commands see the online help under the <keycap>?</keycap> key.
+-->
+上記以外のコマンドは、<keycap>?</keycap> キーでオンラインヘルプをご覧ください。
 
 </para><para>
 
+<!--
 Although <command>aptitude</command> is meant to be familiar to the
 <command>dselect</command> users, it provides much more features and
 can be customized to a great degree. (You can define you own
 keybindings, colors and package views). After installation you can
 explore <command>aptitude</command> capabilities by reading
 <filename>/usr/share/doc/aptitude/README</filename>.
+-->
+<command>aptitude</command> は、<command>dselect</command> ユーザには
+なじみがあるようになっているはずですが、より多くの機能を提供し、
+とても細かくカスタマイズ (自分好みのキーバインド、色および画面に定義) できます。
+インストール後に、<filename>/usr/share/doc/aptitude/README</filename> を
+読んで <command>aptitude</command> の機能を調べられます。
 
 </para>
   </sect3>

@@ -1,14 +1,17 @@
+<?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: shadow.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+<!-- $Id$ -->
+<!-- original version: 11648 -->
 
  <sect2 id="base-config-users">
- <title>Setting Up Users And Passwords</title>
+ <title>ユーザとパスワードの設定</title>
 
   <sect3 id="base-config-shadow">
-  <title>Shadow Passwords</title>
+  <title>シャドウパスワード</title>
 
 <para>
 
+<!--
 Depending on a given priority, the system may ask whether you want to
 enable shadow passwords.  This is a system in which your GNU/Linux
 system is made to be a bit more secure.  In a system without shadow
@@ -20,64 +23,113 @@ Therefore, someone could conceivably grab your
 <filename>/etc/passwd</filename> file and run a brute force attack
 (i.e. run an automated test of all possible password combinations)
 against it to try to determine passwords.
+-->
+与えられた優先順位に従って、シャドウパスワードを使うかどうか尋ねられる
+かもしれません。シャドウパスワードは、Linux システムのセキュリティを
+ある程度強化してくれる仕組みです。シャドウパスワードなしのシステムでは、
+パスワードは (暗号化されてはいるものの) 全ユーザが読むことができる
+<filename>/etc/passwd</filename> ファイルに記録されています。
+このファイルには重要なユーザ情報、例えばユーザ ID とログイン名を
+対応づける情報などが納められているので、システムにログインできる人なら
+誰でも参照できないと困るからです。こうなっていると、誰かが
+<filename>/etc/passwd</filename> ファイルをひったくり、総当たり攻撃
+(すなわち、可能なすべてのパスワード文字列を自動的に検索する方法)
+によってそのファイルを調べ、パスワードを手に入れようとするかもしれません。
 
 </para><para>
 
+<!--
 If you have shadow passwords enabled, passwords are instead stored in
 <filename>/etc/shadow</filename>, which is readable and writable only
 by root, and readable by group shadow. Therefore, we recommend that
 you enable shadow passwords.
+-->
+シャドウパスワードを使用可能にすると、パスワードは
+<filename>/etc/shadow</filename> に納められます。
+このファイルを読み書きできるのは root アカウントだけで、
+読むことができるのも shadow グループに限られます。
+というわけで、シャドウパスワードを有効にすることをお勧めします。
 
 </para><para>
 
+<!--
 Reconfiguration of the shadow password system can be done at any time
 with the <command>shadowconfig</command> program.  After installation,
 see <filename>/usr/share/doc/passwd/README.debian.gz</filename> for
 more information.
+-->
+シャドウパスワード機構の再設定は、<command>shadowconfig</command> プログラムを
+実行すればいつでも可能です。詳しくは、インストール後に
+<filename>/usr/share/doc/passwd/README.debian.gz</filename> をお読みください。
 
 </para>
   </sect3>
 
   <sect3 id="base-config-root">
-  <title>Set the Root Password</title>
+  <title>root アカウントのパスワードを設定する</title>
 
 <para>
 
+<!--
 The <emphasis>root</emphasis> account is also called the
 <emphasis>super-user</emphasis>; it is a login that bypasses all
 security protection on your system. The root account should only be
 used to perform system administration, and only used for as short
 a time as possible.
+-->
+<emphasis>root (ルート)</emphasis> アカウントは
+<emphasis>スーパーユーザ</emphasis>と呼ばれることもあります。
+このアカウントは、システムのセキュリティ保護機構すべてを超越した権限を
+持つログイン名です。ルートアカウントはシステム管理をする時のみ、
+できるだけ短時間に限って使うべきです。
 
 </para><para>
 
+<!--
 Any password you create should contain at least 6 characters, and
 should contain both upper- and lower-case characters, as well as
 punctuation characters.  Take extra care when setting your root
 password, since it is such a powerful account.  Avoid dictionary
 words or use of any personal information which could be guessed.
+-->
+設定するパスワードは 6 文字以上で、大文字・小文字・記号を
+混ぜたものにしてください。これは root 以外のユーザのパスワードでも
+同じですが、root アカウントのような強力なアカウントのパスワード設定には、
+細心の注意を払ってください。辞書に載っているような単語や、
+推測されやすい個人的な情報の使用などは避けてください。
 
 </para><para>
 
+<!--
 If anyone ever tells you they need your root password, be extremely
 wary. You should normally never give your root account out, unless you
 are administering a machine with more than one system administrator.
+-->
+あなたの root アカウントのパスワードが必要だなどと誰かが言ってきても、
+絶対に油断しないでください。他のシステム管理者と協同でマシンを管理しているのでもない限り、
+通常は自分の root アカウントのパスワードを、絶対に人に知られてはいけません。
 
 </para>
   </sect3>
 
   <sect3 id="make-normal-user">
-  <title>Create an Ordinary User</title>
+  <title>一般ユーザの登録</title>
 
 <para>
 
+<!--
 The system will ask you whether you wish to create an ordinary user
 account at this point.  This account should be your main personal
 log-in.  You should <emphasis>not</emphasis> use the root account for
 daily use or as your personal login.
+-->
+システムは一般ユーザのアカウントを作るよう求めてきます。
+こちらを、個人的なログインに用いるアカウントとして主に使ってください。
+root アカウントを通常の利用や個人的なログインに使っては<emphasis>いけません</emphasis>。
 
 </para><para>
 
+<!--
 Why not?  Well, one reason to avoid using root's privileges is that it
 is very easy to do irreparable damage as root.  Another reason is that
 you might be tricked into running a <emphasis>Trojan-horse</emphasis>
@@ -85,27 +137,53 @@ program &mdash; that is a program that takes advantage of your
 super-user powers to compromise the security of your system behind
 your back. Any good book on Unix system administration will cover this
 topic in more detail &mdash; consider reading one if it is new to you.
+-->
+なぜいけないのでしょうか? root 権限の利用を避ける理由のひとつは、
+root を使うと簡単にシステムに回復不能のダメージを与えることができてしまう
+ということです。また別の理由としては、誰かが仕掛けた<emphasis>トロイの木馬</emphasis>
+プログラム (これはあなたのスーパーユーザ権限を悪用してシステム全体の
+セキュリティをぼろぼろにしてしまいます) をうっかり実行してしまうかもしれないからです。
+Unix のシステム管理についての良書では、この話題についてより詳しく解説していますので、
+この話が初耳だという方はそういった本を読んでみてください。
 
 </para><para>
 
+<!--
 Name the user account anything you like.  If your name is John Smith,
 you might use <userinput>smith</userinput>,
 <userinput>john</userinput>, <userinput>jsmith</userinput> or
 <userinput>js</userinput>.  You will also be prompted for the full
 name of the user, and, like before, a password.
+-->
+ユーザアカウント名はお好きなものをつけてください。例えばあなたの
+名前が John Smith だとすると、新アカウント名としては <userinput>smith</userinput>、
+<userinput>john</userinput>、<userinput>jsmith</userinput>、
+<userinput>js</userinput> などが考えられます。
+さらに、ユーザのフルネームやパスワードなども尋ねられます。
 
 </para><para>
 
+<!--
 If at any point after installation you would like to create another
 account, use the <command>adduser</command> command.
+-->
+インストール後に新たなユーザアカウントを作成したい場合は、
+<command>adduser</command> コマンドを使ってください。
 
 </para><para arch="s390">
 
+<!--
 You need to create a user account on &arch-title; if you want to login
 over the network using telnet. The telnet server does not allow root
 logins in Debian's default configuration. However, you can use ssh
 (Secure SHell) to remotely login as root but this is not
 recommended.
+-->
+telnet を用いてネットワーク越しにログインしたい場合、&arch-title; では
+ユーザアカウントを作成する必要があります。Debian のデフォルトの設定では、
+telnet サーバは root でのログインを許可していません。ssh
+(Secure SHell) を使えばリモートから root でログインできますが、
+これはお勧めしません。
 
 </para>
   </sect3>

@@ -1,17 +1,34 @@
+<?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
 <!-- $Id$ -->
+<!-- original version: 14033 -->
 
 <chapter id="boot-new">
+<!--
  <title>Booting Into Your New Debian System</title>
+-->
+ <title>新しい Debian システムを起動させる</title>
 
+<!--
  <sect1><title>Make System Bootable</title>
+-->
+ <sect1><title>システムを起動可能にする</title>
 <para>
 
+<!--
 Note that multiple operating systems booting on a single machine is
 still something of a black art.  This document does not even attempt
 to document the various boot managers, which vary by architecture and
 even by subarchitecture.   You should see your boot manager's
 documentation for more information.
+-->
+複数のオペレーティングシステムを 1 つのマシン上で起動するのは、
+今でもなお黒魔術のようなものです。
+この文書では、さまざまなブートマネージャに関する説明はしません。
+ブートマネージャの動作は、
+アーキテクチャによって (あるいはサブアーキテクチャによっても) 千差万別だからです。
+より詳細な情報については、
+お使いになるブートマネージャのドキュメントを読んでください。
 
 </para>
 
@@ -25,65 +42,59 @@ documentation for more information.
 &bootloader-arm.xml;
 &bootloader-mipsel.xml;
 
+<!--
   <sect2 condition="supports-nfsroot"><title>Diskless Workstations</title>
+-->
+  <sect2 condition="supports-nfsroot"><title>ディスクレスワークステーション</title>
 <para>
 
+<!--
 If you are installing a diskless workstation, obviously, booting off
 the local disk isn't a meaningful option, and this step will be
 skipped. <phrase arch="sparc">You may wish to set the OpenBoot to boot
 from the network by default; see <xref
 linkend="boot-dev-select-sun"/>.</phrase>
+-->
+ディスクレスワークステーションにインストールしている場合は、
+ローカルディスクからの起動は明らかに無意味ですから、この作業段階は
+飛ばされるでしょう。<phrase arch="sparc">なお、デフォルトでネットワークから
+起動するように OpenBoot を設定したい場合には、<xref
+linkend="boot-dev-select-sun"/> をご覧ください。</phrase>
 
 </para>
 
   </sect2>
 </sect1>
 
- <sect1 id="make-boot-floppy"><title>Making a Boot Floppy</title>
-<para>
-
-You may wish to make a boot floppy even if you intend to boot the
-system from the hard disk. The reason for this is that it's possible
-for the hard disk bootstrap to be mis-installed, but a boot floppy
-will almost always work.
-
-</para><para>
-
-Feed the system a blank floppy as directed. Make sure the floppy isn't
-write-protected, as the software will format and write it. Mark this
-the <quote>Custom Boot</quote> floppy and write-protect it once it has
-been written.
-
-</para><para>
-
-This floppy will contain a kernel and a simple file system, with a
-directive to use your new root file system.
-
-</para><para arch="alpha">
-
-Unfortunately, a boot floppy can only be made for SRM systems, since
-<command>MILO</command> won't fit together with a kernel on a single
-floppy.
-
-</para>
- </sect1>
-
-
+<!--
  <sect1 id="base-boot"><title>The Moment of Truth</title>
+-->
+ <sect1 id="base-boot"><title>決着のとき</title>
 <para>
 
-You system's first boot on its own power is what electrical engineers
+<!--
+Your system's first boot on its own power is what electrical engineers
 call the <quote>smoke test</quote>.
+-->
+新しいシステムが初めて自力で起動することを、
+電気を扱うエンジニアは<quote>スモークテスト</quote>と呼んでいます。
 
 </para><para arch="s390">
 
+<!--
 Select the ``Reboot the System'' menu item which will halt the system
 because rebooting is not supported on &arch-title; in this case. You
 then need to IPL GNU/Linux from the DASD which you selected for the
 root filesystem during the first steps of the installation.
+-->
+``Reboot the System'' メニューを選択し、システムを停止させてください。
+この場合、&arch-title; では再起動がサポートされていないからです。
+インストールの最初にルートファイルシステムとして選択した DASD から
+GNU/Linux を IPL してください。
 
 </para><para>
 
+<!--
 If you are booting directly into Debian, and the system doesn't start
 up, either use your original installation boot media (for instance,
 the rescue floppy), or insert the custom boot floppy if you created
@@ -94,20 +105,41 @@ you need to specify
 <userinput>rescue root=<replaceable>root</replaceable></userinput>,
 where <replaceable>root</replaceable> is your root partition, such as
 <filename>/dev/sda1</filename>.
+-->
+Debian を直接起動するようにしていてシステムが立ち上がらない場合には、
+インストールに使った起動メディア (例えば rescue フロッピー)、あるいは
+(作ってあれば) カスタムブートフロッピーを
+挿入してシステムを再起動してください。
+カスタムブートフロッピーを<emphasis>使わなかった</emphasis>場合は、
+おそらくブートパラメータになんらかの引数を渡す必要があるでしょう。
+例えば rescue フロッピーなどから起動する場合は、
+<userinput>rescue root=<replaceable>root</replaceable></userinput> と指定する必要があります。
+<replaceable>root</replaceable> の箇所には、お使いになるルートパーティション
+(<filename>/dev/sda1</filename> など) を入れてください。
 
 </para>
 
+<!--
   <sect2 arch="m68k"><title>VME6000 Booting</title>
+-->
+  <sect2 arch="m68k"><title>VME6000 の起動</title>
 <para>
 
+<!--
 If you have just performed a diskless install on a BVM or Motorola
 VMEbus machine: once the system has loaded the
 <command>tftplilo</command> program from the TFTP server, from the
 <prompt>LILO Boot:</prompt> prompt enter one of:
+-->
+BVM マシンや Motorola VMEbus マシンでディスクレスインストール
+をした場合、システムは TFTP サーバから
+<command>tftplilo</command> プログラムをロードするので、その後に
+<prompt>LILO Boot:</prompt> プロンプトから以下のいずれかを入力してください。
 
 <itemizedlist>
 <listitem><para>
 
+<!--
 <userinput>b6000</userinput> followed by &enterkey;
 to boot a BVME4000/6000
 
@@ -120,6 +152,19 @@ to boot an MVME162
 
 <userinput>b167</userinput> followed by &enterkey;
 to boot an MVME166/167
+-->
+<userinput>b6000</userinput> に続けて &enterkey;
+を押して BVME4000/6000 を起動する
+
+</para></listitem><listitem><para>
+
+<userinput>b162</userinput> に続けて &enterkey;
+を押して MVME162 を起動する
+
+</para></listitem><listitem><para>
+
+<userinput>b167</userinput> に続けて &enterkey;
+を押して MVME166/167 を起動する押す
 
 </para></listitem>
 </itemizedlist>
@@ -128,10 +173,14 @@ to boot an MVME166/167
 
    </sect2>
 
+<!--
   <sect2 arch="m68k"><title>Macintosh Booting</title>
+-->
+  <sect2 arch="m68k"><title>Macintosh の起動</title>
 
 <para>
 
+<!--
 Go to the directory containing the installation files and start up the
 <command>Penguin</command> booter, holding down the
 <keycap>command</keycap> key.  Go to the
@@ -139,9 +188,18 @@ Go to the directory containing the installation files and start up the
 <keycap>command</keycap> <keycap>T</keycap> </keycombo>), and locate
 the kernel options line which should look like
 <userinput>root=/dev/ram video=font:VGA8x16</userinput> or similar.
+-->
+インストールファイルが格納されているディレクトリに移動し、
+<keycap>command</keycap> キーを押しながら
+<command>Penguin</command> ブータを実行してください。
+<userinput>Settings</userinput> ダイアログに移動し (<keycombo>
+<keycap>command</keycap> <keycap>T</keycap> </keycombo>)、
+<userinput>root=/dev/ram video=font:VGA8x16</userinput> のような
+カーネルオプションを入力してください。
 
 </para><para>
 
+<!--
 You need to change the entry to
 <userinput>root=/dev/<replaceable>yyyy</replaceable></userinput>.
 Replace the <replaceable>yyyy</replaceable> with the Linux name of the
@@ -152,25 +210,52 @@ for users with tiny screens. The kernel would pick a prettier (6x11)
 font but the console driver for this font can hang the machine, so
 using 8x16 or 8x8 is safer at this stage.  You can change this at any
 time.
+-->
+<userinput>root=/dev/<replaceable>yyyy</replaceable></userinput> の
+<replaceable>yyyy</replaceable> 部分を変更しなければなりません。
+ここには、システムをインストールしたパーティションの (Linux から見た) 名前を入れます
+(例: <filename>/dev/sda1</filename>)。これは以前にも入力したはずです。
+小さな画面をお使いの方には、<userinput>video=font:VGA8x8</userinput> をお勧めします。
+カーネルは小さな (6x11) フォントを選択しますが、このフォントでは
+コンソールドライバがマシンをハングアップさせることがあるので、
+この段階では 8x16 または 8x8 を使うのが安全です。これはいつでも
+変更できます。
 
 </para><para>
 
+<!--
 If you don't want to start GNU/Linux immediately each time you start,
 uncheck the <userinput>Auto Boot</userinput> option. Save your
 settings in the <filename>Prefs</filename> file using the
 <userinput>Save Settings As Default</userinput> option.
+-->
+起動のたびに GNU/Linux をすぐにスタートさせたくない場合は、
+<userinput>Auto Boot</userinput> オプションを無効にしてください。
+<userinput>Save Settings As Default</userinput> オプションを用いて
+設定を <filename>Prefs</filename> ファイルにセーブしてください。
 
 </para><para>
 
+<!--
 Now select <userinput>Boot Now</userinput> (<keycombo>
 <keycap>command</keycap> <keycap>B</keycap> </keycombo>) to start your
 freshly installed GNU/Linux instead of the RAMdisk installer system.
+-->
+では <userinput>Boot Now</userinput> (<keycombo>
+<keycap>command</keycap> <keycap>B</keycap> </keycombo>) を選択し、
+RAM ディスクのインストーラシステムではなく、
+インストールしたての GNU/Linux を起動させましょう。
 
 </para><para>
 
+<!--
 Debian should boot, and you should see the same messages as
 when you first booted the installation system, followed by some new
 messages. 
+-->
+今度はうまく Debian が起動するはずです。
+画面には初めてインストーラを起動した時と同じメッセージが表示
+され、今回はその後さらに新しいメッセージが続きます。
 
 </para>
 
@@ -178,10 +263,14 @@ messages.
  </sect1>
 
  <sect1 id="base-config">
+<!--
  <title>Debian Post-Boot (Base) Configuration</title>
+-->
+ <title>Debian 起動後の (基本) 設定</title>
 
 <para>
 
+<!--
 After booting, you will be prompted to complete the configuration of
 your basic system, and then to select what additional packages you
 wish to install.  The application which guides you through this
@@ -191,12 +280,27 @@ very similar to the &d-i; from the first stage.  Indeed,
 components, where each component handles one configuration task,
 contains <quote>hidden menu in the background</quote> and also uses
 the same navigation system.
+-->
+起動したら、基本システムの設定を完了させ、追加インストールしたい
+パッケージを選択するように求められます。
+この作業であなたを案内するのは、
+<classname>base-config</classname> というアプリケーションです。
+そのコンセプトは、最初のステージから &d-i にとても良く似ています。
+<classname>base-config</classname> は、本当にたくさんの専門コンポーネント
+からなります。各コンポーネントは 1 つの設定タスクを取り扱い、
+<quote>バックグラウンドの隠されたメニュー</quote>を含み、
+そのうえ同じ運行システムを使います。
 
 </para><para>
 
+<!--
 If you wish to re-run the <classname>base-config</classname> at any
 point after installation is complete, as root run
 <userinput>base-config</userinput>.
+-->
+インストールが終了した後なら、
+root ユーザで <userinput>base-config</userinput> を実行すれば、
+いつでも <classname>base-config</classname> をやり直せます。
 
 </para>
 
@@ -211,34 +315,61 @@ point after installation is complete, as root run
  </sect1>
 
  <sect1 id="login">
+<!--
  <title>Log In</title>
+-->
+ <title>ログイン</title>
 
 <para>
 
+<!--
 After you've installed packages, you'll be presented with the login
 prompt.  Log in using the personal login and password you
 selected. Your system is now ready to use.
+-->
+パッケージのインストールが完了すると、ログインプロンプトが現れます。
+あなたが指定した一般ユーザのアカウント名とパスワードを入力して、
+ログインしてください。これで、システムは準備完了です。
 
 </para><para>
 
+<!--
 If you are a new user, you may want to explore the documentation which
 is already installed on your system as you start to use it. There are
 currently several documentation systems, work is proceeding on
 integrating the different types of documentation. Here are a few
 starting points.
+-->
+初心者のユーザは、システムを使い始めながら、
+すでにインストールされている文書を読んでみると良いでしょう。
+現在はまだ文書システムが数種類存在しており、別々の形式の文書を
+統合するための作業が進められているところです。以下に
+出発点をいくつか示します。
 
 </para><para>
 
+<!--
 Documentation accompanying programs you have installed is in
 <filename>/usr/share/doc/</filename>, under a subdirectory named after
 the program.  For example, the APT User's Guide for using
 <command>apt</command> to install other programs on your system, is
 located in
 <filename>/usr/share/doc/apt/guide.html/index.html</filename>.
+-->
+インストールしたプログラムに添付する文書は、
+<filename>/usr/share/doc/</filename> 以下の
+プログラム名のサブディレクトリに収められています。
+たとえば
+<command>apt</command> を使って
+システムへプログラムをインストールする際に参考になる
+APT User's Guide は、
+<filename>/usr/share/doc/apt/guide.html/index.html</filename>
+となります。
 
 </para><para>
 
  
+<!--
 In addition, there are some special folders within the
 <filename>/usr/share/doc/</filename> hierarchy. Linux HOWTOs are
 installed in <emphasis>.gz</emphasis> format, in
@@ -247,33 +378,66 @@ installed in <emphasis>.gz</emphasis> format, in
 <filename>/usr/share/doc/HTML/index.html</filename> contains
 browse-able indexes of documentation installed by
 <command>dhelp</command>.
+-->
+また、<filename>/usr/share/doc/</filename> 階層構造の中には、
+いくつか特別なフォルダがあります。Linux HOWTO は、
+<filename>/usr/share/doc/HOWTO/en-txt/</filename> と
+<filename>/usr/share/doc/HOWTO/en-txt/mini/</filename> の中に、
+<emphasis>.gz</emphasis> フォーマットで収められています。
+<filename>/usr/share/doc/HTML/index.html</filename> には、
+<command>dhelp</command> によってインストールされる
+文書のインデックスが含まれています。
 
 </para><para>
 
+<!--
 One easy way to view these documents is to <userinput>cd
 /usr/share/doc/</userinput>, and type <userinput>lynx</userinput>
 followed by a space and a dot (the dot stands for the current
 directory).
+-->
+これらの文書を簡単に見るには、<userinput>cd /usr/share/doc/</userinput>
+と入力し、<userinput>lynx .</userinput>
+(lynx スペース ドット。ドットはカレントディレクトリを表します)
+と入力してください。
 
 </para><para>
 
+<!--
 You can also type <userinput>info
 <replaceable>command</replaceable></userinput> or <userinput>man
 <replaceable>command</replaceable></userinput> to see documentation on
 most commands available at the command prompt. Typing
 <userinput>help</userinput> will display help on shell commands. And
-typing a command followed by <userinput>--help</userinput> will
+typing a command followed by <userinput>-\-help</userinput> will
 usually display a short summary of the command's usage. If a command's
 results scroll past the top of the screen, type <userinput>|
 more</userinput> after the command to cause the results to pause
 before scrolling past the top of the screen. To see a list of all
 commands available which begin with a certain letter, type the letter
 and then two tabs.
+-->
+また、コマンドプロンプトから使えるほとんどのコマンドに対し、
+<userinput>info <replaceable>コマンド</replaceable></userinput> または
+<userinput>man <replaceable>コマンド</replaceable></userinput> によって
+その文書が参照できます。
+<userinput>help</userinput> と入力すると、シェルコマンドのヘルプが
+読めます。コマンドを <userinput>--help</userinput> つきで入力すると、
+たいていそのコマンドの簡単な使い方が表示されます。
+その結果が画面からスクロールして消えてしまう場合には、
+コマンドのあとに <userinput>| more</userinput> を追加すると、
+画面ごとに一時停止してくれます。ある文字で始まるコマンドの
+一覧を知りたいときは、その文字を入力してからタブを 2 回押します。
 
 </para><para>
 
+<!--
 For a more complete introduction to Debian and GNU/Linux, see
 <filename>/usr/share/doc/debian-guide/html/noframes/index.html</filename>.
+-->
+Debian と GNU/Linux についてのより完全な導入文書としては、
+<filename>/usr/share/doc/debian-guide/html/noframes/index.html</filename>
+をご覧ください。
 
 </para>
 
