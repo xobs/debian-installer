@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 23061 -->
+<!-- original version: 24663  -->
 <!-- actualizado por rudy, 5 diciembre 2004 -->
 
   <sect2 arch="i386"><title>Arranque desde un CD-ROM</title>
@@ -88,9 +88,7 @@ elija la opción «safe mode command prompt only»). Entre en el subdirectorio
 para la variante que elija, p. ej.:
 
 <informalexample><screen>
-
 cd c:\install
-
 </screen></informalexample>.  
 
 Seguidamente, ejecute <command>install.bat</command>.
@@ -159,13 +157,11 @@ su partición raíz.
 </para><para>
 
 <informalexample><screen>
-
 image=/boot/newinstall/vmlinuz
        label=newinstall
        initrd=/boot/newinstall/initrd.gz
        root=/dev/ram0
        append="devfs=mount,dall ramdisk_size=17000"
-
 </screen></informalexample>
 
 Para más detalles, vea las páginas de manual de 
@@ -183,15 +179,18 @@ El procedimiento para <command>GRUB</command> es bastante similar. Localice su
 siguientes líneas:
 
 <informalexample><screen>
-
 title  Nueva instalacion
-kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram0 devfs=mount,dall ramdisk_size=17000
+kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram0 ramdisk_size=17000
 initrd (hd0,0)/boot/newinstall/initrd.gz
-
 </screen></informalexample>
 
-y reinicie. Tenga en cuenta que el valor de <userinput>ramdisksize</userinput>
-podría necesitar ajustarse al tamaño de la imagen initrd.
+y reinicie. Si falla el arranque puede intentar añadir
+<userinput>devfs=mount,dall</userinput> a la línea <quote>kernel</quote>.
+
+</para><para>
+Tenga en cuenta que puede tener que ajustar el valor de 
+<userinput>ramdisksize</userinput>
+en función del tamaño de la imagen initrd.
 Desde este momento en adelante, no habrá diferencia entre 
 <command>GRUB</command> o <command>LILO</command>.
 
@@ -420,7 +419,7 @@ una de los portátiles Dell mencionados anteriormente, deberá
 ingresar <userinput>exclude port 0x800-0x8ff</userinput>.
 También existe una lista de opciones comunes de rango de recursos
 en la <ulink
-url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-2.html#ss2.5">
+url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-1.html#ss1.12">
 sección de configuración de sistema del CÓMO de PCMCIA</ulink>. Note que
 debe omitir las comas, si fuera el caso, cuando ingrese este valor
 en el instalador.

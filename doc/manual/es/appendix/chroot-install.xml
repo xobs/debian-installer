@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 23059 -->
+<!-- original version: 24677 -->
 <!-- revisado jfs, 21 noviembre 2004 -->
 
  <sect1 id="linux-upgrade">
@@ -47,9 +47,7 @@ para crear un sistema de ficheros ext3 en la partición
 <filename>/dev/hda6</filename> (es nuestra partición raíz de ejemplo):
 
 <informalexample><screen>
-
- $ mke2fs -j /dev/hda6
-
+# mke2fs -j /dev/hda6
 </screen></informalexample>
 
 En cambio para crear un sistema de ficheros ext2, omita <userinput>-j</userinput>.
@@ -60,14 +58,10 @@ Inicialice y active la partición de intercambio (sustituya el número de
 partición por la partición de intercambio de Debian que vaya a utilizar):
 
 <informalexample><screen>
-
- $ mkswap /dev/hda5
- $ sync; sync; sync
- $ swapon /dev/hda5
-
+# mkswap /dev/hda5
+# sync; sync; sync
+# swapon /dev/hda5
 </screen></informalexample>
-
-</para><para>
 
 Monte una partición como <filename>/mnt/debinst</filename> (el punto
 de instalación, que será el sistema de ficheros raíz 
@@ -76,10 +70,8 @@ montaje es estrictamente arbitrario, pero se utilizará este mismo
 nombre más adelante.
 
 <informalexample><screen>
-
- $ mkdir /mnt/debinst
- $ mount /dev/hda6 /mnt/debinst
-
+# mkdir /mnt/debinst
+# mount /dev/hda6 /mnt/debinst
 </screen></informalexample>
 
 </para>
@@ -108,12 +100,9 @@ O bien, puede usar el siguiente procedimiento para instalarlo manualmente.
 Cree un directorio temporal «trabajo» para extraer el .deb en él:
 
 <informalexample><screen>
-
- $ mkdir trabajo
- $ cd trabajo
-
+# mkdir trabajo
+# cd trabajo
 </screen></informalexample>
-</para><para>
 
 El binario de <command>debootstrap</command> se encuentra en el archivo de
 Debian (asegúrese de elegir el fichero adecuado para su arquitectura).
@@ -124,11 +113,9 @@ ficheros binarios de éste. Necesitará privilegios de superusuario para
 instalar los binarios.
 
 <informalexample><screen>
-
- $ tar -xf debootstrap_0.X.X_arch.deb
- $ cd /
- $ zcat &#60; /ruta-completa-hasta-trabajo/trabajo/data.tar.gz | tar xv
-
+# tar -xf debootstrap_0.X.X_arch.deb
+# cd /
+# zcat /ruta-completa-hasta-trabajo/trabajo/data.tar.gz | tar xv
 </screen></informalexample>
 
 </para>
@@ -172,28 +159,22 @@ función de su arquitectura:
 <userinput>sparc</userinput>.
 
 <informalexample><screen>
-
- $ /usr/sbin/debootstrap --arch ARQ &releasename; \
+# /usr/sbin/debootstrap --arch ARQ &releasename; \
      /mnt/debinst http://http.us.debian.org/debian
-
 </screen></informalexample>
 
 </para>
-
   </sect2>
 
   <sect2>
   <title>Configurar el sistema base</title>
-
 <para>
 
 Ahora tiene instalado un sistema Debian, aunque algo limitado, en
 su disco. Ejecute la orden <command>chroot</command> en él:
 
 <informalexample><screen>
-
- $ chroot /mnt/debinst /bin/bash
-
+# chroot /mnt/debinst /bin/bash
 </screen></informalexample>
 </para>
 
@@ -204,17 +185,12 @@ su disco. Ejecute la orden <command>chroot</command> en él:
 Necesita crear <filename>/etc/fstab</filename>.
 
 <informalexample><screen>
-
- # editor /etc/fstab
-
+# editor /etc/fstab
 </screen></informalexample>
-
-</para><para>
 
 Este es un ejemplo que puede modificar a sus necesidades:
 
 <informalexample><screen>
-
 # /etc/fstab: información estática de sistema de ficheros.
 #
 # file system    mount point   type    options                  dump pass
@@ -231,22 +207,15 @@ proc             /proc         proc    defaults                 0    0
 /dev/XXX         /var          ext2    rw,nosuid,nodev          0    2
 /dev/XXX         /usr          ext2    rw,nodev                 0    2
 /dev/XXX         /home         ext2    rw,nosuid,nodev          0    2
-
 </screen></informalexample>
-
-</para><para>
 
 Utilice <userinput>mount -a</userinput> para montar todos los sistemas de 
 ficheros que ha especificado en <filename>/etc/fstab</filename> o
 móntelos individualmente usando:
 
 <informalexample><screen>
-
- # mount /ruta  # por ej.:  mount /usr
-
+# mount /ruta  # por ej.:  mount /usr
 </screen></informalexample>
-
-</para><para>
 
 Puede montar el sistema de ficheros «proc» tantas veces como quiera y
 en cualquier ubicación, aunque la ubicación habitual es /proc.
@@ -255,26 +224,20 @@ Asegúrese de montar proc antes de continuar si no usa <userinput>mount
 
 
 <informalexample><screen>
-
- # mount -t proc proc /proc
-
+# mount -t proc proc /proc
 </screen></informalexample>
 
 </para>
-
    </sect3>
 
    <sect3>
    <title>Configurar el teclado</title>
-
 <para>
 
 Para configurar el teclado ejecute:
 
 <informalexample><screen>
-
- # dpkg-reconfigure console-data
-
+# dpkg-reconfigure console-data
 </screen></informalexample>
 
 </para>
@@ -290,12 +253,8 @@ Para configurar la red, edite
 <filename>/etc/hostname</filename>.
 
 <informalexample><screen>
-
- # editor /etc/network/interfaces 
-
+# editor /etc/network/interfaces 
 </screen></informalexample>
-
-</para><para>
 
 Aquí hay algunos ejemplos sencillos que podrá encontrar en
 <filename>/usr/share/doc/ifupdown/examples</filename>:
@@ -329,41 +288,27 @@ iface lo inet loopback
 #     gateway 192.168.0.1
 </screen></informalexample>
 
-</para><para>
-
 Introduzca su servidor o servidores de nombres así como las
 directivas de búsqueda en
 <filename>/etc/resolv.conf</filename>:
 
 <informalexample><screen>
-
- # editor /etc/resolv.conf
-
+# editor /etc/resolv.conf
 </screen></informalexample>
-
-</para><para>
 
 Un <filename>/etc/resolv.conf</filename> sencillo sería:
 
 <informalexample><screen>
-
-# search hqdom.local\000
-# nameserver 10.1.1.36
-# nameserver 192.168.9.100
-
+search hqdom.local\000
+nameserver 10.1.1.36
+nameserver 192.168.9.100
 </screen></informalexample>
-
-</para><para>
 
 Escriba el nombre de máquina de su sistema (de 2 a 63 caracteres):
 
 <informalexample><screen>
-
- # echo MaquinaDebian &#62; /etc/hostname
-
+# echo MaquinaDebian &gt; /etc/hostname
 </screen></informalexample>
-
-</para><para>
 
 Si tiene múltiples tarjetas de red, debe añadir los nombres de los
 módulos de controlador en el fichero <filename>/etc/modules</filename>
@@ -375,17 +320,15 @@ asociada con el nombre de la interfaz (eth0, eth1, etc.) que vd. haya indicado.
 
    <sect3>
    <title>Configurar zona horaria, usuarios y APT</title>
-
 <para>
 
 Configure su zona horaria, añada un usuario común y elija sus fuentes
 <command>apt</command> ejecutando
 
 <informalexample><screen>
-
- # /usr/sbin/base-config
-
+# /usr/sbin/base-config
 </screen></informalexample>
+
 </para>
    </sect3>
 
@@ -394,15 +337,13 @@ Configure su zona horaria, añada un usuario común y elija sus fuentes
 <para>
 
 Instale el paquete de soporte a locales y configúrelo para poder
-configurar los valores de localización para usar un idioma diferente
+definir los valores de localización para usar un idioma diferente
 al inglés:
 
 
 <informalexample><screen>
-
- # apt-get install locales
- # dpkg-reconfigure locales
-
+# apt-get install locales
+# dpkg-reconfigure locales
 </screen></informalexample>
 
 NOTA: Debe haber configurado antes Apt, durante la fase base-config.
@@ -416,7 +357,6 @@ latin1.
 
   <sect2>
   <title>Instalar un núcleo</title>
-
 <para>
 
 Si intenta arrancar este sistema, probablemente querrá un núcleo Linux
@@ -424,19 +364,13 @@ y un gestor de arranque. Identifique los núcleos pre-empaquetados
 disponibles con
 
 <informalexample><screen>
-
- # apt-cache search kernel-image
-
+# apt-cache search kernel-image
 </screen></informalexample>
-
-</para><para>
 
 Luego instale su elección usando el nombre del paquete.
 
 <informalexample><screen>
-
- # apt-get install kernel-image-2.X.X-arquitectura-etc
-
+# apt-get install kernel-image-2.X.X-arquitectura-etc
 </screen></informalexample>
 
 </para>
@@ -468,7 +402,6 @@ relativo al sistema desde el cual lo ejecute).
 Aquí tiene un ejemplo básico de /etc/lilo.conf:
 
 <informalexample><screen>
-
 boot=/dev/hda6
 root=/dev/hda6
 install=/boot/boot-menu.b
@@ -476,7 +409,6 @@ delay=20
 lba32
 image=/vmlinuz
 label=Debian
-
 </screen></informalexample>
 
 </para><para arch="powerpc">
@@ -495,7 +427,6 @@ relativo al sistema desde el cual lo ejecute).
 Aquí tiene un ejempo básico de <filename>/etc/yaboot.conf</filename>:
 
 <informalexample><screen>
-
 boot=/dev/hda2
 device=hd:
 partition=6
@@ -504,7 +435,6 @@ magicboot=/usr/lib/yaboot/ofboot
 timeout=50
 image=/vmlinux
 label=Debian
-
 </screen></informalexample>
 
 Puede que tenga que utilizar <userinput>ide0:</userinput> 

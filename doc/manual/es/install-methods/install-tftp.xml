@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 23213 -->
+<!-- original version: 24663 -->
 <!-- revisado por nahoo, 1 noviembre 2004 -->
 
  <sect1 condition="supports-tftp" id="install-tftp">
@@ -91,9 +91,7 @@ añadiendo a <filename>/etc/inetd.conf</filename> algo
 similar a lo siguiente:
 
 <informalexample><screen>
-
 tftp dgram udp wait nobody /usr/sbin/tcpd in.tftpd /tftpboot
-
 </screen></informalexample>
 
 Los paquetes de Debian cuando se instalan, por lo general, lo configuran
@@ -127,9 +125,7 @@ Si pretende instalar Debian en una máquina SGI y su servidor TFTP es una máquina
 GNU/Linux ejecutando Linux 2.4 necesitará configurar lo siguiente en su servidor:
 
 <informalexample><screen>
-
-echo 1 > /proc/sys/net/ipv4/ip_no_pmtu_disc
-
+# echo 1 > /proc/sys/net/ipv4/ip_no_pmtu_disc
 </screen></informalexample>
 
 para desactivar el descubrimiento de ruta MTU, de otro modo el PROM
@@ -139,9 +135,7 @@ o la descarga se parará después del primer paquete. Nuevamente, es Linux
 2.4.x el que presenta este fallo en la PROM, y puede evitarlo configurando
 
 <informalexample><screen>
-
-echo "2048 32767" > /proc/sys/net/ipv4/ip_local_port_range
-
+# echo "2048 32767" > /proc/sys/net/ipv4/ip_local_port_range
 </screen></informalexample>
 
 para ajustar el rango de puertos origen que usa el servidor TFTP.
@@ -286,13 +280,10 @@ de su sistema es «SUN4C» y su IP es 192.168.1.3, el nombre del fichero
 será <filename>C0A80103.SUN4C</filename>. Una forma sencilla de determinarlo es
 usar la siguiente orden en una shell (asumiendo que la IP sea 10.0.0.4).
 
-</para>
-
 <informalexample><screen>
-printf '%.2x%.2x%.2x%.2x\n' 10 0 0 4
+$ printf '%.2x%.2x%.2x%.2x\n' 10 0 0 4
 </screen></informalexample>
 
-<para>
 Esto mostrará la IP en hexadecimal, para obtener el nombre correcto, necesita
 cambiar todas las letras a mayúsculas y añadir si es necesario el nombre de la
 subarquitectura.
@@ -383,10 +374,8 @@ Desempaquete el archivo raíz en su servidor NFS (puede ser el mismo
 sistema en el que reside su servidor TFTP):
 
 <informalexample><screen>
-
 # cd /tftpboot
 # tar xvzf root.tar.gz
-
 </screen></informalexample>
 
 Asegúrese de usar GNU <command>tar</command> (otros programas, como el de
@@ -401,12 +390,11 @@ línea a <filename>/etc/exports</filename> (sintaxis de GNU/Linux,
 debería ser similar para SunOS):
 
 <informalexample><screen>
-
-/tftpboot/debian-sparc-root cliente(rw,no_root_squash)
-
+/tftpboot/debian-sparc-root <replaceable>cliente</replaceable>(rw,no_root_squash)
 </screen></informalexample>
 
-NOTA: «cliente» es el nombre de máquina o dirección IP reconocida por
+NOTA: <replaceable>cliente</replaceable> es el nombre de máquina 
+o dirección IP reconocida por
 el servidor, para el sistema que esté arrancando.
 
 </para></listitem>
@@ -418,9 +406,7 @@ punteada a <filename>debian-sparc-root</filename> en el directorio
 cliente es 192.168.1.3, efectúe
 
 <informalexample><screen>
-
 # ln -s debian-sparc-root 192.168.1.3
-
 </screen></informalexample>
 
 </para></listitem>

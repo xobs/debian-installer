@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 22935 -->
+<!-- original version: 24677 -->
 <!-- revisado por nahoo, 7 noviembre 2004 -->
 
  <sect1 condition="bootable-usb" id="boot-usb-files">
@@ -25,7 +25,7 @@ Note, que el dispositivo USB, deberá tener por lo menos una capacidad de 128 MB
 
   <sect2 id="usb-copy-easy">
   <title>Copiado de los ficheros - la forma fácil</title>
-<para>
+<para arch="i386">
 
 Existe un fichero todo-en-uno <filename>hd-media/boot.img.gz</filename>
 que contiene todos los ficheros del instalador (incluyendo el núcleo)
@@ -33,9 +33,25 @@ así como <command>SYSLINUX</command> y su fichero de configuración.
 Sólo debe extraerlo directamente en el dispositivo USB:
 
 <informalexample><screen>
+# gzip -dc boot.img.gz &gt;/dev/<replaceable>sda</replaceable>
+</screen></informalexample>
 
-gzip -dc boot.img.gz >/dev/<replaceable>sda</replaceable>
+Obviamente destruirá todo lo que haya en el dispositivo, así
+que tenga cuidado y use el nombre de dispositivo correcto para
+su dispositivo USB.
 
+</para><para arch="powerpc">
+
+Existe un fichero todo-en-uno <filename>hd-media/boot.img.gz</filename>
+que contiene todos los ficheros del instalador (incluyendo el núcleo)
+así como <command>yaboot</command> y su fichero de configuración.
+Cree una partición del tipo «Apple_Bootstrap» en su dispositivo
+USB utilizando la orden
+<command>mac-fdisk</command>'s <userinput>C</userinput> y extraiga
+la imagen directamente a éste:
+
+<informalexample><screen>
+# zcat boot.img.gz &gt;/dev/<replaceable>sda2</replaceable>
 </screen></informalexample>
 
 Obviamente destruirá todo lo que haya en el dispositivo, así
@@ -44,9 +60,14 @@ su dispositivo USB.
 
 </para><para>
 
-Después, monte la memoria USB (<userinput>mount /dev/sda
-/mnt</userinput>), que ahora tendrá un sistema de ficheros FAT en ella,
-y copie una imagen ISO «netinst» o «bussinesscard» de Debian en ella.
+Después, monte la memoria USB (
+<replaceable arch="i386">/dev/sda</replaceable>
+<replaceable arch="powerpc">/dev/sda2</replaceable>
+/mnt</userinput>),
+que ahora tendrá un sistema de ficheros 
+<phrase arch="i386">FAT</phrase>
+<phrase arch="powerpc">HFS</phrase>
+en ella, y copie una imagen ISO «netinst» o «bussinesscard» de Debian en ella.
 Por favor, tenga en cuenta que el nombre del fichero debe terminar en 
 <filename>.iso</filename>. Desmonte el dispositivo USB
 (<userinput>umount /mnt</userinput>) y habrá terminado.
@@ -60,105 +81,16 @@ Por favor, tenga en cuenta que el nombre del fichero debe terminar en
 
 Si desea más flexibilidad o simplemente le gusta saber que ocurre,
 podría usar el siguiente método para colocar los ficheros en su
-dispositivo USB. Le mostraremos como configurar la memoria USB para usar
-la primera partición en lugar de todo el dispositivo.
+dispositivo USB. 
 
-</para><note><para>
+</para>
 
-Puesto de la mayoría de memorias USB vienen con una sola partición 
-FAT16 ya configurada, probablemente no tendrá que reparticionarlo o
-reformatearlo. Si aún así tiene que hacerlo, use
-<command>cfdisk</command> o cualquier otra herramienta de particionado
-para crear la partición FAT16 y luego escriba
+&usb-setup-i386.xml;
+&usb-setup-powerpc.xml;
 
-<informalexample><screen>
-
-mkdosfs /dev/<replaceable>sda1</replaceable>
-
-</screen></informalexample>
-
-Sea precavido y use el nombre de dispositivo correcto para su memoria 
-USB. La orden <command>mkdosfs</command> se encuentra en el paquete
-de Debian <classname>dosfstools</classname>.
-
-</para></note><para>
-
-Para iniciar el núcleo después de arrancar desde el dispositivo USB,
-necesitaremos colocar un gestor de arranque en él. Aunque cualquier
-gestor de arranque (como <command>LILO</command>) debería funcionar, es
-conveniente usar <command>SYSLINUX</command>, puesto que usa una 
-partición FAT16 y puede reconfigurarse con sólo editar un 
-fichero de texto. Puede usar cualquier sistema operativo que soporte el
-sistema de ficheros FAT para hacer cambios a la configuración del
-gestor de arranque.
-
-</para><para>
-
-Para poner <command>SYSLINUX</command> en la partición FAT16 de su dispositivo
-USB, instale los paquetes <classname>syslinux</classname> y
-<classname>mtools</classname> en su sistema, y escriba
-
-<informalexample><screen>
-
-syslinux /dev/<replaceable>sda1</replaceable>
-
-</screen></informalexample>
-
-Nuevamente, sea precavido al usar el nombre de dispositivo correcto. La
-partición no debe estar montada cuando se inicie  <command>SYSLINUX</command>.
-Este procedimiento escribe un sector de arranque en la partición y
-crea el fichero <filename>ldlinux.sys</filename> que contiene el código
-del gestor de arranque.
-
-</para><para>
-
-Monte la partición (<userinput>mount /dev/sda1 /mnt</userinput>) y
-copie los siguientes ficheros desde los archivos de Debian, en el 
-dispositivo USB:
-
-<itemizedlist>
-<listitem><para>
-
-<filename>vmlinuz</filename> (binario del núcleo)
-
-</para></listitem>
-<listitem><para>
-
-<filename>initrd.gz</filename> (imagen inicial de disco RAM)
-
-</para></listitem>
-<listitem><para>
-
-<filename>syslinux.cfg</filename> (fichero de configuración de SYSLINUX)
-
-</para></listitem>
-<listitem><para>
-
-Módulos del núcleo opcionales
-
-</para></listitem>
-</itemizedlist>
-
-Si desea renombrar los ficheros, por favor, tenga en cuenta que 
-<command>SYSLINUX</command> sólo puede procesar nombres de ficheros DOS (8.3).
-
-</para><para>
-
-El fichero de configuración <filename>syslinux.cfg</filename> debe
-contener las dos líneas siguientes:
-
-<informalexample><screen>
-
-default vmlinuz
-append initrd=initrd.gz ramdisk_size=10000 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
-
-</screen></informalexample>
-
-Por favor, fíjese en que el parámetro <userinput>ramdisk_size</userinput> 
-podría necesitar ser incrementado, dependiendo de la imagen que esté
-arrancando.
-
-</para><para>
+   <sect3>
+   <title>Añadir una image ISO</title>
+<para>
 
 Ahora deberá poner cualquier imagen ISO de Debian («businesscard», «netinst» o
 incluso una completa) en su dispositivo (si cabe). El nombre de fichero para
@@ -177,7 +109,15 @@ en lugar del que se encuentra en <filename>hd-media</filename>, debido a que
 Cuando finalice, desmonte el dispositivo USB (<userinput>umount
 /mnt</userinput>) y active su protección de escritura.
 
-</para><warning><para>
+</para>
+
+   </sect3>
+
+   <!-- TODO: doesn't this section belong later? -->
+   <sect3 arch="i386">
+   <title>Arranque con la memoria USB</title>
+
+<warning><para>
 
 Si su sistema rechaza arrancar desde el dispositivo USB, éste podría
 contener un registro de arranque maestro (MBR) inválido. Para
@@ -185,11 +125,10 @@ corregirlo, use la orden <command>install-mbr</command> del
 paquete <classname>mbr</classname>:
 
 <informalexample><screen>
-
-install-mbr /dev/<replaceable>sda</replaceable>
-
+# install-mbr /dev/<replaceable>sda</replaceable>
 </screen></informalexample>
 
 </para></warning>
+   </sect3>
   </sect2>
  </sect1>
