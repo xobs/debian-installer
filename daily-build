@@ -29,10 +29,11 @@ for t in cdrom floppy; do
     cat dest/$t.log2
     cat dest/$t.log2 >> dest/$t.log
 done
+make all_stats > dest/stats.txt
 
 ssh $host mkdir $basedir/$dir
 ssh $host rm -f $basedir/daily
 ssh $host ln -sf $dir $basedir/daily
-scp tmp/cdrom/vmlinuz dest/*-image.img dest/*-initrd.gz dest/*.log $host:$basedir/$dir/
+scp tmp/cdrom/vmlinuz dest/*-image.img dest/*-initrd.gz dest/*.log dest/stats.txt $host:$basedir/$dir/
 
 make reallyclean
