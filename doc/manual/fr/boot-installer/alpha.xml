@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 11648 -->
+<!-- original version: 19466 -->
 
 
  <sect2 arch="alpha" id="alpha-firmware">
  <title>Le microprogramme Alpha Console</title>
 <para>
 
-Le microprogramme console est stocké dans une ROM flash et est
-      lancé lorsqu'un système Alpha est allumé ou remis à zéro. Il y a
-      deux sortes de spécifications utilisées sur les systèmes Alpha et
-      ainsi deux classes de microprogramme console disponibles&nbsp;:
+Le microprogramme pour la console est stocké dans une ROM flash. Il est
+lancé lorsqu'un système Alpha est allumé ou remis à zéro. Il y a deux sortes 
+de spécifications utilisées sur les systèmes Alpha et ainsi deux classes de 
+microprogramme console disponibles&nbsp;:
 
 </para>
 
@@ -17,9 +17,8 @@ Le microprogramme console est stocké dans une ROM flash et est
 <listitem><para>
 
 La <emphasis>console SRM</emphasis> basée sur une spécification du
-          sous-système console Alpha et qui fournit un environnement
-          opérationnel pour OpenVMS, Tru64 UNIX et les systèmes
-          d'exploitations de type Linux&nbsp;;
+sous-système console Alpha et qui fournit un environnement opérationnel pour 
+OpenVMS, Tru64 UNIX et les systèmes d'exploitations de type Linux&nbsp;;
 
 </para></listitem>
 <listitem><para>
@@ -34,48 +33,43 @@ Les <emphasis>consoles ARC, AlphaBIOS ou ARCSBIOS</emphasis>,
 
 <para>
 
-Du point de vue de l'utilisateur, la plus grosse différence
-      entre SRM et ARC est que le choix de la console induit le schéma
-      de partitionnement du disque sur lequel vous choisirez d'amorcer.
+Du point de vue de l'utilisateur, la plus grosse différence entre SRM et ARC 
+est que le choix de la console induit le schéma de partitionnement du disque 
+sur lequel vous choisirez d'amorcer.
 
 </para><para>
 
 ARC requiert l'utilisation d'une table de partition MS-DOS
-(créée par <command>cfdisk</command>) pour le disque
-      amorçable. Les tables de partition MS-DOS sont donc les formats
-      de partition «&nbsp;natifs&nbsp;» lorsque l'on amorce avec
-      ARC. En effet, depuis que AlphaBIOS contient un utilitaire de
-      partition de disque, il se peut que vous préfériez
-      partitionner vos disques depuis le menu du microprogramme avant
-      d'installer Linux.
+(créée par <command>cfdisk</command>) pour le disque amorçable. Les tables 
+des partitions MS-DOS sont donc les formats de partition «&nbsp;natifs&nbsp;» 
+lorsque l'on amorce avec ARC. En effet, depuis qu' AlphaBIOS contient un 
+partititionneur de disque, vous préférerez peut-être partitionner vos disques 
+depuis le menu du microprogramme avant d'installer Linux.
+</para>
+<para>
+
+Inversement, SRM est <emphasis>incompatible</emphasis> avec les tables des
+partitions MS-DOS
+<footnote><para>Précisément, le format du secteur d'amorçage requis par la 
+spécification du sous-système console entre en conflit avec le placement de 
+la table des partitions MS-DOS.</para></footnote>. 
+Depuis que Unix Tru64 utilise le format des disques BSD, c'est le format 
+«&nbsp;natif&nbsp;» des partitions pour les installations à partir de SRM.
 
 </para><para>
 
-Inversement, SRM est <emphasis>incompatible</emphasis> avec les tables de
-partition de MS-DOS
-<footnote><para>Précisément, le format du secteur
-      d'amorçage requis par la spécification du sous-système console
-      entre en conflit avec le placement de la table de partition
-      MS-DOS.</para></footnote>. Depuis que Unix Tru64 utilise le format
-      d'étiquette de disque BSD, c'est le format «&nbsp;natif&nbsp;»
-      de partition pour les installations à partir de SRM.
+Puisque GNU/Linux est le seul système d'exploitation sur Alpha qui peut être 
+amorcé à partir des deux types de console, le choix va aussi dépendre de quel 
+autre type de système d'exploitation vous souhaitez utiliser sur la même 
+machine. Tous les autres systèmes d'exploitation de type Unix (Unix Tru64,
+ FreeBSD, OpenBSD, NetBSD) et OpenVMS peuvent amorcer à partir de SRM alors 
+que Windows NT ne peut amorcer que depuis ARC.
 
 </para><para>
 
-Puisque GNU/Linux est le seul système d'exploitation sur Alpha
-      qui peut être amorcé à partir des deux types de console, le
-      choix va aussi dépendre de quel autre type de système
-      d'exploitation vous souhaitez utiliser sur la même machine. Tous
-      les autres systèmes d'exploitation de type Unix ((Unix Tru64,
-      FreeBSD, OpenBSD et NetBSD) et OpenVMS peuvent amorcer à partir
-      de SRM alors que Windows NT ne peut amorcer que depuis ARC.
-
-</para><para>
-
-Le tableau suivant résume les combinaisons type de
-système-console disponibles et supportés (cf.
-<xref linkend="alpha-cpus"/> pour les noms des types de système). Le mot
-      «&nbsp;ARC&nbsp;» ci-dessous désigne toute console compatible
+Le tableau suivant résume les combinaisons type de système-console 
+disponibles (cf. <xref linkend="alpha-cpus"/> pour les noms des types de 
+système). Le mot «&nbsp;ARC&nbsp;» ci-dessous désigne toute console compatible
       avec ARC.
 
 </para><para>
@@ -83,93 +77,93 @@ système-console disponibles et supportés (cf.
 <informaltable><tgroup cols="2">
 <thead>
 <row>
-  <entry>System Type</entry>
-  <entry>Console Type Supported</entry>
+  <entry>Système</entry>
+  <entry>Console acceptée</entry>
 </row>
 </thead>
 
 <tbody>
 <row>
   <entry>alcor</entry>
-  <entry>ARC or SRM</entry>
+  <entry>ARC ou SRM</entry>
 </row><row>
   <entry>avanti</entry>
-  <entry>ARC or SRM</entry>
+  <entry>ARC ou SRM</entry>
 </row><row>
   <entry>book1</entry>
-  <entry>SRM only</entry>
+  <entry>SRM</entry>
 </row><row>
   <entry>cabriolet</entry>
-  <entry>ARC or SRM</entry>
+  <entry>ARC ou SRM</entry>
 </row><row>
   <entry>dp264</entry>
-  <entry>SRM only</entry>
+  <entry>SRM</entry>
 </row><row>
   <entry>eb164</entry>
-  <entry>ARC or SRM</entry>
+  <entry>ARC ou SRM</entry>
 </row><row>
   <entry>eb64p</entry>
-  <entry>ARC or SRM</entry>
+  <entry>ARC ou SRM</entry>
 </row><row>
   <entry>eb66</entry>
-  <entry>ARC or SRM</entry>
+  <entry>ARC ou SRM</entry>
 </row><row>
   <entry>eb66p</entry>
-  <entry>ARC or SRM</entry>
+  <entry>ARC ou SRM</entry>
 </row><row>
   <entry>jensen</entry>
-  <entry>SRM only</entry>
+  <entry>SRM</entry>
 </row><row>
   <entry>lx164</entry>
-  <entry>ARC or SRM</entry>
+  <entry>ARC ou SRM</entry>
 </row><row>
   <entry>miata</entry>
-  <entry>ARC or SRM</entry>
+  <entry>ARC ou SRM</entry>
 </row><row>
   <entry>mikasa</entry>
-  <entry>ARC or SRM</entry>
+  <entry>ARC ou SRM</entry>
 </row><row>
   <entry>mikasa-p</entry>
-  <entry>SRM only</entry>
+  <entry>SRM</entry>
 </row><row>
   <entry>nautilus</entry>
-  <entry>ARC only (see motherboard manual)</entry>
+  <entry>ARC (voyez le manuel de la carte mère)</entry>
 </row><row>
   <entry>noname</entry>
-  <entry>ARC or SRM</entry>
+  <entry>ARC ou SRM</entry>
 </row><row>
   <entry>noritake</entry>
-  <entry>SRM only</entry>
+  <entry>SRM</entry>
 </row><row>
   <entry>noritake-p</entry>
-  <entry>SRM only</entry>
+  <entry>SRM</entry>
 </row><row>
   <entry>pc164</entry>
-  <entry>ARC or SRM</entry>
+  <entry>ARC ou SRM</entry>
 </row><row>
   <entry>rawhide</entry>
-  <entry>SRM only</entry>
+  <entry>SRM</entry>
 </row><row>
   <entry>ruffian</entry>
-  <entry>ARC only</entry>
+  <entry>ARC</entry>
 </row><row>
   <entry>sable</entry>
-  <entry>SRM only</entry>
+  <entry>SRM</entry>
 </row><row>
   <entry>sable-g</entry>
-  <entry>SRM only</entry>
+  <entry>SRM</entry>
 </row><row>
   <entry>sx164</entry>
-  <entry>ARC or SRM</entry>
+  <entry>ARC ou SRM</entry>
 </row><row>
   <entry>takara</entry>
-  <entry>ARC or SRM</entry>
+  <entry>ARC ou SRM</entry>
 </row><row>
   <entry>xl</entry>
-  <entry>ARC only</entry>
+  <entry>ARC</entry>
 </row><row>
   <entry>xlt</entry>
-  <entry>ARC or SRM</entry>
+  <entry>ARC ou SRM</entry>
 </row>
 
 </tbody>
@@ -178,37 +172,34 @@ système-console disponibles et supportés (cf.
 
 </para><para>
 
-D'une façon générale, aucune de ces consoles ne peut amorcer
-      Linux directement&nbsp;; il est donc nécessaire d'avoir recours
-      à un chargeur d'amorçage intermédiaire. Il en existe deux
-principaux pour Linux&nbsp;: <command>MILO</command> et
-<command>aboot</command>.
+D'une façon générale, aucune de ces consoles ne peut amorcer Linux 
+directement&nbsp;; il est donc nécessaire d'avoir recours à un programme 
+d'amorçage intermédiaire. Il en existe deux principaux pour Linux&nbsp;: 
+<command>MILO</command> et <command>aboot</command>.
 
 </para><para>
 
 <command>MILO</command> est lui-même une console, qui remplace ARC ou
-SRM en mémoire. <command>MILO</command> peut être amorcé à la fois par
-      ARC et SRM et c'est même la seule façon de démarrer Linux à
-      partir d'une console ARC. <command>MILO</command> est dépendant de la
-      plateforme (un programme différent de <command>MILO</command> est
-      nécessaire pour chaque système) et n'existe, pour le support
-      ARC, que pour les systèmes listés ci-dessus. Reportez-vous aussi
-au <ulink url="&url-milo-howto;">MILO HOWTO</ulink>, malheureusement
-      plus très à jour.
+SRM en mémoire. <command>MILO</command> peut être amorcé à la fois par ARC et 
+SRM et c'est même la seule façon de démarrer Linux à partir d'une console 
+ARC. <command>MILO</command> est dépendant de la plateforme (un programme 
+différent de <command>MILO</command> est nécessaire pour chaque système) et 
+n'existe, pour le support ARC, que pour les systèmes listés ci-dessus. 
+Reportez-vous aussi au <ulink url="&url-milo-howto;">MILO HOWTO</ulink>, 
+malheureusement plus très à jour.
 
 </para><para>
 
-<command>aboot</command> est un petit chargeur d'amorçage, indépendant
-      de la plateforme et qui fonctionne uniquement avec
-SRM. Reportez-vous au <ulink url="&url-srm-howto;">SRM HOWTO</ulink>
-      (malheureusement plus très à jour) pour obtenir plus
-      d'informations sur <command>aboot</command>.
+<command>aboot</command> est un petit programme d'amorçage, indépendant
+de la plateforme et qui fonctionne uniquement avec SRM. Reportez-vous au 
+<ulink url="&url-srm-howto;">SRM HOWTO</ulink> (hélas plus très à jour) pour 
+obtenir d'autres informations sur <command>aboot</command>.
 
 </para><para>
 
-Vous pouvez donc être confronté à trois types de scénario
-      possibles, selon le microprogramme de la console du système
-et selon que <command>MILO</command> est disponible ou non&nbsp;:
+Vous pouvez donc être confronté à trois types de scénario possibles, selon le 
+microprogramme de la console du système et selon que <command>MILO</command> 
+est disponible ou non&nbsp;:
 
 <informalexample><screen>
 
@@ -220,32 +211,30 @@ ARC -> MILO
 
 </para><para>
 
-La carte-mère UP1000 (nom de sous-architecture
-«&nbsp;nautilus&nbsp;») de <emphasis>Alpha Processor, Inc </emphasis>, est
-      différente de toutes les autres en ce sens qu'elle utilise un
-      chargeur d'amorçage qui utilise le microprogramme AlphaBIOS.
+La carte-mère UP1000 (nom de sous-architecture «&nbsp;nautilus&nbsp;») de 
+<emphasis>Alpha Processor, Inc </emphasis>, est différente de toutes les 
+autres en ce sens qu'elle utilise un programme d'amorçage qui utilise le 
+microprogramme AlphaBIOS.
 
 </para><para>
 
-Comme <command>MILO</command> n'est disponible pour aucun des systèmes
-      Alpha actuellement en production (jusqu'en février 2000) et
-      comme il n'est pas nécessaire d'acheter une licence OpenVMS ou
-      Unix Tru64 pour avoir le microprogramme sur votre vieil Alpha,
-      il est recommandé d'utiliser SRM et <command>aboot</command> pour une
-      nouvelle installation de GNU/Linux, à moins que vous ne
-      désiriez un amorçage double avec Windows NT.
+Comme <command>MILO</command> n'est disponible pour aucun des systèmes Alpha 
+actuellement en production (février 2000) et comme il n'est plus nécessaire 
+d'acheter une licence OpenVMS ou Unix Tru64 pour avoir le microprogramme sur 
+votre vieil Alpha, il est recommandé d'utiliser SRM et 
+<command>aboot</command> pour une nouvelle installation de GNU/Linux, à moins 
+que vous ne désiriez pouvoir amorcer aussi Windows NT.
 
 </para><para>
 
-La majorité des AlphaServer, tous les serveurs et tous les postes de
-      travail contiennent à la fois SRM et AlphaBIOS dans leur
-      microprogramme. Pour les machines «&nbsp;half-flash&nbsp;» comme
-      les nombreuses cartes d'évaluation, il est possible de passer
-      d'une version à l'autre par flashage du microprogramme. Ainsi,
-      lorsque SRM est installé, il est possible d'exécuter
-      ARC/AlphaBIOS depuis une disquette (en utilisant la commande
-<command>arc</command>). Pour les raisons mentionnées précédemment,
-      nous recommandons de passer à SRM avant d'installer Debian.
+La majorité des AlphaServer, tous les serveurs et tous les postes de travail 
+contiennent à la fois SRM et AlphaBIOS dans leur microprogramme. Pour les 
+machines «&nbsp;half-flash&nbsp;» comme les nombreuses cartes d'évaluation, 
+il est possible de passer d'une version à l'autre par flashage du 
+microprogramme. Ainsi, lorsque SRM est installé, il est possible d'exécuter
+ARC/AlphaBIOS depuis une disquette (en utilisant la commande
+<command>arc</command>). Pour les raisons mentionnées précédemment, nous 
+recommandons de passer à SRM avant d'installer Debian.
 
 </para><para>
 
@@ -304,11 +293,15 @@ Ensuite, pour amorcer sur la première interface Ethernet, vous
 
 <informalexample><screen>
 
->>> boot ewa0
+>>> boot ewa -flags ""0
 
 </screen></informalexample>
 
 </para><para>
+L'amorçage se fera ave les paramètres par défaut du noyau qui sont dans
+l'image netboot.
+</para>
+<para>
 
 Si vous souhaiter utiliser une console série, vous
 <emphasis>devez</emphasis> passer le paramètre <userinput>console=</userinput>
@@ -319,7 +312,7 @@ au noyau. Cela peut être fait avec l'argument
 <userinput>/dev</userinput>. Par exemple, pour amorcer depuis 
 <userinput>ewa0</userinput>
         en utilisant la console sur le premier port série, vous devrez
-        taper&nbsp;:
+        saisir&nbsp;:
 
 <informalexample><screen>
 
@@ -334,7 +327,7 @@ au noyau. Cela peut être fait avec l'argument
 </title>
 <para>
 
-Tapez
+Exécutez
 
 <informalexample><screen>
 
@@ -356,14 +349,14 @@ Pour amorcer un cédérom depuis la console ARC, trouvez le nom de
 code de votre sous-architecture (voyez&nbsp;:
 <xref linkend="alpha-cpus"/>, puis entrez 
 <filename>\milo\linload.exe</filename>
-      comme chargeur d'amorçage et
+      comme programme d'amorçage et
  <filename>\milo\<replaceable>subarch</replaceable></filename> 
 (où <replaceable>subarch</replaceable>
-      est le nom de la sous-architecture propre) comme un chemin vers
-      le système d'exploitation («&nbsp;OS Path&nbsp;», NdT) dans le
+      est le nom de la sous-architecture) comme chemin vers
+      le système d'exploitation dans le
       menu «&nbsp;OS Selection Setup&nbsp;». Les
       «&nbsp;Ruffians&nbsp;» font exception&nbsp;: vous aurez besoin
-      d'utiliser <filename>\milo\ldmilo.exe</filename> comme chargeur
+      d'utiliser <filename>\milo\ldmilo.exe</filename> comme programme
       d'amorçage.
 
 </para>
@@ -411,10 +404,10 @@ via <command>aboot</command>, utilisez la commande suivante&nbsp;:
         
 </screen></informalexample>
 
-(tapez sur une seule ligne) en substituant, si nécessaire, le
+(saisissez sur une seule ligne) en substituant, si nécessaire, le
         nom de périphérique d'amorçage SRM utilisé pour
 <filename>dva0</filename>, le nom de périphérique d'amorçage de Linux
-        pour <filename>fd0</filename> et les paramètres noyaux désirés pour
+        pour <filename>fd0</filename> et les paramètres noyau désirés pour
         <filename>arguments</filename>.
 
 </para><para>
@@ -433,7 +426,7 @@ chargement une fois entré dans MILO. Voyez <xref linkend="booting-from-milo"/>.
 <para>
 
 Dans le menu de «&nbsp;OS selection&nbsp;», choisissez
-<command>linload.exe</command> comme chargeur d'amorçage et
+<command>linload.exe</command> comme programme d'amorçage et
 <command>milo</command> comme chemin vers le système
         d'exploitation. L'amorçage se fera depuis cette nouvelle
         entrée.
@@ -442,7 +435,7 @@ Dans le menu de «&nbsp;OS selection&nbsp;», choisissez
   </sect2>
 
   <sect2 arch="alpha">
-  <title>Amorcer depuis les disquettes avec le chargeur d'amorçage APB (UP1000)
+  <title>Amorcer depuis les disquettes avec le programme d'amorçage APB (UP1000)
 </title>
 
 <para>
@@ -471,9 +464,8 @@ Le programme MILO, contenu dans le média d'amorçage, est configuré
 
 </para><para>
 
-Si vous désirez spécifier les bits explicitement (pour fournir
-      par exemple des paramètres supplémentaires), vous pouvez
-      utiliser une commande de ce type&nbsp;:
+Si vous désirez tout spécifier (pour fournir par exemple des paramètres 
+supplémentaires), vous pouvez utiliser une commande de ce type&nbsp;:
 
 <informalexample><screen>
 
@@ -491,4 +483,3 @@ substituez <filename>fd0</filename> dans l'exemple ci-dessus par le nom
 
 </para>
  </sect2>
-
