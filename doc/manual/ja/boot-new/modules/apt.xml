@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23066 -->
+<!-- original version: 23498 -->
 
  <sect2 id="configure-apt">
  <title>APT の設定</title>
@@ -38,6 +38,18 @@ CD, the network, or wherever.
 
 </para>
 </footnote>
+<!--
+Other package maintenance front-ends, like <command>dselect</command>,
+<command>aptitude</command> and <command>synaptic</command> also use
+and depend on <command>apt</command>. These front-ends are recommended
+for new users, since they integrate some other features (package
+searching and status checks) in a nice user interface.
+-->
+<command>dselect</command> のような他のパッケージメンテナンスフロントエンド
+としては、<command>aptitude</command> や <command>synaptic</command>
+もまた使用され、<command>apt</command> に依存しています。
+これらフロントエンドは、洗練されたユーザインターフェイスに他のいくつかの特徴
+(パッケージの検索や状態のチェック) が統合されているので、新規ユーザにお薦めです。
 
 <!--
 APT must be configured, however, so that it knows where to retrieve
@@ -137,36 +149,81 @@ to tell <command>apt-setup</command> which country you live in.  This
 configures which of the official Debian Internet mirror network you
 connect to.  Depending on which country you select, you will be given
 a list of possible machines.  It's generally fine to pick the one at
-the top of the list, but any of them should work.
+the top of the list, but any of them should work. It will be tested
+afterwards, however, and you should select a different one if you see
+any issue. Notice that the mirror list provided by the installation
+was generated when this Debian version was released and some mirrors
+might not be available if some time (a few months) has elapsed between
+the release and your installation.
 -->
 ネットワーク上からのパッケージ取得設定の次の段階は、
 <command>apt-setup</command> にあなたが住んでいる国を教えることです。
 この情報を使って、Debian の公式ミラーサイトのうちどれに接続するかを
 決定します。国を選ぶと、利用可能なマシンの一覧が表示されます。
 一覧のうちの一番上を選べば良いはずですが、
-もちろんどれを選んでも構いません。
+もちろんどれを選んでも構いません。あとでテストされるでしょうけれど、
+問題に気づいた場合は異なるものを選択すべきです。リリースからインストール
+までの間にかなり長い時間 (数ヶ月) が経過していた場合、インストールに
+よって提供されるミラーリストは、この Debian バージョンがリリースされ、
+いくつかのミラーがまだ取得可能でなかったかもしれない時に生成された
+ということに注意してください。
 
 </para><para>
 
 <!--
 If you are installing via HTTP, you will be asked to configure your
-proxy server.  This is sometimes required by people behind firewalls,
-on corporate networks, etc.
+proxy server. A proxy server is a server that will forward all your
+HTTP requests to the Internet and is used when you have limited
+connectivity to the Internet.  This is sometimes required by people
+behind firewalls (only the proxy server can access the Internet), on
+corporate networks, etc. Most home users will not need to setup a
+proxy server, although some ISPs might provide proxy servers for their
+users.
 -->
-HTTP 経由でインストールする場合は、プロキシサーバの設定を
-尋ねられます。この設定は、ファイアウォールの内側や会社の
-ネットワークを使用している場合に必要になることが多いです。
+HTTP 経由でインストールする場合は、プロキシサーバの設定を尋ねられます。
+プロキシサーバはすべての HTTP リクエストをインターネットに転送し、
+インターネットへの接続を制限した場合に使用されるサーバです。
+この設定は、(プロキシサーバだけがインターネットにアクセスできる)
+ファイアウォールの内側や会社のネットワークを使用している場合に必要に
+なることが多いです。一部の ISP はユーザにプロキシサーバを提供している
+かもしれませんが、ほとんどのホームユーザはセットアップにプロキシサーバ
+を必要としないでしょう。
+
+</para><para>
+
+<!--
+Notice that if you are planning the installation of many different
+Debian systems, a proxy server might be helpful to reduce the traffic
+load when all those systems try to connect to the Internet to retrieve
+new packages (or security patches). You might want to consider setting
+up a system and carefully installing a proxy server with a cache, and
+then install other systems pointing to the proxy server so they all
+benefit from the cached content.
+-->
+たくさんの異なるシステムへの Debian のインストールを計画している場合は、
+それらすべてのシステムが新しいパッケージ (あるいはセキュリティパッチ)
+を検索するためにインターネットに接続しようとする時に、プロキシサーバが
+トラフィック負荷を軽減する助けになるかもしれないということに注目してください。
+システムを設定し、キャッシュを備えたプロキシサーバを注意深くインストール
+してから、そのプロキシサーバを示すことで他のシステムをインストールして、
+キャッシュされた内容から恩恵を受けたいと考えるかもしれません。
+
+</para><para>
 
 </para><para>
 
 <!--
 Finally, your new network package source will be tested.  If all goes
 well, you will be prompted whether you want to do it all over again
-with another network source.
+with another network source. If you have any issue with your source
+package try using a different mirror site (from your country list or
+from your global list) or try using a different network package source.
 -->
 最後に、設定した新しいパッケージ取得先がテストされます。
 テストが無事終了すれば、さらに別のパッケージ取得先を設定するか
-どうかを尋ねられます。
+どうかを尋ねられます。ソースパッケージに問題があった場合には、
+(自分の国リストあるいは全体リストとは) 別のミラーサイトを試してみるか、
+別のネットワークパッケージソースを用いて試してみてください。
 
 </para>
   </sect3>
