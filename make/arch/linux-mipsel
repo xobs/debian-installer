@@ -1,12 +1,20 @@
 arch-image: $(IMAGE)
 
+ifdef FLOPPY_SIZE
+# Create a bootable tftp image.
 $(IMAGE): $(INITRD)
-ifeq ($(TYPE),netboot)
 	set -e; $(foreach NAME,$(KERNELNAME), \
 		tftpboot.sh $(TEMP)/$(NAME) /dev/null $< $@;)
-endif
-ifeq ($(TYPE),cdrom)
-	# This is borken. We have to install delo in the CD image.
-	set -e; $(foreach NAME,$(KERNELNAME), \
-		tftpboot.sh $(TEMP)/$(NAME) /dev/null $< $@;)
-endif
+endif # FLOPPY_SIZE
+
+# Copy files somewhere the CD build scripts can find them
+# XXX Will only use the last kernel if there are several
+cd_content: $(IMAGE)
+	$(foreach NAME,$(KERNELNAME), \
+		cp -f $(DEST)/$(NAME) $(DEST)/$(TYPE)-linux;)
+	cp  boot/mips/delo.conf $(DEST)/delo.conf
+
+cd_image: cd_content
+	# This is borken. We have to install arcboot in an ext2 image.
+#	mkisofs -r -J -b `basename $(IMAGE)` -o $(TYPE).iso $(DEST)
+#	mv $(TYPE).iso $(DEST)
