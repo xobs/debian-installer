@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23576 -->
+<!-- original version: 23664 -->
 
  <sect2 arch="alpha" id="alpha-firmware">
  <title>Alpha Console-Firmware</title>
@@ -57,12 +57,24 @@ für SRM-Installationen.
 
 </para><para>
 
-Da GNU/Linux das einzige Betriebssystem auf Alpha-Systemen ist, das 
-von beiden Konsolentypen booten kann, hängt die Auswahl davon ab, 
-welche anderen Betriebssysteme Sie auf der gleichen Maschine haben. 
-Alle anderen unix-ähnlichen Betriebssysteme (Tru64 Unix, FreeBSD, 
-OpenBSD und NetBSD) sowie OpenVMS können nur von SRM booten, während 
-Windows NT nur von ARC starten kann.
+GNU/Linux ist das einzige Betriebssystem, das auf Alpha-Systemen von
+beiden Konsolentypen booten kann, aber &debian; &release; unterstützt
+nur das Booten von SRM-basierten Systemen. Wenn Sie eine Alpha-Maschine
+haben, für die keine SRM-Version verfügbar ist, wenn Sie ein Dual-Boot-System
+mit Windows-NT aufbauen möchten oder wenn Ihr Boot-Laufwerk für die
+BIOS-Initialisierung ARC-Konsolen-Support benötigt, können Sie nicht den
+&debian; &release;-Installer verwenden. Sie können aber trotzdem
+&debian; &release; auf dieser Maschine laufen lassen, indem Sie andere
+Installationsmedien benutzen; z.B. können Sie zunächst Debian Woody mit
+MILO installieren und dann auf Sarge aktualisieren.
+
+</para><para>
+
+Da <command>MILO</command> für keines der Alpha-Systeme der laufenden 
+Produktion (seit Februar 2000) verfügbar ist und weil es nicht mehr 
+nötig ist, eine OpenVMS- oder Tru64 Unix-Lizenz zu kaufen, um 
+SRM-Firmware für ältere Alpha-Systeme zu bekommen, wird empfohlen, 
+dass Sie wenn möglich SRM benutzen.
 
 </para><para>
 
@@ -126,7 +138,7 @@ in der Tabelle bezeichnet alle ARC-konformen Konsolen.
   <entry>nur SRM</entry>
 </row><row>
   <entry>nautilus</entry>
-  <entry>nur ARC (siehe das Handbuch des Motherboards)</entry>
+  <entry>ARC (siehe das Handbuch des Motherboards) oder SRM</entry>
 </row><row>
   <entry>noname</entry>
   <entry>ARC oder SRM</entry>
@@ -172,10 +184,27 @@ in der Tabelle bezeichnet alle ARC-konformen Konsolen.
 </para><para>
 
 Generell kann keine der Konsolen Linux direkt booten; es ist immer 
+die Hilfe eines zwischengeschalteten Bootloaders erforderlich. Für die
+SRM-Konsole gibt es <command>aboot</command>, einen kleinen,
+plattform-unabhängigen Bootloader. Siehe auch das (leider veraltete)
+<ulink url="&url-srm-howto;">SRM-HOWTO</ulink>, wenn Sie mehr Infos über 
+<command>aboot</command> wünschen.
+
+<!-- </para><para condition="FIXME"> -->
+<!-- commented out outdated paragraphs
+
+Die folgenden Kapitel stammen aus dem Woody-Installationshandbuch und
+sind hier nur als Referenz eingefügt; vielleicht sind Sie zu einem späteren
+Zeitpunkt mal nützlich, wenn Debian zu einem späteren Zeitpunkt evtl. wieder
+MILO-basierte Installationen unterstützt.
+
+</para><para condition="FIXME">
+
+Generell kann keine der Konsolen Linux direkt booten; es ist immer 
 die Hilfe eines zwischengeschalteten Bootloaders erforderlich. Es 
 gibt derer zwei Stück: <command>MILO</command> und <command>aboot</command>.
 
-</para><para>
+</para><para condition="FIXME">
 
 <command>MILO</command> is selbst auch eine Konsole, die im Speicher 
 ARC oder SRM ersetzt. <command>MILO</command> kann sowohl von ARC wie von 
@@ -186,14 +215,14 @@ nötig) und existiert nur für solche Systeme, die in der Tabelle mit ARC-Suppor
 aufgelistet sind. Lesen Sie auch das (leider überholte) 
 <ulink url="&url-milo-howto;">MILO HOWTO</ulink>.
 
-</para><para>
+</para><para condition="FIXME">
 
 <command>aboot</command> ist ein kleiner, plattform-unabhängiger Bootloader, 
 der nur auf SRM läuft. Siehe auch das (leider ebenfalls veraltete)
 <ulink url="&url-srm-howto;">SRM HOWTO</ulink>, wenn Sie mehr Infos über 
 <command>aboot</command> wünschen.
 
-</para><para>
+</para><para condition="FIXME">
 
 Es gibt also drei mögliche Szenarios, abhängig von der Konsolen-Firmware 
 des System und ob <command>MILO</command> verfügbar ist oder nicht:
@@ -206,21 +235,14 @@ ARC -> MILO
 
 </screen></informalexample>
 
-</para><para>
-
-Das UP1000-Motherboard (Unterarchitektur `nautilus') von 
-Alpha Processor, Inc. unterscheidet sich von allen anderen, da es 
-einen API-spezifischen Bootloader benutzt, der unter der 
-AlphaBIOS-Firmware läuft.
-
-</para><para>
+</para><para condition="FIXME">
 
 Da <command>MILO</command> für keines der Alpha-Systeme der laufenden 
 Produktion (seit Februar 2000) verfügbar ist und weil es nicht mehr 
 nötig ist, eine OpenVMS- oder Tru64 Unix-Lizenz zu kaufen, um 
 SRM-Firmware für ältere Alpha-Systeme zu bekommen, wird empfohlen, 
 dass Sie SRM und <command>aboot</command> für GNU/Linux-Installationen 
-benutzen, außer Sie haben ein Dual-Boot-System mit Windows NT.
+benutzen, außer Sie haben ein Dual-Boot-System mit Windows NT. -->
 
 </para><para>
 
@@ -239,7 +261,7 @@ Wie auf anderen Architekturen auch sollten Sie die neueste verfügbare
 Firmware-Version installieren, <footnote><para>Außer auf Jensen, weil 
 dort Linux auf Firmware-Versionen neuer als 1.7 nicht unterstützt 
 wird - siehe <ulink url="&url-jensen-howto;"></ulink> für mehr 
-Informationen</para></footnote> bevor Sie &debian; installieren. 
+Informationen.</para></footnote> bevor Sie &debian; installieren. 
 Für Alpha-Systeme können Sie Firmware-Updates auf  
 <ulink url="&url-alpha-firmware;">Alpha Firmware Updates</ulink> 
 erhalten. 
@@ -330,12 +352,12 @@ Tippen Sie
 
 </screen></informalexample>
 
-wobei <replaceable>xxxx</replaceable> die SRM-Bezeichnung Ihres CD-ROM-Laufwerk ist. 
+ein, wobei <replaceable>xxxx</replaceable> die SRM-Bezeichnung Ihres CD-ROM-Laufwerk ist. 
 
 </para>
   </sect2>
 
-  <sect2 arch="alpha">
+  <sect2 arch="alpha" condition="FIXME">
   <title>Booten von CD-ROM mit der ARC- oder AlphaBIOS-Konsole</title>
 <para>
 
@@ -384,7 +406,7 @@ startet.
 
 </para><para>
 
-Wenn Sie via <command>aboot</command>starten und Kernelparameter 
+Wenn Sie via <command>aboot</command> starten und Kernelparameter 
 angeben wollen, nutzen Sie folgenden Befehl:
 
 <informalexample><screen>
@@ -420,24 +442,7 @@ erstellten Eintrag.
 </para>
   </sect2>
 
-  <sect2 arch="alpha">
-  <title>Booten eines UP1000-Systems von Floppy mit dem APB-Bootloader</title>
-
-<para>
-
-Um dieses System zu booten, starten Sie <command>\apb\apb.exe</command> 
-vom `Utility/Run Maintenance Program'-Menü und tippen 
-      <informalexample><screen>
-
-boot debian_install
-      
-</screen></informalexample>
-am APB-Prompt ein. 
-
-</para>
-  </sect2>
-
- <sect2 arch="alpha" id="booting-from-milo"><title>Booten mit MILO</title>
+ <sect2 arch="alpha" condition="FIXME" id="booting-from-milo"><title>Booten mit MILO</title>
 <para>
 
 MILO (auf dem Boot-Medium enthalten) ist konfiguriert, direkt nach 
@@ -446,7 +451,7 @@ während des MILO-Countdowns nur die Leertaste drücken.
 
 </para><para>
 
-Wenn Sie alle Bits explizit angeben möchten (z.B. um zusätzliche Parameter 
+Wenn Sie alles explizit angeben möchten (z.B. um zusätzliche Parameter 
 hinzuzufügen), nutzen einen Befehl wie diesen: 
 
 <informalexample><screen>
