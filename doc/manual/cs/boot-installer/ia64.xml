@@ -1,16 +1,122 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 14350 -->
+<!-- original version: 18660 -->
 
   <sect2 arch="ia64"><title>Zavedení z CD-ROM</title>
 
 &boot-installer-intro-cd.xml;
 
-<emphasis condition="FIXME">Not yet written.</emphasis>
+<note><title>Obsah CD</title><para>
 
+Existují tři varianty instalačních CD. <emphasis>Malé
+síťové</emphasis> CD obsahuje pouze soubory instalačního programu
+a proto se vleze na malé CD velikosti vizitky. Pro instalaci
+základního systému (a dalších balíků) však vyžaduje síťové
+připojení. <emphasis>Plné síťové</emphasis> CD obsahuje kromě
+instalačního programu také základní systém, ale pro instalaci
+čehokoliv dalšího vyžaduje síť. Třetí možností je <emphasis>sada
+CD</emphasis>, která obsahuje kompletní systém a tudíž nevyžaduje
+připojení k síti.
+
+</para></note><para>
+
+&arch-title; používá další generaci Extensible Firmware Interface
+(EFI) od Intelu. Na rozdíl od tradičního BIOSu, který ví o zaváděcím
+zařízení velmi málo (zná jen tabulku oblastí a hlavní zaváděcí
+sektor), umí EFI číst a zapisovat soubory z oblastí, na kterých je
+souborový systém FAT16 nebo FAT32. Tím se zaváděcí proces velmi
+zjednoduší, protože systémový zavaděč a EFI firmware mají k dispozici
+celou oblast na uložení potřebných souborů. To znamená, že systémový
+disk na &arch-title; obsahuje místo zaváděcího bloku malou oblast,
+která je celá vyhrazená pro EFI.
+
+</para><para>
+
+Debianí CD obsahují menší verzi EFI oblasti, kde je uloženo
+<command>elilo</command>, jeho konfigurační soubor, instalační jádro
+a prvotní souborový systém (initrd). (Samozřejmě, že EFI oblast je
+přítomna i v nainstalovaném systému.)
+
+</para>
+
+   <sect3 arch="ia64" id="boot-from-cd">
+   <title>Zavádění z EFI shellu</title>
+<para>
+
+Zavaděč EFI se spouští jako postední krok inicializace
+firmwaru. Zobrazí menu, ze kterého si můžete vybrat různé
+položky. Manu se může na různých systémech lišit, ale vždy by se tam
+měla vyskytovat položka <command>EFI Shell
+[Built-in]</command>. Instalační CD zavadete následujícími kroky:
+
+</para>
+
+<itemizedlist>
+<listitem><para>
+
+Vložte CD do DVD/CD mechaniky.
+
+</para></listitem>
+<listitem><para>
+
+Ze zaváděcího menu vyberte <command>EFI Shell</command>.  EFI Shell si
+zjistí všechna zaveditelná zařízení a zobrazí je na
+konzoli. Rozpoznaná zaváděcí zařízení budou zobrazena ve tvaru
+<filename>fs<replaceable>n</replaceable>:</filename>, všechna ostatní
+bloková zařízení budou pojmenována
+<filename>blk<replaceable>n</replaceable>:</filename>.
+
+</para></listitem>
+<listitem><para>
+
+Prozkoumejte výstup shellu a hledejte CD mechaniku &mdash; s největší
+pravděpodobností to bude zařízení <filename>fs0:</filename>.
+
+</para></listitem>
+<listitem><para>
+
+Pro výběr požadovaného zařízení zadejte
+<command>fs<replaceable>n</replaceable>:</command>, kde 
+<replaceable>n</replaceable> je číslo oblasti. Toto číslo se nyní
+zobrazí jako součást výzvy.
+
+</para></listitem>
+<listitem><para>
+
+Zadejte příkaz <command>elilo</command>, což spustí zavaděč.
+<classname>elilo</classname> zobrazí svou výzvu a bude čekat na název
+jádra, které má zavést.
+
+</para></listitem>
+<listitem><para>
+
+Zadejte svou volbu, obvykle <classname>linux</classname> nebo
+<classname>linux26</classname>. Chcete-li použít implicitní jádro,
+jednoduše stiskěte klávesy &enterkey;, nebo počkejte dvacet sekund
+a jádro se zavede samo. Během zavádění jádra uvidíte spousty výpisů,
+ale těch si většinou nemusíte všímat.
+
+</para></listitem>
+</itemizedlist>
+
+<para>
+
+V EFI shellu též můžete použít zkrácenou variantu zápisu:
+<command>fs<replaceable>n</replaceable>:elilo</command>.  Jen co se
+jádro zavede, měli byste vidět úvodní obrazovku instalačního programu.
+
+</para>
+   </sect3>
   </sect2>
 
   <sect2 arch="ia64" id="boot-tftp"><title>Zavedení z TFTP</title>
+<para>
+
+Zavádění systému &arch-title; ze sítě je téměř shodné se zaváděním
+z CD. Jediný rozdíl spočívá ve způsobu, jakým se nahraje jádro. EFi
+umí stahovat a spouštět soubory ze serverů na síti.
+
+</para>
 
 &boot-installer-intro-net.xml;
 
@@ -106,6 +212,18 @@ a vraťte se zpět do menu se zaváděcími volbami.
 Měli byste vidět právě vytvořenou položku. Tu stačí vybrat a provede
 se DHCP dotaz vedoucí k nahrání <filename>elilo.efi</filename> z TFTP
 serveru.
+
+</para><para>
+
+Po stažení tohoto souboru se zobrazí výzva zavaděče, který očekává
+název jádra pro zavedení. Stejně jako u instalace z CD vyberte
+požadované jádro a po chvíli by se měla zobrazit úvodní obrazovka
+instalačního programu.
+
+</para><para>
+
+Pokračujte další kapitolou, kde si vyberete instalační jazyk,
+nastavíte síť a rozdělíte disky.
 
 </para>
 
