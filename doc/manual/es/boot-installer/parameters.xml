@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 22935 -->
+<!-- original version: 23207 -->
+<!-- revisado jfs, 4 noviembre 2004 -->
 
  <sect1 id="boot-parms"><title>Parámetros de arranque</title>
 <para>
 
-Se conoce como «parámetros de arranque» a aquellos parámetros del núcleo
+Se llaman «parámetros de arranque» a los parámetros del núcleo
 de Linux que generalmente se utilizan para asegurarse de la
 correcta gestión de los periféricos.
 En la mayoría de los casos el núcleo puede auto-detectar información sobre
@@ -12,24 +13,26 @@ sus periféricos pero, en algunos casos, deberá ayudar un poco a su núcleo.
 
 </para><para>
 
-Si es la primera vez que esta arrancando el sistema, intente los
-parámetros de arranque predeterminados (es decir, no intente definir
-parámetros) y observe si funciona correctamente. Probablemente lo
-hará. Si no lo hace, puede reiniciar después y buscar cualquier
-parámetro especial que informe al sistema sobre su hardware.
+Es recomendable utilizar los parámetros de arranque predeterminados si
+es la primera vez que arranca su sistema, es decir, no defina ningún
+parámetro. Observer si su sistema así correctamente, probablemente lo
+haga. Si no lo hace, podrá reiniciar más adelante después de buscar
+los específicos que necesita utilizar para informar a su sistema del
+hardware del que dispone.
 
 </para><para>
 
-Puede encontrar información sobre parámetros de arranque en el
+Puede encontrar información sobre muchos parámetros de arranque en el
 <ulink url="http://www.tldp.org/HOWTO/BootPrompt-HOWTO.html">COMO
-de BootPrompt</ulink>, incluye consejos para hardware poco común.
+de BootPrompt</ulink>, incluyendo consejos útiles para hardware poco común.
 Esta sección solamente contiene un resumen de los parámetros más
-importantes. Algunas trucos se incluyen en
-<xref linkend="boot-troubleshooting"/>.
+importantes. Podrá consultar también algunas precauciones comunes
+más adelante en <xref linkend="boot-troubleshooting"/>.
 
 </para><para>
 
-Cuando el núcleo arranca, deberá emitir un mensaje
+El núcleo deberá emitir el siguiente mensaje en una de las primeras etapas
+del proceso de arranque:
 
 <informalexample><screen>
 
@@ -38,35 +41,36 @@ available
 
 </screen></informalexample>
 
-en una etapa inicial del proceso.
-<replaceable>total</replaceable> debe corresponder a la cantidad de RAM, en
-kilobytes. Si no corresponde al tamaño real de la RAM que tiene instalada,
-necesita usar el parámetro
+<replaceable>total</replaceable> debe corresponder a la cantidad de RAM disponible, en kilobytes. 
+Si no corresponde al tamaño real de la RAM que tiene instalada,
+debe usar el parámetro
 <userinput>mem=<replaceable>ram</replaceable></userinput>,
-donde <replaceable>ram</replaceable> define la cantidad de memoria,
-con un sufijo de 'k' para kilobytes, o 'm' para megabytes. Por
-ejemplo, tanto <userinput>mem=65536k</userinput> como
-<userinput>mem=64m</userinput> significan 64MB de RAM.
+definiendo la cantidad de memoria en <replaceable>ram</replaceable> y
+utilizando el sufijo «k» para kilobytes, o «m» para megabytes. Por
+ejemplo, para indicar 64MB de RAM puede utilizar
+tanto <userinput>mem=65536k</userinput> como
+<userinput>mem=64m</userinput>.
 
 </para><para condition="supports-serial-console">
 
-Si esta arrancando con una consola serie, usualmente el núcleo
-auto-detectará
+Habitualmente el núcleo detectará automáticamente una consola serie
+si la utiliza en el arranque
 <phrase arch="mipsel">(aunque no en DECstations)</phrase>
-Si tiene una tarjeta de vídeo (framebuffer) y un teclado también
-conectado al ordenador en el cual desea arrancar a través de la
-consola serie, podría tener que pasar el argumento
-<userinput>console=<replaceable>dispositivo</replaceable></userinput>
-al núcleo, donde <replaceable>dispositivo</replaceable> es
-su dispositivo serie, que generalmente es algo como
+Si el desea arrancar por consola serie un ordenador que ya tiene 
+una tarjeta de vídeo (framebuffer) y un teclado instalados
+deberá indicárselo al núcleo con el parámetro
+<userinput>console=<replaceable>dispositivo</replaceable></userinput>,
+donde <replaceable>dispositivo</replaceable> es
+su dispositivo serie, que generalmente es algo parecido a
 <filename>ttyS0</filename>.
 
 </para><para arch="sparc">
 
-Para &arch-title; los dispositivos serie son <filename>ttya</filename> o
+Los dispositivos serie de &arch-title; son <filename>ttya</filename> o
 <filename>ttyb</filename>.
-Alternativamente, defina las variables <envar>input-device</envar> y
-<envar>output-device</envar> de OpenPROM <filename>ttya</filename>.
+También puede definir en OpenPROM las variables 
+<envar>input-device</envar> y
+<envar>output-device</envar> a <filename>ttya</filename>.
 
 </para>
 
@@ -74,8 +78,18 @@ Alternativamente, defina las variables <envar>input-device</envar> y
   <sect2 id="installer-args"><title>Parámetros del instalador de Debian</title>
 <para>
 
-El sistema de instalación reconoce algunos parámetros adicionales que 
-pueden ser útiles.
+El sistema de instalación reconoce algunos parámetros adicionales que <footnote>
+
+<para>
+Tenga en cuenta que el núcleo acepta un máximo de ocho opciones de
+línea de órdenes y ocho opciones del entorno, incluyendo cualquier
+opción que el instalador añada por omisión. Si excede este número, los
+núcleos de versión 2.4 descartarán las opciones que lo sobrepasen y
+los núcleos 2.6 se bloquearán.
+</para>
+
+</footnote> pueden ser útiles.
+
 
 </para>
 
@@ -84,27 +98,30 @@ pueden ser útiles.
 <term>debconf/priority</term>
 <listitem><para>
 
-Los valores de este parámetro definirán prioridad más alta de
-los mensajes a ser mostrados.
+El valor de este parámetro define la prioridad de los mensajes que se
+mostrarán durante la instalación. No se mostrará ningún mensaje de
+menor prioridad a la aquí definida.
+
 
 </para><para>
 
-La instalación predeterminada usa <userinput>debconf/priority=high</userinput>.
-Esto significa que tanto los mensajes con prioridad high y critical serán
-mostrados, pero los mensajes con prioridad medium y low no lo serán.
-Si se encuentran problemas, el instalador ajusta la prioridad como
-se necesite.
+La instalación utiliza <userinput>debconf/priority=high</userinput>
+como valor predeterminado.  Esto significa que se mostrarán los
+mensajes de prioridades alta y crítica, pero no así los mensajes con
+prioridades media y baja. El instalador, sin embargo, ajustará esta
+prioridad si se produce algún error.
 
 </para><para>
 
-Si añade <userinput>debconf/priority=medium</userinput> como parámetro de 
-arranque, se le mostrará el menú y tendrá mayor control sobre la instalación.
-Cuando se usa <userinput>debconf/priority=low</userinput>, todos los mensajes
-son mostrados (esto es equivalente al método de arranque
-<emphasis>expert</emphasis>). Con
+Si utiliza como parámetro de arranque
+<userinput>debconf/priority=medium</userinput>, se le mostrará el menú
+del instalador y tendrá un mayor control sobre la instalación.  Si usa
+<userinput>debconf/priority=low</userinput>, se mostrarán todos los
+mensajes (esto es equivalente al método de arranque
+<emphasis>experto</emphasis>). Si utiliza
 <userinput>debconf/priority=critical</userinput>, el sistema de
-instalación mostrará solamente los mensajes críticos e intentará
-hacer lo correcto sin mayor trámite.
+instalación mostrará solamente los mensajes críticos e intentará hacer
+lo correcto sin hace muchas preguntas.
 
 </para></listitem>
 </varlistentry>
@@ -114,8 +131,9 @@ hacer lo correcto sin mayor trámite.
 <term>DEBIAN_FRONTEND</term>
 <listitem><para>
 
-Este parámetro controla el tipo de interfaz de usuario usado por
-el instalador. Los posibles valores del parámetro son:
+Este parámetro de arranque controla el tipo de interfaz de usuario que
+utilizará el instalador. A continuación se muestran los posibles
+valores que puede tomar este parámetro:
 
 <itemizedlist>
 <listitem>
@@ -137,11 +155,13 @@ el instalador. Los posibles valores del parámetro son:
 </listitem>
 </itemizedlist>
 
-La interfaz predeterminada es <userinput>DEBIAN_FRONTEND=newt</userinput>.
-<userinput>DEBIAN_FRONTEND=text</userinput> podría ser preferible para
-instalaciones a través de una consola serie. Generalmente solo la interfaz
-<userinput>newt</userinput> esta disponible en el medio de instalación
-predeterminado, de modo que todavía no es muy útil por ahora.
+La interfaz predeterminada es
+<userinput>DEBIAN_FRONTEND=newt</userinput>.  Si va a realizar una
+instalación a través de una consola serie puede ser mejor utilizar
+<userinput>DEBIAN_FRONTEND=text</userinput>.  Esta opción no es ahora
+mismo muy útil ya que, por regla general, sólo dispondrá de la
+interfaz <userinput>newt</userinput> en el medio de instalación
+predeterminado.
 
 </para></listitem>
 </varlistentry>
@@ -151,32 +171,32 @@ predeterminado, de modo que todavía no es muy útil por ahora.
 <term>BOOT_DEBUG</term>
 <listitem><para>
 
-El pasar este parámetro de arranque causará que el arranque sea registrado
-con mas detalle.
+El pasar este parámetro de arranque provocará que se generen registros
+más detallados del arranque.
 
 <variablelist>
 <varlistentry>
 <term><userinput>BOOT_DEBUG=0</userinput></term>
-<listitem><para>Este es el predeterminado.</para></listitem>
+<listitem><para>Este es el valor predeterminado.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>BOOT_DEBUG=1</userinput></term>
-<listitem><para>Mas detallado que lo habitual.</para></listitem>
+<listitem><para>Más detallado de lo habitual.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>BOOT_DEBUG=2</userinput></term>
-<listitem><para>Mucha información de depuración.</para></listitem>
+<listitem><para>Incluye mucha información de depuración.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>BOOT_DEBUG=3</userinput></term>
 <listitem><para>
 
-Se ejecutan shells en diversos puntos en el proceso de arranque para
-permitir depuración detallada. Salga del shell para continuar el
-arranque.
+Se ejecutan intérpretes de órdenes en diversos puntos en el proceso de
+arranque para permitir una depuración detallada. Salga del intérprete
+de ordenes para proseguir con el arranque.
 
 </para></listitem>
 </varlistentry>
@@ -190,16 +210,16 @@ arranque.
 <term>INSTALL_MEDIA_DEV</term>
 <listitem><para>
 
-El valor del parámetro es la ruta al dispositivo desde donde cargar
+Mediante este parámetro se indica la ruta al dispositivo desde donde cargar
 el instalador. Por ejemplo,
 <userinput>INSTALL_MEDIA_DEV=/dev/floppy/0</userinput>
 
 </para><para>
 
-El disquete de arranque, que normalmente escanea todos las unidades
-de disquete y dispositivos de almacenamiento USB en busca de el
-disquete raíz, puede ser modificado con este parámetro para
-que solamente busque en un dispositivo específico.
+El disquete de arranque normalmente analiza todos las unidades
+de disquete y dispositivos de almacenamiento USB en busca del
+disquete raíz. Si utiliza este paramétro puede modificar su comportamiento
+para que solamente busque en un dispositivo concreto.
 
 </para></listitem>
 </varlistentry>
@@ -208,28 +228,29 @@ que solamente busque en un dispositivo específico.
 <term>debian-installer/framebuffer</term>
 <listitem><para>
 
-Algunas arquitecturas usan el framebuffer del núcleo para ofrecer
-instalación en un número diverso de idiomas. Si framebuffer causa un
-problema en su sistema puede deshabilitar esta característica con
+En algunas arquitecturas se utiliza el framebuffer del núcleo para
+dar la opción a realizar la instalación en un número diverso de idiomas. 
+Si el uso de éste origina problemas en su
+su sistema puede deshabilitar esta característica con
 el parámetro
-<userinput>debian-installer/framebuffer=false</userinput>. Los
-síntomas de problemas son mensajes de error sobre bterm o bogl, una
-pantalla en blanco o un congelamiento después de algunos minutos
-de iniciada la instalación.
+<userinput>debian-installer/framebuffer=false</userinput>. 
+Algunos síntomas de problemas son mensajes de que tratan sobre bterm o bogl,
+la aparición de una pantalla en blanco o que el sistema se quede congelado
+algunos minutos después de que inicie la instalación.
 
 </para><para arch="i386">
 
-El argumento <userinput>video=vga16:off</userinput> también puede ser
-usado para deshabilitar framebuffer. Este tipo de problemas ha sido
-reportado en una Dell Inspiron con tarjeta Mobile Radeon.
+También puede utilizar el argumento <userinput>video=vga16:off</userinput> 
+para deshabilitar framebuffer. Los problemas antes indicados se han
+observado en equipos Dell Inspiron con tarjetas Mobile Radeon.
 
 </para><para arch="m68k">
 
-Este tipo de problemas ha sido reportado en la Amiga 1200 y SE/30.
+Los problemas antes indicados se han observado en sistemas Amiga 1200 y SE/30.
 
 </para><para arch="hppa">
 
-Este tipo de problemas han sido reportados en hppa.
+Se han observado este tipo de problemas en hppa.
 
 </para></listitem>
 </varlistentry>
@@ -238,8 +259,9 @@ Este tipo de problemas han sido reportados en hppa.
 <term>debian-installer/probe/usb</term>
 <listitem><para>
 
-Defina a <userinput>false</userinput> para evitar la comprobación
-de USB en el arranque, si esto causa problemas.
+Puede evitar que se comprueben los dispositivos USB en el arranque
+definiendo este valor a <userinput>false</userinput> en caso de
+que esta comprobación de lugar a problemas.
 
 </para></listitem>
 </varlistentry>
@@ -248,18 +270,20 @@ de USB en el arranque, si esto causa problemas.
 <term>netcfg/disable_dhcp</term>
 <listitem><para>
 
-Por omisión, el &d-i; automáticamente prueba la conexión de red a través de
-DHCP. Si la prueba es exitosa, no tendrá oportunidad de revisar y cambiar
-los valores obtenidos. Puede efectuar la configuración de red manual
-solo en caso de que falle la comprobación DHCP.
+Por omisión, el &d-i; solicita automáticamente la conexión de red a través de
+DHCP. No podrá revisar ni cambiar los valores obtenidos de esta forma
+si la prueba tiene éxito. Sin embargo, podrá realizar la configuración
+de de forma manual en el caso de que falle la solicitud DHCP.
 
 </para><para>
 
-Si tiene un servidor DHCP en su red local, pero desea evitar usarlo,
-debido a que por ejemplo da valores incorrectos, puede usar el
-parámetro 
-<userinput>netcfg/disable_dhcp=true</userinput> para evitar la
-configuración de red con DHCP e ingresar la información manualmente.
+Puede usar el parámetro
+<userinput>netcfg/disable_dhcp=true</userinput> para que no se lleve a
+cabo la configuración de red con DHCP, tendrá entonces que introducir
+la información manualmente. Esto puede ser útil si vd. tiene un
+servidor DHCP en su red local pero no quiere utilizarlo porque, por
+ejemplo, no proporciona valores que correctos
+
 
 </para></listitem>
 </varlistentry>
@@ -268,9 +292,10 @@ configuración de red con DHCP e ingresar la información manualmente.
 <term>hw-detect/start_pcmcia</term>
 <listitem><para>
 
-Defina a <userinput>false</userinput> para evitar que se ejecuten los
-servicios PCMCIA, si esto causa problemas. Algunos ordenadores 
-portátiles son conocidos por este comportamiento errado.
+Si quiere evitar que se ejecuten los servicios PCMCIA deberá definir
+este parámetro a <userinput>false</userinput>.  Algunos ordenadores
+portátiles son conocidos por tener problemas en estos casos, y puede
+ser recomendable deshabilitarlo.
 
 </para></listitem>
 </varlistentry>
@@ -279,8 +304,8 @@ portátiles son conocidos por este comportamiento errado.
 <term>preseed/url</term>
 <listitem><para>
 
-Especifíca el url de un fichero de pre-configuración para ser
-descargado y usado para la automatización de la instalación.
+Este valor especifíca la url de un fichero de pre-configuración que
+se descargará y utilizará para automatizar la instalación.
 Vea <xref linkend="automatic-install"/>.
 
 </para></listitem>
@@ -290,8 +315,9 @@ Vea <xref linkend="automatic-install"/>.
 <term>preseed/file</term>
 <listitem><para>
 
-Especifíca el url de un fichero de pre-configuración para cargar
-la automatización de la instalación. Vea <xref linkend="automatic-install"/>.
+Este valor especifíca la url de un fichero de pre-configuración que
+se utilizará que se cargará en la instalación automática. 
+Consulte <xref linkend="automatic-install"/>.
 
 </para></listitem>
 </varlistentry>
@@ -300,7 +326,8 @@ la automatización de la instalación. Vea <xref linkend="automatic-install"/>.
 <term>ramdisk_size</term>
 <listitem><para>
 
-Si esta usando un núcleo 2.2.x, podría necesitar definir &ramdisksize;.
+Puede necesitar definir &ramdisksize; si está usando un núcleo en la
+versión 2.2.x.
 
 </para></listitem>
 </varlistentry>
