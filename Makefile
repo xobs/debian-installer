@@ -445,7 +445,7 @@ endif
 	if [ -e $(TREE)/etc/pcmcia/config ]; then \
 		./pcmcia-config-reduce.pl $(TREE)/etc/pcmcia/config \
 			`if [ -d "$(EXTRADRIVERSDIR)" ]; then find $(EXTRADRIVERSDIR)/lib/modules -name \*.o -name \*.ko; fi` \
-			`find $(TREE)/lib/modules/ -name \*.o -name \*.ko` > \
+			`find $(TREE)/lib/modules/ -name \*.o -or -name \*.ko` > \
 			$(TREE)/etc/pcmcia/config.reduced; \
 		mv -f $(TREE)/etc/pcmcia/config.reduced $(TREE)/etc/pcmcia/config; \
 	fi
