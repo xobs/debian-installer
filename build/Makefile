@@ -419,9 +419,8 @@ endif
 
 	# Reduce status file to contain only the elements we care about.
 	egrep -i '^((Status|Provides|Depends|Package|Version|Description|installer-menu-item|Description-..):|$$)' \
-		$(DPKGDIR)/status > $(DPKGDIR)/status.udeb
-	rm -f $(DPKGDIR)/status
-	ln -sf status.udeb $(DPKGDIR)/status
+		$(DPKGDIR)/status > $(DPKGDIR)/status.new
+	mv $(DPKGDIR)/status.new $(DPKGDIR)/status
 
 ifdef DROP_LANG
 	# Remove languages from the templates.
