@@ -1,69 +1,12 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 14033 -->
+<!-- original version: 14975 -->
 
 <chapter id="boot-new">
 <!--
  <title>Booting Into Your New Debian System</title>
 -->
  <title>新しい Debian システムを起動させる</title>
-
-<!--
- <sect1><title>Make System Bootable</title>
--->
- <sect1><title>システムを起動可能にする</title>
-<para>
-
-<!--
-Note that multiple operating systems booting on a single machine is
-still something of a black art.  This document does not even attempt
-to document the various boot managers, which vary by architecture and
-even by subarchitecture.   You should see your boot manager's
-documentation for more information.
--->
-複数のオペレーティングシステムを 1 つのマシン上で起動するのは、
-今でもなお黒魔術のようなものです。
-この文書では、さまざまなブートマネージャに関する説明はしません。
-ブートマネージャの動作は、
-アーキテクチャによって (あるいはサブアーキテクチャによっても) 千差万別だからです。
-より詳細な情報については、
-お使いになるブートマネージャのドキュメントを読んでください。
-
-</para>
-
-&bootloader-i386.xml;
-&bootloader-m68k.xml;
-&bootloader-alpha.xml;
-&bootloader-sparc.xml;
-&bootloader-powerpc.xml;
-&bootloader-hppa.xml;
-&bootloader-s390.xml;
-&bootloader-arm.xml;
-&bootloader-mipsel.xml;
-
-<!--
-  <sect2 condition="supports-nfsroot"><title>Diskless Workstations</title>
--->
-  <sect2 condition="supports-nfsroot"><title>ディスクレスワークステーション</title>
-<para>
-
-<!--
-If you are installing a diskless workstation, obviously, booting off
-the local disk isn't a meaningful option, and this step will be
-skipped. <phrase arch="sparc">You may wish to set the OpenBoot to boot
-from the network by default; see <xref
-linkend="boot-dev-select-sun"/>.</phrase>
--->
-ディスクレスワークステーションにインストールしている場合は、
-ローカルディスクからの起動は明らかに無意味ですから、この作業段階は
-飛ばされるでしょう。<phrase arch="sparc">なお、デフォルトでネットワークから
-起動するように OpenBoot を設定したい場合には、<xref
-linkend="boot-dev-select-sun"/> をご覧ください。</phrase>
-
-</para>
-
-  </sect2>
-</sect1>
 
 <!--
  <sect1 id="base-boot"><title>The Moment of Truth</title>
@@ -81,12 +24,14 @@ call the <quote>smoke test</quote>.
 </para><para arch="s390">
 
 <!--
-Select the ``Reboot the System'' menu item which will halt the system
+Select the <guimenuitem>Reboot the System</guimenuitem> menu item
+which will halt the system
 because rebooting is not supported on &arch-title; in this case. You
 then need to IPL GNU/Linux from the DASD which you selected for the
 root filesystem during the first steps of the installation.
 -->
-``Reboot the System'' メニューを選択し、システムを停止させてください。
+<guimenuitem>Reboot the System</guimenuitem> メニューを選択し、
+システムを停止させてください。
 この場合、&arch-title; では再起動がサポートされていないからです。
 インストールの最初にルートファイルシステムとして選択した DASD から
 GNU/Linux を IPL してください。
@@ -95,24 +40,18 @@ GNU/Linux を IPL してください。
 
 <!--
 If you are booting directly into Debian, and the system doesn't start
-up, either use your original installation boot media (for instance,
-the rescue floppy), or insert the custom boot floppy if you created
-one, and reset your system.  If you are <emphasis>not</emphasis> using
-the custom boot floppy, you will probably need to add some boot
-arguments.  If booting with the rescue floppy or similar technique,
-you need to specify
-<userinput>rescue root=<replaceable>root</replaceable></userinput>,
-where <replaceable>root</replaceable> is your root partition, such as
+up, either use your original installation boot media, or insert the
+custom boot floppy if you have one, and reset your system.  This way,
+you will probably need to add some boot arguments like
+<userinput>root=<replaceable>root</replaceable></userinput>, where
+<replaceable>root</replaceable> is your root partition, such as
 <filename>/dev/sda1</filename>.
 -->
 Debian を直接起動するようにしていてシステムが立ち上がらない場合には、
-インストールに使った起動メディア (例えば rescue フロッピー)、あるいは
-(作ってあれば) カスタムブートフロッピーを
-挿入してシステムを再起動してください。
-カスタムブートフロッピーを<emphasis>使わなかった</emphasis>場合は、
-おそらくブートパラメータになんらかの引数を渡す必要があるでしょう。
-例えば rescue フロッピーなどから起動する場合は、
-<userinput>rescue root=<replaceable>root</replaceable></userinput> と指定する必要があります。
+インストールに使った起動メディア、あるいは (作ってあれば) カスタムブート
+フロッピーを挿入してシステムを再起動してください。この方法では、おそらく
+ブートパラメータに <userinput>root=<replaceable>root</replaceable></userinput>
+のような、なんらかの引数を渡す必要があるでしょう。
 <replaceable>root</replaceable> の箇所には、お使いになるルートパーティション
 (<filename>/dev/sda1</filename> など) を入れてください。
 
@@ -257,7 +196,162 @@ messages.
 され、今回はその後さらに新しいメッセージが続きます。
 
 </para>
+   </sect2>
 
+
+  <sect2 arch="powerpc"><title>OldWorld PowerMacs</title>
+<para>
+
+<!--
+If the machine fails to boot after completing the installation, and
+stops with a <prompt>boot:</prompt> prompt, try typing
+<userinput>Linux</userinput> followed by &enterkey;. (The default boot
+configuration in <filename>quik.conf</filename> is labeled Linux). The
+labels defined in <filename>quik.conf</filename> will be displayed if
+you press the <keycap>Tab</keycap> key at the <prompt>boot:</prompt>
+prompt. You can also try booting back into the installer, and editing
+the <filename>/target/etc/quik.conf</filename> placed there by the
+<guimenuitem>Install <command>Quik</command> on a Hard
+Disk</guimenuitem> step. Clues for dealing with
+<command>quik</command> are available at <ulink
+url="&url-powerpc-quik-faq;"></ulink>.
+-->
+インストール終了後に起動が失敗し、<prompt>boot:</prompt>というプロンプト
+のところで停止してしまったら、<userinput>Linux</userinput> と
+入力して &enterkey; を押してみてください (<filename>quik.conf</filename>
+のデフォルトの起動設定には「Linux」というラベルがついているのです)。
+<filename>quik.conf</filename> 中で定義されているラベルは、
+<prompt>boot:</prompt>というプロンプトが出た時に <keycap>Tab</keycap>
+キーを押すと表示されます。また、もう 1 度インストーラを起動し直して、
+<guimenuitem>Install <command>Quik</command> on a Hard
+Disk</guimenuitem> の段階で置いた <filename>/target/etc/quik.conf</filename>
+を編集してみるのもよいでしょう。
+<command>quik</command> を扱う上での情報は、
+<ulink url="&url-powerpc-quik-faq;"></ulink> から得られます。
+
+</para><para>
+
+<!--
+To boot back into MacOS without resetting the nvram, type
+<userinput>bye</userinput> at the Open Firmware prompt (assuming MacOS
+has not been removed from the machine). To obtain an OpenFirmware
+prompt, hold down the <keycombo> <keycap>command</keycap>
+<keycap>option</keycap> <keycap>o</keycap> <keycap>f</keycap>
+</keycombo> keys while cold booting the machine. If you need to reset
+the OpenFirmware nvram changes to the MacOS default in order to boot
+back to MacOS, hold down the <keycombo> <keycap>command</keycap>
+<keycap>option</keycap> <keycap>p</keycap> <keycap>r</keycap>
+</keycombo> keys while cold booting the machine.
+-->
+nvram をリセットせずに MacOS を起動するには、OpenFirmware プロンプトで
+<userinput>bye</userinput> と入力してください (MacOS がマシンから
+削除されていないことが前提です)。OpenFirmware プロンプトに入るには、
+マシンがコールドブートするまで <keycombo> <keycap>command</keycap>
+<keycap>option</keycap> <keycap>o</keycap> <keycap>f</keycap>
+</keycombo> のキーを押し続けてください。OpenFirmware nvram を
+リセットして MacOS をデフォルトにし、MacOS に戻るようにするには、
+マシンがコールドブートしている間、<keycombo> <keycap>command</keycap>
+<keycap>option</keycap> <keycap>p</keycap> <keycap>r</keycap>
+</keycombo> キーを押し続けてください。
+
+</para><para>
+
+<!--
+If you use <command>BootX</command> to boot into the installed system,
+just select your desired kernel in the <filename>Linux
+Kernels</filename> folder, un-choose the ramdisk option, and add
+a root device corresponding to your installation;
+e.g. <userinput>/dev/hda8</userinput>.
+-->
+あなたがインストールされたシステムにブートに <command>BootX</command>
+を使うなら、ただ <filename>Linux Kernels</filename> フォルダであなたの
+希望するカーネルを選んで、ramdisk オプションを非選択にします。そして、
+あなたのインストールと一致しているルートデバイス
+(例えば <userinput>/dev/hda8</userinput>) を加えます。
+
+</para>
+   </sect2>
+
+
+  <sect2 arch="powerpc"><title>NewWorld PowerMacs</title>
+<para>
+
+<!--
+On G4 machines and iBooks, you can hold down the
+<keycap>option</keycap> key and get a graphical screen with a button
+for each bootable OS, &debian; will be a button with a small penguin
+icon.
+-->
+G4 マシンと iBook では、<keycap>option</keycap> キーを押すと、
+起動可能な OS のボタンが並んだグラフィカルな画面になります。&debian; 
+は小さなペンギンのアイコンで示されます。
+
+</para><para>
+
+<!--
+If you kept MacOS and at some point it changes the OpenFirmware
+<envar>boot-device</envar> variable you should reset OpenFirmware to
+its default configuration.  To do this hold down the <keycombo>
+<keycap>command</keycap> <keycap>option</keycap> <keycap>p</keycap>
+<keycap>r</keycap> </keycombo> keys while cold booting the machine.
+-->
+MacOS を残しており、どこかの時点で OpenFirmware の
+<envar>ブートデバイス</envar>変数を変更した場合には、OpenFirmware を
+デフォルトの設定に戻す必要があります。これには、マシンがコールドブートするまで
+<keycombo> <keycap>command</keycap> <keycap>option</keycap> <keycap>p</keycap>
+<keycap>r</keycap> </keycombo> キーを押し続けます。
+
+</para><para>
+
+<!--
+The labels defined in <filename>yaboot.conf</filename> will be
+displayed if you press the <keycap>Tab</keycap> key at the
+<prompt>boot:</prompt> prompt.
+-->
+<prompt>boot:</prompt> プロンプトが表示されたときに
+<keycap>Tab</keycap> キーを押すと、<filename>yaboot.conf</filename>
+で定義されているラベルが表示されます。
+
+</para><para>
+
+<!--
+Resetting OpenFirmware on G3 or G4 hardware will cause it to boot
+&debian; by default (if you correctly partitioned and placed the
+Apple_Bootstrap partition first).  If you have &debian; on a SCSI disk
+and MacOS on an IDE disk this may not work and you will have to enter
+OpenFirmware and set the <envar>boot-device</envar> variable,
+<command>ybin</command> normally does this automatically.
+-->
+G3 や G4 において OpenFirmware をリセットすると、
+&debian; がデフォルトで起動するようになります
+(パーティションが正しく作成され、Apple_Bootstrap
+パーティションが最初に置かれている場合)。
+&debian; が SCSI ディスクに置かれていて
+MacOS が IDE ディスクに置かれている場合には、
+うまく働かないかもしれません。その場合は
+OpenFirmware に入って <envar>ブートデバイス</envar> 変数を設定する
+必要がありますが、通常は <command>ybin</command> が
+自動的にこの作業をします。
+
+</para><para>
+
+<!--
+After you boot &debian; for the first time you can add any additional
+options you desire (such as dual boot options) to
+<filename>/etc/yaboot.conf</filename> and run <command>ybin</command>
+to update your boot partition with the changed configuration.  Please
+read the <ulink url="&url-powerpc-yaboot-faq;">yaboot HOWTO</ulink>
+for more information.
+-->
+いちど &debian; が起動できたら、あなたが望む
+オプション (デュアルブートなど) を
+<filename>/etc/yaboot.conf</filename> に追加して
+<command>ybin</command> を実行すれば、その変更をブートパーティションに
+反映させることができます。詳しくは、
+<ulink url="&url-powerpc-yaboot-faq;">yaboot HOWTO</ulink>
+を参照してください。
+
+</para>
    </sect2>
  </sect1>
 
