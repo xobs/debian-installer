@@ -1,2 +1,153 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 14337 untranslated -->
+<!-- original version: 21918 -->
+
+<sect3 id="mdcfg">
+ <title>Configuration d'un périphérique à plusieurs disques (RAID logiciel)</title>
+<para>
+Si vous avez plusieurs disques durs <footnote><para>
+
+Pour être honnête, on peut construire un périphérique à plusieurs disques
+même avec les partitions d'un seul disque, mais ça n'apporte pas grand chose.
+</para></footnote>
+
+sur votre machine, vous pouvez utiliser <command>mdcfg</command> pour
+obtenir de vos disques de meilleures performances et une meilleure fiabilité de
+vos données. Le résultat est un périphérique à plusieurs disques, 
+<firstterm>Multidisk Device</firstterm>, ou <firstterm>RAID logiciel</firstterm>.
+</para>
+<para>
+Un périphérique à plusieurs disques n'est qu'un ensemble de partitions
+situées sur différents disques mais réunies pour former un périphérique
+<emphasis>logique</emphasis>. Ce périphérique peut alors être utilisé comme
+une simple partition, c'est-à-dire une partition qu'on peut monter et 
+formater avec <command>partman</command>.
+</para>
+<para>
+Ce que vous gagnez dépend du type de périphérique créé. Voici ceux qui
+sont reconnus&nbsp;:
+<variablelist>
+<varlistentry>
+
+<term>RAID0</term><listitem><para>
+Ce type vise principalement la performance. RAID0 divise toutes les données
+entrantes en <firstterm>bandes</firstterm> et les distribue également sur
+tous les disques. Cela peut augmenter la vitesse des opérations d'écriture et
+de lecture, mais si l'un des disques a un problème, vous perdez 
+<emphasis>tout</emphasis>&nbsp;: une partie des informations est encore sur
+les disques sains, mais l'autre <emphasis>était</emphasis> sur le disque
+défectueux.
+</para>
+<para>
+L'usage standard de RAID0 est une partition pour du travail vidéo.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>RAID1</term><listitem><para>
+Ce type est adapté là où la fiabilité est le premier souci. Il consiste en 
+plusieurs partitions de même taille (deux, habituellement) qui contiennent
+exactement les mêmes données. Cela signifie essentiellement deux choses.
+Si l'un des disques a un problème, les données sont encore sur les autres 
+disques. Et vous pouvez utiliser une partie seulement de la capacité 
+disponible, précisément, la partition la plus petite du RAID.
+</para>
+<para>
+Vous pouvez aussi avoir un disque de rechange qui prendra la place du disque
+défectueux en cas de problème.  
+  </para></listitem>
+</varlistentry>
+</variablelist>
+Pour résumer&nbsp;:
+
+<informaltable>
+<tgroup cols="5">
+<thead>
+<row>
+  <entry>Type</entry>
+  <entry>Nombre minimum de disques</entry>
+  <entry>Disque de rechange</entry>
+  <entry>Supporte l'échec d'un disque ?</entry>
+  <entry>Espace disponible</entry>
+</row>
+</thead>
+
+<tbody>
+<row>
+  <entry>RAID0</entry>
+  <entry>2</entry>
+  <entry>non</entry>
+  <entry>non</entry>
+  <entry>Taille de la plus petite partition multipliée par le nombre des périphériques dans le RAID</entry>
+</row>
+
+<row>
+  <entry>RAID1</entry>
+  <entry>2</entry>
+  <entry>facultatif</entry>
+  <entry>oui</entry>
+  <entry>Taille de la plus petite partition dans le RAID</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+<para>
+Si vous voulez tout savoir sur le RAID logiciel, lisez le
+<ulink url="&url-software-raid-howto;">HOWTO sur le RAID logiciel</ulink>.
+</para>
+<para>
+Pour créer un périphérique à plusieurs disques, vous devez préparer les 
+partitions nécessaires. Vous pouvez le faire avec <command>partman</command>,
+dans le menu <guimenu>Définitions des partitions</guimenu> où vous
+choisirez <menuchoice><guimenu>Use as:</guimenu> 
+<guimenuitem>Utiliser la partition comme périphérique RAID</guimenuitem>
+</menuchoice>
+</para>
+<warning><para>
+Pour l'instant, vous ne pouvez pas utiliser un périphérique de ce type pour
+la partition racine, <filename>/</filename>.
+</para></warning>
+<para>
+Ensuite, vous choisissez <guimenuitem>Configurer le RAID logiciel</guimenuitem>
+dans le menu principal de <command>partman</command>. Dans le premier écran
+de <command>mdcfg</command>, sélectionnez 
+<guimenuitem>Créer un périphérique à plusieurs disques</guimenuitem>. Une liste
+des types acceptés pour ces périphériques est affichée et vous pouvez en
+choisir un, par exemple RAID1. La suite dépend du type que vous avez choisi.
+</para>
+
+<itemizedlist>
+<listitem><para>
+Le type RAID0 est simple. Une liste des partitions RAID disponibles est
+présentée et tout ce que vous avez à faire est de choisir les partitions qui
+composeront le périphérique.
+</para></listitem>
+<listitem><para>
+Le type RAID1 est un peu plus compliqué. On vous demandera d'abord le nombre
+de périphériques actifs et le nombre de périphériques de rechange qui
+composeront le périphérique. Ensuite vous devrez choisir dans la liste des
+partitions RAID celles qui seront actives et celles qui resteront en réserve.
+Le nombre de ces partitions devra être égal à celui donné l'instant d'avant.
+Mais, si vous n'indiquez pas le même chiffre, le &d-i; ne vous laissera pas
+continuer et vous demandera une correction.
+</para></listitem>
+</itemizedlist>
+
+<para>
+Il est parfaitement possible d'avoir plusieurs types de périphériques en même
+temps. Par exemple, avec trois disques durs de 200&nbsp;Go, chacun contenant
+deux partitions de 100&nbsp;Go, vous pouvez créer un périphérique de type
+RAID0 avec les premières partitions des trois disques, soit une partition
+rapide de 300&nbsp;Go pour le travail vidéo&nbsp;; et vous pouvez combiner
+les trois partitions restantes (deux actives, une de rechange) dans un
+périphérique RAID1, soit une partition très fiable de 100&nbsp;Go pour
+<filename>/home</filename>.
+</para>
+<para>
+Quand vous avez défini vos périphériques, vous pouvez choisir
+<guimenuitem>Terminer</guimenuitem> <command>mdcfg</command> pour retourner
+au menu de <command>partman</command> et créer les systèmes de fichiers et les
+options habituelles comme les points de montage pour ces nouveaux 
+périphériques.
+</para>
+</sect3>
