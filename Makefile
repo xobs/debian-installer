@@ -107,6 +107,10 @@ define recurse
 	$(if $($(1)_SUPPORTED),$(call recurse_many,$(1),$(2),$(3)),$(call recurse_once,$(2),$(3)))
 endef
 
+define genext2fs-userdevfs
+       genext2fs -d $(TREE) -b 15000 -r 0
+endef
+
 define genext2fs
 	genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` -r 0
 endef
@@ -568,7 +572,11 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 	install -d $(TEMP)
 
 	if [ $(INITRD_FS) = ext2 ]; then \
-		$(genext2fs) $(TEMP)/initrd; \
+		if [ "" != "$(USERDEVFS)" ]; then \
+			$(genext2fs-userdevfs) $(TEMP)/initrd; \
+		else \
+			$(genext2fs) $(TEMP)/initrd; \
+		fi \
 	elif [ $(INITRD_FS) = romfs ]; then \
 		$(genromfs) $(TEMP)/initrd; \
 	else \
