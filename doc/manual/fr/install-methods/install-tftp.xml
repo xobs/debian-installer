@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 22939 -->
+<!-- original version: 23137 -->
 
  <sect1 condition="supports-tftp" id="install-tftp">
  <title>Préparer les fichiers pour amorcer depuis le réseau avec TFTP</title>
@@ -34,16 +34,16 @@ VMEbus&nbsp;: l'adresse IP peut être configurée manuellement dans la ROM
 d'amorçage.</phrase>
 
 <phrase condition="supports-dhcp">Le protocole DHCP 
-(«&nbsp;Dynamic Host Configuration Protocole&nbsp;» ou Protocole de 
-configuration dynamique des hôtes, NdT) est une extension bien plus flexible 
+(«&nbsp;Dynamic Host Configuration Protocole&nbsp;», Protocole de 
+configuration dynamique des hôtes) est une extension bien plus flexible 
 de BOOTP (et respectant la compatibilité ascendante). Certains systèmes ne 
 peuvent être configurés que via DHCP.</phrase>
 
 </para><para arch="powerpc">
 
 Pour les PowerPC, si vous avez une machine Power Macintosh NewWorld, il vaut 
-mieux utiliser DHCP plutôt que BOOTP. Certaines de ces dernières sont 
-incapables d'amorcer en utilisant BOOTP.
+mieux utiliser DHCP plutôt que BOOTP. Certaines de ces machines ne peuvent pas 
+s'amorcer avec BOOTP.
 
 </para><para arch="alpha"> 
 
@@ -74,7 +74,7 @@ BOOTP. Un paquet RBOOTD est disponible sur le site web de parisc-linux.
 </para><para>
 
 Le protocole trivial de transfert des fichiers («&nbsp;Trivial Transfert File 
-Protocol&nbsp;» ou TFTP, NdT) est utilisé pour transférer l'image d'amorçage 
+Protocol&nbsp;» ou TFTP) est utilisé pour transférer l'image d'amorçage 
 au client. Théoriquement, tout serveur sur toutes les plateformes qui
 implémentent ces protocoles peut être utilisé. Dans les exemples qui vont 
 suivre, on donnera les commandes pour SunOS 4.x, SunOS 5.x (mieux connu sous 
@@ -126,7 +126,7 @@ pré-amorçage (PXE) de TFTP, vous avez besoin d'un serveur TFTP avec
 
 Si vous voulez installer Debian sur une machine SGI et si votre serveur TFTP 
 est une machine GNU/Linux avec Linux 2.4.X, il vous faudra effectuer la 
-manoeuvre suivante sur votre serveur&nbsp;:
+man&oelig;uvre suivante sur votre serveur&nbsp;:
 
 <informalexample><screen>
 
@@ -146,8 +146,7 @@ echo "2048 32767" > /proc/sys/net/ipv4/ip_local_port_range
 
 </screen></informalexample>
 
-pour fixer l'intervalle des ports source que le serveur Linux
-         TFTP peut utiliser.
+pour fixer l'intervalle des ports source que le serveur TFTP peut utiliser.
 
 </para>
   </sect2>
@@ -177,14 +176,14 @@ travers TFTP. Pour amorcer sur le réseau, utilisez
 </para>
 <para arch="i386">
 
-Pour le démarrage PXE, tout ce dont vous avez besoin est dans la tarballe
+Pour le démarrage PXE, tout ce dont vous avez besoin est dans l'archive
 <filename>netboot/netboot.tar.gz</filename>. Extrayez les fichiers dans le
 répertoire de l'image <command>tftpd</command>. Assurez-vous que le serveur
 DHCP donnera bien le fichier <filename>/pxelinux.0</filename> comme fichier
 d'amorçage à <command>tftpd</command>.
 </para>
 <para arch="ia64">
-Pour le démarrage PXE, tout ce dont vous avez besoin est dans la tarballe
+Pour le démarrage PXE, tout ce dont vous avez besoin est dans l'archive
 <filename>netboot/netboot.tar.gz</filename>. Extrayez les fichiers dans le
 répertoire de l'image <command>tftpd</command>. Assurez-vous que le serveur
 DHCP donnera bien le fichier 
@@ -193,7 +192,7 @@ d'amorçage à <command>tftpd</command>.
 </para>
 
    <sect3 arch="mipsel">
-   <title>DECstation TFTP Images</title>
+   <title>Images TFTP pour les DECstation</title>
 <para>
 
 Pour les DECstation, il y a des fichiers tftpimage pour chaque 
@@ -230,7 +229,7 @@ Il peut y avoir plusieurs causes&nbsp;:
 
 Le microprogramme ne répond pas à une requête ARP durant un transfert TFTP. 
 Cela conduit à une suspension ARP et le transfert s'arrête. La solution est 
-d'ajouter l'adresse MAC de la carte Ethernet de la DECstation dans la table 
+d'ajouter l'adresse MAC de la carte Ethernet dans la table 
 ARP du serveur TFTP. On peut le faire avec
 <userinput>arp -s <replaceable>IP-address</replaceable>
 <replaceable>MAC-address</replaceable></userinput> en tant que root sur la 
@@ -254,7 +253,7 @@ tout par TFTP, voyez
    </sect3>
 
    <sect3 arch="alpha">
-   <title>Alpha TFTP Booting</title>
+   <title>Amorçage TFTP pour Alpha</title>
 <para>
 Sur Alpha, vous devez spécifier le nom de fichier (le chemin étant
 relatif au répertoire de l'image d'amorçage) en utilisant l'argument 
@@ -271,7 +270,7 @@ de fichier.
    </sect3>
 
    <sect3 arch="sparc">
-   <title>SPARC TFTP Booting</title>
+   <title>Amorçage TFTP pour SPARC</title>
 <para>
 
 Les architectures SPARC utilisent des noms de sous-architecture, comme 
@@ -280,24 +279,32 @@ l'architecture est laissée en blanc et le fichier que le client recherche
 est simplement <filename>ip-du-client-en-hexa</filename>. Ainsi, si
 votre sous-architecture système est SUN4C et que son adresseIP est 
 192.168.1.3, le nom de fichier sera <filename>C0A80103.SUN4C</filename>.
+Pour déterminer facilement ce nom, lancez un interpréteur de commandes sur
+une autre machine Unix et faites&nbsp;:
+
+</para><para>
+<userinput>printf '%.2x%.2x%.2x%.2x\n' 10 0 0 4</userinput>
+</para><para>
+si l'adresse de la machine est 10.0.0.4. Cela recrache l'adresse en 
+hexadécimal. Il suffira de mettre les lettres en majuscule et d'ajouter le
+nom de la sous-architecture pour obtenir le nom du fichier.
 
 </para><para>
 
 Vous pouvez aussi forcer certains systèmes SPARC à rechercher un nom de 
 fichier spécifique en l'ajoutant à la fin de la commande d'amorçage de 
 OpenPROM, p.&nbsp;ex. <userinput>boot net my-sparc.image</userinput>. 
-Ce fichier doit bien sûr être présent dans un répertoire 
-connu du serveur TFTP.
+Ce fichier doit bien sûr être présent dans un répertoire connu du serveur TFTP.
 
 </para>
    </sect3>
 
    <sect3 arch="m68k">
-   <title>BVM/Motorola TFTP Booting</title>
+   <title>Amorçage TFTP pour BVM/Motorola</title>
 <para>
 
-Pour BVM et les systèmes VMEbus Motorola, recopiez les
-          fichiers &bvme6000-tftp-files; dans <filename>/tftpboot/</filename>.
+Pour BVM et les systèmes VMEbus Motorola, recopiez les fichiers 
+&bvme6000-tftp-files; dans <filename>/tftpboot/</filename>.
 
 </para><para>
 
@@ -311,7 +318,7 @@ des informations supplémentaires sur la configuration de votre système.
    </sect3>
 
    <sect3 arch="mips">
-   <title>SGI Indys TFTP Booting</title>
+   <title> Amorçage TFTP pour SGI Indy</title>
 <para>
 
 Sur les Indy de SGI, vous pouvez compter sur <command>bootpd</command> pour
