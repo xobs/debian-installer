@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 17510 -->
+<!-- original version: 18640 -->
 
  <sect1 id="module-details">
  <title>Usando componentes individuales</title>
@@ -22,11 +22,11 @@ Asumamos que el instalador de Debian ha arrancado y esta visualizando
 su pantalla inicial. En este momento, las capacidades del &d-i; son
 todavía algo limitadas. Éste no conoce mucho sobre su hardware, idioma
 preferido, o incluso la tarea que deberá realizar. No se preocupe.
-Porque &d-i; es algo hábil, puede explorar automáticamente su hardware, 
-ubicar el resto de sus componentes y auto-actualizarse a un programa
-moderno y bien construido.
+Porque &d-i; es bastante intuitivo, puede explorar su hardware 
+automáticamente, ubicar el resto de sus componentes y auto-actualizarse 
+a un programa moderno y bien construido.
 
-Sin embargo, todavía deberá ayudar a &d-i; proveiendo alguna información
+Sin embargo, todavía deberá ayudar al &d-i; proveiendo alguna información
 que no puede determinar automáticamente (como elegir su idioma preferido,
 el mapa del teclado o el servidor de réplica deseado).
 
@@ -37,7 +37,7 @@ varias veces durante esta etapa. La primera vez se enfoca específicamente
 en el hardware requerido para cargar los componentes del instalador (como
 su CD-ROM o tarjeta de red). En vista de que no todos los controladores
 podrían estar disponibles en esta primera ejecución, la detección de
-hardware se necesita repetir después, durante el proceso.
+hardware se necesita ser repetida después, durante el proceso.
 
 </para>
 
@@ -47,18 +47,12 @@ hardware se necesita repetir después, durante el proceso.
 &module-kbd-chooser.xml;
 &module-s390-netdevice.xml;
 &module-s390-dasd.xml;
-&module-pcmcia.xml;
-&module-cdrom-detect.xml;
 &module-ddetect.xml;
+&module-cdrom-detect.xml;
 &module-iso-scan.xml;
-<!--
-&module-load-components;
-Insert Load installer components here; mention that it is executed later
-(after netcfg and choose mirror) if netboot installation.
--->
+&module-anna.xml;
 &module-netcfg.xml;
 &module-choose-mirror.xml;
-&module-anna.xml; <!-- should probably not be included -->
 
   </sect2>
 
@@ -97,26 +91,26 @@ red lentos, esto podría tomar algún tiempo.
 </para>
 
 &module-base-installer.xml;
-&module-kernel-chooser.xml;
   </sect2>
 
   <sect2>
   <title>Hacer su sistema arrancable</title>
-<para>
 
-Note que el arrancar múltiples sistemas operativos en una misma máquina
-todavía es un arte oscuro. Este documento no intenta documentar
-los diferentes gestores de arranque, que varían por arquitectura e
-incluso por sub-arquitectura. Deberá consultar la documentación de
-su gestor de arranque para mayor información.
-
-</para><para condition="supports-nfsroot">
+<para condition="supports-nfsroot">
 
 Si esta instalando una estación de trabajo sin disco, obviamente, 
 arrancar desde el disco local no es una opción significativa, de modo
 que esta etapa se saltará. <phrase arch="sparc">Tal vez quiera
 configurar OpenBoot para arrancar desde red en forma predeterminada,
 vea <xref linkend="boot-dev-select-sun"/>.</phrase>
+
+</para><para>
+
+Note que el arrancar múltiples sistemas operativos en una misma máquina
+todavía es un arte oscuro. Este documento no intenta documentar
+los diferentes gestores de arranque, que varían por arquitectura e
+incluso por sub-arquitectura. Deberá consultar la documentación de
+su gestor de arranque para mayor información.
 
 </para>
 
@@ -141,7 +135,7 @@ vea <xref linkend="boot-dev-select-sun"/>.</phrase>
 <para>
 
 Estas son las últimas cosas a hacer antes de reiniciar su nuevo
-sistema Debian. Básicamente consiste en ordenar después al &d-i;. 
+sistema Debian. En su mayoría consiste en ordenar después del &d-i;. 
 
 </para>
 
@@ -158,9 +152,9 @@ para ayudar al usuario en caso de que algo falle.
 
 </para>
 
-&module-baseconfig.xml;
 &module-bugreporter.xml;
 &module-cdrom-checker.xml;
 &module-shell.xml;
+&modules-baseconfig.xml;
   </sect2>
  </sect1>
