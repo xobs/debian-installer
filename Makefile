@@ -550,7 +550,7 @@ boot_floppy_check: floppy_image
 stats: tree $(EXTRA_TARGETS) general-stats $(EXTRA_STATS)
 
 COMPRESSED_SZ=$(shell expr $(shell tar czf - $(TREE) | wc -c) / 1024)
-KERNEL_SZ=$(shell expr \( $(foreach NAME,$(KERNELNAME),$(shell du -b $(TEMP)/$(NAME) | cut -f 1) +) 0 \) / 1024)
+KERNEL_SZ=$(shell expr \( $(foreach NAME,$(KERNELNAME),$(shell du -b $(TEMP)/$(NAME) 2>&1 | cut -f 1) +) 0 \) / 1024)
 general-stats:
 	@echo
 	@echo "System stats for $(TYPE)"
