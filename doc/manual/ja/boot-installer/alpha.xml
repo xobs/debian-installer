@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23576 -->
+<!-- original version: 23664 -->
 
  <sect2 arch="alpha" id="alpha-firmware">
  <title>Alpha コンソールファームウェア</title>
@@ -98,20 +98,40 @@ SRM をインストールする場合はこちらが
 </para><para>
 
 <!--
-Because GNU/Linux is the only operating system on Alpha that can be
-booted from both console types, the choice will also depend on what
-other operating systems you wish to run on the same machine.  All
-other Unix-like operating systems (Tru64 Unix, FreeBSD, OpenBSD, and
-NetBSD) and OpenVMS can only boot from SRM, whereas Windows NT can
-only boot from ARC.
+GNU/Linux is the only operating system on Alpha that can be booted from
+both console types, but &debian; &release; only supports booting on
+SRM-based systems.  If you have an Alpha for which no version of SRM is
+available, if you will be dual-booting the system with Windows NT, or if
+your boot device requires ARC console support for BIOS initialization,
+you will not be able to use the &debian; &release; installer.  You can
+still run &debian; &release; on such systems by using other install
+media; for instance, you can install Debian woody with MILO and upgrade.
 -->
-GNU/Linux は、両方のコンソールから起動できる
-唯一の Alpha 用オペレーティングシステムです。
-そのため、どちらを選ぶかは、そのマシンで他にどのような
-OS を動作させたいかにも依存します。
-他の Unix ライクなオペレーティングシステム
-(Tru64 Unix や FreeBSD、OpenBSD、NetBSD)
-は SRM からのみ起動でき、逆に Windows NT は ARC からのみ起動できます。
+GNU/Linux は、いずれのコンソールからも起動できる
+唯一の Alpha 用オペレーティングシステムですが、
+&debian; &release; は SRM ベースシステムでの起動のみをサポートしています。
+SRM が有効でないバージョンの Alpha をお持ちの場合や、
+Windows NT とのデュアルブートにしたい場合、
+起動デバイスが BIOS の初期化に ARC コンソールを必要とする場合の時には、
+&debian; &release; インストーラを使用できません。
+そのようなシステムでは 他のインストールメディアを使用して、
+&debian; &release; を実行できます。
+(例えば、Debian woody を MILO でインストールし、アップグレードする)
+
+</para><para>
+
+<!--
+Because <command>MILO</command> is not available for any of the Alpha
+systems currently in production (as of February 2000), and because it
+is no longer necessary to buy an OpenVMS or Tru64 Unix license to have
+SRM firmware on your older Alpha, it is recommended that you use SRM
+when possible.
+-->
+<command>MILO</command> が、
+現在生産中 (2000年2月現在) の Alpha システムでどれにも利用できず、
+古い Alpha 用に (SRM ファームウェアを持つ) OpenVMS や 
+Tru64 Unix ライセンスをもう購入する必要がないため、
+可能であれば、SRM を使用することをお奨めします。
 
 </para><para>
 
@@ -182,7 +202,7 @@ ARC 互換な任意のコンソールを指しています。
   <entry>SRM のみ</entry>
 </row><row>
   <entry>nautilus</entry>
-  <entry>ARC のみ (マザーボードのマニュアル参照)</entry>
+  <entry>ARC (マザーボードのマニュアル参照) か SRM</entry>
 </row><row>
   <entry>noname</entry>
   <entry>ARC か SRM</entry>
@@ -229,6 +249,34 @@ ARC 互換な任意のコンソールを指しています。
 
 <!--
 Generally, none of these consoles can boot Linux directly, so the
+assistance of an intermediary bootloader is required.  For the SRM
+console, <command>aboot</command>, a small, platform-independent
+bootloader, is used.  See the (unfortunately outdated) <ulink
+url="&url-srm-howto;">SRM HOWTO</ulink> for more information on
+<command>aboot</command>.
+-->
+一般に Linux を直接起動できるコンソールはありませんので、
+中間に挟まるブートローダの補助が必要になります。
+SRM コンソールでは、<command>aboot</command> 
+(小さくプラットフォームに依存しないブートローダ) を使います。
+<command>aboot</command> についての詳細は、
+(残念ながら古くなっていますが) <ulink url="&url-srm-howto;">SRM HOWTO</ulink> 
+をご覧ください。
+
+</para><para condition="FIXME">
+
+<!--
+The following paragraphs are from the woody install manual, and are
+included here for reference; they may be useful to someone at a later
+date when Debian supports MILO-based installs again.
+-->
+以下の段落は woody インストールマニュアルから、参考のために収録しています。
+後日、MILO ベースのインストールが再度サポートされたときに有用かもしれません。
+
+</para><para condition="FIXME">
+
+<!--
+Generally, none of these consoles can boot Linux directly, so the
 assistance of an intermediary bootloader is required.  There are two
 mainstream Linux loaders: <command>MILO</command> and <command>aboot</command>.
 -->
@@ -237,7 +285,8 @@ mainstream Linux loaders: <command>MILO</command> and <command>aboot</command>.
 主な Linux ローダには <command>MILO</command> と <command>aboot</command>
 の 2 つがあります。
 
-</para><para>
+
+</para><para condition="FIXME">
 
 <!--
 <command>MILO</command> is itself a console, which replaces ARC or SRM in
@@ -256,10 +305,10 @@ ARC コンソールから Linux を起動する唯一の方法でもあります。
 <command>MILO</command> はプラットフォームに依存し
 (それぞれのシステムに応じて異なる <command>MILO</command> が必要になります)、
 上記の表で ARC がサポートされているシステム向けのものしか存在しません。
-<ulink url="&url-milo-howto;">MILO HOWTO</ulink>
-もご覧ください (残念なことに古くなっていますが)。
+(残念ながら古くなっていますが) <ulink url="&url-milo-howto;">MILO HOWTO</ulink>
+もご覧ください。
 
-</para><para>
+</para><para condition="FIXME">
 
 <!--
 <command>aboot</command> is a small, platform-independent bootloader, which
@@ -274,7 +323,7 @@ url="&url-srm-howto;">SRM HOWTO</ulink> for more information on
 <ulink url="&url-srm-howto;">SRM HOWTO</ulink>
 をご覧ください。
 
-</para><para>
+</para><para condition="FIXME">
 
 <!--
 Thus, three scenarios are generally possible, depending on the
@@ -294,19 +343,7 @@ ARC -> MILO
 
 </screen></informalexample>
 
-</para><para>
-
-<!--
-The UP1000 motherboard (subarchitecture name `nautilus') from Alpha
-Processor, Inc. is different from all the others, in that it uses an
-API-specific bootloader that runs under AlphaBIOS firmware.
--->
-Alpha Processor, Inc. の UP1000 マザーボード (サブアーキテクチャ名 `nautilus')
-は他のものとは異なっています。
-こちらは API 専用のブートローダを利用し、
-AlphaBIOS ファームウェアの下で動作します。
-
-</para><para>
+</para><para condition="FIXME">
 
 <!--
 Because <command>MILO</command> is not available for any of the Alpha
@@ -333,9 +370,8 @@ products contain both SRM and AlphaBIOS in their firmware.  For
 possible to switch from one version to another by reflashing the
 firmware.  Also, once SRM is installed, it is possible to run
 ARC/AlphaBIOS from a floppy disk (using the <command>arc</command>
-command).  For the
-reasons mentioned above, we recommend switching to SRM before
-installing &debian;.
+command).  For the reasons mentioned above, we recommend switching to
+SRM before installing &debian;.
 -->
 大部分の AlphaServer や、
 現行のサーバ・ワークステーション製品のすべてには、
@@ -500,7 +536,7 @@ SRM における CD-ROM ドライブの呼び名を入れます。
 </para>
   </sect2>
 
-  <sect2 arch="alpha">
+  <sect2 arch="alpha" condition="FIXME">
   <title>ARC コンソールや AlphaBIOS コンソールでの CD-ROM からの起動</title>
 <para>
 
@@ -528,7 +564,7 @@ Ruffians は例外で、ブートローダに
   </sect2>
 
 
-  <sect2 arch="alpha">
+  <sect2 arch="alpha" condition="supports-floppy-boot">
   <title>SRM コンソールでのフロッピーからの起動</title>
 <para>
 
@@ -613,7 +649,7 @@ MILO に入ったところで一度ブートストラップを中断する必要があります。
   </sect2>
 
 
-  <sect2 arch="alpha">
+  <sect2 arch="alpha" condition="supports-floppy-boot">
   <title>ARC コンソールや AlphaBIOS コンソールでのフロッピーからの起動</title>
 
 <para>
@@ -630,33 +666,7 @@ OS Path に <command>milo</command> を指定してください。
 </para>
   </sect2>
 
-  <sect2 arch="alpha">
-  <title>APB ブートローダ (UP1000) でのフロッピーからの起動</title>
-
-<para>
-
-<!--
-To boot on this platform, run <command>\apb\apb.exe</command> from the
-`Utility/Run Maintenance Program' menu, and type
--->
-このプラットフォームで起動するには、
-"Utility/Run Maintenance Program" メニューで
-<command>\apb\apb.exe</command> を実行し、
-APB プロンプトで
-      <informalexample><screen>
-
-boot debian_install
-      
-</screen></informalexample>
-<!--
- at the APB prompt.
--->
-と入力してください。
-
-</para>
-  </sect2>
-
- <sect2 arch="alpha" id="booting-from-milo"><title>MILO による起動</title>
+ <sect2 arch="alpha" condition="FIXME" id="booting-from-milo"><title>MILO による起動</title>
 <para>
 
 <!--
