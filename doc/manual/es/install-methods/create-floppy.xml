@@ -1,95 +1,101 @@
-<!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 untranslated -->
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 18623 -->
 
  <sect1 condition="supports-floppy-boot" id="create-floppy">
- <title>Creating Floppies from Disk Images</title>
+ <title>Crear disquetes desde imágenes de disco</title>
 <para>
 
-Bootable floppy disks are commonly used to boot the installer system
-for machines with a floppy drive. Floppies can also be used for
-installation of the kernel and modules on most systems.
+Los disquetes arrancable son generalmente usados como último recurso
+para arrancar el instalador en hardware que no puede hacerlo desde CD
+o por otros métodos.
 
 </para><para arch="powerpc">
 
-Floppy disk booting reportedly fails on Mac USB floppy drives.
+El arranque desde disquete ha sido reportado como fallido en unidades
+de disquete USB de Mac.
 
 </para><para arch="m68k">
 
-Floppy disk booting is not supported on Amigas or
-68k Macs.
+El arranque desde disquete no esta soportado en Amigas o Macs 68k.
 
 </para><para>
 
-Disk images are files containing the complete contents of a floppy
-disk in <emphasis>raw</emphasis> form.  Disk images, such as
-<filename>boot.img</filename>, cannot simply be copied to floppy
-drives.  A special program is used to write the image files to floppy
-disk in <emphasis>raw</emphasis> mode.  This is required because these
-images are raw representations of the disk; it is required to do a
-<emphasis>sector copy</emphasis> of the data from the file onto the
-floppy.
+Las imágenes de disco son ficheros que contienen el contenido completo
+de un disquete en formato <emphasis>raw</emphasis>. Las imágenes de disco,
+como <filename>boot.img</filename>, no pueden ser copiadas simplemente
+a la unidad de disquete. Se usa un programa especial para escribir los
+ficheros de imagen a la unidad de disquete en modo <emphasis>raw</emphasis>.
+Esto se requiere debido a que estas imágenes son representaciones en "bruto"
+del disco; se requiere efectuar una <emphasis>copia por sector</emphasis> 
+de la data del fichero en el disquete.
 
 </para><para>
 
-There are different techniques for creating floppies from disk images,
-which depend on your platform.  This section describes how to create
-floppies from disk images on different platforms.
+Existen diferentes métodos para crear disquetes desde imágenes de disco,
+las cuales dependen de su plataforma. Esta sección describe como crear
+disquetes desde imágenes de disco en diferentes plataformas.
 
 </para><para>
 
-No matter which method you use to create your floppies, you should
-remember to flip the tab on the floppies once you have written them,
-to ensure they are not damaged unintentionally.
+No importa el método que use para crear sus disquetes, deberá 
+recordar activar la protección de escritura en los disquetes, una
+vez que haya escrito en ellos, para asegurarse que no se dañen
+sin intención.
 
 </para>
 
-  <sect2><title>Writing Disk Images From a Linux or Unix System</title>
+  <sect2><title>Escribir imágenes de disco desde un sistema Linux o Unix</title>
 <para>
 
-To write the floppy disk image files to the floppy disks, you will
-probably need root access to the system.  Place a good, blank floppy
-in the floppy drive.  Next, use the command
+Para escribir los ficheros de imagen de disco en los disquetes, probablemente
+necesitará acceso de superusuario en el sistema. Coloque un disquete en blanco
+y en buen estado en la unidad de disquetes. Seguidamente use la orden
 
 <informalexample><screen>
-dd if=<replaceable>file</replaceable> of=/dev/fd0 bs=1024 conv=sync ; sync
+dd if=<replaceable>fichero</replaceable> of=/dev/fd0 bs=1024 conv=sync ; sync
 </screen></informalexample>
 
-where <replaceable>file</replaceable> is one of the floppy disk image
-files (see <xref linkend="downloading-files"/> for what
-<replaceable>file</replaceable> should be).
-<filename>/dev/fd0</filename> is a commonly used name of the floppy
-disk device, it may be different on your workstation (on Solaris, it
-is <filename>/dev/fd/0</filename>). The command may return to the
-prompt before Unix has finished writing the floppy disk, so look for
-the disk-in-use light on the floppy drive and be sure that the light
-is out and the disk has stopped revolving before you remove it from
-the drive. On some systems, you'll have to run a command to eject the
-floppy from the drive (on Solaris, use <command>eject</command>, see
-the manual page).
+donde <replaceable>fichero</replaceable> es uno de los ficheros de imagen
+de disco (vea <xref linkend="downloading-files"/> para saber que
+<replaceable>ficheros</replaceable> deben ser).
+<filename>/dev/fd0</filename> es el nombre comunmente usado por la unidad
+de disquetes, podría ser distinto en su ordenador
+<phrase arch="sparc">(en Solaris, es
+<filename>/dev/fd/0</filename>)</phrase>.
+La orden podría retornar el cursor antes de que Unix haya finalizado la
+escritura en el disquete, por lo que espere que la luz de "disco en uso" en
+la unidad de disquete este apagada y que ha finalizado de dar vueltas 
+antes de retirarlo de la unidad. En algunos sistemas, tendrá que ejecutar
+una orden para expulsar el disquete de la unidad
+<phrase arch="sparc">(en Solaris, use <command>eject</command>, vea
+la página de manual)</phrase>.
 
 </para><para>
 
-Some systems attempt to automatically mount a floppy disk when you
-place it in the drive. You might have to disable this feature before
-the workstation will allow you to write a floppy in <emphasis>raw
-mode</emphasis>.  Unfortunately, how to accomplish this will vary
-based on your operating system.  On Solaris, you can work around
-volume management to get raw access to the floppy.  First, make sure
-that the floppy is auto-mounted (using <command>volcheck</command> or
-the equivalent command in the file manager). Then use a
-<command>dd</command> command of the form given above, just replace
-<filename>/dev/fd0</filename> with
-<filename>/vol/rdsk/<replaceable>floppy_name</replaceable></filename>,
-where <replaceable>floppy_name</replaceable> is the name the floppy
-disk was given when it was formatted (unnamed floppies default to the
-name <filename>unnamed_floppy</filename>).  On other systems, ask your
-system administrator.
+Algunos sistemas intentan montar automáticamente el disquete cuando
+lo coloca en la unidad. Deberá deshabilitar esta característica antes
+de que su ordenador le permita escribir en <emphasis>modo raw</emphasis>.
+Desafortunadamente, la forma de hacer esto variará basadi en su sistema
+operativo.
+<phrase arch="sparc">
+En Solaris, puede modificar el administrador de volúmenes para tener
+acceso raw al disquete. Primero, asegúrese de que el disquete ha sido
+auto-montado (usando <command>volcheck</command> o la orden
+equivalente en el gestor de ficheros). Luego use la orden
+<command>dd</command> de la forma señalada a continuación, simplemente
+reemplace <filename>/dev/fd0</filename> con
+<filename>/vol/rdsk/<replaceable>nombre_disquete</replaceable></filename>,
+donde <replaceable>nombre_disquete</replaceable> es el nombre que se ha
+asignado al disquete cuando fue formateado (los disquetes no-nombrados
+tienen el nombre predeterminado <filename>unnamed_floppy</filename>).  
+En otros sistemas, pregunte a su administrador
+</phrase>
 
 </para><para arch="powerpc"> 
 
-If writing a floppy on powerpc Linux, you will need to eject it. The
-<command>eject</command> program handles this nicely; you might need
-to install it.
+Si escribe un disquete en Linux powerpc, necesitará expulsarlo. El
+programa <command>eject</command> controla esto adecuadamente; podría
+necesitar instalarlo.
 
 </para>
 

@@ -1,107 +1,84 @@
-<!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 untranslated -->
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 18632 -->
 
  <sect1 condition="bootable-disk" id="boot-drive-files">
- <title>Preparing Files for Hard Disk Booting</title>
+ <title>Preparar ficheros para arranque desde disco duro</title>
 <para>
 
-The installer may be booted using boot files placed on an
-existing hard drive partition, either launched from another operating
-system or by invoking a boot loader directly from the BIOS.
+El instalador puede ser arrancado usando los ficheros de arranque
+en una partición existente del disco duro, ya sea cargados desde
+otro sistema operativo o al invocar un gestor de arranque directamente
+desde el BIOS.
 
 </para><para>
 
-A full, "pure network" installation can be achieved using this
-technique. This avoids all hassles of removable media, like finding
-and burning CD images or struggling with too numerous and 
-<xref linkend="unreliable-floppies"/> unreliable floppy disks.
+Se puede conseguir una instalación "completamente a través de red" usando
+esta técnica. Esto evita todas las molestias de los medios removibles,
+como encontrar y quemar las imágenes de CD o batallar con muchos y
+<xref linkend="unreliable-floppies"/> poco confiables disquyetes.
 
 </para><para arch="i386">
 
-The installer cannot boot from files on an NTFS file system.
+El instalador no puede arrancar desde ficheros en un sistema de
+ficheros NTFS.
 
 </para><para arch="powerpc"> 
 
-The installer cannot boot from files on an HFS+ file system.  MacOS
-System 8.1 and above may use HFS+ file systems; NewWorld PowerMacs all
-use HFS+. To determine whether your existing file system is HFS+,
-select <userinput>Get Info</userinput> for the volume in question. HFS
-file systems appear as <userinput>Mac OS Standard</userinput>, while
-HFS+ file systems say <userinput>Mac OS Extended</userinput>. You must
-have an HFS partition in order to exchange files between MacOS and
-Linux, in particular the installation files you download.
+El instalador no puede arrancar desde ficheros en un sistema de
+ficheros HFS+. MacOS System 8.1 y superiores podrían usar sistema
+de ficheros HFS+; todas las PowerMac NewWorld usan HFS+. Para determinar
+si su sistema existente usa HFS+, elija <userinput>Get Info</userinput> 
+para el volumen en cuestión. Los sistemas de ficheros HFS aparecen como
+<userinput>Mac OS Standard</userinput>, mientras que los sistemas de
+ficheros HFS+ dicen <userinput>Mac OS Extended</userinput>. Deberá tener
+una partición HFS a modo de intercambiar ficheros entre MacOS y Linux,
+en particular los ficheros de instalación que descargue.
 
 </para><para arch="powerpc"> 
 
-Different programs are used for hard disk installation system booting,
-depending on whether the system is a ``NewWorld'' or an ``OldWorld''
-model.
+Se usan diferentes programas para el arranque del sistema de instalación
+desde disco duro, dependiendo de si el sistema es un modelo "NewWorld" u
+"OldWorld".
 
 </para>
 
   <sect2 arch="i386" id="files-lilo">
-  <title>Hard disk installer booting using <command>LILO</command> or
+  <title>Arranque desde disco duro usando <command>LILO</command> o
   <command>GRUB</command></title>
 <para>
 
-This section explains how to add to or even replace an existing linux
-installation using either <command>LILO</command> or
+Esta sección explica como añadir o incluso reemplazar una instalación
+de Linux existente usando ya sea <command>LILO</command> o
 <command>GRUB</command>.
 
 </para><para>
 
-At boot time, both bootloaders support loading in memory not
-only the kernel, but also a disk image. This RAM disk can be used as
-the root file-system by the kernel. Choose the flavor in 
-<xref linkend="kernel-choice"/> that best fits your taste, and you 
-will be (almost) done.
+En el momento de arranque, ambos gestores soportar el cargar el memoria
+no solamente el núcleo, sino también una imágen de disco. Este disco RAM
+puede ser usado por el núcleo como el sistema de ficheros raíz.
 
 </para><para>
 
-Copy the following two or three files from the Debian archives in a
-convenient location on your hard drive, for instance in
+Copie los siguientes ficheros desde los archivos de Debian a una
+ubicación conveniente en su disco duro, por ejemplo a
 <filename>/boot/newinstall/</filename>.
 
 <itemizedlist>
 <listitem><para>
 
-<filename>vmlinuz</filename> (kernel binary)
+<filename>vmlinuz</filename> (binario del núcleo)
 
 </para></listitem>
 <listitem><para>
 
-<filename>initrd.gz</filename> (ramdisk image)
-
-</para></listitem>
-<listitem><para>
-
-<filename>drivers.tgz</filename> (optional kernel modules) 
+<filename>initrd.gz</filename> (imagen de disco ram)
 
 </para></listitem>
 </itemizedlist>
 
-Extract recursively everything <emphasis>now</emphasis> (easier than
-later). Remember on which physical partition
-(e.g. <filename>/dev/hda4</filename>) are the <filename>.o</filename>
-drivers you just extracted from <filename>drivers.tgz</filename>.
-
 </para><para>
 
-You can also replace <filename>vmlinuz</filename> and
-<filename>drivers.tgz</filename> by your custom kernel and the
-carefully chosen drivers that you will need for the installation, for
-instance a module for your exotic and unsupported network interface.
-Do not forget that your custom kernel must have (at least) the
-<filename>RAMDISK</filename> and <filename>initrd</filename> features
-<emphasis>built-in</emphasis>.  See the very beginning of 
-<xref linkend="rescue-replace-kernel"/> for the list of the other
-mandatory built-in kernel features required to boot and launch the
-installer. The floppy-related stuff after the list of features is
-irrelevant to you.
-
-</para><para>
-
-Finally, to configure the bootloader proceed to 
+Finalmente, para configurar el gestor de arranque continúe en
 <xref linkend="boot-initrd"/>.
 
 </para>
@@ -109,58 +86,59 @@ Finally, to configure the bootloader proceed to
 
 
   <sect2 arch="powerpc" id="files-oldworld">
-  <title>Hard Disk Installer Booting for OldWorld Macs</title>
+  <title>Arranque del instalador desde disco duro en Macs OldWorld</title>
 <para>
 
-The <filename>boot-floppy-hfs</filename> floppy uses
-<application>miBoot</application> to launch Linux installation, but
-<application>miBoot</application> cannot easily be used for hard disk
-booting. <application>BootX</application>, launched from MacOS,
-supports booting from files placed on the hard
-disk. <application>BootX</application> can also be used to dual-boot
-MacOS and Linux after your Debian installation is complete. For the
-Performa 6360, it appears that <command>quik</command> cannot make the
-hard disk bootable.  So <application>BootX</application> is required
-on that model.
+El disquete <filename>boot-floppy-hfs</filename> usa 
+<application>miBoot</application> para cargar la instalación de Linux,
+pero <application>miBoot</application> no puede ser usado para arranque
+desde disco duro. <application>BootX</application>, cargado desde MacOS,
+soporta el arranque desde ficheros ubicados en el disco duro.
+<application>BootX</application> también puede ser usado para arranque
+dual de MacOS y Linux después de finalizada su instalación Debian.
+Para la Performa 6360, aparentemente <command>quik</command> no puede
+hacer el disco arrancable. De modo que se requiere 
+<application>BootX</application> en ese modelo.
 
 </para><para>
 
-Download and unstuff the <application>BootX</application>
-distribution, available from <ulink url="&url-powerpc-bootx;"></ulink>, 
-or in the
+Descargue y desempaquete la distribución de <application>BootX</application>
+disponible en <ulink url="&url-powerpc-bootx;"></ulink>, 
+o en el directorio
 <filename>dists/woody/main/disks-powerpc/current/powermac</filename>
-directory on Debian http/ftp mirrors and official Debian CDs. Use
-<application>Stuffit Expander</application> to extract it from its
-archive. Within the package, there is an empty folder called
-<filename>Linux Kernels</filename>. Download
-<filename>linux.bin</filename> and
-<filename>ramdisk.image.gz</filename> from the
-<filename>disks-powerpc/current/powermac</filename> folder, and place
-them in the <filename>Linux Kernels</filename> folder. Then place the
-<filename>Linux Kernels</filename> folder in the active System Folder.
+de las réplicas http/ftp y los CDs oficiales de Debian. Use
+<application>Stuffit Expander</application> para extraerlo desde su
+archivo. Con el paquete, existe una carpeta vacía llamada
+<filename>Linux Kernels</filename>. Descargue 
+<filename>linux.bin</filename> y
+<filename>ramdisk.image.gz</filename> desde el directorio
+<filename>disks-powerpc/current/powermac</filename>, y luego ubíquelos
+en la carpeta <filename>Linux Kernels</filename>. Luego ubique la
+carpeta <filename>Linux Kernels</filename> en la carpeta System activa.
 
 </para>
   </sect2>
 
   <sect2 arch="powerpc" id="files-newworld">
-  <title>Hard Disk Installer Booting for NewWorld Macs</title>
+  <title>Arranque de instalador desde disco duro en Macs NewWorld Macs</title>
 <para>
 
-NewWorld PowerMacs support booting from a network or an ISO9660
-CD-ROM, as well as loading ELF binaries directly from the hard
-disk. These machines will boot Linux directly via
-<command>yaboot</command>, which supports loading a kernel and RAMdisk
-directly from an ext2 partition, as well as dual-booting with
-MacOS. Hard disk booting of the installer is particularly appropriate
-for newer machines without floppy drives. <command>BootX</command> is
-not supported and must not be used on NewWorld PowerMacs.
+Las PowerMac NewWorld soportan arranque desde red o desde un CD-ROM
+ISO9660, asi como cargar binarios ELF directamente desde el disco 
+duro. Estas máquinas arrancarán Linux directamente a través de
+<command>yaboot</command>, que soporta la carga de núcleo y disco RAM
+directamente desde una partición ext2, así como arranque dual con
+MacOS. El arranque del instalador desde disco duro es particularmente
+apropiado para máquinas nuevas sin unidades de disquete.  
+<command>BootX</command> no esta soportado y no debe ser usado en PowerMacs
+NewWorld.
 
 </para><para>
 
-<emphasis>Copy</emphasis> (not move) the following four files which
-you downloaded earlier from the Debian archives, onto the root level
-of your hard drive (this can be accomplished by
-<keycap>option</keycap>-dragging each file to the hard drive icon).
+<emphasis>Copie</emphasis> (no mueva) los siguientes cuatro ficheros desde
+los archivos de Debian, vaya al nivel superior de su disco duro (esto se
+puede hacer al 
+arrastrar con <keycap>option</keycap> cada fichero al icono del disco duro).
 
 <itemizedlist>
 <listitem><para>
@@ -170,7 +148,7 @@ of your hard drive (this can be accomplished by
 </para></listitem>
 <listitem><para>
 
-<filename>root.bin</filename> (from inside the images-1.44 folder)
+<filename>root.bin</filename> (desde la carpeta images-1.44)
 
 </para></listitem>
 <listitem><para>
@@ -187,15 +165,15 @@ of your hard drive (this can be accomplished by
 
 </para><para>
 
-Make a note of the partition number of the MacOS partition where you
-place these files. If you have the MacOS <command>pdisk</command>
-program, you can use the L command to check for the partition
-number. You will need this partition number for the command you type
-at the Open Firmware prompt when you boot the installer.
+Tome nota de el número de partición de la partición MacOS donde 
+ubico los ficheros. Si tiene el programa <command>pdisk</command> de
+MacOS, puede usar la orden L para verificar el número de partición.
+Necesitará este número de partción para la orden que escribirá
+en el cursor de Open Firmware cuando arranque el instalador.
 
 </para><para>
 
-To boot the installer, proceed to <xref linkend="boot-newworld"/>.
+Para arrancar el instalador, continúe en <xref linkend="boot-newworld"/>.
 
 </para>
   </sect2>
