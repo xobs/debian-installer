@@ -7,6 +7,9 @@
 # This makefile builds a debian-installer system from a collection of
 # udebs.
 
+# The kernel version to use on the boot floppy.
+KVERS=2.4.0-di
+
 # The type of system to build. Determines what udebs are unpacked into
 # the system. See the .list files for various types. You may want to
 # override this on the command line.
@@ -23,7 +26,15 @@ DEBUG=n
 # Build tree location.
 DEST=debian-installer
 
-CWD:=$(shell pwd)/
+# Filename of initrd to create.
+INITRD=initrd.gz
+
+# How big a floppy image should I make? (in kilobytes)
+FLOPPY_SIZE=1440
+
+# The floppy image to create.
+FLOPPY_IMAGE=floppy.img
+
 # Directory apt uses for stuff.
 APTDIR=apt
 
@@ -37,6 +48,15 @@ LOCALUDEBDIR=localudebs
 # Directory where debug versions of udebs will be built.
 DEBUGUDEBDIR=debugudebs
 
+# The beta version of upx can be used to make the kernel a lot smaller
+# it shaved 75k off our kernel. That allows us to put a lot more on
+# a single floppy. binaries are at:
+# http://wildsau.idv.uni-linz.ac.at/mfx/download/upx/unstable/upx-1.11-linux.tar.gz
+# or source at:
+# http://sourceforge.net/projects/upx/
+#UPX=~davidw/bin/upx
+UPX=
+
 # Figure out which sources.list to use. The .local one is preferred,
 # so you can set up a locally preferred one (and not accidentially cvs
 # commit it).
@@ -46,30 +66,30 @@ else
 SOURCES_LIST=sources.list
 endif
 
-# Add to PATH so dpkg will always work
+# Add to PATH so dpkg will always work, and so local programs will
+# be found.
 PATH:=$(PATH):/usr/sbin:/sbin:.
 
-# All these options makes apt read the right sources list, and
+# All these options make apt read the right sources list, and
 # use APTDIR for everything so it need not run as root.
+CWD:=$(shell pwd)/
 APT_GET=apt-get --assume-yes \
 	-o Dir::Etc::sourcelist=$(CWD)$(SOURCES_LIST) \
 	-o Dir::State=$(CWD)$(APTDIR)/state \
 	-o Debug::NoLocking=true \
 	-o Dir::Cache=$(CWD)$(APTDIR)/cache \
 
-
-# Comments are allowed in the lists.
+# Get the list of udebs to install. Comments are allowed in the lists.
 UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE)) $(EXTRAS)
 
 DPKGDIR=$(DEST)/var/lib/dpkg
 TMPDIR=./tmp
+TMP_MNT=./mnt/$(DEST)
+
+# This is the kernel image that we will boot from.
+KERNEL=$(TMPDIR)/vmlinuz
 
 build: demo_clean tree lib_reduce status_reduce stats
-
-# For now, just build a demo tarball. Later, this should build actual bootable
-# images.
-image: build
-	tar czf ../debian-installer.tar.gz $(DEST)
 
 demo:
 	sudo chroot $(DEST) bin/sh -c "if ! mount | grep ^proc ; then bin/mount proc -t proc /proc; fi"
@@ -139,6 +159,7 @@ get_udebs:
 
 # This is a list of the devices we want to create
 DEVS=console kmem mem null ram0 ram tty1 tty2 tty3 tty4 hda hdb hdc hdd fd0
+# TODO: this should be its own udeb we just install.
 PROTOTYPE_ROOTFS=rootfs
 
 # Build the installer tree.
@@ -164,31 +185,13 @@ tree: get_udebs
 	$(foreach DEV, $(DEVS), \
 	(cp -dpR /dev/$(DEV) $(DEST)/dev/ ) ; )
 	mkdir -p $(DEST)/lib/modules/$(KVER)/
-	depmod -q -a -b $(DEST)/ $(KVER) 
-	# TODO: configure some of the packages?
+	depmod -q -a -b $(DEST)/ $(KVER)
+	# Move the kernel image out of the way, into a temp directory
+	# for use later. We don't need it bloating our image!
+	mv -f $(DEST)/boot/vmlinuz $(KERNEL)
 
-UPX=
-#UPX=~davidw/bin/upx
-# the beta version of upx can be used to make the kernel a lot smaller
-# it shaved 75k off our kernel. That allows us to put a lot more on
-# a single floppy. binaries are at:
-#http://wildsau.idv.uni-linz.ac.at/mfx/download/upx/unstable/upx-1.11-linux.tar.gz
-# or source at:
-# http://sourceforge.net/projects/upx/
-
-KVER=2.4.0-di
-# FIXME, KERNEL_DEB, need to handle the version number intelligently
-KDEB=../kernel-image-$(KVER)_0.003_i386.deb
-KTREE=kernel_tree
-# Take a kernel-image-*.deb and extract needed information
-kernel:
-	mkdir -p $(KTREE)
-	dpkg-deb -X $(KDEB) $(KTREE) 
-	if [ "$(UPX)" ]; then \
-		$(UPX) $(KTREE)/boot/vmlinux-$(KVER); \
-	fi
-
-TMP_MNT=./mnt/$(DEST)
+tarball: build
+	tar czf ../debian-installer.tar.gz $(DEST)
 
 # Make sure that the temporary mountpoint is not occupied,
 # and make it.
@@ -205,13 +208,10 @@ tmp_mount:
 # 2. mount that file via the loop device, create a filesystem on it
 # 3. copy over the root filesystem
 # 4. unmount the file, compress it
-
-INITRD=initrd.gz
-TMP_FILE=$(TMPDIR)/$(DEST)
-
+#
 # TODO: get rid of this damned fuzz factor!
-FUZZ=127
-
+initrd: FUZZ=127
+initrd: TMP_FILE=$(TMPDIR)/$(DEST)
 initrd: tmp_mount
 	dh_testroot
 	rm -f $(TMP_FILE)
@@ -224,19 +224,10 @@ initrd: tmp_mount
 	umount $(TMP_MNT)
 	dd if=$(TMP_FILE) bs=1k | gzip -v9 > $(INITRD)
 
-# This is the kernel which will be used on the boot disk.
-KERNEL=$(KTREE)/boot/vmlinuz-$(KVER)
-
-# How big a floppy image should I make? (in kilobytes)
-FLOPPY_SIZE=1440
-# The floppy image to create.
-FLOPPY_IMAGE=floppy.img
-
 # Create a bootable floppy image. i386 specific. FIXME
 # 1. make a dos filesystem image
 # 2. copy over kernel, initrd
 # 3. install syslinux
-
 floppy_image: initrd kernel tmp_mount
 	dh_testroot
 	
@@ -277,7 +268,6 @@ status_reduce:
 		$(DPKGDIR)/status > $(DPKGDIR)/status.new
 	mv -f $(DPKGDIR)/status.new $(DPKGDIR)/status
 
-
 COMPRESSED_SZ=$(shell expr $(shell tar cz $(DEST) | wc -c) / 1024)
 stats:
 	@echo
@@ -298,7 +288,7 @@ stats:
 # this:
 UPLOAD_DIR=klecker.debian.org:~/public_html/debian-installer/daily/
 daily_build:
-	fakeroot $(MAKE) image > log 2>&1
+	fakeroot $(MAKE) tarball > log 2>&1
 	scp -q -B log $(UPLOAD_DIR)
 	scp -q -B ../debian-installer.tar.gz \
 		$(UPLOAD_DIR)/debian-installer-$(shell date +%Y%m%d).tar.gz
