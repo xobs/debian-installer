@@ -5,6 +5,7 @@ beta 3 update:
 	- also test i386 businesscard with sarge_d-i, just in case
 	- add m68k cds to beta3?
 	- any sparc, ia64, alpha, mips fixes?
+		- silo-installer -> 0.0.5
 
 Status for different parts of debian-installer.  The numbers are
 approximate (as in +/- 50%) and may change in any direction, at any
@@ -12,26 +13,20 @@ time.
 
 [0%] Not begun
 ---------------------------------------------------------------------
-	- Some kind of a mechanism for udebs to declare what parts of
-	  busybox they need, so we can ensure that all deps are met while
-	  keeping the busybox footprint small.
-          Packages depending on base-installer should use the
-	  utilities in /target so we can keep busybox's size down.
-	  (We will probably ship without this.)
 	- ppp support
-	  Not as important for analog dialup, as for ISDN, pppoe.
+		  Not as important for analog dialup, as for ISDN, pppoe.
 	- some architectures
-		arm
-		hurd-i386
-		sh
-		s/390
+		hurd-i386 (we will ship w/o this)
+		sh (we will ship w/o this)
+		s/390 (needs working partitioner)
+	- 2.6 support!
+		  Some groundwork has been laid.
+	- Compaq smartarray and DAC960
+		  Needs mapdevfs support.
 
 [30%] Might need large rewrites. Current implementation might
       work by accident
 ---------------------------------------------------------------------
-        - user documentation
-		Short term we have the INSTALLATION-HOWTO, but the real
-		install manual is still being put together.
         - GUI frontend to cdebconf.
 		There are some basic implementations. The trick is to make
 		it a GUI that does not suck, while still using debconf
@@ -46,16 +41,11 @@ time.
 		Mostly done, still filling in minor holes.
 	- translations
 		Varying languages translated to varying degrees.
-		http://people.debian.org/~barbier/debian-installer/l10n/
-	- language-chooser
-		The perennial problem is how to order/present the list of
-		languages. Many complaints, but it works.
+		http://people.debian.org/~seppy/d-i/translation-status.html
         - boot loader installers (lilo, grub, etc)
 		Work, except for when they don't. See BTS.
-        - base system installer
-		debootstrap is stable, and has quite good support in
-                base-installer
-		Except for when it fails. See BTS.
+		At least the GRUB installer needs a better UI for selecting
+		there to install GRUB to. In partman?
 	- anna
 		Works, mostly.  Needs support for Release files.
 		Support for signed Release files would be cool, but
@@ -64,16 +54,15 @@ time.
 		binary to save space on root floppy. Or removed, not used
 		anymore.
         - disk selector, partitioner
-		There are three of them, autopartkit, partkit, and partman.
-		All of them work, except for when they don't. (See BTS.)
+		We have switched to partman for most arches, but not all.
 	- wireless support
 		- configurator newly available, needs testing
  		- wireless-tools-udeb is available, but is not loaded by default
 		  on netinst CD
 	- post-reboot configuration
-		base-cofig is stable, though stuff may need to be added to
-		it to handle things d-i doesn't bother with. i18n is
-                needed. Some questions repeat questions from d-i.
+		base-cofig is stable, though it could use more polish
+		i18n is needed.
+		Some questions repeat questions from d-i.
 	- linda support for udebs, to catch all the common gotchas
 		(lintian support in progress)
 	- web site
@@ -81,10 +70,8 @@ time.
 		Could be better laid out, lacking some sections, other
 		parts are quite good.
 	- archive integration
-		Only a few arches (i386, powerpc, ia64) have boot media in
-		the archive.
-		Last kinks in unstable/testing separation for d-i still being
-		worked out.
+		No automatic propagation to testing.
+		No source propigation for udeb sources!
 	- pcmcia support
 		- may work, may not.. (many failure reports)
 		- Probably need to re-run hw-detect after loading pcmcia from
@@ -93,12 +80,18 @@ time.
 		Where "low" is 32-46 mb!
 		Works, but user must be careful to set up swap ASAP.
 		There is no sanity checking, and some bad failure modes.
+        - user documentation
+		Short term we have the INSTALLATION-HOWTO, but the real
+		install manual is still being polished.
+	- developer documentation
+		We understand it, but casual hackers have a high barrier to
+		doing simple things like using a custom kernel.
 	- some architectures
 		i386
 		ia64
 		powerpc (some subarches)
 		mips
-			- problems with partitioning, CD images, arcboot
+			- problems with partitioning, arcboot
 			- netboot and basic install works, if you know what
 			  you're doing
 		m68k (some subarches)
@@ -107,6 +100,7 @@ time.
 		alpha
 			- needs TLC
 		sparc
+		arm
 
 [90%] Single missing important feature or bug.
 ---------------------------------------------------------------------
@@ -115,15 +109,18 @@ time.
 	- iso-scan
 		Works, but does not flag the disk the iso is mounted from
 		as unusable by the rest of the installer.
-	- kernel-package integration
-		Moving to the new linux-kernel-di system. Not all arches
-		use it yet.
         - netcfg
 		Working, pending rewrite for IPv6.
 	- bts
 		Still need a non-manual way to tag our bugs.
-        - library reduction
-		Still breaking from time to time.	
+	- language-chooser
+		The perennial problem is how to order/present the list of
+		languages. Many complaints, but it works.
+        - base system installer
+		It can break due to testing package churn. cdebootrap would
+		fix this.
+	- dhcp
+		Needs to switch to busybox's internal one to save space.
 
 [100%] Those shouldn't need to be touched any more 
        (famous last words)
@@ -134,12 +131,13 @@ time.
 	- cdrom retriever
         - ethdetect
         - cdebconf
-	- dhcp
 	- floppy retriever
         - main-menu
         - choose-mirror
         - busybox integration
         - install media build system
+	- kernel-package integration
+        - library reduction
 
 Common problems and transitions
 ===============================
@@ -171,10 +169,9 @@ code base:
     command, logging the ouput to syslog, w/o losing exit status.
 
   * udebs should not include md5sums files, or postrm, prerm, preinst
-    scripts. This includes ones generated by debhelper.
+    scripts. This includes ones generated by debhelper. Linda will find
+    these pretty well.
 
-  * Use the cdebconf error template type for error messages, instead of
-    note.
-  
-  * Most debconf title setting can be replaced with providing the
-    appropriate title template and letting main-menu set it.
+  * There is no need to set the seen flag anymore. All code that does so
+    should be removed, unless that code is expected to also possibly run on
+    a normal debian system (choose-mirror).
