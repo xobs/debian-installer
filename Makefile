@@ -224,6 +224,7 @@ $(TYPE)-tree-stamp: $(TYPE)-get_udebs-stamp debian/control
 	# Unpack the udebs with dpkg. This command must run as root
 	# or fakeroot.
 	echo -n > diskusage-$(TYPE).txt
+	set -e; \
 	oldsize=0; oldblocks=0; oldcount=0; for udeb in $(UDEBDIR)/*.udeb ; do \
 		pkg=`basename $$udeb` ; \
 		dpkg $(DPKG_UNPACK_OPTIONS) --root=$(TREE) --unpack $$udeb ; \
