@@ -1,0 +1,154 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 24663 -->
+
+   <sect3 arch="i386">
+   <!-- <title>USB stick partitioning on &arch-title;</title> -->
+   <title>Partizionamento della penna USB su &arch-title;</title>
+
+<para>
+
+<!-- We will show how to setup the memory stick to use the first partition,
+instead of the entire device. -->
+
+Verrà spiegato come impostare la penna per usare solo la prima partizione
+anziché l'intero dispositivo.
+
+</para><note><para>
+
+<!-- Since most USB sticks come pre-configured with a single FAT16
+partition, you probably won't have to repartition or reformat the
+stick.  If you have to do that anyway, use <command>cfdisk</command>
+or any other partitioning tool for creating a FAT16 partition and then
+create the filesystem using: -->
+
+Poiché la maggior parte delle penne USB viene venduta con una singola
+partizione FAT16 già configurata, probabilmente non è necessario
+ripartizionare o riformattare la penna. Se la si vuole ripartizionare
+ugualmente usare <command>cfdisk</command> o un qualsiasi altro programma
+di partizionamento per creare una partizione FAT16 e poi crearci un
+filesystem usando:
+
+<informalexample><screen>
+# mkdosfs /dev/<replaceable>sda1</replaceable>
+</screen></informalexample>
+
+<!-- Take care that you use the correct device name for your USB stick. The
+<command>mkdosfs</command> command is contained in the
+<classname>dosfstools</classname> Debian package. -->
+
+Fare attenzione a usare il nome di device della penna USB. Il
+comando <command>mkdosfs</command> è contenuto nel pacchetto Debian
+<classname>dosfstools</classname>.
+
+</para></note><para>
+
+<!-- In order to start the kernel after booting from the USB stick, we will
+put a boot loader on the stick. Although any boot loader
+(e.g. <command>LILO</command>) should work, it's convenient to use
+<command>SYSLINUX</command>, since it uses a FAT16 partition and can
+be reconfigured by just editing a text file. Any operating system
+which supports the FAT file system can be used to make changes to the
+configuration of the boot loader. -->
+
+Per far partire il kernel dopo aver avviato da un penna USB è necessario
+mettere un bootloader sulla penna. Nonostante il fatto che qualsiasi
+bootloader (p.e. <command>LILO</command>) dovrebbe funzionare è più
+comodo usare <command>SYSLINUX</command> dato che utilizza una partizione
+FAT16 e può essere riconfigurato semplicemente modificando un file di
+testo. Qualsiasi sistema operativo con supporto per il filesystem FAT può
+essere usato per fare delle modifiche alla configurazione del bootloader.
+
+</para><para>
+
+<!-- To put <command>SYSLINUX</command> on the FAT16 partition on your USB
+stick, install the <classname>syslinux</classname> and
+<classname>mtools</classname> packages on your system, and do: -->
+
+Per collocare <command>SYSLINUX</command> sulla partizione FAT16 della
+penna USB installare i pacchetti <classname>syslinux</classname> e
+<classname>mtools</classname> ed eseguire:
+
+<informalexample><screen>
+# syslinux /dev/<replaceable>sda1</replaceable>
+</screen></informalexample>
+
+<!-- Again, take care that you use the correct device name. The partition
+must not be mounted when starting <command>SYSLINUX</command>. This
+procedure writes a boot sector to the partition and creates the file
+<filename>ldlinux.sys</filename> which contains the boot loader code. -->
+
+Di nuovo fare attenzione a usare il nome corretto del device. La partizione
+non deve essere montata quando si avvia <command>SYSLINUX</command>, la
+procedura scrive il settore di avvio sulla partizione e crea il file
+<filename>ldlinux.sys</filename> che contiene il codice del bootloader.
+
+</para><para>
+
+<!-- Mount the partition (<userinput>mount /dev/sda1 /mnt</userinput>) and
+copy the following files from the Debian archives to the stick: -->
+
+Montare la partizione (<userinput>mount /dev/sda1 /mnt</userinput>) e
+copiare i seguenti file dall'archivio Debian sulla penna:
+
+<itemizedlist>
+<listitem><para>
+
+<!-- <filename>vmlinuz</filename> (kernel binary) -->
+
+<filename>vmlinuz</filename> (kernel)
+
+</para></listitem>
+<listitem><para>
+
+<!-- <filename>initrd.gz</filename> (initial ramdisk image) -->
+
+<filename>initrd.gz</filename> (immagine del ramdisk iniziale)
+
+</para></listitem>
+<listitem><para>
+
+<!-- <filename>syslinux.cfg</filename> (SYSLINUX configuration file) -->
+
+<filename>syslinux.cfg</filename> (file di configurazione di SYSLINUX)
+
+</para></listitem>
+<listitem><para>
+
+<!-- Optional kernel modules -->
+
+Moduli del kernel opzionali
+
+</para></listitem>
+</itemizedlist>
+
+<!-- If you want to rename the files, please note that
+<command>SYSLINUX</command> can only process DOS (8.3) file names. -->
+
+Se si vuole rinominare questi file ricordarsi che <command>SYSLINUX</command>
+può gestire solo nomi di file in formato DOS (8.3).
+
+</para><para>
+
+<!-- The <filename>syslinux.cfg</filename> configuration file should
+contain the following two lines: -->
+
+Il file di configurazione <filename>syslinux.cfg</filename> deve contenere
+le seguenti righe:
+
+<informalexample><screen>
+default vmlinuz
+append initrd=initrd.gz ramdisk_size=12000 root=/dev/rd/0 init=/linuxrc rw
+</screen></informalexample>
+
+<!-- Please note that the <userinput>ramdisk_size</userinput> parameter
+may need to be increased, depending on the image you are booting.
+If the boot fails, you can try adding <userinput>devfs=mount,dall</userinput>
+to the <quote>append</quote> line. -->
+
+Notare che potrebbe essere necessario aumentare il valore del parametro
+<userinput>ramdisk_size</userinput> a seconda dell'immagine che si vuole
+avviare. Se non si riesce ad avviare provare aggiungendo
+<userinput>devfs=mount,dall</userinput> alla riga <quote>append</quote>.
+
+</para>
+   </sect3>
