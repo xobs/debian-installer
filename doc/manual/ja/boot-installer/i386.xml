@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 16313 -->
+<!-- original version: 16879 -->
 
   <sect2 arch="i386"><title>CD-ROM からの起動</title>
 
@@ -178,32 +178,28 @@ bf2.4 flavor. The symptom of the problem is an
 <para>
 
 <!--
-One <emphasis>initrd=</emphasis> line in
-<filename>/etc/lilo.conf</filename> is enough to configure two
-essentials things:
+For <command>LILO</command>, you will need to configure two
+essentials things in <filename>/etc/lilo.conf</filename>:
 -->
-<filename>/etc/lilo.conf</filename> 中の <emphasis>initrd=</emphasis> 
-という行は、非常に重要な次の 2 つを設定します。
-
+<command>LILO</command> では、<filename>/etc/lilo.conf</filename> の
+非常に重要な次の 2 点を設定します。
 <itemizedlist>
 <listitem><para>
 
 <!--
-tell <command>LILO</command> to load the <filename>initrd.gz</filename>
-installer as a RAM disk at boot time;
+to load the <filename>initrd.gz</filename> installer at boot time;
 -->
-起動時に、<filename>initrd.gz</filename> インストーラを 
-RAM ディスクとしてロードするよう <command>LILO</command> に指示する。
+起動時に、<filename>initrd.gz</filename> インストーラをロードする。
 
 </para></listitem>
 <listitem><para>
 
 <!--
-tell the <filename>vmlinuz</filename> kernel to use this RAM disk as
+have the <filename>vmlinuz</filename> kernel use a RAM disk as
 its root partition.
 -->
-この RAM ディスクをルートパーティションとして使うよう、
-<filename>vmlinuz</filename> カーネルに指示する。
+RAM ディスクをルートパーティションとして使う
+<filename>vmlinuz</filename> カーネルを設定する。
 
 </para></listitem>
 </itemizedlist>
@@ -220,13 +216,12 @@ Here is a <filename>/etc/lilo.conf</filename> example:
 image=/boot/newinstall/vmlinuz
        label=newinstall
        initrd=/boot/newinstall/initrd.gz
+       root=/dev/ram
        append="devfs=mount,dall"
 
 </screen></informalexample>
 
 <!--
-<emphasis>root=/dev/hdXYZ</emphasis> options in
-<filename>lilo.conf</filename> will be ignored in this case.
 For more details, refer to the
 <citerefentry><refentrytitle>initrd</refentrytitle>
 <manvolnum>4</manvolnum></citerefentry> and
@@ -234,8 +229,6 @@ For more details, refer to the
 <manvolnum>5</manvolnum></citerefentry> man pages. Now run
 <userinput>lilo</userinput> and reboot.
 -->
-この例では、<filename>lilo.conf</filename> 中の 
-<emphasis>root=/dev/hdXYZ</emphasis> オプションは無視されます。
 詳細は <citerefentry><refentrytitle>initrd</refentrytitle>
 <manvolnum>4</manvolnum></citerefentry> や
 <citerefentry><refentrytitle>lilo.conf</refentrytitle>
@@ -246,7 +239,7 @@ For more details, refer to the
 </para><para>
 
 <!--
-Procedure for <command>GRUB</command> is quite similar. Locate your
+The procedure for <command>GRUB</command> is quite similar. Locate your
 <filename>menu.lst</filename> in the <filename>/boot/grub/</filename>
 directory (sometimes in the <filename>/boot/boot/grub/</filename>),
 add the following lines:
@@ -259,20 +252,20 @@ add the following lines:
 <informalexample><screen>
 
 title  New Install
-kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram ramdisk_size=10000 devfs=mount,dall
+kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram devfs=mount,dall
 initrd (hd0,0)/boot/newinstall/initrd.gz
 
 </screen></informalexample>
 
 <!--
-and reboot. Please note, that the <userinput>ramdisk_size</userinput>
-parameter may need to be increased, depending on the image you are
-booting. From now on, there should be no difference between
-<command>GRUB</command> or <command>LILO</command>.
+and reboot. Please note, that you may need an additional parameter
+<userinput>ramdisk_size=<replaceable>size in KB</replaceable></userinput>,
+depending on the image you are booting. From now on, there should be
+no difference between <command>GRUB</command> or <command>LILO</command>.
 -->
-その後再起動してください。
-起動するイメージにより、<userinput>ramdisk_size</userinput> パラメータを、
-増やす必要があるかもしれないことに注意してください。
+その後再起動してください。起動するイメージにより、
+<userinput>ramdisk_size=<replaceable>サイズ (KB)</replaceable></userinput>
+といった追加パラメータが必要かもしれないことに注意してください。
 これより後は、<command>GRUB</command> と <command>LILO</command> 
 に違いはありません。
 
