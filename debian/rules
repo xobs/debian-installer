@@ -30,6 +30,11 @@ build-stamp:
 	rm -f $@
 	fakeroot $(MAKE) -C build all_build stats SUITE=$(DISTRIBUTION)
 	touch $@
+	
+build-manual:
+	cd doc/manual/build && \
+		destination=$(shell pwd)/debian/tmp/$(DESTDIR)/doc/manual \
+		architectures=$(ARCH) noarchdir=1 ./build.sh
 
 install: build
 	dh_testdir
@@ -39,9 +44,7 @@ install: build
 	install -d debian/tmp/$(DESTDIR)/doc
 	cp debian/*.html doc/INSTALLATION-HOWTO doc/INSTALLATION-HOWTO.?? \
 		debian/tmp/$(DESTDIR)/doc
-	cd doc/manual/build && \
-		destination=$(shell pwd)/debian/tmp/$(DESTDIR)/doc/manual \
-		architectures=$(ARCH) noarchdir=1 ./build.sh
+	$(MAKE) build-manual
 	install -d debian/tmp/$(IMAGEDIR)
 	cp -a build/dest/* debian/tmp/$(IMAGEDIR)
 	cd debian/tmp/$(IMAGEDIR) && md5sum `find . -type f` > MD5SUMS
