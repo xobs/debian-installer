@@ -19,7 +19,7 @@ if [ -z "$destination" ]; then
 fi
 
 if [ -z "$formats" ]; then
-        formats="newps newpdf html htmlone ps pdf text"
+        formats="newps newpdf html htmlone text"
         #formats="html"
 fi
 

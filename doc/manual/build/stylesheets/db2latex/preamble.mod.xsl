@@ -557,6 +557,7 @@
 		<xsl:text>\usepackage{float}       &#10;</xsl:text>
 		<xsl:text>\usepackage{moreverb}       &#10;</xsl:text>
 		<xsl:text>\usepackage{multirow}       &#10;</xsl:text>
+		<xsl:text>\usepackage{bigstrut}       &#10;</xsl:text>
 		<xsl:text>\usepackage{ragged2e}       &#10;</xsl:text>
 		<xsl:if test="$latex.use.fancyvrb=1">
 			<!-- must be after \usepackage{fancybox} -->

@@ -6,9 +6,9 @@
 usage() {
 
 
-	cat <<END
+	sed 's/\ \ /\ /g' <<END
 
-$0: Generate the Debian Installer Manual in several different formats
+Generate the Debian Installer Manual in several different formats
 
 Usage: $0 [params]
 
@@ -214,8 +214,13 @@ create_LaTeX () {
 		-o $tempdir/install.${cur_lang}.new.tex \
 		$tempdir/driver.xsl \
 		$tempdir/install.${cur_lang}.profiled.xml &> xsltproc.log
+	
+	RET=$?
 
-	RET=$?; return $RET
+    output_files="$output_files $tempdir/install.${cur_lang}.new.tex"
+
+	return $RET
+	
 
 }
 

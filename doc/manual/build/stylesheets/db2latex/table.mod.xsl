@@ -1088,6 +1088,8 @@
 	</doc:template>
 	<xsl:template match="tbody/row">
 		<xsl:apply-templates/>
+		<!-- should be conditional for multirows -->
+		<xsl:text>\bigstrut</xsl:text>
 		<xsl:text> \tabularnewline&#10;</xsl:text>
 		<xsl:call-template name="generate.table.row.separator">
 		</xsl:call-template>
@@ -1361,16 +1363,20 @@
 	</xsl:if> 
     </xsl:template>
 
-	<xsl:template name="get.multirow.description.pos">
-		<xsl:choose>
-<!--		<xsl:when test="$array=''">
-			<xsl:value-of select="-1"/>
-		</xsl:when>
+<!--
+
+	DER PLAN:
+
+	1. Finde heraus: CountNonZeroPre, CountNonZeroPost
+	2. If CountNonZeroPre + 1 = position(), print &*CountNonZeroPre
+	3. print &*CountNonZeroPost
+
 -->
-		<xsl:when test="$pos = 0">
+
+	<xsl:template name="get.multirow.description.pos">
+		<xsl:if test="$pos = 0">
 			<xsl:value-of select="$i"/>
-		</xsl:when>
-		</xsl:choose>
+		</xsl:if>
 		<xsl:if test="string-length($array) &gt; 0">
 			<xsl:call-template name="get.multirow.description.pos">
 			<xsl:with-param name="pos" select="$pos - 1"/>
@@ -1378,45 +1384,55 @@
 			<xsl:with-param name="array" select="substring-after($array, ' ')" />
 			</xsl:call-template>
 		</xsl:if>
+		<xsl:if test="string-length($array) &lt;= 0 and $pos &gt; 0">
+			<xsl:value-of select="-2"/>
+		</xsl:if>
 	</xsl:template>
 
-	<xsl:template name="generate.multirow.postcell">
-		<xsl:variable name="i">
+	<xsl:template name="generate.ampersands">
+		<xsl:if test="$number &gt; 0">
+			<xsl:text>&amp;</xsl:text>
+			<xsl:call-template name="generate.ampersands">
+				<xsl:with-param name="number" select="$number - 1"/>
+			</xsl:call-template>
+		</xsl:if>
+	</xsl:template>
+
+	<xsl:template name="CountToZero">
+		<xsl:variable name="current">
 			<xsl:call-template name="get.multirow.description.pos">
-				<xsl:with-param name="pos" select="$pos"/>
-				<xsl:with-param name="i" select="-1" />
-				<xsl:with-param name="array" select="$desc" />
+			<xsl:with-param name="pos" select="$pos"/>
+			<xsl:with-param name="i" select="-1" />
+			<xsl:with-param name="array" select="$desc" />
 			</xsl:call-template>
 		</xsl:variable>
-		<xsl:message>
-			<xsl:text>$i: </xsl:text>
-			<xsl:value-of select="$i"/>
-		</xsl:message>
-<!--		<xsl:message>
-			<xsl:text>String '</xsl:text>
-			<xsl:value-of select="$desc"/>
-			<xsl:text>': Position 1 '</xsl:text>
-			<xsl:call-template name="get.multirow.description.pos">
-				<xsl:with-param name="pos" select="1"/>
-				<xsl:with-param name="i" select="-1" />
-				<xsl:with-param name="array" select="$desc" />
+		<xsl:if test="$current = 0">
+			<xsl:choose>
+				<xsl:when test="$count = 0">
+					<xsl:value-of select="$pos"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="CountToZero">
+						<xsl:with-param name="desc" select="$desc"/>
+						<xsl:with-param name="pos" select="$pos + 1"/>
+						<xsl:with-param name="count" select="$count -1"/>
+					</xsl:call-template>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:if>
+		<xsl:if test="$current &gt; 0">
+			<xsl:call-template name="CountToZero">
+				<xsl:with-param name="desc" select="$desc"/>
+				<xsl:with-param name="pos" select="$pos + 1"/>
+				<xsl:with-param name="count" select="$count"/>
 			</xsl:call-template>
-			<xsl:text>' Position 3 '</xsl:text>
-			<xsl:call-template name="get.multirow.description.pos">
-				<xsl:with-param name="pos" select="3"/>
-				<xsl:with-param name="i" select="-1" />
-				<xsl:with-param name="array" select="$desc" />
-			</xsl:call-template>
-			<xsl:text>'</xsl:text>
-		</xsl:message>
--->
-			<xsl:if test="$i &gt; 0">
-				<xsl:text>&amp;</xsl:text>
-				<xsl:call-template name="generate.multirow.postcell">
-					<xsl:with-param name="pos" select="$pos + 1"/>
-					<xsl:with-param name="desc" select="$desc" />
-				</xsl:call-template>
-			</xsl:if>
+		</xsl:if>
+		<xsl:if test="$current = -1">
+			<xsl:text>-1</xsl:text>
+		</xsl:if>
+		<xsl:if test="$current = -2">
+			<xsl:value-of select="$pos"/>
+		</xsl:if>
 	</xsl:template>
 
 	<xsl:template name="latex.entry.prealign">
@@ -1435,6 +1451,32 @@
 			<xsl:otherwise>-1</xsl:otherwise>
 		</xsl:choose>
 	</xsl:variable>
+	<!-- MultiRow -->
+	<xsl:variable name="desc">
+		<xsl:for-each select="parent::*/preceding-sibling::row[1]">
+			<xsl:call-template name="generate.row.description">
+				<xsl:with-param name="start" select="position()"/>
+			</xsl:call-template>
+		</xsl:for-each>
+	</xsl:variable>
+	<xsl:variable name="FirstZero">
+		<xsl:call-template name="CountToZero">
+			<xsl:with-param name="desc" select="$desc"/>
+			<xsl:with-param name="pos" select="1"/>
+			<xsl:with-param name="count" select="0"/>
+		</xsl:call-template>
+	</xsl:variable>
+	<xsl:message>
+		<xsl:value-of select="$desc"/>
+		<xsl:text>: </xsl:text>
+		<xsl:value-of select="$FirstZero"/>
+	</xsl:message>
+	<xsl:if test="position()=1">
+	<xsl:call-template name="generate.ampersands">
+		<xsl:with-param name="number" select="$FirstZero - 1"/>
+	</xsl:call-template>
+	</xsl:if>
+	
 	<!-- Remember: if multicolumn is present, generate.latex.cell.separator post needs to occur within multicolumn -->
 	<xsl:if test="$span &gt; 1">
 		<xsl:text>\multicolumn{</xsl:text>
@@ -1480,16 +1522,37 @@
 	<xsl:if test="@morerows!=''">}</xsl:if>
 	<xsl:text>}}</xsl:text>
 	<!-- multirow stuff -->
-	<xsl:call-template name="generate.multirow.postcell">
-		<xsl:with-param name="pos" select="position()"/>
-		<xsl:with-param name="i" select="-1"/>
-		<xsl:with-param name="desc">
-			<xsl:for-each select="parent::*/preceding-sibling::row[1]">
-					<xsl:call-template name="generate.row.description">
-						<xsl:with-param name="start" select="position()"/>
-					</xsl:call-template>
-			</xsl:for-each>
-		</xsl:with-param>
+	<xsl:variable name="desc">
+		<xsl:for-each select="parent::*/preceding-sibling::row[1]">
+			<xsl:call-template name="generate.row.description">
+				<xsl:with-param name="start" select="position()"/>
+			</xsl:call-template>
+		</xsl:for-each>
+	</xsl:variable>
+		<xsl:variable name="NewCount">
+		<xsl:call-template name="CountToZero">
+			<xsl:with-param name="desc" select="$desc"/>
+			<xsl:with-param name="pos" select="1"/>
+			<xsl:with-param name="count" select="position()"/>
+		</xsl:call-template>
+		</xsl:variable>
+		<xsl:variable name="OldCount">
+		<xsl:call-template name="CountToZero">
+			<xsl:with-param name="desc" select="$desc"/>
+			<xsl:with-param name="pos" select="1"/>
+			<xsl:with-param name="count" select="position() -1"/>
+		</xsl:call-template>
+		</xsl:variable>
+	<xsl:variable name="PostAmper" select="number($NewCount) - number($OldCount)"/>
+	<xsl:message>
+		<xsl:value-of select="$PostAmper"/>
+		<xsl:text>=</xsl:text>
+		<xsl:value-of select="$NewCount"/>
+		<xsl:text>-</xsl:text>
+		<xsl:value-of select="$OldCount"/>
+	</xsl:message>
+	<xsl:call-template name="generate.ampersands">
+		<xsl:with-param name="number" select="$PostAmper -1 "/>
 	</xsl:call-template>
 	<!-- this is used when the entry's align spec wants to override the column default -->
 	<xsl:if test="@namest='' and @spanspec=''"><!-- TODO improve -->

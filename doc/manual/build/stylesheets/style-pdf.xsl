@@ -22,7 +22,6 @@
 	<xsl:param name="tfoot.frame">1</xsl:param>
 	<xsl:param name="latex.math.support">0</xsl:param>
 	<xsl:param name="latex.use.ltxtable">1</xsl:param>
-<!--	<xsl:param name="latex.use.longtable">1</xsl:param> -->
 	<xsl:param name="latex.book.preamble.post.l10n"/>
 	<xsl:param name="latex.book.preamble.post">
 	    <xsl:text>\usepackage[sf,bf,compact,medium]{titlesec}&#10;</xsl:text>
