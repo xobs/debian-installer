@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 16879 -->
+<!-- original version: 17795 -->
 
  <sect1 condition="supports-tftp" id="install-tftp">
  <title>TFTP ネットブート用ファイルの準備</title>
@@ -29,9 +29,9 @@ You need to setup a TFTP server, and for CATS machines, a BOOTP server
 -->
 設定が必要なのは TFTP サーバです。
 また CATS マシンでは BOOTP サーバ
-<phrase condition="supports-rarp">、または RARP サーバ</phrase>
-<phrase condition="supports-dhcp">、または DHCP サーバ</phrase>.
-の設定が必要です。
+<phrase condition="supports-rarp">、RARP サーバ</phrase>
+<phrase condition="supports-dhcp">、DHCP サーバ</phrase>.
+のいずれかの設定が必要です。
 
 </para><para>
 
@@ -351,14 +351,18 @@ label lanlinux
 </screen></informalexample>
 
 <!--
-<userinput>devfs=mount</userinput> is important, because without it
+Note that <userinput>devfs=mount</userinput> is important, because without it
 there may be problems mounting the initrd.gz file system once the
-kernel is booted.
+kernel is booted. Also note that you may need an additional parameter
+<userinput>ramdisk_size=<replaceable>size in KB</replaceable></userinput>,
+depending on the image you are booting.
 -->
-<userinput>devfs=mount</userinput> が重要です。
+<userinput>devfs=mount</userinput> が重要であることに注意してください。
 これがないと、カーネル起動時に一回だけ行う initrd.gz 
 ファイルシステムのマウントに問題が発生するからです。
-
+また起動しようとするイメージによって、追加パラメータ
+<userinput>ramdisk_size=<replaceable>サイズ (KB)</replaceable></userinput>
+が、必要になるかもしれないことにも注意してください。
 </para><para arch="i386">
 
 <!--
