@@ -385,10 +385,7 @@ unifont-reduced-$(TYPE).bdf: all-$(TYPE).utf
 	        echo "error: Trying to build unifont.bgf without rootskel-locale!"; \
 	        exit 1; \
 	    fi
-	# Grepping out some encodings that confuse reduce-font.
-	# This is a temporary fix.
-	grep -v ISO-8859- all-$(TYPE).utf | grep -v EUC-JP | grep -v CP1251 | \
-		LOCPATH=$(LOCALE_PATH) LC_ALL=C.UTF-8 reduce-font /usr/src/unifont.bdf > $@.tmp
+	cat all-$(TYPE).utf | LOCPATH=$(LOCALE_PATH) LC_ALL=C.UTF-8 reduce-font /usr/src/unifont.bdf > $@.tmp
 	mv $@.tmp $@
 
 $(TREE)/unifont.bgf: unifont-reduced-$(TYPE).bdf
