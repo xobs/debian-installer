@@ -132,7 +132,7 @@ endif
 demo: tree
 	$(MAKE) tree_mount
 	-@[ -f questions.dat ] && cp -f questions.dat $(TREE)/var/lib/cdebconf/
-	-@sudo chroot $(TREE) bin/sh -c "export DEBCONF_DEBUG=5; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; exec /usr/share/debconf/frontend /usr/bin/main-menu"
+	-@sudo chroot $(TREE) bin/sh -c "export TERM=linux; export DEBCONF_DEBUG=5; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; exec /usr/share/debconf/frontend /usr/bin/main-menu"
 	$(MAKE) tree_umount
 
 shell: tree
@@ -154,7 +154,7 @@ clean: demo_clean tmp_mount debian/control
 	rm -rf $(TREE) 2>/dev/null $(TEMP)/full $(DRIVER1) || sudo rm -rf $(TREE) $(TEMP)/full $(DRIVER1)
 	dh_clean
 	rm -f *-stamp
-	rm -rf $(UDEBDIR) $(TMP_MNT) debian/build
+	rm -rf $(UDEBDIR) $(EXTRAUDEBDIR) $(TMP_MNT) debian/build
 	rm -rf $(DEST)/$(TYPE)-* || sudo rm -rf $(DEST)/$(TYPE)-*
 
 reallyclean: clean
