@@ -1,5 +1,27 @@
 #!/bin/sh
 
+# Configuration
+
+stylesheet_dir="stylesheets"
+stylesheet_profile="$stylesheet_dir/style-profile.xsl"
+stylesheet_html="$stylesheet_dir/style-html.xsl"
+stylesheet_fo="$stylesheet_dir/style-fo.xsl"
+stylesheet_dsssl="$stylesheet_dir/style-print.dsl"
+
+main_path="$PWD/`dirname $0`"
+entities_path="$main_path/entities"
+source_path="$main_path/../../${language}"
+
+xsltprocessor=/usr/bin/xsltproc
+
+if [ -z $destination ]; then
+    destination="results/unofficial-manual"
+fi
+
+tempdir=${language}.temp
+
+dynamic="${tempdir}/dynamic.ent"
+
 if [ "$1" = "--help" ]; then
     echo "$0: Generate the HTML version of the Debian Installer Manual"
     echo "Usage: $0 [arch] [lang] [format]"
@@ -18,8 +40,6 @@ checkresult () {
 }
 
 create_profiled () {
-
-    dynamic="${tempdir}/dynamic.ent"
 
     if [ ! "$official_build" ]; then
         unofficial_build="FIXME;unofficial-build"
@@ -45,18 +65,19 @@ create_profiled () {
     echo "<!ENTITY kernelversion \"${kernelversion}\">" >> $dynamic
     echo "<!ENTITY altkernelversion \"${altkernelversion}\">" >> $dynamic
 
-    sed "s/\"en/\"..\/..\/..\/${language}/" entities/docstruct.ent >> $dynamic
-
-    sed "s/##LANG##/${language}/" templates/install.xml.template > $tempdir/install.${language}.xml
+    sed "s:##SRCPATH##:$source_path:" templates/docstruct.ent >> $dynamic
+    sed "s/##LANG##/$language/g" templates/install.xml.template | \
+    sed "s:##ENTPATH##:$entities_path:g" | \
+    sed "s:##SRCPATH##:$source_path:" > $tempdir/install.${language}.xml
 
     ## Create the profiles xml file
     $xsltprocessor \
-    --xinclude \
-    --stringparam profile.arch "$archspec" \
-    --stringparam profile.condition "$cond" \
-    --output $tempdir/install.${language}.profiled.xml \
-    $stylesheet_profile \
-    $tempdir/install.${language}.xml
+	--xinclude \
+	--stringparam profile.arch "$archspec" \
+	--stringparam profile.condition "$cond" \
+	--output $tempdir/install.${language}.profiled.xml \
+	$stylesheet_profile \
+	$tempdir/install.${language}.xml
 
     checkresult $?
 
@@ -65,11 +86,13 @@ create_profiled () {
 create_html () {
 
     create_profiled
+    
     $xsltprocessor \
         --xinclude \
         --stringparam base.dir ./$basedir/html/ \
         $stylesheet_html \
         $tempdir/install.${language}.profiled.xml
+
     checkresult $?
 
 }
@@ -114,27 +137,10 @@ create_ps() {
     mv install.${language}.ps $basedir/ps
 }
 
-stylesheet_dir="stylesheets"
-stylesheet_profile="$stylesheet_dir/style-profile.xsl"
-stylesheet_html="$stylesheet_dir/style-html.xsl"
-stylesheet_fo="$stylesheet_dir/style-fo.xsl"
-stylesheet_dsssl="$stylesheet_dir/style-print.dsl"
-
-xsltprocessor=/usr/bin/xsltproc
-
-
-if [ -z $destination ]; then
-    destination="results/unofficial-manual"
-fi
-
-tempdir=${language}.temp
 mkdir -p $tempdir
 
 basedir=$destination/${language}/${arch}
 
-## Create the profiled XML file...
-
-## Create the requested format...
 case ${format} in
 
     html) create_html;;
