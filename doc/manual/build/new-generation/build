@@ -1,5 +1,15 @@
 #!/bin/sh
 
+if [ "$1" = "--help" ]; then
+    echo "$0: Generate the HTML version of the Debian Installer Manual"
+    echo "Usage: $0 [arch] [lang] [format]"
+    exit 1
+fi
+
+arch=${1:-i386}
+language=${2:-en}
+format=${3:-html}
+
 # Configuration
 
 stylesheet_dir="stylesheets"
@@ -22,15 +32,6 @@ tempdir=${language}.temp
 
 dynamic="${tempdir}/dynamic.ent"
 
-if [ "$1" = "--help" ]; then
-    echo "$0: Generate the HTML version of the Debian Installer Manual"
-    echo "Usage: $0 [arch] [lang] [format]"
-    exit 1
-fi
-
-arch=${1:-i386}
-language=${2:-en}
-format=${3:-html}
 
 ## Function to check result of executed programs and exit on error
 checkresult () {
