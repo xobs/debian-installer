@@ -12,6 +12,8 @@ href="file:///usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/docbook.xsl"/>
 <!-- Any html-specific parameters follow -->
 <!-- You may find some in /etc/sgml/docbook-xsl/html/param.xsl -->
 
+<!-- Force UTF-8 encoding -->
+<xsl:output method="html" encoding="UTF-8" indent="no"/>
 
 <!-- Where to put resulting html. Don't forget trailing slash! -->
 <xsl:param name="base.dir" select="'./'"/>

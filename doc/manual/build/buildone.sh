@@ -111,14 +111,13 @@ create_text () {
     RET=$?; [ $RET -ne 0 ] && return $RET
 
     # Replace some unprintable characters
-    sed "s:\&#8211;:-:g        # n-dash
-         s:\&#8212;:--:g       # m-dash
-         s:\&#8220;:\&quot;:g  # different types of quotes
-         s:\&#8221;:\&quot;:g
-         s:\&#8222;:\&quot;:g
-         s:�\|�:\&quot;:g      # quotes in Russian translation
-         s:\&#8230;:...:g      # ellipsis
-         s:\&#8482;: (tm):g    # trademark" \
+    sed "s:–:-:g        # n-dash
+         s:—:--:g       # m-dash
+         s:“:\&quot;:g  # different types of quotes
+         s:”:\&quot;:g
+         s:„:\&quot;:g
+         s:…:...:g      # ellipsis
+         s:™: (tm):g    # trademark" \
         $tempdir/install.${language}.html >$tempdir/install.${language}.corr.html
     RET=$?; [ $RET -ne 0 ] && return $RET
 
