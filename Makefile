@@ -438,21 +438,22 @@ endif
 # Collect the used UTF-8 strings, to know which glyphs to include in
 # the font.  Using strigs is not the best way, but no better suggestion
 # has been made yet.
-all.utf: $(TYPE)-tree-stamp
-	cp graphic.utf all.utf
-	cat $(TREE)/var/lib/dpkg/info/*.templates >> all.utf
-	find $(TREE) -type f | xargs strings >> all.utf
+all-$(TYPE).utf: $(TYPE)-tree-stamp
+	cp graphic.utf all-$(TYPE).utf
+	cat $(TREE)/var/lib/dpkg/info/*.templates >> all-$(TYPE).utf
+	find $(TREE) -type f | xargs strings >> all-$(TYPE).utf
 
-unifont-reduced.bdf: all.utf
+unifont-reduced-$(TYPE).bdf: all-$(TYPE).utf
 	# Need to use an UTF-8 based locale to get reduce-font working.
 	# Any will do.  en_IN seem fine and was used by boot-floppies
 	# reduce-font is part of package libbogl-dev
 	# unifont.bdf is part of package bf-utf-source
-	LC_ALL=en_IN.UTF-8 reduce-font /usr/src/unifont.bdf < all.utf > $@
+	# The locale must be generated after installing the package locales
+	LC_ALL=en_IN.UTF-8 reduce-font /usr/src/unifont.bdf < all-$(TYPE).utf > $@
 
-$(TREE)/unifont-reduced.bgf: unifont-reduced.bdf
+$(TREE)/unifont-reduced.bgf: unifont-reduced-$(TYPE).bdf
 	# bdftobogl is part of package libbogl-dev
-	bdftobogl -b unifont-reduced.bdf > $@
+	bdftobogl -b unifont-reduced-$(TYPE).bdf > $@
 
 tarball: tree
 	tar czf $(DEST)/$(TYPE)-debian-installer.tar.gz $(TREE)
