@@ -16,18 +16,26 @@ KVERS=2.4.1-di
 # override this on the command line.
 TYPE=net
 
+# List here any libraries that need to be put on the system. Generally
+# this is not needed except for libnss_* libraries, which will not be
+# automatically pulled in by the library reduction code. Wildcards are
+# allowed.
+# TODO: this really needs to be determined on a per TYPE basis.
+#       libnss_nns is needed for many, but not all, install scenarios
+EXTRALIBS=/lib/libnss_dns*
+
 # List here any extra udebs that are not in the list file but that
 # should still be included on the system.
 EXTRAS=""
-
-# set DEBUG to y if you want to get the source for and compile 
-# debug versions of the needed udebs
-DEBUG=n
 
 # This variable can be used to copy in additional files from the system
 # that is doing the build. Useful if you need to include strace, or gdb,
 # or just something extra on a floppy.
 #EXTRAFILES=/usr/bin/strace
+
+# set DEBUG to y if you want to get the source for and compile 
+# debug versions of the needed udebs
+DEBUG=n
 
 # All output files will go here.
 DEST=dest
@@ -203,13 +211,17 @@ tree-stamp:
 	mv -f $(TREE)/boot/vmlinuz $(KERNEL)
 	-rmdir $(TREE)/boot/
 
-	# Copy in any extra files
 ifdef EXTRAFILES
 	# Copy in any extra files
 	for file in $(EXTRAFILES); do \
 		mkdir -p $(TREE)/`basename $$file`; \
 		cp -a $$file $(TREE)/$$file; \
 	done
+endif
+
+	# Copy in any extra libs.
+ifdef EXTRALIBS
+	cp -a $(EXTRALIBS) $(TREE)/lib/
 endif
 
 	# Library reduction.
