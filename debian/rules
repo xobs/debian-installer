@@ -1,7 +1,6 @@
 #! /usr/bin/make -f
 
 TYPES=cdrom cdrom144 net netboot
-ARCHS=alpha arm hppa i386 ia64 m68k mips mipsel powerpc s390 sparc
 # Where to place the files in the pkg
 INSTALL_ROOT=var\/www\/debian
 # Where to fetch old files from the woody ftp tree
@@ -42,48 +41,33 @@ clean:
 	for TYPE in $(TYPES) ; do \
 		$(MAKE) TYPE=$$TYPE clean ; \
 	done
-	rm -rf  debian/build debian/$(PACKAGE)  
+	rm -rf  debian/build debian/$(PACKAGE)  *-stamp wget-cache
 	rm -rf debian/*.install debian/*.dirs
 	rm -rf localudebs/*
 	dh_clean
 
-# We want some stamps to survice the cleanup process
-# They are only removed by 'make reallyclean'
-# so they are in subdirs that are cleaned by 'reallyclean'
-CONFIGURE_STAMP:=wget-cache/configure-stamp
-
-# Prepare a source tarball ready for the archive.
-# Should be clean, and contains all necessary sources;
-# debian/control should contain the appropriate Build-Depends
-#
-configure:   debian/control
-$(CONFIGURE_STAMP): 
+configure: configure-stamp debian/$(PACKAGE).dirs debian/$(PACKAGE).install
+configure-stamp:
 	# Fetch some files from woody, that are not built but useful.
 	mkdir -p wget-cache
 	(cd wget-cache ; wget --base=$(DEBIAN_ARCHIVE) -x -i ../debian/wget-files )
-	$(MAKE) TYPES="$(TYPES)"  fetch-sources
-	( cd .. ; tar zcpf build-installer_$(VERSION).orig.tar.gz build )
-	touch $(CONFIGURE_STAMP)
-
-
-build: build-stamp
-build-stamp: $(CONFIGURE_STAMP)
-	$(MAKE) TYPES="$(TYPES)" compile-udebs
+	touch configure-stamp
+	
+build:
 	mkdir -p debian/build
 	for KERNEL in $(KERNELS_$(ARCH)) ; do \
 		for TYPE in $(TYPES) ; do \
-			( $(MAKE) KERNELVERSION=$$KERNEL APT_GET=true TYPE=$$TYPE stats cd_content || true ) ; \
+			$(MAKE) KERNELVERSION=$$KERNEL TYPE=$$TYPE stats cd_content ; \
 			mkdir -p debian/build/$$KERNEL ; \
-			( cp -R dest/* debian/build/$$KERNEL || true) ; \
+			cp -R dest/* debian/build/$$KERNEL ; \
 		done ; \
 	done
-	touch build-stamp
 
 binary-indep:
 
 binary-arch: install
 
-install: configure  build debian/$(PACKAGE).dirs debian/$(PACKAGE).install
+install: configure  
 	dh_testdir
 	dh_testroot
 	dh_clean -k
@@ -107,10 +91,3 @@ debian/$(PACKAGE).dirs: debian/$(PACKAGE).dirs.in
 
 debian/$(PACKAGE).install: debian/$(PACKAGE).install.in
 	sed  's/@DISKS_ROOT@/$(DISKS_ROOT)/' < $< | sed 's/@WOODY_DISKS_ROOT@/$(WOODY_DISKS_ROOT)/'  > $@
-
-debian/control: debian/control.in $(CONFIGURE_STAMP)
-	for d in  `ls sourceudebs | grep -v stamp` ; do 	\
-		grep Build-Depends sourceudebs/$$d/debian/control >> sourceudebs/depends ; \
-	done
-	deps=`cut -d: -f2 <  sourceudebs/depends | sed 's/$$/,/' | xargs`  ; sed "s/@UDEB_DEPENDS@/$$deps/" < $< > $@
-	rm -f sourceudebs/depends
