@@ -481,7 +481,7 @@ boot_floppy: $(IMAGE)
 
 # Write drivers  floppy
 %_floppy: $(DEST)/%-image.img
-	sudo dd if=$< of=$(FLOPPYDEV)
+	sudo dd if=$< of=$(FLOPPYDEV) bs=$(FLOPPY_SIZE)k
 
 # If you're paranoid (or things are mysteriously breaking..),
 # you can check the floppy to make sure it wrote properly.
