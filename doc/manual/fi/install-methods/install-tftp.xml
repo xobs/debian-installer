@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 22232 untranslated -->
+<!-- original version: 23213 untranslated -->
 
  <sect1 condition="supports-tftp" id="install-tftp">
  <title>Preparing Files for TFTP Net Booting</title>
@@ -190,13 +190,8 @@ to <command>tftpd</command> as the filename to boot.
 
 For DECstations, there are tftpimage files for each subarchitecture,
 which contain both kernel and installer in one file. The naming
-convention is tftpimage-<replaceable>subarchitecture</replaceable> or
-tftpimage-<replaceable>subarchitecture</replaceable>.gz.  If the
-tftpimage is gzipped (the name ends with .gz), you need to unpack it
-first with <userinput>gunzip
-tftpimage-<replaceable>subarchitecture</replaceable>.gz</userinput>,
-as DECstations cannot boot compressed files by TFTP. Copy the
-tftpimage file you would like to use to
+convention is <replaceable>subarchitecture</replaceable>/netboot-boot.img.
+Copy the tftpimage file you would like to use to
 <userinput>/tftpboot/tftpboot.img</userinput> if you work with the
 example BOOTP/DHCP setups described above.
 
@@ -276,7 +271,21 @@ as ``SUN4M'' or ``SUN4C''; in some cases, the architecture is left
 blank, so the file the client looks for is just
 <filename>client-ip-in-hex</filename>.  Thus, if your system
 subarchitecture is a SUN4C, and its IP is 192.168.1.3, the filename
-would be <filename>C0A80103.SUN4C</filename>.
+would be <filename>C0A80103.SUN4C</filename>. An easy way to determine
+this is to enter the following command in a shell (assuming the
+machine's intended IP is 10.0.0.4).
+
+</para>
+
+<informalexample><screen>
+printf '%.2x%.2x%.2x%.2x\n' 10 0 0 4
+</screen></informalexample>
+
+<para>
+
+This will spit out the IP in hexadecimal; to get to the correct
+filename, you will need to change all letters to uppercase and
+if necessary append the subarchitecture name.
 
 </para><para>
 
