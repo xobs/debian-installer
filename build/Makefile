@@ -316,18 +316,19 @@ ifdef KERNELVERSION
 	# modules.
 	#
 	set -e; \
-	if [ -n "$(VERSIONED_SYSTEM_MAP)" ]; then \
-		[ ! -e $(TREE)/boot/System.map-$(VERSION) ] || sysmap_name="$(TREE)/boot/System.map-$(VERSION)"; \
-	else \
-		[ ! -e $(TREE)/boot/System.map ] || sysmap_name="$(TREE)/boot/System.map"; \
-	fi; \
-	[ -n "$$sysmap_name" ] || sysmap_opt="-F $$sysmap_name"; \
 	$(foreach VERSION,$(KERNELVERSION), \
+		sysmap_name=; sysmap_opt=; \
+		if [ -n "$(VERSIONED_SYSTEM_MAP)" ]; then \
+			[ ! -e $(TREE)/boot/System.map-$(VERSION) ] || sysmap_name="$(TREE)/boot/System.map-$(VERSION)"; \
+		else \
+			[ ! -e $(TREE)/boot/System.map ] || sysmap_name="$(TREE)/boot/System.map"; \
+		fi; \
+		[ -n "$$sysmap_name" ] || sysmap_opt="-F $$sysmap_name"; \
 		if [ -d $(TREE)/lib/modules/$(VERSION) ]; then \
 			mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
 			$(shell ./choose-subarch-env $(VERSION)) depmod $$sysmap_opt -q -a -b $(TREE)/ $(VERSION); \
 		fi; \
-		[ -n "$$sysmap_name" ] || mv $(TREE)/boot/System.map-$(VERSION) $(TEMP))
+		[ -z "$$sysmap_name" ] || mv $$sysmap_name $(TEMP))
 
 	# These files depmod makes are used by hotplug, and we shouldn't
 	# need them, yet anyway.
