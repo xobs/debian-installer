@@ -49,7 +49,9 @@ APT_GET=apt-get --assume-yes \
 # Comments are allowed in the lists.
 UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE)) $(EXTRAS)
 
-build: tree reduce stats
+DPKGDIR=$(DEST)/var/lib/dpkg
+
+build: tree lib_reduce status_reduce stats
 
 demo:
 	chroot $(DEST) bin/sh
@@ -89,7 +91,6 @@ get_udebs:
 	done
 
 # Build the installer tree.
-DPKGDIR=$(DEST)/var/lib/dpkg
 tree: get_udebs
 	dh_testroot
 
@@ -101,8 +102,7 @@ tree: get_udebs
 	# Only dpkg needs this stuff, so it can be removed later.
 	mkdir -p $(DPKGDIR)/updates/
 	touch $(DPKGDIR)/available
-	# Unpack the udebs with dpkg, ignoring dependancies.
-	# (So you'd better get the deps right in your .list files!)
+	# Unpack the udebs with dpkg, ignoring pre-dependancies.
 	# This command must run as root or fakeroot.
 	dpkg --force-depends --root=$(DEST) --unpack $(UDEBDIR)/*.udeb
 	# Clean up after dpkg.
@@ -115,9 +115,15 @@ tree: get_udebs
 	ln -s ash $(DEST)/bin/sh
 
 # Library reduction.
-reduce:
+lib_reduce:
 	mkdir -p $(DEST)/lib
 	mklibs.sh -v -d $(DEST)/lib `find $(DEST) -type f -perm +0111`
+
+# Reduce a status file to contain only the elements we care about.
+status_reduce:
+	egrep -i '^((Depends|Package|Description|installer-menu-item):|$$)' \
+		$(DPKGDIR)/status > $(DPKGDIR)/status.new
+	mv -f $(DPKGDIR)/status.new $(DPKGDIR)/status
 
 stats:
 	@echo
