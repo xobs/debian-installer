@@ -25,14 +25,19 @@ endif
 
 ifdef DISK_LABEL
 	# generate a disk label
-	./makelabel $(DISK_LABEL) > $(TEMP)/disk.lbl
+	./makelabel $(DISK_LABEL) $(BUILD_DATE) > $(TEMP)/disk.lbl
 	mcopy -i$@.new $(TEMP)/disk.lbl ::disk.lbl
 endif
 
 ifdef KERNELNAME
 	# syslinux is used to make the floppy bootable
 	cat boot/i386/syslinux.cfg | todos | \
-		mcopy -i$@.new - ::\syslinux.cfg
+		mcopy -i$@.new - ::syslinux.cfg
+	for img in boot/i386/*.txt ; do \
+		./bootscreen-subst "${MEDIA_TYPE}" "${DEBIAN_VERSION}" "${BUILD_DATE}" \
+		       < $$img | \
+			mcopy -i$@.new - ::`basename $$img`; \
+	done
 	syslinux $(SYSLINUX_OPTS) $@.new
 endif
 

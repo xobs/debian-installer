@@ -15,7 +15,8 @@ cd_content: initrd
 	# New-world bootability
 	cp -f boot/powerpc/ofboot.b $(CD_IMAGE_TREE)/install/powermac
 	cp -f /usr/lib/yaboot/yaboot $(CD_IMAGE_TREE)/install/powermac
-	cp -f boot/powerpc/boot.msg $(CD_IMAGE_TREE)/install/powermac
+	./bootscreen-subst "${MEDIA_TYPE}" "${DEBIAN_VERSION}" "${BUILD_DATE}" \
+		< boot/powerpc/boot.msg > $(CD_IMAGE_TREE)/install/powermac
 	cp -f boot/powerpc/$(TYPE)-yaboot.conf $(CD_IMAGE_TREE)/install/powermac/yaboot.conf
 
 # creates a bootable cd image for powerpc

@@ -394,7 +394,7 @@ $(EXTRA_TARGETS) : %-stamp : $(TYPE)-get_udebs-stamp
 			cp $(EXTRAUDEBDIR)/$$file* ${TEMP}/$*  ; \
 	done
 	./pkg-list $* $(KERNEL_FLAVOUR) $(KERNELIMAGEVERSION) > ${TEMP}/$*/udeb_include
-	./makelabel ${DISK_LABEL_$*} > ${TEMP}/$*/disk.lbl
+	./makelabel ${DISK_LABEL_$*} ${BUILD_DATE} > ${TEMP}/$*/disk.lbl
 	touch $@
 
 $(EXTRA_IMAGES) : $(DEST)/%-image.img :  $(EXTRA_TARGETS)
