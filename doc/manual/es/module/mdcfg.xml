@@ -1,2 +1,169 @@
-<!-- retain these comments for translator revision tracking -->
-<!-- original version: 14337 untranslated -->
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<!-- original version: 18383 -->
+
+   <sect3 id="mdcfg">
+   <title>Configuración de dispositivos multidisco (RAID)</title>
+<para>
+
+Si tiene más de un disco duro<footnote><para>
+
+Siendo honestos, puede construir un MD (Metadispositivo) incluso con particiones
+de un mismo disco físico, pero no tiene ninguna ventaja.
+
+</para></footnote> en su ordenador, con <command>mdcfg</command> puede
+configurar sus discos para un mayor rendimiento y/o una mayor seguridad de los
+datos. El resultado se denomina <firstterm>Dispositivo Multidisco</firstterm> (o
+después de su variante más conocida <firstterm>RAID</firstterm>).
+
+</para><para>
+
+Básicamente el metadispositivo es un grupo de particiones de diferentes discos
+combinadas para formar un dispositivo <emphasis>lógico</emphasis>. Este
+dispositivo puede usarse como una partición ordinaria (p.ej. puede darle formato
+con <command>partman</command>, asignarle un punto de montaje, etc.).
+
+</para><para>
+
+El beneficio obtenido depende del tipo de MD creado. Actualmente los tipos
+soportados son:
+
+<variablelist>
+<varlistentry>
+
+<term>RAID 0</term><listitem><para>
+
+Su principal objetivo es el rendimiento. RAID 0 divide todos los datos de
+entrada en <firstterm>franjas</firstterm> y los distribuye igualmente por cada
+disco en el sistema RAID. Esto puede aumentar la velocidad de las operaciones de
+lectura/escritura, pero cuando falle un disco, perderá <emphasis>todo</emphasis>
+(parte de la información todavía está en el disco o discos que funcionan, la
+otra parte <emphasis>estaba</emphasis> en el disco que falló).
+
+</para><para>
+
+Es típico el uso de RAID 0 en una partición para edición de vídeo.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>RAID 1</term><listitem><para>
+
+Es adecuado para los casos en los que la seguridad sea lo primero. Consiste en
+varias (normalmente dos) particiones del mismo tamaño donde cada partición
+contiene exactamente los mismos datos. Esto significa dos cosas. Primero, si un
+disco falla, todavía tiene una copia de los datos en los discos restantes.
+Segundo, sólo puede usar una fracción de la capacidad disponible (exactamente el
+tamaño de la partición más pequeña del sistema RAID).
+
+</para><para>
+
+Opcionalmente puede tener un disco de reserva en el sistema que tomará el lugar
+del disco defectuoso en caso de fallo.
+
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+Resumiendo:
+
+<informaltable>
+<tgroup cols="5">
+<thead>
+<row>
+  <entry>Tipo</entry>
+  <entry>Dispositivos mínimos</entry>
+  <entry>Dispositivo de reserva</entry>
+  <entry>¿Soporta el fallo de un disco?</entry>
+  <entry>Espacio disponible</entry>
+</row>
+</thead>
+
+<tbody>
+<row>
+  <entry>RAID 0</entry>
+  <entry>2</entry>
+  <entry>no</entry>
+  <entry>no</entry>
+  <entry>Tamaño del menor dispositivo multiplicado por el número de dispositivos
+  en el sistema RAID</entry>
+</row>
+
+<row>
+  <entry>RAID 1</entry>
+  <entry>2</entry>
+  <entry>opcional</entry>
+  <entry>sí</entry>
+  <entry>Tamaño del menor dispositivo en el sistema RAID</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+
+</para><para>
+
+Si quiere saberlo todo acerca de RAID, consulte el <ulink
+url="&url-software-raid-howto;">CÓMO RAID</ulink>.
+
+</para><para>
+
+Para crear un MD, necesita tener las particiones deseadas marcadas
+para su uso con RAID (puede hacerlo con <command>partman</command> en el
+menú <guimenu>Configuración de la partición</guimenu> donde debería seleccionar
+<menuchoice> <guimenu>Utilizar como:</guimenu> <guimenuitem>Usar la partición
+como un dispositivo RAID</guimenuitem> </menuchoice>).
+
+</para><warning><para>
+
+Actualmente no puede usar un metadispositivo para la partición raíz
+(<filename>/</filename>).
+
+</para></warning><para>
+
+En la primera pantalla de <command>mdcfg</command> simplemente seleccione
+<guimenu>Crear un dispositivo MD</guimenu>. Se le presentará una lista de tipos
+de MD soportados, de los que debe elegir uno (p.ej. RAID 1). Los siguientes
+pasos dependen del tipo de MD seleccionado. En términos generales, tendrá que
+proporcionar algunos parámetros y elegir las particiones que formarán parte del
+sistema MD.
+
+</para>
+
+<itemizedlist>
+<listitem><para>
+
+RAID 0 es simple &mdash; se le presentará una lista de particiones RAID
+disponibles y únicamente tendrá que seleccionar las particiones que formarán el
+MD.
+
+</para></listitem>
+<listitem><para>
+
+RAID 1 es un poco más complejo. Primero, se le preguntará el número de
+dispositivos activos y el número de dispositivos de reserva que formarán el
+MD. A continuación, necesita seleccionar de la lista de particiones RAID
+disponibles las que estarán activas y las que quedarán en reserva. El total de
+las particiones seleccionadas debe ser igual al que se dio unos segundos
+antes. No se preocupe. Si comete algún error y selecciona un número distinto de
+particiones, &d-i; no le dejará continuar hasta que solucione el problema.
+
+</para></listitem>
+</itemizedlist>
+
+<para>
+
+Es perfectamente posible tener varios tipos de MD a la vez. Por ejemplo, si
+tiene tres discos duros de 200 GB dedicados para el MD, cada uno con dos
+particiones de 100 GB, puede combinar la primera partición de los tres discos en
+un RAID 0 (una partición rápida de 300 GB para edición de vídeo) y usar las
+otras tres (2 activas, 1 de reserva) en un RAID 1 (una partición bastante segura
+de 100 GB para /home).
+
+</para><para>
+
+Después de configurar los MD a su gusto, <guimenuitem>Terminar</guimenuitem>
+<command>mdcfg</command> para volver a <command>partman</command> y crear los
+sistemas de ficheros en sus nuevos MD y asignarles los atributos habituales,
+como los puntos de montaje.
+
+</para>
+   </sect3>
