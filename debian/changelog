@@ -1,4 +1,4 @@
-debian-installer (20031114) UNRELEASED; urgency=low
+debian-installer (20031208) UNRELEASED; urgency=low
 
   * Joey Hess
     - Switch i386 to using dhcp-client rather than pump for netboot.
@@ -16,6 +16,36 @@ debian-installer (20031114) UNRELEASED; urgency=low
     - Turn off ia64 until someone sends me a real report of successful
       building with only build deps. (Too many buildd failures, the latest
       is something about elilo.)
+    - makelabel takes the build date as its second parameter. Calculating
+      BUILD_DATE once at the start to avoid inconsistencies during
+      long/midnight builds.
+    - Add MEDIA_TYPE to configs for bootable image types.
+    - Add DEBIAN_VERSION to config.
+    - Add bootscreen-subst to substitute these variables into boot screens.
+    - Make a syslinux help screen, for all i386 syslinuxed boot media.
+      Includes the build date, debian version, and media type, and is derived
+      from isolinux help texts on the sarge cds, but modified to actually
+      match d-i:
+        - remove boot flavor docs, as we currently have no flavors
+        - remove rescue stuff, as d-i is not currently also a rescue disk
+        - reduce number of colors used for cleaner look
+        - remove mention of non-free
+        - try to make the prerequisites documentation somewhere close to
+          reality -- 64 mb ram and 256 mb disk.
+        - make every boot message screen 22 lines long, followed by a blank
+          line (which is in turn followed by the boot: prompt), for consistent
+          display
+        - remove references in f4.txt to a nonexistant table
+        - remove documentation of mono and vga16:off, as they do not work with
+          d-i
+        - remove keytimer hack documentation, that was for boot-floppies
+        - add documentation of d-i's boot time parameters, including the new
+          debian-installer/framebuffer=false
+        - remove the mailing list subscription info; boot time is not the
+          time to tell the user about this. In its place, make f9.txt be
+          about Debian.
+      - Remove DEBCONF_DEBUG setting from syslinux.cfg.
+      - Use bootscreen-subst on powerpc's boot.msg, too.
   * Goswin von Brederlow
     - Moved fetching of (u)debs into get-packages shell script.
     - Changed sources.list to sources.list.udeb, added sources.list.deb.
