@@ -18,8 +18,8 @@ for dir in $PACKAGES; do
     (
     	needsupload=no
         cd $dir
-        ver=$(dpkg-parsechangelog | grep Version | cut -d: -f 2)
-        pkg=$(dpkg-parsechangelog | grep Source | cut -d: -f 2)
+        ver=$(dpkg-parsechangelog | grep ^Version | cut -d: -f 2)
+        pkg=$(dpkg-parsechangelog | grep ^Source | cut -d: -f 2)
         archver=$(madison $pkg | grep unstable  | grep source | cut -d\| -f 2)
         if [ -z "$archver" ]; then 
             archver="n/a"
