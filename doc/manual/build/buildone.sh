@@ -59,7 +59,7 @@ case $arch in
 	kernelversion="2.4.25"
 	
         fdisk="cfdisk.txt"
-        network="supports-tftp;supports-rarp;supports-dhcp;supports-bootp;supports-nfsroot"
+        network="supports-tftp;supports-dhcp;supports-bootp;supports-nfsroot"
         boot=""
         other="supports-serial-console;rescue-needs-root-disk"
         smp=""
