@@ -1,46 +1,81 @@
+<?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: chroot-install.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+<!-- original version: 12756 -->
 
  <sect1 id="linux-upgrade">
- <title>Installing Debian GNU/Linux from a Unix/Linux System</title>
+ <title>Unix/Linux System システムからの &debian; のインストール</title>
 
 <para>
 
-This section explains how to install Debian GNU/Linux from an existing
+<!--
+This section explains how to install &debian; from an existing
 Unix or Linux system, without using the ncurses-based, menu-driven
 installer as explained in the rest of the manual. This "cross-install"
-HOWTO has been requested by users switching to Debian GNU/Linux from
+HOWTO has been requested by users switching to &debian; from
 Redhat, Mandrake, and SUSE. In this section some familiarity with
 entering *nix commands and navigating the file system is assumed. In
 this section, <prompt>$</prompt> symbolizes a command to be entered in
 the user's current system, while <prompt>#</prompt> refers to a
 command entered in the Debian chroot.
+-->
+本節は、マニュアルの他の部分で説明されている 
+ncurses ベースのメニュードリブンインストーラを使用せずに、
+既存の Unix・Linux システムから &debian; 
+をインストールする方法について説明します。
+この「クロスインストール」HOWTOは、
+Redhat, Mandrake, SUSE から &debian; に移行するユーザの要望で書かれました。
+本節では、*nix コマンドの入力について熟知し、
+ファイルシステムを操作できるのが前提となっています。
+また、<prompt>#</prompt>が Debian chroot に入力されたコマンドを示し、
+<prompt>$</prompt> はユーザの現在のシステムに入力されるコマンドを表します。
+
 
 </para><para>
 
+<!--
 Once you've got the new Debian system configured to your preference,
 you can migrate your existing user data (if any) to it, and keep on
-rolling. This is therefore a "zero downtime" Debian GNU/Linux
+rolling. This is therefore a "zero downtime" &debian;
 install. It's also a clever way for dealing with hardware that
 otherwise doesn't play friendly with various boot or installation
 media.
+-->
+一旦、新しい Debian システムを好みに設定したら、
+既存のユーザデータを (あるなら) 稼働したまま移行できます。
+したがって、これは「0 ダウンタイム」 &debian; インストールになります。
+またこれは、
+様々な起動・インストールメディアと相性のよくないハードウェアに対処する、
+うまい方法です。
 
 </para>
 
   <sect2>
-  <title>Getting Started</title>
+  <title>はじめに</title>
 <para>
 
+<!--
 With your current *nix partitioning tools, repartition the hard
 drive as needed, creating at least one filesystem plus swap. You
 need at least 150MB of space available for a console only install,
 or at least 300MB if you plan to install X.
+-->
+今の *nix のパーティション分割ツールで、
+スワップと最低 1 つファイルシステムを作成するよう、
+ハードディスクを希望に添って再分割してください。
+コンソールのみのインストールには、最低 150MB の空き領域が必要ですし、
+X をインストールする予定なら最低 300MB 必要です。
 
 </para><para>
 
+<!--
 To create file systems on your partitions. For example, to create an 
 ext3 file system on partition <filename>/dev/hda6</filename> (that's  
 our example root partition):
+-->
+パーティションへのファイルシステム作成。
+例えば、<filename>/dev/hda6</filename> パーティションに、
+ext3 ファイルシステムを作成するには、以下のようにします。
+(今回の例ではこのパーティションを root パーティションとします)
 
 <informalexample><screen>
 
@@ -48,12 +83,22 @@ our example root partition):
 
 </screen></informalexample>
 
+<!--
 To create an ext2 file system instead, omit <userinput>-j</userinput>.
+-->
+ext3 ではなく ext2 ファイルシステムを作成するには、
+<userinput>-j</userinput> を取ってください。
 
 </para><para>
 
+<!--
 Initialize and activate swap (substitute the partition number for 
 your intended Debian swap partition):
+-->
+スワップを以下のように初期化して有効にしてください。
+(パーティション番号は、
+Debian スワップパーティションにするパーティション番号に、
+読み替えてください)
 
 <informalexample><screen>
 
@@ -65,10 +110,17 @@ your intended Debian swap partition):
 
 </para><para>
 
+<!--
 Mount one partition as <filename>/mnt/debinst</filename> (the
 installation point, to be the root (<filename>/</filename>) filesystem
 on your new system). The mount point name is strictly arbitrary, it is
 referenced later below.
+-->
+パーティションを <filename>/mnt/debinst</filename> (インストールポイント。
+新システムの root (<filename>/</filename>) ファイルシステムになります) 
+にマウントしてください。
+厳密にいうとマウントポイント名は何でも構いません。
+以降の説明ではこれを使用します。
 
 <informalexample><screen>
 
@@ -81,26 +133,47 @@ referenced later below.
   </sect2>
 
   <sect2>
-  <title>Install <command>debootstrap</command></title>
+  <title><command>debootstrap</command> のインストール</title>
 <para>
 
+<!--
 The tool that the Debian installer uses, which is recognized as the
 official way to install a Debian base system, is
 <command>debootstrap</command>. It uses <command>wget</command>, but
 otherwise depends only on <classname>glibc</classname>. Install
 <command>wget</command> if it isn't already on your current system,
 then download and install <command>debootstrap</command>.
+-->
+Debian インストーラが使用するツール 
+(Debian 基本システムをインストールする公式の方法と認められている) 
+が <command>debootstrap</command> です。
+<command>wget</command> を使用しますが、
+<classname>glibc</classname> にのみ依存しています。
+今のシステムに既にインストールしていなければ、
+<command>wget</command> をインストールし、
+その後 <command>debootstrap</command> 
+をダウンロード・インストールしてください。
 
 </para><para>
 
+<!--
 If you have an rpm-based system, you can use alien to convert the 
 .deb into .rpm, or download an rpm-ized version at 
 <ulink url="http://people.debian.org/~blade/install/debootstrap"></ulink>
+-->
+rpm ベースシステムがあるなら、alien を使って .deb を .rpm に変換できます。
+もしくは、
+<ulink url="http://people.debian.org/~blade/install/debootstrap"></ulink> 
+から rpm 形式のものをダウンロードできます。
 
 </para><para>
 
+<!--
 Or, you can use the following procedure to install it
 manually. Make a work folder for extracting the .deb into:
+-->
+また、手動でインストールするには、以下の手順になります。
+まず .deb を展開するために作業フォルダを次のように作ってください。
 
 <informalexample><screen>
 
@@ -109,7 +182,7 @@ manually. Make a work folder for extracting the .deb into:
 
 </screen></informalexample>
 </para><para>
-
+<!--
 The <command>debootstrap</command> binary is located in the Debian
 archive (be sure to select the proper file for your
 architecture). Download the <command>debootstrap</command> .deb from
@@ -117,6 +190,13 @@ the <ulink url="http://ftp.debian.org/debian/pool/main/d/debootstrap/">
 pool</ulink>, copy the package to the work folder, and extract the
 binary files from it. You will need to have root privileges to install
 the binaries.
+-->
+<command>debootstrap</command> バイナリは、Debian アーカイブ 
+(あなたのアーキテクチャに適合するファイルを必ず選ぶこと) にあります。
+<ulink url="http://ftp.debian.org/debian/pool/main/d/debootstrap/">
+pool</ulink> から <command>debootstrap</command> .deb をダウンロードして、
+作業フォルダにパッケージをコピーし、バイナリファイルを展開してください。
+バイナリをインストールする際には root 権限を持つ必要があるでしょう。
 
 <informalexample><screen>
 
@@ -130,26 +210,46 @@ the binaries.
   </sect2>
 
   <sect2>
-  <title>Run <command>debootstrap</command> (Network-connected)</title>
+  <title><command>debootstrap</command> の実行 (ネットワーク接続)</title>
 <para>
 
+<!--
 <command>debootstrap</command> can download the needed files directly
 from the archive when you run it. You can substitute any Debian
 archive mirror for <userinput>http.us.debian.org/debian</userinput> in
 the command example below, preferably a mirror close to you
 network-wise. Mirrors are listed at 
 <ulink url="http://www.debian.org/misc/README.mirrors"></ulink>.
+-->
+<command>debootstrap</command> は，実行されると、
+アーカイブから必要なファイルを直接ダウンロードできます。
+以下のコマンドの例では、
+<userinput>http.us.debian.org/debian</userinput> としていますが、
+ネットワーク的に近い Debian アーカイブミラーサイトで代用できます。
+ミラーサイトは、
+<ulink url="http://www.debian.org/misc/README.mirrors"></ulink> 
+でリストされています。
 
 </para><para>
 
-If you have a woody version Debian GNU/Linux CD mounted at
+<!--
+If you have a woody version &debian; CD mounted at
 <filename>/cdrom</filename>, you could substitute a file URL instead
 of the http URL: <userinput>file:/cdrom/debian/</userinput>
+-->
+woody 版 &debian; CD を持っていて、
+<filename>/cdrom</filename> にマウントしていれば、
+http URL に代えて file URL (<userinput>file:/cdrom/debian/</userinput>) 
+を使用することができます。
 
 </para><para>
 
+<!--
 Substitute one of the following for <replaceable>ARCH</replaceable> 
 in the <command>debootstrap</command> command: 
+-->
+<command>debootstrap</command> コマンドの <replaceable>ARCH</replaceable> は、
+以下のうち一つを使用してください。
 
 <userinput>alpha</userinput>, 
 <userinput>arm</userinput>,
@@ -160,7 +260,7 @@ in the <command>debootstrap</command> command:
 <userinput>mips</userinput>, 
 <userinput>mipsel</userinput>, 
 <userinput>powerpc</userinput>, 
-<userinput>s390</userinput>, or
+<userinput>s390</userinput>, 
 <userinput>sparc</userinput>.
 
 <informalexample><screen>
@@ -175,28 +275,44 @@ in the <command>debootstrap</command> command:
   </sect2>
 
   <sect2>
-  <title>Run <command>debootstrap</command> 
-  (Using <filename>basedebs.tar</filename>)</title>
+  <title><command>debootstrap</command> の実行
+  (<filename>basedebs.tar</filename> を使用)</title>
 <para>
 
+<!--
 <command>debootstrap</command> can use the
 <filename>basedebs.tar</filename> file, if you have already downloaded
 it ahead of time. The <filename>basedebs.tar</filename> file is
 generated only every once in a while, so you'll get the latest version
 of the base system by pointing <command>debootstrap</command> directly
 to a Debian archive as shown in the previous section.
+-->
+あらかじめ <filename>basedebs.tar</filename> ファイルをダウンロードしていれば、
+<command>debootstrap</command> がそのファイルを使用することができます。
+<filename>basedebs.tar</filename> ファイルはたまに生成されるだけですから、
+前節で示した Debian アーカイブの <command>debootstrap</command> ディレクトリから、
+基本システムの最新版を得ることができます。
 
 </para><para>
 
+<!--
 The <filename>basedebs.tar</filename> file is found in the
 <filename>base-images-current</filename> directory of the Debian
 archive for your architecture, for example: 
 <ulink url="http://http.us.debian.org/debian/dists/woody/main/disks-&architecture;/base-images-current/basedebs.tar"></ulink>
+-->
+あなたのマシンのアーキテクチャ用 <filename>basedebs.tar</filename> ファイルは、
+Debian アーカイブの <filename>base-images-current</filename> ディレクトリにあります。
+例: <ulink url="http://http.us.debian.org/debian/dists/woody/main/disks-&architecture;/base-images-current/basedebs.tar"></ulink>
 
 </para><para>
 
+<!--
 Substitute one of the following for <replaceable>ARCH</replaceable> in the
 <command>debootstrap</command> command: 
+-->
+<command>debootstrap</command> コマンドの <replaceable>ARCH</replaceable> は、
+以下のうち一つを使用してください。
 
 <userinput>alpha</userinput>, 
 <userinput>arm</userinput>,
@@ -219,12 +335,17 @@ $ /usr/sbin/debootstrap --arch ARCH --unpack-tarball \
   </sect2>
 
   <sect2>
-  <title>Configure The Base System</title>
+  <title>基本システムの設定</title>
 
 <para>
 
+<!--
 Now you've got a real Debian system, though rather lean, on disk.
 <command>Chroot</command> into it:
+-->
+さあ、これでディスクに真の Debian システムを 
+(いくぶん中がスカスカですが) 手に入れました。
+そこに <command>chroot</command> してください。
 
 <informalexample><screen>
 
@@ -234,10 +355,13 @@ Now you've got a real Debian system, though rather lean, on disk.
 </para>
 
    <sect3>
-   <title>Mount Partitions</title>
+   <title>パーティションのマウント</title>
 <para>
 
+<!--
 You need to create <filename>/etc/fstab</filename>.
+-->
+<filename>/etc/fstab</filename> を作る必要があります。
 
 <informalexample><screen>
 
@@ -247,7 +371,10 @@ You need to create <filename>/etc/fstab</filename>.
 
 </para><para>
 
+<!--
 Here is a sample you can modify to suit:
+-->
+以下のサンプルを自分に合うように編集できます。
 
 <informalexample><screen>
 
@@ -272,22 +399,33 @@ proc             /proc         proc    defaults                 0    0
 
 </para><para>
 
+<!--
 Use <userinput>mount -a</userinput> to mount all the file systems you
 have specified in your <filename>/etc/fstab</filename>, or to mount
 file systems individually use:
+-->
+<filename>/etc/fstab</filename> で指定したファイルシステムを、
+すべてマウントするには <userinput>mount -a</userinput> としてください。
+また、ファイルシステムを別々にマウントするには、以下のようにしてください。
 
 <informalexample><screen>
 
- # mount /path  # e.g.:  mount /usr
+ # mount /path  # 例:  mount /usr
 
 </screen></informalexample>
 
 </para><para>
 
+<!--
 You can mount the proc file system multiple times and to arbitrary
 locations, though /proc is customary. If you didn't use
 <userinput>mount -a</userinput>, be sure to mount proc before
 continuing:
+-->
+proc ファイルシステムは、どこでも何度でもマウントすることができますが、
+慣習的に /proc にマウントします。
+<userinput>mount -a</userinput> を使用しなかった場合は、
+以下のように先に進む前に必ず proc をマウントしてください。
 
 <informalexample><screen>
 
@@ -298,7 +436,11 @@ continuing:
 </para>
 
 <para>
+<!--
 A RedHat user reports that on his system, this should be 
+-->
+RedHat ユーザによって、
+RedHat システムでは次のようにするとよいという報告がなされています。
 
 <informalexample><screen>
 
@@ -309,12 +451,14 @@ A RedHat user reports that on his system, this should be
    </sect3>
 
    <sect3>
-   <title>Configure Keyboard</title>
+   <title>キーボードの設定</title>
 
 <para>
 
+<!--
 To configure your keyboard:
-
+-->
+キーボードを設定するには次のようにしてください。
 <informalexample><screen>
 
  # dpkg-reconfigure console-data
@@ -325,13 +469,20 @@ To configure your keyboard:
    </sect3>
 
    <sect3>
-   <title>Configure Networking</title>
+   <title>ネットワークの設定</title>
 <para>
 
+<!--
 To configure networking, edit
 <filename>/etc/network/interfaces</filename>,
 <filename>/etc/resolv.conf</filename>, and
 <filename>etc/hostname</filename>.
+-->
+<!--nabetaro etc/hostname じゃなくて /etc/hostname だとおもわれ -->
+ネットワークの設定をするには、
+<filename>/etc/network/interfaces</filename>,
+<filename>/etc/resolv.conf</filename>, 
+<filename>/etc/hostname</filename> を編集してください。
 
 <informalexample><screen>
 
@@ -341,8 +492,12 @@ To configure networking, edit
 
 </para><para>
 
+<!--
 Here are some simple examples from
 <filename>/usr/share/doc/ifupdown/examples</filename>:
+-->
+次は、
+<filename>/usr/share/doc/ifupdown/examples</filename> のシンプルな例です。
 
 <informalexample><screen>
 ######################################################################
@@ -374,8 +529,12 @@ iface lo inet loopback
 
 </para><para>
 
+<!--
 Enter your nameserver(s) and search directives in
 <filename>/etc/resolv.conf</filename>:
+-->
+<filename>/etc/resolv.conf</filename> に、
+ネームサーバと search ディレクティブを入力してください。
 
 <informalexample><screen>
 
@@ -385,8 +544,10 @@ Enter your nameserver(s) and search directives in
 
 </para><para>
 
+<!--
 A simple <filename>/etc/resolv.conf</filename>:
-
+-->
+シンプルな <filename>/etc/resolv.conf</filename> は以下になります。
 <informalexample><screen>
 
 # search hqdom.local\000
@@ -397,8 +558,10 @@ A simple <filename>/etc/resolv.conf</filename>:
 
 </para><para>
 
+<!--
 Enter your system's host name (2 to 63 characters):
-
+-->
+システムのホスト名 (2 から 63 文字) を入力してください。
 <informalexample><screen>
 
  # echo DebianHostName &#62; /etc/hostname
@@ -407,21 +570,32 @@ Enter your system's host name (2 to 63 characters):
 
 </para><para>
 
+<!--
 If you have multiple network cards, you should arrange the names of
 driver modules in the <filename>/etc/modules</filename> file into the
 desired order. Then during boot, each card will be associated with the
 interface name (eth0, eth1, etc.) that you expect.
+-->
+複数のネットワークカードを持っているなら、
+<filename>/etc/modules</filename> ファイルに希望の順番で、
+ドライバモジュールの名前を配置してください。
+その後起動中に、各カードは期待通りにインターフェース名 (eth0, eth1など) 
+と結びつけられます。
 
 </para>
    </sect3>
 
    <sect3>
-   <title>Configure Timezone, Users, and APT</title>
+   <title>タイムゾーン、ユーザ、APT の設定</title>
 
 <para>
 
+<!--
 Set your timezone, add a normal user, and choose your <command>apt</command>
 sources by running
+-->
+タイムゾーンの設定、一般ユーザの追加、
+<command>apt</command> ソースの選択を行うには、以下のコマンドを実行します。
 
 <informalexample><screen>
 
@@ -432,11 +606,15 @@ sources by running
    </sect3>
 
    <sect3>
-   <title>Configure Locales</title>
+   <title>locale の設定</title>
 <para>
 
+<!--
 To configure your locale settings to use a language other than
 English, install the locales support package and configure it:
+-->
+英語以外の言語を使用するよう locale の設定をするために、
+次のように locales サポートパッケージをインストール・設定します。
 
 <informalexample><screen>
 
@@ -445,21 +623,31 @@ English, install the locales support package and configure it:
 
 </screen></informalexample>
 
+<!--
 NOTE: Apt must be configured before, ie. during the base-config phase.
 Before using locales with character sets other than ASCII or latin1,
 please consult the appropriate localisation HOWTO.
+-->
+注: apt はあらかじめ (つまり base-config で) 設定しておかなければなりません。
+ASCII や latin1 以外の文字セットを持つ locale を使用する前には、
+適切な localisation HOWTO を調べてください。
 
 </para>
    </sect3>
   </sect2>
 
   <sect2>
-  <title>Install a Kernel</title>
+  <title>カーネルのインストール</title>
 
 <para>
 
+<!--
 If you intend to boot this system, you probably want a Linux kernel
 and a boot loader. Identify available pre-packaged kernels with
+-->
+このシステムを起動できるようにするなら、
+おそらく Linux カーネルとブートローダが必要でしょう。
+次のようにして、あらかじめパッケージ化したカーネルを確認してください。
 
 <informalexample><screen>
 
@@ -469,7 +657,10 @@ and a boot loader. Identify available pre-packaged kernels with
 
 </para><para>
 
+<!--
 Then install your choice using its package name.
+-->
+次に、選んだパッケージ名を使ってインストールしてください。
 
 <informalexample><screen>
 
@@ -481,24 +672,42 @@ Then install your choice using its package name.
   </sect2>
 
   <sect2>
-<title>Set up the Boot Loader</title>
+<title>ブートローダのセットアップ</title>
 <para>
 
-To make your Debian GNU/Linux system bootable, set up your boot
-loader to load the installed kernel with your new root partition.
+<!--
+To make your &debian; system bootable, set up your boot loader to load
+the installed kernel with your new root partition.
+-->
+&debian; システムを起動できるようにするために、
+インストールしたカーネルを新しい root パーティションから読み込むように、
+ブートローダをセットアップしてください。
 
 </para><para arch="i386">
 
+<!--
 Check <userinput>man lilo.conf</userinput> for instructions on setting
 up the bootloader.  If you are keeping the system you used to install
 Debian, just add an entry for the Debian install to your existing
 lilo.conf.  You could also copy it to the new system and edit it
 there. After you are done editing, call lilo (remember it will use
 lilo.conf relative to the system you call it from).
+-->
+ブートローダのセットアップについての説明は、
+<userinput>man lilo.conf</userinput> をチェックしてください。
+Debian をインストールするのに使用したシステムを保持する場合、
+既存の lilo.conf に、Debian インストールへのエントリを単に加えてください。
+そして新システムにそれをコピーし、そこで編集してください。
+編集を終えた後、lilo を呼び出してください。
+(lilo を呼び出したシステムと関係あるところの、
+lilo.conf が使われるということを覚えていてください)
 
 </para><para arch="i386">
 
+<!--
 Here is a basic /etc/lilo.conf as an example:
+-->
+以下は基本的な /etc/lilo.conf の例です。
 
 <informalexample><screen>
 
@@ -514,16 +723,29 @@ label=Debian
 
 </para><para arch="powerpc">
 
+<!--
 Check <userinput>man yaboot.conf</userinput> for instructions on
 setting up the bootloader.  If you are keeping the system you used to
 install Debian, just add an entry for the Debian install to your
 existing yaboot.conf.  You could also copy it to the new system and
 edit it there. After you are done editing, call ybin (remember it will
 use yaboot.conf relative to the system you call it from).
+-->
+ブートローダのセットアップについての説明は、
+<userinput>man yaboot.conf</userinput> をチェックしてください。
+Debian をインストールするのに使用したシステムを保持する場合、
+既存の yaboot.conf に、Debian インストールへのエントリを単に加えてください。
+そして新システムにそれをコピーし、そこで編集してください。
+編集を終えた後、ybin を呼び出してください。
+(ybin を呼び出したシステムと関係あるところの、
+yaboot.conf が使われるということを覚えていてください)
 
 </para><para arch="powerpc">
 
+<!--
 Here is a basic /etc/yaboot.conf as an example:
+-->
+以下は基本的な /etc/yaboot.conf の例です。
 
 <informalexample><screen>
 
@@ -538,13 +760,21 @@ label=Debian
 
 </screen></informalexample>
 
+<!--
 On some machines, you may need to use <userinput>ide0:</userinput> 
 instead of <userinput>hd:</userinput>. 
+-->
+いくつかのマシンでは、
+<userinput>hd:</userinput> の代わりに 
+<userinput>ide0:</userinput> を使う必要があるかもしれません。
 
 </para><para arch="not-i386;not-powerpc">
 
 <phrase condition="FIXME">
+<!--
 FIXME: Someone may eventually supply an example for this architecture.
+-->
+FIXME: どなたかこのアーキテクチャに、例を付け加えてくれないかな。
 </phrase>
 
 </para>
