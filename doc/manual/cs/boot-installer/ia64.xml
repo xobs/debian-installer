@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 18974 -->
+<!-- original version: 21882 -->
 
   <sect2 arch="ia64"><title>Zavedení z CD-ROM</title>
 
@@ -20,7 +20,7 @@ připojení k síti.
 
 </para></note><para>
 
-&arch-title; používá další generaci Extensible Firmware Interface
+Architektura &arch-title; používá další generaci Extensible Firmware Interface
 (EFI) od Intelu. Na rozdíl od tradičního BIOSu, který ví o zaváděcím
 zařízení velmi málo (zná jen tabulku oblastí a hlavní zaváděcí
 sektor), umí EFI číst a zapisovat soubory z oblastí, na kterých je
@@ -32,10 +32,10 @@ která je celá vyhrazená pro EFI.
 
 </para><para>
 
-Debianí CD obsahují menší verzi EFI oblasti, kde je uloženo
-<command>elilo</command>, jeho konfigurační soubor, instalační jádro
-a prvotní souborový systém (initrd). (Samozřejmě, že EFI oblast je
-přítomna i v nainstalovaném systému.)
+Instalační CD Debianu obsahují malou EFI oblast, ve které je uložen
+zavaděč <command>ELILO</command>, jeho konfigurační soubor, instalační
+jádro a prvotní souborový systém (initrd). (Samozřejmě, že EFI oblast
+je přítomna i v nainstalovaném systému.)
 
 </para><para>
 
@@ -51,7 +51,10 @@ použijte druhou možnost.
 
 Zavaděč EFI po nějaké době spustí implicitní akci, obvykle první
 položku z menu. (Odpočítávání je vidět dole na obrazovce.) Pokud
-propásnete správný okamžik, budete muset počítač znovu restartovat.
+propásnete správný okamžik, budete muset počítač znovu
+restartovat. Jestliže však byla implicitní akce <command>EFI
+Shell</command>, můžete se ještě vrátit zpět příkazem
+<command>exit</command>.
 
 </para></warning>
 
@@ -170,18 +173,44 @@ můžete zobrazit různé nápovědné obrazovky. Obrazovka
 <classname>Params</classname> popisuje běžné parametry příkazového
 řádku.
 
-</para><warning><title>Sériová konzole</title><para>
+</para><para>
 
-Některé &arch-title; počítače mají jak sériovou konzolu, tak
-klávesnici a grafickou kartu. Tu můžete v EFI firmwaru nastavit jako
-systémovou konzolu; EFI umí pracovat s oběma typy konzol. Pokud
-linuxové jádro během inicializace nalezne klávesnici, automaticky
-použije pro implicitní konzoli klávesnici/grafickou kartu. Chcete-li
-instalovat přes sériovou konzolu, musíte ji v EFI povolit a do
-textového okna <classname>Boot:</classname> zadat
-<command>console=ttyS0,9600n8</command>. To je velmi důležité, protože
-pokud na zmíněný parametr zapomene, po startu jádra se ztratí veškeré
-vstupy a výstupy a budete muset počítač restartovat.
+Instalovat můžete buď pomocí monitoru a klávesnice, nebo přes sériovou
+linku. Pro první možnost vyberte položku obsahující řetězec
+<computeroutput>[VGA console]</computeroutput>, pro druhou pak položku
+obsahující text <computeroutput>[<replaceable>BAUDY</replaceable> baud
+serial console]</computeroutput>, kde <replaceable>BAUDY</replaceable>
+je rychlost sériové konzole. V menu jsou přednastaveny jsou
+nejobvyklejší rychlosti pro zařízení <filename>ttyS0</filename>.
+
+</para><para>
+
+Ve většině případů budete chtít, aby instalační program použil stejnou
+rychlost, jakou používáte pro spojení k EFI konzoli. Tuto rychlost
+můžete zjistit v EFI shellu příkazem <command>baud</command>.
+
+</para><para>
+
+Pokud v menu neexistuje položka pro sériové zařízení resp. rychlost,
+kterou chcete použít, můžete změnit nastavení existujícího záznamu
+tak, že do textového okna <classname>Boot:</classname> zadáte
+příslušné parametry. Například
+<command>console=ttyS1,57600n8</command> použije konzolu na zařízení
+<filename>ttyS1</filename> o rychlosti 57600 baudů.
+
+</para><note><para>
+
+Většina systémů &arch-title; používá implicitní nastavení konzoly
+o rychlosti 9600 baudů. Toto nastavení je velmi pomalé a překreslování
+instalačních obrazovek by trvalo neúměrně dlouho. Zkuste buď zvýšit
+přenosovou rychlost, nebo použijte instalaci v textovém režimu (pokyny
+naleznete v menu <classname>Params</classname>).
+
+</para></note><warning><para>
+
+Vyberete-li špatný typ konzole, bude vše probíhat zdánlivě dobře až do
+startu jádra. V tom okamžiku se ztratí veškeré vstupy a výstupy
+a budete muset počítač restartovat.
 
 </para></warning><para>
 
@@ -205,7 +234,7 @@ dále v textu. Instalační systém spustíte následovně:
 <listitem><para>
 
 Volitelně zadejte zaváděcí parametry do textového okna. (Zde se
-nastavuje sériová konzole.)
+zadávají parametry jádra, jako např. sériová konzole.)
 
 </para></listitem>
 <listitem><para>
@@ -231,7 +260,7 @@ a diskové oblasti.
 
 Zavádění systému &arch-title; ze sítě je téměř shodné se zaváděním
 z CD. Jediný rozdíl spočívá ve způsobu, jakým se nahraje jádro. EFi
-umí stahovat a spouštět soubory ze serverů na síti.
+umí stahovat a spouštět soubory ze serveru na síti.
 
 </para>
 
@@ -258,7 +287,7 @@ Vhodný TFTP záznam pro zavádění ze sítě vypadá nějak takto:
 host mcmuffin {
         hardware ethernet 00:30:6e:1e:0e:83;
         fixed-address 10.0.0.21;
-        filename "elilo.efi";
+        filename "debian-installer/ia64/elilo.efi";
 }
 
 </screen></informalexample>
@@ -267,27 +296,27 @@ Cílem je dostat <command>elilo.efi</command> na klienta.
 
 </para><para>
 
-Ve svém tftpboot adresáři vytvořte podadresář
-<filename>ia64/</filename> a nakopírujte do něj soubory
-<filename>vmlinuz</filename> a <filename>initrd.gz</filename>
-ze zrcadla Debianu z adresáře <filename>netboot</filename>.
+Ve svém tftpboot adresáři rozbalte soubor
+<filename>netboot.tar.gz</filename>, čímž se vytvoří adresářový strom
+<filename>debian-installer</filename> obsahující zaváděcí soubory pro
+IA-64. Typické tftp adresáře bývají <filename>/var/lib/tftp</filename>
+nebo <filename>/tftpboot</filename>.
+
+<informalexample><screen>
+<prompt>#</prompt> <userinput>cd /var/lib/tftp</userinput>
+<prompt>#</prompt> <userinput>tar xvfz /home/user/netboot.tar.gz</userinput>
+./
+./debian-installer/
+./debian-installer/ia64/
+[...]
+</screen></informalexample>
 
 </para><para>
 
-Dále do adresáře tftpboot nakopírujte soubor
-<filename>elilo.efi</filename>, který je obvykle součástí balíku
-<classname>elilo</classname> v adresáři
-<filename>/usr/lib/elilo</filename> nebo
-<filename>/boot/efi</filename>. Vhodná kopie se nachází také na
-zrcadle Debianu v adresáři <filename>netboot</filename>.
-
-</para><para>
-
-Na stejném místě vytvořte soubor <filename>elilo.conf</filename>,
-který určuje, jak se bude <command>elilo.efi</command> chovat po
-nahrání na klienta (jaké se nahraje jádro, initrd, apod.). Ukázkový
-soubor je k dispozici na zrcadle Debianu v adresáři
-<filename>netboot</filename>.
+Soubor <filename>elilo.conf</filename>, který se zde také rozbalí, by
+měl fungovat na většině konfigurací <quote>sám od sebe</quote>. Pokud
+potřebujete tento soubor změnit (např. chcete použít jiné jádro),
+naleznete jej v adresáři <filename>debian-installer/ia64/</filename>.
 
 Dokonce je možné mít různé konfigurační soubory pro různé
 klienty. Místo souboru <filename>elilo.conf</filename> totiž můžete
@@ -314,8 +343,9 @@ Přidejte zaváděcí volbu.
 </para></listitem>
 <listitem><para>
 
-Vyberte řádek <guimenuitem>Load File
-[Acpi()/.../Mac()]</guimenuitem> a stiskněte &enterkey;.
+Vyberte řádek <guimenuitem>Load File [Acpi()/.../Mac()]</guimenuitem>
+a stiskněte &enterkey;. Pokud je podobných řádků více, vyberte ten,
+který obsahuje MAC adresu rozhraní, ze kterého chcete zavádět.
 
 </para></listitem>
 <listitem><para>

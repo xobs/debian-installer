@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 19059 -->
+<!-- original version: 21579 -->
 
    <sect3 id="partman">
    <title>Rozdělení disků</title>
 <para>
 
 Nyní nastal čas rozdělit pevné disky. Pokud se náhodou něco pokazí,
-nebo pokud chcete vědět více o rozdělování disků, podívejte se do
+nebo pokud chcete o rozdělování disků dozvědět více, podívejte se do
 dodatku <xref linkend="partitioning"/>.
 
 </para><para>
@@ -16,18 +16,18 @@ Nejprve vám bude nabídnuta možnost automaticky rozdělit buď celý disk,
 nebo volné místo na disku. Tato volba se někdy nazývá
 <quote>asistované</quote> rozdělení, protože do dělení můžete sami
 zasáhnout. Pokud nechcete využít automatické dělení disku, zvolte
-z menu <guimenuitem>Ručně upravit tabulku oblastí</guimenuitem>
-a přeskočte na další odstavec. Pokračujete-li v automatickém
-rozdělování, bude se další otázka ptát, zda chcete mít
-<guimenuitem>Všechny soubory v jedné oblasti</guimenuitem>,
-<guimenuitem>Samostatnou oblast pro domovské adresáře</guimenuitem>
-nebo zda plánujete provozovat <guimenuitem>Víceuživatelský
-systém</guimenuitem>. Všechny možnosti mají svá pro a proti, některé
-argumenty jsou zmíněny v dodatku <xref linkend="partitioning"/>. Pokud
-si nejste jisti, zvolte první možnost. Pamatujte však, že asistované
-dělení vyžaduje určitou minimální velikost volného místa, se kterým
-může pracovat. Nemáte-li k dispozici zhruba 1GB volného místa (závisí
-na zvoleném způsobu dělení), asistované dělení selže.
+z menu <guimenuitem>Ručně upravit tabulku oblastí</guimenuitem>.
+
+</para><para>
+
+Pokračujete-li v automatickém rozdělování, můžete si vybrat z několika
+připravených schémat rozdělení disku (viz tabulka níže). Všechny
+možnosti mají svá pro a proti, některé argumenty jsou zmíněny
+v dodatku <xref linkend="partitioning"/>. Pokud si nejste jisti,
+zvolte první možnost. Pamatujte však, že asistované dělení vyžaduje
+určitou minimální velikost volného místa, se kterým může
+pracovat. Nemáte-li k dispozici zhruba 1GB volného místa (závisí na
+zvoleném způsobu dělení), asistované dělení selže.
 
 </para>
 
@@ -47,13 +47,13 @@ na zvoleném způsobu dělení), asistované dělení selže.
   <entry>600MB</entry>
   <entry><filename>/</filename>, swap</entry>
 </row><row>
-  <entry>Samostatná oblast pro domovské adresáře</entry>
+  <entry>Desktopový počítač</entry>
   <entry>500MB</entry>
   <entry>
     <filename>/</filename>, <filename>/home</filename>, swap
   </entry>
 </row><row>
-  <entry>Víceuživatelský systém</entry>
+  <entry>Víceuživatelská pracovní stanice</entry>
   <entry>1GB</entry>
   <entry>
     <filename>/</filename>, <filename>/home</filename>,
@@ -86,26 +86,26 @@ Seznam oblastí může vypadat třeba takto:
 <!-- TODO: show some flags here (lightning, skull, smiley) -->
 <informalexample><screen>
   IDE1 master (hda) - 6.4 GB WDC AC36400L
-       1. primární   16.4 MB    ext2   /boot
-       2. primární  551.0 MB    swap   swap
+       1. primární   16.4 MB    ext2       /boot
+       2. primární  551.0 MB    swap       swap
        3. primární    5.8 GB    ntfs
           pri/log     8.2 MB    VOLNÉ MÍSTO
 
   IDE1 slave (hdb) - 80.0 GB ST380021A
        1. primární   15.9 MB    ext3
        2. primární  996.0 MB    fat16
-       3. primární    3.9 GB    xfs    /home
-       5. logická     6.0 GB    ext3   /
-       6. logická     1.0 GB    ext3   /var
+       3. primární    3.9 GB    xfs        /home
+       5. logická     6.0 GB    ext3       /
+       6. logická     1.0 GB    ext3       /var
        7. logická   498.8 GB    ext3
-       8. logická   551.5 GB    swap   swap
+       8. logická   551.5 GB    swap       swap
        9. logická    65.8 GB    ext2
 </screen></informalexample>
 
 Jak je vidět, v počítači jsou dva pevné disky rozdělené na několik
 oblastí. Každý řádek popisující oblast zobrazuje její pořadí, typ,
 velikost, volitelné příznaky, souborový systém a (pokud existuje)
-přípojný bod.
+přípojný bod. Na prvním disku je ještě kousek volného místa.
 
 </para><para>
 
@@ -159,9 +159,7 @@ Nezapomeňte vytvořit aspoň dvě oblasti &mdash; jednu pro
 pro <emphasis>kořenový souborový systém</emphasis> (který musí být
 připojen jako <filename>/</filename>). Bez připojeného kořenového
 souborového systému vám <command>partman</command> nedovolí
-pokračovat. Tato situace by však neměla nastat, protože
-<command>partman</command> standardně nabízí rozumné přednastavené
-hodnoty. Chcete-li s rozdělováním pomoci, můžete kdykoliv
+pokračovat. Chcete-li s rozdělováním pomoci, můžete kdykoliv
 z rozdělovacího menu vybrat možnost <guimenuitem>Automaticky rozdělit
 disk</guimenuitem> nebo <guimenuitem>Automaticky rozdělit volné
 místo</guimenuitem>.
@@ -171,6 +169,13 @@ místo</guimenuitem>.
 Pokud zapomenete vytvořit a nastavit zaváděcí EFI oblast,
 <command>partman</command> to zjistí a dokud vše nespravíte, nenechá
 vás pokračovat.
+
+</para><para>
+
+Jestliže budete ve vytváření své tabulky oblastí příliš kreativní
+a uvedete ji do nepoužitelného stavu, můžete se vždy vrátit do
+výchozího bodu volbou <guimenuitem>Vrátit zpět změny provedené na
+oblastech</guimenuitem>.
 
 </para><para>
 
@@ -185,9 +190,10 @@ se, že máte nahrány příslušné moduly
 </para><para>
 
 Až budete s rozdělením disků hotovi, vyberte z nabídky
-<guimenuitem>Ukončit rozdělování</guimenuitem>. Zobrazí se seznam
-provedených změn a budete požádáni o potvrzení, zda opravdu chcete
-vytvořit nové souborové systémy.
+<guimenuitem>Ukočit rozdělování a zapsat změny na
+disk</guimenuitem>. Zobrazí se seznam provedených změn a budete
+požádáni o potvrzení, zda opravdu chcete vytvořit nové souborové
+systémy.
 
 </para>
    </sect3>
