@@ -251,7 +251,7 @@ $(INITRD): Makefile tmp_mount tree
 # 2. copy over kernel, initrd
 # 3. install syslinux
 floppy_image: $(FLOPPY_IMAGE)
-floppy_image: Makefile initrd tmp_mount
+$(FLOPPY_IMAGE): Makefile initrd tmp_mount
 	dh_testroot
 	
 	dd if=/dev/zero of=$(FLOPPY_IMAGE) bs=1k count=$(FLOPPY_SIZE)
