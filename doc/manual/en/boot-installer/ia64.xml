@@ -46,33 +46,18 @@ the vmlinuz and initrd.gz files from the Debian installer netboot directory.
 
 </para><para>
 
-Copy elilo.efi from an IA-64 machine to your tftpboot directory and make it
-world readable.  
+Copy elilo.efi to your tftpboot directory and make it world readable.  
 This file can usually be found in the elilo package in IA64 distributions,
-or in /usr/lib/elilo or in a subdirectory of /boot/efi.
+or in /usr/lib/elilo or in a subdirectory of /boot/efi.  A suitable copy is
+provided in the Debian installer netboot directory.
 
 </para><para>
 
 Create an elilo.conf file in your tftpboot directory.  This will
 be loaded by elilo.efi once it is running on the client, and controls what
-happens next, including the choice of kernel, initrd image, etc.  A reasonable
-example for booting with a serial console might look something like this:
-
-<informalexample><screen>
-
-#
-# elilo.conf for netbooting ia64 client
-#
-default=Installer
-  
-image=ia64/vmlinuz
-    label=Installer
-    initrd=ia64/initrd.gz
-    root=/dev/ram
-    append="ramdisk_size=32768 console=ttyS0,9600n8"
-    read-only
-
-</screen></informalexample>
+happens next, including the choice of kernel, initrd image, etc.  An
+example file is provided in the Debian installer netboot directory, review
+the contents and update as needed for your choice of paths, etc.
 
 It is possible to have different config files for different clients by naming
 them using the client's IP address in hex with the suffix .conf instead of
