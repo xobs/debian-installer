@@ -1,0 +1,39 @@
+arch-image: $(IMAGE)
+
+# Create a bootable floppy image.
+# 1. make a dos filesystem image
+# 2. copy over kernel, initrd
+# 3. install syslinux
+$(IMAGE): $(INITRD) tmp_mount
+	dd if=/dev/zero of=$@.new bs=1k count=$(FLOPPY_SIZE)
+	mkfs.msdos -i deb00001 -n 'Debian Installer' -C $@.new $(FLOPPY_SIZE)
+	mount -t vfat -o loop $@.new $(TMP_MNT)
+
+	if $(foreach NAME,$(KERNELNAME), \
+             cp -f $(TEMP)/$(NAME) $(TMP_MNT)/linux) \
+	   && cp $(INITRD) $(TMP_MNT)/initrd.gz \
+	   && cp /usr/lib/elilo/elilo.efi $(TMP_MNT)/ \
+	   && cp boot/ia64/elilo.conf $(TMP_MNT)/ ; \
+	then \
+		umount $(TMP_MNT) ; \
+		true ; \
+	else \
+		umount $(TMP_MNT) ; \
+		false ; \
+	fi
+
+	# Finalize the image.
+	mv $@.new $@
+
+# Copy files somewhere the CD build scripts can find them
+# XXX Will only use the last kernel if there are several
+cd_content: $(IMAGE)
+	$(foreach NAME,$(KERNELNAME), \
+		cp -f $(TEMP)/$(NAME) $(DEST)/$(TYPE)-linux; )
+	cp  boot/ia64/elilo.conf $(DEST)/$(TYPE)-elilo.conf
+
+cd_image: cd_content
+	mkisofs -r -J -no-emul-boot -boot-load-size 1 \
+		-b `basename $(IMAGE)` -o $(TYPE).iso $(DEST)
+	mv $(TYPE).iso $(DEST)
+
