@@ -15,7 +15,8 @@ language=${1:-en}
 #esac
 
 ## First we define some paths to various needed files
-stylesheet_dsssl="/usr/share/sgml/docbook/stylesheet/dsssl/modular/print/docbook.dsl"
+#stylesheet_dsssl="/usr/share/sgml/docbook/stylesheet/dsssl/modular/print/docbook.dsl"
+stylesheet_dsssl="style-print.dsl"
 xml_decl="/usr/share/sgml/declaration/xml.dcl"
 
 ## Location to our tools
