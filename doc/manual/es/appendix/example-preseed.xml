@@ -1,70 +1,71 @@
-<!-- retain these comments for translator revision tracking -->
-<!-- original version: 22935 untranslated -->
+<!-- original version: 22580 -->
 
 <sect1 id="example-preseed">
-<title>Preconfiguration File Example</title>
+<title>Ejemplo de fichero de preconfiguración</title>
 
-<para>
-
-This is a complete working example of a preconfiguration file for an automated
-install. Its use is explained in <xref linkend="automatic-install"/>. You
-may want to uncomment some of the lines before using the file.
-
-</para>
+Este es un ejemplo de un fichero de preconfiguración funcional, para 
+efectuar una instalación automatizada. Su uso se explica en
+<xref linkend="automatic-install"/>. Tal vez quiera descomentar alguna
+de las líneas antes de usar el fichero.
 
 <informalexample><screen>
-#### Modifying syslinux.cfg.
+#### Modificar syslinux.cfg.
 
-# Edit the syslinux.cfg (or similar) file, and add parameters to the end
-# of the append line(s) for the kernel.
+# Edite el fichero syslinux.cfg (o similar) y añada parámetros al final de
+# la línea «append» del núcleo.
 #
-# You'll at least want to add a parameter telling the installer where to
-# get its preseed file from.
-# If you're installing from USB media, use this, and put the preseed file
-# in the toplevel directory of the USB stick.
+# Por lo menos querra añadir un parámetro indicando al instalador de donde
+# obtener el fichero de preconfiguración.
+# Si esta insatlando desde un medio USB, use el siguiente parámetro, y coloque
+# el fichero de preconfiguración en el directorio superior del dispostiivo USB.
 #   preseed/file=/hd-media/preseed
-# If you're netbooting, use this instead:
-#   preseed/url=http://host/path/to/preseed
-# If you're remastering a CD, you could use this:
+# En cambio, si esta arrancando desde red, use este:
+#   preseed/url=http://maquina/ruta/hacia/fichero/preseed
+# Si esta remasterizando un CD, podría usar este otro:
 #   preseed/file=/cdrom/preseed
-# Be sure to copy this file to the location you specify.
+# Asegúrese de copiar este fichero a la uicación que ha especificado.
 # 
-# While you're at it, you may want to throw a debconf/priority=critical in
-# there, to avoid most questions even if the preseeding below misses some.
-# And you might set the timeout to 1 in syslinux.cfg to avoid needing to hit
-# enter to boot the installer.
+# Mientras esta realizando esto, tal vez quiera cambiar allí a 
+# debconf/priority=critical, para evitar la mayoría de preguntas incluso
+# si la siguiente preconfiguración obvia alguna.
+# También podría definir el tiempo de espera a 1 en syslinux.cfg para
+# evitar la necesidad de presionar enter para arrancar el instalador.
 #
-# Language, country, and keyboard selection cannot be preseeded from a file,
-# because the questions are asked before the preseed file can be loaded.
-# Instead, to avoid these questions, pass some more parameters to the kernel:
+# La selección de idioma, país y teclado no puede ser preconfigurada desde
+# un fichero, debido a que estas preguntas son efectuadas antes de que
+# el fichero de preconfiguración pueda ser cargado.
+# En su lugar, para obviar estas preguntas, pase algunos parámetros más
+# al núcleo:
 #
-#    languagechooser/language-name=English
-#    countrychooser/shortlist=US
-#    console-keymaps-at/keymap=us
+#    languagechooser/language-name=Spanish
+#    countrychooser/shortlist=ES
+#    console-keymaps-at/keymap=es
 
-#### Shell commands.
+#### Órdenes de Shell.
 
-# d-i preseeding is inherently not secure. Nothing in the installer checks
-# for attempts at buffer overflows or other exploits of the values of a
-# preseed file like this one. Only use preseed files from trusted
-# locations! To drive that home, and because it's generally useful, here's
-# a way to run any shell command you'd like inside the installer,
-# automatically.
+# La preconfiguración de d-u es inherentement insegura. Ninguna parte del
+# instalador verifica intentos de desbordamiento de buffer u otras
+# formas de vulneración de los valores de un fichero de preconfiguración
+# como este. ¡Solamente use ficheros de preconfiguración de fuentes
+# confiables! Para lograr gestionar esto, y porque generalmente es útil,
+# a continuación ofrecemos una forma de ejecutar cualquier orden de shell
+# que desee dentro del instalador, de forma automática.
 
-# This first command is run as early as possible, just after
-# preseeding is read.
+# La primera orden a ejecutar tan pronto como sea posible, después de que
+# el fichero de preconfiguración es leido.
 #d-i	preseed/early_command		string wget http://url/to/my.udeb -O /tmp/my.udeb ; udpkg -i /tmp/my.udeb
-# This command is run just before the install finishes, but when there is
-# still a usable /target directory.
+# Esta orden se ejecuta justamente antes de que finalize la instalación,
+# pero cuando todavía existe un directorio /target usable.
 #d-i	preseed/late_command		string for deb in /hd-media/*.deb; do cp $deb /target/tmp; chroot /target dpkg -i /tmp/$(basename $deb); done
-# This command is run just as base-config is starting up.
+# Esta orden se ejecuta tan pronto como se inicie base-config.
 #base-config	base-config/early_command	string echo hi mom
-# This command is run after base-config is done, just before the login:
-# prompt. This is a good way to install a set of packages you want, or to
-# tweak the configuration of the system.
+# Esta orden se ejecuta después de que se finalice con base-config, y
+# antes de presentar el cursor «login:». Esta es una buena forma de
+# instalar el conjunto de paquetes que deseea, o de modificar la
+# configuración del sistema.
 #base-config	base-config/late_command	string apt-get install zsh; chsh -s /bin/zsh
 
-#### Network configuration.
+#### Configuración de red.
 
 # Of course, this won't work if you're loading your preseed file from the
 # network! But it's great if you're booting from CD or USB stick. You can
@@ -173,7 +174,7 @@ d-i	prebaseconfig/reboot_in_progress	note
 # XXX: Note that most of this will not work right until base-config 2.40.4
 # is available.
 
-# Avoid the introductory message.
+# Avoid the intorductory message.
 base-config	base-config/intro	note 
 
 # Avoid the final message.
