@@ -23,19 +23,16 @@ clean:
 	dh_testdir
 	dh_testroot
 	dh_clean build-stamp
-	$(MAKE) reallyclean
+	$(MAKE) -C build reallyclean
 
 build: build-stamp
 build-stamp:
 	rm -f $@
-	fakeroot $(MAKE) all_build stats SUITE=$(DISTRIBUTION)
+	cd doc/manual/build && \
+		destination=$(shell pwd)/debian/tmp/$(DESTDIR)/doc/manual \
+		architectures=$(ARCH) noarchdir=1 ./build.sh
+	fakeroot $(MAKE) -C build all_build stats SUITE=$(DISTRIBUTION)
 	touch $@
-
-	# This is a gross, gross hack. The docs really should be
-	# included in this package, but CVS makes that a messy reorg.
-	if [ -e ../doc/INSTALLATION-HOWTO ]; then \
-		cp ../doc/INSTALLATION-HOWTO debian/; \
-	fi
 
 install: build
 	dh_testdir
@@ -43,9 +40,10 @@ install: build
 	dh_clean -k
 	dh_install
 	install -d debian/tmp/$(DESTDIR)/doc
-	cp debian/*.html debian/INSTALLATION-HOWTO debian/tmp/$(DESTDIR)/doc
+	cp debian/*.html doc/INSTALLATION-HOWTO doc/INSTALLATION-HOWTO.?? \
+		debian/tmp/$(DESTDIR)/doc
 	install -d debian/tmp/$(IMAGEDIR)
-	cp -a dest/* debian/tmp/$(IMAGEDIR)
+	cp -a build/dest/* debian/tmp/$(IMAGEDIR)
 	cd debian/tmp/$(IMAGEDIR) && md5sum `find . -type f` > MD5SUMS
 	ln -s $(DATE) debian/tmp/$(ARCHIVEDIR)/current
 

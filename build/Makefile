@@ -260,7 +260,7 @@ _build:
 #
 $(STAMPS)tree-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
 	dh_testroot
-	dpkg-checkbuilddeps
+	cd .. && dpkg-checkbuilddeps
 	@rm -f $@
 
 	# This build cannot be restarted, because dpkg gets confused.
