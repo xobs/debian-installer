@@ -310,6 +310,7 @@ tmp_mount:
 # 3. copy over the root filesystem
 # 4. unmount the file, compress it
 #
+## TODO: get rid of the root requirement by using genext2fs instead
 initrd: Makefile tmp_mount tree $(INITRD)
 $(INITRD): TMP_FILE=$(TEMP)/image.tmp
 $(INITRD):
