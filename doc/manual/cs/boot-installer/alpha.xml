@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 23576 -->
+<!-- original version: 23664 -->
 
  <sect2 arch="alpha" id="alpha-firmware">
  <title>Firmware Alpha konzoly</title>
@@ -58,12 +58,22 @@ instalace <quote>nativní</quote> formát oblastí.
 
 </para><para>
 
-Protože GNU/Linux je na Alpha stanicích jediný operační systém
-zaveditelný z obou typů konzol, bude váš výběr také záviset na
-ostatních operačních systémech, které chcete mít na daném stroji.
-Všechny ostatní UNIXové operační systémy (Tru64 Unix, FreeBSD, OpenBSD
-a NetBSD) a OpenVMS mohou startovat pouze ze SRM, zatímco Windows NT
-mohou být zavedeny jenom z ARC konzole.
+GNU/Linux je na Alpha stanicích jediný operační systém zaveditelný
+z obou typů konzol, ovšem &debian; &release; podporuje pouze zavádění
+ze SRM konzoly. Pokud pro váš systém neexistuje žádná verze SRM, nebo
+pokud chcete mít duální zavádění s Windows NT, nebo pokud vaše
+zaváděcí zařízení vyžaduje podporu ARC konzoly pro inicializaci BIOSu,
+nemůžete použít instalační program dodávaný s Debianem &release;. Na
+těchto systémech stále můžete &debian; &release; nainstalovat tak, že
+například nainstalujete Woodyho a aktualizujete systém na verzi
+&release;.
+
+</para><para>
+
+Protože program <command>MILO</command> není dostupný pro žádné
+aktuálně používané Alpha systémy (únor 2000) a protože již není nutné
+si pro získání SRM firmwaru na starší Alphu kupovat licenci OpenVMS
+nebo Tru64 Unix, je doporučeno používat SRM všude, kde to je možné.
 
 </para><para>
 
@@ -127,7 +137,7 @@ označuje jakoukoliv ARC-kompatibilní konzoli.
   <entry>SRM</entry>
 </row><row>
   <entry>nautilus</entry>
-  <entry>ARC (viz manuál k základní desce)</entry>
+  <entry>ARC (viz manuál k základní desce) nebo SRM</entry>
 </row><row>
   <entry>noname</entry>
   <entry>ARC nebo SRM</entry>
@@ -173,10 +183,24 @@ označuje jakoukoliv ARC-kompatibilní konzoli.
 </para><para>
 
 Žádná z těchto konzolí obvykle neumí zavést Linux přímo, takže je
+potřeba zavaděče, který funguje jako prostředník. Pro SRM konzolu se
+používá <command>aboot</command>, což je malý, platformově nezávislý
+zavaděč. Více informací o tomto programu naleznete v (bohužel starším)
+<ulink url="&url-srm-howto;">SRM HOWTO</ulink>.
+
+</para><para condition="FIXME">
+
+Následující odstavce jsou převzaty z instalačního manálu pro Woodyho
+a jsou schovány do doby, kdy &debian; opět začne podporovat instalace
+přes MILO.
+
+</para><para condition="FIXME">
+
+Žádná z těchto konzolí obvykle neumí zavést Linux přímo, takže je
 potřeba zavaděče, který funguje jako prostředník. Existují dva hlavní
 linuxové zavaděče: <command>MILO</command> a <command>aboot</command>.
 
-</para><para>
+</para><para condition="FIXME">
 
 <command>MILO</command> je samo konzolí, která v paměti nahrazuje ARC
 či SRM. <command>MILO</command> může být zavedeno jak z ARC, tak ze SRM
@@ -187,13 +211,13 @@ existuje pouze pro ty systémy, které podle předchozí tabulky podporují
 ARC. Podívejte se také do (bohužel staršího)
 <ulink url="&url-milo-howto;">MILO HOWTO</ulink>.
 
-</para><para>
+</para><para condition="FIXME">
 
 <command>aboot</command> je malý, platformově nezávislý zavaděč, který
 běží pouze z konzoly SRM. Více informací o tomto programu
 je v (také starším) <ulink url="&url-srm-howto;">SRM HOWTO</ulink>.
 
-</para><para>
+</para><para condition="FIXME">
 
 V závislosti na firmwaru konzoly a na (ne)přítomnosti programu
 <command>MILO</command> jsou možné tři scénáře:
@@ -206,22 +230,7 @@ ARC -> MILO
 
 </screen></informalexample>
 
-</para><para>
-
-Základní deska UP1000 (jméno podarchitektury <quote>nautilus</quote>)
-od Alpha Processor, Inc. je odlišná od všech ostatních tím, že používá
-API-specifický zavaděč, který běží pod AlphaBIOS firmwarem.
-
-</para><para>
-
-Protože program <command>MILO</command> není dostupný pro žádné právě
-vyráběné Alpha systémy (únor 2000) a protože již není nutné
-si pro získání SRM firmwaru na starší Alfu kupovat licenci
-OpenVMS nebo Tru64 Unix, je doporučeno na nové instalace GNU/Linuxu
-použít SRM a program <command>aboot</command>. (Pokud ovšem nechcete
-mít dvojí zavádění s Windows NT.)
-
-</para><para>
+</para><para condition="FIXME">
 
 Většina AlphaServerů a všechny současné servery a pracovní stanice
 obsahují ve firmwaru jak SRM, tak i AlphaBIOS.
@@ -332,7 +341,7 @@ kde <replaceable>xxxx</replaceable> je vaše CD mechanika (v notaci SRM).
 </para>
   </sect2>
 
-  <sect2 arch="alpha">
+  <sect2 arch="alpha" condition="FIXME">
   <title>Zavedení z CD-ROM s konzolou ARC nebo AlphaBIOS</title>
 <para>
 
@@ -349,7 +358,7 @@ zavaděč používá <filename>\milo\ldmilo.exe</filename>.
   </sect2>
 
 
-  <sect2 arch="alpha">
+  <sect2 arch="alpha" condition="supports-floppy-boot">
   <title>Zavedení z disket s konzolou SRM</title>
 <para>
 
@@ -403,7 +412,7 @@ Podrobný návod je v <xref linkend="booting-from-milo"/>.
   </sect2>
 
 
-  <sect2 arch="alpha">
+  <sect2 arch="alpha" condition="supports-floppy-boot">
   <title>Zavedení z disket s ARC nebo AlphaBIOS konzolou</title>
 
 <para>
@@ -416,26 +425,8 @@ položkou.
 </para>
   </sect2>
 
-  <sect2 arch="alpha">
-  <title>Zavedení z disket se zavaděčem APB (UP1000)</title>
-
-<para>
-
-Pro zavedení systému na této platformě musíte z menu
-<quote>Utility/Run Maintenance Program</quote> spustit
-<command>\apb\apb.exe</command> a v APB promptu napsat
-
-<informalexample><screen>
-
-boot debian_install
-      
-</screen></informalexample>
-
-</para>
-  </sect2>
-
- <sect2 arch="alpha" id="booting-from-milo">
- <title>Zavedení se zavaděčem <command>MILO</command></title>
+  <sect2 arch="alpha" id="booting-from-milo" condition="FIXME">
+  <title>Zavedení se zavaděčem <command>MILO</command></title>
 <para>
 
 Na zaváděcích médiích je <command>MILO</command> nastaveno tak, aby

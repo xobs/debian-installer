@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 11648 -->
+<!-- original version: 23683 -->
 
   <sect2 arch="alpha"><title>Dělení disku na &arch-title;</title>
 <para>
 
-Pokud jste si vybrali zavedení ze SRM konzoly, musíte použít program
-<command>fdisk</command>, protože to je jediný dělící program, který
-umí manipulovat s oblastmi ,,BSD disk label'', požadovanými programem
-<command>aboot</command>. (Zaváděcí blok SRM je nekompatibilní s
-tabulkou oblastí systému MS-DOS - viz
-<xref linkend="alpha-firmware"/>). Pokud jste nestartovali
-pomocí zavaděče <command>MILO</command>,
-<command>debian-installer</command> spustí <command>fdisk</command>
-automaticky.  
+Zavádění Debianu ze SRM konzoly vyžaduje, abyste na svém zaváděcím
+disku neměli dosovou tabulku rozdělení disku, ale tzv. <quote>BSD
+disklabel</quote>. (Zaváděcí blok SRM je nekompatibilní s tabulkou
+oblastí systému MS-DOS - viz <xref linkend="alpha-firmware"/>).
+Program na dělení disku <command>partman</command> vytváří na
+arhitektuře &architecture; BSD disklabel automaticky, ale pokud již
+máte na disku existující dosovou tabulku oblastí, budete ji muset
+nejprve smazat.
 
 </para><para>
 
-Pokud disk vybraný pro rozdělení již obsahuje BSD disk label,
-<command>fdisk</command> se sám přepne do BSD disk label módu.
-V opačném případě musíte pro přepnutí použít příkaz ,,b''.
+Pokud pro dělení disku použijete program <command>fdisk</command>
+a vybraný disk ještě neobsahuje BSD disklabel, musíte se přepnout do
+režimu disklabel příkazem <userinput>b</userinput>.
 
 </para><para>
 
@@ -36,13 +35,14 @@ oblast překrývající se se zaváděcím blokem.
 
 Na začátku disku <emphasis>musíte</emphasis> nechat dostatek volného
 místa pro <command>aboot</command>, protože se zapisuje do několika
-prvních sektorů na disku (v současnosti zabírá asi  70 kilobajtů nebo
+prvních sektorů na disku (v současnosti zabírá asi 70 kilobajtů nebo
 150 sektorů). Dříve se doporučovalo pro tyto účely vytvořit na začátku
 disku malou nenaformátovanou oblast, ale nyní si myslíme, že na
-discích používaných jenom GNU/Linuxem to není vhodné. (S ohledem na
-důvody zmíněné výše.)
+discích používaných jenom GNU/Linuxem to není nutné. (S ohledem na
+důvody zmíněné výše.) Použijete-li <command>partman</command>, oblast
+pro <command>aboot</command> se pro jistotu vytvoří automaticky.
 
-</para><para>
+</para><para condition="FIXME">
 
 Pro instalaci z ARC konzoly byste měli udělat na začátku disku malou
 FAT oblast, která bude obsahovat <command>MILO</command> a
