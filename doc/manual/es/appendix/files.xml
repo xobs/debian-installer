@@ -1,19 +1,17 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 -->
+<!-- original version: 18647 -->
 
 
  <sect1 id="linuxdevices"><title>Dispositivos en Linux</title>
 <para>
 
-En Linux tiene varios ficheros especiales en <filename>/dev</filename>.
+Linux tiene varios ficheros especiales en <filename>/dev</filename>.
 Estos ficheros se llaman ficheros de dispositivo. En el mundo Unix el
-acceso al hardware es diferente. Allí tiene un fichero especial que
+acceso al hardware es diferente. AllÃ­ tiene un fichero especial que
 en realidad ejecuta un controlador de dispositivo que le permite el
 acceso al hardware. El fichero de dispositivo es un interfaz a un 
-componente del sistema actual. Los ficheros en <filename>/dev</filename> se 
-comportan también de manera diferente a los ficheros ordinarios. 
-Más abajo están listados los ficheros de dispositivo más importantes.
+componente real del sistema. Los ficheros en <filename>/dev</filename>
+se comportan tambiÃ©n de manera diferente a los ficheros ordinarios. 
+A continuaciÃ³n se lista los ficheros de dispositivo mÃ¡s importantes.
 
 </para><para>
 
@@ -42,10 +40,10 @@ Más abajo están listados los ficheros de dispositivo más importantes.
   <entry>Disco duro IDE / CD-ROM en el segundo puerto IDE (Esclavo)</entry>
 </row><row>
   <entry><filename>hda1</filename></entry>
-  <entry>Primera partición del primer disco duro IDE</entry>
+  <entry>Primera particiÃ³n del primer disco duro IDE</entry>
 </row><row>
   <entry><filename>hdd15</filename></entry>
-  <entry>Décimo quinta partición del cuarto disco duro IDE</entry>
+  <entry>DÃ©cimo quinta particiÃ³n del cuarto disco duro IDE</entry>
 </row>
 </tbody></tgroup></informaltable>
 
@@ -61,10 +59,10 @@ Más abajo están listados los ficheros de dispositivo más importantes.
   <entry>Disco duro SCSI con el siguiente ID SCSI (por ejemplo 2)</entry>
 </row><row>
   <entry><filename>sda1</filename></entry>
-  <entry>Primera partición del primer disco duro SCSI</entry>
+  <entry>Primera particiÃ³n del primer disco duro SCSI</entry>
 </row><row>
   <entry><filename>sdd10</filename></entry>
-  <entry>Décima partición del cuarto disco duro SCSI</entry>
+  <entry>DÃ©cima particiÃ³n del cuarto disco duro SCSI</entry>
 </row>
 </tbody></tgroup></informaltable>
 
@@ -87,27 +85,27 @@ Más abajo están listados los ficheros de dispositivo más importantes.
   <entry>Puerto serie 1, COM2 en MS-DOS</entry>
 </row><row>
   <entry><filename>psaux</filename></entry>
-  <entry>Ratón de tipo PS/2</entry>
+  <entry>RatÃ³n de tipo PS/2</entry>
 </row><row>
   <entry><filename>gpmdata</filename></entry>
-  <entry>Pseudo dispositivo, repite datos desde el demonio GPM (ratón)</entry>
+  <entry>Pseudo dispositivo, repite datos desde el demonio GPM (ratÃ³n)</entry>
 </row>
 </tbody></tgroup></informaltable>
 
 <informaltable><tgroup cols="2"><tbody>
 <row>
   <entry><filename>cdrom</filename></entry>
-  <entry>Enlace simbólico a la unidad de CD-ROM</entry>
+  <entry>Enlace simbÃ³lico a la unidad de CD-ROM</entry>
 </row><row>
   <entry><filename>mouse</filename></entry>
-  <entry>Enlace simbólico al fichero de dispositivo del ratón</entry>
+  <entry>Enlace simbÃ³lico al fichero de dispositivo del ratÃ³n</entry>
 </row>
 </tbody></tgroup></informaltable>
 
 <informaltable><tgroup cols="2"><tbody>
 <row>
   <entry><filename>null</filename></entry>
-  <entry>Todo lo que se direccione a este dispositivo desaparecerá</entry>
+  <entry>Todo lo que se direccione a este dispositivo desaparecerÃ¡</entry>
 </row><row>
   <entry><filename>zero</filename></entry>
   <entry>Se pueden leer continuamente ceros desde este dispositivo</entry>
@@ -117,41 +115,42 @@ Más abajo están listados los ficheros de dispositivo más importantes.
 </para>
 
   <sect2>
-<title>Configurar su ratón</title>
+<title>Configurar su ratÃ³n</title>
 
 <para>
 
-El ratón puede ser usado tanto en consola de Linux (con gpm) como en el
+El ratÃ³n puede ser usado tanto en consola de Linux (con gpm) como en el
 entorno de ventanas X. Los dos usos se pueden complementar si se usa el
-repetidor gpm para permitir que la señal fluya hacia el servidor X como
+repetidor gpm para permitir que la seÃ±al fluya hacia el servidor X como
 se muestra:
 <informalexample><screen>
 mouse =&#62; /dev/psaux  =&#62; gpm =&#62; /dev/gpmdata -&#62; /dev/mouse =&#62; X
-         /dev/ttyS0             (repetidor)        (enlace simbólico)
+         /dev/ttyS0             (repetidor)        (enlace simbÃ³lico)
          /dev/ttyS1
 </screen></informalexample>
 
 </para><para>
 
-Configure el protocolo del repetidor como raw (en <filename>/etc/gpm.conf</filename>) mientras
-configura X al protocolo de ratón original en <filename>/etc/X11/XF86Config</filename>
-o <filename>/etc/X11/XF86Config-4</filename>.
+Configure el protocolo del repetidor como raw (en 
+<filename>/etc/gpm.conf</filename>) mientras configura X al protocolo de 
+ratÃ³n original en <filename>/etc/X11/XF86Config</filename> o 
+<filename>/etc/X11/XF86Config-4</filename>.
 
 </para><para>
 
-Este enfoque de usar gpm incluso en X tiene ventajas cuando el ratón
+Este enfoque de usar gpm incluso en X tiene ventajas cuando el ratÃ³n
 se desconecta inadvertidamente. Simplemente reiniciando gpm con
 <informalexample><screen>
-user@debian:# /etc/init.d/gpm restart
+usuario@debian:# /etc/init.d/gpm restart
 </screen></informalexample>
-volverá a conectar el ratón a través de software sin reiniciar X.
+volverÃ¡ a conectar el ratÃ³n a travÃ©s de software sin reiniciar X.
 
 </para><para>
 
-Si gpm se desactiva o no se instala por alguna razón, asegúrese de
-configurar X para leer directamente desde un dispositivo de ratón tal como
-/dev/psaux. Para más detalles, refierase a el mini-Como 3 botones en el Ratón
-en
+Si gpm se desactiva o no se instala por alguna razÃ³n, asegÃºrese de
+configurar X para leer directamente desde un dispositivo de ratÃ³n tal como
+/dev/psaux. Para mÃ¡s detalles, refierase a el mini-Como 3 botones en el
+ratÃn³ en
 <filename>/usr/share/doc/HOWTO/en-txt/mini/3-Button-Mouse.gz</filename>, 
 <userinput>man gpm</userinput>, 
 <filename>/usr/share/doc/gpm/FAQ.gz</filename> y
@@ -161,24 +160,24 @@ en
 
 Para PowerPC, en <filename>/etc/X11/XF86Config</filename> o
 <filename>/etc/X11/XF86Config-4</filename>, configure el dispositivo de
-ratón a <userinput>"/dev/input/mice"</userinput>. 
+ratÃ³n a <userinput>"/dev/input/mice"</userinput>. 
 
 </para><para arch="powerpc">
 
-Los núcleos modernos le ofrecen la capacidad de emular un ratón de
-tres botones aunque su ratón solo tenga uno. Simplemente añada las
-siguientes líneas al fichero <filename>/etc/sysctl.conf</filename>.
+Los nÃºcleos modernos le ofrecen la capacidad de emular un ratÃ³n de
+tres botones aunque su ratÃ³n solo tenga uno. Simplemente aÃ±ada las
+siguientes lÃ­neas al fichero <filename>/etc/sysctl.conf</filename>.
 
 <informalexample><screen>
 
-# Emulación de un ratón de 3 botones
-# Activar emulación
+# EmulaciÃ³n de un ratÃ³n de 3 boton
+# Activar emulaciÃ³
 /dev/mac_hid/mouse_button_emulation = 1
-# Hacer que el botón del medio funcione al pulsar la tecla F11
+# Hacer que el botÃ³n del medio funcione al pulsar la tecla F11
 /dev/mac_hid/mouse_button2_keycode = 87
-# Hacer que el botón derecho funcione al pulsar la tecla F12
+# Hacer que el botÃ³n derecho funcione al pulsar la tecla F12
 /dev/mac_hid/mouse_button3_keycode = 88
-# Para usar teclas diferentes, utilize showkey para saber el código de éstas.
+# Para usar teclas diferentes, utilize showkey para saber el cÃ³digo de Ã©stas.
 
 </screen></informalexample>  
 </para>
@@ -189,60 +188,29 @@ siguientes líneas al fichero <filename>/etc/sysctl.conf</filename>.
  <title>Espacio en disco requerido para las tareas</title>
 <para>
 
-La instalación base de Woody en el computador del autor requirió
-117MB. El tamaño de instalación para todos los paquetes estándar fue
-123MB, con un tamaño de descarga de 38MB; de modo que se requirió
-278MB de espacio para instalar el sistema base y todos los paquetes
-estándar.
+La instalaciÃ³n base dee sarge pra i386, incluyendo todos
+los paquetes estÃ¡ndra, requiere 178MB de espacio en dico.
 
 </para><para>
 
-La siguiente tabla lista los tamaños informados por aptitude (un
-programa muy amigable por cierto) para las tareas listadas en 
-tasksel. El sistema para el cual se hizo el informe ya tenia todos
-los paquetes estándar instalados. Note que algunas tareas tienen
-componentes comunes, de modo que el tamaño total instalado para 
-dos tareas juntas podría ser inferior al total obtenido al sumar
-sus tamaños indivudualmente.
+La siguiente tabla lista los tamaÃ±os informados por aptitude
+para las tareas listadas en tasksel. Note que algunas tareas tienen
+componentes comunes, de modo que el tamaÃ±o total instalado para 
+dos tareas juntas podrÃ­a ser inferior al total obtenido al sumar
+sus tamaÃ±os indivudualmente.
 
 </para><para>
 
 <informalexample><screen>
-Tarea                            Tamaño        Tamaño       Espacio requerido
+Tarea                            TamaÃ±o        TamaÃ±o       Espacio requerido
                               instalado (MB) descarga (MB)  para instalar (MB)
 
-Entorno de escritorio              345          118           463
-Sistema X window                    78           36           114
-Juegos                              49           14            63
-Debian Jr.                         340          124           464
-Sistema acceso telefónico           28            8            36
-Sistema portátil                     3            1             4
-Aplicaciones científicas           110           30           140
-
-C y C++                             32           15            47
-Python                             103           30           133
-Tcl/Tk                              37           11            48
-Fortran                             10            4            14
-
-Servidor de ficheros                 1            -             1
-Servidor de correo                   4            3             7
-Servidor de usenet                   6            2             8
-Servidor de impresión               48           18            66
-Servidor Unix convencional          55           19            74
-Servidor web                         4            1             5
-
-Entorno TeX/LaTeX                  171           64           235
-
-Entorno Alemán                      31            9            40
-Entorno Chino simplificado          80           29           109
-Entorno Chino tradicional          166           68           234
-Entorno Cirílico                    29           13            42
-Entorno Coreano                    178           72           250
-Entorno Español                     15            4            19
-Entorno Francés                     60           18            78
-Entorno Japonés                    110           53           163
-Entorno Polaco                      58           27            85
-Entorno Ruso                        12            6            18
+Base de datos SQL	           108           33           141
+Entorno de escritorio             1537          521          2058
+Servidor de ficheros                85           34           119
+Servidor de correo                  41           12            53
+Servidor de impresiÃ³n	            240           88           323 
+Servidor web                        71           21            92
 
 </screen></informalexample>
 </para>
