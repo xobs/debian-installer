@@ -1,0 +1,55 @@
+<!-- original version: 11648 -->
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+  <sect2 arch="alpha"><title>Particionado en &arch-title;</title>
+<para>
+
+Si ha decidido iniciar su máquina desde una consola SRM, debe
+usar <command>fdisk</command> para particionar su disco, 
+ya que es el único capaz de manipular las etiquetas de discos de
+tipo BSD, requeridas por <command>aboot</command> 
+(requerde que el bloque de inicio de tipo SRM es totalmente incompatible
+con las tablas de particiones de tipo MS-DOS ; para más información, vea
+<xref linkend="alpha-firmware"/>).
+El <command>debian-installer</command> ejecutará por omisión <command>fdisk</command>
+si no ha iniciado su máquina desde <command>MILO</command>.
+
+</para><para>
+
+Si el disco que ha seleccionado para particionar contiene una etiqueta
+de disco de tipo BSD, por omisión <command>fdisk</command> la dejará establecida. 
+De otra forma, debe usar la orden `b' para modificar la etiqueta de disco.
+
+</para><para>
+
+A menos que desee usar el disco que está particionando con Tru64 Unix
+o alguno de los sistemas derivados de Free 4.4BSD-Lite (FreeBSD,
+OpenBSD, o NetBSD), se suguiere que <emphasis>no</emphasis> deje
+que la tercera partición contenga el total del disco.
+Esto no es requerido por <command>aboot</command>, y de hecho,
+puede producir cierta confusión, ya que la herramienta <command>swriteboot</command>,
+usada para instalar <command>aboot</command> en el sector de inicio, podría
+presentar problemas acerca de sobreposición en dicho sector.
+
+</para><para>
+
+Además, debido a que <command>aboot</command> está instalado
+en los primeros sectores del disco (actualmente ocupa alrededor de 70 kilobytes,
+o 150 sectores), <emphasis>debe</emphasis> dejar suficiente espacio
+al principio del disco. Tiempo atrás, era recomendable crear
+una pequeña partición al principio del disco y dejarla sin formatear.
+Por la misma razón del principio, sugerimos que no haga esto en discos
+que tendrán solamente sistemas GNU/Linux.
+
+</para><para>
+
+Para instalaciones ARC, debe crear una pequeña partición de tipo FAT
+al principio del disco, conteniendo <command>MILO</command> y
+<command>linload.exe</command> ; 5 megabytes debería ser suficiente. Para mayor
+información, vea <xref linkend="non-debian-partitioning"/>. Desafortunadamente, 
+aún no es posible hacer una partición FAT desde el menú ,por lo tanto, 
+deberá crearla desde el intérprete de órdenes, usando la orden 
+<command>mkdosfs</command> antes de instalar el asistente de inicio de su máquina.
+
+</para>
+  </sect2>
