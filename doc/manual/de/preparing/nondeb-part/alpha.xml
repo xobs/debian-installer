@@ -1,67 +1,68 @@
-<!-- original version: 14559 -->
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 11648 -->
 
 
   <sect2 arch="alpha"><title>Partitionieren in Tru64 UNIX</title>
 <para>
 
 Tru64 UNIX, ehemals bekannt als Digital UNIX, welches wiederum vorher
-als OSF/1 bekannt war, verwendet ein Partitionsschema, das Ã¤hnlich den
+als OSF/1 bekannt war, verwendet ein Partitionsschema, das ähnlich den
 BSD `disk labels' ist, welches bis zu acht Partitionen pro Laufwerk
 erlaubt. Die Partitionen werden in Linux von `1' bis `8' durchnummeriert,
 und in UNIX von `a' bis `h' ``durchbuchstabiert''. Im Linux Kernel ab
-Version 2.2 entspricht `1' `a', `2' `b' und so weiter. Zum Beispiel,
-<filename>rz0e</filename> in Tru64 UNIX wird unter Linux am ehesten
+Version 2.2 entspricht `1' `a', `2' `b' und so weiter. Zum Beispiel wird
+<filename>rz0e</filename> aus Tru64 UNIX unter Linux wahrscheinlich
 mit <filename>sda5</filename> benannt.
 
 </para><para>
 
-Partitionen im Disk-Label kÃ¶nnen Ã¼berlappen. Ferner wird die `c'-Partition
-benÃ¶tigt, die die ganze Platte umfassen soll (alle nicht-leeren Partitionen
-Ã¼berlappen). Unter Linux macht das <filename>sda3</filename> identisch zu
+Partitionen im Disk-Label dürfen überlappen. Ferner wird die `c'-Partition
+benötigt, die die ganze Platte umfassen muss (also alle nicht-leeren Partitionen
+enthalten). Unter Linux macht das <filename>sda3</filename> identisch zu
 <filename>sda</filename> (<filename>sdb3</filename> zu
 <filename>sdb</filename>, wenn vorhanden, und so weiter). Abgesehen davon,
-dass Sie diese Bedingung erfÃ¼llen, sollten Sie Ã¼berlappende Partitionen
+dass Sie diese Bedingung erfüllen, sollten Sie überlappende Partitionen
 vermeiden.
 
 </para><para>
 
-Eine andere Ã¼bliche Bedingung ist, dass die `a'-Partition am Anfang der
-Festplatte anfÃ¤ngt, sodass Sie immer den Bootblock mit dem Disk-Label
-enthÃ¤lt. Wenn Sie vorsehen, Debian von dieser Festplatte zu booten, mÃ¼ssen
-Sie mindestens 2MB hierfÃ¼r einplanen, damit mindestens ein Bootblock und
+Eine andere übliche Bedingung ist, dass die `a'-Partition am Anfang der
+Festplatte anfängt, sodass Sie immer den Bootblock mit dem Disk-Label
+enthält. Wenn Sie vorhaben, Debian von dieser Festplatte zu booten, müssen
+Sie mindestens 2MB hierfür einplanen, damit mindestens ein Bootblock und
 gegebenenfalls ein Kernel darauf passen.
 
 </para><para>
 
-Beachten Sie, dass diese zwei Partitionen nur fÃ¼r die KompatibilitÃ¤t
-benÃ¶tigt werden; Sie dÃ¼rfen kein Dateisystem darauf erstellen, sonst
-zerstÃ¶ren Sie Daten. Wenn Sie nicht vorhaben, die Festplatte mit Tru64-UNIX
-oder einem der freien von 4.4BSD-Lite abgeleiteten Betriebssysteme
-(FreeBSD, OpenBSD oder NetBSD) zu teilen, kÃ¶nnen Sie diese Bedingungen
-ignorieren und das Partitionierungsprogramm von den Debian Bootdisketten
-verwenden. Siehe <xref linkend="partition-programs"/> fÃ¼r Details.
+Beachten Sie, dass diese zwei Partitionen nur wegen der Kompatibilität
+benötigt werden; Sie dürfen kein Dateisystem darauf erstellen, sonst
+zerstören Sie die Daten. Wenn Sie nicht vorhaben, die Festplatte mit Tru64-UNIX
+oder einem der freien, von 4.4BSD-Lite abgeleiteten Betriebssysteme
+(FreeBSD, OpenBSD oder NetBSD) zu teilen, können Sie diese Bedingungen
+ignorieren und das Partitionierungsprogramm von den Debian-Bootdisketten
+verwenden. Siehe <xref linkend="partition-programs"/> für Details.
 
 </para><para>
 
-Festplatten kÃ¶nnen entweder mit dem grafischen Plattenkonfigurationswerkzeug,
+Festplatten können entweder mit dem grafischen Plattenkonfigurationswerkzeug,
 auf das man durch den Application Manager Zugriff hat, oder mit dem
 Kommandozeilenprogramm <command>disklabel</command> partitioniert werden.
-Der Partitionstyp fÃ¼r das Linux-Dateisystem sollte auf `reservd8' gesetzt
-werden. Das ist nur mit <command>disklabel</command> mÃ¶glich; die restliche
-Konfiguration kann mit dem grafischen Werkzeug durchgefÃ¼hrt werden.
+Der Partitionstyp für das Linux-Dateisystem sollte auf `reservd8' gesetzt
+werden. Das ist nur mit <command>disklabel</command> möglich; die restliche
+Konfiguration kann mit dem grafischen Werkzeug durchgeführt werden.
 
 </para><para>
 
-Es ist mÃ¶glich, und sogar sinnvoll, eine Swap-Partition mit UNIX und Linux
+Es ist möglich und sogar sinnvoll, eine Swap-Partition mit UNIX und Linux
 zu teilen. In diesem Fall muss jedoch <command>mkswap</command> bei jedem
-Neustart von UNIX nach Linux ausgefÃ¼hrt werden, da UNIX die Signatur
-der Swap-Partition beschÃ¤digt. Sie werden <command>mkswap</command>
-von den Linux Start-Up Skripten vor dem HinzufÃ¼gen von Swap-Space mit
-<command>swapon -</command> ausfÃ¼hren wollen.
+Neustart von UNIX nach Linux ausgeführt werden, da UNIX die Signatur
+der Swap-Partition beschädigt. Sie sollten <command>mkswap</command>
+über die Linux-Start-Up-Skripte ausführen, bevor Sie Swap-Space mit
+<command>swapon -</command> hinzufügen. 
 
 </para><para>
 
-Wenn Sie UNIX-Partitionen unter Linux einhÃ¤ngen wollen, mÃ¼ssen Sie beachten,
+Wenn Sie UNIX-Partitionen unter Linux einhängen wollen, müssen Sie beachten,
 dass Digital UNIX zwei verschiedene Dateisysteme, UFS und AdvFS, benutzen
 kann, Linux jedoch nur UFS versteht.
 
@@ -72,23 +73,23 @@ kann, Linux jedoch nur UFS versteht.
 
 <para>
 
-Windows NT benutzt eine Partitionstabelle, wie sie beim PC verwendet wird.
-Wenn Sie eine existierende FAT- oder NTFS-Partition verÃ¤ndern wollen, wird
+Windows NT benutzt eine Partitionstabelle nach dem PC-Stil.
+Wenn Sie eine existierende FAT- oder NTFS-Partition verändern wollen, wird
 empfohlen, die nativen Windows NT-Werkzeuge (oder das AlphaBIOS
-Setup-MenÃ¼) zu verwenden. Ansonsten ist es nicht wirklich notwendig,
-von Windows aus zu partitionieren; die Linux-Partitionsprogramme fÃ¼hren
+Setup-Menü) zu verwenden. Ansonsten ist es nicht wirklich notwendig,
+von Windows aus zu partitionieren; die Linux-Partitionsprogramme führen
 ihre Arbeit im Normalfall besser durch. Beachten Sie: wenn Sie Windows NT
-starten, wird Ihnen der Disk Administrator mÃ¶glicherweise anbieten, eine
+starten, wird Ihnen der Disk Administrator möglicherweise anbieten, eine
 ``harmlose Signatur'' auf nicht-Windows Festplatten zu schreiben, falls
-Sie welche haben. Lassen Sie das <emphasis>nie</emphasis> tun, da diese
-Signatur die Partitionesinformationen zerstÃ¶ren wird.
+Sie welche haben. Lassen Sie dies <emphasis>niemals</emphasis> zu, da diese
+Signatur die Partitionesinformationen zerstören wird.
 
 </para><para>
 
 Wenn Sie vorhaben, Linux von einer ARC/AlphaBios/ARCBIOS-Konsole aus
-hochzustarten, benÃ¶tigen Sie eine (kleine) FAT Partition fÃ¼r MILO. 5MB
-reichen hierfÃ¼r aus. Wenn Windows NT installiert ist, kann dessen 6MB groÃŸe
-Bootstrap-Partition hierfÃ¼r verwendet werden.
+hochzustarten, benötigen Sie eine (kleine) FAT Partition für MILO. 5MB
+reichen hierfür aus. Wenn Windows NT installiert ist, kann dessen 6MB grosse
+Bootstrap-Partition hierfür verwendet werden.
 
 </para>
   </sect2>
