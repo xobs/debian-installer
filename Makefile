@@ -56,8 +56,8 @@ ifeq ($(TYPE),floppy)
 # List of additional udebs for driver floppy(ies). At the moment there is only one additional driver floppy needed
 DRIVERFD_UDEBS = \
 	$(shell  grep --no-filename -v ^\# \
-		pkg-lists/driver1/common \
-		`if [ -f pkg-lists/driver1/$(DEB_HOST_ARCH) ]; then echo pkg-lists/driver1/$(DEB_HOST_ARCH); fi` \
+		pkg-lists/net_drivers/common \
+		`if [ -f pkg-lists/net_drivers/$(DEB_HOST_ARCH) ]; then echo pkg-lists/net_drivers/$(DEB_HOST_ARCH); fi` \
 		| sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2\n)/g' )
 endif
 
@@ -102,21 +102,21 @@ else
 	-@sudo chroot $(TREE) /usr/bin/update-dev
 endif
 
-# Build the driver1 fd image
-driver1-stamp driver1: floppy-get_udebs-stamp
-	mkdir -p $(DRIVER1)
+# Build the net_drivers fd image
+net_drivers-stamp net_drivers: floppy-get_udebs-stamp
+	mkdir -p $(NETDRIVERS)
 	for file in $(DRIVERFD_UDEBS) ; do \
-		cp $(EXTRAUDEBDIR)/$$file*.udeb $(DRIVER1) ; done
-	touch driver1-stamp
+		cp $(EXTRAUDEBDIR)/$$file*.udeb $(NETDRIVERS) ; done
+	touch net_drivers-stamp
 
-$(DRIVER1_IMAGE): driver1-stamp
-	rm -f $(DRIVER1_IMAGE)
+$(NETDRIVERS_IMAGE): net_drivers-stamp
+	rm -f $(NETDRIVERS_IMAGE)
 	install -d $(TEMP)
 	install -d $(DEST)
 	set -e; if [ $(INITRD_FS) = ext2 ]; then \
-		genext2fs -d $(DRIVER1) -b `expr $$(du -s $(DRIVER1) | cut -f 1) + $$(expr $$(find $(DRIVER1) | wc -l) \* 2)` $(DRIVER1_IMAGE); \
+		genext2fs -d $(NETDRIVERS) -b `expr $$(du -s $(NETDRIVERS) | cut -f 1) + $$(expr $$(find $(NETDRIVERS) | wc -l) \* 2)` $(NETDRIVERS_IMAGE); \
         elif [ $(INITRD_FS) = romfs ]; then \
-                genromfs -d $(DRIVER1) -f $(DRIVER1_IMAGE); \
+                genromfs -d $(NETDRIVERS) -f $(NETDRIVERS_IMAGE); \
         else \
                 echo "Unsupported filesystem type"; \
                 exit 1; \
@@ -159,7 +159,7 @@ clean: demo_clean tmp_mount debian/control
 	        umount "$(USER_MOUNT_HACK)";\
 	    fi ; \
 	fi
-	rm -rf $(TREE) 2>/dev/null $(TEMP)/modules $(DRIVER1) || sudo rm -rf $(TREE) $(TEMP)/modules $(DRIVER1)
+	rm -rf $(TREE) 2>/dev/null $(TEMP)/modules $(NETDRIVERS) || sudo rm -rf $(TREE) $(TEMP)/modules $(NETDRIVERS)
 	dh_clean
 	rm -f *-stamp
 	rm -rf $(UDEBDIR) $(EXTRAUDEBDIR) $(TMP_MNT) debian/build
@@ -496,10 +496,10 @@ boot_floppy: $(IMAGE)
 	install -d $(DEST)
 	dd if=$(IMAGE) of=$(FLOPPYDEV)
 
-# Write driver1 to floppy
-driver1_floppy: $(DRIVER1_IMAGE)
+# Write net_drivers to floppy
+net_drivers_floppy: $(NETDRIVERS_IMAGE)
 	install -d $(DEST)
-	dd if=$(DRIVER1_IMAGE) of=$(FLOPPYDEV)
+	dd if=$(NETDRIVERS_IMAGE) of=$(FLOPPYDEV)
 
 # If you're paranoid (or things are mysteriously breaking..),
 # you can check the floppy to make sure it wrote properly.
@@ -527,14 +527,14 @@ endif
 # Add your interesting stats here.
 	@$(MAKE) stats-$(EXTRA_TARGETS)
 
-DRIVER1_SZ=$(shell expr $(shell du -b $(DRIVER1) | cut -f 1) / 1024)
-stats-driver1:
+NETDRIVERS_SZ=$(shell expr $(shell du -b $(NETDRIVERS) | cut -f 1) / 1024)
+stats-net_drivers:
 	@echo
-	@echo "Driver1 size: $(DRIVER1_SZ)k"
+	@echo "Driver1 size: $(NETDRIVERS_SZ)k"
 ifneq (,$(FLOPPY_SIZE))
-	@echo "Free space: $(shell expr $(FLOPPY_SIZE) - $(DRIVER1_SZ))k"
+	@echo "Free space: $(shell expr $(FLOPPY_SIZE) - $(NETDRIVERS_SZ))k"
 endif
-	@echo "Disk usage per package on driver1:"
+	@echo "Disk usage per package on net_drivers:"
 	@ls -l $(EXTRAUDEBDIR)/*.udeb
 	@echo
 
