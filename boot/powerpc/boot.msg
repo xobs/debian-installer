@@ -1,5 +1,8 @@
 Welcome to Debian GNU/Linux ${DEBIAN_VERSION}!
 
+This is a Debian installation ${MEDIA_TYPE},
+built on ${BUILD_DATE}.
+
 In addition to the default 'install' option, 
 there is 'install-safe' which you should try if 
 the system fails to boot at all (the typical
