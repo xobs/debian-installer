@@ -30,13 +30,9 @@ debian-installer (20050120) UNRELEASED; urgency=low
     - Switch libparted1.6-0 build-dependency to libparted1.6-12.
     - Fix support for multiple words in KERNELVERSION.
   * Christian Perrier
-    - Add 7 missing characters to installer/build/needed-characters/ar
-      Thanks to Naidim Shaikli and Arabeyes contributors
     - Add the list of needed characters for Belarussian
     - Add the list of needed characters for Esperanto
   * Martin Michlmayr
-    - Add a ramdisk_size parameter to sb1-swarm-bn's boot configuration
-      file since the initrd is now bigger than what the kernel expects.
     - Switch Cobalt to use the new-style initrd parameter rd_start and
       rd_size.
   * Stephen R. Marenka
@@ -50,15 +46,6 @@ debian-installer (20050120) UNRELEASED; urgency=low
   * Joshua Kwan
     - Change sparc kernels to use 2.6.8-2 udebs.
   * Joey Hess
-    - Add module-init-tools to build deps for ia64 to fix truncated
-      modules.dep files and USB keyboard.
-    - Add it for sparc too.
-    - Add 2.6 netboot image for hppa. Includes a move of the 2.4 netboot
-      image into the netboot/ directory for consistency.
-    - Add discover1 to even the 2.4 hppa images. Yes, there are no modules
-      there, but this allows the de4x5 blacklist code in hw-detect to notice
-      that discover1 wants to load de4x5, and blacklist it, avoiding a
-      crash when the installed system boots.
     - Add new usb-modules to sparc64 images to support usb keyboard on sun
       blades.
     - Add preseed-common to all initrds, split out from file/network-preseed.
@@ -73,8 +60,6 @@ debian-installer (20050120) UNRELEASED; urgency=low
       fucked state.
     - However, in release builds of the package, this is unset, so those will
       pull udebs from sarge as previously.
-    - Fix SUITE setting so debian/rules can override it. I guess this never
-      worked as intended before!
     - Move all utilities in build/ into build/util/, except daily-build,
       which is hardcoded in many cron jobs.
     - Fix two cases where the pkg-lists dependency checker printed warnings
@@ -98,6 +83,31 @@ debian-installer (20050120) UNRELEASED; urgency=low
     - Update netboot and monolithic config files for amd64 to match i386.
 
  -- Frans Pop <aragorn@tiscali.nl>  Wed, 23 Feb 2005 20:36:56 +0100
+
+debian-installer (20041227) unstable; urgency=low
+
+  * Joey Hess
+    - Add module-init-tools to build deps for ia64 to fix truncated
+      modules.dep files and USB keyboard.
+    - Add it for sparc too.
+    - Add discover1 to even the 2.4 hppa images. Yes, there are no modules
+      there, but this allows the de4x5 blacklist code in hw-detect to notice
+      that discover1 wants to load de4x5, and blacklist it, avoiding a
+      crash when the installed system boots.
+    - Add 2.6 netboot image for hppa. Includes a move of the 2.4 netboot
+      image into the netboot/ directory for consistency.
+    - Fix SUITE setting so debian/rules can override it. I guess this never
+      worked as intended before!
+  * Christian Perrier
+    - Add 7 missing characters to installer/build/needed-characters/ar
+      Thanks to Naidim Shaikli and Arabeyes contributors
+  * Martin Michlmayr
+    - Add a ramdisk_size parameter to sb1-swarm-bn's boot configuration
+      file since the initrd is now bigger than what the kernel expects.
+  * fjpop
+    - Implement new-generation build scripts for sarge branch.
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 27 Dec 2004 21:26:29 -0500
 
 debian-installer (20041118) unstable; urgency=HIGH
 
