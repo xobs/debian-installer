@@ -1,7 +1,27 @@
-debian-installer (20050120) UNRELEASED; urgency=low
+debian-installer (trunk) UNRELEASED; urgency=low
 
   Note: this is not intended for sarge. Any significant changes for sarge
-  should be made on the sarge branch too.
+  should be made on the sarge branch too, released from there, and
+  documented in the changelog entries below this one.
+
+  * Joey Hess
+    - Add preseed-common to all initrds, split out from file/network-preseed.
+    - Add initrd-preseed too.
+    - Add a PRESEED variable, which can be used to specify a preseed file to
+      add to the initrd in the location initrd-preseed expects to find one
+      (/preseed.cfg).
+    - Default PRESEED to unstable.cfg, which sets mirror/udeb/suite, which
+      means that all d-i developmental and daily builds that download udebs
+      will download them from unstable, not testing, which is appropriate
+      given a) d-i's current, forked state and b) the kernel ABI's current,
+      fucked state.
+    - However, in release builds of the package, this is unset, so those will
+      pull udebs from sarge as previously.
+
+ -- Joey Hess <joeyh@debian.org>  Thu, 24 Feb 2005 17:23:59 -0500
+
+debian-installer (20050120) UNRELEASED; urgency=low
+
   * Thiemo Seufer
     - Do an e2fsck for the extra floppy images.
     - Handle sparse files in cramfs images more efficiently.
@@ -48,18 +68,6 @@ debian-installer (20050120) UNRELEASED; urgency=low
   * Joey Hess
     - Add new usb-modules to sparc64 images to support usb keyboard on sun
       blades.
-    - Add preseed-common to all initrds, split out from file/network-preseed.
-    - Add initrd-preseed too.
-    - Add a PRESEED variable, which can be used to specify a preseed file to
-      add to the initrd in the location initrd-preseed expects to find one
-      (/preseed.cfg).
-    - Default PRESEED to unstable.cfg, which sets mirror/udeb/suite, which
-      means that all d-i developmental and daily builds that download udebs
-      will download them from unstable, not testing, which is appropriate
-      given a) d-i's current, forked state and b) the kernel ABI's current,
-      fucked state.
-    - However, in release builds of the package, this is unset, so those will
-      pull udebs from sarge as previously.
     - Move all utilities in build/ into build/util/, except daily-build,
       which is hardcoded in many cron jobs.
     - Fix two cases where the pkg-lists dependency checker printed warnings
