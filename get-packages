@@ -74,7 +74,19 @@ for i in libnewt0.51 libdebconfclient0 libdebian-installer4 \
 	dpkg -s $i >> $APTDIR/state/status
 done
 if [ "$ONLINE" = "y" ]; then
-	$APT_GET update
+	$APT_GET update || {
+		echo "Failed to update the Packages file. This usually means of of two things:"
+		echo
+		echo "A) $LIST does not contain a vaild repository."
+		echo "   You can override the generates sources.list.$TYPE"
+		echo "   with sources.list.$TYPE.local if you haven't done so yet."
+		echo
+		echo "B) The repository in $LIST is not reachable."
+		echo "   If the you are not working online use 'export ONLINE=n' to skip updating"
+		echo "   the Packages files. Beware that this can result in images with"
+		echo "   out-of-date packages and should be used for private developement only."
+		exit 1
+	}
 	$APT_GET autoclean
 fi
 

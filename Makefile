@@ -141,7 +141,7 @@ sources.list.deb:
 	cat $(SYSTEM_SOURCES_LIST) | grep ^deb\  | grep -v debian-non-US | grep ' main' | grep -v 'security.debian.org' | \
 		awk '{print $$1 " " $$2}' | sed "s,/* *$$, $(SUITE) main," | sed "s,^deb file,deb copy," | uniq; \
 	fi; \
-	) > sources.list.udeb
+	) > sources.list.deb
 
 # Get all required udebs and put in UDEBDIR.
 get_udebs: $(TYPE)-get_udebs-stamp
