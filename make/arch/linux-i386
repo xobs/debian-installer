@@ -21,8 +21,7 @@ $(IMAGE): $(INITRD)
 	
 ifdef KERNELNAME
 	# syslinux is used to make the floppy bootable
-	sed 's/$$SYSLINUX_DEBCONF_PRIORITY/$(SYSLINUX_DEBCONF_PRIORITY)/' \
-		boot/i386/syslinux.cfg | todos | \
+	boot/i386/syslinux.cfg | todos boot/i386/syslinux.cfg | \
 		mcopy -i$@.new - ::\syslinux.cfg
 	syslinux $(SYSLINUX_OPTS) $@.new
 endif
