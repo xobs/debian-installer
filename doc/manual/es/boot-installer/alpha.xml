@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 19466 -->
+<!-- original version: 23664 -->
 
  <sect2 arch="alpha" id="alpha-firmware">
  <title>Firmware de consola Alpha</title>
@@ -58,13 +58,24 @@ SRM.
 
 </para><para>
 
-Debido a que GNU/Linux es el único sistema operativo en Alpha que 
-se puede arrancar desde ambos tipos de la consola, la elección 
-también dependerá de que otros sistemas operativos desea ejecutar
-en la misma máquina. Todos los otros sistemas operativos de tipo
-Unix (Tru64 Unix, FreeBSD, OpenBSD y NetBSD) y OpenVMS sólo pueden
-arrancar desde SRM, mientras que Windows NT solo puede arrancar
-desde ARC.
+GNU/Linux es el único sistema operativo en Alpha que se puede arrancar
+desde ambos tipos de la consola, pero &debian; &release; solamente puede
+arrancarse en sistemas con SRM.  Si tiene un sistema Alpha para el cual
+no hay ninguna versión de SRM disponible, si tendrá un sistema de 
+arranque dual con Windows NT, o bien si su dispositivo de arranque exige
+la consola ARC para su inicialización BIOS, no podrá usar el
+instalador de &debian; &release;.  Sin embargo, sí que podrá correr
+&debian; &release; en tales sistemas si usa otra media de instalación;
+por ejemplo, puede instalar Debian woody con MILO y luego actualizar el
+sistema a &debian; &release;.
+
+</para><para>
+
+Debido a que <command>MILO</command> no está disponible para ningún
+de los sistemas Alpha actualmente en producción (hasta febrero de
+2000), y debido a que ya no es necesario comprar licencias de OpenVMS o
+Tru64 Unix para tener firmware SRM en su Alpha antigua, es recomendable
+que use SRM siempre que sea posible.
 
 </para><para>
 
@@ -129,7 +140,7 @@ compatibles con ARC.
   <entry>solamente SRM</entry>
 </row><row>
   <entry>nautilus</entry>
-  <entry>solamente ARC (vea el manual de la placa base)</entry>
+  <entry>ARC (vea el manual de la placa base) o SRM</entry>
 </row><row>
   <entry>noname</entry>
   <entry>ARC o SRM</entry>
@@ -175,58 +186,12 @@ compatibles con ARC.
 </para><para>
 
 Generalmente, ninguna de estas consolas puede arrancar Linux directamente,
-por lo que se requiere de la asistencia de un gestor de arranque 
-intermedio. Existen dos principales gestores de arranque para Linux:
-<command>MILO</command> y <command>aboot</command>.
-
-</para><para>
-
-<command>MILO</command> es de por sí una consola que reemplaza a ARC o SRM
-en memoria. <command>MILO</command> puede arrancar tanto desde ARC y SRM,
-y es la única manera de cargar Linux desde la consola ARC.
-<command>MILO</command> es específico de plataforma (se requiere una versión
-diferente de <command>MILO</command> para cada tipo de sistema) y existe
-solamente para los sistemas para los cuales existe soporte ARC como se 
-muestra en la tabla anterior. Véase también el (desafortunadamente
-desactualizado) <ulink url="&url-milo-howto;">CÓMO de MILO</ulink>.
-
-</para><para>
-
-<command>aboot</command> es un gestor de arranque, pequeño, independiente
-de plataforma, que sólo se puede ejecutar desde SRM. Vea (el también
+por lo que se requiere la asistencia de un gestor de arranque 
+intermedio. Para la consola SRM, se usa <command>aboot</command>,
+un gestor de arranque pequeño e independiente de plataforma.  Vea (el
 desafortunadamente desactualizado) <ulink
 url="&url-srm-howto;">COMO de SRM</ulink> para mayor información acerca
 de <command>aboot</command>.
-
-</para><para>
-
-Por lo tanto, generalmente existen tres posibles escenarios, dependiendo
-del firmware de la consola del sistema y de si <command>MILO</command> está
-disponible o no:
-
-<informalexample><screen>
-
-SRM -> aboot
-SRM -> MILO
-ARC -> MILO
-
-</screen></informalexample>
-
-</para><para>
-
-La placa base UP1000 (con nombre de subarquitectura 'nautilus') de
-Alpha Processor, Inc. es diferente de todas las otras, ésta usa un
-gestor de arranque de API específico que se ejecuta bajo el firmware
-AlphaBIOS.
-
-</para><para>
-
-Debido a que <command>MILO</command> no está disponible para todos
-los sistemas Alpha actualmente en producción (hasta febrero de 2000),
-y debido a que ya no es necesario comprar licencias de OpenVMS o Tru64
-Unix para tener firmware SRM en su Alpha antigua, es recomendable que
-use SRM y <command>aboot</command> en nuevas instalaciones de GNU/Linux,
-a menos que desee tener arranque dual con Windows NT.
 
 </para><para>
 
@@ -311,13 +276,15 @@ pasar el parámetro <userinput>console=</userinput> al núcleo.
 Esto se puede hacer usando el argumento <userinput>-flags</userinput>
 para la orden <userinput>boot</userinput> de SRM. Los puertos serie
 se nombran de forma similar a sus ficheros correspondientes en
-<userinput>/dev</userinput>. Por ejemplo, para arrancar desde
+<userinput>/dev</userinput>. Además, cuando se especifican parámetros
+de núcleo adicionales, hay que repetir ciertas opciónes implícitas
+que las imagenes de &d-i; requieren.  Por ejemplo, para arrancar desde
 <userinput>ewa0</userinput> y usar una consola en el primer puerto
 serie, debería escribir:
 
 <informalexample><screen>
 
->>> boot ewa0 -flags console=ttyS0
+&gt;&gt;&gt; boot ewa0 -flags &quot;root=/dev/ram ramdisk_size=16384 console=ttyS0&quot;
 
 </screen></informalexample>
 
@@ -340,7 +307,7 @@ donde <replaceable>xxxx</replaceable> es su unidad de CD-ROM en notación de SRM.
 </para>
   </sect2>
 
-  <sect2 arch="alpha">
+  <sect2 arch="alpha" condition="FIXME">
   <title>Arranque desde CD-ROM con la consola ARC o AlphaBIOS</title>
 <para>
 
@@ -358,7 +325,7 @@ máquinas «ruffian» son una excepción: necesita usar
   </sect2>
 
 
-  <sect2 arch="alpha">
+  <sect2 arch="alpha" condition="supports-floppy-boot">
   <title>Arrancar desde disquetes con la consola SRM</title>
 <para>
 
@@ -411,7 +378,7 @@ a MILO. Vea <xref linkend="booting-from-milo"/>.
   </sect2>
 
 
-  <sect2 arch="alpha">
+  <sect2 arch="alpha" condition="supports-floppy-boot">
   <title>Arrancar desde disquetes con la consola ARC o AlphaBIOS</title>
 
 <para>
@@ -423,24 +390,7 @@ operativo. Arranque usando la nueva entrada creada.
 </para>
   </sect2>
 
-  <sect2 arch="alpha">
-  <title>Arranque desde disquetes con el gestor de arranque APB (UP1000)</title>
-
-<para>
-
-Para arrancar en esta plataforma, ejecute <command>\apb\apb.exe</command> 
-desde el menú «Utility/Run Maintenance Program», y escriba
-      <informalexample><screen>
-
-boot debian_install
-      
-</screen></informalexample>
- en el cursor de APB.
-
-</para>
-  </sect2>
-
- <sect2 arch="alpha" id="booting-from-milo"><title>Arrancar con MILO</title>
+ <sect2 arch="alpha" condition="FIXME" id="booting-from-milo"><title>Arrancar con MILO</title>
 <para>
 
 MILO contenido en el medio de arranque esta configurado para proceder
