@@ -16,11 +16,11 @@
 <para
 >Это полностью работающий пример файла автоматической установки. В <xref linkend="automatic-install"/> описано как его использовать. Вы можете убрать комментарии с нужных вам строк перед использованием этого файла. <note
 ><para
->In order to be able to properly present this example in the manual, we've had to split some lines. This is indicated by the use of the line-continuation-character <quote
+>Для правильного отображения этого примера в руководстве мы разделили некоторые строки. Это можно определить по символу продолжения строки <quote
 >\</quote
-> and extra indentation in the next line. In a real preconfiguration file, these split lines have to be joined into <emphasis
->one single line</emphasis
->. If you do not, preconfiguration will fail with unpredictable results. </para
+> и дополнительному отступу в следующей строке. В рабочем конфигурационном файле эти строки должны быть объединены в <emphasis
+>одну строку</emphasis
+>. Если вы этого не сделаете, автоматическая установка завершится неудачно с непредсказуемым результатом. </para
 ></note>
 
 </para>
@@ -348,8 +348,11 @@ xserver-xfree86  xserver-xfree86/config/monitor/mode-list \
 # be asked. You can preseed those too, of course. To get a list of every
 # possible question that could be asked during an install, do an
 # installation, and then run these commands:
-#   debconf-get-selections --installer > file
-#   debconf-get-selections >> file
+#   debconf-get-selections --installer 
+> file
+#   debconf-get-selections 
+>
+> file
 
 # If you like, you can include other preseed files into this one.
 # Any settings in those files will override pre-existing settings from this
@@ -372,7 +375,7 @@ xserver-xfree86  xserver-xfree86/config/monitor/mode-list \
 <!--   End of file appendix/example-preseed.xml -->
 
 <!-- Start of file appendix/files.xml -->
-<!-- $Id: files.xml 23058 2004-10-12 23:51:17Z cjwatson $ -->
+<!-- $Id: files.xml 24689 2005-01-02 20:01:11Z fjpop-guest $ -->
 
 
  <sect1 id="linuxdevices"
@@ -626,27 +629,24 @@ xserver-xfree86  xserver-xfree86/config/monitor/mode-list \
 >Установка мыши</title>
 
 <para
->Мышь можно использовать и в консоли Linux (с gpm), и в среде X window. Два этих режима можно использовать совместно, если повторитель gpm использован для разрешения прохождения сигнала в X сервер, как показано ниже: <informalexample
-><screen
->мышь =&#62; /dev/psaux  =&#62; gpm =&#62; /dev/gpmdata -&#62; /dev/mouse =&#62; X
-         /dev/ttyS0           (повторитель)   (символьная ссылка)
+>Мышь можно использовать одновременно и в консоли Linux (с помощью gpm) и в среде X window. Это возможно, если использовать повторитель gpm, который позволит передачу сигналовX серверу: <informalexample
+><screen>
+mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; X
+         /dev/ttyS0             (repeater)        (symlink)
          /dev/ttyS1
 </screen
-></informalexample>
-
-</para
-><para
->Установите протокол повторителя в значение raw (в <filename
+></informalexample
+> Установите протокол повторителя в raw (в файле <filename
 >/etc/gpm.conf</filename
->) и настройте X на оригинальный протокол мыши в <filename
+>), а в настройках X изначальный протокол работы мыши(в файле <filename
 >/etc/X11/XF86Config</filename
 > или <filename
 >/etc/X11/XF86Config-4</filename
->. </para
+>). </para
 ><para
 >Такой подход с использованием gpm даже в X имеет преимущество, если мышь отключат по неосторожности. Простой перезапуск gpm командой <informalexample
 ><screen>
-user@debian:# /etc/init.d/gpm restart
+# /etc/init.d/gpm restart
 </screen
 ></informalexample
 > подключит мышь в программе заново без перезапуска X. </para
@@ -681,10 +681,9 @@ user@debian:# /etc/init.d/gpm restart
 # Посылать сингал правой кнопки мышки клавишей F12
 /dev/mac_hid/mouse_button3_keycode = 88
 # Для других клавиш, используйте showkey, который скажет вам нужный код.
-
 </screen
-></informalexample
->  
+></informalexample>
+
 </para>
   </sect2>
  </sect1>
@@ -698,26 +697,98 @@ user@debian:# /etc/init.d/gpm restart
 >В следующей таблице содержатся размеры, полученные из aptitude для задач, описанных в tasksel. Заметим, что некоторые пакеты содержатся в нескольких задачах одновременно, поэтому полный размер установки для двух задач вместе может быть меньше, чем полный размер, полученный сложением размеров. </para
 ><para>
 
-<informalexample
-><screen
->Задача                            После установки   Нужно загрузить   Требует места
-                                  Размер (МБ)       Размер (МБ)       Для установки (МБ)
+<informaltable
+><tgroup cols="4">
+<thead>
+<row>
+  <entry
+>Задача</entry>
+  <entry
+>Размер после установки (МБ)</entry>
+  <entry
+>Размер загрузки (МБ)</entry>
+  <entry
+>Требуемое место для установки (МБ)</entry>
+</row>
+</thead>
 
-Десктоп                           1537              521               2058
-Веб сервер                        71                21                92
-Сервер печати                     240               83                323
-Почтовый сервер                   41                12                53
-Файловый сервер                   85                34                119
-База данных SQL                   108               33                141
+<tbody>
+<row>
+  <entry
+>Рабочий стол</entry>
+  <entry
+>1537</entry>
+  <entry
+>521</entry>
+  <entry
+>2058</entry>
+</row>
 
-</screen
-></informalexample>
+<row>
+  <entry
+>Веб сервер</entry>
+  <entry
+>71</entry>
+  <entry
+>21</entry>
+  <entry
+>92</entry>
+</row>
+
+<row>
+  <entry
+>Сервер печати</entry>
+  <entry
+>240</entry>
+  <entry
+>83</entry>
+  <entry
+>323</entry>
+</row>
+
+<row>
+  <entry
+>Почтовый сервер</entry>
+  <entry
+>41</entry>
+  <entry
+>12</entry>
+  <entry
+>53</entry>
+</row>
+
+<row>
+  <entry
+>Файловый сервер</entry>
+  <entry
+>85</entry>
+  <entry
+>34</entry>
+  <entry
+>119</entry>
+</row>
+
+<row>
+  <entry
+>SQL база данных</entry>
+  <entry
+>108</entry>
+  <entry
+>33</entry>
+  <entry
+>141</entry>
+</row>
+
+</tbody>
+</tgroup
+></informaltable>
+
 </para>
  </sect1>
 <!--   End of file appendix/files.xml -->
 
 <!-- Start of file appendix/chroot-install.xml -->
-<!-- $Id: chroot-install.xml 23059 2004-10-12 23:52:13Z cjwatson $ -->
+<!-- $Id: chroot-install.xml 24677 2005-01-01 23:01:40Z fjpop-guest $ -->
 
  <sect1 id="linux-upgrade">
  <title
@@ -738,39 +809,32 @@ user@debian:# /etc/init.d/gpm restart
 <para
 >С помощью имеющейся утилиты работы с разделами диска, переразметьте диск как нужно, создав как минимум одну файловую систему плюс раздел подкачки (swap). Вам потребуется минимум 150 МБ для консольной версии установки или минимум 300 МБ, если вы планируете установить X. </para
 ><para
->Создайте файловые системы на разделах. Например, чтобы создать файловую систему ext3 на разделе <filename
+>Создание файловых систем на разделах. Например, чтобы создать файловую систему ext3 на разделе <filename
 >/dev/hda6</filename
 > (это корневой раздел в нашем примере): <informalexample
 ><screen>
-
- $ mke2fs -j /dev/hda6
-
+# mke2fs -j /dev/hda6
 </screen
 ></informalexample
-> Чтобы создать файловую систему ext2, пропустите параметр <userinput
+> Чтобы создать файловую систему ext2, не указывайте параметр <userinput
 >-j</userinput
 >. </para
 ><para
->Инициализируйте и активизируйте раздел подкачки (подставьте номер раздела, предназначенного для раздела подкачки Debian): <informalexample
-><screen
->$ mkswap /dev/hda5
- $ sync; sync; sync
- $ swapon /dev/hda5
-
+>Инициальзация и активирование подкачки (замените номер раздела на свой): <informalexample
+><screen>
+# mkswap /dev/hda5
+# sync; sync; sync
+# swapon /dev/hda5
 </screen
-></informalexample>
-
-</para
-><para
->Смонтируйте один раздел как <filename
+></informalexample
+> Смонтируйте один раздел как <filename
 >/mnt/debinst</filename
 > (точка установки, она будет корневой (<filename
 >/</filename
 >) файловой системой в вашей новой системе). Имя точки монтирования абсолютно произвольное, оно описано позже. <informalexample
 ><screen
->$ mkdir /mnt/debinst
- $ mount /dev/hda6 /mnt/debinst
-
+># mkdir /mnt/debinst
+# mount /dev/hda6 /mnt/debinst
 </screen
 ></informalexample>
 
@@ -799,27 +863,23 @@ user@debian:# /etc/init.d/gpm restart
 ></ulink
 > </para
 ><para
->Также вы можете использовать следующую процедуру для установки вручную. Создайте каталог work для распаковки .deb: <informalexample
-><screen
->$ mkdir work
- $ cd work
-
+>Или вы можете использовать следующую процедуру установки вручную. Создайте каталог work для распаковки в него .deb: <informalexample
+><screen>
+# mkdir work
+# cd work
 </screen
-></informalexample>
-</para
-><para
->Бинарный файл <command
+></informalexample
+> Бинарный файл <command
 >debootstrap</command
 > расположен в архиве Debian (убедитесь, что вы выбрали правильный файл, соответствующий вашей архитектуре). Загрузите <command
 >debootstrap</command
 > .deb из <ulink url="http://ftp.debian.org/debian/pool/main/d/debootstrap/"
-> пула</ulink
+>пула</ulink
 >, скопируйте пакет в каталог work и извлеките из него бинарные файлы. Вам потребуются привилегии суперпользователя (root) для установки бинарных файлов. <informalexample
 ><screen
->$ ar -xf debootstrap_0.X.X_arch.deb
- $ cd /
- $ zcat &#60; /full-path-to-work/work/data.tar.gz | tar xv
-
+># tar -xf debootstrap_0.X.X_arch.deb
+# cd /
+# zcat /full-path-to-work/work/data.tar.gz | tar xv
 </screen
 ></informalexample>
 
@@ -874,49 +934,42 @@ user@debian:# /etc/init.d/gpm restart
 >sparc</userinput
 >. <informalexample
 ><screen
->$ /usr/sbin/debootstrap --arch ARCH &releasename; \
+># /usr/sbin/debootstrap --arch ARCH &releasename; \
      /mnt/debinst http://http.us.debian.org/debian
-
 </screen
 ></informalexample>
 
 </para>
-
   </sect2>
 
   <sect2>
   <title
 >Настройка базовой системы</title>
-
 <para
 >Теперь у вас на диске есть настоящая, пусть и слабенькая, система Debian. Выполните <command
 >Chroot</command
 > в неё: <informalexample
 ><screen
->$ chroot /mnt/debinst /bin/bash
-
+># chroot /mnt/debinst /bin/bash
 </screen
 ></informalexample>
+
 </para>
 
    <sect3>
    <title
 >Монтирование разделов</title>
 <para
->Вам надо создать <filename
+>Вам нужно создать файл <filename
 >/etc/fstab</filename
 >. <informalexample
-><screen
-># editor /etc/fstab
-
+><screen>
+# editor /etc/fstab
 </screen
-></informalexample>
-
-</para
-><para
->Вот пример, который можно использовать: <informalexample
-><screen
-># /etc/fstab: информация о статических файловых системах.
+></informalexample
+> Вот пример, измените его под ваши условия: <informalexample
+><screen>
+# /etc/fstab: информация о статических файловых системах.
 #
 # файл. система  точка монтир. тип     параметры                дамп проход
 /dev/XXX         /             ext2    defaults                 0    0
@@ -932,47 +985,35 @@ proc             /proc         proc    defaults                 0    0
 /dev/XXX         /var          ext2    rw,nosuid,nodev          0    2
 /dev/XXX         /usr          ext2    rw,nodev                 0    2
 /dev/XXX         /home         ext2    rw,nosuid,nodev          0    2
-
 </screen
-></informalexample>
-
-</para
-><para
->Используйте <userinput
+></informalexample
+> Выполните <userinput
 >mount -a</userinput
-> для монтирования всех файловых систем, которые вы описали в <filename
+>, чтобы смонтировать все файловые системы, заданные в файле <filename
 >/etc/fstab</filename
->, или смонтируйте файловые системы по отдельности: <informalexample
-><screen
-># mount /путь  # например:  mount /usr
-
+>, или для монтирования определённой файловой системы выполните: <informalexample
+><screen>
+# mount /path   # e.g.: mount /usr
 </screen
-></informalexample>
-
-</para
-><para
->Вы можете смонтировать файловую систему proc много раз и в разные места, хотя принято в /proc . Если вы не использовали <userinput
+></informalexample
+> Вы можете монтировать файловую систему proc несколько раз и в произвольные места, хотя принято в /proc. Если вы не использовали <userinput
 >mount -a</userinput
->, убедитесь, что смонтировали proc: <informalexample
+>, то перед тем как продолжить, убедитесь, что proc смонтирована: <informalexample
 ><screen
 ># mount -t proc proc /proc
-
 </screen
 ></informalexample>
 
 </para>
-
    </sect3>
 
    <sect3>
    <title
 >Настройка клавиатуры</title>
-
 <para
 >Для настройки клавиатуры введите: <informalexample
 ><screen
 ># dpkg-reconfigure console-data
-
 </screen
 ></informalexample>
 
@@ -983,42 +1024,38 @@ proc             /proc         proc    defaults                 0    0
    <title
 >Настройка сети</title>
 <para
->Для настройки сети отредактируйте <filename
+>Для настройки сети, отредактируйте <filename
 >/etc/network/interfaces</filename
 >, <filename
 >/etc/resolv.conf</filename
 > и <filename
 >/etc/hostname</filename
 >. <informalexample
-><screen
-># editor /etc/network/interfaces 
-
+><screen>
+# editor /etc/network/interfaces 
 </screen
-></informalexample>
-
-</para
-><para
->Вот несколько примеров из <filename
+></informalexample
+> Здесь приведены некоторые простые примеры из <filename
 >/usr/share/doc/ifupdown/examples</filename
 >: <informalexample
-><screen
->######################################################################
-# /etc/network/interfaces -- файл настройки для ifup(8), ifdown(8)
-# Смотрите на man странице interfaces(5) описание возможных
-# параметров.
+><screen>
+######################################################################
+# /etc/network/interfaces -- configuration file for ifup(8), ifdown(8)
+# See the interfaces(5) manpage for information on what options are 
+# available.
 ######################################################################
 
-# Нам всегда нужен loopback интерфейс.
+# We always want the loopback interface.
 #
 auto lo
 iface lo inet loopback
 
-# Чтобы использовать dhcp:
+# To use dhcp:
 #
 # auto eth0
 # iface eth0 inet dhcp
 
-# Пример настройки статического IP: (опции broadcast и gateway необязательны)
+# An example static IP setup: (broadcast and gateway are optional)
 #
 # auto eth0
 # iface eth0 inet static
@@ -1028,61 +1065,45 @@ iface lo inet loopback
 #     broadcast 192.168.0.255
 #     gateway 192.168.0.1
 </screen
-></informalexample>
-
-</para
-><para
->Введите адрес(а) ваших DNS-серверов и параметры search в <filename
+></informalexample
+> Укажите серверы имён и директивы search в <filename
 >/etc/resolv.conf</filename
 >: <informalexample
-><screen
-># editor /etc/resolv.conf
-
+><screen>
+# editor /etc/resolv.conf
 </screen
-></informalexample>
-
-</para
-><para
->Простой <filename
+></informalexample
+> Простой <filename
 >/etc/resolv.conf</filename
 >: <informalexample
-><screen
-># search hqdom.local\000
-# nameserver 10.1.1.36
-# nameserver 192.168.9.100
-
+><screen>
+search hqdom.local\000
+nameserver 10.1.1.36
+nameserver 192.168.9.100
 </screen
-></informalexample>
-
-</para
-><para
->Введите имя вашей системы (от 2 до 63 символов): <informalexample
-><screen
-># echo DebianHostName &#62; /etc/hostname
-
+></informalexample
+> Укажите имя системы (2 - 63 символа): <informalexample
+><screen>
+# echo DebianHostName &gt; /etc/hostname
 </screen
-></informalexample>
-
-</para
-><para
->Если у вас есть несколько сетевых карт, вы должны упорядочить имена модулей драйверов в файле <filename
+></informalexample
+> Если у вас несколько сетевых карт, то вам нужноразместить имена драйверов в файле <filename
 >/etc/modules</filename
->. Во время следующей загрузки, каждая карта будет ассоциирована с именем интерфейса (eth0, eth1, и т.д.) как вы и ожидаете. </para>
+> в желаемом порядке. Позже при загрузке каждая карта будет связана с именем интерфейса (eth0, eth1, и тд.) как вы и хотели. </para>
    </sect3>
 
    <sect3>
    <title
 >Настройка часового пояса, пользователей и APT</title>
-
 <para
 >Выберите часовой пояс, добавьте обычного пользователя и укажите источники <command
 >apt</command
 >, запустив <informalexample
 ><screen
 ># /usr/sbin/base-config new
-
 </screen
 ></informalexample>
+
 </para>
    </sect3>
 
@@ -1092,10 +1113,8 @@ iface lo inet loopback
 <para
 >Чтобы использовать язык, отличный от английского, нужно настроить локаль. Для этого установите пакет поддержки локалей и настройте его: <informalexample
 ><screen>
-
- # apt-get install locales
- # dpkg-reconfigure locales
-
+# apt-get install locales
+# dpkg-reconfigure locales
 </screen
 ></informalexample
 > ЗАМЕЧАНИЕ: Apt должен быть уже настроен, например, во время фазы base-config. Перед использованием локалей с набором символов, отличным от ASCII или latin1, пожалуйста проконсультируйтесь с нужным HOWTO по локализации. </para>
@@ -1105,21 +1124,17 @@ iface lo inet loopback
   <sect2>
   <title
 >Установка ядра</title>
-
 <para
 >Если вы намерены загружать эту систему, то вам скорее всего понадобится ядро Linux и системный загрузчик. Определите доступные пакеты с ядрами при помощи <informalexample
-><screen
-># apt-cache search kernel-image
-
+><screen>
+# apt-cache search kernel-image
 </screen
-></informalexample>
-
-</para
-><para
->А затем установите нужный, указав имя пакета. <informalexample
+></informalexample
+> Затем установите нужное указав его имя пакета. <informalexample
 ><screen
-># apt-get install kernel-image-2.X.X-арх-и.т.д.
-
+># apt-get install kernel-image-<replaceable
+>2.X.X-arch-etc</replaceable
+>
 </screen
 ></informalexample>
 
@@ -1155,7 +1170,6 @@ delay=20
 lba32
 image=/vmlinuz
 label=Debian
-
 </screen
 ></informalexample>
 
@@ -1169,11 +1183,10 @@ label=Debian
 >yaboot.conf</filename
 >, относящийся к системе, из которой его вызвали). </para
 ><para arch="powerpc"
->Вот простой <filename
+>Вот простой пример <filename
 >/etc/yaboot.conf</filename
-> в качестве примера: <informalexample
+>: <informalexample
 ><screen>
-
 boot=/dev/hda2
 device=hd:
 partition=6
@@ -1182,7 +1195,6 @@ magicboot=/usr/lib/yaboot/ofboot
 timeout=50
 image=/vmlinux
 label=Debian
-
 </screen
 ></informalexample
 > На некоторых машинах вам возможно понадобится использовать <userinput

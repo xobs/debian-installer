@@ -448,7 +448,7 @@
 <!--   End of file partitioning/device-names.xml -->
 
 <!-- Start of file partitioning/partition-programs.xml -->
-<!-- $Id: partition-programs.xml 24419 2004-12-14 22:26:25Z joeyh $ -->
+<!-- $Id: partition-programs.xml 24663 2004-12-31 18:38:22Z fjpop-guest $ -->
 
  <sect1 id="partition-programs">
  <title
@@ -602,28 +602,29 @@
 >debian-installer</command
 > и перейдите к следующему шагу. </para
 ><para
->Если вы будете работать с более чем 20 разделами на ide диске, то вам нужно создать устройство для 21 раздела и далее. Следующий шаг инициализации раздела завершится неудачно, если устройства не будет. В качестве примера, вот команды, которые вы можете выполнить на <userinput
+>Если вы будете работать с более чем 20 разделами на ide диске, то вам нужно создать устройства начиная с 21 раздела и далее. Следующий шаг инициализации раздела завершится неудачно, если устройства не будет. В качестве примера здесь показаны команды, которые вы можете выполнить на <userinput
 >tty2</userinput
 > или через Запуск оболочки для добавления 21 раздела: <informalexample
 ><screen>
-cd /dev
-mknod hda21 b 3 21 
-chgrp disk hda21
-chmod 660 hda21
+# cd /dev
+# mknod hda21 b 3 21 
+# chgrp disk hda21
+# chmod 660 hda21
 </screen
 ></informalexample
 > Загрузка в новую систему завершится неудачно, если в системе не будет нужных устройств. После установки ядра и модулей, выполните: <informalexample
-><screen
->cd /target/dev
-mknod hda21 b 3 21 
-chgrp disk hda21
-chmod 660 hda21
+><screen>
+# cd /target/dev
+# mknod hda21 b 3 21 
+# chgrp disk hda21
+# chmod 660 hda21
 </screen
-></informalexample>
-
-</para
-><para arch="i386"
->Не забудьте сделать раздел загрузочным, установив флаг ``Загрузочный''. </para
+></informalexample
+> <phrase arch="i386"
+>Не забудьте пометить раздел загрузки как <quote
+>Загрузочный</quote
+>.</phrase
+> </para
 ><para condition="mac-fdisk.txt"
 >О том как создавать разделы смотрите <ulink url="mac-fdisk.txt"
 >страницу руководства mac-fdisk</ulink
@@ -704,7 +705,7 @@ chmod 660 hda21
 ><title
 >Разметка для &arch-title;</title>
 <para
->If you have an existing other operating system such as DOS or Windows and you want to preseve that operating system while installing Debian, you may need to resize its partition to free up space for the Debian installation. The installer supports resizing of both FAT and NTFS filesystems; when you get to the installer's partitioning step, select the option to partition manually and then simply select an existing partition and change its size. </para
+>Если у вас есть другие операционные системы, например DOS или Windows и вы хотите сохранить их, то может потребоваться изменить размеры их разделов, чтобы освободить больше пространства для Debian. Программа установки может изменять размеры файловых систем FAT и NTFS; на шаге разметки выберите разметку вручную и затем просто выберите нужный раздел и измените его размер. </para
 ><para
 >PC BIOS обычно накладывает дополнительные ограничения на дисковую разметку. Есть ограничение на количество <quote
 >первичных</quote
@@ -751,7 +752,7 @@ chmod 660 hda21
 <!--   End of file partitioning/partition/i386.xml -->
 
 <!-- Start of file partitioning/partition/ia64.xml -->
-<!-- $Id: ia64.xml 18660 2004-07-28 04:49:59Z dannf $ -->
+<!-- $Id: ia64.xml 24663 2004-12-31 18:38:22Z fjpop-guest $ -->
 
 
   <sect2 arch="ia64"
@@ -789,27 +790,22 @@ chmod 660 hda21
 ><para
 >Программа разметки <command
 >partman</command
-> справится с большинством вариантов разметки. В тех редких случаев, когда необходимо вручную разметить диск, вы можете использоватьоболочку как описано выше и запустить утилиту <command
+> способна работать с большинством дисковых раскладок. В тех редких ситуациях, когда требуется настройка диска вручную, вы можете вызвать интерпретатор командной строки, как описано выше, запустить утилиту <command
 >parted</command
-> прямо из командной строки. Если предположить, что вы хотите стереть весь диск и создатьGPT таблицу с несколькими разделами, то для этого нужно использовать примерно такую последовательность команд: </para
-><para>
-<informalexample
-><screen
->mklabel gpt
+> и напрямую использовать её интерфейс командной строки. Предположим, если вы хотите стереть весь диск, создать таблицу GPT и несколько разделов, то можно использовать такую последовательность команд: <informalexample
+><screen>
+      mklabel gpt
       mkpartfs primary fat 0 50
       mkpartfs primary linux-swap 51 1000
       mkpartfs primary ext2 1001 3000
       set 1 boot on
       print
       quit
-
 </screen
-></informalexample>
-</para
-><para
->Таким образом создастся таблица разделов и три раздела будут использоваться в качествезагрузочного раздела EFI, раздела swap и корневой файловой системы. Наконец, установится флаг загрузкуи на раздел EFI. Разделы заданы в мегабайтах, в виде смещения начала и конца от начала диска. В примере мы создали файловую систему ext2 размером 1999МБ, начиная со смещения 1001МБ от начала диска. Заметим, что форматирование swap раздела с помощью <command
+></informalexample
+> Она создаст новую таблицу разделов, и три раздела, используемых в качестве загрузочного раздела EFI, пространства подкачки и корневой файловой системы. В конце на EFI разделе устанавливается загрузочный флаг. Размеры разделов заданы в мегабайтах в виде начальных и конечных смещений от начала диска.Например, в приведённом выше примере создана файловая система ext2 размером 1999МБ начинающаяся с 1001МБ от начала диска. Заметим, что форматирование пространства подкачки с помощью <command
 >parted</command
-> может занять несколько минут, так как происходит сканирование плохих блоков. </para>
+> может занять несколько минут, так как оно сканируется на наличие плохих блоков. </para>
   </sect2>
 
   <sect2 arch="ia64"

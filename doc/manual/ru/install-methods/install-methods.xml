@@ -240,7 +240,7 @@ archive will not work. Obtain the newest version from
 <!--   End of file install-methods/ipl-tape.xml -->
 
 <!-- Start of file install-methods/create-floppy.xml -->
-<!-- $Id: create-floppy.xml 18623 2004-07-27 19:08:34Z joeyh $ -->
+<!-- $Id: create-floppy.xml 24663 2004-12-31 18:38:22Z fjpop-guest $ -->
 
  <sect1 condition="supports-floppy-boot" id="create-floppy">
  <title
@@ -272,22 +272,22 @@ archive will not work. Obtain the newest version from
 <para
 >Для записи дисковых образов файлов на дискеты, вам вероятно понадобятся права суперпользователя. Вставьте хорошую, чистую дискету в дисковод. Затем, используйте команду <informalexample
 ><screen>
-dd if=<replaceable
+$ dd if=<replaceable
 >файл</replaceable
 > of=/dev/fd0 bs=1024 conv=sync ; sync
 </screen
 ></informalexample
 > где <replaceable
 >файл</replaceable
-> это один файловых образов дискет (смотрите в <xref linkend="downloading-files"/> какой<replaceable
+> &mdash; это один из файловых образов дискет (смотрите в <xref linkend="downloading-files"/> какой <replaceable
 >файл</replaceable
 > должен быть). <filename
 >/dev/fd0</filename
-> это распространённое имя дисковода, оно может быть отличаться от используемого на вашей машине <phrase arch="sparc"
+> &mdash; это имя устройства дисковода, оно может отличаться от используемого на вашей машине <phrase arch="sparc"
 >(в Solaris это<filename
 >/dev/fd/0</filename
 >)</phrase
->. Команда может завершиться раньше, чемUnix завершит запись на дискету, поэтому следите за лампой дисковода и перед вытаскиванием дискеты убедитесь, что она погасла и диск перестал вращаться. На некоторых систмах, нужно выдать команду вытаскивания дискеты из дисковода<phrase arch="sparc"
+>. Команда может завершиться раньше, чемUnix завершит запись на дискету, поэтому следите за лампой дисковода и перед вытаскиванием дискеты убедитесь, что она погасла и диск перестал вращаться. На некоторых систмах, нужно выдать команду вытаскивания дискеты из дисковода <phrase arch="sparc"
 >(в Solaris используется <command
 >eject</command
 >, смотрите страницу руководства)</phrase
@@ -502,7 +502,7 @@ dd if=<replaceable
 <!--   End of file install-methods/create-floppy.xml -->
 
 <!-- Start of file install-methods/boot-usb-files.xml -->
-<!-- $Id: boot-usb-files.xml 24616 2004-12-29 04:36:44Z cjwatson $ -->
+<!-- $Id: boot-usb-files.xml 24677 2005-01-01 23:01:40Z fjpop-guest $ -->
 
  <sect1 condition="bootable-usb" id="boot-usb-files">
  <title
@@ -521,80 +521,74 @@ dd if=<replaceable
   <title
 >Копирование файлов - лёгкий путь</title>
 <para arch="i386"
->There is an all-in-one file <filename
+>Существует файл "всё-в-одном" <filename
 >hd-media/boot.img.gz</filename
-> which contains all the installer files (including the kernel) as well as <command
+>, который содержит все файлы установки (включая ядро), а также <command
 >SYSLINUX</command
-> and its configuration file. You only have to extract it directly to your USB stick: <informalexample
-><screen
->
-
-gzip -dc boot.img.gz >/dev/<replaceable>sda</replaceable>
-
+> и его файл конфигурации. Вам нужно просто распаковать его прямо на USB устройство: <informalexample
+><screen>
+# zcat boot.img.gz &gt; /dev/<replaceable
+>sda</replaceable>
 </screen
 ></informalexample
-> Of course this will destroy anything already on the device, so take care that you use the correct device name for your USB stick. </para
+> Естественно, это уничтожит все данные на устройстве, поэтому не ошибитесь с именем USB устройства. </para
 ><para arch="powerpc"
->There is an all-in-one file <filename
+>Существует файл "всё-в-одном" <filename
 >hd-media/boot.img.gz</filename
-> which contains all the installer files (including the kernel) as well as <command
+>, который содержит все файлы установки (включая ядро), а также <command
 >yaboot</command
-> and its configuration file. Create a partition of type "Apple_Bootstrap" on your USB stick using <command
+> и его файл конфигурации. На USB устройстве создайте раздел с типом "Apple_Bootstrap" с помощью команды <command
 >mac-fdisk</command
->'s <userinput
+> <userinput
 >C</userinput
-> command and extract the image directly to that: <informalexample
-><screen
->
-
-gzip -dc boot.img.gz >/dev/<replaceable>sda2</replaceable>
-
+> и распакуйте образ на этот раздел: <informalexample
+><screen>
+# zcat boot.img.gz &gt; /dev/<replaceable
+>sda2</replaceable>
 </screen
 ></informalexample
-> Of course this will destroy anything already on the device, so take care that you use the correct device name for your USB stick. </para
+> Естественно, это уничтожит все данные на устройстве, поэтому не ошибитесь с именем USB устройства. </para
 ><para
->After that, mount the USB memory stick (<userinput
+>После этого, смонтируйте USB устройство (<userinput
 >mount <replaceable arch="i386"
 >/dev/sda</replaceable
 > <replaceable arch="powerpc"
 >/dev/sda2</replaceable
 > /mnt</userinput
->), which will now have <phrase arch="i386"
->a FAT filesystem</phrase
+>), который теперь имеет <phrase arch="i386"
+>файловую систему FAT</phrase
 > <phrase arch="powerpc"
->an HFS filesystem</phrase
-> on it, and copy a Debian netinst or businesscard ISO image to it. Please note that the file name must end in <filename
+>файловую систему HFS</phrase
+>, и скопируйте на него ISO образ Debian netinst или businesscard. Имя файла должно заканчиваться обязательно на<filename
 >.iso</filename
->. Unmount the stick (<userinput
+>. Размонтируйте устройство (<userinput
 >umount /mnt</userinput
->) and you are done. </para>
+>) и всё готово. </para>
   </sect2>
 
   <sect2 id="usb-copy-flexible">
   <title
 >Копирование файлов - гибкий путь</title>
 <para
->If you like more flexibility or just want to know what's going on, you should use the following method to put the files on your stick. </para>
+>Если вам хочется большей гибкости или вы просто хотите знать, что на самом деле происходит, то можете воспользоваться следующим методом перемещения файлов на устройство. </para>
 
 
 <!-- Start of file install-methods/usb-setup/i386.xml -->
-<!-- $Id: i386.xml 24628 2004-12-29 20:33:31Z fjpop-guest $ -->
+<!-- $Id: i386.xml 24663 2004-12-31 18:38:22Z fjpop-guest $ -->
 
    <sect3 arch="i386">
    <title
->USB stick partitioning on &arch-title;</title>
+>Разметка карты памяти USB на архитектуре &arch-title;</title>
 <para
->We will show how to setup the memory stick to use the first partition, instead of the entire device. </para
+>Мы покажем как использовать на карте памяти только первый раздел, а не всё устройство. </para
 ><note
 ><para
->Так как большинство USB устройств продаются только с одним разделом FAT16, вам, вероятно, не хочется переразмечать или форматировать устройство. Если вас всё равно, то воспользуйтесь<command
+>Так как большинство USB устройств продаются только с единственным разделом FAT16, вам, вероятно, не хочется переразмечать или форматировать устройство. Если вам всё равно это нужно сделать, воспользуйтесь <command
 >cfdisk</command
-> или любой другой утилитой разметки для созданияраздела FAT16, а затем выполните <informalexample
+> или любой другой утилитой разметки для создания раздела FAT16, а затем создайте файловую систему:<informalexample
 ><screen>
-
-mkdosfs /dev/<replaceable
+# mkdosfs /dev/<replaceable
 >sda1</replaceable>
-
 </screen
 ></informalexample
 > Обязательно вводите правильное имя устройства USB. Команда <command
@@ -618,15 +612,13 @@ mkdosfs /dev/<replaceable
 >mtools</classname
 > в систему, и введите <informalexample
 ><screen>
-
-syslinux /dev/<replaceable
+# syslinux /dev/<replaceable
 >sda1</replaceable>
-
 </screen
 ></informalexample
 > Ещё раз отметим: не ошибитесь в имени устройства. Раздел не должен быть смонтирован при запуске <command
 >SYSLINUX</command
->. Эта процедура переписывает загрузочный сектор раздела и создаёт файл<filename
+>. Эта процедура переписывает загрузочный сектор раздела и создаёт файл <filename
 >ldlinux.sys</filename
 >, который содержит код системного загрузчика. </para
 ><para
@@ -660,117 +652,111 @@ syslinux /dev/<replaceable
 >SYSLINUX</command
 > работает только с файловыми именами DOS (8.3). </para
 ><para
->The <filename
+>Конфигурационный файл <filename
 >syslinux.cfg</filename
-> configuration file should contain the following two lines: <informalexample
-><screen
->
-
+> должен содержать две строки: <informalexample
+><screen>
 default vmlinuz
-append initrd=initrd.gz ramdisk_size=10000 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
-
+append initrd=initrd.gz ramdisk_size=12000 root=/dev/rd/0 init=/linuxrc rw
 </screen
 ></informalexample
-> Please note that the <userinput
+> Учтите, что может потребоваться увеличить параметр <userinput
 >ramdisk_size</userinput
-> parameter may need to be increased, depending on the image you are booting. </para>
+>, в зависимости от загружаемого образа.Если загрузка завершилась неудачно, попробуйте добавить <userinput
+>devfs=mount,dall</userinput
+> в строку <quote
+>append</quote
+>. </para>
    </sect3>
 <!--   End of file install-methods/usb-setup/i386.xml -->
 
 <!-- Start of file install-methods/usb-setup/powerpc.xml -->
-<!-- $Id: powerpc.xml 24628 2004-12-29 20:33:31Z fjpop-guest $ -->
+<!-- $Id: powerpc.xml 24663 2004-12-31 18:38:22Z fjpop-guest $ -->
 
    <sect3 arch="powerpc">
    <title
->USB stick partitioning on &arch-title;</title>
+>Разметка карты памяти USB на архитектуре &arch-title;</title>
 <para
->Most USB sticks do not come pre-configured in such a way that Open Firmware can boot from them, so you will need to repartition the stick. On Mac systems, run <userinput
+>С большинства USB устройств невозможно сразу загрузиться с помощью Open Firmware, поэтому вам придётся переразметить карту памяти. На системах Mac, запустите <userinput
 >mac-fdisk /dev/sda</userinput
->, initialise a new partition map using the <userinput
+>, инициализируйте новую карту разделов с помощью команды <userinput
 >i</userinput
-> command, and create a new partition of type Apple_Bootstrap using the <userinput
+> и создайте новый раздел с типом Apple_Bootstrap с помощью команды <userinput
 >C</userinput
-> command. (Note that the first "partition" will always be the partition map itself.) Then type <informalexample
-><screen
->
-
-hformat /dev/<replaceable>sda2</replaceable>
-
+>. (Заметим, что первый "раздел" всегда будет сама карта разделов.) Затем введите <informalexample
+><screen>
+$ hformat /dev/<replaceable
+>sda2</replaceable>
 </screen
 ></informalexample
-> Take care that you use the correct device name for your USB stick. The <command
+> Обязательно вводите правильное имя устройства USB. Команда <command
 >hformat</command
-> command is contained in the <classname
+> содержится в пакете Debian <classname
 >hfsutils</classname
-> Debian package. </para
+>. </para
 ><para
->In order to start the kernel after booting from the USB stick, we will put a boot loader on the stick. The <command
+>Чтобы запустить ядро после загрузки с USB устройства, мы поместим на устройство системный загрузчик. Системный загрузчик <command
 >yaboot</command
-> boot loader can be installed on an HFS filesystem and can be reconfigured by just editing a text file. Any operating system which supports the HFS file system can be used to make changes to the configuration of the boot loader. </para
+> может быть установлен в файловую систему HFS и настроен простым редактированием текстового файла. Для изменения конфигурации системного загрузчика можно использовать любую операционную систему, которая поддерживает файловую систему HFS. </para
 ><para
->The normal <command
+>Обычная утилита <command
 >ybin</command
-> tool that comes with <command
+>, идущая вместе с <command
 >yaboot</command
-> does not yet understand USB storage devices, so you will have to install <command
+>, не понимает карт памяти USB, поэтому вам нужно установить <command
 >yaboot</command
-> by hand using the <classname
+> вручную с помощью утилит <classname
 >hfsutils</classname
-> tools. Type <informalexample
-><screen
->
-
-hmount /dev/sda2
-hcopy -r /usr/lib/yaboot/yaboot :
-hattrib -c UNIX -t tbxi :yaboot
-hattrib -b :
-humount
-
+>. Введите <informalexample
+><screen>
+$ hmount /dev/sda2
+$ hcopy -r /usr/lib/yaboot/yaboot :
+$ hattrib -c UNIX -t tbxi :yaboot
+$ hattrib -b :
+$ humount
 </screen
 ></informalexample
-> Again, take care that you use the correct device name. The partition must not be otherwise mounted during this procedure. This procedure writes the boot loader to the partition, and uses the HFS utilities to mark it in such a way that Open Firmware will boot it. Having done this, the rest of the USB stick may be prepared using the normal Unix utilities. </para
+> Повторим, проверьте правильность имени вводимого устройства. Во время процедуры раздел не должен быть смонтирован. Эта процедура записывает системный загрузчик на раздел и с помощью утилит HFS метит его для возможности загрузки из Open Firmware. После этого, остальную работу с картой памяти USB можно выполнять с помощью обычных инструментов Unix. </para
 ><para
->Mount the partition (<userinput
+>Смонтируйте раздел (<userinput
 >mount /dev/sda2 /mnt</userinput
->) and copy the following files from the Debian archives to the stick: <itemizedlist>
+>) и скопируйте следующие файлыиз архива Debian на карту: <itemizedlist>
 <listitem
 ><para
 ><filename
->vmlinux</filename
-> (kernel binary) </para
+>vmlinuх</filename
+> (бинарный файл ядра) </para
 ></listitem>
 <listitem
 ><para
 ><filename
 >initrd.gz</filename
-> (initial ramdisk image) </para
+> (образ ramdisk) </para
 ></listitem>
 <listitem
 ><para
 ><filename
 >yaboot.conf</filename
-> (yaboot configuration file) </para
+> (конфигурационный файл yaboot) </para
 ></listitem>
 <listitem
 ><para
 ><filename
 >boot.msg</filename
-> (optional boot message) </para
+> (необязательное загрузочное сообщение) </para
 ></listitem>
 <listitem
 ><para
->Optional kernel modules </para
+>Необязательные модули ядра </para
 ></listitem>
 </itemizedlist>
 
 </para
 ><para
->The <filename
+>Конфигурационный файл <filename
 >yaboot.conf</filename
-> configuration file should contain the following lines: <informalexample
-><screen
->
-
+> должен содержать следующие строки: <informalexample
+><screen>
 default=install
 root=/dev/ram
 
@@ -782,18 +768,17 @@ image=/vmlinux
         initrd-size=10000
         append="devfs=mount,dall --"
         read-only
-
 </screen
 ></informalexample
-> Please note that the <userinput
+> Учтите, что может потребоваться увеличить параметр <userinput
 >initrd-size</userinput
-> parameter may need to be increased, depending on the image you are booting. </para>
+>, в зависимости от загружаемого образа. </para>
    </sect3>
 <!--   End of file install-methods/usb-setup/powerpc.xml -->
 
    <sect3>
    <title
->Adding an ISO image</title>
+>Добавление ISO образа</title>
 <para
 >Теперь вы должны положить какой-нибудь ISO образ Debian (businesscard, netinst или вообще один большой) на устройство (если он влезет). Имя файла образа обязательно должно заканчиваться на <filename
 >.iso</filename
@@ -815,7 +800,7 @@ image=/vmlinux
    <!-- TODO: doesn't this section belong later? -->
    <sect3 arch="i386">
    <title
->Booting the USB stick</title>
+>Загрузка с карты памяти USB</title>
 <warning
 ><para
 >Если машина не хочет грузиться с USB устройства, носитель может содержать неправильную главную загрузочную запись (MBR). Чтобы исправить её, используйте команду <command
@@ -824,10 +809,9 @@ image=/vmlinux
 >mbr</classname
 >: <informalexample
 ><screen
->install-mbr /dev/<replaceable
+># install-mbr /dev/<replaceable
 >sda</replaceable
 >
-
 </screen
 ></informalexample>
 
@@ -1004,7 +988,7 @@ image=/vmlinux
 <!--   End of file install-methods/boot-drive-files.xml -->
 
 <!-- Start of file install-methods/install-tftp.xml -->
-<!-- $Id: install-tftp.xml 23213 2004-10-18 21:04:56Z fjpop-guest $ -->
+<!-- $Id: install-tftp.xml 24663 2004-12-31 18:38:22Z fjpop-guest $ -->
 
  <sect1 condition="supports-tftp" id="install-tftp">
  <title
@@ -1044,7 +1028,7 @@ image=/vmlinux
 
 
 <!-- Start of file install-methods/tftp/rarp.xml -->
-<!-- $Id: rarp.xml 15652 2004-05-19 00:37:43Z kraai $ -->
+<!-- $Id: rarp.xml 24663 2004-12-31 18:38:22Z fjpop-guest $ -->
 
 
   <sect2 condition="supports-rarp" id="tftp-rarp">
@@ -1059,39 +1043,33 @@ image=/vmlinux
 >/sbin/ifconfig eth0</userinput
 >. </para
 ><para
->Если система с RARP сервером использует ядро Linux 2.2.x, то вам необходимо заполнить RARP таблицу ядра. Чтобы сделать это, выполните следующие команды: <informalexample>
-<para>
+>Если система с RARP сервером использует ядро Linux 2.2.x, то вам необходимо заполнить RARP таблицу ядра. Чтобы сделать это, выполните следующие команды: <informalexample
+><screen>
+# <userinput
+>/sbin/rarp -s 
+<replaceable
+>client-hostname</replaceable>
+<replaceable
+>client-enet-addr</replaceable
+></userinput>
 
-<userinput
->/sbin/rarp -s <replaceable
->имя клиентской машины</replaceable
-> <replaceable
->MAC-адресклиентской машины</replaceable
-> </userinput>
-
-</para
-><para>
-
-<userinput
->/usr/sbin/arp -s <replaceable
->IP-адрес клиентской машины</replaceable
-> <replaceable
->MAC-адрес клиентской машины</replaceable
-> </userinput>
-
-</para
-></informalexample>
-
-</para
-><para
->Если вы получили <informalexample
+# <userinput
+>/usr/sbin/arp -s 
+<replaceable
+>client-ip</replaceable>
+<replaceable
+>client-enet-addr</replaceable
+></userinput>
+</screen
+></informalexample
+> Если вы получили <informalexample
 ><screen>
 SIOCSRARP: Invalid argument
 </screen
 ></informalexample
->, то вероятно, вам нужно загрузить модуль ядра RARP или пересобрать ядро с поддержкой RARP. Попробуйте выполнить <userinput
+> то вероятно, нужно загрузить модуль RARP ядра или пересобрать ядро с поддержкой RARP. Попробуйте <userinput
 >modprobe rarp</userinput
-> и затем ввести команду <command
+> а затем попробуйте команду <command
 >rarp</command
 > ещё раз. </para
 ><para
@@ -1110,7 +1088,7 @@ SIOCSRARP: Invalid argument
 <!--   End of file install-methods/tftp/rarp.xml -->
 
 <!-- Start of file install-methods/tftp/bootp.xml -->
-<!-- $Id: bootp.xml 16879 2004-06-16 21:47:55Z fjpop-guest $ -->
+<!-- $Id: bootp.xml 24663 2004-12-31 18:38:22Z fjpop-guest $ -->
 
 
   <sect2 condition="supports-bootp" id="tftp-bootp">
@@ -1127,24 +1105,20 @@ SIOCSRARP: Invalid argument
 >dhcp</classname
 >. </para
 ><para
->Для использования CMU <command
+>Чтобы использовать CMU <command
 >bootpd</command
->, сначала вы должны раскомментировать (или добавить) соответствующую строку в <filename
+>, во-первых, вы должны раскомментировать(или добавить) соответствующую строку в <filename
 >/etc/inetd.conf</filename
->. Для этого в &debian; вы можете запустить <userinput
+>. Для этого в &debian;, вы можете запустить <userinput
 >update-inetd --enable bootps</userinput
 >, затем <userinput
 >/etc/init.d/inetd reload</userinput
->. Иначе, добавляемая строка должна выглядеть так: <informalexample
-><screen
->bootps  dgram  udp  wait  root  /usr/sbin/bootpd  bootpd -i -t 120
-
+>. Иначе, нужно добавить следующую строку: <informalexample
+><screen>
+bootps  dgram  udp  wait  root  /usr/sbin/bootpd  bootpd -i -t 120
 </screen
-></informalexample>
-
-</para
-><para
->Теперь, вы должны создать файл <filename
+></informalexample
+>Теперь вы должны создать файл <filename
 >/etc/bootptab</filename
 >. Внутри он напоминает хорошо знакомый и загадочный формат старых добрых BSD файлов <filename
 >printcap</filename
@@ -1156,11 +1130,10 @@ SIOCSRARP: Invalid argument
 >bootptab</filename
 >. Для CMU <command
 >bootpd</command
->, вам нужно знать аппаратный адрес (MAC) клиента. Вот пример <filename
+> вам нужно знать аппаратный адрес (MAC) клиента. Вот пример <filename
 >/etc/bootptab</filename
 >: <informalexample
 ><screen>
-
 client:\
   hd=/tftpboot:\
   bf=tftpboot.img:\
@@ -1168,15 +1141,14 @@ client:\
   sm=255.255.255.0:\
   sa=192.168.1.1:\
   ha=0123456789AB:
-
 </screen
 ></informalexample
 > Вам нужно изменить по крайней мере параметр "ha", который содержит аппаратный адрес клиента. Параметр "bf" содержит файл, который клиент должен получить по TFTP; подробности смотрите в <xref linkend="tftp-images"/>. <phrase arch="mips"
-> На SGI Indy, вы можете просто войти в командный монитор и набрать <userinput
+> На SGI Indy вы можете просто войти в командный монитор и набрать <userinput
 >printenv</userinput
 >. Значение переменной <userinput
 >eaddr</userinput
-> содержитMAC адрес машины.</phrase
+> содержит MAC адрес машины.</phrase
 > </para
 ><para
 >Настройка же BOOTP от ISC <command
@@ -1192,14 +1164,13 @@ client:\
 <!--   End of file install-methods/tftp/bootp.xml -->
 
 <!-- Start of file install-methods//tftp/dhcp.xml -->
-<!-- $Id: dhcp.xml 22664 2004-10-06 15:49:49Z fjpop-guest $ -->
-
+<!-- $Id: dhcp.xml 24663 2004-12-31 18:38:22Z fjpop-guest $ -->
 
   <sect2 condition="supports-dhcp" id="dhcpd">
    <title
 >Настройка DHCP сервера</title>
 <para
->Есть один свободный DHCP сервер: это ISC <command
+>Есть один свободный DHCP сервер &mdash; это ISC <command
 >dhcpd</command
 >. В &debian; он доступен из пакета <classname
 >dhcp</classname
@@ -1207,7 +1178,6 @@ client:\
 >/etc/dhcpd.conf</filename
 >): <informalexample
 ><screen>
-
 option domain-name "example.com";
 option domain-name-servers ns1.example.com;
 option subnet-mask 255.255.255.0;
@@ -1227,10 +1197,9 @@ host clientname {
   hardware ethernet 01:23:45:67:89:AB; 
   fixed-address 192.168.1.90;
 }
-
 </screen
 ></informalexample
-> Примечание: новый (и предпочтительный) пакет <classname
+> Замечание: новый (и предпочтительный) пакет <classname
 >dhcp3</classname
 > использует <filename
 >/etc/dhcp3/dhcpd.conf</filename
@@ -1256,7 +1225,6 @@ host clientname {
 >dhcp.conf</filename
 >, в котором используется метод предстартового выполнения среды (PXE) по TFTP. <informalexample
 ><screen>
-
 option domain-name "example.com";
 
 default-lease-time 6048;
@@ -1292,10 +1260,9 @@ group {
   filename "/tftpboot/pxelinux.0";
  }
 }
-
 </screen
 ></informalexample
-> Заметим, что для PXE загрузки, в filename клиента<filename
+> Заметим, что для PXE загрузки в filename клиента <filename
 >pxelinux.0</filename
 > записано имя системного загрузчика, а не образа ядра (смотрите ниже <xref linkend="tftp-images"/>). </para>
    </sect3>
@@ -1306,15 +1273,13 @@ group {
   <title
 >Включение TFTP сервера</title>
 <para
->Для запуска TFTP сервера вы должны убедиться, что<command
+>Для запуска TFTP сервера вы должны убедиться, что <command
 >tftpd</command
->включён. Обычно, это делается добавлением в <filename
+> включён. Обычно, это делается добавлением в <filename
 >/etc/inetd.conf</filename
 > строки вида: <informalexample
 ><screen>
-
 tftp dgram udp wait nobody /usr/sbin/tcpd in.tftpd /tftpboot
-
 </screen
 ></informalexample
 > Пакеты Debian сами создают такую строку при установке. </para
@@ -1351,23 +1316,17 @@ tftp dgram udp wait nobody /usr/sbin/tcpd in.tftpd /tftpboot
 >. </para
 ></note
 ><para arch="mips"
->Если вы хотите установить Debian на машину SGI, а ваш TFTP сервер работает на GNU/Linux с ядром Linux 2.4, то вам нужно выполнить следующее: <informalexample
+>Если вы хотите установить Debian на машину SGI, а ваш TFTP сервер работает на GNU/Linux с ядром Linux 2.4, то на сервере вам нужно выполнить: <informalexample
 ><screen>
-
-echo 1 
-> /proc/sys/net/ipv4/ip_no_pmtu_disc
-
+# echo 1 &gt; /proc/sys/net/ipv4/ip_no_pmtu_disc
 </screen
 ></informalexample
-> чтобы отключить обнаружение Path MTU, иначеIndy PROM не сможет загрузить ядро. Кроме того, убедитесь, что TFTP пакеты посылаютсяс портом источника не более 32767, или загрузка остановится после первого пакета. Ещё раз, это ошибка Linux 2.4.X при работе с PROM, и вы можете избежать этого, выполнив настройку<informalexample
+> чтобы отключить обнаружение Path MTU, иначе Indy PROM не сможет загрузить ядро. Кроме того, убедитесь, что TFTP пакеты посылаются с портом источника не выше 32767 или загрузка остановится после первого пакета. Ещё раз, это ошибка Linux 2.4.X при работе с PROM, и вы можете избежать этого, выполнив настройку <informalexample
 ><screen>
-
-echo "2048 32767" 
-> /proc/sys/net/ipv4/ip_local_port_range
-
+# echo "2048 32767" &gt; /proc/sys/net/ipv4/ip_local_port_range
 </screen
 ></informalexample
->, которая регулирует диапазон портов источника используемого Linux сервере TFTP. </para>
+>, которая регулирует диапазон портов источника используемого Linux TFTP сервером. </para>
   </sect2>
 
   <sect2 id="tftp-images">
@@ -1486,20 +1445,16 @@ echo "2048 32767"
    <title
 >Загрузка SPARC по TFTP</title>
 <para
->В SPARC архитектурах используются имена субархитектур, например``SUN4M'' или ``SUN4C''; в некоторых случаях, имя архитектуры оставляют пустым, аимя файла клиент ищет просто как <filename
+>На SPARC архитектурах используются имена субархитектур, например``SUN4M'' или ``SUN4C''; в некоторых случаях, имя архитектуры оставляют пустым, для того чтобы имя файла клиент искал просто как <filename
 >ip-клиента-в-шестнадцатеричной-форме</filename
->. То есть, если система с субархитектурой SUN4C, и IP адресом 192.168.1.3, то имя файлабудет <filename
+>. То есть, если система с субархитектурой SUN4C и IP адресом 192.168.1.3, то имя файла будет <filename
 >C0A80103.SUN4C</filename
->. Простой способ его определения это ввести следующую команду в оболочке (предполагаем, что машине назначен IP адрес равный 10.0.0.4). </para>
-
-<informalexample
-><screen
->printf '%.2x%.2x%.2x%.2x\n' 10 0 0 4
+>. Простой способ его определения &mdash; это ввести следующую команду в оболочке (предполагается, что машине назначен IP адрес равный 10.0.0.4).<informalexample
+><screen>
+$ printf '%.2x%.2x%.2x%.2x\n' 10 0 0 4
 </screen
-></informalexample>
-
-<para
->Она выводит каждый октет IP в шестнадцатеричной форме; чтобы получить правильное имя файла, вам нужно изменить все буквы на заглавные и если нужно, добавить название субархитектуры. </para
+></informalexample
+> Она выведет октеты IP адреса в шестнадцатеричном виде; для получения правильного имени файла, вам нужно сделать все буквы заглавными и если нужно, добавить имя субархитектуры. </para
 ><para
 >Также вы можете заставить некоторые sparc системы брать имя файла из последнего параметра команды загрузки OpenPROM, например <userinput
 >boot net my-sparc.image</userinput
@@ -1590,10 +1545,8 @@ your TFTP server):
 <informalexample
 ><screen
 >
-
 # cd /tftpboot
 # tar xvzf root.tar.gz
-
 </screen
 ></informalexample>
 
@@ -1619,14 +1572,14 @@ for SunOS):
 <informalexample
 ><screen
 >
-
-/tftpboot/debian-sparc-root client(rw,no_root_squash)
-
+/tftpboot/debian-sparc-root <replaceable>client</replaceable>(rw,no_root_squash)
 </screen
 ></informalexample>
 
-NOTE: "client" is the host name or IP address recognized by the server for
-the system you are booting.
+NOTE: <replaceable
+>client</replaceable
+> is the host name or IP address recognized
+by the server for the system you are booting.
 
 </para
 ></listitem>
@@ -1645,9 +1598,7 @@ IP address is 192.168.1.3, do
 <informalexample
 ><screen
 >
-
 # ln -s debian-sparc-root 192.168.1.3
-
 </screen
 ></informalexample>
 
@@ -1689,7 +1640,7 @@ END FIXME -->
 <!--   End of file install-methods/install-tftp.xml -->
 
 <!-- Start of file install-methods/automatic-install.xml -->
-<!-- $Id: automatic-install.xml 23847 2004-11-13 23:35:27Z joeyh $ -->
+<!-- $Id: automatic-install.xml 24663 2004-12-31 18:38:22Z fjpop-guest $ -->
 
  <sect1 id="automatic-install">
  <title
@@ -1719,18 +1670,14 @@ END FIXME -->
 > из пакета <classname
 >debconf-utils</classname
 >, чтобы совместить базы данных debconf и cdebconf из /var/log/debian-installer/cdebconf в один файл: <informalexample
-><screen
->debconf-get-selections --installer 
-> файл
-debconf-get-selections 
->
-> файл
+><screen>
+$ debconf-get-selections --installer &gt; <replaceable
+>file</replaceable>
+$ debconf-get-selections &gt;&gt; <replaceable
+>file</replaceable>
 </screen
-></informalexample>
-
-</para
-><para
->Однако, файл, созданный таким образом будет содержать элементы, которые невозможно обработать, и для большинства пользователей лучше начать с файла <xref linkend="example-preseed"/>. </para
+></informalexample
+> Однако, созданный таким образом файл будет содержать некоторые элементы, которые не должны обрабатываться, и файл в <xref linkend="example-preseed"/> &mdash; лучшее место для начала для большинства пользователей. </para
 ><para
 >Как только у вас появился файл автоматической установки, вы можете отредактировать его по своему усмотрению и поместить его на веб сервер или скопировать его на загрузочный носитель с программой установки. После размещения файла нужно передать его как параметр программе установки во время загрузки. </para
 ><para

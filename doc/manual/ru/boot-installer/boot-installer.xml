@@ -1,20 +1,23 @@
 <!-- Start of file boot-installer/boot-installer.xml -->
-<!-- $Id: boot-installer.xml 13948 2004-04-20 06:28:59Z bdale $ -->
+<!-- $Id: boot-installer.xml 24701 2005-01-03 01:47:56Z fjpop-guest $ -->
 
 <chapter id="boot-installer"
 ><title
 >Загрузка системы</title>
 
- <sect1
-><title
+<!-- Include only archs that are documented to avoid build-errors -->
+<!-- The arch="..." condition can be deleted when al archs are present -->
+ <sect1 arch="alpha;arm;i386;ia64;m68k;mips;s390;powerpc;sparc">
+ <title
 >Запуск программы установки на &arch-title;</title>
- 
+
 <!-- This info is so architecture dependent, that I have turned the   -->
 <!-- structure inside out for this chapter. Each arch has a document. -->
+<!-- Note: archs hppa and mipsel are currently missing -->
 
 
 <!-- Start of file boot-installer/alpha.xml -->
-<!-- $Id: alpha.xml 23664 2004-11-07 21:59:02Z vorlon $ -->
+<!-- $Id: alpha.xml 24665 2004-12-31 18:57:14Z fjpop-guest $ -->
 
  <sect2 arch="alpha" id="alpha-firmware">
  <title
@@ -272,28 +275,24 @@
 ><para condition="FIXME"
 ><command
 >aboot</command
-> это маленький, платформо-независимый системный загрузчик, который запускается только из SRM. Смотрите также (тоже, к сожалению, устаревшее) <ulink url="&url-srm-howto;"
+> &mdash; это маленький, платформо-независимый системный загрузчик, который запускается только из SRM. Смотрите также (тоже, к сожалению, устаревшее) <ulink url="&url-srm-howto;"
 >SRM HOWTO</ulink
 > для более полной информации про <command
 >aboot</command
 >. </para
 ><para condition="FIXME"
->Таким образом, всего возможно три сценария, в зависимости от прошивки системной консоли и доступности или недоступности <command
+>Таким образом, возможно три сценария, в зависимости от микропрограммы системной консолии есть или нет <command
 >MILO</command
 >: <informalexample
-><screen
->SRM -> aboot
-SRM -> MILO
-ARC -> MILO
-
+><screen>
+SRM -&gt; aboot
+SRM -&gt; MILO
+ARC -&gt; MILO
 </screen
-></informalexample>
-
-</para
-><para condition="FIXME"
+></informalexample
 >Поскольку <command
 >MILO</command
-> не доступен для всех типов систем Alpha, которые сейчас выпускаются (по состоянию на февраль 2000), и поскольку теперь не требуется покупать лицензию OpenVMS или Tru64 Unix чтобы получить прошивку SRM на вашей старой Alpha, рекомендуется использовать SRM и <command
+> не доступен для всех типов систем Alpha, которые сейчас выпускаются (по состоянию на февраль 2000), и поскольку теперь не требуется покупать лицензию OpenVMS или Tru64 Unix, чтобы получить прошивку SRM для вашей старой Alpha, рекомендуется использовать SRM и <command
 >aboot</command
 > в новых установках GNU/Linux, если вам не нужна двойная загрузка с Windows NT. </para
 ><para
@@ -317,64 +316,39 @@ ARC -> MILO
 ><title
 >Загрузка по TFTP</title>
 <para
->В SRM, названия  интерфейсов Ethernet начинается на <userinput
+>В SRM, названия интерфейсов Ethernet начинаются на <userinput
 >ewa</userinput
 >, а их наличие можно посмотреть в результатах команды <userinput
 >show dev</userinput
 >, например таком (немного отредактирован): <informalexample
 ><screen>
-
-
->
->
-> show dev
+&gt;&gt;&gt; show dev
 ewa0.0.0.9.0               EWA0              08-00-2B-86-98-65
 ewb0.0.0.11.0              EWB0              08-00-2B-86-98-54
 ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
-
 </screen
 ></informalexample
 > Сначала вам нужно задать протокол загрузки: <informalexample
 ><screen>
-
-
->
->
-> set ewa0_protocol bootp
-
+&gt;&gt;&gt; set ewa0_protocol bootp
 </screen
 ></informalexample
 > Затем, установить правильный тип среды передачи: <informalexample
 ><screen>
-
-
->
->
-> set ewa0_mode <replaceable
->тип</replaceable>
-
+&gt;&gt;&gt; set ewa0_mode <replaceable
+>mode</replaceable>
 </screen
 ></informalexample
-> Список возможных типов можно получить командой<userinput
->
->
->
->set ewa0_mode</userinput
+> Список возможных типов можно получить с помощью команды <userinput
+>&gt;&gt;&gt; set ewa0_mode</userinput
 >. </para
 ><para
->Теперь, чтобы загрузиться через первый Ethernet интерфейс, введите: <informalexample
-><screen
->
->
->
-> boot ewa0 -flags ""
-
+>Затем, чтобы загрузиться через первый Ethernet интерфейс, введите: <informalexample
+><screen>
+&gt;&gt;&gt; boot ewa0 -flags ""
 </screen
-></informalexample>
-
-</para
-><para
->Далее произойдёт загрузка с параметрами ядра по умолчанию как они настроены в netboot образе. </para
+></informalexample
+> Будет загружено ядро с параметрами по умолчанию, которые указаны в образе netboot. </para
 ><para
 >Если вы хотите использовать консоль на последовательном порту, то вам <emphasis
 >нужно</emphasis
@@ -391,7 +365,6 @@ ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
 > и использовании консоли на первом последовательном порту, введите: <informalexample
 ><screen
 >&gt;&gt;&gt; boot ewa0 -flags &quot;root=/dev/ram ramdisk_size=16384 console=ttyS0&quot;
-
 </screen
 ></informalexample>
 
@@ -404,14 +377,12 @@ ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
 <para
 >Наберите <informalexample
 ><screen>
-
 &gt;&gt;&gt; boot xxxx -flags 0
-
 </screen
 ></informalexample
 > где <replaceable
 >xxxx</replaceable
-> &mdash; это привод CD-ROM в SRM виде. </para>
+> &mdash; это название привода CD-ROM в SRM. </para>
   </sect2>
 
   <sect2 arch="alpha" condition="FIXME">
@@ -438,44 +409,38 @@ ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
 <para
 >В приглашении SRM консоли (<prompt
 >&gt;&gt;&gt;</prompt
->), введите следующю команду: <informalexample
+>), введите следующую команду: <informalexample
 ><screen>
-
 &gt;&gt;&gt; boot dva0 -flags 0
-        
 </screen
 ></informalexample
 >, возможно изменив <filename
 >dva0</filename
 > на нужное имя устройства. Обычно, <filename
 >dva0</filename
-> &mdash; это дискета; введите <informalexample
+> &mdash; это дисковод гибких дисков; введите <informalexample
 ><screen>
-
 &gt;&gt;&gt; show dev
-        
 </screen
 ></informalexample
 > чтобы увидеть список устройств (например, если вы хотите загрузиться с CD). Заметим, что если вы загружаетесь с помощью MILO, аргумент <command
 >-flags</command
-> игнорируется, тоэтому вы можете вводить просто <command
+> игнорируется, поэтому вы можете вводить просто <command
 >boot dva0</command
 >. Если всё прошло хорошо, в конечном счёте увидите загрузку ядра Linux. </para
 ><para
->Если вы хотите задать параметры ядру при загрузке с помощью <command
+>Если вы хотите передать загрузочные параметры ядру с помощью <command
 >aboot</command
 >, используйте следующую команду: <informalexample
 ><screen>
-
 &gt;&gt;&gt; boot dva0 -file linux.bin.gz -flags "root=/dev/fd0 load_ramdisk=1 arguments"
-        
 </screen
 ></informalexample
 > (набирается в одной строке), заместив, если нужно, имя устройства загрузки в SRM на <filename
 >dva0</filename
 >, в Linux на <filename
 >fd0</filename
->, и желаемые параметры вместо<filename
+>, и желаемые параметры вместо <filename
 >arguments</filename
 >. </para
 ><para
@@ -503,26 +468,22 @@ ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
 <para
 >MILO, находящийся на установочном носителе, настроен на автоматическое продолжение загрузки Linux. Чтобы вмешаться в процесс, вам нужно нажать клавишу пробел во время отсчёта MILO. </para
 ><para
->Если вы хотите что-то изменить в загрузке (например, передать дополнительные параметры), вы можете воспользоваться командой: <informalexample
-><screen
->MILO&gt; boot fd0:linux.bin.gz root=/dev/fd0 load_ramdisk=1 <!-- arguments -->
-        
+>Если вы хотите задать все параметры явно (например, чтобы добавить свои параметры), то можете использовать такую команду: <informalexample
+><screen>
+MILO
+> boot fd0:linux.bin.gz root=/dev/fd0 load_ramdisk=1 <!-- arguments -->
 </screen
-></informalexample>
-
-</para
-><para
->Если вы загружаетесь не с дискеты, замените <filename
+></informalexample
+> Если вы загружаетесь не с дискеты, замените <filename
 >fd0</filename
 > в приведённом выше примере на соответствующее имя устройства в Linux. Команда <command
 >help</command
 > выводит краткую справку о командах MILO. </para>
  </sect2>
-
 <!--   End of file boot-installer/alpha.xml -->
 
 <!-- Start of file boot-installer/arm.xml -->
-<!-- $Id: arm.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
+<!-- $Id: arm.xml 24663 2004-12-31 18:38:22Z fjpop-guest $ -->
 
   <sect2 arch="arm" id="boot-tftp"
 ><title
@@ -584,46 +545,36 @@ ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
 </para
 ></note
 ><para
->После перезагрузки и прерывания процесса загрузки во время паузы перед загрузкой, сначала настройте сеть, указав либо статический адрес: <informalexample
+>После перезагрузки и прерывании процесса загрузки во время обратного отсчёта, вы должны сначала настроить сеть или статически: <informalexample
 ><screen>
-
-    команда NeTTrom -> setenv eth0_ip 192.168.0.10/24
-
+    NeTTrom command-&gt; setenv eth0_ip 192.168.0.10/24
 </screen
 ></informalexample
-> где 24 &mdash; это число битов в сетевой маске, либо динамический адрес: <informalexample
-><screen
->команда NeTTrom-> boot diskless
-
+> где 24 &mdash; это число битов в маске сети, или динамически: <informalexample
+><screen>
+    NeTTrom command-&gt; boot diskless
 </screen
-></informalexample>
-
-</para
-><para
->Возможно вам потребуется настроить переменную <userinput
+></informalexample
+> Также, вам може потребоваться настроить переменную <userinput
 >route1</userinput
->, если сервер TFTP расположен не в локальной подсети. Оставшаяся часть настроек достаточно стандартная (шаг save-all необязателен): <informalexample
-><screen
->команда NeTTrom-> setenv kerntftpserver 192.168.0.1
-    команда NeTTrom-> setenv kerntftpfile tftpboot.img
-    команда NeTTrom-> save-all
-    команда NeTTrom-> setenv netconfig_eth0 flash
-    команда NeTTrom-> setenv kernconfig tftp
-
+>, если TFTP сервер находится не в локальной подсети. Оставшаяся настройка стандартна (шаг save-all необязателен): <informalexample
+><screen>
+    NeTTrom command-&gt; setenv kerntftpserver 192.168.0.1
+    NeTTrom command-&gt; setenv kerntftpfile tftpboot.img
+    NeTTrom command-&gt; save-all
+    NeTTrom command-&gt; setenv netconfig_eth0 flash
+    NeTTrom command-&gt; setenv kernconfig tftp
 </screen
-></informalexample>
-
-</para
-><para
->Только две последние из них предотвращают загрузку с диска, так что безопаснее сделать <command
+></informalexample
+> Только две последнии строки мешают обычной загрузке с диска, поэтому безопасней выполнять <command
 >save-all</command
-> прямо перед ними, это сохранит сетевые настройки на случай, если вам понадобится снова загрузиться по сети. Используйте команду <command
+> прямо перед ними (это сохранит настройки сети в случае, если потребуется загрузка из сети ещё раз). Используйте команду <command
 >printenv</command
-> для просмотра переменных среды. И наконец, если переменная <envar
+>, чтобы проверить настройки среды. Наконец, если переменная NeTTrom <envar
 >cmdappend</envar
-> в NeTTrom содержит команду <option
+> содержит параметр <option
 >noinitrd</option
-> (которая необходима для загрузки ядер 2.4), уберите её, для того чтобы загружаемое ядро смогло загрузиться со своим встроенным ram-диском. </para>
+> (который нужен для загрузки ядер версии 2.4), то вы должны удалить его, так как загружаемое ядро может загрузиться с прикреплённого ramdisk. </para>
   </sect3>
 
   <sect3 arch="arm"
@@ -665,9 +616,10 @@ ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
 > </para>
   </sect2>
 <!--   End of file boot-installer/arm.xml -->
+<!-- &boot-installer-hppa.xml; -->
 
 <!-- Start of file boot-installer/i386.xml -->
-<!-- $Id: i386.xml 24601 2004-12-28 23:39:38Z cjwatson $ -->
+<!-- $Id: i386.xml 24663 2004-12-31 18:38:22Z fjpop-guest $ -->
 
   <sect2 arch="i386"
 ><title
@@ -811,9 +763,7 @@ option).  Enter the subdirectory for the flavor you chose, e.g.,
 <informalexample
 ><screen
 >
-
 cd c:\install
-
 </screen
 ></informalexample
 >.  
@@ -891,8 +841,7 @@ END FIXME -->
        label=newinstall
        initrd=/boot/newinstall/initrd.gz
        root=/dev/ram0
-       append="devfs=mount,dall ramdisk_size=17000"
-
+       append="devfs=mount,dall ramdisk_size=12000"
 </screen
 ></informalexample
 > Подробней смотрите на страницах руководства <citerefentry
@@ -913,26 +862,30 @@ END FIXME -->
 ><para
 >Процедура для <command
 >GRUB</command
-> очень похожа. Найдите файл<filename
+> очень похожа. Найдите файл <filename
 >menu.lst</filename
->в каталоге <filename
+> в каталоге <filename
 >/boot/grub/</filename
 > (иногда в <filename
 >/boot/boot/grub/</filename
 >), добавьте следующие строчки: <informalexample
 ><screen>
-
 title  New Install
-kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram0 devfs=mount,dall ramdisk_size=17000
+kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram0 ramdisk_size=12000
 initrd (hd0,0)/boot/newinstall/initrd.gz
-
 </screen
 ></informalexample
-> и перезагрузите машину. Заметим, что значение<userinput
+> и перезагрузите машину. Если загрузка завершилась неудачно, то попробуйте добавить <userinput
+>devfs=mount,dall</userinput
+>в строку <quote
+>kernel</quote
+>. </para
+><para
+>Заметим, что значение<userinput
 >ramdisksize</userinput
 > может потребоваться привести в соответствие с размером образа initrd. Далее, не должно быть разницы между <command
 >GRUB</command
-> и <command
+> или <command
 >LILO</command
 >. </para>
   </sect2>
@@ -941,9 +894,9 @@ initrd (hd0,0)/boot/newinstall/initrd.gz
   <title
 >Загрузка с карты памяти USB</title>
 <para
->Let's assume you have prepared everything from <xref linkend="boot-dev-select"/> and <xref linkend="boot-usb-files"/>. Now just plug your USB stick into some free USB connector and reboot the computer. The system should boot up, and you should be presented with the <prompt
+>Предположим, что вы уже приготовили всё как написано в <xref linkend="boot-dev-select"/> и <xref linkend="boot-usb-files"/>. Теперь вставьте карту памяти USB в свободное USB гнездо и перезагрузите компьютер. Система должна загрузиться и вы должны увидеть приглашение <prompt
 >boot:</prompt
-> prompt. Here you can enter optional boot arguments, or just hit &enterkey;. </para
+>. Сейчас вы можете ввести необязательные параметры загрузки, или просто нажать &enterkey;. </para
 ><para
 >Если компьютер не поддерживает загрузку с устройств USB с памятью, вы можете воспользоваться одной дискетой для начальной загрузки, а затем перейти к использованию USB. Загрузитесь как описано в <xref linkend="floppy-boot"/>; ядро на загрузочной дискете должно обнаружить устройство USB автоматически. Когда вас попросят дискету с корневой файловой системой, просто нажмите &enterkey;. Вы должны увидеть запуск &d-i;. </para>
   </sect2>
@@ -1101,11 +1054,11 @@ initrd (hd0,0)/boot/newinstall/initrd.gz
 >hw-detect/start_pcmcia=false</userinput
 >. После установки вы сможете настроить PCMCIA, исключив ресурсный диапазон, с которым возникают проблемы. </para
 ><para
->Alternatively, you can boot the installer in expert mode. You will then be asked to enter the resource range options your hardware needs. For example, if you have one of the Dell laptops mentioned above, you should enter <userinput
+>Другой вариант: вы можете загрузить программу установки в экспертном режиме. Вас попросят указать диапазон ресурсов, который используется аппаратным обеспечением. Например, если у вас один из ноутбуков Dell, упомянутых выше, то вы должны ввести <userinput
 >exclude port 0x800-0x8ff</userinput
-> here. There is also a list of some common resource range options in the <ulink url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-1.html#ss1.12"
+>. Также, есть список распространённых диапазонов ресурсов в <ulink url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-1.html#ss1.12"
 >System resource settings section of the PCMCIA HOWTO</ulink
->. Note that you have to omit the commas, if any, when you enter this value in the installer. </para>
+>. Заметим, что при вводе значений в программу установки вы не должны указывать запятых, если они есть. </para>
   </sect2>
 
   <sect2 arch="i386">
@@ -1119,7 +1072,7 @@ initrd (hd0,0)/boot/newinstall/initrd.gz
 <!--   End of file boot-installer/i386.xml -->
 
 <!-- Start of file boot-installer/ia64.xml -->
-<!-- $Id: ia64.xml 24321 2004-12-08 17:05:45Z fjpop-guest $ -->
+<!-- $Id: ia64.xml 24663 2004-12-31 18:38:22Z fjpop-guest $ -->
 
   <sect2 arch="ia64"
 ><title
@@ -1427,15 +1380,13 @@ initrd (hd0,0)/boot/newinstall/initrd.gz
   <title
 >Настройка сервера</title>
 <para
->Соответствующая пункт TFTP для загрузки по сети системы ia64 выглядит так: <informalexample
+>Соответствующая запись TFTP для загрузки по сети системы ia64 выглядит так: <informalexample
 ><screen>
-
 host mcmuffin {
         hardware ethernet 00:30:6e:1e:0e:83;
         fixed-address 10.0.0.21;
         filename "debian-installer/ia64/elilo.efi";
 }
-
 </screen
 ></informalexample
 > Заметим, что цель &mdash; получить запущенный <command
@@ -1878,7 +1829,7 @@ host mcmuffin {
 <!--   End of file boot-installer/m68k.xml -->
 
 <!-- Start of file boot-installer/mips.xml -->
-<!-- $Id: mips.xml 22939 2004-10-09 23:27:48Z ths-guest $ -->
+<!-- $Id: mips.xml 24663 2004-12-31 18:38:22Z fjpop-guest $ -->
 
 
   <sect2 arch="mips" id="boot-tftp"
@@ -1891,18 +1842,14 @@ host mcmuffin {
 <para
 >После входа в командный монитор используйте <informalexample
 ><screen>
-
 bootp():
-
 </screen
 ></informalexample
-> на SGI Indys для загрузки linux и начала установки Debian. Чтобы сделать это, вам надо очистить переменную окружения <envar
+> на SGI Indys для загрузки linux и начала установки Debian. Чтобы сделать это, вам может понадобиться сбросить переменную среды <envar
 >netaddr</envar
 >. Для этого наберите <informalexample
 ><screen>
-
 unsetenv netaddr
-
 </screen
 ></informalexample
 > в командном мониторе. </para>
@@ -1912,21 +1859,17 @@ unsetenv netaddr
    <title
 >Загрузка по TFTP Broadcom BCM91250A</title>
 <para
->Для Broadcom BCM91250A evaluation по TFTP загружается системный загрузчик SiByl, который затем загружвает и запускается программу установки Debian. В большинстве случаев, сначала вам нужно получить IP адрес по DHCP, но также возможна настроить статический адрес. Чтобы использовать DHCP, вы можете ввести следующую командув строке приглашения CFE: <informalexample
+>Для Broadcom BCM91250A evaluation по TFTP загружается системный загрузчик SiByl, который затем загружает и запускает программу установки Debian. В большинстве случаев, сначала вам нужно получить IP адрес по DHCP, но также возможно настроить адрес статически. Чтобы использовать DHCP, вы можете ввести следующую команду в строке приглашения CFE: <informalexample
 ><screen>
-
 ifconfig eth0 -auto
-
 </screen
 ></informalexample
 > После получения IP адреса, вы можете загрузить SiByl с помощью следующей команды: <informalexample
 ><screen>
-
 boot 192.168.1.1:/boot/sibyl
-
 </screen
 ></informalexample
-> Вместо приведённого в этом примере IP адреса вам нужно указать или имя или IP адреса TFTP сервера. После выполнения этой команды, программа установки будет загружена автоматически. </para>
+> Вместо приведённого в этом примере IP адреса вам нужно указать или имя или IP адрес TFTP сервера. После выполнения этой команды, программа установки будет загружена автоматически. </para>
 </sect3>
   </sect2>
 
@@ -1945,21 +1888,18 @@ boot 192.168.1.1:/boot/sibyl
 >После команды <command
 >bootp():</command
 > вы можете задать путь и имя загружаемого файла, если вы не получаете это имя явно с bootp/dhcp сервера. Пример: <informalexample
-><screen
->bootp():/boot/tftpboot.img
-
+><screen>
+bootp():/boot/tftpboot.img
 </screen
-></informalexample>
-</para
-><para
->Остальные параметры ядра можно передать через <command
+></informalexample
+> Дополнительные параметры ядра могут быть указаны через <command
 >append</command
 >: <informalexample
 ><screen
 >bootp(): append="root=/dev/sda1"
-
 </screen
 ></informalexample>
+
 </para>
   </sect3>
 
@@ -1976,6 +1916,7 @@ boot 192.168.1.1:/boot/sibyl
 
   </sect2>
 <!--   End of file boot-installer/mips.xml -->
+<!-- &boot-installer-mipsel.xml; -->
 
 <!-- Start of file boot-installer/s390.xml -->
 <!-- $Id: s390.xml 18574 2004-07-26 18:08:39Z waldi $ -->
@@ -2001,7 +1942,7 @@ boot 192.168.1.1:/boot/sibyl
 <!--   End of file boot-installer/s390.xml -->
 
 <!-- Start of file boot-installer/powerpc.xml -->
-<!-- $Id: powerpc.xml 24602 2004-12-28 23:42:27Z cjwatson $ -->
+<!-- $Id: powerpc.xml 24663 2004-12-31 18:38:22Z fjpop-guest $ -->
 
   <sect2 arch="powerpc" id="boot-cd"
 ><title
@@ -2042,11 +1983,10 @@ boot 192.168.1.1:/boot/sibyl
 >yaboot</command
 > на компакт-диске в подсказке OF, такой как <informalexample
 ><screen
->0 
-> boot cd:,\install\yaboot
-
+>0 &gt; boot cd:,\install\yaboot
 </screen
 ></informalexample>
+
 </para>
   </sect2>
 
@@ -2108,7 +2048,7 @@ boot 192.168.1.1:/boot/sibyl
 >yaboot</filename
 > и <filename
 >yaboot.conf</filename
-> в корень раздела HFS как описано в <xref linkend="files-newworld"/>. Перезагрузите компьютер, и быстро(во время звукового сигнала) одновременно зажмите клавиши <keycap
+> в корень раздела HFS как описано в <xref linkend="files-newworld"/>. Перезагрузите компьютер и быстро(во время звукового сигнала) одновременно зажмите клавиши <keycap
 >Option</keycap
 >, <keycap
 >Command (cloverleaf/Apple)</keycap
@@ -2116,27 +2056,22 @@ boot 192.168.1.1:/boot/sibyl
 >o</keycap
 > и <keycap
 >f</keycap
->. Через несколько секунд вы увидите приглашение Open Firmware. Наберите<informalexample
+>. Через несколько секунд вы увидите приглашение Open Firmware. Наберите <informalexample
 ><screen>
-
-0 
-> boot hd:<replaceable
+0 &gt; boot hd:<replaceable
 >x</replaceable
 >,yaboot
-
 </screen
 ></informalexample
 > заменив <replaceable
 >x</replaceable
-> номером раздела HFS, на котором лежать файлы ядра и yaboot и нажмите &enterkey;. На некоторых машинах, вам нужно использовать <userinput
+> номером раздела HFS, на котором лежат файлы ядра и yaboot и нажмите &enterkey;. На некоторых машинах, вам нужно использовать <userinput
 >ide0:</userinput
 >, а не <userinput
 >hd:</userinput
 >. Ещё через несколько секунд вы увидите приглашение yaboot <informalexample
 ><screen>
-
 boot:
-
 </screen
 ></informalexample
 > В приглашении yaboot <prompt
@@ -2157,10 +2092,10 @@ boot:
   <title
 >Загрузка с карты памяти USB</title>
 <para
->Currently, NewWorld PowerMac systems are known to support USB booting. </para>
+>В настоящий момент системы New World PowerMac можно загружать с USB устройств. </para>
 
 <para
->Make sure you have prepared everything from <xref linkend="boot-usb-files"/>. To boot a Macintosh system from a USB stick, you will need to use the Open Firmware prompt, since Open Firmware does not search USB storage devices by default. To get to the prompt, hold down <keycombo
+>Проверьте, что вы сделали всё как написано в <xref linkend="boot-usb-files"/>. Для загрузки системы Macintosh с карт памяти USB нужно использовать микропрограмму Open Firmware, так как по умолчанию Open Firmware не ищет загрузочные устройства среди USB носителей. Чтобы получить приглашение к вводу комманд во время загрузки держите одновременно нажатыми клавиши <keycombo
 ><keycap
 >Command</keycap
 > <keycap
@@ -2170,48 +2105,49 @@ boot:
 > <keycap
 >f</keycap
 ></keycombo
-> all together while booting (see <xref linkend="invoking-openfirmware"/>). </para
+> (смотрите <xref linkend="invoking-openfirmware"/>). </para
 ><para
->You will need to work out where the USB storage device appears in the device tree, since at the moment <command
+>Далее, вам необходимо выяснить, в каком месте дерева устройств появилась карта памяти USB, так как в настоящее время <command
 >ofpath</command
-> cannot work that out automatically. Type <userinput
+> не может выполнить этого автоматически. Введите <userinput
 >dev / ls</userinput
-> and <userinput
+> и <userinput
 >devalias</userinput
-> at the Open Firmware prompt to get a list of all known devices and device aliases. On the author's system with various types of USB stick, paths such as <filename
+> в приглашении Open Firmware, чтобы получить список всех найденных устройств и их псевдонимов. У автора этого документа на системе различные типы карт памяти USB были доступны по следующим путям: <filename
 >usb0/disk</filename
 >, <filename
 >usb0/hub/disk</filename
 >, <filename
 >/pci@f2000000/usb@1b,1/disk@1</filename
->, and <filename
+> и <filename
 >/pci@f2000000/usb@1b,1/hub@1/disk@1</filename
-> work. </para
+>. </para
 ><para
->Having worked out the device path, use a command like this to boot the installer: <informalexample
-><screen
->
-
-boot <replaceable>usb0/disk</replaceable>:<replaceable>2</replaceable>,\\:tbxi
-
+>После нахождения пути к устройству, запустите команду загрузки программы установки: <informalexample
+><screen>
+boot <replaceable
+>usb0/disk</replaceable
+>:<replaceable
+>2</replaceable
+>,\\:tbxi
 </screen
 ></informalexample
-> The <replaceable
+> Цифра <replaceable
 >2</replaceable
-> matches the Apple_HFS or Apple_Bootstrap partition onto which you copied the boot image earlier, and the <userinput
+> соответствует разделу Apple_HFS или Apple_Bootstrap, на который вы ранее скопировали загрузочный образ, а <userinput
 >,\\:tbxi</userinput
-> part instructs Open Firmware to boot from the file with an HFS file type of "tbxi" (i.e. <command
+> говорит Open Firmware загружать из файла с типом HFS "tbxi" (то есть <command
 >yaboot</command
->) in the directory previously blessed with <command
+>) из каталога ранее установленного с помощью <command
 >hattrib -b</command
 >. </para
 ><para
->The system should now boot up, and you should be presented with the <prompt
+>Система должна загрузиться и вы должны увидеть приглашение <prompt
 >boot:</prompt
-> prompt. Here you can enter optional boot arguments, or just hit &enterkey;. </para
+>. Здесь вы можете ввести необязательные параметры загрузки, или просто нажать &enterkey;. </para
 ><warning
 ><para
->This boot method is new, and may be difficult to get to work on some NewWorld systems. If you have problems, please file an installation report, as explained in <xref linkend="submit-bug"/>. </para
+>Это новый метод загрузки и с них могут возникнуть некоторые трудности на некоторых системах NewWorld. Если у вас есть проблемы, пожалуйста, отправьте отчёт об установке, как описано в <xref linkend="submit-bug"/>. </para
 ></warning>
   </sect2>
 
@@ -2283,7 +2219,7 @@ boot <replaceable>usb0/disk</replaceable>:<replaceable>2</replaceable>,\\:tbxi
 <!--   End of file boot-installer/powerpc.xml -->
 
 <!-- Start of file boot-installer/sparc.xml -->
-<!-- $Id: sparc.xml 23797 2004-11-11 04:46:04Z joshk $ -->
+<!-- $Id: sparc.xml 24663 2004-12-31 18:38:22Z fjpop-guest $ -->
 
   <sect2 arch="sparc" id="boot-tftp"
 ><title
@@ -2346,16 +2282,13 @@ boot <replaceable>usb0/disk</replaceable>:<replaceable>2</replaceable>,\\:tbxi
 >Загрузка с дискет</title>
 <para
 >Для загрузки с дискеты на Sparc, используйте <informalexample
-><screen
->Stop-A -> OpenBoot: "boot floppy"
-
+><screen>
+Stop-A -&gt; OpenBoot: "boot floppy"
 </screen
-></informalexample>
-</para
-><para
->Не забудьте, что новая архитектура Sun4u (ultra) не поддерживает загрузку с дискет. Обычно, показывается сообщение об ошибке: <computeroutput
+></informalexample
+> Не забудьте, что новая архитектура Sun4u (ultra) не поддерживает загрузку с дискет. Обычно, выводится сообщение об ошибке: <computeroutput
 >Bad magic number in disk label - Can't open disk label package</computeroutput
->. Кроме того, некоторые моделиSun4c (такие как IPX) не поддерживают сжатые образы дисков, поэтому они также не поддерживаются. </para
+>. Кроме того, некоторые модели Sun4c (такие как IPX) не поддерживают сжатые образы дисков, поэтому загрузка с дискет также не поддерживается. </para
 ><para
 >Некоторые Sparc (например Ultra 10) имеют ошибку OBP, которая не даёт им загрузиться (они вообще отказываются загружаться). Соответствующее обновление OBP можно загрузить как продукт с ID 106121 с <ulink url="http://sunsolve.sun.com"
 ></ulink
@@ -2363,10 +2296,8 @@ boot <replaceable>usb0/disk</replaceable>:<replaceable>2</replaceable>,\\:tbxi
 ><para
 >Если вы загружаетесь с дискеты и видите такое сообщение<informalexample
 ><screen>
-
 Fatal error: Cannot read partition
 Illegal or malformed device name
-
 </screen
 ></informalexample
 >, то возможно, загрузка с дискет просто не поддерживается на этой машине. </para>
@@ -2386,7 +2317,7 @@ Illegal or malformed device name
 
 
 <!-- Start of file boot-installer/parameters.xml -->
-<!-- $Id: parameters.xml 23207 2004-10-18 20:10:57Z fjpop-guest $ -->
+<!-- $Id: parameters.xml 24663 2004-12-31 18:38:22Z fjpop-guest $ -->
 
  <sect1 id="boot-parms"
 ><title
@@ -2402,13 +2333,11 @@ Illegal or malformed device name
 ><para
 >В самом начале при загрузке ядра должно появиться сообщение <informalexample
 ><screen>
-
 Memory:<replaceable
 >avail</replaceable
 >k/<replaceable
 >total</replaceable
 >k available 
-
 </screen
 ></informalexample
 >. Значение <replaceable
@@ -2708,7 +2637,7 @@ Memory:<replaceable
 <!--   End of file boot-installer/parameters.xml -->
 
 <!-- Start of file boot-installer/trouble.xml -->
-<!-- $Id: trouble.xml 20466 2004-08-31 22:39:09Z joeyh $ -->
+<!-- $Id: trouble.xml 24663 2004-12-31 18:38:22Z fjpop-guest $ -->
 
  <sect1 id="boot-troubleshooting">
  <title
@@ -2801,15 +2730,13 @@ Memory:<replaceable
 <para
 >Если у вас возникли проблемы, отправьте отчёт об установке. Также, мы поощряем отправку отчётов об установке даже в случае успеха, чтобы получить побольше информации о разных аппаратных конфигурациях. Пожалуйста, используйте этот шаблон для заполнения отчёта об установке и направляйте отчёт как сообщение об ошибке псевдо-пакету "installation-reports" на адрес <email
 >submit@bugs.debian.org</email
->. <informalexample
-><screen
->Package: installation-reports
+>. Package: installation-reports
 
 Debian-installer-version: &lt;Укажите дату и где вы взяли образ&gt;
-uname -a: &lt;Результат выполнения команды uname -a в оболочке&gt;
+uname -a: &lt;Результат выполнения команды uname -a в командной строке&gt;
 Date: &lt;Дата и время установки&gt;
 Method: &lt;Каким способом вы производили установку?  Откуда вы загружались?  Если по сети,
-      по откуда?  Через прокси?&gt;
+      то откуда?  Через прокси?&gt;
 
 Machine: &lt;Описание машины (например, IBM Thinkpad R32)&gt;
 Processor:
@@ -2839,20 +2766,12 @@ Comments/Problems:
 
 &lt;Описание установки, комментарии, предложения
       возникшие в процессе.&gt;
-
 </screen
-></informalexample>
-
-</para
-><para
->В отчёте об ошибках опишите, в чём состоит проблема, включая последние увиденные сообщения ядра в случае повисания ядра. Опишите шаги, которые вы делали, чтобы привести систему в проблемное состояние. </para>
-
+></informalexample
+> В отчёте об ошибках опишите, в чём состоит проблема, включая последние увиденные сообщения ядра в случае повисания ядра. Опишите шаги, которые вы делали, чтобы привести систему в проблемное состояние. </para>
   </sect2>
-
  </sect1>
 <!--   End of file boot-installer/trouble.xml -->
 
 </chapter>
-
-
 <!--   End of file boot-installer/boot-installer.xml -->
