@@ -27,8 +27,12 @@ foprocessor=./fop/fop.sh
 ## Build preparation
 dynamic="dynamic.ent"
 
-## You should comment the following line before Official Build
-unofficial_build="FIXME;unofficial-build"
+# Official/unofficial builds.
+if [ ! "$official_build" ]; then
+	unofficial_build="FIXME;unofficial-build"
+else
+	unofficial_build=""
+fi
 
 ## Now we have to setup correct profiling information for each architecture
 case $arch in

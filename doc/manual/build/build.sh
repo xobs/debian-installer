@@ -15,6 +15,11 @@ fi
 
 [ -e "$destination" ] || mkdir -p "$destination"
 
+if [ "$official_build" ]; then
+	# Propigate this to children.
+	export official_build
+fi
+
 for lang in $languages; do
     echo "Language: $lang";
     for arch in $architectures; do
