@@ -1,0 +1,135 @@
+Debian Installation Manual - notes for translation
+--------------------------------------------------
+
+This file explains how to translate the manual using .po files.
+This is not yet officially supported yet, but the necessary tools are already
+available and some languages are already using this method.
+
+!!! For general information on translating the manual, please see the
+!!! translations.txt file.
+
+Note: if you happen to modify this file, please don't forget to
+      update the trailing changelog
+
+Background information
+======================
+There are currently two toolsets that support translating XML files using .po
+files: KDE's poxml and po4a. We have chosen poxml as that gives better context
+(it does not split paragraphs) for translation.
+The downside of the poxml tools is that they require the .xml files to be
+"proper" XML. Because some of the individual files in the English
+original are not proper XML, we've had to "integrate" the files per chapter.
+
+This means that instead translating about 160 small files, you will be
+translating about 15 large files.
+
+Current limitations
+===================
+The use of .po files for translating the manual is not yet officially
+supported. This means that some things that will eventually be automated,
+will now have to be done manually.
+You are also not yet allowed to check in your .po files into d-i's SVN
+repository. Instead you have to check in the integrated translated .xml files
+that can be created from the .po files.
+
+If there is more than one person working on the translation, this means you
+will have to find some other way to give everybody access to the .po files.
+
+Requirements
+============
+You will need to install the following packages on your system:
+- gettext
+- poxml
+- gawk
+
+Available tools
+===============
+You will not be using poxml itself, but rather some scripts that call the
+poxml tools.
+
+- ./scripts/merge_xml  : merges the small .xml files into larger files
+- ./scripts/update_pot : creates (new) .pot templates based on integrated
+                         English .xml files
+- ./scripts/update_po  : updates your .po files when there are changes in the
+                         English text (the .pot templates)
+- ./scripts/create_xml : creates translated .xml files from the merged English
+                         .xml files and the translated .po files
+- ./scripts/create_po  : used to convert an existing .xml translation to
+                         using .po files
+
+All scripts should be run from the ./manual directory and take the language as
+parameter.
+
+Starting a new translation
+==========================
+Run the following commands:
+  1. ./scripts/merge_xml en
+  2. ./scripts/create_pot
+
+The first command will create a directory ./integrated and in that the
+integrated XML files for English.
+The second command creates a directory ./po and in that the .pot template
+files.
+
+You can now start translating! Just copy a .pot file to a .<lang>.po file and
+use your favorite .po file editor (like kbabel) to translate the .po file.
+You don't need to copy all .pot files to begin with, just copy each one as you
+start translating them.
+
+Example for a Dutch translation:
+  - cp ./po/bookinfo.pot ./po/bookinfo.nl.po
+  - <po editor> ./po/bookinfo.nl.po
+
+Committing your translation
+===========================
+Run the following command:
+  1. ./scripts/create_xml <your language>
+
+This command will create translated XML files for your language in the
+./integrated directory (in a subdirectory for your language).
+You next have to copy these files to their regular location and commit them
+to the repository:
+  2. cp -r ./integrated/<your language> .
+  3. svn ci <your language> -m "<some comment describing the changes>"
+
+If this is the first time you commit the translation or a file, you will need
+to run the 'svn add' command on the new files before you do 'svn ci'.
+Tip: use the commands 'svn st ' and 'svn diff' before you commit your changes
+to check what you are committing before you run the 'svn ci' command.
+
+NOTE
+You should *not* run 'svn up' between the moment you last updated the .pot
+templates and your .po files and the moment you create the .xml files for your
+translation!
+
+Updating your translation
+=========================
+When there are changes in the original English files, you will need to update
+your .po files. Changed strings will be marked 'fuzzy' and new strings will be
+untranslated.
+
+Run the following commands:
+  1. svn up
+  2. ./scripts/merge_xml en
+  3. ./scripts/create_pot
+  4. ./scripts/update_po <your language>
+
+After this your .po files in the ./po directory should be updated and you can
+update your translation with your favorite .po file editor. To commit the
+changes, follow again the procedure described in the previous section.
+
+Converting an existing translation from .xml files to .po files
+===============================================================
+It is possible to convert an existing translation of the manual where the
+individual XML files have been translated to using .po files.
+There are two important conditions:
+- the translation must be up-to-date with the English XML files;
+- the translation must have same structure as the English XML files (i.e.
+  the translation must have the same chapters, sections, paragraphs, tables,
+  examples, etc; you can have no 'extra' paragraphs in your translation).
+
+The first condition does not mean that everything needs to be translated!
+
+The conversion is fairly difficult and some checks need to be done after some
+of the steps.
+If you would like to switch, please contact Frans Pop <aragorn@tiscali.nl>.
