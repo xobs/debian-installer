@@ -81,14 +81,14 @@ APT_GET=apt-get --assume-yes \
 UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE)) $(EXTRAS)
 
 DPKGDIR=$(TREE)/var/lib/dpkg
-TMPDIR=./tmp
+TEMP=./tmp
 TMP_MNT=./mnt/$(TREE)
 
 # Build tree location.
-TREE=$(TMPDIR)/tree
+TREE=$(TEMP)/tree
 
 # This is the kernel image that we will boot from.
-KERNEL=$(TMPDIR)/vmlinuz
+KERNEL=$(TEMP)/vmlinuz
 
 build: demo_clean reduced_tree stats
 
@@ -111,7 +111,7 @@ demo_clean:
 clean:
 	dh_clean
 	rm -f $(FLOPPY_IMAGE) $(INITRD)
-	rm -rf $(TREE) $(APTDIR) $(UDEBDIR) $(TMPDIR)
+	rm -rf $(TREE) $(APTDIR) $(UDEBDIR) $(TEMP)
 
 # Get all required udebs and put in UDEBDIR.
 get_udebs:
@@ -159,8 +159,8 @@ get_udebs:
 
 # Build the installer tree.
 reduced_tree: tree lib_reduce status_reduce
-tree: $(TREE)
-$(TREE): get_udebs
+$(TREE): tree
+tree: get_udebs
 	dh_testroot
 
 	# This build cannot be restarted, because dpkg gets confused.
@@ -202,13 +202,13 @@ tmp_mount:
 # 4. unmount the file, compress it
 #
 # TODO: get rid of this damned fuzz factor!
-initrd: $(INITRD)
-$(INITRD): FUZZ=127
-$(INITRD): TMP_FILE=$(TMPDIR)/image.tmp
-$(INITRD): tmp_mount reduced_tree
+$(INITRD): initrd
+initrd: FUZZ=127
+initrd: TMP_FILE=$(TEMP)/image.tmp
+initrd: tmp_mount reduced_tree
 	dh_testroot
 	rm -f $(TMP_FILE)
-	install -d $(TMPDIR)
+	install -d $(TEMP)
 	dd if=/dev/zero of=$(TMP_FILE) bs=1k count=`expr $$(du -s $(TREE) | cut -f 1) + $(FUZZ)`
 	# FIXME: 2000 bytes/inode (choose that better?)
 	mke2fs -F -m 0 -i 2000 -O sparse_super $(TMP_FILE)
@@ -221,6 +221,7 @@ $(INITRD): tmp_mount reduced_tree
 # 1. make a dos filesystem image
 # 2. copy over kernel, initrd
 # 3. install syslinux
+$(FLOPPY_IMAGE): floppy_image
 floppy_image: initrd tmp_mount
 	dh_testroot
 	
@@ -229,14 +230,18 @@ floppy_image: initrd tmp_mount
 	mount -t msdos -o loop $(FLOPPY_IMAGE) $(TMP_MNT)
 	
 	cp $(KERNEL) $(TMP_MNT)/LINUX
-	cp $(INITRD) $(TMP_MNT)/
+	cp $(INITRD) $(TMP_MNT)/initrd.gz
 	
 	cp syslinux.cfg $(TMP_MNT)/
 	todos $(TMP_MNT)/syslinux.cfg
 # This number is used later for stats. There's gotta be a better way.
-	df -h $(TMP_MNT) | tail -1 | sed 's/[^ ]* //' | awk 'END { print $$3 }' > $(TMPDIR)/.floppy_free_stat
+	df -h $(TMP_MNT) | tail -1 | sed 's/[^ ]* //' | awk 'END { print $$3 }' > $(TEMP)/.floppy_free_stat
 	umount $(TMP_MNT)
 	syslinux $(FLOPPY_IMAGE)
+
+# Write image to floppy
+boot_floppy: $(FLOPPY_IMAGE)
+	dd if=$(FLOPPY_IMAGE) of=/dev/fd0
 
 # Library reduction.
 lib_reduce:
@@ -270,8 +275,8 @@ stats: tree
 	@echo Total system size: $(shell du -h -s $(TREE) | cut -f 1)
 	@echo Compresses to: $(COMPRESSED_SZ)k
 	@echo Single Floppy kernel must be less than: ~$(shell expr $(FLOPPY_SIZE) - $(COMPRESSED_SZ) )k
-	@if [ -e $(TMPDIR)/.floppy_free_stat ]; then \
-		echo Single net floppy currently has `cat $(TMPDIR)/.floppy_free_stat` free!; \
+	@if [ -e $(TEMP)/.floppy_free_stat ]; then \
+		echo Single net floppy currently has `cat $(TEMP)/.floppy_free_stat` free!; \
 	fi
 # Add your interesting stats here.
 
