@@ -282,7 +282,7 @@ endif
 	# we want to use the ones in usr/lib instead since they came 
 	# from udebs. Only libdebconf has this problem so far.
 	set -e; \
-	for lib in `find $(TREE)/usr/lib/lib* -type f -printf "%f\n" | cut -d . -f 1 | sort | uniq`; do \
+	for lib in `find $(TREE)/usr/lib/ -name "lib*" -type f -printf "%f\n" | cut -d . -f 1 | sort | uniq`; do \
 		rm -f $(TREE)/lib/$$lib.*; \
 	done
 
@@ -291,8 +291,8 @@ endif
 	# and alters their names to end in -reduced to indicate that
 	# they have been modified.
 	set -e; \
-	for package in $$(dpkg -S `find $(TREE)/lib -type f -not -name '*.o' -not -name '*.dep' | \
-			sed s:$(TREE)::` | cut -d : -f 1 | \
+	for package in $$(dpkg -S `find $(TREE)/lib -type f -not -name '*.o' -not -name '*.dep' -not -name 'S[0-9][0-9]*' | \
+			sed s:$(TREE)/::` | cut -d : -f 1 | \
 			sort | uniq); do \
 		dpkg -s $$package | sed "s/$$package/$$package-reduced/g" \
 			>> $(DPKGDIR)/status; \
