@@ -7,21 +7,12 @@ arch-image: $(IMAGE)
 $(IMAGE): $(INITRD) tmp_mount
 	dd if=/dev/zero of=$@.new bs=1k count=$(FLOPPY_SIZE)
 	mkfs.msdos -i deb00001 -n 'Debian Installer' -C $@.new $(FLOPPY_SIZE)
-	mount -t vfat -o loop $@.new $(TMP_MNT)
 
-	if $(foreach NAME,$(KERNELNAME), \
-             gzip -9c $(TEMP)/$(NAME) > $(TMP_MNT)/linux) \
-	   && cp $(INITRD) $(TMP_MNT)/initrd.gz \
-	   && cp /usr/lib/elilo/elilo.efi $(TMP_MNT)/ \
-	   && cp boot/ia64/elilo.conf $(TMP_MNT)/ \
-	   && df -k $(TMP_MNT); \
-	then \
-		umount $(TMP_MNT) ; \
-		true ; \
-	else \
-		umount $(TMP_MNT) ; \
-		false ; \
-	fi
+	$(foreach NAME,$(KERNELNAME), \
+             gzip -9c $(TEMP)/$(NAME) | mcopy -i$@.new - ::\linux)
+	mcopy -i$@.new $(INITRD) ::\initrd.gz
+	mcopy -i$@.new /usr/lib/elilo/elilo.efi ::\elilo.efi
+	mcopy -i$@.new boot/ia64/elilo.conf ::\elilo.conf
 
 	# Finalize the image.
 	mv $@.new $@
