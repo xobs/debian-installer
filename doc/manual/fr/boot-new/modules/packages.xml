@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 24840 -->
+<!-- original version: 25776 -->
 
 
  <sect2 id="install-packages">
@@ -28,28 +28,51 @@ exécuté. Chacun de ces programmes peut être utilisé, à tout moment une fois
 l'installation terminée, pour installer	d'autres paquets. Une fois que 
 l'installation est finie, si vous voulez un paquet particulier, exécutez 
 simplement 
-<userinput>apt-get install <replaceable>paquet</replaceable></userinput>, où
+<userinput>aptitude install <replaceable>paquet</replaceable></userinput>, où
 <replaceable>paquet</replaceable> est le nom du paquet voulu.
 </para>
 </footnote>.
 </para>
+
+<para>
+Une fois les tâches sélectionnées, choisissez <guibutton>Ok</guibutton>.
+<command>Aptitude</command> installera les paquets demandés.
+
+<note><para>
+Même si vous n'avez sélectionné aucune tâche, tous les paquets dont la priorité
+est de type standard, important ou nécessaire seront installés. Cela revient à
+exécuter <userinput>taskel -ris</userinput> sur la ligne de commande&nbsp;;
+environ 37 Mo d'archives seront téléchargés. Le nombre de paquet à installer et
+la taille en Mo de ces paquets seront affichées.
+</para></note>
+</para>
 <para>
 Si vous choisissez d'installer des paquets sur une base individuelle,
 sélectionnez <quote>Sélection manuelle des paquets</quote> dans
-    <command>tasksel</command>.
+    <command>tasksel</command>. Si vous choisissez une ou plusieurs tâches,
+aptitude sera appelé avec l'option <command>--visual-preview</command>.
+Vous pourrez ainsi revoir
+<footnote><para>
+Vous pouvez aussi modifier les sélections par défaut. Si vous voulez choisir
+un paquet supplémentaire, utilisez <menuchoice> <guimenu>Voir</guimenu>
+<guimenuitem>Voir les nouveaux paquets</guimenuitem> </menuchoice>.
+</para></footnote>
+
+les paquets à installer. Si vous ne sélectionnez pas de tâche, l'écran
+habituel d'<command>aptitude</command> sera affiché. Une fois vos choix faits,
+pressez la touche <quote><userinput>g</userinput></quote> pour commencer le
+téléchargement et l'installation des paquets.
+
+<note><para>
+Si vous choisissez <quote>Sélection manuelle des paquets</quote> 
+<emphasis>sans</emphasis> choisir de tâche, aucun paquet ne sera installé.
+Vous pouvez ainsi installer un système minimal. Cependant il vous incombera 
+d'installer les paquets nécessaires à votre système qui ne font pas partie du
+système de base.
+</para></note>
+
 </para>
-<para>
-Une fois que vous avez sélectionné vos tâches, choisissez
-<guibutton>OK</guibutton>. À ce stade, <command>aptitude</command>
-installera tous les paquets que vous avez sélectionnés. Notez que même
-si vous n'avez pas choisi de tâche, tous les paquets de type standard, 
-important ou nécessaire, qui ne sont pas encore présents sur votre système 
-seront automatiquement installés. Cette fonctionnalité revient à exécuter 
-<userinput>tasksel -s</userinput> sur la ligne de commande et implique 
-actuellement le téléchargement d'environ 37&nbsp;Mo d'archive. Il vous sera 
-montré le nombre de paquets à installer et la quantité de données en 
-kilo-octets qu'il est nécessaire de télécharger.
-</para>
+
 <para>
 Sur les &num-of-distrib-pkgs; paquets disponibles dans les archives Debian, 
 seule une petite minorité est comprise dans les tâches offertes par
@@ -89,7 +112,7 @@ Les actions les plus basiques sont&nbsp;:
 <tbody>
 <row>
   <entry><keycap>Haut</keycap>, <keycap>Bas</keycap></entry>
-  <entry>Déplacer la sélection en haut ou en bas.</entry>
+  <entry>Déplacer la sélection vers le haut ou vers le bas.</entry>
 </row><row>
   <entry>&enterkey;</entry>
   <entry>Ouvrir/fermer/activer un élément.</entry>
@@ -107,7 +130,7 @@ Les actions les plus basiques sont&nbsp;:
   <entry>Vraiment télécharger/installer/supprimer les paquets.</entry>
 </row><row>
   <entry><keycap>q</keycap></entry>
-  <entry>Quitter la vue courante.</entry>
+  <entry>Quitter la vue actuelle.</entry>
 </row><row>
   <entry><keycap>F10</keycap></entry>
   <entry>Activer le menu.</entry>
