@@ -22,7 +22,7 @@ APT_GET=apt-get --assume-yes \
 
 UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE) )
 
-build: tree reduce
+build: tree reduce stats
 
 demo:
 	chroot $(TREE) bin/sh
@@ -74,3 +74,12 @@ tree: get_udebs
 reduce: tree
 	mkdir -p $(TREE)/lib
 	mklibs.sh -d $(TREE)/lib `find $(TREE) -type f -perm +0111`
+
+stats:
+	@echo
+	@echo System stats
+	@echo ------------
+	@echo Installed udebs: $(UDEBS)
+	@echo Total system size: $(shell du -h -s $(TREE) | cut -f 1)
+# Add your interesting stats here.
+	
