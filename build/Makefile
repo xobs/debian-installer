@@ -296,7 +296,7 @@ $(STAMPS)tree-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
 			usedblocks=`echo $$newblocks - $$oldblocks | bc`; \
 			usedcount=`echo $$newcount - $$oldcount | bc`; \
 			version=`dpkg-deb --info $$udeb | grep Version: | awk '{print $$2}'` ; \
-			echo " $$usedsize B - $$usedblocks blocks - $$usedcount files used by pkg $$pkg (version $$version)" >>$(TEMP)/diskusage.txt;\
+			echo " $$usedsize B - $$usedblocks blocks - $$usedcount files from $$pkg (version $$version)" >>$(TEMP)/diskusage.txt;\
 			oldsize=$$newsize ; \
 			oldblocks=$$newblocks ; \
 			oldcount=$$newcount ; \
@@ -766,7 +766,7 @@ demo_%:
 	$(submake) _demo
 
 .PHONY: _demo
-_demo:
+_demo: $(TARGET)
 	@$(submake) tree_mount; \
 	[ -f questions.dat ] && cp -f questions.dat $(TREE)/var/lib/cdebconf/ ; \
 	sudo chroot $(TREE) bin/sh -c "export DEBCONF_DEBUG=5 ; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; exec /usr/share/debconf/frontend /usr/bin/main-menu" ; \
@@ -780,7 +780,7 @@ shell_%:
 	$(submake) _shell
 
 .PHONY: _shell
-_shell:
+_shell: $(TARGET)
 	@$(submake) tree_mount; \
 	sudo chroot $(TREE) bin/sh; \
 	$(submake) tree_umount
@@ -794,7 +794,7 @@ uml_%:
 	$(submake) _uml
 
 .PHONY: _uml
-_uml:
+_uml: $(TARGET)
 	-linux initrd=$(INITRD) root=/dev/rd/0 ramdisk_size=8192 con=fd:0,fd:1 devfs=mount
 
 .PHONY: qemu_%
@@ -806,7 +806,7 @@ qemu_%:
 	$(submake) _qemu $(shell $(submake) $(subst qemu_,validate_,$@))
 
 .PHONY: _qemu
-_qemu:
+_qemu: $(TARGET)
 	@case "$(MEDIA_TYPE)" in \
 	floppy) \
 		$(QEMU) -fda $(BOOT); \
