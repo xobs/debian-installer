@@ -1,67 +1,88 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 untranslated -->
+<!-- original version: 23847  -->
 
  <sect1 id="automatic-install">
- <title>Automatic Installation</title>
+ <title>Instalazio automatikoa</title>
 <para>
 
-For installing on multiple computers it's possible to do fully
-automatic installations. Debian packages intended for this include
-<classname>fai</classname> (which uses an install server),
+Ordenagailu anitzetan instalatzeko posible da guztiz automatizatutako
+instalazio bat egitea. Hau posible egiten duten paketeak:
+<classname>fai</classname> (Instazaio zerbitzari bat erabiltzen duena),
 <classname>replicator</classname>,
 <classname>systemimager</classname>,
-<classname>autoinstall</classname>, and
-<classname>debian-installer</classname>.
+<classname>autoinstall</classname>, eta
+Debian Instalatzailea bera dira.
 
 </para>
 
 <sect2>
-<title>debian-installer</title>
-<!-- the information from Sesse
-> IIRC you are the person that did various automated installs with d-i.
->
-> Where do I read more about it?
-
-Well, there isn't really much to read; I think I've summarized my experiences
-a few times, but of course I can do it again (a bit short, though):
-
-- cdebconf preseeding works very well; the latest cdebconf should also work
-  correctly wrt. automated installs (debconf/showold = false by default), it
-  was broken for a while. I just add the cdebconf database to the
-  installation media, and use a custom udeb or two (which can be found at
-  http://people.debian.org/~sesse/, but should probably be cleaned up some).
-  The simplest way to get this database is to install manually once, then
-  prune the cdebconf database manually and just insert it in the right place.
-- Partitioning is done with autopartkit, also works well at least for my
-  purposes. I think partman can do something like this as well.
-- Likewise, debconf preseeding works well; one of my udebs drop some
-  base-config fragments in the right place which skip the root password
-  generation etc. and pop the right info into the debconf database, as well
-  as install a metapackage depending on whatever I want. (In the future, I'll
-  probably use pkgsync for this; see my ITP on `pkgsync'. :-) )
-
-Let me know if you're wondering about something more specific. Note that I
-haven't been able to touch d-i in a month or two, so I don't know how
-broken/working automated installs are ATM. :-)
-
-/* Steinar */
--->
-
-<para>this section needs love &amp; care</para>
+<title>Debian Instalatzailea erabiliaz instalazio automatikoa</title>
 
 <para>
-Do a Manual install
-</para>
+Debian instalatzaileak aurrekonfigurazio fitxategien bidez instalazio
+automatiko onartzen du. Aurrekonfigurazio fitxategiak sare bidez edo 
+medio aldagarrien bidez kargatu eta instalazioan egingo diren galderak
+erantzuteko erabili daiteke.
 
-<para>
-Save the answers from the debconf database,
- <filename>/var/log/debian-installer/cdebconf</filename>,
- into a file.
-</para>
+</para><para>
 
-<para>
-Put the file in <filename>preseeding udeb</filename>
+Aurrekonfigurazio fitxategia debconf-set-selections komandoak
+erabiltzen duen formatuan dago. Ondo dokumentaturiko eta lanean 
+dagoen editatu dezakezun adibide bat  hemen dago: 
+<xref linkend="example-preseed"/>.
+
+</para><para>
+
+Beste aldetik, aukeratu behar diiren aukera guztien erantzunak 
+eskuratzeko era bat eskuzko instalazio bat egin eta orduan
+<classname>debconf-utils</classname> paketeko
+<filename>debconf-get-selections</filename> koamdoa erabili
+bai debconf eta bai /var/log/debian-installer/cdebconf fitxategiko 
+cdebconf databaseak fitxategi batetara irauktzeko:
+
+<informalexample><screen>
+debconf-get-selections --installer > fitxategia
+debconf-get-selections >> fitxategia
+</screen></informalexample>
+
+</para><para>
+
+Hala ere honela sortutako fitxategi batek erantzungabeko galderak eduki
+ditzake eta, <xref linkend="example-preseed"/> fitxategia 
+erabilgarriagoa da erabiltzaile gehienentzat.
+
+</para><para>
+
+Bein aurrekonfigurazio fitxategiarekin, editatu daiteke behar ezkero, 
+ipini web zerbitzari batetan, edo kopiatu instalatzailearen mediora. 
+Behin fitxategia erabakitako lekuan ipinita Instalatzaileari
+abiarazte garaian komando bat eman behar zaio erabil dezan.
+
+</para><para>
+
+Instalatzaileak sare bidez deskargaturiko aurrekonfigurazio bat 
+erabiltzeko gehitu preseed/url=http://url/helbidea/preseed.cfg 
+kernela abiarazteko aukerei. Noski aurrekonfigurazioak ezingo du 
+lan egin instalatzaileak sarea martxan ipini arte, horregatik
+da oso erabilgarria instalatzaileak ezer galdetu gabe DHCP bidez
+instalatzeko aukera izatea. Agian instalazio lehentasuna kritikora 
+ezartzea interesgarri zain daiteke sareari buruzko datu guztiak 
+konfiguratu daitezen. Begiratu <xref linkend="installer-args"/>.
+
+</para><para>
+
+Aurrekonfigurazio fitxategia CD batetan ipintzeko, ISO irudi original
+nerregin egin behar da berau gehitzeko. mkisofs manual orrialdea 
+begiratu argibide gehiagorako. Betela fitxategia diskete batetan ipini
+eta 'preseed/file=/floppy/preseed.cfg' erabili.
+
+</para><para arch="i386">
+
+USB memoria baten bidez abiarazi nahi zain ezkeri, orduan kopiatu 
+aurrekonfigurazio fitxategia memoriaren fitxategi sisteman eta 
+syslinux.cfg fitxategia editatu preseed/file=/hd-media/preseed.cfg gehitzeko
+kernele abiarazte aukeren barruan.
+
 </para>
 </sect2>
-
  </sect1>

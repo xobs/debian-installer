@@ -1,384 +1,278 @@
-<!-- retain these comments for translator revision tracking -->
-<!-- original version: 17055 untranslated -->
-
-
- <chapter id="d-i-intro"><title>Using the Debian Installer</title>
-
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 17055-->
+ <chapter id="d-i-intro"><title>Debianen Instalatzailea erabiltzen</title>
  <sect1><title>How the Installer Works</title>
 <para>
-
-The Debian Installer consists of a number of special-purpose
-components to perform each installation task. Each component performs
-its task, asking the user questions as necessary to do its job.
-The questions themselves are given priorities, and the priority
-of questions to be asked is set when the installer is started.
-
+Debianen instalatzailea instalaketa ahalbidetzeko zeregin zehatz
+batzuetarako sortu diren osagaiez eratua dago. Osagai bakoitzak
+egokitu zaion lana egiten du, bere lana egiteko behar bestetan
+erabiltzaileari galderak eginez. Galdera bakoitzari lehentasun
+bat ematen zaio, eta lehentasun hau instalatzailea abiarazten den
+unean egokitzen da.
 </para><para>
-
-When a default installation is performed, only essential (high priority)
-questions will be asked. This results in a highly automated installation
-process with little user interaction. Components are automatically run
-in sequence; which components are run depends mainly on the installation
-method you use and on your hardware. The installer will use default values
-for questions that are not asked.
-
+Ohiko instalaketa bat egitean, oinarrizko (lehentasun handieneko)
+galderak soilik egingo dira. Honen ondorioz instalatzaileak bere
+kasa egiten du lan ia guztia, ia erabiltzailearen partehartzerik gabe.
+Osagaiak jarraian abiarazten dira; zein osagai abiarazten diren instalaketa
+metodoaren eta hardwarearen arabera aldatzen da. Galdetzen ez diren
+gaietan ohiko balioak erabiliko ditu instalatzaileak.
 </para><para>
-
-If there is a problem, the user will see an error screen, and the
-installer menu may be shown in order to select some alternative
-action. If there are no problems, the user will never see the
-installer menu, but will simply answer questions for each component
-in turn. Serious error notifications are set to priority 'critical'
-so the user will always be notified.
-
+Arazoren bat egoten bada, erabiltzaileak akatsaren leihoa ikusiko
+du, eta instalatzailearen menua ere agertuko da beste ekintza bat
+aukeratu ahal izateko. Ez bada arazorik egoten, erabiltzaileak ez
+du sekula ikusiko instalatzailearen menua, baina pausu bakoitzean
+osagai bakoitzaren galderei erantzun beharko die. Akats larrien
+ohartarazpenei lehentasun 'oso handia'(critical) egokituko zaie eta
+erabiltzailea beti ohartaraziko da akats horretaz.
 </para><para>
-
-Some of the defaults that the installer uses can be influenced by passing
-boot arguments when &d-i; is started. If, for example, you wish to
-force static network configuration (DHCP is used by default if available),
-you could add the boot parameter <userinput>netcfg/use_dhcp=false</userinput>.
-See <xref linkend="installer-args"/> for available options.
-
+Instalatzaileak darabiltzan ohiko balio batzuk &d-i; lanean hastean
+aldatu daitezke abiarazketa-argumentuak bidaliz. Esaterako, sare
+estatikoaren konfigurazioa behartu nahi baduzu (ahal denean DHCP
+erabiltzen da ohiko aukera bezala), abiarazketan parametro hau
+gehi zenezake: <userinput>netcfg/use_dhcp=false</userinput>.
+Ikusi <xref linkend="installer-args"/> orrian aukera erabilgarri guztiak.
 </para><para>
-
-Power users may be more comfortable with a menu-driven interface,
-where each step is controlled by the user rather than the installer
-performing each step automatically in sequence. To use the installer
-in a manual, menu-driven way, add the boot argument
+Erabiltzaile aurreratuenak menuan oinarrituriko ingurunean egon
+litezke erosoen, bertan pausu bakoitza erabiltzaileak kontrolatzen
+baitu, instalatzaileak denak bata bestearen ostean abiarazi ordez.
+Instalatzailea menuan oinarrituriko era honetan erabiltzeko,
+gehitu honako argumentu hau:
 <userinput>DEBCONF_PRIORITY=medium</userinput>.
-
 </para><para>
-
-If your hardware requires you to pass options to kernel modules as
-they are installed, you will need to start the installer in
-<quote>expert</quote> mode. This can be done by either using the
-<command>expert</command> command to start the installer or by adding
-the boot argument <userinput>DEBCONF_PRIORITY=low</userinput>.
-Expert mode gives you full control over &d-i;.
-
+Instalaketan muinaren (kernelaren) moduluei aukerak igorri beharra
+baduzu hardwarea erabili edo atzemateko, instalatzailea <quote>expert</quote>
+eran abiarazi beharko duzu. Hau egiteko abiarazketan
+<command>expert</command> agindua erabili dezakezu, edo baita
+<userinput>DEBCONF_PRIORITY=low</userinput> abiarazketa-argumentua
+gehituz ere. Adituentzako era honek &d-i;rengan kontrol
+mugagabea ematen dizu.
 </para><para condition="FIXME">
-
 <emphasis>
-FIXME: Should we add something here about starting d-i with the 2.6 kernel?
+OSA NAZAZU: Ez al genuke hemen &d-i; 2.6 muinarekin abiarazteaz zer-edo-zer idatzi beharko?
 </emphasis>
-
 </para><para>
-
-The normal installer display is character-based (as opposed to the now
-more familiar graphical interface). The mouse is not operational in
-this environment. Here are the keys you can use to navigate within the
-various dialogs.  The <keycap>Tab</keycap> or <keycap>right</keycap>
-arrow keys move `forward', and the <keycombo> <keycap>Shift</keycap>
-<keycap>Tab</keycap> </keycombo> or <keycap>left</keycap> arrow keys
-move `backward' between displayed buttons and selections.
-The <keycap>up</keycap> and <keycap>down</keycap> arrow select
-different items within a scrollable list, and also scroll the list
-itself. In addition, in long lists, you can type a letter to cause the
-list to scroll directly to the section with items starting with the
-letter you typed and use <keycap>Pg-Up</keycap> and
-<keycap>Pg-Down</keycap> to scroll the list in sections.  The
-<keycap>space bar</keycap> selects an item such as a checkbox.  Use
-&enterkey; to activate choices.
-
+Instalatzailearen ingurune arrunta idatzizkoa da (orain arruntagoa den
+irudizko ingurunearen aurkakoa). Sagua ezin da ingurune honetan erabili.
+Hona hemen idatzien artean ibiltzeko erabil ditzakezun teklak:
+<keycap>Tabulatzailea</keycap> edo <keycap>eskuina</keycap> erakusten duen
+gezia 'aurrera' mugitzeko dira, eta <keycombo> <keycap>Shift</keycap>
+<keycap>Hutsunea</keycap> </keycombo> edo <keycap>ezkerra</keycap>
+erakusten duen gezia 'atzera' joateko ikusten diren botoi eta aukeretan
+zehar.
+<keycap>Gora</keycap> eta <keycap>behera</keycap>nzko geziak zerrenda
+higikor batean zehar aritzeko dira, eta baita zerrenda bera higitzeko
+ere (pantailaren amaierara iristean). Gainera, zerrenda luzeetan, hizki
+baten tekla sakatuz zerrendan hizki horrekin hasten den aukerara zuzenean
+joan zaitezke, eta zerrenda zatika iragan dadin, <keycap>Orrian Gora</keycap> eta
+<keycap>Orrian Behera</keycap> sakatzea daukazu. <keycap>Hutsune</keycap> 
+teklak item bat aukeratzen du. Erabili &enterkey; eginiko aukerak gaitzeko.
 </para><para arch="s390">
-
-S/390 does not support virtual consoles. You may open a second and third
-telnet session to view the logs described below.
-
+S/390ak ez ditu kontsola birtualak jasaten. Ondoren zehazten diren errejistroko
+mezuak (logak) ikusteko bigarren edo hirugarren telnet saio bat ireki dezakezu.
 </para><para>
-
-Error messages are redirected to the third console (known as
-<userinput>tty3</userinput>).  You can access this console by
-pressing <keycombo><keycap>Left Alt</keycap><keycap>F3</keycap></keycombo>
-(hold the left <keycap>Alt</keycap> key while pressing the
-<keycap>F3</keycap> function key); get back to
-the main installer process with 
-<keycombo><keycap>Left Alt</keycap><keycap>F1</keycap></keycombo>.
-
+Akats oharrak hirugarren kontsolara berbideratzen dira (<userinput>tty3</userinput>
+izenez ezagutzen da berau). Kontsola honetara sartzeko <keycombo><keycap>Ezkerreko Alt</keycap>
+<keycap>F3</keycap></keycombo> sakatu (<keycap>F3</keycap> sakatzeko unean <keycap>Ezkerreko Alt</keycap>
+sakatuta eduki); instalatzailearen prozesu nagusira itzultzeko sakatu
+<keycombo><keycap>Ezkerreko Alt</keycap><keycap>F1</keycap></keycombo>.
 </para><para>
-
-These messages can also be found in
-<filename>/var/log/messages</filename>.  After installation, this log
-is copied to <filename>/var/log/installer.log</filename> on your new
-system. Other installation messages may be found in
-<filename>/target/var/log/debian-installer/</filename> during the
-installation, and <filename>/var/log/debian-installer/</filename>
-after the computer has been booted into the installed system.
-
+Ohar hauek hemen ere aurkituko dituzu:
+<filename>/var/log/messages</filename>. Instalaketaren ondoren, log hau
+zure sistema berriko <filename>/var/log/installer.log</filename>
+helbidera kopiatzen da. Instalaketako beste oharrak
+<filename>/target/var/log/debian-installer/</filename> bidean
+aurki ditzakezu instalaketan, eta <filename>/var/log/debian-installer/</filename>
+helbidean instalaturiko sistema berria abiarazi ostean.
 </para>
  </sect1>
-
-
-  <sect1 id="modules-list"><title>Components Introduction</title>
+  <sect1 id="modules-list"><title>Osagaiak: Sarrera</title>
 <para>
-
-Here is a list of installer components with a brief description
-of each component's purpose. Details you might need to know about
-using a particular component are in <xref linkend="module-details"/>.
-
+Hemen osagaiez eta hauen helburuen deskripzio labur batez osaturiko
+zerrenda bat duzue. Osagai jakin bat erabiltzeko jakin beharreko
+xehetasunak hemen aurkituko dituzu: <xref linkend="module-details"/>.
 </para>
-
 <variablelist>
 <varlistentry>
-
 <term>main-menu</term><listitem><para>
-
-Shows the list of components to the user during installer operation,
-and starts a selected component when it is selected. Main-menu's
-questions are set to priority MEDIUM, so if your priority is set to
-HIGH or CRITICAL (HIGH is the default), you will not see the menu. On
-the other hand, if there is an error which requires your intervention,
-the question priority may be downgraded temporarily to allow you
-to resolve the problem, and in that case the menu may appear.
-
+Instalaketan zehar erabiltzaileari osagaien zerrenda bat erakusten
+dio, eta aukeratutako osagai bat abiarazten du, aukeratzen denean.
+'Main-menu'-ren galderak lehentasun ertainera (MEDIUM) egokiturik daude,
+honela, zure lehentasuna handia (HIGH) edo oso handia (CRITICAL) bada
+(handia da ohiko balioa), ez duzu menua ikusiko. Bestalde, zure
+eskuhartzea behar duen akats bat gertatzen bada, galderen lehentasuna
+une batez txikituko da akatsa konpontzeko aukera izan dezazun, eta 
+kasu horretan menua agertuko da.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>languagechooser</term><listitem><para>
-
-Shows a list of languages and language variants. The installer will
-display messages in the chosen language, unless the translation for
-that language is not complete. When a translation is not complete,
-English messages are shown.
-
+Hizkuntza eta hizkera ugariren zerrenda bat erakusten du. Instalatzaileak
+aukeraturiko hizkuntzan agertaraziko ditu mezuak, hizkuntza horren
+itzulpena osaturik badago behintzat. Itzulpen bat osaturik ez dagoenean,
+ingelerazko mezuak erakutsiko dira.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>countrychooser</term><listitem><para>
-
-Shows a list of countries. The user may choose the country he lives
-in.
-
+Herrien zerrenda bat erakusten du. Erabiltzaileak bera bizi den
+herria aukeratuko du.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>ddetect</term><listitem><para>
-
-Detects hard disks, either installed or attached to the computer.
-
+Diska gogorrak atzematen ditu, bai konputagailuan instalaturikoak eta baita
+honi loturikoak ere.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>pcmcia</term><listitem><para>
-
-Allows the user to configure PCMCIA cards used in laptops for 
-networking.
-
+Erabiltzaileari PCMCIA txartelak konfiguratzen uzten dio.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>kbd-chooser</term><listitem><para>
-
-Shows a list of keyboards, from which the user chooses the model which
-matches his own.
-
+Teklatuen zerrenda bat erakusten du, bertatik erabiltzaileak bere
+teklatuari hobekien egokitzen zaiona aukeratzen duelarik.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>netcfg</term><listitem><para>
-
-Configures the computer's network connections so it can communicate
-over the internet.
-
+Konputagailuaren sare koneksioak konfiguratzen ditu, internet bidez
+komunikatu ahal izateko.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>iso-scan</term><listitem><para>
-
-Looks for ISO file systems, which may be on a CD-ROM or on the 
-hard drive.
-
+ISO fitxategi-sistemak bilatzen ditu, hauek CD-ROM batean edo
+diska gogorrean egon daitezkeelarik.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>choose-mirror</term><listitem><para>
-
-Presents a list of Debian archive mirrors. The user may choose
-the source of his installation packages. Commonly, a CD-ROM or 
-network mirror are chosen.
-
+Debianen artxiboko ispiluen zerrenda bat aurkezten du. Erabiltzaileak
+bere instalaketa paketeentzako iturburua aukeratu ahalko du. Ohikoena
+CD-ROM edo sareko ispilu bat hautatzea da.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>cdrom-checker</term><listitem><para>
-
-Checks integrity of a CD-ROM. This way the user may assure him/herself
-that the installation CD-ROM was not corrupted.
-
+CD-ROM baten osotasuna aztertzen du. Honela, erabiltzaileak
+ziurtatu ahal izango du instalaketarako CDa ez dagoela hondaturik.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>cdrom-detect</term><listitem><para>
-
-Detects CD-ROM drives, either installed or attached to the computer.
-
+CD-ROM unitateak atzematen ditu, bai instalaturikoak bai konputagailura loturikoak.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>lowmem</term><listitem><para>
-
-Lowmem tries to detect systems with low memory and then does various
-tricks to remove unnecessary parts of &d-i; from the memory (at the
-cost of some features).
-
+Memoria gutxiko sistemak atzematen ditu eta trikimailu zenbaiten
+ondoren beharrezkoak ez diren &d-i;ren zatiak ezabatzen ditu memoriatik
+(ezaugarri batzuk galtzen direlarik honela).
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>anna</term><listitem><para>
-
-Anna's Not Nearly APT. Installs packages which have been retrieved
-from the chosen mirror.
-
+«Anna's Not Nearly APT» (hau da, Anna ia ez da APTa). Aukeratutako
+ispilutik bildutako paketeak instalatzen ditu.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>partman</term><listitem><para>
-
-Allows the user to partition disks attached to the system, create file
-systems on the selected partitions, and attach them to the
-mountpoints. Included are also interesting features like a fully
-automatic mode or LVM support. This is the preferred partitioning tool
-in Debian.
-
+Sistemara loturiko disketan partizioak sortzeko aukera ematen dio
+erabiltzaileari, ondoren hautaturiko partizioetan fitxategi-sistemak sortu
+eta muntaia puntuetara gehituz. Bere kasa aritzeko aukera edo LVM soportea
+bezalako ezaugarri interesgerriak ere baditu bere baitan. Debianen 
+partizio sortzaile gogokoena da honakoa.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>autopartkit</term><listitem><para>
-
-Automatically partitions an entire disk according to preset 
-user preferences.
-
+Diska oso bat partizionatzen du erabiltzaileak aurrezehazturiko
+hobespenen arabera.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>partitioner</term><listitem><para>
-
-Allows the user to partition disks attached to the system. A 
-partitioning program appropriate to your computer's architecture
-is chosen.
-
+Sistemari loturiko diskak partizionatzeko aukera ematen dio
+erabiltzaileari. Partizioak sortzeko zure konputagailuaren
+arkitekturarako programa egoki bat aukeratzen da.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>partconf</term><listitem><para>
-
-Displays a list of partitions, and creates file systems on 
-the selected partitions according to user instructions.
-
+Partizioen zerrenda bat erakusten du, eta hautaturiko
+partizioetan fitxategi-sistemak sortzen ditu erabiltzailearen
+aginduei jarraiki.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>lvmcfg</term><listitem><para>
-
-Helps the user with the configuration of the
-<firstterm>LVM</firstterm> (Logical Volume Manager).
-
+Erabiltzailea laguntzen du <firstterm>LVM</firstterm>a
+(Bolumen Kudeatzaile Lojikoa / Logical Volume Manager) konfiguratzen.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>mdcfg</term><listitem><para>
-
-Allows the user to setup Software <firstterm>RAID</firstterm>
-(Redundant Array of Inexpensive Disks). This Software RAID is usually
-superior to the cheap IDE (pseudo hardware) RAID controllers found on
-newer motherboards.
-
+Software <firstterm>RAID</firstterm>a (Redundant Array of Inexpensive Disks)
+instalatzen laguntzen dio erabiltzaileari. Software RAID hau IDE merkearen (sasi-hardwarea)
+RAID kontrolatzaileak baino hobea izan ohi da.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>base-installer</term><listitem><para>
-
-Installs the most basic set of packages which would allow
-the computer to operate under Linux when rebooted. 
-
+Berrabiaraztean konputagailuak Linuxpean lan egin
+dezan ahalbidetzen duen oinarrizko pakete multzo bat
+instalatzen du. 
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>kernel-chooser</term><listitem><para>
-
-Allows the user to choose an operating system kernel version,
-if there is more than one version available.
-
+Erabiltzaileari sistema eragilearen muinaren (kernel) bertsioa
+aukeratzen uzten dio, bertsio bat baino gehiago badaude.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>os-prober</term><listitem><para>
-
-Detects currently installed operating systems on the computer and
-passes this information to the bootloader-installer, which may offer
-you an ability to add discovered operating systems to the bootloader's
-start menu. This way the user could easily choose at the boot time
-which operating system to start.
-
+Une honetan konputagailuan instalaturiko sistema eragileak
+atzematen ditu eta informazio hau bootloader-installer-i ematen
+dio, honek abiarazketa kudeatzailearen menura sistema eragile hauek
+gehitzeko aukera emango dizularik. Honela erabiltzaileak erraz
+asko hautatuko du abioan zein sistema eragilerekin hasi nahi duen.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>bootloader-installer</term><listitem><para>
-
-Installs a boot loader program on the hard disk, which is necessary
-for the computer to start up using Linux without using a floppy or
-CD-ROM.  Many boot loaders allow the user to choose an alternate
-operating system each time the computer boots.
-
+Abiarazketa kudeatzeko programa bat instalatzen du diska gogorrean,
+CD-ROM edo 3.5eko diskarik erabili gabe Linux erabiltzeko beharrezkoa
+dena. Abiarazketa kudeatzaile askok erabiltzaileari saioa beste sistema
+eragile batekin hasteko aukera ematen diote abiarazketa bakoitzean.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>baseconfig</term><listitem><para>
-
-Provides dialogs for setting up the base system packages according
-to user preferences. This is normally done after rebooting the 
-computer; it is the 'first run' of the new Debian system. 
-
+Oinarri sistemaren paketeak konfiguratzeko galderak egiten
+ditu erabiltzailearen hobespenei jarraiki. Hau konputagailua
+berrabiarazterakoan egin ohi da; Debian sistema berriaren 'lehen
+abioa' da.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>shell</term><listitem><para>
-
-Allows the user to execute a shell from the menu, or in the second
-console.
-
+Erabiltzaileari shell bat abiarazteko aukera ematen dio, menutik
+nahiz bigarren kontsolatik.
 </para></listitem>
 </varlistentry>
 <varlistentry>
-
 <term>bugreporter</term><listitem><para>
-
-Provides a way for the user to record information on a floppy disk
-when trouble is encountered, in order to accurately report installer
-software problems to Debian developers later.
-
+Akats bat aurkitzean 3 t'erdiko diska batean informazioa gordetzeko
+aukera ematen dio erabiltzaileari, instalatzailearen arazoen berri
+zehatza emateko gero Debianen garatzaileei.
 </para></listitem>
 </varlistentry>
-
 </variablelist>
-
  </sect1>
-
 &using-d-i-components.xml;
-
 </chapter>
 
