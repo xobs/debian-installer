@@ -11,9 +11,24 @@ fail () {
 	exit 1
 }
 
+cleanup () {
+	echo "Installer exited. Cleaning up the chroot .."
+	if [ "$PROC_MOUNTED" ]; then
+		umount ./proc || fail "could not unmount $TMPDIR/proc; leaving $TMPDIR"
+	fi
+	if [ "$DEVFS_MOUNTED" = 1 ]; then
+		umount ./dev || fail "could not unmount devfs $TMPDIR/dev; leaving $TMPDIR"
+	fi
+	if [ -d $TMPDIR ]; then
+		rm -rf $TMPDIR || fail "failed to clean up $TMPDIR"
+	fi
+}
+
 if [ "`whoami`" != root ]; then
 	fail "Only root can run this program."
 fi
+
+trap cleanup 0 INT
 
 echo "Setting up the chroot in $TMPDIR .."
 mkdir $TMPDIR || fail "failed to make temp directory $TMPDIR"
@@ -32,10 +47,4 @@ fi
 echo "Entering the installer .."
 chroot . sbin/debian-installer || fail "chroot exited with status code $?"
 
-echo "Installer exited. Cleaning up the chroot .."
-umount ./proc || fail "could not unmount $TMPDIR/proc; leaving $TMPDIR"
-PROC_MOUNTED=0
-if [ "$DEVFS_MOUNTED" = 1 ]; then
-	umount ./dev || fail "could not unmount devfs $TMPDIR/dev; leaving $TMPDIR"
-fi
-rm -rf $TMPDIR || fail "failed to clean up $TMPDIR"
+# cleanup will be called on exit
