@@ -554,6 +554,7 @@ $(TREE)/unifont.bgf: $(TEMP)/all.utf
 # Create a compressed image of the root filesystem by way of genext2fs.
 $(INITRD): $(TEMP_INITRD)
 	install -m 644 -D $< $@
+	$(if MANIFEST-INITRD,echo $(MANIFEST-INITRD) >> $(BASE_DEST)MANIFEST)
 
 $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 	# Only build the font if we have rootskel-locale
@@ -561,7 +562,6 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 		$(submake) $(TREE)/unifont.bgf; \
 	fi
 	install -d $(TEMP)
-	install -d $(SOME_DEST)
 
 	if [ $(INITRD_FS) = ext2 ]; then \
 		$(genext2fs) $(TEMP)/initrd; \
@@ -580,31 +580,36 @@ $(TEMP_BOOT_SCREENS): arch_boot_screens
 # raw kernel images
 $(KERNEL): $(STAMPS)tree-$(targetstring)-stamp
 	install -m 644 -D $(TEMP)/$(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,') $@
+	$(if MANIFEST-KERNEL,echo $(MANIFEST-KERNEL) >> $(BASE_DEST)MANIFEST)
 
 # bootable images
 $(BOOT): $(TEMP_BOOT)
 	install -m 644 -D $(TEMP_BOOT)$(GZIPPED) $@
+	$(if MANIFEST-BOOT,echo $(MANIFEST-BOOT) >> $(BASE_DEST)MANIFEST)
 
 # non-bootable root images
 $(ROOT): $(TEMP_INITRD) arch_root
 	install -m 644 -D $(TEMP_ROOT)$(GZIPPED) $@
+	$(if MANIFEST-ROOT,echo $(MANIFEST-ROOT) >> $(BASE_DEST)MANIFEST)
 
 # miniature ISOs with only a boot image
 $(MINIISO): $(TEMP_INITRD) arch_miniiso
 	install -m 644 -D $(TEMP_MINIISO) $@
+	$(if MANIFEST-MINISO,echo $(MANIFEST-MINIISO) >> $(BASE_DEST)MANIFEST)
 
 # various kinds of information, for use on debian-cd isos.
 $(DEBIAN_CD_INFO): $(TEMP_BOOT_SCREENS)
 	(cd $(TEMP_BOOT_SCREENS); tar cz .) > $@
+	$(if MANIFEST-DEBIAN_CD_INFO,echo $(MANIFEST-DEBIAN_CD_INFO) >> $(BASE_DEST)MANIFEST)
 
 # Other images, e.g. driver floppies. Those are simply handled as flavours
 $(EXTRA): $(TEMP_EXTRA)
 	install -m 644 -D $(TEMP_EXTRA)$(GZIPPED) $@
+	$(if MANIFEST-EXTRA,echo $(MANIFEST-EXTRA) >> $(BASE_DEST)MANIFEST)
 
 $(TEMP_EXTRA): $(STAMPS)extra-$(targetstring)-stamp
 	install -d $(shell dirname $@)
 	install -d $(TREE)
-	install -d $(SOME_DEST)
 	set -e; if [ $(INITRD_FS) = ext2 ]; then \
 		$(genext2fs) $@; \
 	elif [ $(INITRD_FS) = romfs ]; then \
