@@ -2,33 +2,32 @@
 <!-- original version: 22664 untranslated -->
 
  <sect1 condition="bootable-usb" id="boot-usb-files">
- <title>Preparing Files for USB Memory Stick Booting</title>
+ <title>Préparation des fichiers pour un amorçage avec une clé USB</title>
 
 <para>
 
-For preparing the USB stick you will need a system where GNU/Linux is
-already running and where USB is supported. You should ensure that the
-usb-storage kernel module is loaded (<userinput>modprobe
-usb-storage</userinput>) and try to find out which SCSI device the USB
-stick has been mapped to (in this example
-<filename>/dev/sda</filename> is used). To write to your stick, you
-will probably have to turn off its write protection switch.
+Pour préparer une clé USB, vous avez besoin d'un système GNU/Linux fonctionnel
+et qui accepte les périphériques USB. Vérifiez que le module du noyau
+usb-storage est chargé (<userinput>modprobe usb-storage</userinput>) et trouvez
+à quel périphérique SCSI la clé USB est attribuée (dans cet exemple, c'est
+<filename>/dev/sda</filename>). Pour pouvoir écrire sur la clé, il vous faudra
+sans doute enlever la protection contre l'écriture.
+</para>
+<para>
 
-</para><para>
-
-Note, that the USB stick should be at least 128 MB in size (smaller
-setups are possible if you follow <xref linkend="usb-copy-flexible"/>).
+Notez que la taille de la clé doit être au moins de 128&nbsp;Mo. Pour des
+tailles inférieures, voyez <xref linkend="usb-copy-flexible"/>.
 
 </para>
 
   <sect2 id="usb-copy-easy">
-  <title>Copying the files - the easy way</title>
+  <title>Copie des fichiers - la méthode simple</title>
 <para>
 
-There is an all-in-one file <filename>hd-media/boot.img.gz</filename>
-which contains all the installer files (including the kernel) as well
-as <command>SYSLINUX</command> and its configuration file. You only
-have to extract it directly to to your USB stick:
+Le fichier <filename>hd-media/boot.img.gz</filename> contient tous les
+fichiers de l'installateur, le noyau et le programme 
+<command>SYSLINUX</command> avec son fichier de configuration. Il vous suffit
+d'extraire ces fichiers dans votre clé USB&nbsp;:
 
 <informalexample><screen>
 
@@ -36,36 +35,35 @@ gzip -dc boot.img.gz >/dev/<replaceable>sda</replaceable>
 
 </screen></informalexample>
 
-Of course this will destroy anything already on the device, so take
-care that you use the correct device name for your USB stick.
-
-</para><para>
-
-After that, mount the USB memory stick (<userinput>mount /dev/sda
-/mnt</userinput>), which will now have a FAT filesystem on it, and
-copy a Debian netinst or businesscard ISO image to it. Please note
-that the file name must end in <filename>.iso</filename>. Unmount the
-stick (<userinput>umount /mnt</userinput>) and you are done.
-
+Bien sûr toutes les données présentes sur la clé seront détruites. Utilisez
+le bon périphérique pour votre clé&nbsp;!
 </para>
-  </sect2>
-
-  <sect2 id="usb-copy-flexible">
-  <title>Copying the files - the flexible way</title>
 <para>
 
-If you like more flexibility or just want to know what's going on, you
-should use the following method to put the files on your stick. We
-will show how to setup the memory stick to use the first partition,
-instead of entire device.
+Montez ensuite la clé (<userinput>mount /dev/sda/mnt</userinput>), qui aura
+maintenant un système de fichiers FAT, et copiez une image ISO de type
+netinst ou businesscard. Le nom de ce fichier doit se terminer par
+<filename>.iso</filename>. Démontez la clé (<userinput>umount /mnt</userinput>)
+et voilà, c'est fait&nbsp;!
+</para>
+</sect2>
 
-</para><note><para>
+  <sect2 id="usb-copy-flexible">
+  <title>Copie des fichiers - la méthode souple</title>
+<para>
 
-Since most USB sticks come pre-configured with a single FAT16
-partition, you probably won't have to repartition or reformat the
-stick.  If you have to do that anyway, use <command>cfdisk</command>
-or any other partitioning tool for creating a FAT16 partition and then
-type
+Si vous aimez la souplesse ou si vous voulez simplement savoir ce qui se
+passe, vous pouvez utiliser la méthode suivante pour mettre les fichiers
+sur la clé. Nous montrerons comment n'utiliser que la première partition,
+au lieu de tout le périphérique.
+</para>
+
+<note><para>
+
+La plupart des clés USB sont préconfigurés avec une seule partition FAT16.
+Vous n'aurez sans doute pas à partitionner ou à formater la clé. Si vous
+devez le faire, utilisez le programme <command>cfdisk</command> ou un autre
+programme de partitionnement et tapez&nbsp;:
 
 <informalexample><screen>
 
@@ -73,25 +71,27 @@ mkdosfs /dev/<replaceable>sda1</replaceable>
 
 </screen></informalexample>
 
-Take care that you use the correct device name for your USB stick. The
-<command>mkdosfs</command> command is contained in the
-<classname>dosfstools</classname> Debian package.
+Faites attention à utiliser le périphérique correct pour la clé. Le programme
+<command>mkdosfs</command>  se trouve dans le paquet Debian 
+<classname>dosfstools</classname>.
 
-</para></note><para>
+</para></note>
+<para>
 
-In order to start the kernel after booting from the USB stick, we will
-put a boot loader on the stick. Although any boot loader
-(e.g. <command>LILO</command>) should work, it's convenient to use
-<command>SYSLINUX</command>, since it uses a FAT16 partition and can
-be reconfigured by just editing a text file. Any operating system
-which supports the FAT file system can be used to make changes to the
-configuration of the boot loader.
+Pour pouvoir lancer le noyau après l'amorçage sur la clé, nous y mettons
+un programme d'amorçage. Tous les programmes d'amorçage fonctionnent
+(p.&nbsp;ex. <command>LILO</command>), mais <command>SYSLINUX</command> est 
+préférable car il utilise une partition FAT16 et peut être reconfiguré en
+modifiant un simple fichier texte. On peut modifier la configuration du 
+programme d'amorçage avec tous les systèmes d'exploitation qui acceptent
+le système de fichiers FAT.
 
-</para><para>
+</para>
+<para>
 
-To put <command>SYSLINUX</command> on the FAT16 partition on your USB
-stick, install the <classname>syslinux</classname> and
-<classname>mtools</classname> packages on your system, and type
+Pour mettre <command>SYSLINUX</command> sur la partition FAT16 de la clé,
+installez les paquets <classname>syslinux</classname> et
+<classname>mtools</classname> sur votre système et tapez&nbsp;:
 
 <informalexample><screen>
 
@@ -99,46 +99,49 @@ syslinux /dev/<replaceable>sda1</replaceable>
 
 </screen></informalexample>
 
-Again, take care that you use the correct device name. The partition
-must not be mounted when starting <command>SYSLINUX</command>. This
-procedure writes a boot sector to the partition and creates the file
-<filename>ldlinux.sys</filename> which contains the boot loader code.
+Encore une fois, faites bien attention à utiliser le nom correct pour la clé.
+La partition ne doit pas être montée au lancement de 
+<command>SYSLINUX</command>. Cette procédure écrit un secteur d'amorçage sur 
+la partition et crée le fichier <filename>ldlinux.sys</filename> qui contient
+le code du programme d'amorçage.
 
-</para><para>
+</para>
+<para>
 
-Mount the parition (<userinput>mount /dev/sda1 /mnt</userinput>) and
-copy the following files from the Debian archives to the stick:
+Montez la partition (<userinput>mount /dev/sda1 /mnt</userinput>) et
+copiez les fichiers suivants sur la clé&nbsp;:
 
 <itemizedlist>
 <listitem><para>
 
-<filename>vmlinuz</filename> (kernel binary)
+<filename>vmlinuz</filename> (noyau binaire)
 
 </para></listitem>
 <listitem><para>
 
-<filename>initrd.gz</filename> (initial ramdisk image)
+<filename>initrd.gz</filename> (image du disque virtuel initial)
 
 </para></listitem>
 <listitem><para>
 
-<filename>syslinux.cfg</filename> (SYSLINUX configuration file)
+<filename>syslinux.cfg</filename> (fichier de configuration de SYSLINUX)
 
 </para></listitem>
 <listitem><para>
 
-Optional kernel modules
+Modules facultatifs du noyau
 
 </para></listitem>
 </itemizedlist>
 
-If you want to rename the files, please note that
-<command>SYSLINUX</command> can only process DOS (8.3) file names.
+Si vous voulez modifier le nom des fichiers, remarquez que
+<command>SYSLINUX</command> ne peut traiter que des noms de type DOS (8.3).
 
-</para><para>
+</para>
+<para>
 
-The <filename>syslinux.cfg</filename> configuration file should
-contain the following two lines:
+Le fichier de configuration <filename>syslinux.cfg</filename> doit contenir
+les deux lignes suivantes&nbsp;:
 
 <informalexample><screen>
 
@@ -147,35 +150,39 @@ append initrd=initrd.gz ramdisk_size=10000 root=/dev/rd/0 init=/linuxrc devfs=mo
 
 </screen></informalexample>
 
-Please note, that the <userinput>ramdisk_size</userinput> parameter
-may need to be increased, depending on the image you are booting.
+Remarquez que la valeur du paramètre <userinput>ramdisk_size</userinput> 
+doit être augmentée avec la taille de l'image qui est amorcée.
 
-</para><para>
+</para>
+<para>
 
-Now you should put any Debian ISO image (businesscard, netinst or even
-a full one) onto your stick (if it fits). The file name of such an
-image must end in <filename>.iso</filename>.
+Vous pouvez maintenant mettre une image ISO (businesscard, netinst ou même
+l'image complète) sur la clé. Le nom de cette image doit se terminer par
+<filename>.iso</filename>.
 
-</para><para>
+</para>
+<para>
 
-If you want to install over the network, without using an ISO image,
-you will of course skip the previous step. Moreover you will have to
-use the initial ramdisk from the <filename>netboot</filename>
-directory instead of the one from <filename>hd-media</filename>,
-because <filename>hd-media/initrd.gz</filename> does not have network
-support.
+Si vous voulez faire une installation sur le réseau, sans utiliser d'image
+ISO, vous sauterez bien sûr l'étape précédente. De plus vous devrez utiliser
+le disque virtuel initial qui se trouve dans le répertoire
+<filename>netboot</filename> au lieu de celui dans le répertoire
+<filename>hd-media</filename>, car le fichier 
+<filename>hd-media/initrd.gz</filename> n'a aucun support pour le réseau.
 
-</para><para>
+</para>
+<para>
 
-When you are done, unmount the USB memory stick (<userinput>umount
-/mnt</userinput>) and activate its write protection switch.
+Quand tout est fait, démontez la clé USB (<userinput>umount /mnt</userinput>) 
+et activez la protection contre l'écriture.
 
-</para><warning><para>
+</para>
+<warning><para>
 
-If your system refuses to boot from the memory stick, the stick may
-contain an invalid master boot record (MBR). To fix this, use the
-<command>install-mbr</command> command from the package
-<classname>mbr</classname>:
+Si le système refuse de s'amorcer à partir de la clé, il se peut que la clé
+possède un secteur principal d'amorçage défectueux. Corrigez-le avec le
+programme <command>install-mbr</command> qui se trouve dans le paquet
+<classname>mbr</classname>&nbsp;:
 
 <informalexample><screen>
 
