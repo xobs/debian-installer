@@ -446,14 +446,15 @@ endif
 
 	# If the image has pcmcia, reduce the config file to list only
 	# entries that there are modules on the image. This saves ~30k.
-	set -e; \
-	if [ -e $(TREE)/etc/pcmcia/config ]; then \
-		./pcmcia-config-reduce.pl $(TREE)/etc/pcmcia/config \
-			`if [ -d "$(EXTRADRIVERSDIR)" ]; then find $(EXTRADRIVERSDIR)/lib/modules -name \*.o -name \*.ko; fi` \
-			`find $(TREE)/lib/modules/ -name \*.o -or -name \*.ko` > \
-			$(TREE)/etc/pcmcia/config.reduced; \
-		mv -f $(TREE)/etc/pcmcia/config.reduced $(TREE)/etc/pcmcia/config; \
-	fi
+	# Disabled for now, as it doesn't pass enough modules to the script.
+	#set -e; \
+	#if [ -e $(TREE)/etc/pcmcia/config ]; then \
+	#	./pcmcia-config-reduce.pl $(TREE)/etc/pcmcia/config \
+	#		`if [ -d "$(EXTRADRIVERSDIR)" ]; then find $(EXTRADRIVERSDIR)/lib/modules -name \*.o -name \*.ko; fi` \
+	#		`find $(TREE)/lib/modules/ -name \*.o -or -name \*.ko` > \
+	#		$(TREE)/etc/pcmcia/config.reduced; \
+	#	mv -f $(TREE)/etc/pcmcia/config.reduced $(TREE)/etc/pcmcia/config; \
+	#fi
 
 	# Strip all kernel modules, just in case they haven't already been
 	set -e; \
