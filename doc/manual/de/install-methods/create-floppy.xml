@@ -1,100 +1,105 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 18623 untranslated -->
+<!-- original version: 18623 -->
 
  <sect1 condition="supports-floppy-boot" id="create-floppy">
- <title>Creating Floppies from Disk Images</title>
+ <title>Floppys erstellen aus Disk-Images</title>
 <para>
 
-Bootable floppy disks are generally used as a last resort to boot the
-installer on hardware that cannot boot from CD or by other means.
+Bootfähige Floppy-Disks sind generell der letzte Ausweg, den Installer 
+auf Hardware zu starten, auf der er nicht von CD oder auf anderem Wege 
+gebootet werden kann.
 
 </para><para arch="powerpc">
 
-Floppy disk booting reportedly fails on Mac USB floppy drives.
+Einen Mac per USB-Floppy-Laufwerk zu booten, schlägt fehl, wurde uns
+berichtet.
 
 </para><para arch="m68k">
 
-Floppy disk booting is not supported on Amigas or
-68k Macs.
+Booten von Floppy wird auf Amigas oder 68k-Macs nicht unterstützt.
 
 </para><para>
 
-Disk images are files containing the complete contents of a floppy
-disk in <emphasis>raw</emphasis> form.  Disk images, such as
-<filename>boot.img</filename>, cannot simply be copied to floppy
-drives.  A special program is used to write the image files to floppy
-disk in <emphasis>raw</emphasis> mode.  This is required because these
-images are raw representations of the disk; it is required to do a
-<emphasis>sector copy</emphasis> of the data from the file onto the
-floppy.
+Disk-Images sind Dateien, die den kompletten Inhalt einer Floppy-Disk 
+in <emphasis>roher</emphasis> Form enthalten. Disk-Images wie 
+<filename>boot.img</filename> können nicht einfach auf eine Floppy 
+kopiert werden. Es wird ein spezielles Programm benutzt, um die 
+Image-Datei in <emphasis>roher</emphasis> Form auf die Floppy 
+zu schreiben. Dies ist nötig, da die Images rohe Darstellungen 
+der Disk sind; es ist erforderlich, eine 
+<emphasis>Sektor-Kopie (sector copy)</emphasis>
+der Daten aus der Datei auf die Floppy-Disk zu machen. 
 
 </para><para>
 
-There are different techniques for creating floppies from disk images,
-which depend on your platform.  This section describes how to create
-floppies from disk images on different platforms.
+Es gibt unterschiedliche Techniken, Floppys aus Disk-Images zu erzeugen,
+abhängig von Ihrer Systemplattform. Dieses Kapitel beschreibt für verschiedene 
+Plattformen, wie man aus Disk-Images Floppys erstellt.
 
 </para><para>
 
-No matter which method you use to create your floppies, you should
-remember to flip the write-protect tab on the floppies once you have
-written them, to ensure they are not damaged unintentionally.
+Unabhängig davon, welche Methode Sie benutzen: sobald das Image 
+auf die Disk geschrieben wurde, sollten Sie den Schreibschutz der 
+Disk aktivieren, um ein unbeabsichtigtes Überschreiben zu vermeiden.
 
 </para>
 
-  <sect2><title>Writing Disk Images From a Linux or Unix System</title>
+  <sect2><title>Disk-Images mittels eines Linux- oder Unix-Systems schreiben</title>
 <para>
 
-To write the floppy disk image files to the floppy disks, you will
-probably need root access to the system.  Place a good, blank floppy
-in the floppy drive.  Next, use the command
+Um ein Floppy-Disk-Image auf die Floppy zu schreiben, benötigen Sie 
+unter Umständen root-Rechte auf dem System. Legen Sie eine unbeschädigte,
+leere Floppy in das Laufwerk ein. Nutzen Sie dann den Befehl
 
 <informalexample><screen>
 dd if=<replaceable>file</replaceable> of=/dev/fd0 bs=1024 conv=sync ; sync
 </screen></informalexample>
 
-where <replaceable>file</replaceable> is one of the floppy disk image
-files (see <xref linkend="downloading-files"/> for what
-<replaceable>file</replaceable> should be).
-<filename>/dev/fd0</filename> is a commonly used name of the floppy
-disk device, it may be different on your workstation
-<phrase arch="sparc">(on Solaris, it is
+wobei <replaceable>file</replaceable> eine der Floppy-Disk-Imagedateien ist
+(siehe <xref linkend="downloading-files"/> für Details, was Sie für
+<replaceable>file</replaceable> eintippen müssen). 
+<filename>/dev/fd0</filename> ist eine allgemein benutzte Bezeichnung für
+das Floppy-Laufwerk; auf Ihrem Rechner könnte Sie sich jedoch unterscheiden 
+<phrase arch="sparc">(auf Solaris-Maschinen ist es
 <filename>/dev/fd/0</filename>)</phrase>.
-The command may return to the
-prompt before Unix has finished writing the floppy disk, so look for
-the disk-in-use light on the floppy drive and be sure that the light
-is out and the disk has stopped revolving before you remove it from
-the drive. On some systems, you'll have to run a command to eject the
-floppy from the drive
-<phrase arch="sparc">(on Solaris, use <command>eject</command>, see
-the manual page)</phrase>.
+Das Kommando könnte bereits auf den Prompt zurückkehren, bevor der 
+Schreibvorgang abgeschlossen ist, also achten Sie auf die 
+»Disk-in-Benutzung«-Lampe am Laufwerk und entfernen Sie die Disk erst, 
+wenn die Lampe aus ist und nicht mehr auf die Floppy zugegriffen wird. 
+Auf einigen Systemen müssen Sie einen Befehl ausführen, um die Disk 
+auszuwerfen <phrase arch="sparc">(auf Solaris-Maschinen benutzen Sie 
+dazu <command>eject</command>, siehe die entsprechende 
+Handbuchseite)</phrase>.
 
 </para><para>
 
-Some systems attempt to automatically mount a floppy disk when you
-place it in the drive. You might have to disable this feature before
-the workstation will allow you to write a floppy in <emphasis>raw
-mode</emphasis>.  Unfortunately, how to accomplish this will vary
-based on your operating system.
+Einige Systeme versuchen automatisch, die Floppy-Disk 
+einzuhängen, wenn sie eingelegt wird. Sie müssen diese Funktion 
+unter Umständen deaktivieren, bevor der Rechner Ihnen erlaubt, die 
+Floppy im <emphasis>Roh-Modus</emphasis> zu beschreiben. 
+Bedauerlicherweise hängt es von Ihrem Betriebssystem ab, wie Sie 
+dies bewältigen.
 <phrase arch="sparc">
-On Solaris, you can work around
-volume management to get raw access to the floppy.  First, make sure
-that the floppy is auto-mounted (using <command>volcheck</command> or
-the equivalent command in the file manager). Then use a
-<command>dd</command> command of the form given above, just replace
-<filename>/dev/fd0</filename> with
-<filename>/vol/rdsk/<replaceable>floppy_name</replaceable></filename>,
-where <replaceable>floppy_name</replaceable> is the name the floppy
-disk was given when it was formatted (unnamed floppies default to the
-name <filename>unnamed_floppy</filename>).  On other systems, ask your
-system administrator.
+Auf Solaris-Maschinen können Sie das Volume Management 
+umgehen, um Roh-Zugriff zur Floppy zu bekommen. Stellen Sie dazu zunächst
+sicher, dass die Floppy automatisch eingehangen wurde (benutzen Sie dafür
+den Befehl <command>volcheck</command> oder das entsprechende
+Äquivalent im Dateimanager). Führen Sie dann einen 
+<command>dd</command>-Befehl wie oben angegeben aus; ersetzen Sie dabei
+<filename>/dev/fd0</filename> durch 
+<filename>/vol/rdsk/<replaceable>floppy_name</replaceable></filename>, 
+wobei <replaceable>floppy_name</replaceable> der Name der Floppy ist, 
+der beim Formatieren festgelegt wurde (unbenannte Floppy haben den 
+Standardnamen <filename>unnamed_floppy</filename>).  
+Auf anderen Systemen fragen Sie Ihren Systemadministrator.
 </phrase>
 
 </para><para arch="powerpc"> 
 
-If writing a floppy on powerpc Linux, you will need to eject it. The
-<command>eject</command> program handles this nicely; you might need
-to install it.
+Wenn Sie eine Floppy auf einem PowerPC-Linux beschreiben, müssen Sie 
+sie danach aus dem Laufwerk auswerfen. Dies erledigt der Befehl 
+<command>eject</command> vortrefflich; möglicherweise müssen Sie Ihn 
+erst installieren.
 
 </para>
 

@@ -1,74 +1,78 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23213 untranslated -->
+<!-- original version: 23213 -->
 
  <sect1 condition="supports-tftp" id="install-tftp">
- <title>Preparing Files for TFTP Net Booting</title>
+ <title>Dateien vorbereiten für TFTP-Netzwerk-Boot</title>
 <para>
 
-If your machine is connected to a local area network, you may be able
-to boot it over the network from another machine, using TFTP. If you
-intend to boot the installation system from another machine, the
-boot files will need to be placed in specific locations on that machine,
-and the machine configured to support booting of your specific machine.
+Wenn Ihr Rechner mit einem Netzwerk (Local Area Network, LAN) verbunden ist,
+sind Sie vielleicht in der Lage, über das Netzwerk per TFTP von einem
+anderen Rechner aus zu booten. Wenn Sie dies vorhaben, müssen
+die Boot-Dateien in speziellen Verzeichnissen auf diesem entfernten Rechner
+abgelegt werden und der Rechner muss für das Booten Ihrer Maschine
+speziell konfiguriert werden.
 
 </para><para>
 
-You need to setup a TFTP server, and for many machines, a BOOTP server
-<phrase condition="supports-rarp">, or RARP server</phrase>
-<phrase condition="supports-dhcp">, or DHCP server</phrase>.
+Sie müssen einen TFTP-Server einrichten und in manchen Fällen auch
+einen BOOTP-Server 
+<phrase condition="supports-rarp">oder einen RARP-Server</phrase>
+<phrase condition="supports-dhcp">oder einen DHCP-Server</phrase>.
 
 </para><para>
 
-<phrase condition="supports-rarp">The Reverse Address Resolution Protocol (RARP) is
-one way to tell your client what IP address to use for itself. Another
-way is to use the BOOTP protocol. </phrase>
+<phrase condition="supports-rarp">Das Reverse-Address-Resolution-Protocol (RARP)
+ist eine Möglichkeit, dem Client mitzuteilen, welche IP-Adresse er selbst
+verwenden soll. Ein anderer Weg wäre, das BOOTP-Protokoll zu verwenden. </phrase>
 
-<phrase condition="supports-bootp">BOOTP is an IP protocol that
-informs a computer of its IP address and where on the network to obtain
-a boot image. </phrase>
+<phrase condition="supports-bootp">BOOTP ist ein IP-Protokoll, dass einem
+Computer seine IP-Adresse mitteilt und wo er im Netzwerk ein Boot-Image 
+findet. </phrase>
 
-<phrase arch="m68k"> Yet another alternative exists on VMEbus
-systems: the IP address can be manually configured in boot ROM. </phrase>
+<phrase arch="m68k">Noch eine andere Möglichkeit auf VMEbus-Systemen:
+die IP-Adresse kann manuell im Boot-ROM eingestellt werden. </phrase>
 
-<phrase condition="supports-dhcp">The DHCP (Dynamic Host Configuration
-Protocol) is a more flexible, backwards-compatible extension of BOOTP.
-Some systems can only be configured via DHCP. </phrase>
+<phrase condition="supports-dhcp">Das Dynamic-Host-Configuration-Protocol
+(DHCP) ist eine flexiblere, rückwärts-kompatible Erweiterung von BOOTP.
+Einige Systeme können nur per DHCP konfiguriert werden. </phrase>
 
 </para><para arch="powerpc">
 
-For PowerPC, if you have a NewWorld Power Macintosh machine, it is a
-good idea to use DHCP instead of BOOTP.  Some of the latest machines
-are unable to boot using BOOTP.
+Auf PowerPCs, wenn Sie einen NewWorld-PowerMac haben, ist es eine
+gute Idee, DHCP statt BOOTP zu benutzen. Einige der letzten Maschinen
+können nicht per BOOTP starten.
 
 </para><para arch="alpha"> 
 
-Unlike the Open Firmware found on Sparc and PowerPC machines, the SRM
-console will <emphasis>not</emphasis> use RARP to obtain its IP
-address, and therefore you must use BOOTP for net booting your Alpha.
-You can also enter the IP configuration for network interfaces
-directly in the SRM console.
+Im Gegensatz zu Open-Firmware auf Sparc- und PowerPC-Maschinen kann
+die SRM-Konsole RARP <emphasis>nicht</emphasis> nutzen, um eine IP-Adresse
+zu beziehen; deswegen müssen Sie BOOTP verwenden, wenn Sie Ihren Alpha-Rechner
+per Netzwerk booten wollen. Sie können ebenfalls die IP-Konfiguration für 
+Netzwerk-Schnittstellen direkt in der SRM-Konsole eingeben.
 
 <footnote>
 <para>
 
-Alpha systems can also be net-booted using the DECNet MOP (Maintenance
-Operations Protocol), but this is not covered here.  Presumably, your
-local OpenVMS operator will be happy to assist you should you have
-some burning need to use MOP to boot Linux on your Alpha.
+Alpha-Systeme können auch per Netzwerk gebootet werden, indem man das
+DECNet MOP (Maintenance-Operations-Protocol) benutzt, aber dies wird
+hier nicht behandelt. Wahrscheinlich wird ein OpenVMS-Service vor Ort
+Sie gerne unterstützen, wenn Sie Probleme haben, Linux mit MOP auf
+Ihrem Alpha zu booten.
 
 </para>
 </footnote></para><para arch="hppa"> 
 
-Some older HPPA machines (e.g. 715/75) use RBOOTD rather than BOOTP.
-An RBOOTD package is available on the parisc-linux web site.
+Einige ältere HPPA-Maschinen (wie z.B. 715/75) funktionieren eher 
+mit RBOOTD als mit BOOTP. Ein RBOOTD-Paket ist auf der Parisc-Linux-Website 
+verfügbar.
 
 </para><para>
 
-The Trivial File Transfer Protocol (TFTP) is used to serve the boot
-image to the client.  Theoretically, any server, on any platform,
-which implements these protocols, may be used.  In the examples in
-this section, we shall provide commands for SunOS 4.x, SunOS 5.x
-(a.k.a. Solaris), and GNU/Linux.
+Das Trivial-File-Transfer-Protocol (TFTP) wird benutzt, um dem Client
+das Boot-Image zur Verfügung zu stellen. Theoretisch kann jeder Server
+auf jeder Plattform benutzt werden, der diese Protokolle implementiert hat.
+In den Beispielen in diesem Abschnitt geben wir Kommandos für
+SunOS 4.x, SunOS 5.x (a.k.a. Solaris) und GNU/Linux an.
 
 </para>
 
@@ -77,12 +81,12 @@ this section, we shall provide commands for SunOS 4.x, SunOS 5.x
 &tftp-dhcp.xml;
 
   <sect2 id="tftpd">
-  <title>Enabling the TFTP Server</title>
+  <title>Den TFTP-Server aktivieren</title>
 <para>
 
-To get the TFTP server ready to go, you should first make sure that
-<command>tftpd</command> is enabled.  This is usually enabled by having
-something like the following line in <filename>/etc/inetd.conf</filename>:
+Um den TFTP-Server einzurichten, sollten Sie als erstes sicherstellen,
+dass <command>tftpd</command> aktiv ist. Dies können Sie mit einer Zeile
+wie der folgenden in <filename>/etc/inetd.conf</filename> erreichen:
 
 <informalexample><screen>
 
@@ -90,36 +94,38 @@ tftp dgram udp wait nobody /usr/sbin/tcpd in.tftpd /tftpboot
 
 </screen></informalexample>
 
-Debian packages will in general set this up correctly by default when they
-are installed.
+Debian-Pakete richten dies generell korrekt ein, wenn Sie installiert werden.
 
 </para><para>
 
-Look in that file and remember the directory which is used as the
-argument of <command>in.tftpd</command>; you'll need that below.  The
-<userinput>-l</userinput> argument enables some versions of
-<command>in.tftpd</command> to log all requests to the system logs;
-this is useful for diagnosing boot errors.  If you've had to change
-<filename>/etc/inetd.conf</filename>, you'll have to notify the
-running <command>inetd</command> process that the file has changed.
-On a Debian machine, run <userinput>/etc/init.d/inetd
-reload</userinput>; on other machines,
-find out the process ID for <command>inetd</command>, and run
-<userinput>kill -HUP <replaceable>inetd-pid</replaceable></userinput>.
+Schauen Sie sich die Datei an und merken Sie sich das Verzeichnis, das
+als Argument hinter <command>in.tftpd</command> eingetragen ist; Sie
+werden es später brauchen. Das Argument <userinput>-l</userinput>
+aktiviert bei einigen Version von <command>in.tftpd</command> das
+Logging, sodass alle Anfragen im Systemlog protokolliert werden;
+dies ist sinnvoll für die Fehlersuche bei Bootproblemen.
+Wenn Sie <filename>/etc/inetd.conf</filename> ändern mussten,
+ist es nötig, dem laufenden <command>inetd</command>-Prozess
+mitzuteilen, dass sich die Konfig-Datei geändert hat.
+Auf einem Debian-Rechner erledigen Sie das mit 
+<userinput>/etc/init.d/inetd reload</userinput>; auf anderen Maschinen
+müssen Sie die Prozess-ID von <command>inetd</command> herausfinden 
+und <userinput>kill -HUP <replaceable>inetd-pid</replaceable></userinput>
+ausführen.
 
 </para><note arch="i386"><para>
 
-To use the Pre-boot Execution Environment (PXE) method of TFTP
-booting, you will need a TFTP server with <userinput>tsize</userinput>
-support.  On a &debian; server, the <classname>atftpd</classname> and
-<classname>tftpd-hpa</classname> packages qualify; we recommend
-<classname>tftpd-hpa</classname>.
+Um die Pre-Boot-Execution-Environment- (PXE-) Methode von TFTP zu nutzen,
+benötigen Sie einen TFTP-Server mit Unterstützung für
+<userinput>tsize</userinput>. Auf einem &debian;-Server sind dies
+<classname>atftpd</classname> und <classname>tftpd-hpa</classname>;
+wir empfehlen, <classname>tftpd-hpa</classname> zu nutzen.
 
 </para></note><para arch="mips">
 
-If you intend to install Debian on an SGI machine and your TFTP server is a
-GNU/Linux box running Linux 2.4, you'll need to set the following on your
-server:
+Wenn Sie vorhaben, Debian auf einer SGI-Maschine zu installieren und Ihr
+TFTP-Server ist ein GNU/Linux-Rechner mit Linux 2.4, müssen Sie auf dem
+Server folgendes ausführen:
 
 <informalexample><screen>
 
@@ -127,11 +133,12 @@ echo 1 > /proc/sys/net/ipv4/ip_no_pmtu_disc
 
 </screen></informalexample>
 
-to turn off Path MTU discovery, otherwise the Indy's PROM can't
-download the kernel. Furthermore, make sure TFTP packets are sent from
-a source port no greater than 32767, or the download will stall after
-the first packet.  Again, it's Linux 2.4.X tripping this bug in the
-PROM, and you can avoid it by setting
+um Path MTU discovery auszuschalten, andernfalls kann der PROM des Indy
+den Kernel nicht herunterladen. Ausserdem müssen Sie sicherstellen, dass
+TFTP-Pakete von einem Quellport nicht größer als 32767 verschickt werden, 
+sonst wird der Download nach dem ersten Paket gestoppt. Es ist wieder 
+der Linux-Kernel 2.4.x, der diesen Fehler im PROM auslöst, aber Sie können
+dies vermeiden, indem Sie
 
 <informalexample><screen>
 
@@ -139,48 +146,51 @@ echo "2048 32767" > /proc/sys/net/ipv4/ip_local_port_range
 
 </screen></informalexample>
 
-to adjust the range of source ports the Linux TFTP server uses.
+ausführen; dies stellt den Bereich der Quellports ein, den der Linux-TFTP-Server
+benutzt.
 
 </para>
   </sect2>
 
   <sect2 id="tftp-images">
-  <title>Move TFTP Images Into Place</title>
+  <title>Die TFTP-Images an ihren Platz befördern</title>
 <para>
 
-Next, place the TFTP boot image you need, as found in 
-<xref linkend="where-files"/>, in the <command>tftpd</command> 
-boot image directory.  Generally, this directory will be
-<filename>/tftpboot</filename>.  You'll have to make a link from that
-file to the file which <command>tftpd</command> will use for booting a
-particular client.  Unfortunately, the file name is determined by the
-TFTP client, and there are no strong standards.
+Als nächstes legen Sie die TFTP-Bootimages, die Sie brauchen
+und die Sie wie in <xref linkend="where-files"/> beschrieben 
+finden können, im <command>tftpd</command>-Bootimage-Verzeichnis 
+ab. Meistens wird dies <filename>/tftpboot</filename> sein. 
+Sie müssen einen Link von diesem Image auf die Datei anlegen,
+die <command>tftpd</command> benutzt, um einen speziellen Client
+zu booten. Bedauerlicherweise hängt der Name dieser Datei von dem
+TFTP-Client ab und es gibt dabei keine festen Standards.
 
 </para><para arch="powerpc">
 
-On NewWorld Power Macintosh machines, you will need to set up the
-<command>yaboot</command> boot loader as the TFTP boot image.
-<command>Yaboot</command> will then retrieve the kernel and RAMdisk
-images via TFTP itself.  For net booting, use the
-<filename>yaboot-netboot.conf</filename>.  Just rename this to
-<filename>yaboot.conf</filename> in the TFTP directory.
+Auf NewWorld-PowerMacs müssen Sie den <command>yaboot</command>-Bootloader
+als TFTP-Bootimage einstellen. <command>Yaboot</command> wird dann
+selbst das Kernel- und RAMdisk-Image per TFTP abrufen. Für Netzwerk-Boot
+benutzen Sie die Datei <filename>yaboot-netboot.conf</filename> und
+benennen Sie einfach in <filename>yaboot.conf</filename> im TFTP-Verzeichnis
+um.
 
 </para><para arch="i386">
 
-For PXE booting, everything you should need is set up in the
-<filename>netboot/netboot.tar.gz</filename> tarball. Simply extract this
-tarball into the <command>tftpd</command> boot image directory. Make sure
-your dhcp server is configured to pass <filename>/pxelinux.0</filename>
-to <command>tftpd</command> as the filename to boot.
+Um per PXE zu booten, müssen Sie nur den 
+<filename>netboot/netboot.tar.gz</filename>-Tarball vorbereiten.
+Entpacken Sie den Tarball einfach in das 
+<command>tftpd</command>-Bootimage-Verzeichnis. Stellen Sie sicher, dass
+der DHCP-Server konfiguriert ist, <filename>/pxelinux.0</filename> als
+zu bootende Datei zum <command>tftpd</command> weiterzuleiten.
 
 </para><para arch="ia64">
 
-For PXE booting, everything you should need is set up in the
-<filename>netboot/netboot.tar.gz</filename> tarball. Simply extract this
-tarball into the <command>tftpd</command> boot image directory. Make sure
-your dhcp server is configured to pass
-<filename>/debian-installer/ia64/elilo.efi</filename>
-to <command>tftpd</command> as the filename to boot.
+Um per PXE zu booten, müssen Sie nur den 
+<filename>netboot/netboot.tar.gz</filename>-Tarball vorbereiten.
+Entpacken Sie den Tarball einfach in das 
+<command>tftpd</command>-Bootimage-Verzeichnis. Stellen Sie sicher, dass
+der DHCP-Server konfiguriert ist, <filename>/debian-installer/ia64/elilo.efi</filename> 
+als zu bootende Datei zum <command>tftpd</command> weiterzuleiten.
 
 </para>
 
@@ -188,22 +198,21 @@ to <command>tftpd</command> as the filename to boot.
    <title>DECstation TFTP Images</title>
 <para>
 
-For DECstations, there are tftpimage files for each subarchitecture,
-which contain both kernel and installer in one file. The naming
-convention is <replaceable>subarchitecture</replaceable>/netboot-boot.img.
-Copy the tftpimage file you would like to use to
-<userinput>/tftpboot/tftpboot.img</userinput> if you work with the
-example BOOTP/DHCP setups described above.
+Für DECstations gibt es tftp-Image-Dateien für jede Unterarchitektur,
+die sowohl Kernel wie auch den Installer in einer Datei enthalten.
+Sie sind nach dem Schema <replaceable>subarchitecture</replaceable>/netboot-boot.img
+benannt. Kopieren Sie die tftp-Image-Datei, die Sie benutzen wollen,
+nach <userinput>/tftpboot/tftpboot.img</userinput> (wenn Sie das Beispiel
+mit BOOTP/DHCP von oben verwenden).
 
 </para><para>
 
-The DECstation firmware boots by TFTP with the command <userinput>boot
-<replaceable>#</replaceable>/tftp</userinput>, where
-<replaceable>#</replaceable> is the number of the TurboChannel device
-from which to boot. On most DECstations this is "3".  If the
-BOOTP/DHCP server does not supply the filename or you need to pass
-additional parameters, they can optionally be appended with the
-following syntax:
+Die DECstation-Firmware bootet per TFTP mit dem Befehl
+<userinput>boot <replaceable>#</replaceable>/tftp</userinput>, wobei 
+<replaceable>#</replaceable> die Nummer des TurboChannel-Gerätes ist,
+von dem gebootet werden soll. Auf den meisten DECstations ist dies "3".
+Wenn der BOOTP-/DHCP-Server den Dateinamen nicht angibt oder falls Sie
+zusätzliche Parameter angeben müssen, können Sie folgende Syntax verwenden:
 
 </para><para>
 
@@ -211,69 +220,71 @@ following syntax:
 
 </para><para>
 
-Several DECstation firmware revisions show a problem with regard to
-net booting: the transfer starts, but after some time it stops with
-an <computeroutput>a.out err</computeroutput>. This can have several reasons:
+Einige Versionen der DECstation-Firmware haben ein Problem betreffend
+Booten per Netzwerk: die Übertragung beginnt, aber nach einiger Zeit stoppt
+sie mit einem Fehler (<computeroutput>a.out err</computeroutput>).
+Dies kann verschiedene Gründe haben:
 
 <orderedlist>
 <listitem><para>
 
-The firmware does not respond to ARP requests during a TFTP
-transfer. This leads to an ARP timeout and the transfer stops.  The
-solution is to add the MAC address of the Ethernet card in the
-DECstation statically to the ARP table of the TFTP server.  This is
-done by running <userinput>arp -s
-<replaceable>IP-address</replaceable>
-<replaceable>MAC-address</replaceable></userinput> as root on the
-machine acting as TFTP server. The MAC-address of the DECstation can
-be read out by entering <command>cnfg</command> at the DECstation
-firmware prompt.
+Die Firmware antwortet nicht auf ARP-Anfragen während des TFTP-Transfers.
+Dies führt zu einem ARP-Timeout und der Transfer stoppt. Die Lösung 
+ist, die MAC-Adresse von der Ethernet-Karte der DECstation fest in die
+ARP-Tabelle des TFTP-Servers einzutragen. Dies erledigen Sie mit
+<userinput>arp -s <replaceable>IP-address</replaceable>
+<replaceable>MAC-address</replaceable></userinput> als root auf dem
+Rechner, der als TFTP-Server agiert. Die MAC-Adresse der DECstation
+können Sie auslesen, indem Sie <command>cnfg</command> am Firmware-Prompt
+eingeben.
 
 </para></listitem>
 <listitem><para>
 
-The firmware has a size limit on the files that can be booted
-by TFTP.
+Die Firmware hat ein Limit für die Größe der Dateien, die per TFTP
+gebootet werden.
 
 </para></listitem>
 </orderedlist>
 
-There are also firmware revisions that cannot boot via TFTP at all. An
-overview about the different firmware revisions can be found at the
-NetBSD web pages:
+Es gibt ebenfalls Firmware-Versionen, die überhaupt nicht per TFTP booten
+können. Auf den NetBSD-Websites finden Sie einen Überblick über die
+verschiedenen Firmware-Versionen:
 <ulink url="http://www.netbsd.org/Ports/pmax/board-list.html#proms"></ulink>.
 
 </para>
    </sect3>
 
    <sect3 arch="alpha">
-   <title>Alpha TFTP Booting</title>
+   <title>TFTP-Boot von Alpha-Systemen</title>
 <para>
-On Alpha, you must specify the filename (as a relative path to the
-boot image directory) using the <userinput>-file</userinput> argument
-to the SRM <userinput>boot</userinput> command, or by setting the
-<userinput>BOOT_FILE</userinput> environment variable.  Alternatively,
-the filename can be given via BOOTP (in ISC <command>dhcpd</command>,
-use the <userinput>filename</userinput> directive).  Unlike Open
-Firmware, there is <emphasis>no default filename</emphasis> on SRM, so
-you <emphasis>must</emphasis> specify a filename by either one of
-these methods.
+Auf Alpha-Systemen müssen Sie den Dateinamen angeben (als relative
+Pfadangabe zum Bootimage-Verzeichnis), indem Sie entweder den
+SRM-<userinput>boot</userinput>-Befehl mit dem Parameter 
+<userinput>-file</userinput> benutzen, oder Sie setzen die
+Umgebungsvariable <userinput>BOOT_FILE</userinput>.
+Alternativ können Sie auch den Dateinamen per BOOTP übergeben
+(benutzen Sie im ISC <command>dhcpd</command> die Anweisung
+<userinput>filename</userinput>). Im Unterschied zu Open-Firmware
+gibt es auf SRM <emphasis>keinen Standard-Dateinamen</emphasis>,
+Sie <emphasis>müssen</emphasis> also mit einer dieser Methoden einen
+Dateinamen angeben.
 
 </para>
    </sect3>
 
    <sect3 arch="sparc">
-   <title>SPARC TFTP Booting</title>
+   <title>TFTP-Boot von SPARC-Systemen</title>
 <para>
 
-SPARC architectures for instance use the subarchitecture names, such
-as ``SUN4M'' or ``SUN4C''; in some cases, the architecture is left
-blank, so the file the client looks for is just
-<filename>client-ip-in-hex</filename>.  Thus, if your system
-subarchitecture is a SUN4C, and its IP is 192.168.1.3, the filename
-would be <filename>C0A80103.SUN4C</filename>. An easy way to determine
-this is to enter the following command in a shell (assuming the
-machine's intended IP is 10.0.0.4).
+SPARC-Architekturen zum Beispiel nutzen die Namen der Unterarchitekturen,
+wie ``SUN4M'' oder ``SUN4C''; in einigen Fällen bleibt die 
+Architekturbezeichnung leer, d.h. die Datei, nach der der Client sucht,
+ist einfach <filename>client-ip-in-hex</filename>. Wenn die Unterarchitektur
+Ihres Systems also SUN4C ist und seine IP-Adresse ist 192.168.1.3, wäre
+der Dateiname <filename>C0A80103.SUN4C</filename>. Eine einfache Art, dies
+herauszufinden, ist, den folgenden Befehl in eine Shell einzugeben
+(angenommen, die IP-Adresse der Maschine wäre 10.0.0.4):
 
 </para>
 
@@ -283,57 +294,58 @@ printf '%.2x%.2x%.2x%.2x\n' 10 0 0 4
 
 <para>
 
-This will spit out the IP in hexadecimal; to get to the correct
-filename, you will need to change all letters to uppercase and
-if necessary append the subarchitecture name.
+Es wird die IP-Adresse in hexadezimal ausgegeben; um den korrekten
+Dateinamen zu bekommen, müssen Sie alle Buchstaben in Großbuchstaben
+ändern und falls nötig den Namen der Unterarchitektur hinzufügen.
 
 </para><para>
 
-You can also force some sparc systems to look for a specific file name
-by adding it to the end of the OpenPROM boot command, such as
-<userinput>boot net my-sparc.image</userinput>. This must still reside
-in the directory that the TFTP server looks in.
+Manche Sparc-Systeme kann man zwingen, nach einem bestimmten Dateinamen
+zu suchen, indem man ihn ans Ende des OpenPROM-Boot-Befehls anhängt, z.B.
+<userinput>boot net my-sparc.image</userinput>. Die Datei muss aber immer in dem
+Verzeichnis liegen, in dem der TFTP-Server danach sucht.
 
 </para>
    </sect3>
 
    <sect3 arch="m68k">
-   <title>BVM/Motorola TFTP Booting</title>
+   <title>TFTP-Boot von BVM-/Motorola-Systemen</title>
 <para>
 
-For BVM and Motorola VMEbus systems copy the files
-&bvme6000-tftp-files; to <filename>/tftpboot/</filename>.
+Auf BVM- und Motorola VMEbus-Systemen kopieren Sie die Dateien 
+&bvme6000-tftp-files; nach <filename>/tftpboot/</filename>.
 
 </para><para>
 
-Next, configure your boot ROMs or BOOTP server to initially load the
-<filename>tftplilo.bvme</filename> or
-<filename>tftplilo.mvme</filename> files from the TFTP server.  Refer
-to the <filename>tftplilo.txt</filename> file for your subarchitecture
-for additional system-specific configuration information.
+Als nächstes konfigurieren Sie Ihr Boot-ROM oder Ihren BOOTP-Server,
+sodass zunächst die Datei <filename>tftplilo.bvme</filename> oder
+<filename>tftplilo.mvme</filename> vom TFTP-Server geladen wird.
+Lesen Sie die <filename>tftplilo.txt</filename>-Datei für Ihre
+Unterarchitektur, falls Sie zusätzliche Informationen zur 
+Konfiguration benötigen.
 
 </para>
    </sect3>
 
    <sect3 arch="mips">
-   <title>SGI Indys TFTP Booting</title>
+   <title>TFTP-Boot von SGI-Indy-Systemen</title>
 <para>
 
-On SGI Indys you can rely on the <command>bootpd</command> to supply
-the name of the TFTP file. It is given either as the
-<userinput>bf=</userinput> in <filename>/etc/bootptab</filename> or as
-the <userinput>filename=</userinput> option in
-<filename>/etc/dhcpd.conf</filename>.
+Auf SGI Indys können Sie sich auf den <command>bootpd</command>-Dienst
+verlassen, um den Namen der TFTP-Datei festzulegen. Er wird entweder als
+Wert für <userinput>bf=</userinput> in <filename>/etc/bootptab</filename>
+oder als Angabe für <userinput>filename=</userinput> in 
+<filename>/etc/dhcpd.conf</filename> angegeben.
 
 </para>
    </sect3>
 
    <sect3 arch="mips">
-   <title>Broadcom BCM91250A TFTP Booting</title>
+   <title>TFTP-Boot von Broadcom BCM91250A-Systemen</title>
 <para>
 
-You don't have to configure DHCP in a special way because you'll pass the
-full path of the file to the loaded to CFE.
+Sie müssen DHCP nicht speziell konfigurieren, weil der komplette Pfad zur 
+Boot-Datei beim CFE angegeben wird.
 
 </para>
    </sect3>
@@ -342,7 +354,8 @@ full path of the file to the loaded to CFE.
 
 <!-- FIXME: commented out since it seems too old to be usable and a current
             way is not known
-  
+            !!! Leaving this part untranslated for the same reason. H. Wansing
+
   <sect2 id="tftp-low-memory">
   <title>TFTP Installation for Low-Memory Systems</title>
 <para>

@@ -1,44 +1,43 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 22935 untranslated -->
+<!-- original version: 23847 -->
 
  <sect1 id="automatic-install">
- <title>Automatic Installation</title>
+ <title>Automatische Installation</title>
 <para>
 
-For installing on multiple computers it's possible to do fully
-automatic installations. Debian packages intended for this include
-<classname>fai</classname> (which uses an install server),
+Um Debian auf einer größeren Anzahl von Rechnern zu installieren, kann 
+man vollautomatische Installationen durchführen. Debian-Pakete, die dafür 
+vorgesehen sind: <classname>fai</classname> (benutzt einen Installationsserver),
 <classname>replicator</classname>,
 <classname>systemimager</classname>,
-<classname>autoinstall</classname>, and 
-the Debian Installer itself.
+<classname>autoinstall</classname> und der Debian Installer selbst.
 
 </para>
 
 <sect2>
-<title>Automatic installation using the Debian Installer</title>
+<title>Automatische Installation mit dem Debian Installer</title>
 
 <para>
-The Debian Installer supports automating installs via preconfiguration
-files. A preconfiguration file can be loaded from the network or from
-removable media, and used to fill in answers to question asked during the
-installation process.
+Der Debian Installer bietet automatische Installationen über 
+Voreinstellungs-Dateien an. Eine solche Voreinstellungs-Datei kann über das Netzwerk oder 
+von einem Wechselmedium geladen werden und wird benutzt, um Fragen zu beantworten,
+die während des Installationsprozesses auftreten.
 
 </para><para>
 
-The preconfiguration file is in the format used by the
-debconf-set-selections command. A well documented and working example that
-you can edit is in <xref linkend="example-preseed"/>.
+Die Voreinstellungs-Dateien haben das gleiche Format, das auch 
+von dem »debconf-set-selections«-Befehl genutzt wird. Eine gut dokumentierte
+und funktionierende Beispieldatei, die Sie sich selbst anpassen können, 
+finden Sie unter <xref linkend="example-preseed"/>.
 
 </para><para>
 
-The preconfiguration file is in the format used by the
-debconf-set-selections command, and one way to get a complete file listing
-all the values that can be preseeded is to do a manual install,
-and then use <filename>debconf-get-selections</filename>,
-from the <classname>debconf-utils</classname> package,
-to dump both the debconf database and the cdebconf
-database in /var/log/debian-installer/cdebconf to a single file:
+Alternativ gibt es die Möglichkeit, eine komplette Liste aller möglichen 
+voreinstellbaren Werte zu bekommen, indem Sie eine manuelle Installation 
+durchführen und danach den Befehl <filename>debconf-get-selections</filename> 
+aus dem <classname>debconf-utils</classname>-Paket benutzen; hierdurch wird 
+sowohl die debconf-Datenbank wie auch die cdebconf-Datenbank 
+(aus /var/log/debian-installer/cdebconf) in eine einfache Datei geladen:
 
 <informalexample><screen>
 debconf-get-selections --installer > file
@@ -47,41 +46,48 @@ debconf-get-selections >> file
 
 </para><para>
 
-However, a file generated in this manner will have some items that should
-not be preseeded, and the file in <xref linkend="example-preseed"/> is a
-better starting place for most users.
+Allerdings enthält eine so erstellte Datei einige Einträge, die besser nicht 
+voreingestellt sein sollten; die Datei im <xref linkend="example-preseed"/> 
+ist deshalb für die meisten Benutzer wohl ein besserer Ausgangspunkt.
 
 </para><para>
 
-Once you have a preconfiguration file, you can edit it if necessary, and
-place it on a web server, or copy it onto the installer's boot media. Wherever
-you place the file, you need to pass a parameter to the installer at boot
-time to tell it to use the file.
+Wenn Sie einmal eine Voreinstellungs-Datei haben, können Sie sie bei Bedarf 
+verändern und auf einem Web-Server speichern oder auf das Boot-Medium des 
+Installers kopieren. Wo immer Sie die Datei auch ablegen, Sie müssen dem 
+Installer auf jeden Fall einen Boot-Parameter mitgeben, sodass er die Datei 
+benutzt. 
 
 </para><para>
 
-To make the installer use a preconfiguration file downloaded from the
-network, add preseed/url=http://url/to/preseed.cfg to the kernel boot
-parameters. Of course the preconfiguration will not take effect until the
-installer manages to set up the network to download the file, so this is
-most useful if the installer can set up the network via DHCP without asking
-any questions. You may want to set the installation priority to critical to
-avoid any questions while the network is being configured. See 
-<xref linkend="installer-args"/>.
+Um zu erreichen, dass der Installer eine Voreinstellungs-Datei nutzt, 
+die per Netzwerk heruntergeladen werden muss, 
+fügen Sie <userinput>preseed/url=http://url/to/preseed.cfg</userinput> 
+zu den Kernel-Bootparametern hinzu. Die Voreinstellungen werden natürlich 
+keine Wirkung haben, wenn 
+der Installer das Netzwerk nicht erfolgreich konfigurieren kann, um dann 
+die Datei herunterzuladen; deshalb ist dies eigentlich nur sinnvoll, wenn 
+die Netzwerkkonfiguration per DHCP erfolgt, sodass der Installer dazu keine
+Fragen stellen muss. Sie sollten vielleicht die Priorität für die Installation 
+auf »critical« setzen, um Fragen während der Netzwerkkonfiguration zu vermeiden.
+Siehe dazu auch <xref linkend="installer-args"/>.
 
 </para><para>
 
-To place a preconfiguration file on a CD, you would need to remaster the
-ISO image to include your preconfiguration file. See the manual page for
-mkisofs for details. Alternatively, put the preseed file on a floppy, and
-use preseed/file=/floppy/preseed.cfg
+Wenn Sie eine Voreinstellungs-Datei auf einer CD abspeichern wollen, 
+müssen Sie das ISO-Image remastern, um Ihre Datei einzufügen. Lesen Sie die 
+Handbuchseite von <command>mkisofs</command> bezüglich weiterer Einzelheiten. 
+Alternativ dazu können Sie die Datei auf einer Floppy-Disk speichern 
+und den Boot-Parameter <userinput>preseed/file=/floppy/preseed.cfg</userinput> 
+benutzen.
 
 </para><para arch="i386">
 
-If you'll be booting from a USB memory stick, then you can simply copy your
-preconfiguration file onto the memory stick's filesystem, and edit the
-syslinux.cfg file to add preseed/file=/hd-media/preseed.cfg to the kernel boot
-parameters.
+Wenn Sie von einem USB-Speicher booten, können Sie die 
+Voreinstellungs-Datei einfach auf dem Dateisystem des Memory-Sticks speichern 
+und dann die Datei <filename>syslinux.cfg</filename> editieren, um 
+<userinput>preseed/file=/hd-media/preseed.cfg</userinput> 
+zu den Kernel-Bootparametern hinzuzufügen.
 
 </para>
 </sect2>
