@@ -1,2 +1,57 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 14337 -->
+<!-- original version: 22469 -->
+
+<sect3 id="lvmcfg">
+   <title>Configuration du <quote>Logical Volume Manager</quote> (LVM)</title>
+<para>
+
+Si vous travaillez sur les ordinateurs comme administrateur système ou
+si vous êtes un utilisateur <quote>avancé</quote>, vous avez sûrement
+rencontré le cas suivant&nbsp;: une partition qui manque d'espace libre 
+(c'est habituellement la plus importante du système) et une partition
+grossièrement sous-utilisée, la gestion de cette situation ayant consisté
+en déplacement de fichiers, création de liens symboliques, etc.
+</para>
+<para>
+Pour éviter cette situation, on peut utiliser un gestionnaire de volumes
+logiques, <quote>Logical Volume Manager</quote> (LVM). Dit simplement,
+avec LVM vous pouvez combiner vos partitions 
+(<firstterm>volumes physiques</firstterm> dans le lexique LVM) pour former
+un disque virtuel (<firstterm>groupe de volumes</firstterm>) qui peut être
+divisé en partitions virtuelles (<firstterm>volumes logiques</firstterm>).
+L'idée est que les volumes logiques s'étendent sur plusieurs disques physiques.
+</para>
+<para>
+Dès lors, quand vous constatez que votre vieille partition 
+<filename>/home</filename> de 160&nbsp;Go a besoin d'espace, vous pouvez
+simplement ajouter un disque de 300&nbsp;Go à votre machine, l'intégrer au
+groupe de volumes existant et redimensionner le volume logique qui comprend
+la partition <filename>/home</filename> et voilà, vos utilisateurs ont
+de nouveau de la place sur la partition de 460&nbsp;Go&nbsp;!
+Cet exemple est bien sûr un peu simplifié. Si vous ne l'avez pas encore lu,
+vous devriez consulter le 
+<ulink url="&url-lvm-howto;">HOWTO LVM</ulink>.
+</para>
+<para>
+La configuration de LVM dans l'installateur debian est très simple. D'abord,
+vous devez marquer les partitions à utiliser comme volumes physiques par
+LVM. Cela se fait avec <command>partman</command> dans le menu 
+<guimenu>Partition settings</guimenu>, où vous choisissez
+<menuchoice><guimenu>Use as:</guimenu> 
+<guimenuitem>volume physique pour LVM</guimenuitem></menuchoice>.
+Puis, vous lancez le module <command>lvmcfg</command> (soit directement dans
+<command>partman</command>, soit dans le menu principal de l'installateur) et
+vous combinez les volumes physiques dans un groupe de volumes dans le menu
+<guimenuitem>Modifier les groupes de volumes</guimenuitem>. Enfin vous
+devez créer les volumes logiques au dessus des groupes de volumes dans le
+menu <guimenuitem>Modifier les volumes logiques</guimenuitem>.
+</para>
+<para>
+
+Quand vous aurez quitté <command>lvmcfg</command>, vous verrez dans 
+<command>partman</command> tous les volumes logiques créés comme si c'étaient
+de simples partitions, et vous devez les traiter ainsi.
+</para>
+</sect3>
+
+
