@@ -13,7 +13,7 @@ unset LANG LC_ALL LANGUAGE
 cvs up
 make reallyclean
 
-for t in netboot cdrom floppy; do
+for t in netboot cdrom bootfloppy floppy; do
     echo
     echo BUILDING INITRD FOR $t
     echo
@@ -21,7 +21,7 @@ for t in netboot cdrom floppy; do
     fakeroot make TYPE="$t" initrd >& dest/$t.log
     cat dest/$t.log
 done
-for t in cdrom floppy; do
+for t in cdrom bootfloppy floppy; do
     echo
     echo BUILDING IMAGE FOR $t
     echo
