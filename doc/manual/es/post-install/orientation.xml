@@ -1,0 +1,111 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 11648 -->
+
+
+ <sect1 id="debian-orientation"><title>Orientación sobre Debian</title>
+<para>
+
+Debian es un poco diferente a otras distribuciones. Incluso si está
+familiarizado con Linux en otras distribuciones, hay cosas que debe
+conocer sobre Debian para ayudarle a mantener su sistema en buen estado.
+Este capítulo contiene material que le ayudará a orientarse; no se
+tiene la intención de ser un tutorial sobre el uso de Debian, pero si
+un breve resumen sobre el sistema para aquellos con prisa.
+
+</para>
+
+  <sect2><title>Sistema de paquetes de Debian</title>
+<para>
+
+<p>
+El concepto más importante a entender es el sistema de paquetes Debian.
+Esencialmente, podría considerarse que gran parte de su sistema está
+bajo el control del sistema de paquetes. Esto incluye:
+
+<itemizedlist>
+<listitem><para>
+
+<filename>/usr</filename> (excluyendo <filename>/usr/local</filename>)
+
+</para></listitem>
+<listitem><para>
+
+<filename>/var</filename> (puede crear
+<filename>/var/local</filename> sin riesgos)
+
+</para></listitem>
+<listitem><para>
+
+<filename>/bin</filename>
+
+</para></listitem>
+<listitem><para>
+
+<filename>/sbin</filename>
+
+</para></listitem>
+<listitem><para>
+
+<filename>/lib</filename>
+
+</para></listitem>
+</itemizedlist>
+
+Por ejemplo, si sustituye <filename>/usr/bin/perl</filename>, Éste funcionará,
+pero si luego actualiza su paquete <classname>perl</classname>, el fichero
+que puso en su lugar será sustituido. Los usuarios avanzados pueden evitar esto
+poniendo los paquetes en estado ``hold'' (congelado) en 
+<command>aptitude</command>.
+
+</para><para>
+
+Uno de los mejores métodos de instalación de apt. Puede usar la versión
+de línea de órdenes <command>apt-get</command> o la versión de interfaz a
+pantalla completa <application>aptitude</application>. Note que apt también
+le permitirá combinar main, contrib y non-free de este modo puede tener
+paquetes con restricción de exportación así como las versiones estándares.
+
+</para>
+  </sect2>
+
+  <sect2><title>Gestión de versión de aplicaciones</title>
+<para>
+
+Las versiones alternativas de aplicaciones son manejadas por
+update-alternatives, Si usted mantiene múltiples versiones de sus
+aplicaciones, lea la página de manual de update-alternatives.
+
+</para>
+  </sect2>
+
+  <sect2><title>Gestión de tareas de cron</title>
+<para>
+
+Cualquier tarea bajo supervisión del administrador del sistema debe
+estar en <filename>/etc</filename>, puesto que estos con ficheros de
+configuración. Si usted tiene una tarea de cron de superusuario que
+se ejecuta diariamente, semanalmente o cada noche, ubiquela en
+<filename>/etc/cron.{daily,weekly,monthly}>/filename>. Estos son
+invocados desde <filename>/etc/crontab</filename> y se ejecutaran
+en orden alfabético, lo cual serializa el procesamiento.
+
+</para><para>
+
+Por otro lado, si usted tiene una tarea de cron que (a) necesita ser
+ejecutada como un usuario específico o (b) necesita ejecutarse en un
+momento o frecuencia especifica, puede usar tanto 
+<filename>/etc/crontab</filename>, o todavía mejor 
+<filename>/etc/cron.d/cualquiercosa</filename>. Estos ficheros específicos
+también tienen un campo adicional que le permite definir el usuario
+bajo el cual se ejecuta la tarea.
+
+</para><para>
+
+En cualquier caso, solamente edite los ficheros y cron notará el cambio
+automáticamente. No hay necesidad de ejecutar un comando especial. Para 
+mas información vea cron(8), crontab(5) y 
+<filename>/usr/share/doc/cron/README.Debian</filename>.
+
+</para>
+  </sect2>
+ </sect1>
