@@ -163,7 +163,8 @@ tree: get_udebs
 	find $(DEST) -depth -type d -path "*CVS*" -exec rm -rf {} \;
 	$(foreach DEV, $(DEVS), \
 	(cp -dpR /dev/$(DEV) $(DEST)/dev/ ) ; )
-	depmod -n -F ksyms -a -b $(DEST)/ $(KVER) > $(DEST)/lib/modules/$(KVER)/modules.dep
+	mkdir -p $(DEST)/lib/modules/$(KVER)/
+	depmod -q -a -b $(DEST)/ $(KVER) 
 	# TODO: configure some of the packages?
 
 
