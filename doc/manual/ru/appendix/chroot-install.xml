@@ -1,0 +1,479 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: chroot-install.xml 18773 2004-07-31 16:41:16Z joeyh $ -->
+
+ <sect1 id="linux-upgrade">
+ <title
+>Installing &debian; from a Unix/Linux System</title>
+
+<para
+>This section explains how to install &debian; from an existing Unix or Linux system, without using the ncurses-based, menu-driven installer as explained in the rest of the manual. This "cross-install" HOWTO has been requested by users switching to &debian; from Redhat, Mandrake, and SUSE. In this section some familiarity with entering *nix commands and navigating the file system is assumed. In this section, <prompt
+>$</prompt
+> symbolizes a command to be entered in the user's current system, while <prompt
+>#</prompt
+> refers to a command entered in the Debian chroot. </para
+><para
+>Once you've got the new Debian system configured to your preference, you can migrate your existing user data (if any) to it, and keep on rolling. This is therefore a "zero downtime" &debian; install. It's also a clever way for dealing with hardware that otherwise doesn't play friendly with various boot or installation media. </para>
+
+  <sect2>
+  <title
+>Начинаем</title>
+<para
+>С помощью вашей текущей утилиты разметки диска, переразбейте диск так, как это необходимо, создав как минимум одну файловую систему плюс область подкачки (swap). Вам нужно минимум 150 Мб доступного места для консольной установки или минимум 300 Мб, если вы планируете установить X. </para
+><para
+>Создайте файловую систему на ваших разделах. Например, чтобы создать файловую систему ext3 на разделе <filename
+>/dev/hda6</filename
+> (это корневой раздел в нашем примере): <informalexample
+><screen>
+
+ $ mke2fs -j /dev/hda6
+
+</screen
+></informalexample
+> Чтобы создать файловую систему ext2, пропустите параметр <userinput
+>-j</userinput
+>. </para
+><para
+>Проинициализируйте и активизируйте раздел подкачки (подставьте номер раздела, предназначенного для раздела подкачки Debian): <informalexample
+><screen
+>$ mkswap /dev/hda5
+ $ sync; sync; sync
+ $ swapon /dev/hda5
+
+</screen
+></informalexample>
+
+</para
+><para
+>Смонтируйте один раздел как <filename
+>/mnt/debinst</filename
+> (точка установки, она будет корневой (<filename
+>/</filename
+>) файловой системой в вашей новой системе). Имя точки монтирования абсолютно произвольное, оно описано позже. <informalexample
+><screen
+>$ mkdir /mnt/debinst
+ $ mount /dev/hda6 /mnt/debinst
+
+</screen
+></informalexample>
+
+</para>
+  </sect2>
+
+  <sect2>
+  <title
+>Установите <command
+>debootstrap</command
+></title>
+<para
+>The tool that the Debian installer uses, which is recognized as the official way to install a Debian base system, is <command
+>debootstrap</command
+>. It uses <command
+>wget</command
+>, but otherwise depends only on <classname
+>/bin/sh</classname
+>. Install <command
+>wget</command
+> if it isn't already on your current system, then download and install <command
+>debootstrap</command
+>. </para
+><para
+>Если у вас система, основанная на rpm, вы можете использовать alien для конвертации .deb в .rpm, или скачать rpm-изированную версию с <ulink url="http://people.debian.org/~blade/install/debootstrap"
+></ulink
+> </para
+><para
+>Либо вы можете использовать следующую процедуру для установки его вручную. Создайте рабочую папку work для распаковки в нее .deb: <informalexample
+><screen
+>$ mkdir work
+ $ cd work
+
+</screen
+></informalexample>
+</para
+><para
+>Бинарник <command
+>debootstrap</command
+> расположен в архиве Debian (убедитесь, что вы выбрали правильный файл, соответствующий вашей архитектуре). Скачайте <command
+>debootstrap</command
+> .deb из <ulink url="http://ftp.debian.org/debian/pool/main/d/debootstrap/"
+> пула</ulink
+>, скопируйте пакет в рабочую папку work и извлеките бинарные файлы из него. Вам потребуются привилегии суперпользователя (root) для установки бинарников. <informalexample
+><screen
+>$ ar -xf debootstrap_0.X.X_arch.deb
+ $ cd /
+ $ zcat &#60; /полный-путь-к-рабочей-папке/work/data.tar.gz | tar xv
+
+</screen
+></informalexample>
+
+</para>
+  </sect2>
+
+  <sect2>
+  <title
+>Run <command
+>debootstrap</command
+></title>
+<para
+>Когда вы его запустите, <command
+>debootstrap</command
+> может скачать необходимые файлы прямо из архива. Вы можете заменить в следующем примере <userinput
+>http.us.debian.org/debian</userinput
+> на любое зеркало архивов Debian, лучше всего на зеркало, наиболее близкое к вам с сетевой точки зрения. Список зеркал есть на <ulink url="http://www.debian.org/misc/README.mirrors"
+></ulink
+>. </para
+><para
+>If you have a &releasename; &debian; CD mounted at <filename
+>/cdrom</filename
+>, you could substitute a file URL instead of the http URL: <userinput
+>file:/cdrom/debian/</userinput
+> </para
+><para
+>Замените <replaceable
+>ARCH</replaceable
+> на один из нижеследующих вариантов в строке вызова <command
+>debootstrap</command
+>: <userinput
+>alpha</userinput
+>, <userinput
+>arm</userinput
+>, <userinput
+>hppa</userinput
+>, <userinput
+>i386</userinput
+>, <userinput
+>ia64</userinput
+>, <userinput
+>m68k</userinput
+>, <userinput
+>mips</userinput
+>, <userinput
+>mipsel</userinput
+>, <userinput
+>powerpc</userinput
+>, <userinput
+>s390</userinput
+>, or <userinput
+>sparc</userinput
+>. <informalexample
+><screen
+>$ /usr/sbin/debootstrap --arch ARCH sarge \
+     /mnt/debinst http://http.us.debian.org/debian
+
+</screen
+></informalexample>
+
+</para>
+
+  </sect2>
+
+  <sect2>
+  <title
+>Настройка базовой системы</title>
+
+<para
+>Теперь у вас на диске есть настоящая, пусть и слабенькая, система Debian. Выполните <command
+>Chroot</command
+> в нее: <informalexample
+><screen
+>$ chroot /mnt/debinst /bin/bash
+
+</screen
+></informalexample>
+</para>
+
+   <sect3>
+   <title
+>Монтирование разделов</title>
+<para
+>Вам надо создать <filename
+>/etc/fstab</filename
+>. <informalexample
+><screen
+># editor /etc/fstab
+
+</screen
+></informalexample>
+
+</para
+><para
+>Вот пример, который вы можете подогнать под себя: <informalexample
+><screen
+># /etc/fstab: информация о статических файловых системах.
+#
+# файл. система  точка монтир. тип     параметры                дамп проход
+/dev/XXX         /             ext2    defaults                 0    0
+/dev/XXX         /boot         ext2    ro,nosuid,nodev          0    2
+
+/dev/XXX         none          swap    sw                       0    0
+proc             /proc         proc    defaults                 0    0
+
+/dev/fd0         /mnt/floppy   auto    noauto,rw,sync,user,exec 0    0
+/dev/cdrom       /mnt/cdrom    iso9660 noauto,ro,user,exec      0    0
+
+/dev/XXX         /tmp          ext2    rw,nosuid,nodev          0    2
+/dev/XXX         /var          ext2    rw,nosuid,nodev          0    2
+/dev/XXX         /usr          ext2    rw,nodev                 0    2
+/dev/XXX         /home         ext2    rw,nosuid,nodev          0    2
+
+</screen
+></informalexample>
+
+</para
+><para
+>Используйте <userinput
+>mount -a</userinput
+> для монтирования всех файловых систем, которые вы описали в вашем <filename
+>/etc/fstab</filename
+>, или смонтируйте файловые системы по раздельности: <informalexample
+><screen
+># mount /путь  # например:  mount /usr
+
+</screen
+></informalexample>
+
+</para
+><para
+>Вы можете смотрировать файловую системы proc много раз и в разные места, хотя общепринято в /proc . Если вы не использовали <userinput
+>mount -a</userinput
+>, убедитесь, что смонтировали proc перед продолжением: <informalexample
+><screen
+># mount -t proc proc /proc
+
+</screen
+></informalexample>
+
+</para>
+
+   </sect3>
+
+   <sect3>
+   <title
+>Настройка клавиатуры</title>
+
+<para
+>Для настройки вашей клавиатуры введите: <informalexample
+><screen
+># dpkg-reconfigure console-data
+
+</screen
+></informalexample>
+
+</para>
+   </sect3>
+
+   <sect3>
+   <title
+>Настройка сети</title>
+<para
+>To configure networking, edit <filename
+>/etc/network/interfaces</filename
+>, <filename
+>/etc/resolv.conf</filename
+>, and <filename
+>/etc/hostname</filename
+>. <informalexample
+><screen
+># editor /etc/network/interfaces 
+
+</screen
+></informalexample>
+
+</para
+><para
+>Вот несколько примеров из <filename
+>/usr/share/doc/ifupdown/examples</filename
+>: <informalexample
+><screen
+>######################################################################
+# /etc/network/interfaces -- файл конфигурации для ifup(8), ifdown(8)
+# Смотрите страницу руководства interfaces(5) для информации о том, какие 
+# параметры доступны.
+######################################################################
+
+# Нам всегда нужен кольцевой интерфейс.
+#
+auto lo
+iface lo inet loopback
+
+# Для использования dhcp:
+#
+# auto eth0
+# iface eth0 inet dhcp
+
+# Пример настройки статического IP: (broadcast и шлюз опциональны)
+#
+# auto eth0
+# iface eth0 inet static
+#     address 192.168.0.42
+#     network 192.168.0.0
+#     netmask 255.255.255.0
+#     broadcast 192.168.0.255
+#     gateway 192.168.0.1
+</screen
+></informalexample>
+
+</para
+><para
+>Введите адрес(а) ваших DNS-серверов и настройки поиска в <filename
+>/etc/resolv.conf</filename
+>: <informalexample
+><screen
+># editor /etc/resolv.conf
+
+</screen
+></informalexample>
+
+</para
+><para
+>Простой <filename
+>/etc/resolv.conf</filename
+>: <informalexample
+><screen
+># search hqdom.local\000
+# nameserver 10.1.1.36
+# nameserver 192.168.9.100
+
+</screen
+></informalexample>
+
+</para
+><para
+>Введите хост-имя вашей системы (от 2 до 63 символов): <informalexample
+><screen
+># echo DebianHostName &#62; /etc/hostname
+
+</screen
+></informalexample>
+
+</para
+><para
+>Если у вас есть несколько сетевых карт, вы должны упорядочить имена модулей драйверов в файле <filename
+>/etc/modules</filename
+> file в нужном порядке. Позже во время загрузки, каждая карта будет ассоциирована с именем интерфейса (eth0, eth1, и т.д.) как вы и ожидаете. </para>
+   </sect3>
+
+   <sect3>
+   <title
+>Настройка часового пояса, пользователей и APT</title>
+
+<para
+>Установите ваш часовой пояс, добавьте обычного пользователя и выберите ваши источники <command
+>apt</command
+>, запустив <informalexample
+><screen
+># /usr/sbin/base-config new
+
+</screen
+></informalexample>
+</para>
+   </sect3>
+
+   <sect3>
+   <title
+>Настройка локалей</title>
+<para
+>Для настройки вашей локали, чтобы пользоваться другим языком, а не английским, установите пакет поддержки локалей и настройте его: <informalexample
+><screen>
+
+ # apt-get install locales
+ # dpkg-reconfigure locales
+
+</screen
+></informalexample
+> ЗАМЕЧАНИЕ: Apt должен быть сначала настроен, например, во время фазы base-config. Перед использованием локалей с набором символов, отличающимся от ASCII или latin1, пожалуйста проконсультируйтесь с нужным HOWTO по локализации. </para>
+   </sect3>
+  </sect2>
+
+  <sect2>
+  <title
+>Установка ядра</title>
+
+<para
+>Если вы намерены загрузиться в эту систему, вам скорее всего понадобится ядро Linux и системный загрузчик. Определите доступные пакеты с ядрами при помощи <informalexample
+><screen
+># apt-cache search kernel-image
+
+</screen
+></informalexample>
+
+</para
+><para
+>А затем установите ваш выбор, используя имя его пакетв. <informalexample
+><screen
+># apt-get install kernel-image-2.X.X-арх-и.т.д.
+
+</screen
+></informalexample>
+
+</para>
+  </sect2>
+
+  <sect2>
+<title
+>Установка системного загрузчика</title>
+<para
+>To make your &debian; system bootable, set up your boot loader to load the installed kernel with your new root partition. Note that debootstrap does not install a boot loader, though you can use apt-get inside your Debian chroot to do so. </para
+><para arch="i386"
+>Check <userinput
+>info grub</userinput
+> or <userinput
+>man lilo.conf</userinput
+> for instructions on setting up the bootloader. If you are keeping the system you used to install Debian, just add an entry for the Debian install to your existing grub <filename
+>menu.lst</filename
+> or <filename
+>lilo.conf</filename
+>. For <filename
+>lilo.conf</filename
+>, you could also copy it to the new system and edit it there. After you are done editing, call lilo (remember it will use <filename
+>lilo.conf</filename
+> relative to the system you call it from). </para
+><para arch="i386"
+>Here is a basic <filename
+>/etc/lilo.conf</filename
+> as an example: <informalexample
+><screen
+>boot=/dev/hda6
+root=/dev/hda6
+install=/boot/boot-menu.b
+delay=20
+lba32
+image=/vmlinuz
+label=Debian
+
+</screen
+></informalexample>
+
+</para
+><para arch="powerpc"
+>Check <userinput
+>man yaboot.conf</userinput
+> for instructions on setting up the bootloader. If you are keeping the system you used to install Debian, just add an entry for the Debian install to your existing <filename
+>yaboot.conf</filename
+>. You could also copy it to the new system and edit it there. After you are done editing, call ybin (remember it will use <filename
+>yaboot.conf</filename
+> relative to the system you call it from). </para
+><para arch="powerpc"
+>Here is a basic <filename
+>/etc/yaboot.conf</filename
+> as an example: <informalexample
+><screen
+>
+
+boot=/dev/hda2
+device=hd:
+partition=6
+root=/dev/hda6
+magicboot=/usr/lib/yaboot/ofboot
+timeout=50
+image=/vmlinux
+label=Debian
+
+</screen
+></informalexample
+> On some machines, you may need to use <userinput
+>ide0:</userinput
+> instead of <userinput
+>hd:</userinput
+>. </para>
+  </sect2>
+ </sect1>

@@ -1,0 +1,119 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: arm.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
+
+  <sect2 arch="arm" id="boot-tftp"
+><title
+>Загрузка по TFTP</title>
+&boot-installer-intro-net.xml; <sect3 arch="arm"
+><title
+>Загрузка по TFTP на NetWinder</title>
+
+<para
+>На NetWinder есть два сетевых интерфейса: 10Mbps NE2000-совместимая карта <filename
+>eth0</filename
+> и 100Mbps Tulip  карта <filename
+>eth1</filename
+>. </para
+><note
+><para
+>Вам потребуется NeTTrom 2.2.1 или новее для загрузки системы установки. Рекомендуем NeTTrom 2.3.3: получите эти файты с <ulink url="ftp://ftp.netwinder.org/pub/netwinder/firmware/"
+></ulink
+>: <itemizedlist>
+<listitem
+><para>
+
+<filename
+>nettrom-2.3-3.armv4l.rpm</filename>
+
+</para
+></listitem>
+<listitem
+><para>
+
+<filename
+>nettrom-2.3.3.bin</filename>
+
+</para
+></listitem>
+<listitem
+><para>
+
+<filename
+>nettrom-2.3.3.bin.md5sum</filename>
+
+</para
+></listitem>
+</itemizedlist>
+
+</para
+></note
+><para
+>После перезагрузки и прерывания процесса загрузки по время отсчета, вы должны сперва настроить сеть, задав либо статический адрес: <informalexample
+><screen>
+
+    команда NeTTrom -> setenv eth0_ip 192.168.0.10/24
+
+</screen
+></informalexample
+> где 24 это число битов в сетевой маске, либо динамический адрес: <informalexample
+><screen
+>команда NeTTrom-> boot diskless
+
+</screen
+></informalexample>
+
+</para
+><para
+>Возможно вам потребуется сконфигурировать настройки <userinput
+>route1</userinput
+>, если сервер TFTP расположен не в локальной подсети. Оставшаяся часть настроек достаточно стандартная (шаг save-all необязателен): <informalexample
+><screen
+>команда NeTTrom-> setenv kerntftpserver 192.168.0.1
+    команда NeTTrom-> setenv kerntftpfile tftpboot.img
+    команда NeTTrom-> save-all
+    команда NeTTrom-> setenv netconfig_eth0 flash
+    команда NeTTrom-> setenv kernconfig tftp
+
+</screen
+></informalexample>
+
+</para
+><para
+>Только две последние их них мешают нормальному процессу загрузки с диска, так что безопаснее сделать <command
+>save-all</command
+> прямо перед ними, это сохранит сетевые настройки на случай, если вам понадобится снова загрузиться по сети. Используйте команду <command
+>printenv</command
+> для просмотра настроек вашего окружения. И наконец, если переменная <envar
+>cmdappend</envar
+> вашего NeTTrom содержит опцию <option
+>noinitrd</option
+> (которая необходима для загрузки ядер 2.4), вы должны убрать ее, чтобы закачанное ядро смогло загрузиться со своим встроенным ram-диском. </para>
+  </sect3>
+
+  <sect3 arch="arm"
+><title
+>Загрузка по TFTP на CATS</title>
+
+<para
+>На машинах CATS используйте <command
+>boot de0:</command
+> или нечто подобное в подсказке Cyclone. </para>
+   </sect3>
+  </sect2>
+
+
+
+  <sect2 arch="arm"
+><title
+>Booting from CD-ROM</title>
+
+&boot-installer-intro-cd.xml;
+
+<para>
+
+To boot a CD-ROM from the Cyclone console prompt, use the command
+<command
+>boot cd0:cats.bin</command>
+
+</para>
+  </sect2>

@@ -1,0 +1,143 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: trouble.xml 20466 2004-08-31 22:39:09Z joeyh $ -->
+
+ <sect1 id="boot-troubleshooting">
+ <title
+>Устранение проблем процесса установки</title>
+ 
+
+  <sect2 id="unreliable-floppies">
+  <title
+>Надежность дискеты</title>
+
+<para
+>Надежность дискеты это, похоже, самая большая проблема для людей, впервые устанавливающих Debian. </para
+><para
+>The boot floppy is the floppy with the worst problems, because it is read by the hardware directly, before Linux boots. Often, the hardware doesn't read as reliably as the Linux floppy disk driver, and may just stop without printing an error message if it reads incorrect data. There can also be failures in the Driver Floppies most of which indicate themselves with a flood of messages about disk I/O errors. </para
+><para
+>Если установка замирает на какой-то дискете, сперва попробуйте скачать заново образ дискеты и записать на <emphasis
+>другую</emphasis
+> дискету. Простого переформатирования старой дискеты может быть недостаточно, особенно если это случилось с дискетой, которую отформатировали и записали без ошибок. Иногда полезно попробовать записать дискету на другой системе. </para
+><para
+>Один пользователь сообщил, что он записал образ на дискету <emphasis
+>три</emphasis
+> раза, прежде чем она заработала, а затем все было нормально с третьей дискетой. </para
+><para
+>Другие пользователи сообщали, что простая перезагрузка несколько раз с одной и той же дискетой в дисководе привела к успешной загрузке. Это все из-за ошибочной апаратной части и прошивок приводов дискет. </para>
+  </sect2>
+
+  <sect2
+><title
+>Настройка загрузки</title>
+
+<para
+>Если у вас есть проблемы и ядро падает во время загрузки, не распознает существующую у вас периферию или неправильно распознаются диски, сперва проверьте параметры загрузки, как это обсуждяется в <xref linkend="boot-parms"/>. </para
+><para
+>If you are booting with your own kernel instead of the one supplied with the installer, be sure that <userinput
+>CONFIG_DEVFS</userinput
+> is set in your kernel. The installer requires <userinput
+>CONFIG_DEVFS</userinput
+>. </para
+><para
+>Часто проблемы можно решить, убрав дополнения и периферию, а затем попытаться снова загрузиться. <phrase arch="i386"
+>Внутренние модемы, звуковые карты и устройства Plug-n-Play могут быть особенно проблематичными.</phrase
+> </para
+><para
+>Если на вашей машине установлен большой объем памяти, более чем 512M и программа установки падает при загрузке ядра, вам может понадобиться включить загрузочный аргумент для ограничения объема памяти, видимого ядру, такой как <userinput
+>mem=512m</userinput
+>. </para>
+  </sect2>
+
+  <sect2 id="kernel-msgs">
+  <title
+>Интерпретация стартовых сообщений ядра</title>
+
+<para
+>Во время загрузки вы можете видеть много сообщенией вида <computeroutput
+>can't find <replaceable
+>нечто</replaceable
+> </computeroutput
+> или <computeroutput
+> <replaceable
+>нечто</replaceable
+> not present</computeroutput
+>, <computeroutput
+>can't initialize <replaceable
+>нечто</replaceable
+> </computeroutput
+>, или даже <computeroutput
+>this driver release depends on <replaceable
+>нечто</replaceable
+> </computeroutput
+>. Большинство этих сообщений безвредны. Вы видите их потому что ядро для установочной системы собрано так, чтобы запускаться на компьютерах с самыми различными периферийными устройствами. Очевидно, ни один компьютер не может содержать все доступные устройства, так что операционная система может немного пожаловаться во время поиска периферии, которой у вас нет. Вы можете заметить что система иногда замирает. Это случается, когда ожидается ответ от устройства, а это устройство не присутствует в вашей системе. Если вы посчитаете, что загрузка системы занимает недопустимо долгое время, вы можете позже создать собственное ядро (смотрите <xref linkend="kernel-baking"/>). </para>
+  </sect2>
+
+
+  <sect2 id="problem-report">
+  <title
+>Отчет об ошибке</title>
+<para
+>Если вы прошли фазу начальной загрузки, но не смогли завершить установку, может быть полезен выбор меню отчета об ошибке. При этом системные журналы ошибок и информация о конфигурации будут скопированы на предоставленную пользователем дискету. Эта информация поможет понять, что было не так и как это исправить. Если вы отправляете отчет об ошибке, можете приложить эту информацию к отчету. </para
+><para
+>Other pertinent installation messages may be found in <filename
+>/var/log/</filename
+> during the installation, and <filename
+>/var/log/debian-installer/</filename
+> after the computer has been booted into the installed system. </para>
+  </sect2>
+
+  <sect2 id="submit-bug">
+  <title
+>Submitting Installation Reports</title>
+<para
+>If you still have problems, please submit an installation report. We also encourage installation reports to be sent even if the installation is successful, so that we can get as much information as possible on the largest number of hardware configurations. Please use this template when filling out installation reports, and file the report as a bug report against the "installation-reports" pseudo package, by sending it to <email
+>submit@bugs.debian.org</email
+>. <informalexample
+><screen
+>Package: installation-reports
+
+Debian-installer-version: &lt;Fill in date and from where you got the image&gt;
+uname -a: &lt;The result of running uname -a on a shell prompt&gt;
+Date: &lt;Date and time of the install&gt;
+Method: &lt;How did you install?  What did you boot off?  If network
+      install, from where?  Proxied?&gt;
+
+Machine: &lt;Description of machine (eg, IBM Thinkpad R32)&gt;
+Processor:
+Memory:
+Root Device: &lt;IDE?  SCSI?  Name of device?&gt;
+Root Size/partition table: &lt;Feel free to paste the full partition
+      table, with notes on which partitions are mounted where.&gt;
+Output of lspci and lspci -n:
+
+Base System Installation Checklist:
+[O] = OK, [E] = Error (please elaborate below), [ ] = didn't try it
+
+Initial boot worked:    [ ]
+Configure network HW:   [ ]
+Config network:         [ ]
+Detect CD:              [ ]
+Load installer modules: [ ]
+Detect hard drives:     [ ]
+Partition hard drives:  [ ]
+Create file systems:    [ ]
+Mount partitions:       [ ]
+Install base system:    [ ]
+Install boot loader:    [ ]
+Reboot:                 [ ]
+
+Comments/Problems:
+
+&lt;Description of the install, in prose, and any thoughts, comments
+      and ideas you had during the initial install.&gt;
+
+</screen
+></informalexample>
+
+</para
+><para
+>В отчете об ошибке опишите, в чем состоит проблема, включая последние увиденные сообщения ядра в случае падения ядра. Опишите шаги, которые вы сделали, чтобы привести вашу систему в проблемное состояние. </para>
+
+  </sect2>
+
+ </sect1>
