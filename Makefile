@@ -16,6 +16,10 @@ ifeq "$(architecture)" "i386"
 KVERS=2.4.18
 FLAVOUR=386
 endif
+ifeq "$(architecture)" "powerpc"
+KVERS=2.4.18
+FLAVOUR=powerpc
+endif
 
 # The type of system to build. Determines what udebs are unpacked into
 # the system. See the .list files for various types. You may want to
@@ -109,7 +113,7 @@ APT_GET=apt-get --assume-yes \
 	-o Dir::Cache=$(CWD)$(APTDIR)/cache
 
 # Get the list of udebs to install. Comments are allowed in the lists.
-UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE) | sed 's/$${kernel:Version}/$(KVERS)/g' | sed 's/$${kernel:Flavour}/$(FLAVOUR)/g') $(EXTRAS)
+UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE) `if [ -d lists/$(architecture) ]; then echo lists/$(architecture); fi` | sed 's/$${kernel:Version}/$(KVERS)/g' | sed 's/$${kernel:Flavour}/$(FLAVOUR)/g') $(EXTRAS)
 
 DPKGDIR=$(TREE)/var/lib/dpkg
 TEMP=./tmp
