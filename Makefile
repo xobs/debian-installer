@@ -571,12 +571,14 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 	fi;
 	gzip -v9f $(TEMP)/initrd
 
+$(TEMP_BOOT): $(TEMP_INITRD) arch_boot
+
 # raw kernel images
 $(KERNEL): $(STAMPS)tree-$(targetstring)-stamp
 	install -m 644 -D $(TEMP)/$(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,') $@
 
 # bootable images
-$(BOOT): $(TEMP_INITRD) arch_boot
+$(BOOT): $(TEMP_BOOT)
 	install -m 644 -D $(TEMP_BOOT)$(GZIPPED) $@
 
 # non-bootable root images
@@ -584,7 +586,7 @@ $(ROOT): $(TEMP_INITRD) arch_root
 	install -m 644 -D $(TEMP_ROOT)$(GZIPPED) $@
 
 # miniature ISOs with only a boot image
-$(MINIISO): $(TEMP_INITRD) arch_miniiso
+$(MINIISO): $(TEMP_BOOT) arch_miniiso
 	install -m 644 -D $(TEMP_MINIISO) $@
 
 # Other images, e.g. driver floppies. Those are simply handled as flavours
