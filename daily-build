@@ -1,13 +1,20 @@
 #!/bin/sh -e
 
-if [ ! -d pkg-lists ]; then
-    echo "You must run this from the build directory"
-    exit 1
+# Set these in the environment to override.
+if [ -n "$HOST" ]; then
+	HOST=people.debian.org
+fi
+if [ -n "$BASEDIR" ]; then
+	BASEDIR=public_html/d-i/images
+fi
+if [ -n "$DIR" ]; then
+	DIR=`date +%Y-%m-%d`
 fi
 
-host=people.debian.org
-basedir=public_html/d-i/images
-dir=`date +%Y-%m-%d`
+if [ ! -d pkg-lists ]; then
+    echo "You must run this from the build DIRectory"
+    exit 1
+fi
 
 unset LANG LC_ALL LANGUAGE
 cvs up || true
@@ -27,12 +34,12 @@ echo
 echo UPLOADING FILES
 echo
 
-ssh $host mkdir -p $basedir/$dir/RSYNC_IN_PROGRESS
-ssh $host cp -a $basedir/daily/. $basedir/$dir/RSYNC_IN_PROGRESS/ || true
-rsync --stats -rv dest/ $host:$basedir/$dir/RSYNC_IN_PROGRESS/
-ssh $host mv $basedir/$dir/RSYNC_IN_PROGRESS/\* $basedir/$dir/
-ssh $host rmdir $basedir/$dir/RSYNC_IN_PROGRESS
-ssh $host rm -f $basedir/daily
-ssh $host ln -sf $dir $basedir/daily
+ssh $HOST mkdir -p $BASEDIR/$DIR/RSYNC_IN_PROGRESS
+ssh $HOST cp -a $BASEDIR/daily/. $BASEDIR/$DIR/RSYNC_IN_PROGRESS/ || true
+rsync --stats -rv dest/ $HOST:$BASEDIR/$DIR/RSYNC_IN_PROGRESS/
+ssh $HOST mv $BASEDIR/$DIR/RSYNC_IN_PROGRESS/\* $BASEDIR/$DIR/
+ssh $HOST rmdir $BASEDIR/$DIR/RSYNC_IN_PROGRESS
+ssh $HOST rm -f $BASEDIR/daily
+ssh $HOST ln -sf $DIR $BASEDIR/daily
 
 make reallyclean
