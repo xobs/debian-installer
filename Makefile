@@ -477,18 +477,17 @@ $(INITRD):  $(TYPE)-tree-stamp
 floppy: boot_floppy
 boot_floppy: $(IMAGE)
 	install -d $(DEST)
-	dd if=$(IMAGE) of=$(FLOPPYDEV) bs=$(FLOPPY_SIZE)k
+	sudo dd if=$(IMAGE) of=$(FLOPPYDEV) bs=$(FLOPPY_SIZE)k
 
 # Write drivers  floppy
 %_floppy: $(DEST)/%-image.img
-	install -d $(DEST)
-	dd if=$< of=$(FLOPPYDEV)
+	sudo dd if=$< of=$(FLOPPYDEV)
 
 # If you're paranoid (or things are mysteriously breaking..),
 # you can check the floppy to make sure it wrote properly.
 # This target will fail if the floppy doesn't match the floppy image.
 floppy_check: $(IMAGE)
-	cmp $(FLOPPYDEV) $(IMAGE)
+	sudo cmp $(FLOPPYDEV) $(IMAGE)
 
 listtypes:
 	@echo "supported types: $(TYPES_SUPPORTED)"
