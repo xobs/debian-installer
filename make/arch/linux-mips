@@ -1,0 +1,9 @@
+arch-image: $(IMAGE)
+
+$(IMAGE): $(INITRD)
+
+	$(foreach NAME,$(KERNELNAME), \
+		tftpboot.sh $(TEMP)/$(NAME) /dev/null $(INITRD) $@.new)
+
+	# Finalize the image.
+	mv $@.new $@
