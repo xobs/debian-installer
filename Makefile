@@ -9,7 +9,7 @@
 # README for details.
 
 # The kernel version to use on the boot floppy.
-KVERS=2.4.0-di
+KVERS=2.4.1-di
 
 # The type of system to build. Determines what udebs are unpacked into
 # the system. See the .list files for various types. You may want to
