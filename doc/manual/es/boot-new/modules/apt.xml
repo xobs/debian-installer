@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 18642 -->
-<!-- revisado por jfs, 28 octubre 2004 -->
+<!-- original version: 23845 -->
+<!-- actualizado por rudy, 5 diciembre 2004 -->
 
  <sect2 id="configure-apt">
  <title>Configuración de APT</title>
@@ -15,21 +15,31 @@ que pertenece al paquete <classname>apt</classname>.<footnote>
 
 Observe que el programa que realmente instala los paquetes se llama
 <command>dpkg</command>. Sin embargo, este programa es una herramienta
-de más bajo nivel. <command>apt-get</command> llama a 
-<command>dpkg</command> cuando sea necesario. Está en un nivel más alto
-ya que <command>apt</command> sabe que tiene que instalar otros 
-paquetes que necesita el que está intentando instalar. <command>Apt</command> también sabe cómo obtener el paquete de sus CD-ROMs, de su red informática o de cualquier otro lugar.
+de más bajo nivel. <command>apt-get</command> es una herramienta de alto
+nivel la cual invocará a <command>dpkg</command> cuando sea necesario y
+también porque éste sabe paquetes que necesita el que está intentando 
+instalar, además de como obtener el paquete de sus CD-ROMs, de su red 
+informática o de cualquier otro lugar.
 
 </para>
 </footnote>
 
-Sin embargo, debe configurar APT para que éste sepa de dónde recuperar los 
+Otras interfaces de gestión de paquetes, como <command>aptitude</command>,
+<command>synaptic</command> y el viejo <command>dselect</command> también
+usan y dependen de <command>apt-get</command>. Se recomienda éstas interfaces
+para usuarios noveles, puesto que integran algunas características
+adicionales (búsqueda de paquetes y verificación de estado) en una simpática
+interfaz de usuario.
+
+</para><para>
+
+APT debe ser configurado para que éste sepa de dónde recuperar los 
 paquetes. La aplicación de ayuda que asiste en esta tarea se llama
 <command>apt-setup</command>.
 
 </para><para>
 
-El siguiente paso en su proceso de configuración es decirle a APT
+El siguiente paso en su proceso de configuración es indicar a APT
 donde pueden encontrarse otros paquetes Debian. Tenga en cuenta que puede
 volver a ejecutar esta herramienta en cualquier momento después de la
 instalación, ya sea ejecutando <command>apt-setup</command>, o editando
@@ -78,22 +88,35 @@ poco más lenta en establecer las conexiones.
 </para><para>
 
 El siguiente paso a dar durante la configuración de las fuentes de paquetes
-de red es indicar a <command>apt-setup</command> el país en que se
+en la red es indicar a <command>apt-setup</command> el país en que se
 encuentra. Esto configura a qué sistema de la red de servidores espejos
 de Debian en Internet se conectará. Se le mostrará una lista de sistemas disponibles dependiendo del país que elija. Lo habitual es elegir el 
 el primero de la lista, pero cualquiera de ellos debería funcionar.
+Sin embargo, tenga en cuenta que la lista de servidores réplica provista por 
+la instalación ha sido generada cuando se ha publicado esta versión de Debian,
+por lo que algunos sistemas podrían no estar disponibles. 
 
 </para><para>
 
-Se le pedirá configurar su servidor proxys si está instalando a través
-de HTTP. Esta configuración es a veces necesaria para usuarios que estén
-ubicados detrás de un cortafuegos, en redes corporativas, etc.
+Después de elegir el servidor de réplica, se le preguntará si se
+deberá usar un servidor proxy. Un servidor proxy es un servidor que
+reenvía todas sus solicitudes HTTP o FTP al Internet y frecuentemente es
+usado para optimizar el acceso a Internet en redes corporativas. En
+algunas redes solamente el servidor proxy tiene permitido el acceso a
+Internet, en éste caso deberá ingresar el nombre del servidor proxy.
+También podría necesitar incluir un usuario y clave. La mayoría de
+usuarios domésticos no necesitarán especificar un servidor proxy,
+aunque algunos proveedores de Internet podrían ofrecer servidores
+proxy para sus usuarios.
 
 </para><para>
 
-Finalmente, se probará su nueva fuente de paquetes de red. Si todo
-va bien, se le preguntará si desea o no repetir el proceso
-con otra fuente de red.
+Después que elija un servidor réplica, se comprobará su nueva fuente
+de paquetes en la red. Si todo va bien, se le preguntará si desea o
+no añadir otra fuente de paquetes. Si tiene algún problema usando la
+fuente de paquete que ha elegido, intente usando otro servidor réplica
+(ya sea de la lista correspondiente a su país o de la lista global),
+o intente usar una fuente de paquetes en la red distinta.
 
 </para>
   </sect3>

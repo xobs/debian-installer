@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 22580 -->
-<!-- revisado, Rudy Godoy, 24 noviembre 2004 -->
+<!-- original version: 23805 -->
+<!-- actualizado, Rudy Godoy, 5 diciembre 2004 -->
 
 <sect1 id="example-preseed">
 <title>Ejemplo de fichero de preconfiguración</title>
+
+<para>
 
 A continuación se muestra un ejemplo de un fichero de preconfiguración
 funcional que puede utilizar para realizar una instalación
 automatizada. Su uso se explica en <xref
 linkend="automatic-install"/>. Tal vez quiera descomentar alguna de
 las líneas antes de usar el fichero.
+
+</para>
 
 <informalexample><screen>
 #### Modificar syslinux.cfg.
@@ -43,6 +47,15 @@ las líneas antes de usar el fichero.
 #    languagechooser/language-name=Spanish
 #    countrychooser/shortlist=ES
 #    console-keymaps-at/keymap=es
+#
+# Note que el núcleo aceptar un máximo de 8 opciones de línes de ordenes
+# y 8 opciones de entorno (incluyendo cualquier opción añadida en forma
+# predeterminada por el instalador). Si éstos se exceden, los núcleos
+# 2.4 eliminarán cualquier opción de exceso y los 2.6 darán un mensaje
+# de «panic».
+# Algunas opciones predeterminadas, como «vga=normal» y «devfs=mount»,
+# podrían ser eliminadas sin problemas para la mayoría de instalaciones,
+# lo cual le permitiría añadir más opciones para preconfiguración.
 
 #### Órdenes del intérprete de comandos.
 
@@ -153,6 +166,7 @@ d-i	partman-auto/choose_recipe	select Todos los ficheros en una partición (recom
 #	.
 
 # Lo siguiente hace que partman particione automáticamente sin confirmación.
+d-i   partman/confirm_write_new_label boolean true
 d-i	partman/choose_partition	select Finish partitioning and write changes to disk
 d-i	partman/confirm			boolean	true
 
@@ -237,7 +251,7 @@ base-config	tzconfig/choose_country_zone_single boolean true
 # modificado. El usuario asignado será (en minúsculas) el primer nombre
 # del nombre completo.
 #passwd		passwd/user-fullname		string Usuario de Debian
-#passwd		passwd/username			string 
+#passwd		passwd/username			string debian
 # Y su clave, ¡pero uselo con precaución!
 #passwd		passwd/user-password		password inseguro
 #passwd		passwd/user-password-again	password inseguro
