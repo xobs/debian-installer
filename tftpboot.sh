@@ -72,11 +72,7 @@ case "$arch" in
 	if (grep -q "ARCH_CATS=y" $tmp); then
 		catsboot $tftpimage $tftpimage.tmp $rootimage
 	fi
-	if (grep -q "ARCH_NETWINDER=y" $tmp); then
-		cat $rootimage >>$tftpimage
-	else
-		cat $rootimage >>$tftpimage
-	fi
+	cat $rootimage >>$tftpimage
 	;;
     mipsel) t-rex -k $tftpimage.tmp -r $rootimage -o $tftpimage ;;
     mips) tip22 $tftpimage.tmp $rootimage $tftpimage ;;
