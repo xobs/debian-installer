@@ -1,85 +1,89 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- original version: 11648 -->
+<!-- Revisado por Rudy Godoy -->
 
   <sect2 arch="i386"><title>Particionado en &arch-title;</title>
 <para>
 
-Generalmente, la BIOS del computador añade restricciones adicionales
-para particionar el disco. Hay un límite al número de particiones
-<quote>primarias</quote> y <quote>lógicas</quote> que se pueden crear. 
+Generalmente, la BIOS del ordenador aÃ±ade restricciones adicionales
+para particionar el disco. Hay un lÃ­mite del nÃºmero de particiones
+<quote>primarias</quote> y <quote>lÃ³gicas</quote> que se pueden crear. 
 Adicionalmente, con las BIOS anteriores a 1994-98, existen limitaciones
 sobre los dispositivos desde los cuales se puede iniciar el sistema.
-Para mayor información, vea la documentación acerca de 
- <ulink url="&url-partition-howto;">cómo particionar en Linux</ulink> y la 
+Para mayor informaciÃ³n, vea la documentaciÃ³n acerca de 
+ <ulink url="&url-partition-howto;">cÃ³mo particionar en Linux</ulink> y la 
 <ulink url="&url-phoenix-bios-faq-large-disk;">FAQ de la BIOS Phoenix</ulink>, 
-pero de todas maneras, esta sección incluye una visión general para guiarlo
-en la mayoría de las situaciones posibles.
+de cualquier manera, esta secciÃ³n incluye una visiÃ³n general para guiarlo
+en la mayorÃ­a de las situaciones posibles.
 
 </para><para>
 
-Las particiones <quote>primarias</quote> son el método original
-de particionado para discos. Sin embargo, solamente pueden haber cuatro de ellas. 
-Para rebasar esta limitación, se inventaron las particiones de tipos
-<quote>extendidas</quote> y <quote>lógicas</quote>. Estableciendo su
-partición primaria como partición extendida, puede subdividir todo su
-espacio asignado dentro de particiones lógicas. Puede crear hasta
-60 particiones lógicas en cada partición extendida; sin embargo,
-puede tener solamente una partición extendida por disco.
+Las particiones <quote>primarias</quote> son el mÃ©todo original de
+particionado para discos. Sin embargo, solamente puede haber cuatro de 
+ellas. Para rebasar esta limitaciÃ³n, se inventaron las particiones de tipos
+<quote>extendidas</quote> y <quote>lÃ³gicas</quote>. Estableciendo su
+particiÃ³n primaria como particiÃ³n extendida, puede subdividir todo su
+espacio asignado dentro de Ã©sta particiones lÃ³gicas. Puede crear hasta
+60 particiones lÃ³gicas en cada particiÃ³n extendida; sin embargo,
+puede tener solamente una particiÃ³n extendida por disco.
 
 </para><para>
 
-Linux limita a 15 particiones como máximo por cada disco SCSI
-(3 particiones primarias, 12 particiones lógicas), y 63
-particiones en una unidad IDE (3 particiones primarias, 60 particiones lógicas). 
-Sin embargo, los sistemas normales de &debian; proveen sólo 20 dispositivos
-por partición, por lo tanto, no podrá instalar sobre la partición número 20 o siguientes, 
-a menos que haya creado manualmente los dispositivos para esas particiones.
-
+Linux limita a 15 particiones como mÃ¡ximo por cada disco SCSI
+(3 particiones primarias, 12 particiones lÃ³gicas), y 63 particiones en 
+una unidad IDE (3 particiones primarias, 60 particiones lÃ³gicas). 
+Sin embargo, los sistemas &debian; comunes proveen sÃ³lo 20 dispositivos
+por particiÃ³n, por lo tanto, no podrÃ¡ instalar sobre la particiÃ³n nÃºmero
+20 o siguientes, a menos que haya creado manualmente los dispositivos 
+para esas particiones.
 
 </para><para>
 
 Si tiene un disco IDE relativamente grande, y no esta utilizando LBA,
-ni conductores de overlay (proporcionados a veces por los fabricantes
-de los discos duros), la partición de inicio de su máquina (aquella que
-contiene la imagen del núcleo de Linux) debe estar ubicada en los primeros
+ni conductores de Â«overlayÂ» (proporcionados a veces por los fabricantes
+de los discos duros), la particiÃ³n de inicio de su mÃ¡quina (aquella que
+contiene la imagen del nÃºcleo Linux) debe estar ubicada en los primeros
 1024 cilindros de su disco duro (generalmente alrededor de 524 megabytes,
-sin considerar la traducción que realiza la BIOS).
+sin considerar la traducciÃ³n que realiza el BIOS).
 </para><para>
 
-Esta restricción no se aplica si tiene una BIOS relativamente nueva,
+Esta restricciÃ³n no se aplica si tiene un BIOS relativamente nuevo,
 (posterior a 1995-98, dependiendo del fabricante) que soporte las
 <quote>Especificaciones avanzadas de los discos duros</quote>. 
 Ambos Lilo, el cargador de Linux, y la alternativa de Debian 
-<command>mbr</command> deben usar la BIOS para leer el núcleo desde el disco 
-y cargarlo en la RAM. Si la BIOS dispone de las extensiones int 0x13 de acceso a
-discos grandes, se usarán esas extensiones. De otra manera, se 
-utilizará la interfaz primitiva de acceso al disco, que no se podrá usar
-para acceder a posiciones superiores al cilindro 1023. Una vez que se inicie Linux,
-no tiene importancia la BIOS que tenga, ya que las restricciones
-ya no se aplican más, puesto a que Linux no utiliza la BIOS para acceder
+<command>mbr</command> deben usar la BIOS para leer el nÃºcleo desde el disco 
+y cargarlo en la RAM. Si la BIOS dispone de las extensiones Â«int 0x13Â» de 
+acceso a discos grandes, se usarÃ¡n esas extensiones. De otra manera, se 
+utilizarÃ¡ la interfaz nativa de acceso a disco, que no se podrÃ¡ usar
+para acceder a posiciones superiores al cilindro 1023. Una vez que se inicie
+Linux, no tiene importancia el BIOS que tenga, ya que las restricciones
+ya no se aplican mÃ¡s, puesto a que Linux no utiliza el BIOS para acceder
 a los discos.
 
 </para><para>
 
-Si posee un disco grande, podría tener que usar las técnicas para la traducción de
-cilindros, las cuales pueden ser configuradas desde la BIOS, opciones, tales
-como LBA (Dirección lógica de bloques) o traducción de modo (<quote>grande</quote>),
-vía CHS.
-Más información acerca de estos problemas con discos grandes se puede ver en
-la <ulink url="&url-large-disk-howto;">Documentación acerca de discos grandes</ulink>. 
-Si está usando un esquema de traducción de cilindros, y su BIOS no tiene la extensión
-para soportar discos grandes, su partición de inicio debe estar dentro de los primeros
-1024 cilindros (según la visión <emphasis>traducida</emphasis> de la BIOS).
+Si posee un disco grande, podrÃ­a tener que usar las tÃ©cnicas para la 
+traducciÃ³n de cilindros, las cuales pueden ser configuradas desde el BIOS, 
+opciones, tales como LBA (DirecciÃ³n lÃ³gica de bloques) o traducciÃ³n de modo 
+(<quote>grande</quote>), a travÃ©s de CHS.
+Puede ver mÃ¡s informaciÃ³n acerca de estos problemas con discos grandes en
+la <ulink url="&url-large-disk-howto;">DocumentaciÃ³n acerca de discos grandes</ulink>. 
+Si estÃ¡ usando un esquema de traducciÃ³n de cilindros, y su BIOS no tiene la 
+extensiÃ³n para soportar discos grandes, su particiÃ³n de arranque debe estar 
+dentro de los primeros 1024 cilindros (segÃºn la visiÃ³n 
+<emphasis>traducida</emphasis> de la BIOS).
 
 </para><para>
 
-La manera recomendada de solucionar este problema, es creando una pequeña partición
-(5 a 10MB deberían ser suficientes) al principio del disco para usadr como partición
-de inicio, y después, en el área restante, crear las otras particiones que desee tener.
-Esta partición de inicio, se <emphasis>debe</emphasis> montar en <filename>/boot</filename>,
-ya que es en este directorio donde se almacenarán los núcleos de Linux.
-Está configuración funcionará en cualquier sistema, sin importar si se utiliza
-traducción LBA o CHS, ni tampoco si su BIOS soporta las extensiones para discos grandes.
+La manera recomendada de solucionar este problema, es creando una pequeÃ±a 
+particiÃ³n (5 a 10MB deberÃ­an ser suficientes) al principio del disco para 
+usarla como particiÃ³n de arranque, y despuÃ©s, en el Ã¡rea restante, crear 
+las otras particiones que desee tener.
+Esta particiÃ³n de arranque, se <emphasis>debe</emphasis> montar en 
+<filename>/boot</filename>, ya que es en este directorio donde se 
+almacenarÃ¡n los nÃºcleos de Linux.
+EstÃ¡ configuraciÃ³n funcionarÃ¡ en cualquier sistema, sin importar si se utiliza
+traducciÃ³n LBA o CHS, ni tampoco si su BIOS soporta las extensiones para 
+discos grandes.
 
 </para>
   </sect2>
