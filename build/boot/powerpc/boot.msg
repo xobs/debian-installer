@@ -10,6 +10,9 @@ If the system fails to boot at all (the typical
 symptom is a white screen which doesn't go away),
 use 'install video=ofonly' or 'expert video=ofonly'.
 
+Press the tab key for a list of options, or type
+'help' for help.
+
 ************************************
 If in doubt, just choose 'install', and if that 
 doesn't work, try 'install video=ofonly'.
