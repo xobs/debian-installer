@@ -191,10 +191,6 @@ compiled-stamp: $(SOURCEDIR)/udeb-sources-stamp
 	mv $(SOURCEDIR)/*.udeb $(APTDIR)/cache/archives
 	touch compiled-stamp
 
-# Ensure this exists.
-debian/control: debian/control.in
-	sed "s/@UDEB_DEPENDS@/$$deps/" < $< > $@
-
 # 
 # Get all required udebs and put in UDEBDIR.
 get_udebs: $(TYPE)-get_udebs-stamp
