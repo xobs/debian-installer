@@ -45,7 +45,7 @@ Power users may be more comfortable with a menu-driven interface,
 where each step is controlled by the user rather than the installer
 performing each step automatically in sequence. To use the installer
 in a manual, menu-driven way, add the boot argument
-<userinput>DEBCONF_PRIORITY=medium</userinput>.
+<userinput>debconf/priority=medium</userinput>.
 
 </para><para>
 
@@ -53,14 +53,8 @@ If your hardware requires you to pass options to kernel modules as
 they are installed, you will need to start the installer in
 <quote>expert</quote> mode. This can be done by either using the
 <command>expert</command> command to start the installer or by adding
-the boot argument <userinput>DEBCONF_PRIORITY=low</userinput>.
+the boot argument <userinput>debconf/priority=low</userinput>.
 Expert mode gives you full control over &d-i;.
-
-</para><para condition="FIXME">
-
-<emphasis>
-FIXME: Should we add something here about starting d-i with the 2.6 kernel?
-</emphasis>
 
 </para><para>
 
@@ -87,8 +81,8 @@ ssh session to view the logs described below.
 
 </para><para>
 
-Error messages are redirected to the third console (known as
-<userinput>tty3</userinput>).  You can access this console by
+Error messages are redirected to the third console.
+You can access this console by
 pressing <keycombo><keycap>Left Alt</keycap><keycap>F3</keycap></keycombo>
 (hold the left <keycap>Alt</keycap> key while pressing the
 <keycap>F3</keycap> function key); get back to
@@ -99,9 +93,9 @@ the main installer process with
 
 These messages can also be found in
 <filename>/var/log/messages</filename>.  After installation, this log
-is copied to <filename>/var/log/installer.log</filename> on your new
-system. Other installation messages may be found in
-<filename>/target/var/log/debian-installer/</filename> during the
+is copied to <filename>/var/log/debian-installer/messages</filename> on your
+new system. Other installation messages may be found in
+<filename>/var/log/</filename> during the
 installation, and <filename>/var/log/debian-installer/</filename>
 after the computer has been booted into the installed system.
 
@@ -125,11 +119,16 @@ using a particular component are in <xref linkend="module-details"/>.
 
 Shows the list of components to the user during installer operation,
 and starts a selected component when it is selected. Main-menu's
-questions are set to priority MEDIUM, so if your priority is set to
-HIGH or CRITICAL (HIGH is the default), you will not see the menu. On
+questions are set to priority medium, so if your priority is set to
+highor critical (high is the default), you will not see the menu. On
 the other hand, if there is an error which requires your intervention,
 the question priority may be downgraded temporarily to allow you
 to resolve the problem, and in that case the menu may appear.
+
+</para><para>
+
+You can get to the main menu by selecting the "Back" button
+repeatedly to back all the way out of the currently running component.
 
 </para></listitem>
 </varlistentry>
@@ -155,27 +154,27 @@ in.
 </varlistentry>
 <varlistentry>
 
-<term>ddetect</term><listitem><para>
-
-Detects hard disks, either installed or attached to the computer.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
-<term>pcmcia</term><listitem><para>
-
-Allows the user to configure PCMCIA cards used in laptops for 
-networking.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
 <term>kbd-chooser</term><listitem><para>
 
 Shows a list of keyboards, from which the user chooses the model which
 matches his own.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>hw-detect</term><listitem><para>
+
+Automatically detects most of the system's hardware, including network
+cards, disk drives, and PCMCIA.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>cdrom-detect</term><listitem><para>
+
+Looks for and mounts a Debian installation CD.
 
 </para></listitem>
 </varlistentry>
@@ -202,8 +201,7 @@ hard drive.
 <term>choose-mirror</term><listitem><para>
 
 Presents a list of Debian archive mirrors. The user may choose
-the source of his installation packages. Commonly, a CD-ROM or 
-network mirror are chosen.
+the source of his installation packages.
 
 </para></listitem>
 </varlistentry>
@@ -213,14 +211,6 @@ network mirror are chosen.
 
 Checks integrity of a CD-ROM. This way the user may assure him/herself
 that the installation CD-ROM was not corrupted.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
-<term>cdrom-detect</term><listitem><para>
-
-Detects CD-ROM drives, either installed or attached to the computer.
 
 </para></listitem>
 </varlistentry>
@@ -239,7 +229,7 @@ cost of some features).
 <term>anna</term><listitem><para>
 
 Anna's Not Nearly APT. Installs packages which have been retrieved
-from the chosen mirror.
+from the chosen mirror or CD.
 
 </para></listitem>
 </varlistentry>
@@ -314,15 +304,6 @@ the computer to operate under Linux when rebooted.
 </varlistentry>
 <varlistentry>
 
-<term>kernel-chooser</term><listitem><para>
-
-Allows the user to choose an operating system kernel version,
-if there is more than one version available.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
 <term>os-prober</term><listitem><para>
 
 Detects currently installed operating systems on the computer and
@@ -346,7 +327,7 @@ operating system each time the computer boots.
 </varlistentry>
 <varlistentry>
 
-<term>baseconfig</term><listitem><para>
+<term>base-config</term><listitem><para>
 
 Provides dialogs for setting up the base system packages according
 to user preferences. This is normally done after rebooting the 
