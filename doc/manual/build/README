@@ -7,6 +7,7 @@ The currently supported document types are:
 - html
 - pdf
 - ps
+- txt
 
 Note: Building pdf and ps versions of the manual for Japanese and Greek is
       not supported at the moment.
@@ -22,6 +23,7 @@ all     : docbook, docbook-xml, docbook-xsl, xsltproc
 html    : (no additional packages required)
 pdf, ps : openjade, jadetex, docbook-dsssl
 pdf     : gs-common
+txt     : w3m
 
 Note: It's not possible to build the documentation on Woody as packages are
       required that are not available for Woody.
@@ -44,7 +46,7 @@ build.sh: For each language and architecture calls buildone.sh, moves
 clear.sh: Does the actual cleaning.
 
 In ./templates
--------------
+--------------
 install.xml.template: Main xml file used to aggregate various parts into
     one big whole. This is a bit customized compared to the original
     (changed SYSTEM entities, hardcode local path to docbook dtd -- broken
@@ -69,6 +71,7 @@ any other .ent: Location of installation files (kernels, boot disks,
     base tarballs) for various architectures.
 
 In ./stylesheets
+----------------
 style-common.xsl: Common parameters for xsl transformation.
 
 style-html.xsl: HTML-specific parameters for xsl transformation.
@@ -77,6 +80,11 @@ style-print.dsl: Parameters for dvi transformation.
 
 style-fo.xsl: FO-specific parameters for xsl transformation.
     (currently unused)
+
+In ./arch-options
+-----------------
+A file for each architecture where architecture specific parameters
+are set.
 
 3. Building:
 ============
@@ -97,5 +105,5 @@ For mass building you can use ./build.sh script.
 
 
 -- 
-01. December 2004 Frans Pop
+05. December 2004 Frans Pop
 27. January 2004  Miroslav Kure 

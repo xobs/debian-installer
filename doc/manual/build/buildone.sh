@@ -4,7 +4,8 @@ if [ "$1" = "--help" ]; then
     echo "$0: Generate the Debian Installer Manual in several different formats"
     echo "Usage: $0 [arch] [lang] [format]"
     echo "[format] may consist of multiple formats provided they are quoted (e.g. \"html pdf\")"
-    exit 1
+    echo "Supported formats: html, ps, pdf, txt"
+    exit 0
 fi
 
 arch=${1:-i386}
@@ -34,19 +35,11 @@ fi
 tempdir="build.tmp"
 dynamic="${tempdir}/dynamic.ent"
 
-## Function to check result of executed programs and exit on error
-checkresult () {
-    if [ ! "$1" = "0" ]; then
-        exit $1
-    fi
-}
-
 create_profiled () {
 
-    # Skip this step if the profiled .xml file already exists
-    [ -f $tempdir/install.${language}.xml ] && return
+    [ -x /usr/bin/xsltproc ] || return 9
 
-    echo "Creating temporary profiled .xml file..."
+    echo "Info: creating temporary profiled .xml file..."
 
     if [ ! "$official_build" ]; then
         unofficial_build="FIXME;unofficial-build"
@@ -57,7 +50,7 @@ create_profiled () {
     # Now we source the profiling information for the selected architecture
     [ -f arch-options/${arch} ] || {
         echo "Error: unknown architecture $arch!"
-        exit 1
+        return 1
     }
     . arch-options/$arch
 
@@ -85,50 +78,51 @@ create_profiled () {
         --output $tempdir/install.${language}.profiled.xml \
         $stylesheet_profile \
         $tempdir/install.${language}.xml
-    checkresult $?
+    RET=$?; [ $RET -ne 0 ] && return $RET
+
+    return 0
 }
 
 create_html () {
 
-    create_profiled
-    
-    echo "Creating .html files..."
+    echo "Info: creating .html files..."
 
     /usr/bin/xsltproc \
         --xinclude \
         --stringparam base.dir $destination/html/ \
         $stylesheet_html \
         $tempdir/install.${language}.profiled.xml
-    checkresult $?
+    RET=$?; [ $RET -ne 0 ] && return $RET
+
+    return 0
 }
 
 create_text () {
 
-    create_profiled
+    [ -x /usr/bin/w3m ] || return 9
 
-    echo "Creating temporary .html file..."
+    echo "Info: creating temporary .html file..."
 
     /usr/bin/xsltproc \
         --xinclude \
         --output $tempdir/install.${language}.html \
         $stylesheet_html_single \
         $tempdir/install.${language}.profiled.xml
-    checkresult $?
+    RET=$?; [ $RET -ne 0 ] && return $RET
 
     # Replace some unprintable characters
-    cat $tempdir/install.${language}.html | \
-        sed "s:\&#8211;:-:g        # n-dash
-             s:\&#8212;:--:g       # m-dash
-             s:\&#8220;:\&quot;:g  # different types of quotes
-             s:\&#8221;:\&quot;:g
-             s:\&#8222;:\&quot;:g
-             s:«\|»:\&quot;:g      # quotes in Russian translation
-             s:\&#8230;:...:g      # ellipsis
-             s:\&#8482;: (tm):g    # trademark" \
-        >$tempdir/install.${language}.corr.html
-    checkresult $?
+    sed "s:\&#8211;:-:g        # n-dash
+         s:\&#8212;:--:g       # m-dash
+         s:\&#8220;:\&quot;:g  # different types of quotes
+         s:\&#8221;:\&quot;:g
+         s:\&#8222;:\&quot;:g
+         s:«\|»:\&quot;:g      # quotes in Russian translation
+         s:\&#8230;:...:g      # ellipsis
+         s:\&#8482;: (tm):g    # trademark" \
+        $tempdir/install.${language}.html >$tempdir/install.${language}.corr.html
+    RET=$?; [ $RET -ne 0 ] && return $RET
 
-    echo "Creating .txt file..."
+    echo "Info: creating .txt file..."
 
     # Set encoding for output file
     case $language in
@@ -146,20 +140,23 @@ create_text () {
             ;;
     esac
     
-    w3m -dump $tempdir/install.${language}.corr.html \
+    /usr/bin/w3m -dump $tempdir/install.${language}.corr.html \
         -o display_charset=$CHARSET \
         >$destination/install.${language}.txt
-    checkresult $?
+    RET=$?; [ $RET -ne 0 ] && return $RET
+
+    return 0
 }
 
 create_dvi () {
     
+    [ -x /usr/bin/openjade ] || return 9
+    [ -x /usr/bin/jadetex ] || return 9
+
     # Skip this step if the .dvi file already exists
     [ -f $tempdir/install.${language}.dvi ] && return
 
-    create_profiled
-    
-    echo "Creating temporary .tex file..."
+    echo "Info: creating temporary .tex file..."
 
     # And use openjade to generate a .tex file
     export SP_ENCODING="utf-8"
@@ -170,44 +167,57 @@ create_dvi () {
         -V tex-backend \
         $tempdir/install.${language}.profiled.xml
     RET=$?
-    if [ $RET -eq 1 ] ; then
-        echo "** Error $RET from 'openjade'; probably non-fatal so ignoring."
+    if [ $RET -eq 1 ] && [ -s $tempdir/install.${language}.tex ] ; then
+        echo "Warning: recieved error $RET from 'openjade'; probably non-fatal so ignoring."
     else
-        checkresult $RET
+        [ $RET -ne 0 ] && return $RET
     fi
 
-    echo "Creating temporary .dvi file..."
+    echo "Info: creating temporary .dvi file..."
 
     # Next we use jadetext to generate a .dvi file
-    # This needs three passes to properly generate the index (pagenumbering)
+    # This needs three passes to properly generate the index (page numbering)
     cd $tempdir
     for PASS in 1 2 3 ; do
         /usr/bin/jadetex install.${language}.tex >/dev/null
-        checkresult $?
+        RET=$?; [ $RET -ne 0 ] && break
     done
     cd ..
+    [ $RET -ne 0 ] && return $RET
+
+    return 0
 }
 
 create_pdf() {
     
-    create_dvi
+    [ -x /usr/bin/dvipdf ] || return 9
 
-    echo "Creating .pdf file..."
+    create_dvi
+    RET=$?; [ $RET -ne 0 ] && return $RET
+
+    echo "Info: creating .pdf file..."
 
     /usr/bin/dvipdf $tempdir/install.${language}.dvi
-    checkresult $?
+    RET=$?; [ $RET -ne 0 ] && return $RET
     mv install.${language}.pdf $destination/
+
+    return 0
 }
 
 create_ps() {
     
-    create_dvi
+    [ -x /usr/bin/dvips ] || return 9
 
-    echo "Creating .ps file..."
+    create_dvi
+    RET=$?; [ $RET -ne 0 ] && return $RET
+
+    echo "Info: creating .ps file..."
 
     /usr/bin/dvips -q $tempdir/install.${language}.dvi
-    checkresult $?
+    RET=$?; [ $RET -ne 0 ] && return $RET
     mv install.${language}.ps $destination/
+
+    return 0
 }
 
 ## MAINLINE
@@ -217,26 +227,59 @@ rm -rf $tempdir
 rm -rf $destination
 
 [ -d $manual_path/$language ] || {
-    echo "Error: unknown language $language!"
+    echo "Error: unknown language $language"
     exit 1
 }
 
 mkdir -p $tempdir
 mkdir -p $destination
 
-for format in $formats ; do
-    case $format in
+# Create profiled XML. This is needed for all output formats.
+create_profiled
+RET=$?; [ $RET -ne 0 ] && exit 1
 
+BUILD_OK=""
+BUILD_FAIL=""
+for format in $formats ; do
+    if [ "$language" = "ja" ] && [ "$format" = "pdf" -o "$format" = "ps" ] ; then
+        echo "Warning: pdf and ps formats are currently not supported for Japanese"
+        BUILD_SKIP="$BUILD_SKIP $format"
+        continue
+    fi
+
+    case $format in
         html)  create_html;;
         ps)    create_ps;;
         pdf)   create_pdf;;
         txt)   create_text;;
-        *) echo "Format $format unknown or not yet supported!";;
+        *)
+            echo "Error: format $format unknown or not yet supported!"
+            exit 1
+            ;;
+    esac
 
+    RET=$?
+    case $RET in
+        0)
+            BUILD_OK="$BUILD_OK $format"
+            ;;
+        9)
+            BUILD_FAIL="$BUILD_FAIL $format"
+            echo "Error: build of $format failed because of missing build dependencies"
+            ;;
+        *)
+            BUILD_FAIL="$BUILD_FAIL $format"
+            echo "Error: build of $format failed with error code $RET"
+            ;;
     esac
 done
 
 # Clean up
 rm -r $tempdir
 
-exit 0
+# Evaluate the overall results
+[ -n "$BUILD_SKIP" ] && echo "Info: The following formats were skipped:$BUILD_SKIP"
+[ -z "$BUILD_FAIL" ] && exit 0            # Build successful for all formats
+echo "Warning: The following formats failed to build:$BUILD_FAIL"
+[ -n "$BUILD_OK" ] && exit 2              # Build failed for some formats
+exit 1                                    # Build failed for all formats
