@@ -21,6 +21,10 @@ else
 	SYNC_BASEDIR="$HOST:$BASEDIR"
 fi
 
+overview () {
+    LANG=C echo "$(dpkg --print-architecture) ($(date)) $(whoami)@$(hostname) $1" >> dest/overview.log
+}
+
 if [ ! -d pkg-lists ]; then
     echo "You must run this from the build directory"
     exit 1
@@ -36,12 +40,17 @@ fi
 
 make reallyclean
 mkdir dest
+touch dest/overview.log
 for t in $TARGETS; do
     (
     echo
     echo BUILDING IMAGE FOR $t
     echo
-    fakeroot make $t
+    if fakeroot make $t; then
+	overview "$t success"
+    else
+	overview "$t failed"
+    fi
     ) 2>&1 | tee dest/$t.log # This is allowed to fail
 done
 fakeroot make $(echo $TARGETS | sed 's/build_/stats_/g') | 2>&1 tee dest/stats.txt # This is allowed to fail
