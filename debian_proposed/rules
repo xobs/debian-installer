@@ -1,0 +1,43 @@
+#! /usr/bin/make -f
+
+ARCH=$(shell dpkg-architecture -qDEB_BUILD_ARCH)
+VERSION=$(shell LC_ALL=C dpkg-parsechangelog | grep ^Version: | sed 's/^Version: *//')
+TYPES=$(shell dh_listpackages -s | sed s/debian-installer-//)
+
+include config/main
+include config/dir
+
+clean:
+	dh_testdir
+	dh_testroot
+	make reallyclean
+	dh_clean
+
+build:
+	for TYPE in $(TYPES) ; do \
+		$(MAKE) TYPE=$$TYPE image ; \
+	done 
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+	for TYPE in $(TYPES) ; do \
+		mkdir -p debian/debian-installer-$$TYPE/usr/lib/debian-installer-$$TYPE/$(ARCH); \
+		cp -a dest/$$TYPE/* debian/debian-installer-$$TYPE/usr/lib/debian-installer-$$TYPE/$(ARCH) ; \
+	done
+
+binary-indep:
+
+binary-arch: install  
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs
+	dh_installdocs
+	dh_compress
+	dh_gencontrol 
+	dh_builddeb
+
+binary: binary-indep binary-arch 
+.PHONY: build clean binary-indep binary-arch binary install 
