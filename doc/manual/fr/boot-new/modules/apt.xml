@@ -1,66 +1,67 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 11648 -->
+<!-- original version: 18642 -->
 
  <sect2 id="configure-apt">
  <title>La configuration d'APT</title>
 
 <para>
-Le principal outil utilisé pour installer des paquets sur les systèmes Debian 
-est un programme appelé <command>apt-get</command> qui se trouve dans le 
-<classname>apt</classname> <footnote>
+
+Le principal outil utilisé pour installer des paquets sur les systèmes Debian
+est un programme appelé <command>apt-get</command> qui se trouve dans le
+paquet <classname>apt</classname> <footnote>
 
 <para>
 
-Notez que le programme réellement utilisé pour installer les paquets est 
-<command>dpkg</command>. Néanmoins, ce paquet est plutôt un outil de 
-base qu'<command>apt-get</command> utilise quand il en a besoin&nbsp;;
-<command>apt-get</command> est un outil de haut niveau car il sait aussi bien 
-installer les paquets nécessaires à l'installation du paquet que vous voulez 
-installer, que récupérer le paquet à partir de votre cédérom, du réseau, ou 
+Notez que le programme effectivement utilisé pour installer des paquets est 
+nommé <command>dpkg</command>. Toutefois, ce paquet est un outil de bas niveau
+qu'<command>apt-get</command> appelle lorsqu'il en a besoin.
+Ce dernier est un outil de plus haut niveau car il sait aussi bien installer 
+les paquets nécessaires à l'installation du paquet que vous essayez 
+d'installer, que récupérer le paquet à partir d'un cédérom, du réseau ou 
 d'ailleurs.
-</para>
 </footnote>.
 
 APT doit cependant être configuré, pour qu'il sache où récupérer les paquets. 
 L'application qui vous aidera dans cette tâche s'appelle 
 <command>apt-setup</command>.
 
+
 </para><para>
 
-L'étape suivante dans le processus d'installation consiste à indiquer où 
-trouver les autres paquets Debian. Remarquez que vous pouvez exécuter cet 
-outil à tout moment une fois que l'installation est finie, en lançant
-<command>apt-setup</command> ou en modifiant manuellement le fichier
+
+L'étape suivante dans votre processus de configuration est d'indiquer à APT 
+où trouver les autres paquets Debian. Notez que vous pouvez relancer cet 
+outil à tout moment après l'installation en exécutant 
+<command>apt-setup</command> ou en modifiant vous-même 
 <filename>/etc/apt/sources.list</filename>.
 
 </para><para>
 
-Si vous démarrez depuis un cédérom officiel, ce cédérom sera 
-automatiquement défini comme une source APT. Vous le saurez en voyant que ce 
-cédérom est lu&nbsp;; puis on vous demandera si vous avez d'autres cédéroms à 
-déclarer. Si vous possédez un jeu de plusieurs cédéroms &mdash; c'est le cas 
-pour la plupart des gens &mdash; vous devez les faire explorer un par un.
+
+Si un cédérom officiel se trouve dans le lecteur, ce cédérom sera 
+automatiquement configuré comme une source APT. Vous le remarquerez en voyant 
+que ce cédérom est lu.
 
 </para><para>
 
-Pour les utilisateurs qui ne disposent pas d'un cédérom officiel, un ensemble 
-de choix sur la manière d'accéder aux paquets Debian leur sera proposé&nbsp;: 
-HTTP, FTP, cédérom, ou système de fichiers local. Les utilisateurs de 
-cédéroms, pourront accéder à cette étape en demandant explicitement l'ajout 
-d'une autre source.
+
+Pour les utilisateurs ne possédant pas de cédérom officiel, un ensemble de 
+choix sur la manière d'accéder aux paquets Debian leur sera proposé&nbsp;: 
+FTP, HTTP, cédérom ou système de fichiers local.
 
 </para><para>
 
-Il faut savoir qu'il est parfaitement acceptable d'avoir plusieurs sources 
-APT, y compris pour une même archive Debian. <command>apt-get</command> ira 
-chercher automatiquement le paquet portant le numéro de version le plus élevé 
-parmi les sources disponibles. Ou, par exemple, si vous possédez à la fois
-une source HTTP et une source cédérom, <command>apt-get</command> utilisera 
-automatiquement le cédérom local lorsque c'est possible, et n'utilisera la 
-source HTTP que si une nouvelle version y est disponible. Néanmoins, il n'est 
-pas judicieux d'ajouter des sources inutiles, dans la mesure où cela aura 
-tendance à ralentir le processus de sélection des nouvelles versions sur le 
-réseau.
+Vous devriez savoir qu'il est parfaitement acceptable d'avoir plusieurs 
+sources APT, y compris pour une même archive Debian. 
+<command>apt-get</command> choisira automatiquement le paquet ayant le numéro 
+de version le plus élevé parmi les sources disponibles. Ou par exemple si 
+vous aviez à la fois une source HTTP et un cédérom, 
+<command>apt-get</command> utilisera automatiquement le cédérom local, sauf 
+si la source HTTP est une version plus récente. Néanmoins, il n'est pas 
+judicieux d'ajouter des sources inutiles, dans la mesure où cela aura 
+tendance à ralentir le processus de vérification de la présence de nouvelles 
+versions sur le réseau.
+
 
 </para>
 
@@ -71,32 +72,33 @@ réseau.
 
 Si vous prévoyez d'installer le reste de votre système via le réseau, 
 l'option la plus commune est de sélectionner la source
-<userinput>http</userinput>. La source <userinput>ftp</userinput> est aussi
+<userinput>HTTP</userinput>. La source <userinput>FTP</userinput> est aussi
 acceptable, mais a tendance à être légèrement plus lente dans l'établissement 
 des connexions.
 
-</para><para>
-
-L'étape suivante, dans la configuration des sources du réseau, consiste 
-à dire à <command>apt-setup</command> dans quel pays vous vivez. Cela 
-configure le 
-miroir réseau Debian officiel que vous allez utiliser. En fonction du lieu
-sélectionné, une liste des machines disponibles vous sera proposée. Il suffit 
-généralement de choisir celle qui se situe en haut de la liste, mais 
-toutes devraient fonctionner.
 
 </para><para>
 
-Si vous procédez à une installation via HTTP, on vous demandera de configurer 
-votre serveur mandataire («&nbsp;proxy&nbsp;»). C'est parfois nécessaire pour 
-les personnes qui se trouvent derrière des pare-feux, ou des réseaux 
-d'entreprise, etc.
+L'étape suivante durant la configuration des sources des paquets du réseau 
+est d'indiquer à <command>apt-setup</command> votre pays de résidence. Cela 
+configure le miroir réseau Debian officiel que vous allez utiliser. Selon le 
+pays que vous choisissez, une liste de machines possibles vous sera proposée. 
+C'est parfaitement acceptable de choisir la première de la liste, mais toutes 
+devraient fonctionner.
+
+</para><para>
+
+
+Si vous installez via HTTP, il vous sera demandé de configurer votre serveur 
+mandataire («&nbsp;proxy&nbsp;»). C'est parfois requis pour des personnes 
+derrière des pare-feux, ou sur des réseaux d'entreprises, etc.
     </para>
 <para>
 
 Enfin, votre nouvelle source de paquets va être testée. Si tout va bien, on 
 vous demandera si vous souhaitez ou non recommencer l'opération pour une 
 autre source.
+
 
 </para>
   </sect3>
