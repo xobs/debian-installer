@@ -603,7 +603,7 @@ $(MINIISO): $(TEMP_MINIISO)
 	install -m 644 -D $(TEMP_MINIISO) $@
 	./update-manifest $@ $(MANIFEST-MINIISO)
 
-$(TEMP_MINIISO): $(TEMP_INITRD) $(TEMP_KERNEL) $(TEMP_BOOT_SCREENS) arch_miniiso
+$(TEMP_MINIISO): $(TEMP_BOOT_SCREENS) arch_miniiso
 
 # various kinds of information, for use on debian-cd isos.
 $(DEBIAN_CD_INFO): $(TEMP_BOOT_SCREENS)
