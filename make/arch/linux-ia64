@@ -10,10 +10,11 @@ $(IMAGE): $(INITRD) tmp_mount
 	mount -t vfat -o loop $@.new $(TMP_MNT)
 
 	if $(foreach NAME,$(KERNELNAME), \
-             cp -f $(TEMP)/$(NAME) $(TMP_MNT)/linux) \
+             gzip -9c $(TEMP)/$(NAME) > $(TMP_MNT)/linux) \
 	   && cp $(INITRD) $(TMP_MNT)/initrd.gz \
 	   && cp /usr/lib/elilo/elilo.efi $(TMP_MNT)/ \
-	   && cp boot/ia64/elilo.conf $(TMP_MNT)/ ; \
+	   && cp boot/ia64/elilo.conf $(TMP_MNT)/ \
+	   && df -k $(TMP_MNT); \
 	then \
 		umount $(TMP_MNT) ; \
 		true ; \
@@ -29,8 +30,9 @@ $(IMAGE): $(INITRD) tmp_mount
 # XXX Will only use the last kernel if there are several
 cd_content: $(IMAGE)
 	$(foreach NAME,$(KERNELNAME), \
-		cp -f $(TEMP)/$(NAME) $(DEST)/$(TYPE)-linux; )
+		gzip -9c $(TEMP)/$(NAME) > $(DEST)/$(TYPE)-linux; )
 	cp  boot/ia64/elilo.conf $(DEST)/$(TYPE)-elilo.conf
+	cp  cp /usr/lib/elilo/elilo.efi $(DEST)/$(TYPE)-elilo.efi
 
 cd_image: cd_content
 	mkisofs -r -J -no-emul-boot -boot-load-size 1 \

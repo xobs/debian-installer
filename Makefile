@@ -22,6 +22,7 @@ include config/arch/$(DEB_HOST_GNU_SYSTEM)-$(DEB_HOST_GNU_CPU)
 # Include type configs
 -include config/type/$(TYPE)
 -include config/type/$(TYPE)-$(DEB_HOST_GNU_SYSTEM)
+-include config/type/$(TYPE)-$(DEB_HOST_ARCH)
 
 # Include directory config
 include config/dir
