@@ -469,7 +469,7 @@ daily_build:
 
 sub_daily_build:
 	fakeroot $(MAKE) tarball > $(DEST)/$(TYPE).log 2>&1
-	$(MAKE) floppy_image >> $(DEST)/$(TYPE).log 2>&1
+	$(MAKE) image >> $(DEST)/$(TYPE).log 2>&1
 	$(MAKE) stats | grep -v ^make > $(DEST)/$(TYPE).info
 	echo "Tree comparison" >> $(DEST)/$(TYPE).info
 	echo "" >> $(DEST)/$(TYPE).info
