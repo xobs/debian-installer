@@ -467,7 +467,7 @@ tmp_mount:
 # Create a compressed image of the root filesystem by way of genext2fs.
 initrd: $(INITRD)
 $(INITRD): TMP_FILE=$(TEMP)/image.tmp
-$(INITRD): $(TYPE)-tree-stamp
+$(INITRD):  $(TYPE)-tree-stamp $(TREE)/unifont.bgf
 	rm -f $(TMP_FILE)
 	install -d $(TEMP)
 	install -d $(DEST)
