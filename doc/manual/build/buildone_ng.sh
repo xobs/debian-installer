@@ -189,10 +189,7 @@ create_dvi () {
     return 0
 }
 
-create_dvinew() {
-
-
-    [ -f "$tempdir/install.${language}.new.dvi" ] && return
+create_texnew() {
 
     echo "Info: creating .tex file..."
 
@@ -205,6 +202,16 @@ create_dvinew() {
 
     RET=$?; [ $RET -ne 0 ] && break
 
+
+}
+
+create_dvinew() {
+
+
+    [ -f "$tempdir/install.${language}.new.dvi" ] && return
+
+    create_texnew
+    
     echo "Info: creating temporary .dvi file..."
 
     cd $tempdir
@@ -324,6 +331,7 @@ for format in $formats ; do
         txt)   create_text;;
 	new.ps) create_psnew;;
 	new.pdf) create_pdfnew;;
+	new.tex) create_texnew;;
         *)
             echo "Error: format $format unknown or not yet supported!"
             exit 1

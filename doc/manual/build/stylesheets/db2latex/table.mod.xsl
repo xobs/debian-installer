@@ -629,9 +629,10 @@
 			</xsl:when>
 			<xsl:when test="$latex.use.ltxtable='1'">
 				<xsl:if test="parent::informaltable">
-					<xsl:text>\addtocounter{table}{-1}</xsl:text>
+					<xsl:text>\addtocounter{table}{-1}&#10;</xsl:text>
 				</xsl:if>
-				<xsl:text>\begin{longtable}</xsl:text>
+				<xsl:text>\begin{verbatimwrite}{table.temp}&#10;</xsl:text>
+				<xsl:text>\begin{longtable}&#10;</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:if test="$useminipage='1'"><xsl:text>\begin{minipage}{\linewidth}&#10;</xsl:text></xsl:if>
@@ -639,6 +640,7 @@
 			</xsl:otherwise>
 		</xsl:choose>
 		<xsl:choose>
+			<xsl:when test="$latex.use.ltxtable='1'" />
 			<xsl:when test="$width!=''">
 				<xsl:text>{</xsl:text>
 				<xsl:value-of select="$width"/>
@@ -666,7 +668,7 @@
 			</xsl:choose>
 		</xsl:variable>
 		<xsl:choose>
-			<xsl:when test="$usex=1">
+			<xsl:when test="$usex=1 or $latex.use.ltxtable=1">
 				<xsl:call-template name="table.format.tabularx">
 					<xsl:with-param name="cols" select="$cols"/>
 					<xsl:with-param name="colsep" select="$colsep"/>
@@ -797,6 +799,17 @@
 			</xsl:when>
 			<xsl:when test="$latex.use.ltxtable='1'">
 				<xsl:text>\end{longtable}&#10;</xsl:text>
+				<xsl:text>\end{verbatimwrite}&#10;</xsl:text>
+				<xsl:text>\LTXtable{</xsl:text>
+				<xsl:choose>
+				<xsl:when test="$width!=''">
+				    <xsl:value-of select="$width"/>
+        			</xsl:when>
+				<xsl:otherwise>
+				    <xsl:text>\linewidth</xsl:text>
+				</xsl:otherwise>
+				</xsl:choose>
+				<xsl:text>}{table.temp}</xsl:text>
 				<!-- catcode touchup ARGH -->
 				<xsl:call-template name="generate.latex.cell.separator">
 					<xsl:with-param name="which" select="'post'"/>
@@ -1127,7 +1140,7 @@
 
     <xsl:template match="tbody/row/entry">
 	<xsl:call-template name="latex.entry.prealign"/>
-	<xsl:apply-templates/>
+	<xsl:call-template name="latex.tbody.row.entry"/>
 	<xsl:call-template name="latex.entry.postalign"/>
 	<xsl:if test="position()&lt;last()">
 		<xsl:call-template name="generate.latex.cell.separator">

@@ -555,6 +555,7 @@
 			<xsl:text>\usepackage{fancybox}      &#10;</xsl:text>
 		</xsl:if>
 		<xsl:text>\usepackage{float}       &#10;</xsl:text>
+		<xsl:text>\usepackage{moreverb}       &#10;</xsl:text>
 		<xsl:text>\usepackage{ragged2e}       &#10;</xsl:text>
 		<xsl:if test="$latex.use.fancyvrb=1">
 			<!-- must be after \usepackage{fancybox} -->
@@ -588,7 +589,8 @@
 		<xsl:if test="$latex.use.rotating=1"><xsl:text>\usepackage{rotating}         &#10;</xsl:text></xsl:if>
 		<xsl:if test="$latex.use.subfigure=1"><xsl:text>\usepackage{subfigure}         &#10;</xsl:text></xsl:if>
 		<xsl:if test="$latex.use.tabularx=1"><xsl:text>\usepackage{tabularx}         &#10;</xsl:text></xsl:if>
-		<xsl:if test="$latex.use.ltxtable=1 or $latex.use.longtable=1"><xsl:text>\usepackage{longtable}         &#10;</xsl:text></xsl:if>
+		<xsl:if test="$latex.use.longtable=1"><xsl:text>\usepackage{longtable}         &#10;</xsl:text></xsl:if>
+		<xsl:if test="$latex.use.ltxtable=1"><xsl:text>\usepackage{ltxtable}         &#10;</xsl:text></xsl:if>
 		<xsl:if test="$latex.use.umoline=1"><xsl:text>\usepackage{umoline}         &#10;</xsl:text></xsl:if>
 		<xsl:if test="$latex.use.url=1"><xsl:text>\usepackage{url}         &#10;</xsl:text></xsl:if>
 		<xsl:if test="$latex.math.support=1"><xsl:value-of select="$latex.math.preamble"/></xsl:if>

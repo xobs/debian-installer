@@ -5,5 +5,5 @@
 <xsl:param name="latex.inputenc">utf8</xsl:param>
 <xsl:variable name="latex.use.ucs">1</xsl:variable>
 <xsl:param name="latex.fontenc">T1</xsl:param>
-<xsl:param name="latex.book.preamble.post">\usepackage{pslatex}</xsl:param>
+<xsl:param name="latex.book.preamble.post.l10n">\usepackage{pslatex}</xsl:param>
 </xsl:stylesheet>

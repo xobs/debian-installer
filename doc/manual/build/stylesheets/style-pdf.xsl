@@ -5,15 +5,33 @@
 	<xsl:import href="db2latex/docbook.xsl"/>
 	<xsl:variable name="latex.use.fancyhdr">0</xsl:variable>
 	<xsl:template name="latex.thead.row.entry">
-		<xsl:text>{\bfseries
-		</xsl:text><xsl:apply-templates/><xsl:text>}</xsl:text>
+		<xsl:text>{\sc\sffamily\bfseries </xsl:text>
+		<xsl:apply-templates/>
+		<xsl:text>}</xsl:text>
 	</xsl:template>
+
+	<xsl:template name="latex.tbody.row.entry">
+		<xsl:text>{\textsf{ </xsl:text>
+		<xsl:apply-templates/>
+		<xsl:text>}}</xsl:text>
+	</xsl:template>
+
+
 	<xsl:param name="latex.hyperref.param.common">bookmarksnumbered,colorlinks,backref,bookmarks,breaklinks,linktocpage,plainpages=false,unicode</xsl:param>
 	<xsl:variable name="latex.document.font">default</xsl:variable>
 	<xsl:param name="latex.math.support">0</xsl:param>
-<!--	<xsl:param name="latex.use.ltxtable">1</xsl:param> -->
-	<xsl:param name="latex.use.longtable">1</xsl:param> 
+	<xsl:param name="latex.use.ltxtable">1</xsl:param>
+<!--	<xsl:param name="latex.use.longtable">1</xsl:param> -->
+	<xsl:param name="latex.book.preamble.post">
 
+\usepackage[sf,bf,compact,medium]{titlesec}
+%\renewcommand{\thechapter}{\Roman{chapter}}
+\titleformat{\chapter}[display]{\sffamily\bfseries\Huge}{\filleft{\chaptertitlename} {\thechapter}}{4ex}{\titlerule\vspace{2ex}\filright}[\vspace{2ex}\titlerule]
+
+	    <xsl:value-of select="$latex.book.preamble.post.l10n" />
+   
+        </xsl:param>
+	<xsl:param name="latex.book.title.style" />
 	<xsl:template name="latex.fancyvrb.options">
 		<xsl:text>frame=lines</xsl:text>
 	</xsl:template>
@@ -24,6 +42,7 @@
 	<xsl:param name="latex.use.url">0</xsl:param>
 	<xsl:param name="latex.admonition.title.style">\bfseries \sffamily \large</xsl:param>
 	<xsl:param name="latex.use.parskip">1</xsl:param>
+	<xsl:param name="latex.inline.monoseq.style">\sc\bfseries\textsf</xsl:param>
 	
         <xsl:template match="filename">
             <xsl:call-template name="inline.boldseq">
@@ -57,6 +76,7 @@
 	</xsl:call-template>
 	</xsl:if>
 	</xsl:template>
+
 	<xsl:param name="latex.admonition.environment">
 		<xsl:text>\newenvironment{admminipage}[1]</xsl:text>
 		<xsl:text>{ \begin{minipage}{#1}</xsl:text>

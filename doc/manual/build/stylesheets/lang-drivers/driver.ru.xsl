@@ -5,5 +5,5 @@
 <xsl:param name="latex.inputenc">utf8</xsl:param>
 <xsl:variable name="latex.use.ucs">1</xsl:variable>
 <xsl:param name="latex.fontenc">T1,T2A</xsl:param>
-<xsl:param name="latex.book.preamble.post">\usepackage{cyrtimes}</xsl:param>
+<xsl:param name="latex.book.preamble.post.l10n">\usepackage{cyrtimes}</xsl:param>
 </xsl:stylesheet>

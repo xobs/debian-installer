@@ -169,9 +169,24 @@
 			<para> Undocumented. </para>
 		</doc:description>
 	</doc:template>
+
 	<xsl:template name="latex.thead.row.entry">
 		<xsl:apply-templates/>
 	</xsl:template>
+
+
+	<doc:template xmlns="">
+		<refpurpose> Format the output of tabular row entries. </refpurpose>
+		<doc:description>
+			<para> Undocumented. </para>
+		</doc:description>
+	</doc:template>
+
+	<xsl:template name="latex.tbody.row.entry">
+		<xsl:apply-templates/>
+	</xsl:template>
+
+
 
 	<doc:template xmlns="">
 		<refpurpose> Format the output of tabular footers. </refpurpose>
@@ -179,6 +194,7 @@
 			<para> Undocumented. </para>
 		</doc:description>
 	</doc:template>
+	
 	<xsl:template name="latex.tfoot.row.entry">
 		<xsl:apply-templates/>
 	</xsl:template>
