@@ -200,7 +200,6 @@ $xsltprocessor \
     --xinclude \
     --stringparam chunker.output.encoding "UTF-8" \
     --stringparam profile.arch "$archspec" \
-#    --stringparam base.dir ./${language}.${arch}.html/ \
     $stylesheet_html \
     install.${language}.xml
 #$xsltprocessor $stylesheet_html install.${language}.profiled.xml
