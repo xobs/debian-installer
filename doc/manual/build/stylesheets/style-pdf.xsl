@@ -24,9 +24,10 @@
 	<xsl:param name="latex.use.ltxtable">1</xsl:param>
 	<xsl:param name="latex.book.preamble.post.l10n"/>
 	<xsl:param name="latex.book.preamble.post">
-	    <xsl:text>\usepackage[sf,bf,compact,medium]{titlesec}&#10;</xsl:text>
-    	    <xsl:text>\titleformat{\chapter}[display]{\sffamily\bfseries\Large}{\filleft{\chaptertitlename} {\thechapter}}{4ex}{\titlerule\vspace{2ex}\filright}[\vspace{2ex}\titlerule]</xsl:text>
-	    <xsl:text>\usepackage{lmodern}</xsl:text>
+	    <xsl:text>\usepackage[rm,bf,compact,medium]{titlesec}&#10;</xsl:text>
+    	    <xsl:text>\titleformat{\chapter}[display]{\bfseries\Large}{\filleft{\chaptertitlename}
+			{\thechapter}}{2ex}{\titlerule\vspace{1ex}\filright}[\vspace{1ex}\titlerule]</xsl:text>
+<!--	    <xsl:text>\usepackage{lmodern}</xsl:text> -->
 	    <xsl:value-of select="$latex.book.preamble.post.l10n"/>
         </xsl:param>
 	<xsl:param name="latex.book.title.style" />
@@ -38,9 +39,9 @@
 	<xsl:param name="latex.url.quotation">1</xsl:param>
 	<xsl:param name="latex.hyphenation.tttricks">0</xsl:param>
 	<xsl:param name="latex.use.url">0</xsl:param>
-	<xsl:param name="latex.admonition.title.style">\bfseries \sffamily \large</xsl:param>
+	<xsl:param name="latex.admonition.title.style">\bfseries \large</xsl:param>
 	<xsl:param name="latex.use.parskip">1</xsl:param>
-	<xsl:param name="latex.inline.monoseq.style">\sc\bfseries\textsf</xsl:param>
+	<xsl:param name="latex.inline.monoseq.style">\bfseries </xsl:param>
 	
         <xsl:template match="filename">
             <xsl:call-template name="inline.boldseq">
@@ -98,7 +99,7 @@
 		<xsl:value-of select="$latex.admonition.title.style"/>
 		<xsl:text> #2}</xsl:text>
 		<xsl:text> \newline </xsl:text>
-		<xsl:text> \sffamily </xsl:text>
+		<xsl:text> \sffamily\scseries </xsl:text>
 		<xsl:text> \begin{minipage}{\admlength}</xsl:text>
 		<xsl:text> \vspace{1em}</xsl:text>
 		<xsl:text> \parskip=0.5\baselineskip \advance\parskip by 0pt

@@ -12,5 +12,5 @@
 \fontfamily{song}
 </xsl:param>
 <xsl:param name="latex.language.option">none</xsl:param>
-<xsl:param name="latex.documentclass.book">a4paper,10pt,twoside,openright,landscape</xsl:param>
+<xsl:param name="latex.documentclass.book">a4paper,10pt,twoside,openright</xsl:param>
 </xsl:stylesheet>

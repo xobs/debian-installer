@@ -5,5 +5,8 @@
 <xsl:param name="latex.inputenc">utf8</xsl:param>
 <xsl:variable name="latex.use.ucs">1</xsl:variable>
 <xsl:param name="latex.fontenc">T1,T2A</xsl:param>
-<xsl:param name="latex.book.preamble.post.l10n">\usepackage{cyrbookman}</xsl:param>
+<xsl:param name="latex.book.preamble.post.l10n">
+    <xsl:text>\renewcommand{\rmdefault}{fnc}</xsl:text>
+    <xsl:text>\renewcommand{\sfdefault}{fhv}</xsl:text>
+</xsl:param>
 </xsl:stylesheet>
