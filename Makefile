@@ -88,7 +88,7 @@ endif
 
 build: tree_umount tree $(TREE)/unifont.bgf $(EXTRA_TARGETS) stats
 
-image: arch-image $(EXTRA_IMAGES) 
+image: arch-image $(TREE)/unifont.bgf $(EXTRA_IMAGES) 
 
 # Include arch targets
 -include make/arch/$(DEB_HOST_GNU_SYSTEM)
