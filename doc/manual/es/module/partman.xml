@@ -1,26 +1,26 @@
-<?xml version="1.0" encoding="ISO-8859-15"?>
-<!-- original version: 18660 -->
+<!-- original version: 19059 -->
 
    <sect3 id="partman"><title>Particionando sus discos</title>
 <para>
 
 Es hora de particionar sus discos. Si no se siente a gusto particionando, o
-simplemente quiere conocer más detalles, lea <xref linkend="partitioning"/>.
+simplemente quiere conocer mÃ¡s detalles, lea <xref linkend="partitioning"/>.
 
 </para><para>
 
-Primero se le dará la oportunidad de particionar automáticamente un disco
-entero. A esto también se le llama particionamiento <quote>guiado</quote>. Si no
+Primero se le darÃ¡ la oportunidad de particionar automÃ¡ticamente un disco
+entero. A esto tambiÃ©n se le llama particionado <quote>guiado</quote>. Si no
 quiere autoparticionar, elija <guimenuitem>Editar manualmente la tabla de
-particiones</guimenuitem> en el menú y vaya al siguiente párrafo. En otro caso,
-se le preguntará si quiere <guimenuitem>Todos los ficheros en una
-partición</guimenuitem>, <guimenuitem>Partición separada para los directorios
+particiones</guimenuitem> en el menÃº y vaya al siguiente pÃ¡rrafo. En otro caso,
+se le preguntarÃ¡ si quiere <guimenuitem>Todos los ficheros en una
+particiÃ³n</guimenuitem>, <guimenuitem>ParticiÃ³n separada para los directorios
 personales</guimenuitem>, o, si planea tener un <guimenuitem>Sistema
 multiusuario</guimenuitem>. Todos los esquemas tienen sus pros y sus contras,
-algunos se discuten en <xref linkend="partitioning"/>. Si no está seguro, escoja
-el primero. Tenga en cuenta, que el particionamiento guiado requiere una cantidad
-mínima de espacio libre para pode operar. Si no tiene al menos un 1GB de espacio
-(depende del esquema seleccionado), el particionamiento guiado fallará.
+algunos se discuten en <xref linkend="partitioning"/>. Si no estÃ¡ seguro, 
+escoja el primero. Tenga en cuenta, que el particionado guiado requiere 
+una cantidad mÃ­nima de espacio libre para pode operar. Si no tiene al menos 
+un 1GB de espacio (depende del esquema seleccionado), el particionado guiado
+fallarÃ¡.
 
 </para>
 
@@ -28,19 +28,19 @@ mínima de espacio libre para pode operar. Si no tiene al menos un 1GB de espacio
 <tgroup cols="3">
 <thead>
 <row>
-  <entry>Esquema de particionamiento</entry>
-  <entry>Espacio mínimo</entry>
+  <entry>Esquema de particionado</entry>
+  <entry>Espacio mÃ­nimo</entry>
   <entry>Particiones creadas</entry>
 </row>
 </thead>
 
 <tbody>
 <row>
-  <entry>Todos los ficheros en una partición</entry>
+  <entry>Todos los ficheros en una particiÃ³n</entry>
   <entry>600MB</entry>
   <entry><filename>/</filename>, swap</entry>
 </row><row>
-  <entry>Partición separada para los directorios personales</entry>
+  <entry>ParticiÃ³n separada para los directorios personales</entry>
   <entry>500MB</entry>
   <entry>
     <filename>/</filename>, <filename>/home</filename>, swap
@@ -59,55 +59,118 @@ mínima de espacio libre para pode operar. Si no tiene al menos un 1GB de espacio
 
 <para>
 
-En la siguiente pantalla verá la tabla de particiones, el modo en que se les
-dará formato, y donde se montarán. Si realiza el particionamiento automático
-debería poder elegir en el menú <guimenuitem>Particionamiento
-finalizado</guimenuitem> para usar lo que ya está definido.
+En la siguiente pantalla verÃ¡ la tabla de particiones, el modo en que se les
+darÃ¡ formato, y donde se montarÃ¡n. Si realiza el particionado automÃ¡tico
+deberÃ­a poder elegir en el menÃº <guimenuitem>Particionado
+finalizado</guimenuitem> para usar lo que ya estÃ¡ definido.
 
 </para><para arch="ia64">
 
-Si escoge el particionamiento automático para su sistema IA64, habrá una
-partición adicional, con un sistema de ficheros FAT16 y arrancable, para el
-gestor de arranque EFI. Además hay una opción adicional en el menú que permite
-dar formato a los discos para establecer manualmente una partición como una
-partición de arranque EFI.
+Si escoge el particionado automÃ¡tico para su sistema IA64, habrÃ¡ una
+particiÃ³n adicional, con un sistema de ficheros FAT16 y arrancable, para el
+gestor de arranque EFI. AdemÃ¡s hay una opciÃ³n adicional en el menÃº que permite
+dar formato a los discos para establecer manualmente una particiÃ³n como una
+particiÃ³n de arranque EFI.
 
 </para><para>
 
-Seleccione particiones de la lista para modificarlas o eliminarlas. Si tiene
-espacio libre se mostrará debajo de un disco, y podrá seleccionarlo para crear
-particiones nuevas. Cuando modifique una partición tendrá la oportunidad de
-elegir como usar la partición, el sistema de ficheros a usar, y donde montarlo.
-El menú de particiones también tiene una opción en la parte superior que 
-puede usarse para particionar automáticamente un disco o el espacio libre 
-restante de éste, si es que quiere usar esta facilidad. Asegúrese de crear al 
+La lista de particiones podrÃ­a ser como la siguiente:
+
+<!-- TODO: show some flags here (lightning, skull, smiley) -->
+<informalexample><screen>
+  IDE1 master (hda) - 6.4 GB WDC AC36400L
+        #1 primary   16.4 MB    ext2   /boot
+        #2 primary  551.0 MB    swap   swap
+        #3 primary    5.8 GB    ntfs
+           pri/log    8.2 MB    FREE SPACE
+
+  IDE1 slave (hdb) - 80.0 GB ST380021A
+        #1 primary   15.9 MB    ext3
+        #2 primary  996.0 MB    fat16
+        #3 primary    3.9 GB    xfs    /home
+        #5 logical    6.0 GB    ext3   /
+        #6 logical    1.0 GB    ext3   /var
+        #7 logical  498.8 GB    ext3
+        #8 logical  551.5 GB    swap   swap
+        #9 logical   65.8 GB    ext2
+</screen></informalexample>
+
+Como puede ver, exiten dos discos duros IDE dividos en diversas 
+particiones. Cada lÃ­nea de particiÃ³n consiste de el nÃºmero de
+particiÃ³n, su tipo, tamaÃ±o, banderas opcionales, sistema de ficheros
+y punto de montaje (si fuese el caso).
+
+</para><para>
+
+Si elije un disco nuevo que no tiene ni particiones o espacio libre en
+Ã©l, se le podrÃ­a ofrecer a crear una nueva tabla de particiones (esto
+es necesario para que pueda crear nuevas particiones). DespuÃ©s de esto
+una nueva lÃ­nea titulada <quote>ESPACIO LIBRE</quote> deberÃ¡ aparecer
+bajo el disco seleccionado.
+
+</para><para>
+
+Si elije el espacio libre, se le ofrecerÃ¡ crear nuevas particiones. TendrÃ¡
+que responder rÃ¡pidamente un conjunto de preguntas sobre su tamaÃ±o,
+tipo (primaria o lÃ³gica) y ubicaciÃ³n (al inicio o final del espacio libre).
+DespuÃ©s de esto, se le presentarÃ¡ una perspectiva detallada sobre su
+nueva particiÃ³n. Existen opciones como punto de montaje, opciones de
+montaje, bandera arrancable o tipo de uso. Si lo le gusta las opciones
+predeterminadas, no dude en cambiarlas a su gusto. Ejm. Seleccionando
+la opciÃ³n <guimenuitem>Usar como:</guimenuitem>, puede elegir un sistema
+de ficheros distinto para esta particiÃ³n, incluyendo la posibilidad de
+usar la particiÃ³n como intercambio, RAID por software, LVM, o simplemente
+no usarla. Otra caracterÃ­stica interesante es la posibilidad de copiar
+datos desde una particiÃ³n existente a Ã©sta.
+Cuando este satisfecho con su nueva particiÃ³n, elija
+<guimenuitem>Finalizar con particiÃ³n</guimenuitem> y regresarÃ¡ a la
+pantalla principal de <command>partman</command>.
+
+</para><para>
+
+Si decide que desea cambiar algo en su particiÃ³n, simplemente elija
+la particiÃ³n, lo cual le conducirÃ¡ al menÃº de configuraciÃ³n de la
+particiÃ³n. Debido a que es la misma pantalla que cuando crea la 
+particiÃ³n, puede cambiar el mismo conjunto de opciones. Una cosa
+que podrÃ­a no ser muy obvia a primera impresiÃ³n es que puede
+redimensionar el tamaÃ±o de la particiÃ³n seleccionando el elemento
+que muestra el tamaÃ±o de Ã©sta. Los sistemas de ficheros los cuales
+se conoce que funcionan con esta opciÃ³n son por lo menos fat16, fat32,
+ext2, ext3 y swap. Si no le gusta la particiÃ³n puede eliminarla
+desde su menÃº.
+
+</para><para>
+
+El menÃº de particiones tambiÃ©n tiene una opciÃ³n en la parte superior que 
+puede usarse para particionar automÃ¡ticamente un disco o el espacio libre 
+restante de Ã©ste, si es que quiere usar esta facilidad. AsegÃºrese de crear al 
 menos dos particiones, una para el <emphasis>espacio de intercambio</emphasis> 
-(swap) y otra para el sistema de ficheros <emphasis>raíz</emphasis> (que debe 
+(swap) y otra para el sistema de ficheros <emphasis>raÃ­z</emphasis> (que debe 
 montarse como <filename>/</filename>). Si olvida montar el sistema de 
-ficheros raíz, <command>partman</command> no le dejará continuar hasta que 
-corrija el problema. Sin embargo, esta situación no debería darse, porque
+ficheros raÃ­z, <command>partman</command> no le dejarÃ¡ continuar hasta que 
+corrija el problema. Sin embargo, esta situaciÃ³n no deberÃ­a darse, porque
 <command>partman</command> ofrece configuraciones predeterminadas razonables.
 
 </para><para arch="ia64">
 
-Si olvida seleccionar y dar formato a una partición de arranque EFI
-<command>partman</command> lo detectará y no le dejará continuar hasta que
+Si olvida seleccionar y dar formato a una particiÃ³n de arranque EFI
+<command>partman</command> lo detectarÃ¡ y no le dejarÃ¡ continuar hasta que
 habilite una.
 
 </para><para>
 
-Las capacidades de <command>partman</command> se pueden extender con módulos
-para el instalador, así que si no están disponibles todas las funcionalidades
-que esperaba, compruebe que ha cargado todos los módulos necesarios
-(p.ej. <filename>partman-ext3</filename>, <filename>partman-xfs</filename>, o
+Las capacidades de <command>partman</command> se pueden extender con mÃ³dulos
+para el instalador, asÃ­ que si no estÃ¡n disponibles todas las funcionalidades
+que esperaba, compruebe que ha cargado todos los mÃ³dulos necesarios
+(ejm. <filename>partman-ext3</filename>, <filename>partman-xfs</filename>, o
 <filename>partman-lvm</filename>).
 
 </para><para>
 
-Cuando esté satisfecho con el particionamiento, seleccione
-<guimenuitem>Particionamiento terminado</guimenuitem> del menú de
-particionamiento. Se le presentará un resumen de los cambios realizados en los
-discos y se le pedirá confirmación para crear los sistemas de ficheros pedidos.
+Cuando estÃ© satisfecho con el particionado, seleccione
+<guimenuitem>Particionado terminado</guimenuitem> del menÃº de
+particionado. Se le presentarÃ¡ un resumen de los cambios realizados en los
+discos y se le pedirÃ¡ confirmaciÃ³n para crear los sistemas de ficheros pedidos.
 
 </para>
    </sect3>

@@ -1,76 +1,126 @@
-<!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 untranslated -->
+<!-- original version: 19278 -->
 
 
-  <sect2 arch="m68k"><title>Booting from Hard Disk</title>
+  <sect2 arch="m68k"><title>Arrancar desde disco duro</title>
 
 &boot-installer-intro-hd.xml;
 
-  </sect2>
-
-  <sect2 arch="m68k"><title>Booting from AmigaOS</title>
 <para>
 
-In the <command>Workbench</command>, start the Linux installation
-process by double-clicking on the <guiicon>StartInstall</guiicon> icon
-in the <filename>debian</filename> directory.
+El único método de instalación para &arch-title; amiga y mac es
+desde el disco duro. Esta también es una opción para &arch-title; atari.
+<emphasis>En otras palabras el cdrom no es arrancable.</emphasis> 
+Estas sub-arquitecturas podrían tener la posibilidad de elección de
+tres diferentes discos ram: <filename>cdrom</filename> 
+(<filename>root.bin</command> en un cdrom), <filename>hd-media</filename>,
+y <filename>nativehd</filename>. Estos discos ram solamente difieren en
+su fuente de instalación de paquetes. El disco ram <filename>cdrom</filename>
+usa un cdrom para obtener paquetes del instalador de Debian. El disco ram
+<filename>hd-media</filename> usa un fichero de image iso de un cdrom
+desde un disco duro. Finalmente, el disco ram <filename>nativehd</filename>
+usa la red para instalar paquetes.
 
 </para><para>
 
-You may have to press the &enterkey; key twice after the Amiga
-installer program has output some debugging information into a window.
-After this, the screen will go grey, there will be a few seconds'
-delay. Next, a black screen with white text should come up, displaying
-all kinds of kernel debugging information.  These messages may scroll
-by too fast for you to read, but that's OK.  After a couple of
-seconds, the installation program should start automatically, so you
-can continue down at <xref linkend="init-config"/>.
+Algunas sub-arquitecturas de &arch-title; tiene la opción de arrancar
+tanto desde núcleos Linux 2.4.x o 2.2.x y sus discos ram asociados. 
+Cuando tenga esta opción, primero intente con el núcleo linux 2.4.x y su
+disco ram asociado. Las Macs M68K no tienen un núcleo 2.4.x que funcione.
+
+</para><para>
+
+Asegúrese que <userinput>root=/dev/ram</userinput> es uno de sus 
+parámetros de núcleo. Amiga y Atari actualmente no funcionan con bogl,
+de modo que si observa errores de bogl, necesitará incluir el parámetro
+de núcleo <userinput>debian-installer/framebuffer=false</userinput>.
+</para><para>
+
+Si esta usando un núcleo linux 2.2.x, entonces asegúrese que esta usando
+un disco ram construido para éste, vea <ulink url="&disturl;/main/\
+installer-&architecture;/current/images/MANIFEST">MANIFEST</ulink>.
+También necesitará usar el parámetro de núcleo &ramdisksize;.
+
+</para><para>
+
+Si tiene problemas, verifique el 
+<ulink url="&url-m68k-cts-faq;">FAQ cts's &arch-title; del instalador de Debian</ulink>.
+
+</para>
+  </sect2>
+
+  <sect2 arch="m68k"><title>Arrancar desde AmigaOS</title>
+<para>
+
+En <command>Workbench</command>, inicie el proceso de instalación
+de Linux al hacer doble click en el icono <guiicon>StartInstall</guiicon>
+en el directorio <filename>debian</filename>.
+
+</para><para>
+
+Debe presionar la teclar &enterkey; dos veces después de que el programa
+instalador de Amiga ha mostrado alguna información en una ventana.
+Depués de esto, la pantalla se volverá gris, esto tomará algunos segundos.
+Seguidamente, deberá aparecer una pantalla negra con texto blanco,
+mostrando todo tipo de información sobre la depuración del núcleo.
+Estos mensajes podrían pasar muy rápidamente para que usted los lea,
+pero esto es correcto. Después de algunos segundos, el programa de
+instalación deberá inciarse automáticamente, de modo que puede
+continuar como dice <xref linkend="d-i-intro"/>.
 
 </para>
   </sect2>
 
 
-  <sect2 arch="m68k"><title>Booting from Atari TOS</title>
+  <sect2 arch="m68k"><title>Arrancar desde TOS de Atari</title>
 <para>
 
-At the GEM desktop, start the Linux installation process by
-double-clicking on the <guiicon>bootstra.prg</guiicon> icon in the
-<filename>debian</filename> directory and clicking
-<guibutton>Ok</guibutton> at the program options dialog box.
+En el entorno de escritorio GEM, inicie el proceso de instalación de Linux
+al hace doble click en el icono <guiicon>bootstra.prg</guiicon> en
+el directorio <filename>debian</filename> y luego click en 
+<guibutton>Ok</guibutton> en las opciones de cuadro de diálogo del
+programa.
 
 </para><para>
 
-You may have to press the &enterkey; key after the Atari
-bootstrap program has output some debugging information into a
-window. After this, the screen will go grey, there will be a few
-seconds' delay.  Next, a black screen with white text should come up,
-displaying all kinds of kernel debugging information. These messages
-may scroll by too fast for you to read, but that's OK. After a couple
-of seconds, the installation program should start automatically, so
-you can continue below at <xref linkend="init-config"/>.
+Tal vez deba presionar &enterkey; después de que el programa de
+arranque de Atari haya mostrado algunos mensajes de depuración.
+Después de esto, la pantalla se volverá gris, luego habrá unos
+segundos de espera. Seguidamente, se mostrará una pantalla negra
+con texto blanco, la cual mostrará diversos mensajes de depuración
+del núcleo. Estos mensajes podrían pasar muy rápido como para que
+los pueda leer, esto es normal. Después de algunos segundos, el
+programa de instalación deberá iniciarse automáticamente, de
+modo que puede continuar como dice <xref linkend="d-i-intro"/>.
 
 </para>
   </sect2>
 
 
-  <sect2 arch="m68k"><title>Booting from 68k MacOS</title>
+  <sect2 arch="m68k"><title>Arrancar desde MacOS 68k</title>
 <para>
 
-At the MacOS desktop, start the Linux installation process by
-double-clicking on the <guiicon>Penguin Prefs</guiicon> icon in
-the <filename>debian</filename> directory. The
-<command>Penguin</command> booter will start up. Go to the
-<guimenuitem>Settings</guimenuitem> item in the
-<guimenu>File</guimenu> menu, click the
-<guilabel>Kernel</guilabel> tab.  Select the kernel
-(<filename>linux.bin</filename>) and ramdisk
-(<filename>root.bin</filename>) images in the
-<filename>debian</filename> directory by clicking on the corresponding
-buttons in the upper right corner, and navigating the file select
-dialogs to locate the files. Close the <guilabel>Settings</guilabel>
-dialog, save the settings and start the bootstrap using the
-<guimenuitem>Boot Now</guimenuitem> item in the
-<guimenu>File</guimenu> menu.
+Las Mac requieren el gestor de arranque <command>Penguin</command>.
+Si no puede trabajar un archivo <command>Stuffit</command>,
+&penguin19.hfs; es una imagen de disco hfs con <command>Penguin</command>
+desempaquetado.
+<xref linkend="create-floppy"/> describe como copiar esta imagen
+a un disquete.
+
+</para><para>
+
+En el entorno de escritorio de MacOS, inicie el proceso de instalación
+de Linux al hacer doble click en el icono <guiicon>Penguin Prefs</guiicon>
+en el directorio <filename>debian</filename>. El arrancador 
+<command>Penguin</command> se iniciará. Seleccione la opción
+<guimenuitem>Settings</guimenuitem> en el menu <guimenu>File</guimenu>,
+haga click en la pestaña <guilabel>Kernel</guilabel>. Elija las
+imágens de el núcleo (<filename>vmlinuz</filename>) y el disco ram
+(<filename>initrd.gz</filename>) en el directorio <filename>debian</filename>
+al hacer click en los botones correspondientes en la esquina superior
+derecha, y navegar en los diálogos de selección de ficheros para
+ubicarlos. Cierre la caja de diálogo <guilabel>Settings</guilabel>, guarde
+la configuración e inicie el arranque usando la opción 
+<guimenuitem>Boot Now</guimenuitem> en el menú <guimenu>File</guimenu>.
 
 </para><para>
 
@@ -81,7 +131,7 @@ should come up, displaying all kinds of kernel debugging
 information. These messages may scroll by too fast for you to read,
 but that's OK. After a couple of seconds, the installation program
 should start automatically, so you can continue below at 
-<xref linkend="init-config"/>.
+<xref linkend="d-i-intro"/>.
 
 </para>
   </sect2>
