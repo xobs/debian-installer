@@ -41,7 +41,7 @@ EXTRALIBS=/lib/libnss_dns* /lib/libresolv*
 
 # List here any extra udebs that are not in the list file but that
 # should still be included on the system.
-EXTRAS=""
+EXTRAS=
 
 # This variable can be used to copy in additional files from the system
 # that is doing the build. Useful if you need to include strace, or gdb,
@@ -177,24 +177,32 @@ get_udebs-stamp:
 		fi; \
 	fi; \
 
-	# Now the udebs are in APTDIR/cache/archives/ and maybe LOCALUDEBDIR,
-	# but there may be other udebs there too besides those we asked for.
-	# So link those we asked for to UDEBDIR, renaming them to more useful
-	# names.
+	# Now the udebs are in APTDIR/cache/archives/ and maybe LOCALUDEBDIR
+	# or DEBUGUDEBDIR, but there may be other udebs there too besides those
+	# we asked for.  So link those we asked for to UDEBDIR, renaming them
+	# to more useful names. Watch out for duplicates and missing files
+	# while doing that.
 	rm -rf $(UDEBDIR)
 	mkdir -p $(UDEBDIR)
+	function lnpkg() { \
+		local pkg=$$1; local dir=$$2; \
+		local L1="`echo $$dir/$$pkg\_*`"; \
+		local L2="`echo $$L1 | sed -e 's, ,,g'`"; \
+		if [ "$$L1" != "$$L2" ]; then \
+			echo "Duplicate package $$pkg in $$dir/"; \
+			exit 1; \
+		fi; \
+		if [ -e $$L1 ]; then \
+			ln -f $$dir/$$pkg\_* $(UDEBDIR)/$$pkg.udeb; \
+		fi; \
+	}; \
 	for package in $(UDEBS); do \
-		if [ -e $(APTDIR)/cache/archives/$$package\_* ]; then \
-			ln -f $(APTDIR)/cache/archives/$$package\_* \
-				$(UDEBDIR)/$$package.udeb; \
-		fi; \
-		if [ -e $(LOCALUDEBDIR)/$$package\_* ]; then \
-			ln -f $(LOCALUDEBDIR)/$$package\_* \
-				$(UDEBDIR)/$$package.udeb; \
-		fi; \
-		if [ -e $(DEBUGUDEBDIR)/$$package\_*.udeb ]; then \
-			ln -f $(DEBUGUDEBDIR)/$$package\_*.udeb \
-				$(UDEBDIR)/$$package.udeb; \
+		lnpkg $$package $(APTDIR)/cache/archives; \
+		lnpkg $$package $(LOCALUDEBDIR); \
+		lnpkg $$package $(DEBUGUDEBDIR); \
+		if ! [ -e $(UDEBDIR)/$$package.udeb ]; then \
+			echo "Needed $$package not found (looked in $(APTDIR)/cache/archives/, $(LOCALUDEBDIR)/, $(DEBUGUDEBDIR)/)"; \
+			exit 1; \
 		fi; \
 	done
 
