@@ -49,8 +49,18 @@ UDEBS = \
 			pkg-lists/base \
 			pkg-lists/$(TYPE)/common \
 			`if [ -f pkg-lists/$(TYPE)/$(DEB_HOST_ARCH) ]; then echo pkg-lists/$(TYPE)/$(DEB_HOST_ARCH); fi` \
-		| sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2 )/g' \
+		| sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2\n)/g' \
 	) $(EXTRAS)
+
+ifeq ($(TYPE),floppy)
+# List of additional udebs for driver floppy(ies). At the moment there is only one additional driver floppy needed
+DRIVERFD_UDEBS = \
+	$(shell  grep --no-filename -v ^\# \
+		pkg-lists/driver1/common \
+		`if [ -f pkg-lists/driver1/$(DEB_HOST_ARCH) ]; then echo pkg-lists/driver1/$(DEB_HOST_ARCH); fi` \
+		| sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2\n)/g' )
+	EXTRA_TARGETS=driver1
+endif
 
 # Scratch directory.
 BASE_TMP=./tmp/
@@ -74,7 +84,7 @@ ifdef ERROR_TYPE
 	@exit 1
 endif
 
-build: tree_umount tree stats
+build: tree_umount tree stats $(EXTRA_TARGETS)
 
 image: arch-image
 
@@ -89,6 +99,25 @@ ifndef USERDEVFS
 else
 	-@sudo chroot $(TREE) /usr/bin/update-dev
 endif
+
+# Build the driver1 fd image
+driver1: TMP_FILE=$(TEMP)/image.tmp
+driver1: floppy-get_udebs-stamp
+	mkdir -p $(TEMP)/driver1
+	for file in $(DRIVERFD_UDEBS) ; do \
+		cp $(APTDIR)/cache/archives/$$file*.udeb $(TEMP)/driver1 ; done
+	rm -f $(TMP_FILE)
+	install -d $(TEMP)
+	install -d $(DEST)
+	if [ $(INITRD_FS) = ext2 ]; then \
+		genext2fs -d $(TEMP)/driver1 -b `expr $$(du -s $(TEMP)/driver1 | cut -f 1) + $$(expr $$(find $(TEMP)/driver1 | wc -l) \* 2)` $(TMP_FILE); \
+        elif [ $(INITRD_FS) = romfs ]; then \
+                genromfs -d $(TEMP)/driver1 -f $(TMP_FILE); \
+        else \
+                echo "Unsupported filesystem type"; \
+                exit 1; \
+        fi;
+
 
 tree_umount:
 ifndef USERDEVFS
@@ -113,6 +142,11 @@ uml: $(INITRD)
 demo_clean: tree_umount
 
 clean: demo_clean tmp_mount debian/control
+	if [ "$(USER_MOUNT_HACK)" ] ; then \
+	    if mount | grep -q "$(USER_MOUNT_HACK)"; then \
+	        umount "$(USER_MOUNT_HACK)";\
+	    fi ; \
+	fi
 	rm -rf $(TREE) 2>/dev/null || sudo rm -rf $(TREE)
 	dh_clean
 	rm -f *-stamp
@@ -132,7 +166,7 @@ $(SOURCEDIR)/udeb-sources-stamp:
 	mkdir -p $(APTDIR)/cache/archives/partial
 	$(APT_GET) update
 	$(APT_GET) autoclean
-	needed="$(UDEBS) $(DRIVER1_UDEBS)"; \
+	needed="$(UDEBS) $(DRIVERFD_UDEBS)"; \
         for file in `find $(LOCALUDEBDIR) -name "*_*" -printf "%f\n" 2>/dev/null`; do \
 		package=`echo $$file | cut -d _ -f 1`; \
 		needed=`echo " $$needed " | sed "s/ $$package */ /"` ; \
@@ -157,6 +191,10 @@ compiled-stamp: $(SOURCEDIR)/udeb-sources-stamp
 	mv $(SOURCEDIR)/*.udeb $(APTDIR)/cache/archives
 	touch compiled-stamp
 
+# Ensure this exists.
+debian/control: debian/control.in
+	sed "s/@UDEB_DEPENDS@/$$deps/" < $< > $@
+
 # 
 # Get all required udebs and put in UDEBDIR.
 get_udebs: $(TYPE)-get_udebs-stamp
@@ -167,7 +205,7 @@ $(TYPE)-get_udebs-stamp:
 	$(APT_GET) autoclean
 	# If there are local udebs, remove them from the list of things to
 	# get. Then get all the udebs that are left to get.
-	needed="$(UDEBS) $(DRIVER1_UDEBS)"; \
+	needed="$(UDEBS) $(DRIVERFD_UDEBS)"; \
 	for file in `find $(LOCALUDEBDIR) -name "*_*" -printf "%f\n" 2>/dev/null`; do \
 		package=`echo $$file | cut -d _ -f 1`; \
 		needed=`echo " $$needed " | sed "s/ $$package */ /"`; \
@@ -456,7 +494,7 @@ daily_build:
 	touch $(DEST)/info
 	set -e; \
 	for type in $(ALL_TYPES); do \
-		$(MAKE) sub_daily_build TYPE=$$type; \
+		$(MAKE) sub_daily_build TYPE=$$type USER_MOUNT_HACK=$(shell pwd)/$(DEST)/tmp-mnt.img; \
 	done
 	scp -q -B $(KERNEL) $(UPLOAD_DIR)/images/
 	mail $(shell whoami) -s "today's build info" < $(DEST)/info
