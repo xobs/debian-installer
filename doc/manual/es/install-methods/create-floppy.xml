@@ -1,50 +1,51 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- original version: 18623 -->
+<!-- revisado por nahoo, 27 octubre 2004 -->
 
  <sect1 condition="supports-floppy-boot" id="create-floppy">
- <title>Crear disquetes desde imágenes de disco</title>
+ <title>Creación de disquetes desde imágenes de disco</title>
 <para>
 
-Los disquetes arrancables son generalmente usados como último recurso
-para arrancar el instalador en hardware que no puede hacerlo desde CD
-o por otros métodos.
+Los disquetes arrancables se usan generalmente como último recurso
+para arrancar el instalador en hardware que no puede arrancar desde CD
+u otros métodos.
 
 </para><para arch="powerpc">
 
-El arranque desde disquete ha sido reportado como fallido en unidades
+Se ha informado de que el arranque desde disquete falla en unidades
 de disquete USB de Mac.
 
 </para><para arch="m68k">
 
-El arranque desde disquete no esta soportado en Amigas o Macs 68k.
+El arranque desde disquete no está soportado en Amigas o Macs 68k.
 
 </para><para>
 
-Las imágenes de disco son ficheros que contienen el contenido completo
+Las imágenes de disco son ficheros que albergan el contenido completo
 de un disquete en formato <emphasis>raw</emphasis>. Las imágenes de disco,
-como <filename>boot.img</filename>, no pueden ser copiadas simplemente
+como <filename>boot.img</filename>, no pueden copiarse simplemente
 a la unidad de disquete. Se usa un programa especial para escribir los
 ficheros de imagen a la unidad de disquete en modo <emphasis>raw</emphasis>.
-Esto se requiere debido a que estas imágenes son representaciones en "bruto"
-del disco; se requiere efectuar una <emphasis>copia por sector</emphasis> 
-de la data del fichero en el disquete.
+Es necesario debido a que estas imágenes son representaciones en "bruto"
+del disco; por eso hay que efectuar una <emphasis>copia sector a sector</emphasis> 
+de los datos del fichero en el disquete.
 
 </para><para>
 
 Existen diferentes métodos para crear disquetes desde imágenes de disco,
-las cuales dependen de su plataforma. Esta sección describe como crear
+depende de su plataforma. Esta sección describe como crear
 disquetes desde imágenes de disco en diferentes plataformas.
 
 </para><para>
 
-No importa el método que use para crear sus disquetes, deberá 
-recordar activar la protección de escritura en los disquetes, una
-vez que haya escrito en ellos, para asegurarse que no se dañen
-sin intención.
+No importa el método que use para crear sus disquetes, debe 
+acordarse de activar la protección de escritura en los disquetes, una
+vez que haya escrito en ellos, para asegurarse de que no se dañen
+inintencionadamente.
 
 </para>
 
-  <sect2><title>Escribir imágenes de disco desde un sistema Linux o Unix</title>
+  <sect2><title>Escritura de las imágenes de disco desde un sistema Linux o Unix</title>
 <para>
 
 Para escribir los ficheros de imagen de disco en los disquetes, probablemente
@@ -56,15 +57,15 @@ dd if=<replaceable>fichero</replaceable> of=/dev/fd0 bs=1024 conv=sync ; sync
 </screen></informalexample>
 
 donde <replaceable>fichero</replaceable> es uno de los ficheros de imagen
-de disco (vea <xref linkend="downloading-files"/> para saber que
-<replaceable>ficheros</replaceable> deben ser).
-<filename>/dev/fd0</filename> es el nombre usualmente usado para la unidad
+de disco (vea la <xref linkend="downloading-files"/> para saber que
+<replaceable>ficheros</replaceable> usar).
+<filename>/dev/fd0</filename> es el nombre usado normalmente para la unidad
 de disquetes, podría ser distinto en su ordenador
 <phrase arch="sparc">(en Solaris, es
 <filename>/dev/fd/0</filename>)</phrase>.
-La orden podría retornar el cursor antes de que Unix haya finalizado la
-escritura en el disquete, por lo que espere que la luz de "disco en uso" en
-la unidad de disquete este apagada y que ha finalizado de dar vueltas 
+La orden podría devolver el cursor antes de que Unix haya finalizado la
+escritura en el disquete, así que espere a que la luz de "disco en uso" en
+la unidad de disquete se apague y a que termine de dar vueltas,
 antes de retirarlo de la unidad. En algunos sistemas, tendrá que ejecutar
 una orden para expulsar el disquete de la unidad
 <phrase arch="sparc">(en Solaris, use <command>eject</command>, vea
@@ -75,18 +76,19 @@ la página de manual)</phrase>.
 Algunos sistemas intentan montar automáticamente el disquete cuando
 lo coloca en la unidad. Deberá deshabilitar esta característica antes
 de que su ordenador le permita escribir en <emphasis>modo raw</emphasis>.
-Desafortunadamente, la forma de hacer esto variará basado en su sistema
+Desafortunadamente, la forma de hacer esto variará dependiendo de su sistema
 operativo.
 <phrase arch="sparc">
 En Solaris, puede modificar el administrador de volúmenes para tener
-acceso raw al disquete. Primero, asegúrese de que el disquete ha sido
-automontado (usando <command>volcheck</command> o la orden
-equivalente en el gestor de ficheros). Luego use la orden
-<command>dd</command> de la forma señalada a continuación, simplemente
+acceso raw al disquete. Primero, asegúrese de que el disquete se ha montado
+automáticamente (usando <command>volcheck</command> o la orden
+equivalente del gestor de ficheros). Luego use la orden
+<command>dd</command> en la forma señalada anteriormente, simplemente
 reemplace <filename>/dev/fd0</filename> con
 <filename>/vol/rdsk/<replaceable>nombre_disquete</replaceable></filename>,
 donde <replaceable>nombre_disquete</replaceable> es el nombre que se ha
-asignado al disquete cuando fue formateado (los disquetes no nombrados
+asignado al disquete cuando fue formateado (los disquetes a los que no se haya
+dado ningún nombre
 tienen como nombre predeterminado <filename>unnamed_floppy</filename>).  
 En otros sistemas, pregunte a su administrador
 </phrase>
@@ -95,7 +97,7 @@ En otros sistemas, pregunte a su administrador
 
 Si escribe un disquete en Linux powerpc, necesitará expulsarlo. El
 programa <command>eject</command> controla esto adecuadamente; podría
-necesitar instalarlo.
+tener que instalarlo.
 
 </para>
 
