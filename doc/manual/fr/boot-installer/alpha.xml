@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 23576 -->
+<!-- original version: 23664 -->
 
 
  <sect2 arch="alpha" id="alpha-firmware">
@@ -58,16 +58,25 @@ Depuis que Unix Tru64 utilise le format des disques BSD, c'est le format
 
 </para><para>
 
-Puisque GNU/Linux est le seul système d'exploitation sur Alpha qui peut être 
-amorcé à partir des deux types de console, le choix va aussi dépendre de quel 
-autre type de système d'exploitation vous souhaitez utiliser sur la même 
-machine. Tous les autres systèmes d'exploitation de type Unix (Unix Tru64,
- FreeBSD, OpenBSD, NetBSD) et OpenVMS peuvent amorcer à partir de SRM alors 
-que Windows NT ne peut amorcer que depuis ARC.
+GNU/Linux est le seul système d'exploitation sur Alpha qui peut être 
+amorcé à partir des deux types de console, mais la version &debian; &release;
+ne peut s'amorcer qu'à partir d'un système basé sur SRM. Si vous possédez un
+Alpha sans SRM, si vous voulez pouvoir lancer aussi Windows NT ou si votre
+programme d'amorçage demande une console ARC pour initialiser le BIOS, vous
+ne pourrez pas utiliser l'installateur Debian. Vous pourrez toujours lancer
+&debian; &release; sur de tels systèmes en utilisant un autre support
+d'installation. Par exemple, vous pouvez installer Debian woody et faire une 
+mise à jour.
+</para>
+<para>
+Comme <command>MILO</command> n'est pas disponible sur tous les systèmes
+Alpha actuels (Février 2000) et comme il n'est plus nécessaire d'acheter
+une license OpenVMS ou Tru64 Unix pour avoir un microprogramme SRM  sur les
+anciens Alpha, il est recommandé d'utiliser SRM dès que possible.
 
 </para><para>
 
-Le tableau suivant résume les combinaisons type de système-console 
+Le tableau suivant résume les combinaisons type de système / console 
 disponibles (cf. <xref linkend="alpha-cpus"/> pour les noms des types de 
 système). Le mot «&nbsp;ARC&nbsp;» ci-dessous désigne toute console compatible
       avec ARC.
@@ -127,7 +136,7 @@ système). Le mot «&nbsp;ARC&nbsp;» ci-dessous désigne toute console compatible
   <entry>SRM</entry>
 </row><row>
   <entry>nautilus</entry>
-  <entry>ARC (voyez le manuel de la carte mère)</entry>
+  <entry>ARC (voyez le manuel de la carte mère) ou SRM</entry>
 </row><row>
   <entry>noname</entry>
   <entry>ARC ou SRM</entry>
@@ -174,11 +183,24 @@ système). Le mot «&nbsp;ARC&nbsp;» ci-dessous désigne toute console compatible
 
 D'une façon générale, aucune de ces consoles ne peut amorcer Linux 
 directement&nbsp;; il est donc nécessaire d'avoir recours à un programme 
-d'amorçage intermédiaire. Il en existe deux principaux pour Linux&nbsp;: 
-<command>MILO</command> et <command>aboot</command>.
+d'amorçage intermédiaire. Pour la console SRM, on utilise 
+<command>aboot</command>, un programme d'amorçage léger et indépendant de la
+plateforme. Voyez l' obsolète <ulink url="&url-srm-howto;">SRM HOWTO</ulink> 
+pour d'autres informations. 
+</para>
+<para condition="FIXME">
+les paragraphes suivants proviennent du manuel d'installation de la version 
+Woody. Ils sont là pour référence et pourront devnir utiles quand Debian
+pourra utiliser à nouveau MILO.
+</para>
 
-</para><para>
-
+<para condition="FIXME">
+D'une façon générale, aucune de ces consoles ne peut amorcer Linux
+directement&nbsp;; il est donc nécessaire d'avoir recours à un programme
+d'amorçage intermédiaire. Il existe deux programmes d'amorçage 
+principaux&nbsp;: <command>MILO</command> and <command>aboot</command>.
+</para>
+<para>
 <command>MILO</command> est lui-même une console, qui remplace ARC ou
 SRM en mémoire. <command>MILO</command> peut être amorcé à la fois par ARC et 
 SRM et c'est même la seule façon de démarrer Linux à partir d'une console 
@@ -195,7 +217,7 @@ de la plateforme et qui fonctionne uniquement avec SRM. Reportez-vous au
 <ulink url="&url-srm-howto;">SRM HOWTO</ulink> (hélas plus très à jour) pour 
 obtenir d'autres informations sur <command>aboot</command>.
 
-</para><para>
+</para><para condition="FIXME">
 
 Vous pouvez donc être confronté à trois types de scénario possibles, selon le 
 microprogramme de la console du système et selon que <command>MILO</command> 
@@ -209,14 +231,7 @@ ARC -> MILO
 
 </screen></informalexample>
 
-</para><para>
-
-La carte-mère UP1000 (nom de sous-architecture «&nbsp;nautilus&nbsp;») de 
-<emphasis>Alpha Processor, Inc </emphasis>, est différente de toutes les 
-autres en ce sens qu'elle utilise un programme d'amorçage qui utilise le 
-microprogramme AlphaBIOS.
-
-</para><para>
+</para><para condition="FIXME">
 
 Comme <command>MILO</command> n'est disponible pour aucun des systèmes Alpha 
 actuellement en production (février 2000) et comme il n'est plus nécessaire 
@@ -252,7 +267,7 @@ s'obtenir à partir des <ulink url="&url-alpha-firmware;">mises
  </sect2>
 
 
-  <sect2 arch="alpha"><title>Booting with TFTP</title>
+  <sect2 arch="alpha"><title>Amorcer avec TFTP</title>
 <para>
 
 Pour SRM, les interfaces Ethernet sont nommées
@@ -343,7 +358,7 @@ en notation SRM.
 </para>
   </sect2>
 
-  <sect2 arch="alpha">
+  <sect2 arch="alpha" condition="FIXME">
   <title>Amorcer depuis un cédérom avec une console ARC ou AlphaBIOS</title>
 <para>
 
@@ -365,7 +380,7 @@ code de votre sous-architecture (voyez&nbsp;:
   </sect2>
 
 
-  <sect2 arch="alpha">
+  <sect2 arch="alpha" condition="supports-floppy-boot">
   <title>Amorcer à partir de disquette avec la console SRM</title>
 <para>
 
@@ -436,27 +451,9 @@ Dans le menu de «&nbsp;OS selection&nbsp;», choisissez
 </para>
   </sect2>
 
-  <sect2 arch="alpha">
-  <title>Amorcer depuis les disquettes avec le programme d'amorçage APB (UP1000)
-</title>
 
-<para>
-
-Pour amorcer sur cette plateforme, exécutez
-<command>\apb\apb.exe</command> depuis le menu «&nbsp;Utility/Run
-        Maintenance Program&nbsp;» et tapez
-
-      <informalexample><screen>
-
-boot debian_install
-      
-</screen></informalexample>
-à l'invite de APB.
-
-</para>
-  </sect2>
-
- <sect2 arch="alpha" id="booting-from-milo"><title>Amorcer avec MILO</title>
+ <sect2 arch="alpha" condition="FIXME" id="booting-from-milo">
+<title>Amorcer avec MILO</title>
 <para>
 
 Le programme MILO, contenu dans le média d'amorçage, est configuré

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 23058 -->
+<!-- original version: 23678 -->
 
  <sect1 id="kernel-baking"><title>Compiler un nouveau noyau</title>
 <para>
 
-Pourquoi un utilisateur voudrait-il compiler un nouveau noyau&nbsp;?
+Pourquoi vouloir compiler un nouveau noyau&nbsp;?
 Ce n'est en général pas nécessaire, étant donné que le noyau par défaut de
 Debian reconnaît la plupart des configurations. Cependant, il peut être
 utile de compiler un nouveau noyau dans les cas suivants&nbsp;:
@@ -12,44 +12,44 @@ utile de compiler un nouveau noyau dans les cas suivants&nbsp;:
 <itemizedlist>
 <listitem><para>
 
-gérer des périphériques spéciaux, ou des conflits de périphériques dans
+Gérer des périphériques spéciaux, ou des conflits de périphériques dans
 les noyaux par défaut&nbsp;;
 
 </para></listitem>
 <listitem><para>
 
-gérer des périphériques ou activer des options qui ne sont pas incluses
+Gérer des périphériques ou activer des options qui ne sont pas incluses
 dans le noyau par défaut, tel que l'APM ou le SMP&nbsp;;
 
 </para></listitem>
 
 <listitem arch="i386"><para>
  
-les variantes compact et idepci n'ont pas de gestion du son.
+Les variantes compact et idepci n'ont pas de gestion du son.
 Bien que le noyau par défaut l'intègre, cela pourrait ne pas marcher pour
 d'autres raisons&nbsp;;
 
 </para></listitem>
 <listitem><para>
 
-optimiser le noyau en enlevant les pilotes inutiles, ce qui peut
+Optimiser le noyau en enlevant les pilotes inutiles, ce qui peut
 accélérer le démarrage de la machine&nbsp;;
 
 </para></listitem>
 <listitem><para>
 
-utiliser des options du noyau qui ne sont pas reconnues par le
+Utiliser des options du noyau qui ne sont pas reconnues par le
 noyau par défaut, gestion des pare-feux par exemple&nbsp;;
 
 </para></listitem>
 <listitem><para>
 
-utiliser une version de développement du noyau&nbsp;;
+Utiliser une version de développement du noyau&nbsp;;
 
 </para></listitem>
 <listitem><para>
 
-impressionner vos ami(e)s, essayer de nouvelles choses.
+Impressionner vos ami(e)s, essayer de nouvelles choses.
 
 </para></listitem>
 </itemizedlist>
@@ -76,8 +76,8 @@ et quelques autres qui sont probablement déjà installés sur votre machine
 
 </para><para>
 
-Cette méthode crée un .deb à partir des sources du noyau, et si
-vous utilisez des modules non standard, incorpore aussi ces dépendances
+Cette méthode crée un .deb à partir des sources du noyau&nbsp;; si
+vous utilisez des modules non standard, elle incorpore aussi ces dépendances
 dans le .deb. C'est une bonne solution pour gérer les images du noyau&nbsp;;
 le répertoire <filename>/boot</filename> contiendra le noyau, le System.map 
 et une sauvegarde du fichier de configuration utilisé pour ce paquet.
@@ -99,22 +99,8 @@ Notez que vous trouverez une documentation complète sur l'utilisation de
 <filename>/usr/share/doc/kernel-package</filename>. Cette section ne 
 contient qu'un bref didacticiel.
 
-</para><para arch="sparc">
-
-Si vous compilez un noyau pour UltraSPARC, assurez-vous que vous avez 
-installé le paquet <classname>egcs64</classname>. C'est le compilateur favori 
-pour les noyaux SPARC 64 bits. Le compilateur par défaut 
-<command>gcc</command> compile aussi en 64 bits, mais il n'est pas aussi 
-stable. De plus, si vous n'utilisez pas <classname>egcs64</classname> et que 
-vous rencontrez un problème de noyau, il vous sera probablement demandé de 
-recompiler en utilisant <classname>egcs64</classname> afin de vérifier si le 
-problème persiste. Après avoir installé <classname>egcs64</classname>, vous 
-devez exécuter 
-<userinput>update-alternatives --config sparc64-linux-gcc</userinput> en 
-tant que superutilisateur, assurez-vous aussi que 
-<classname>egcs64</classname> est bien utilisé par ce programme.
-
-</para><para>
+</para>
+<para>
 
 Dans ce qui suit, nous supposerons que les sources de votre noyau sont
 situées dans <filename>/usr/local/src/</filename> et qu'il s'agit du noyau 
@@ -141,12 +127,8 @@ Faites attention&nbsp;: les autres options, non spécifiques au matériel,
 doivent être laissées à leur valeur par défaut si vous ne les comprenez pas.
 N'oubliez pas de sélectionner «&nbsp;Kernel module loader&nbsp;» dans la 
 section «&nbsp;Loadable module support&nbsp;»
-
-<phrase arch="alpha"> et «&nbsp;Enhanced Real Time Clock Support&nbsp;» 
-dans «&nbsp;Character devices&nbsp;» (elles ne sont pas sélectionnées
-      </phrase>
-(elle n'est pas sélectionnée par défaut). 
-sinon votre système Debian risque d'avoir des problèmes.
+(elle n'est pas sélectionnée par défaut), sinon votre système Debian risque 
+d'avoir des problèmes.
 
 </para><para>
 
