@@ -148,7 +148,7 @@ demo_clean:
 clean: demo_clean
 	dh_clean
 	rm -f *-stamp
-	rm -rf $(TREE) $(APTDIR) $(UDEBDIR) $(TEMP) $(DEST)
+	rm -rf $(TREE) $(APTDIR) $(UDEBDIR) $(TEMP) $(DEST) $(TMP_MNT)
 
 # Get all required udebs and put in UDEBDIR.
 get_udebs: get_udebs-stamp
@@ -184,7 +184,7 @@ get_udebs-stamp:
 	# while doing that.
 	rm -rf $(UDEBDIR)
 	mkdir -p $(UDEBDIR)
-	function lnpkg() { \
+	lnpkg() { \
 		local pkg=$$1; local dir=$$2; \
 		local L1="`echo $$dir/$$pkg\_*`"; \
 		local L2="`echo $$L1 | sed -e 's, ,,g'`"; \
