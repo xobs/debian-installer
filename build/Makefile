@@ -342,6 +342,12 @@ ifdef KERNELVERSION
 	# need them, yet anyway.
 	find $(TREE)/lib/modules/ -name 'modules*' \
 		-not -name modules.dep -not -type d | xargs rm -f
+
+	# These files are used to build special kernel images for some
+	# subarchitectures. Move them out of the way.
+	if [ -d $(TREE)/usr/lib/kernel-image-$(KERNELVERSION) ]; then \
+		mv $(TREE)/usr/lib/kernel-image-$(KERNELVERSION) $(TEMP)/lib; \
+	fi
 endif
 
 ifdef KERNELNAME
