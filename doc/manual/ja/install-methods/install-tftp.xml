@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 22939 -->
+<!-- original version: 23213 -->
 
  <sect1 condition="supports-tftp" id="install-tftp">
  <title>TFTP ネットブート用ファイルの準備</title>
@@ -481,7 +481,11 @@ as ``SUN4M'' or ``SUN4C''; in some cases, the architecture is left
 blank, so the file the client looks for is just
 <filename>client-ip-in-hex</filename>.  Thus, if your system
 subarchitecture is a SUN4C, and its IP is 192.168.1.3, the filename
-would be <filename>C0A80103.SUN4C</filename>.
+would be <filename>C0A80103.SUN4C</filename>. An easy way to determine
+this is to pull up a shell on another Unix machine and:
+
+this is to enter the following command in a shell (assuming the
+machine's intended IP is 10.0.0.4).
 -->
 <!--nabetaro 訳注残しました -->
 SPARC アーキテクチャは (訳注: <replaceable>client-architecture</replaceable> に)
@@ -492,6 +496,27 @@ SPARC アーキテクチャは (訳注: <replaceable>client-architecture</replaceable> に)
 例えば、システムのサブアーキテクチャが SUN4C で
 IP が 192.168.1.3 の場合は、ファイル名は
 <filename>C0A80103.SUN4C</filename> となります。
+これを決定する簡単な方法は、以下のコマンドをシェルに入力します。
+(予定している IP アドレスは 10.0.0.4 とする)
+
+</para>
+
+<informalexample><screen>
+printf '%.2x%.2x%.2x%.2x\n' 10 0 0 4
+</screen></informalexample>
+ 
+<para>
+
+<!--
+This will spit out the IP in hexadecimal; to get to the correct
+filename, you will need to change all letters to uppercase and
+if necessary append the subarchitecture name.
+-->
+予定しているマシンの IP アドレスが 10.0.0.4 の場合、
+こうして IP アドレスを 16 進数で出力します。
+正しいファイル名を取得するには、文字をすべて大文字に変更し、
+(必要なら) サブアーキテクチャ名を追加しなければなりません。
+
 
 </para><para>
 
