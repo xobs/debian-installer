@@ -119,7 +119,7 @@ define recurse
 endef
 
 define genext2fs-userdevfs
-       genext2fs -d $(TREE) -b 15000 -r 0
+       genext2fs -d $(TREE) -b $(USERDEVFS_SIZE) -r 0
 endef
 
 define genext2fs
@@ -581,6 +581,7 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 	case $(INITRD_FS) in \
 	ext2) \
 		if [ "" != "$(USERDEVFS)" ]; then \
+			echo $(USERDEVFS_SIZE) > $(TREE)/ramdisk_settings; \
 			$(genext2fs-userdevfs) $(TEMP)/initrd; \
 		else \
 			$(genext2fs) $(TEMP)/initrd; \
