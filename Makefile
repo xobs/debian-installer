@@ -327,7 +327,7 @@ $(TYPE)-tree-stamp:
 		oldcount=$$newcount ; \
 	done
 	sort -n < diskusage-$(TYPE).txt > diskusage-$(TYPE).txt.new && \
-	mv diskusage-$(TYPE).txt.new diskusage-$(TYPE).txt
+		mv diskusage-$(TYPE).txt.new diskusage-$(TYPE).txt
 
 	# Clean up after dpkg.
 	rm -rf $(DPKGDIR)/updates
