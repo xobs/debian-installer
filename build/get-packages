@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# get-packages <type> <package> ...
+# get-packages <type> <package> | <update> ...
 #
 # Download deb or udeb package with the help of apt-get
 # type : deb | udeb
@@ -100,6 +100,10 @@ if [ "$ONLINE" = "y" ]; then
 		exit 1
 	}
 	$APT_GET autoclean
+fi
+
+if [ "$PACKAGES" = update ]; then
+	exit 0
 fi
 
 # If there are local (u)debs, remove them from the list of things to

@@ -493,7 +493,7 @@ endif
 
 # Get the list of udebs to install.
 # HACK Alert: pkg-lists/ is still sorted by TYPE instead of a dir hierarchy.
-UDEBS = $(shell set -e; ./get-packages udeb >&2; ./pkg-list $(TYPE) $(KERNEL_FLAVOUR) $(KERNELMAJOR) "$(SUBARCH)" $(KERNELIMAGEVERSION)) $(EXTRAS)
+UDEBS = $(shell set -e; ./get-packages udeb update >&2; ./pkg-list $(TYPE) $(KERNEL_FLAVOUR) $(KERNELMAJOR) "$(SUBARCH)" $(KERNELIMAGEVERSION)) $(EXTRAS)
 
 # Get all required udebs and put them in UDEBDIR.
 $(STAMPS)get_udebs-$(targetstring)-stamp: sources.list.udeb
@@ -673,12 +673,10 @@ $(STAMPS)extra-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
 	@rm -f $@
 	mkdir -p $(TREE)
 	echo -n > $(TEMP)/diskusage.txt
+	
 	set -e; \
-	for file in $(shell grep --no-filename -v ^\#  pkg-lists/$(TYPE)/common \
-		`if [ -f pkg-lists/$(TYPE)/$(ARCH).cfg ]; then echo pkg-lists/$(TYPE)/$(ARCH).cfg; fi` \
-		`if [ -f pkg-lists/$(TYPE)/$(ARCH)/$(SUBARCH).cfg ]; then echo pkg-lists/$(TYPE)/$(ARCH)/$(SUBARCH).cfg; fi` \
-		| sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2\n)/g' ) ; do \
-			cp $(UDEBDIR)/$$file* $(TREE) ; \
+	for file in $(UDEBS); do \
+		cp $(UDEBDIR)/$$file* $(TREE) ; \
 	done
 	for udeb in $(TREE)/*.udeb ; do \
 		if [ -f "$$udeb" ]; then \
@@ -698,7 +696,7 @@ $(STAMPS)extra-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
 
 # Get a list of all the standard priority udebs, excluding kernel stuff.
 pkg-lists/standard-udebs:
-	./get-packages udeb
+	./get-packages udeb update
 	grep-dctrl -FPriority -e 'required|standard|important' \
 		-sPackage apt.udeb/state/lists/*_Packages* | \
 		grep -v kernel-image | grep -v -- -modules | \
@@ -708,7 +706,7 @@ pkg-lists/standard-udebs:
 
 # Get a list of all kernel modules matching the kernel version.
 pkg-lists/kernel-module-udebs:
-	./get-packages udeb
+	./get-packages udeb update
 	grep-dctrl -P -e '.*-modules-$(KERNELVERSION)-$(KERNEL_FLAVOUR)' \
 		-sPackage apt.udeb/state/lists/*_Packages* | \
 		cut -d " " -f 2 > $@
