@@ -8,33 +8,13 @@ $(IMAGE): $(INITRD) tmp_mount
 	dd if=/dev/zero of=$@.new bs=1k count=$(FLOPPY_SIZE)
 	mkfs.msdos -i deb00001 -n 'Debian Installer' -C $@.new $(FLOPPY_SIZE)
 
-ifdef USER_MOUNT_HACK
-	ln -sf `pwd`/$@.new $(USER_MOUNT_HACK)
-	mount $(TMP_MNT)
-else
-	mount -t vfat -o loop $@.new $(TMP_MNT)
-endif
-
-	# syslinux is used to make the floppy bootable.
-	if $(foreach NAME,$(KERNELNAME), \
-             cp -f $(TEMP)/$(NAME) $(TMP_MNT)/linux) \
-	   && cp $(INITRD) $(TMP_MNT)/initrd.gz \
-	   && cp boot/i386/syslinux.cfg $(TMP_MNT)/ \
-	   && todos $(TMP_MNT)/syslinux.cfg ; \
-	then \
-		umount $(TMP_MNT) ; \
-		true ; \
-	else \
-		umount $(TMP_MNT) ; \
-		false ; \
-	fi
-
-ifdef USER_MOUNT_HACK
-	syslinux $(SYSLINUX_OPTS) $(USER_MOUNT_HACK)
-	rm -f $(USER_MOUNT_HACK)
-else
+	# syslinux is used to make the floppy bootable
+	$(foreach NAME,$(KERNELNAME), \
+	   mcopy -i$@.new $(TEMP)/$(NAME) ::\linux \
+	&& mcopy -i$@.new $(INITRD) ::\initrd.gz \
+	&& todos < boot/i386/syslinux.cfg |  \
+	   mcopy -i$@.new - ::\syslinux.cfg)
 	syslinux $(SYSLINUX_OPTS) $@.new
-endif
 
 	# Finalize the image.
 	mv $@.new $@
