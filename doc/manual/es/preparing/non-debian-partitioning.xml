@@ -1,13 +1,14 @@
-<!-- original version: 19054 -->
+<!-- original version: 23372 -->
+<!-- revisado por nahoo, 22 octubre 2004 -->
 
  <sect1 id="non-debian-partitioning">
  <title>Preparticionado para sistemas multiarranque</title>
 <para>
 
-El particionar el disco duro se refiere simplemente al acto de 
+Particionar el disco duro se refiere simplemente al acto de 
 dividir el disco en secciones. De esta forma cada sección es independiente
-de las otras. Es prácticamente equivalente a colocar paredes dentro de
-una casa, si añade muebles a una habitación esto no afecta a
+de las otras. Es como colocar paredes dentro de
+una casa, si añade muebles a una habitación no afecta a
 las otras.
 
 </para><para arch="s390">
@@ -37,16 +38,17 @@ Si ya tiene un sistema operativo en su ordenador
 </phrase>
 
 y desea colocar Linux en el mismo disco, necesitará reparticionar el
-disco. Debian requiere sus propias particiones del disco duro. Éste
-no puede ser instalado en particiones de Windows o MacOS. Podría 
+disco. Debian requiere sus propias particiones de disco duro.
+no puede instalarse en particiones de Windows o MacOS. Podría 
 tener la posibilidad de compartir algunas particiones con otros sistemas
-Linux, pero este tópico no esta cubierto en este manual. En último
-caso necesitará una partición dedicada para la raíz de Debian.
+Linux, pero este tema no se cubre en este manual. Al menos
+necesitará una partición dedicada para la el sistema de ficheros raíz de
+Debian.
 
 </para><para>
 
 Puede encontrar información del estado actual de sus particiones 
-usando una herramienta de partición para su sistema operativo actual.
+usando una herramienta de particionado para su sistema operativo actual
 
 <phrase arch="i386">, como fdisk o PartitionMagic</phrase>
 
@@ -63,11 +65,11 @@ particiones existentes sin realizar cambios.
 </para><para>
 
 En general, cambiar una partición con un sistema de ficheros 
-existente destruirá cualquier información que allí se encuentre. Por
+existente destruirá cualquier información que contenga. Por
 lo tanto siempre deberá efectuar copias de seguridad antes de hacer
 un reparticionado. Usando la analogía de la casa,  
 probablemente querría mover todos los muebles antes de mover una
-pared, en caso contrario se arriesga a destruirla.
+pared, en caso contrario se arriesga a destruirlos.
 
 </para><para arch="hppa" condition="FIXME">
 
@@ -75,7 +77,7 @@ pared, en caso contrario se arriesga a destruirla.
 
 </para><para>
 
-Si su ordenador tiene más de un disco duro, podría querer
+Si su ordenador tiene más de un disco duro, podría
 usar uno de ellos para dedicarlo completamente a Debian. De ser
 así, no necesita particionar este disco antes de iniciar el sistema
 de instalación; el instalador incluye un programa de particionado
@@ -83,71 +85,69 @@ que puede hacer el trabajo adecuadamente.
 
 </para><para>
 
-Si su máquina solamente tiene un disco duro y desea un
+Si su máquina solamente tiene un disco duro y desea
 reemplazar totalmente el sistema operativo actual con &debian;,
 también puede esperar a particionar como parte del
 proceso de instalación (<xref linkend="partman"/>), después de
-que inicie el sistema de instalación. Sin embargo esto solamente
+que inicie el sistema de instalación. Sin embargo solamente
 funciona si planea arrancar el sistema de instalación desde
 cinta, CD-ROM o ficheros en una máquina conectada. Considere:
 Si arranca desde ficheros ubicados en el disco duro y luego
-particiona el mismo disco duro donde esta el sistema de instalación,
-por tanto elimina los ficheros de arranque, deberá esperar que
+particiona el mismo disco duro donde está el sistema de instalación,
+eliminando por tanto los ficheros de arranque, más le vale que
 la instalación sea exitosa la primera vez. Al menos en este caso,
 debería tener alguna alternativa para revivir su máquina,
-como las cintas o CDs del sistema de instalación original.
+como cintas o CDs del sistema de instalación original.
 
 </para><para>
 
 Si su máquina ya tiene particiones múltiples y suficiente espacio en
-el disco duro que pueda ser provisto al eliminar y reemplazar una o
-mas de éstas, entonces también puede esperar y usar el programa
-de particionado del instalador. Todavía deberá leer el siguiente
-material, puesto que podría haber circunstancias especiales como el
+el disco duro que pueda añadirse al eliminar y reemplazar una o
+más de éstas, entonces también puede esperar y usar el programa
+de particionado del instalador. Todavía deberá leer el material siguiente,
+puesto que podría haber circunstancias especiales, tales como el
 orden de las particiones existentes en el mapa de particiones, que
 inevitablemente le fuercen a particionar antes de instalar.
 
 </para><para arch="i386">
 
-Si su máquina tiene un sistema de ficheros FAT, el cual es usado
+Si su máquina tiene un sistema de ficheros FAT, usado
 por DOS y versiones antiguas de Windows, puede esperar y usar el
 programa de particionado del instalador de Debian para redimensionar
-el tamaño del sistema de ficheros FAT.
+el sistema de ficheros FAT.
 
 </para><para>
 
 En cualquier otros caso, necesitará particionar su disco duro
 antes de iniciar el proceso de instalación para crear espacio
-particionable para Debian. Si alguna de las particiones serán
-apropiadas por otros sistemas operativos, deberá crearlas
-usando los programas nativos de particionado para este 
-sistema operativo. Recomendamos que <emphasis>no</emphasis>
-intente crear particiones de Debian Linux usando herramientas
+particionable para Debian. Si algunas de las particiones pertenecerán a otros
+sistemas operativos, deberá crearlas
+usando los programas nativos de particionado de esos 
+sistemas operativos. Recomendamos que <emphasis>no</emphasis>
+intente crear particiones de &debian; usando herramientas
 de otros sistemas operativos. En su lugar, simplemente deberá
-crear las particiones nativas del sistema operativo que desee
-mantener.
+crear las particiones nativas del sistema operativo que desee quedarse.
 
 </para><para>
 
-Si va a instalar mas de un sistema operativo en la misma
+Si va a instalar más de un sistema operativo en la misma
 máquina, deberá instalar todos los sistemas operativos antes de
 proceder con la instalación de Linux. Las instalaciones de Windows
-y otros sistemas operativos pueden destruir la capacidad de iniciar
-Linux o animarle a reformatear particiones no nativas.
+y otros sistemas operativos pueden destruir su capacidad de iniciar
+Linux o animarle a dar formato de nuevo a particiones que no sean nativas.
 
 </para><para>
 
-Puede recuperarse de estas acciones o evitarlas, pero el instalar
+Puede recuperarse de estas acciones o evitarlas, pero instalar
 primero el sistema nativo le evitará problemas.
 
 </para><para arch="powerpc">
 
-De modo de que el OpenFirmware arranque &debian; automáticamente
-las particiones Linux deben aparecer antes de todas las particiones
-en el disco, especialmente las particiones de arranque de MacOS. 
-Deberá tener esto en cuenta cuando preparticione, deberá crear un
-marcador para las particiones Linux que vengan 
-<emphasis>antes</emphasis> de otras particiones arrancables en el
+Para que el OpenFirmware arranque &debian; automáticamente
+las particiones Linux deben aparecer antes del resto de las particiones
+del disco, especialmente las particiones de arranque de MacOS. 
+Téngalo en cuenta cuando preparticione, deberá crear una partición
+para Linux <emphasis>antes</emphasis> de las otras particiones arrancables del
 disco. (Las particiones pequeñas dedicadas a los controladores
 de disco de Apple no son arrancables). Depués puede eliminar
 el espacio con las herramientas de particionado de Linux durante
@@ -156,7 +156,7 @@ la instalación real y reemplazarlas con particiones Linux.
 </para><para>
 
 Si actualmente tiene un disco duro con una partición (una configuración
-común para ordenadores de escritorio) y desea un sistema multi-arranque
+común para ordenadores de escritorio) y desea un sistema multiarranque
 con el sistema operativo nativo y Debian, necesitará:
 
   <orderedlist>
@@ -178,7 +178,7 @@ a que el CD sea el sistema activo de MacOS.</phrase>
 <listitem><para>
 
 Usar las herramientas nativas de particionado para crear particiones
-de sistema nativas. Deje ya sea un marcador o espacio libre para &debian;.
+de sistema nativas. Deje una partición o espacio libre para &debian;.
 
 </para></listitem>
 <listitem><para>
@@ -189,7 +189,7 @@ Instalar el sistema operativo nativo en su nueva partición.
 <listitem><para>
 
 Arrancar nuevamente en el sistema operativo nativo para verificar
-que todo esta bien, y descargar los ficheros de arranque del
+que todo esté bien, y descargar los ficheros de arranque del
 instalador de Debian.
 
 </para></listitem>
