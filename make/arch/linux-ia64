@@ -6,7 +6,7 @@ arch-image: $(IMAGE)
 # 3. copy over elilo files
 $(IMAGE): $(INITRD) tmp_mount
 	dd if=/dev/zero of=$@.new bs=1k count=$(FLOPPY_SIZE)
-	mkfs.msdos -i deb00001 -n 'Debian Installer' -C $@.new $(FLOPPY_SIZE)
+	mkfs.msdos -i $(DOS_VOLUME_ID) -n $(DOS_VOLUME_LABEL) -C $@.new $(FLOPPY_SIZE)
 
 	$(foreach NAME,$(KERNELNAME), \
              gzip -9c $(TEMP)/$(NAME) | mcopy -i$@.new - ::\linux)
