@@ -90,17 +90,18 @@ TREE=$(TEMP)/tree
 # This is the kernel image that we will boot from.
 KERNEL=$(TEMP)/vmlinuz
 
-build: demo_clean reduced_tree stats
+build: demo_clean tree stats
 
-demo: reduced_tree
+demo: tree
 	sudo chroot $(TREE) bin/sh -c "if ! mount | grep ^proc ; then bin/mount proc -t proc /proc; fi"
-	sudo chroot $(TREE) bin/sh -c "export DEBCONF_FRONTEND=text DEBCONF_DEBUG=5; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; /usr/share/debconf/frontend /usr/bin/main-menu"
+	-sudo chroot $(TREE) bin/sh -c "export DEBCONF_FRONTEND=text DEBCONF_DEBUG=5; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; /usr/share/debconf/frontend /usr/bin/main-menu"
 	$(MAKE) demo_clean
 
-shell: reduced_tree
+shell: tree
 	mkdir -p $(TREE)/proc 
 	sudo chroot $(TREE) bin/sh -c "if ! mount | grep ^proc ; then bin/mount proc -t proc /proc; fi"
 	sudo chroot $(TREE) bin/sh
+	$(MAKE) demo_clean
 
 demo_clean:
 	-if [ -e $(TREE)/proc/self ]; then \
@@ -108,9 +109,9 @@ demo_clean:
 		sudo chroot $(TREE) bin/sh -c "rm -rf /etc /var"; \
 	fi
 
-clean:
+clean: demo_clean
 	dh_clean
-	rm -f $(FLOPPY_IMAGE) $(INITRD)
+	rm -f $(FLOPPY_IMAGE) $(INITRD) *-stamp
 	rm -rf $(TREE) $(APTDIR) $(UDEBDIR) $(TEMP)
 
 # Get all required udebs and put in UDEBDIR.
@@ -158,12 +159,11 @@ get_udebs:
 	done
 
 # This is a list of the devices we want to create
-DEVS=console kmem mem null ram0 ram tty1 tty2 tty3 tty4 hda hdb hdc hdd fd0
+DEVS=console kmem mem null ram0 ram tty0 tty1 tty2 tty3 tty4 hda hdb hdc hdd fd0
 
 # Build the installer tree.
-reduced_tree: tree lib_reduce status_reduce
-$(TREE): tree
-tree: get_udebs
+tree: tree-stamp
+tree-stamp: get_udebs
 	dh_testroot
 
 	# This build cannot be restarted, because dpkg gets confused.
@@ -189,7 +189,30 @@ tree: get_udebs
 	mv -f $(TREE)/boot/vmlinuz $(KERNEL)
 	-rmdir $(TREE)/boot/
 
-tarball: reduced_tree
+	# Library reduction.
+	mkdir -p $(TREE)/lib
+	mklibs.sh -v -d $(TREE)/lib `find $(TREE) -type f -perm +0111 -o -name '*.so'`
+	# Now we have reduced libraries installed .. but they are
+	# not listed in the status file. This nasty thing puts them in,
+	# and alters their names to end in -reduced to indicate that
+	# they have been modified.
+	for package in $$(dpkg -S `find debian-installer/lib -type f -not -name '*.o'| \
+			sed s:debian-installer::` | cut -d : -f 1 | \
+			sort | uniq); do \
+		dpkg -s $$package >> $(DPKGDIR)/status; \
+		sed "s/$$package/$$package-reduced/g" \
+			< $(DPKGDIR)/status > $(DPKGDIR)/status-new; \
+		mv -f $(DPKGDIR)/status-new $(DPKGDIR)/status; \
+	done
+
+	# Reduce status file to contain only the elements we care about.
+	egrep -i '^((Status|Provides|Depends|Package|Description|installer-menu-item):|$$)' \
+		$(DPKGDIR)/status > $(DPKGDIR)/status.new
+	mv -f $(DPKGDIR)/status.new $(DPKGDIR)/status
+	
+	touch tree-stamp
+
+tarball: tree
 	tar czf $(TYPE)-debian-installer.tar.gz $(TREE)
 
 # Make sure that the temporary mountpoint exists and is not occupied.
@@ -208,10 +231,10 @@ tmp_mount:
 # 4. unmount the file, compress it
 #
 # TODO: get rid of this damned fuzz factor!
-$(INITRD): initrd
-initrd: FUZZ=150
-initrd: TMP_FILE=$(TEMP)/image.tmp
-initrd: tmp_mount reduced_tree
+initrd: $(INITRD)
+$(INITRD): FUZZ=150
+$(INITRD): TMP_FILE=$(TEMP)/image.tmp
+$(INITRD): Makefile tmp_mount tree
 	dh_testroot
 	rm -f $(TMP_FILE)
 	install -d $(TEMP)
@@ -227,8 +250,8 @@ initrd: tmp_mount reduced_tree
 # 1. make a dos filesystem image
 # 2. copy over kernel, initrd
 # 3. install syslinux
-$(FLOPPY_IMAGE): floppy_image
-floppy_image: initrd tmp_mount
+floppy_image: $(FLOPPY_IMAGE)
+floppy_image: Makefile initrd tmp_mount
 	dh_testroot
 	
 	dd if=/dev/zero of=$(FLOPPY_IMAGE) bs=1k count=$(FLOPPY_SIZE)
@@ -249,31 +272,9 @@ floppy_image: initrd tmp_mount
 boot_floppy: $(FLOPPY_IMAGE)
 	dd if=$(FLOPPY_IMAGE) of=/dev/fd0
 
-# Library reduction.
-lib_reduce:
-	mkdir -p $(TREE)/lib
-	mklibs.sh -v -d $(TREE)/lib `find $(TREE) -type f -perm +0111 -o -name '*.so'`
-	# Now we have reduced libraries installed .. but they are
-	# not listed in the status file. This nasty thing puts them in,
-	# and alters their names to end in -reduced to indicate that
-	# they have been modified.
-	for package in $$(dpkg -S `find debian-installer/lib -type f -not -name '*.o'| \
-			sed s:debian-installer::` | cut -d : -f 1 | \
-			sort | uniq); do \
-		dpkg -s $$package >> $(DPKGDIR)/status; \
-		sed "s/$$package/$$package-reduced/g" \
-			< $(DPKGDIR)/status > $(DPKGDIR)/status-new; \
-		mv -f $(DPKGDIR)/status-new $(DPKGDIR)/status; \
-	done
-
-# Reduce a status file to contain only the elements we care about.
-status_reduce:
-	egrep -i '^((Status|Provides|Depends|Package|Description|installer-menu-item):|$$)' \
-		$(DPKGDIR)/status > $(DPKGDIR)/status.new
-	mv -f $(DPKGDIR)/status.new $(DPKGDIR)/status
 
 COMPRESSED_SZ=$(shell expr $(shell tar cz $(TREE) | wc -c) / 1024)
-stats: reduced_tree
+stats: tree
 	@echo
 	@echo System stats
 	@echo ------------
