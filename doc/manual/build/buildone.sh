@@ -73,7 +73,7 @@ case $arch in
         network="supports-tftp;supports-rarp;supports-dhcp;supports-bootp;supports-nfsroot"
         boot="supports-floppy-boot;bootable-disk;bootable-usb"
         other="supports-pcmcia;supports-serial-console;rescue-needs-root-disk;workaround-bug-99926"
-        smp="supports-smp"
+        smp="supports-smp-sometimes"
         goodies="supports-lang-chooser"
 	;;
     ia64)
