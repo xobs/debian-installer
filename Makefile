@@ -12,6 +12,10 @@ architecture    := $(shell dpkg-architecture -qDEB_HOST_ARCH)
 
 # The version of the kernel to use.
 
+ifeq "$(architecture)" "alpha"
+KERNELVERSION=2.4.20-generic
+KERNELNAME=vmlinuz
+endif
 ifeq "$(architecture)" "hppa"
 KERNELIMAGEVERSION=2.4.19-32
 KERNELVERSION=${KERNELIMAGEVERSION}-udeb
@@ -63,6 +67,7 @@ endif
 # The type of system to build. Determines what udebs are unpacked into
 # the system. See the .list files for various types. You may want to
 # override this on the command line.
+#TYPE=net
 TYPE=net
 
 # The library reducer to use. Can be mklibs.sh or mklibs.py.
@@ -97,6 +102,7 @@ INITRD=$(DEST)/$(TYPE)-initrd.gz
 
 # Filesystem type for the initrd, valid values are romfs and ext2.
 # NOTE: Your kernel must support this filesystem, not just a module. 
+# INITRD_FS=ext2
 INITRD_FS=ext2
 
 # How big a floppy image should I make? (in kilobytes)
