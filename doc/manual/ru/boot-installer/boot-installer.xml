@@ -667,7 +667,7 @@ ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
 <!--   End of file boot-installer/arm.xml -->
 
 <!-- Start of file boot-installer/i386.xml -->
-<!-- $Id: i386.xml 23061 2004-10-13 00:14:32Z cjwatson $ -->
+<!-- $Id: i386.xml 24601 2004-12-28 23:39:38Z cjwatson $ -->
 
   <sect2 arch="i386"
 ><title
@@ -941,9 +941,9 @@ initrd (hd0,0)/boot/newinstall/initrd.gz
   <title
 >Загрузка с карты памяти USB</title>
 <para
->Предположим, что вы уже приготовили всё как написано в <xref linkend="boot-dev-select"/> and <xref linkend="boot-usb-files"/>. Теперь вставьте карту памяти USB в свободное USB гнездо и перезагрзите компьютер. Система должна загрузиться и вы должны увидеть приглашение <prompt
+>Let's assume you have prepared everything from <xref linkend="boot-dev-select"/> and <xref linkend="boot-usb-files"/>. Now just plug your USB stick into some free USB connector and reboot the computer. The system should boot up, and you should be presented with the <prompt
 >boot:</prompt
->. Сейчас вы можете ввести необязательные параметры загрузки, или просто нажать &enterkey;. </para
+> prompt. Here you can enter optional boot arguments, or just hit &enterkey;. </para
 ><para
 >Если компьютер не поддерживает загрузку с устройств USB с памятью, вы можете воспользоваться одной дискетой для начальной загрузки, а затем перейти к использованию USB. Загрузитесь как описано в <xref linkend="floppy-boot"/>; ядро на загрузочной дискете должно обнаружить устройство USB автоматически. Когда вас попросят дискету с корневой файловой системой, просто нажмите &enterkey;. Вы должны увидеть запуск &d-i;. </para>
   </sect2>
@@ -1101,11 +1101,11 @@ initrd (hd0,0)/boot/newinstall/initrd.gz
 >hw-detect/start_pcmcia=false</userinput
 >. После установки вы сможете настроить PCMCIA, исключив ресурсный диапазон, с которым возникают проблемы. </para
 ><para
->Другой вариант: вы можете загрузить программу установки в экспертном режиме. Вас попросят указать параметр ресурсного диапазона, который использует аппаратное обеспечение.Например, если у вас один из ноутбуков Dell, упомянутых выше, то вы должны ввести<userinput
+>Alternatively, you can boot the installer in expert mode. You will then be asked to enter the resource range options your hardware needs. For example, if you have one of the Dell laptops mentioned above, you should enter <userinput
 >exclude port 0x800-0x8ff</userinput
->. Также, есть список распространённых ресурсных диапазонов в <ulink url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-2.html#ss2.5"
+> here. There is also a list of some common resource range options in the <ulink url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-1.html#ss1.12"
 >System resource settings section of the PCMCIA HOWTO</ulink
->. Заметим, что при вводе значений в программу установки вы не должны указывать запятых, если они есть. </para>
+>. Note that you have to omit the commas, if any, when you enter this value in the installer. </para>
   </sect2>
 
   <sect2 arch="i386">
@@ -2001,7 +2001,7 @@ boot 192.168.1.1:/boot/sibyl
 <!--   End of file boot-installer/s390.xml -->
 
 <!-- Start of file boot-installer/powerpc.xml -->
-<!-- $Id: powerpc.xml 23151 2004-10-16 15:37:49Z cjwatson $ -->
+<!-- $Id: powerpc.xml 24602 2004-12-28 23:42:27Z cjwatson $ -->
 
   <sect2 arch="powerpc" id="boot-cd"
 ><title
@@ -2151,6 +2151,68 @@ boot:
 >install</userinput
 > не сработает. После должна запуститься программа установки Debian. </para>
    </sect3>
+  </sect2>
+
+  <sect2 arch="powerpc" id="usb-boot">
+  <title
+>Загрузка с карты памяти USB</title>
+<para
+>Currently, NewWorld PowerMac systems are known to support USB booting. </para>
+
+<para
+>Make sure you have prepared everything from <xref linkend="boot-usb-files"/>. To boot a Macintosh system from a USB stick, you will need to use the Open Firmware prompt, since Open Firmware does not search USB storage devices by default. To get to the prompt, hold down <keycombo
+><keycap
+>Command</keycap
+> <keycap
+>Option</keycap
+> <keycap
+>o</keycap
+> <keycap
+>f</keycap
+></keycombo
+> all together while booting (see <xref linkend="invoking-openfirmware"/>). </para
+><para
+>You will need to work out where the USB storage device appears in the device tree, since at the moment <command
+>ofpath</command
+> cannot work that out automatically. Type <userinput
+>dev / ls</userinput
+> and <userinput
+>devalias</userinput
+> at the Open Firmware prompt to get a list of all known devices and device aliases. On the author's system with various types of USB stick, paths such as <filename
+>usb0/disk</filename
+>, <filename
+>usb0/hub/disk</filename
+>, <filename
+>/pci@f2000000/usb@1b,1/disk@1</filename
+>, and <filename
+>/pci@f2000000/usb@1b,1/hub@1/disk@1</filename
+> work. </para
+><para
+>Having worked out the device path, use a command like this to boot the installer: <informalexample
+><screen
+>
+
+boot <replaceable>usb0/disk</replaceable>:<replaceable>2</replaceable>,\\:tbxi
+
+</screen
+></informalexample
+> The <replaceable
+>2</replaceable
+> matches the Apple_HFS or Apple_Bootstrap partition onto which you copied the boot image earlier, and the <userinput
+>,\\:tbxi</userinput
+> part instructs Open Firmware to boot from the file with an HFS file type of "tbxi" (i.e. <command
+>yaboot</command
+>) in the directory previously blessed with <command
+>hattrib -b</command
+>. </para
+><para
+>The system should now boot up, and you should be presented with the <prompt
+>boot:</prompt
+> prompt. Here you can enter optional boot arguments, or just hit &enterkey;. </para
+><warning
+><para
+>This boot method is new, and may be difficult to get to work on some NewWorld systems. If you have problems, please file an installation report, as explained in <xref linkend="submit-bug"/>. </para
+></warning>
   </sect2>
 
   <sect2 arch="powerpc" id="boot-tftp"
