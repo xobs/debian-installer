@@ -23,14 +23,14 @@ clean:
 	$(MAKE) -C build reallyclean
 	$(MAKE) -C doc/devel/partman clean
 
+# Must run as root, so is not run as part of regular build.
+build-images:
+	rm -f $@
+	$(MAKE) -C build all_build stats \
+		SUITE=$(DISTRIBUTION) BUILD_DATE=$(DATE)
+	
 build: build-stamp
 build-stamp:
-	rm -f $@
-	fakeroot $(MAKE) -C build all_build stats \
-		SUITE=$(DISTRIBUTION) BUILD_DATE=$(DATE)
-	touch $@
-	
-build-docs:
 	-rm -rf debian/tmp/$(DESTDIR)/doc/manual
 	cd doc/manual/build && \
 	        official_build=1 \
@@ -38,13 +38,15 @@ build-docs:
 		architectures=$(ARCH) noarchdir=1 ./build.sh
 
 	$(MAKE) -C doc/devel/partman
+	
+	touch $@
 
 install: build
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_install
-	debian/rules build-docs
+	debian/rules build-images
 	install -d debian/tmp/$(IMAGEDIR)
 	cp -a build/dest/* debian/tmp/$(IMAGEDIR)
 	cd debian/tmp/$(IMAGEDIR) && md5sum `find . -type f` > MD5SUMS
