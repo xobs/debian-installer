@@ -12,19 +12,22 @@ A more detailed overview of how the installer is built:
 
 * sources.list is used to configure apt to download udebs from a mirror.
   You can change it to use whatever debian archive is convenient for you.
+* The Makefile is configured via the make fragements in the config
+  directory. There are per-arch and per-image fragments that are included
+  by the main Makefile.
 * pkg-lists/base contains udebs that are put on all systems; the other files
   in that directory define different types of debian installer systems
   by listing the udebs that they are composed of. Note that
   ${kernel:Version} in these files is replaced with the kernel version, as
-  set in the KVERS variable in the Makefile.
-* The Makefile has a TYPE variable that selects one of the lists. Eg, 
+  set in the KERNELIMAGEVERSION variable.
+* There's a TYPE variable that selects one of the lists. Eg, 
   "fakeroot make TYPE=net"
 * Apt is used to download the required udebs. This does *not* include
   libraries; libraries used by udebs must be installed on the build system,
   and so are build-depended on.
 * If you have some udebs that are not available on your mirror yet,
   you can drop them in localudebs/ and they will be used.
-* Dpkg is used to unpack the udebs into the build directory.
+* dpkg is used to unpack the udebs into the build directory.
 * A customized set of reduced libraries is generated to correspond to the
   udebs that were installed.
 * "make demo" (run as root) will chroot into the system.
