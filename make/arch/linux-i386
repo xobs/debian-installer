@@ -1,3 +1,4 @@
+
 arch-image: $(IMAGE)
 
 # Create a bootable floppy image.
@@ -10,16 +11,21 @@ $(IMAGE): $(INITRD) tmp_mount
 			$(UPX) -9 $(TEMP)/$(NAME); ) \
 	fi
 
-	dd if=/dev/zero of=$@.new bs=1k count=$(FLOPPY_SIZE)
+	dd if=/dev/zero of=$@.new bs=$(FLOPPY_SIZE)k count=1
 	mkfs.msdos -i deb00001 -n 'Debian Installer' -C $@.new $(FLOPPY_SIZE)
 
-	# syslinux is used to make the floppy bootable
+	echo $(NO_KERNEL)
+
+ifndef NO_KERNEL
 	$(foreach NAME,$(KERNELNAME), \
-	   mcopy -i$@.new $(TEMP)/$(NAME) ::\linux \
-	&& mcopy -i$@.new $(INITRD) ::\initrd.gz \
-	&& todos < boot/i386/syslinux.cfg |  \
-	   mcopy -i$@.new - ::\syslinux.cfg)
+	   mcopy -i$@.new $(TEMP)/$(NAME) ::\linux)
+endif
+	mcopy -i$@.new $(INITRD) ::\initrd.gz
+ifndef NO_KERNEL
+	# syslinux is used to make the floppy bootable
+	todos < boot/i386/syslinux.cfg | mcopy -i$@.new - ::\syslinux.cfg
 	syslinux $(SYSLINUX_OPTS) $@.new
+endif
 
 	# Finalize the image.
 	mv $@.new $@
