@@ -251,7 +251,7 @@
 >Системы, которые (кроме Debian) работают под Dos или Windows обычно настроены использовать локальное время. Если хотите использовать мультизагрузку, выберите локальное время вместо GMT.</phrase
 > </para
 ><para
->В зависимости от места, выбранного в начале процесса установки, вам будет показан либо один часовой пояс, либо список часовых поясов возможных в вашей географической точке. Если показан один часовой пояс, выберие <guibutton
+>В зависимости от места, выбранного в начале процесса установки, вам будет показан либо один часовой пояс, либо список часовых поясов возможных в вашей географической точке. Если показан один часовой пояс, выберите <guibutton
 >Да</guibutton
 > для подтверждения или <guibutton
 >Нет</guibutton
@@ -524,7 +524,7 @@
 <!--   End of file boot-new/modules/apt.xml -->
 
 <!-- Start of file boot-new/modules/packages.xml -->
-<!-- $Id: packages.xml 24840 2005-01-09 03:34:52Z fjpop-guest $ -->
+<!-- $Id: packages.xml 25798 2005-02-19 12:23:13Z fjpop-guest $ -->
 
  <sect2 id="install-packages">
  <title
@@ -535,46 +535,77 @@
 >aptitude</command
 >, описанная ниже. Но это может занять много времени, так как в Debian сейчас включено &num-of-distrib-pkgs; пакетов! </para
 ><para
->Поэтому сейчас у вас есть возможность выбрать пакеты согласно <emphasis
->задачам</emphasis
->, а затем позже добавить индивидуальные пакеты. В общих чертах задачи представляют собой несколько различных работ или вещей, которые должен выполнять компьютер, например предоставлять <quote
->среду рабочего стола</quote
->, быть <quote
->web сервером</quote
-> или <quote
->сервером печати</quote
->. <footnote
+>So, you have the ability to choose <emphasis
+>tasks</emphasis
+> first, and then add on more individual packages later. These tasks loosely represent a number of different jobs or things you want to do with your computer, such as <quote
+>desktop environment</quote
+>, <quote
+>web server</quote
+>, or <quote
+>print server</quote
+><footnote
 > <para
->Вы должны знать, что для предоставления этого списка <command
+> You should know that to present this list, <command
 >base-config</command
-> просто вызывает программу <command
+> is merely invoking the <command
 >tasksel</command
->. Для ручного выбора пакетов запускается программа <command
+> program. For manual package selection, the <command
 >aptitude</command
->. Также, их можно запускать в любое время после установки, чтобы установить (или удалить) некоторые пакеты. Если вам нужен какой-то определённый пакет, то после завершения установки просто запустите <userinput
->apt-get install <replaceable
->пакет</replaceable
+> program is being run. Any of these can be run at any time after installation to install (or remove) more packages. If you are looking for a specific single package, after installation is complete, simply run <userinput
+>aptitude install <replaceable
+>package</replaceable
 ></userinput
->, где <replaceable
->пакет</replaceable
-> &mdash; это имя требуемого пакета. </para>
-</footnote>
+>, where <replaceable
+>package</replaceable
+> is the name of the package you are looking for. </para
+> </footnote
+>. <xref linkend="tasksel-size-list"/> lists the space requirements for the available tasks. </para
+><para
+>Once you've selected your tasks, select <guibutton
+>Ok</guibutton
+>. At this point, <command
+>aptitude</command
+> will install the packages you've selected. <note
+><para
+>Even if you did not select any tasks at all, any standard, important, or required priority packages that are not yet present on your system will be installed. This functionality is the same as running <userinput
+>tasksel -ris</userinput
+> at the command line, and currently involves a download of about 37M of archives. You will be shown the number of packages to be installed, and how many kilobytes of packages, if any, need to be downloaded. </para
+></note>
 
 </para
 ><para
->Если вы хотите устанавливать пакеты по отдельности, выберите <quote
->ручной выбор пакетов</quote
-> в <command
+>If you do want to choose what to install on a package by package basis, select the <quote
+>manual package selection</quote
+> option in <command
 >tasksel</command
+>. If you select one or more tasks alongside this option, aptitude will be called with the <command
+>--visual-preview</command
+> option. This means you will be able to review<footnote
+> <para
+> You can also change the default selections. If you would like to select any additional package, use <menuchoice
+> <guimenu
+>View</guimenu
+> <guimenuitem
+>New Package View</guimenuitem
+> </menuchoice
 >. </para
-><para
->После выделения задач выберите <guibutton
->Ok</guibutton
->. Теперь <command
+> </footnote
+> the packages that are to be installed. If you do not select any tasks, the normal <command
 >aptitude</command
-> начнёт установку выбранных пакетов. Заметим, что даже если вы не выбрали ни одной задачи, всё равно будут установлены все пакеты стандартного, важного или требуемого приоритета, которых ещё нет в системе. Это то же самое, что запуск в командной строке <userinput
->tasksel -s</userinput
->, и в настоящий момент вызывает скачивание приблизительно 37МБ архивов. Вы увидите число устанавливаемых пакетов и сколько килобайт пакетов надо скачать. </para
+> screen will be displayed. After making your selections you should press <quote
+><userinput
+>g</userinput
+></quote
+> to start the download and installation of packages. <note
+><para
+>If you choose <quote
+>manual package selection</quote
+> <emphasis
+>without</emphasis
+> selecting any tasks, no packages will be installed by default. This means you can use this option if you want to install a minimal system, but also that the responsibility for selecting any packages not installed as part of the base system (before the reboot) that might be required for your system lies with you. </para
+></note>
+
+</para
 ><para
 >Из &num-of-distrib-pkgs; пакетов, доступных в Debian, только малая часть выбирается с помощью задач. Чтобы посмотреть информацию об остальных пакетах, используйте <userinput
 >apt-cache search <replaceable

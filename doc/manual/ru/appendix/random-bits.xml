@@ -371,7 +371,7 @@ xserver-xfree86  xserver-xfree86/config/monitor/mode-list \
 <!--   End of file appendix/example-preseed.xml -->
 
 <!-- Start of file appendix/files.xml -->
-<!-- $Id: files.xml 24840 2005-01-09 03:34:52Z fjpop-guest $ -->
+<!-- $Id: files.xml 25763 2005-02-17 18:38:18Z fjpop-guest $ -->
 
 
  <sect1 id="linuxdevices"
@@ -625,7 +625,7 @@ xserver-xfree86  xserver-xfree86/config/monitor/mode-list \
 >Установка мыши</title>
 
 <para
->Мышь можно использовать одновременно и в консоли Linux (с помощью gpm) и в среде X window. Это возможно, если использовать повторитель gpm, который позволит передачу сигналовX серверу: <informalexample
+>Мышь можно использовать одновременно и в консоли Linux (с помощью gpm) и в среде X window. Это возможно, если использовать повторитель gpm, который который передаёт сигналы ещё и X серверу: <informalexample
 ><screen>
 mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; X
          /dev/ttyS0             (repeater)        (symlink)
@@ -634,7 +634,7 @@ mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; X
 ></informalexample
 > Установите протокол повторителя в raw (в файле <filename
 >/etc/gpm.conf</filename
->), а в настройках X изначальный протокол работы мыши(в файле <filename
+>), а в настройках X фактический протокол обмена данными с мышью (в файле <filename
 >/etc/X11/XF86Config</filename
 > или <filename
 >/etc/X11/XF86Config-4</filename
@@ -647,7 +647,7 @@ mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; X
 ></informalexample
 > подключит мышь в программе заново без перезапуска X. </para
 ><para
->Если gpm выключен или не установлен по некоторым причинам, убедитесь что X сервер настроен на чтение прямо из устройства мышь, например /dev/psaux. Подробней смотрите 3-Button Mouse mini-Howto в <filename
+>Если gpm выключен или не установлен по каким-то причинам, убедитесь что X сервер настроен на чтение прямо из устройства мыши, например /dev/psaux. Подробней смотрите 3-Button Mouse mini-Howto в <filename
 >/usr/share/doc/HOWTO/en-txt/mini/3-Button-Mouse.gz</filename
 >, <userinput
 >man gpm</userinput
@@ -688,9 +688,9 @@ mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; X
  <title
 >Дисковое пространство, необходимое для задач</title>
 <para
->Для базовой установки на i386, включая все стандартные пакеты, требуется 178МБ дискового пространства. </para
+>Для базовой установки на i386 со всеми стандартными пакетами требуется 178 МБ дискового пространства. </para
 ><para
->В следующей таблице содержатся размеры, полученные из aptitude для задач, описанных в tasksel. Заметим, что некоторые пакеты содержатся в нескольких задачах одновременно, поэтому полный размер установки для двух задач вместе может быть меньше, чем полный размер, полученный сложением размеров. </para
+>В таблице ниже приведено количество используемого места при установке задач, описанных в tasksel. Данные величины получены с помощью aptitude. Заметим, что некоторые пакеты входят в несколько задач одновременно, поэтому полный размер установки для двух задач вместе может быть меньше, чем полный размер, полученный сложением размеров. </para
 ><para>
 
 <informaltable
@@ -711,7 +711,7 @@ mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; X
 <tbody>
 <row>
   <entry
->Рабочий стол</entry>
+>рабочий стол</entry>
   <entry
 >1537</entry>
   <entry
@@ -722,7 +722,7 @@ mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; X
 
 <row>
   <entry
->Веб сервер</entry>
+>веб сервер</entry>
   <entry
 >71</entry>
   <entry
@@ -733,7 +733,7 @@ mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; X
 
 <row>
   <entry
->Сервер печати</entry>
+>сервер печати</entry>
   <entry
 >240</entry>
   <entry
@@ -744,7 +744,7 @@ mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; X
 
 <row>
   <entry
->Почтовый сервер</entry>
+>почтовый сервер</entry>
   <entry
 >41</entry>
   <entry
@@ -755,7 +755,7 @@ mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; X
 
 <row>
   <entry
->Файловый сервер</entry>
+>файловый сервер</entry>
   <entry
 >85</entry>
   <entry
@@ -766,7 +766,7 @@ mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; X
 
 <row>
   <entry
->SQL база данных</entry>
+>база данных SQL</entry>
   <entry
 >108</entry>
   <entry
@@ -779,19 +779,26 @@ mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; X
 </tgroup
 ></informaltable>
 
+<note
+><para
+>В задачу <emphasis
+>рабочий стол</emphasis
+> входит установка среды рабочего стола и Gnome и KDE одновременно. </para
+></note>
+
 </para>
  </sect1>
 <!--   End of file appendix/files.xml -->
 
 <!-- Start of file appendix/chroot-install.xml -->
-<!-- $Id: chroot-install.xml 25154 2005-01-27 18:20:43Z fjpop-guest $ -->
+<!-- $Id: chroot-install.xml 25594 2005-02-12 21:50:13Z fjpop-guest $ -->
 
  <sect1 id="linux-upgrade">
  <title
 >Установка &debian; из системы Unix/Linux</title>
 
 <para
->В этом разделе объясняется, как установить &debian; из существующей системы Unix или Linux без использования управляемой из меню программы установки, основанной на библиотеке ncurses, как это описывается в остальном руководстве. Это "междистрибутивное" HOWTO попросили пользователи, переходящие на &debian; из Redhat, Mandrake и SUSE. В этом разделе подразумевается наличие некоторого опыта работы с командами *nix и навигации по файловой системе. Здесь <prompt
+>В этом разделе объясняется, как установить &debian; из существующей системы Unix или Linux без использования управляемой из меню программы установки, основанной на библиотеке ncurses, как это описывается в остальном руководстве. Это "междистрибутивное" HOWTO попросили пользователи, переходящие на &debian; из Redhat, Mandrake и SUSE. В этом разделе подразумевается наличие некоторого опыта работы с командами *nix и навигации по файловой системе. Здесь символ <prompt
 >$</prompt
 > означает команду, вводимую в текущей пользовательской системе, а <prompt
 >#</prompt
@@ -805,7 +812,7 @@ mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; X
 <para
 >С помощью имеющейся утилиты работы с разделами диска, переразметьте диск как нужно, создав как минимум одну файловую систему плюс раздел подкачки (swap). Вам потребуется минимум 150 МБ для консольной версии установки или минимум 300 МБ, если вы планируете установить X. </para
 ><para
->Создание файловых систем на разделах. Например, чтобы создать файловую систему ext3 на разделе <filename
+>Создайте файловые системы на разделах. Например, чтобы создать файловую систему ext3 на разделе <filename
 >/dev/hda6</filename
 > (это корневой раздел в нашем примере): <informalexample
 ><screen>
@@ -816,7 +823,7 @@ mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; X
 >-j</userinput
 >. </para
 ><para
->Инициальзация и активирование подкачки (замените номер раздела на свой): <informalexample
+>Проинициализируйте и активируйте раздел подкачки (замените номер раздела на свой): <informalexample
 ><screen>
 # mkswap /dev/hda5
 # sync; sync; sync
@@ -827,7 +834,7 @@ mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; X
 >/mnt/debinst</filename
 > (точка установки, она будет корневой (<filename
 >/</filename
->) файловой системой в вашей новой системе). Имя точки монтирования абсолютно произвольное, оно описано позже. <informalexample
+>) файловой системой в вашей новой системе). Имя точки монтирования абсолютно произвольное. <informalexample
 ><screen
 ># mkdir /mnt/debinst
 # mount /dev/hda6 /mnt/debinst
@@ -892,7 +899,7 @@ mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; X
 >debootstrap</command
 ></title>
 <para
->При запуске, <command
+>При запуске <command
 >debootstrap</command
 > загружает необходимые файлы прямо из архива. В примере ниже вы можете заменить <userinput
 >http.us.debian.org/debian</userinput
@@ -967,7 +974,7 @@ mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; X
 # editor /etc/fstab
 </screen
 ></informalexample
-> Вот пример, измените его под ваши условия: <informalexample
+> Вот пример, который можно изменить в соответствии с вашими условиями: <informalexample
 ><screen>
 # /etc/fstab: информация о статических файловых системах.
 #
@@ -989,9 +996,9 @@ proc             /proc         proc    defaults                 0    0
 ></informalexample
 > Выполните <userinput
 >mount -a</userinput
->, чтобы смонтировать все файловые системы, заданные в файле <filename
+> для монтирования всех файловых систем, указанных в файле <filename
 >/etc/fstab</filename
->, или для монтирования определённой файловой системы выполните: <informalexample
+>, а для монтирования определённой файловой системы выполните: <informalexample
 ><screen>
 # mount /path   # e.g.: mount /usr
 </screen
@@ -1087,7 +1094,7 @@ nameserver 192.168.9.100
 # echo DebianHostName &gt; /etc/hostname
 </screen
 ></informalexample
-> Если у вас несколько сетевых карт, то вам нужноразместить имена драйверов в файле <filename
+> Если у вас несколько сетевых карт, то вам нужно разместить имена драйверов в файле <filename
 >/etc/modules</filename
 > в желаемом порядке. Позже при загрузке каждая карта будет связана с именем интерфейса (eth0, eth1, и тд.) как вы и хотели. </para>
    </sect3>
