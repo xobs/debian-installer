@@ -18,11 +18,9 @@ checkresult () {
 ## First we define some paths to various xsl stylesheets
 stylesheet_profile="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/profiling/profile.xsl"
 stylesheet_html="style-html.xsl"
-stylesheet_fo="style-fo.xsl"
 
 ## Location to our tools
 xsltprocessor=xsltproc
-foprocessor=./fop/fop.sh
 
 ## Build preparation
 dynamic="dynamic.ent"
@@ -38,7 +36,7 @@ fi
 case $arch in
     alpha)
         archspec="alpha;not-i386;not-s390;not-m68k;not-powerpc"
-	kernelversion="2.4.26"
+	kernelversion="2.4.27"
 	
         fdisk="fdisk.txt;cfdisk.txt"
         network="supports-tftp;supports-nfsroot"
@@ -49,7 +47,7 @@ case $arch in
 	;;
     arm)
         archspec="arm;not-i386;not-s390;not-m68k;not-powerpc;not-alpha"
-	kernelversion="2.4.25"
+	kernelversion="2.4.27"
 		
         fdisk="fdisk.txt;cfdisk.txt"
         network="supports-tftp;supports-rarp;supports-dhcp;supports-bootp;supports-nfsroot"
@@ -60,7 +58,7 @@ case $arch in
 	;;
     hppa)
         archspec="hppa;not-i386;not-s390;not-m68k;not-powerpc;not-alpha"
-	kernelversion="2.4.25"
+	kernelversion="2.4.27"
 	
         fdisk="cfdisk.txt"
         network="supports-tftp;supports-dhcp;supports-bootp;supports-nfsroot"
@@ -82,7 +80,7 @@ case $arch in
 	;;
     ia64)
         archspec="ia64;not-i386;not-s390;not-m68k;not-powerpc;not-alpha"
-	kernelversion="2.4.26"
+	kernelversion="2.4.27"
 	
         fdisk="parted.txt;cfdisk.txt"
         network="supports-tftp;supports-rarp;supports-dhcp;supports-bootp;supports-nfsroot"
@@ -93,8 +91,8 @@ case $arch in
 	;;
     m68k)
         archspec="m68k;not-i386;not-s390;not-powerpc;not-alpha"
-	kernelversion="2.2.26"
-	
+	kernelversion="2.4.27"
+
         fdisk="atari-fdisk.txt;mac-fdisk.txt;amiga-fdisk.txt;pmac-fdisk.txt"
         network="supports-tftp;supports-rarp;supports-dhcp;supports-bootp;supports-nfsroot"
         boot="supports-floppy-boot;bootable-disk"
@@ -104,7 +102,7 @@ case $arch in
 	;;
     mips)
         archspec="mips;not-i386;not-s390;not-m68k;not-powerpc;not-alpha"
-	kernelversion="2.4.26"
+	kernelversion="2.4.27"
 	
         fdisk="fdisk.txt;cfdisk.txt"
         network="supports-tftp;supports-nfsroot"
@@ -115,7 +113,7 @@ case $arch in
 	;;
     mipsel)
         archspec="mipsel;not-i386;not-s390;not-m68k;not-powerpc;not-alpha"
-	kernelversion="2.4.26"
+	kernelversion="2.4.27"
 	
         fdisk="fdisk.txt;cfdisk.txt"
         network="supports-tftp;supports-dhcp;supports-bootp;supports-nfsroot"
@@ -126,7 +124,7 @@ case $arch in
 	;;
     powerpc)
         archspec="powerpc;not-s390;not-m68k;not-i386;not-alpha"
-	kernelversion="2.4.25"
+	kernelversion="2.6.8"
 	
         fdisk="mac-fdisk.txt;cfdisk.txt"
         network="supports-tftp;supports-dhcp;supports-bootp;supports-nfsroot"
@@ -137,7 +135,7 @@ case $arch in
 	;;
     s390)
         archspec="s390;not-powerpc;not-m68k;not-i386;not-alpha"
-	kernelversion="2.4.26"
+	kernelversion="2.4.27"
 	
         fdisk="fdasd.txt;dasdfmt.txt"
         network="supports-nfsroot"
@@ -148,7 +146,7 @@ case $arch in
 	;;
     sparc)
         archspec="sparc;not-i386;not-s390;not-m68k;not-powerpc;not-alpha"
-	kernelversion="2.4.26"
+	kernelversion="2.4.27"
 	
         fdisk="fdisk.txt"
         network="supports-tftp;supports-rarp;supports-dhcp;supports-bootp;supports-nfsroot"
@@ -188,12 +186,6 @@ checkresult $?
 $xsltprocessor $stylesheet_html install.${language}.profiled.xml
 checkresult $?
 
-## ...and also to the .fo...
-# $xsltprocessor --output install.${language}.fo \
-#                $stylesheet_fo install.${language}.profiled.xml
+## ...and optionally we can generate (little bit ugly) pdf/ps/txt.
+# ./buildfop.sh pdf ${language}
 # checkresult $?
-
-## ...from which we can generate (little bit ugly) pdf/ps/txt.
-# $foprocessor -fo install.${language}.fo -pdf install.${language}.pdf
-# checkresult $?
-
