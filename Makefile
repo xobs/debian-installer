@@ -178,10 +178,8 @@ shell: tree
 	-@sudo chroot $(TREE) bin/sh
 	$(MAKE) demo_clean
 
-uml: tree
-	-@[ -f questions.dat ] && cp -f questions.dat $(TREE)/var/lib/cdebconf/
-	-linux ubd0=$(TREE) con=fd:0,fd:1 devfs=mount
-	$(MAKE) demo_clean
+uml: initrd
+	-linux initrd=$(INITRD) root=/dev/rd/0 ramdisk_size=8192 con=fd:0,fd:1 devfs=mount
 
 demo_clean:
 	-@sudo chroot $(TREE) bin/sh -c "bin/umount /dev ; bin/umount /proc" &> /dev/null
