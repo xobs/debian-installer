@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23151 untranslated -->
+<!-- original version: 24602 untranslated -->
 
   <sect2 arch="powerpc" id="boot-cd"><title>Booting from a CD-ROM</title>
 
@@ -114,6 +114,71 @@ doesn't work. The Debian installation program should start.
 
 </para>
    </sect3>
+  </sect2>
+
+  <sect2 arch="powerpc" id="usb-boot">
+  <title>Booting from USB memory stick</title>
+<para>
+
+Currently, NewWorld PowerMac systems are known to support USB booting.
+
+</para>
+
+<para>
+
+Make sure you have prepared everything from <xref
+linkend="boot-usb-files"/>. To boot a Macintosh system from a USB stick,
+you will need to use the Open Firmware prompt, since Open Firmware does
+not search USB storage devices by default.
+<!-- TODO: although it could be made to; watch this space -->
+To get to the prompt, hold down
+<keycombo><keycap>Command</keycap> <keycap>Option</keycap>
+<keycap>o</keycap> <keycap>f</keycap></keycombo> all together while
+booting (see <xref linkend="invoking-openfirmware"/>).
+
+</para><para>
+
+You will need to work out where the USB storage device appears in the
+device tree, since at the moment <command>ofpath</command> cannot work
+that out automatically. Type <userinput>dev / ls</userinput> and
+<userinput>devalias</userinput> at the Open Firmware prompt to get a
+list of all known devices and device aliases. On the author's system
+with various types of USB stick, paths such as
+<filename>usb0/disk</filename>, <filename>usb0/hub/disk</filename>,
+<filename>/pci@f2000000/usb@1b,1/disk@1</filename>, and
+<filename>/pci@f2000000/usb@1b,1/hub@1/disk@1</filename> work.
+
+</para><para>
+
+Having worked out the device path, use a command like this to boot the
+installer:
+
+<informalexample><screen>
+
+boot <replaceable>usb0/disk</replaceable>:<replaceable>2</replaceable>,\\:tbxi
+
+</screen></informalexample>
+
+The <replaceable>2</replaceable> matches the Apple_HFS or
+Apple_Bootstrap partition onto which you copied the boot image earlier,
+and the <userinput>,\\:tbxi</userinput> part instructs Open Firmware to
+boot from the file with an HFS file type of "tbxi" (i.e.
+<command>yaboot</command>) in the directory previously blessed with
+<command>hattrib -b</command>.
+
+</para><para>
+
+The system should now boot up, and you should be presented with the
+<prompt>boot:</prompt> prompt. Here you can enter optional boot
+arguments, or just hit &enterkey;.
+
+</para><warning><para>
+
+This boot method is new, and may be difficult to get to work on some
+NewWorld systems. If you have problems, please file an installation
+report, as explained in <xref linkend="submit-bug"/>.
+
+</para></warning>
   </sect2>
 
   <sect2 arch="powerpc" id="boot-tftp"><title>Booting with TFTP</title>
