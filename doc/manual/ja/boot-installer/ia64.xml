@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 18660 -->
+<!-- original version: 18974 -->
 
   <sect2 arch="ia64"><title>CD-ROM からの起動</title>
 
@@ -110,11 +110,7 @@ EFI パーティションは、システムディスクにパッケージをロードする前に、
 さらにパーティション分割タスクでは、インストールプロセスが先に進む前に、
 適切な EFI パーティションが存在していることを確認します。
 
-</para>
-
-  <sect3 arch="ia64" id="boot-from-cd">
-  <title>EFI シェルからの起動</title>
-<para>
+</para><para>
 
 <!--
 The EFI Boot Manager is started as the last step of the firmware
@@ -124,15 +120,157 @@ an option.
 Depending on the model of system and what other software has been
 loaded on the system, this menu may be different from one system
 to another.
-In any event, there should be one option called
-<command>EFI Shell [Built-in]</command>.
-Boot the Debian Installer CD with the following steps:
+There should be two menu items displayed,
+<command>Boot Option Maintenance Menu</command> and
+<command>EFI Shell (Built-in)</command>.
+Using the first option is preferred, however, if that
+option is not available or the CD for some reason does not
+boot with it, use the second option.
 -->
 ファームウェアの最終ステップとして、EFI Boot Manager が起動されます。
 ここでは、オプションを選択できるようにメニューリストが表示されます。 
 システムの型番や、システムに他のソフトウェアが読み込まれるかによりますが、
 このメニューは他のシステムとは異なっているかもしれません。
-どんな場合でも、
+ここでは <command>Boot Option Maintenance Menu</command> と
+<command>EFI Shell (Built-in)</command> の 2 つのメニュー項目が表示されます。
+前者の使用をお奨めしますが、これが有効でなかったり、
+何かの理由でCDから起動できない場合は、後者を使用してください。
+
+</para>
+
+  <warning>
+  <title>重要</title>
+<para>
+<!--
+The EFI Boot Manager will select a default boot action, typically
+the first menu choice, within a pre-set number of seconds.
+This is indicated by a countdown at the bottom of the screen.
+Once the timer expires and the systems starts the default action,
+you will have to reboot the machine in order to continue the installation.
+-->
+EFI ブートマネージャは、規定の秒数が経過するとデフォルトの起動 
+(一般的にメニューの先頭) を行います。
+これは画面の下段にカウントダウンで表示されています。
+タイマーが終了すると、システムはデフォルトの動作を行います。
+インストールを続けるためには、マシンを再起動しなければなりません。
+</para>
+  </warning>
+
+  <sect3 arch="ia64" id="bootable-cd">
+  <title>オプション 1: 起動オプションメンテナンスメニューからの起動</title>
+<para>
+
+</para>
+
+<itemizedlist>
+
+<listitem><para>
+<!--
+Insert the CD in the DVD/CD drive and reboot the machine.
+The firmware will display the EFI Boot Manager page and menu after
+it completes its system initialization.
+-->
+DVD/CD ドライブに CD を挿入し、マシンを再起動する。
+システムの初期化が終わると、
+ファームウェアが EFI ブートマネージャの画面やメニューを表示する。
+</para></listitem>
+
+<listitem><para>
+<!--
+Select <command>Boot Maintenance Menu</command> from the menu
+with the arrow keys and press <command>ENTER</command>.
+This will display a new menu.
+-->
+メニューから <command>Boot Maintenance Menu</command> を矢印キーで選択し、
+<command>ENTER</command> を押す。
+ここで新しいメニューを表示する。
+</para></listitem>
+
+<listitem><para>
+<!--
+Select <command>Boot From a File</command> from the menu
+with the arrow keys and press <command>ENTER</command>.
+This will display a list of devices probed by the firmware.
+You should see two menu lines containing either the label
+<command>Debian Inst [Acpi ...</command> or
+<command>Removable Media Boot</command>.
+If you examine the rest of the menu line, you will notice that
+the device and controller information should be the same.
+-->
+メニューから <command>Boot From a File</command> を矢印キーで選択し、
+<command>ENTER</command> を押す。
+ここでは、ファームウェアが検出したデバイスの一覧を表示する。
+その中に、<command>Debian Inst [Acpi ...</command> や
+<command>Removable Media Boot</command> といったメニュー行があるはずである。
+メニュー行の残りを検討すると、
+デバイスやコントローラの情報が同じだと言うことに気がつくだろう。
+</para></listitem>
+
+<listitem><para>
+<!--
+You can choose either of the entries that refer to the CD/DVD
+drive.
+Select your choice with the arrow keys and press <command>ENTER</command>.
+If you choose <command>Removable Media Boot</command> the machine
+will immediately start the boot load sequence.
+If you choose <command>Debian Inst [Acpi ...</command> instead, it
+will display a directory listing of the bootable portion of the
+CD, requiring you to proceed to the next (additional) step.
+-->
+CD/DVD ドライブを参照するエントリを選ぶことができる。
+矢印キーで選択し、<command>ENTER</command> を押すこと。
+<command>Removable Media Boot</command> を選択すると、
+すぐにブートロードシーケンスを始めるだろう。
+また <command>Debian Inst [Acpi ...</command> を選択すると、
+次 (追加) のステップに移ることを要求し、
+CD の起動可能部分のディレクトリ一覧を表示するだろう。
+</para></listitem>
+
+<listitem><para>
+<!--
+You will only need this step if you chose
+<command>Debian Inst [Acpi ...</command>.
+The directory listing will also show
+<command>[Treat like Removable Media Boot]</command> on the next to
+the last line.
+Select this line with the arrow keys and press <command>ENTER</command>.
+This will start the boot load sequence.
+-->
+このステップは、
+<command>Debian Inst [Acpi ...</command> を選択した時のみ必要である。
+ディレクトリ一覧には、次の行から最後の行までに 
+<command>[Treat like Removable Media Boot]</command> も表示している。
+この行を矢印キーで選択し、<command>ENTER</command> を押すと、
+ブートロードシーケンスを開始する。
+</para></listitem>
+
+</itemizedlist>
+
+<para>
+
+<!--
+These steps start the Debian boot loader which will display a
+menu page for you to select a boot kernel and options.
+Proceed to selecting the boot kernel and options.
+-->
+以上の手順で、起動カーネルやオプションを選択するメニューを表示する、
+Debian ブートローダを起動します。
+起動カーネルやオプションの選択に移行してください。
+
+</para>
+  </sect3>
+
+  <sect3 arch="ia64" id="boot-with-efi">
+  <title>オプション 2: EFI シェルからの起動</title>
+<para>
+<!--
+If, for some reason, option 1 is not successful, reboot the machine
+and when the EFI Boot Manager screen appears there should be
+one option called <command>EFI Shell [Built-in]</command>.
+Boot the Debian Installer CD with the following steps:
+-->
+何らかの理由でオプション 1 が成功しない場合、
+マシンを再起動して EFI ブートマネージャが表示されていれば、
 <command>EFI Shell [Built-in]</command> というオプションがあるはずです。
 以下のようにして Debian インストーラ CD を起動してください。
 
@@ -142,15 +280,20 @@ Boot the Debian Installer CD with the following steps:
 
 <listitem><para>
 <!--
-Insert the CD in the DVD/CD drive.
+Insert the CD in the DVD/CD drive and reboot the machine.
+The firmware will display the EFI Boot Manager page and menu after
+it completes system initialization.
 -->
-DVD/CD ドライブに CD を挿入する。
+DVD/CD ドライブに CD を挿入し、マシンを再起動する。
+システムの初期化が終わると、
+ファームウェアが EFI ブートマネージャの画面やメニューを表示する。
 </para></listitem>
 
 <listitem><para>
 <!--
-Select <command>EFI Shell</command> from the menu.
-The EFI Shell will read all of the bootable devices and display
+Select <command>EFI Shell</command> from the menu with the arrow keys
+and press <command>ENTER</command>.
+The EFI Shell will scan all of the bootable devices and display
 them to the console before displaying its command prompt.
 The recognized bootable partitions on devices will show a device name of
 <filename>fs<emphasis>n</emphasis>:</filename>.
@@ -159,7 +302,8 @@ All other recognized partitions will be named
 If you inserted the CD just before entering the shell, this may
 take a few extra seconds as it initializes the CD drive.
 -->
-メニューより <command>EFI Shell</command> を選択する。
+メニューより、矢印キーで <command>EFI Shell</command> を選択し、
+<command>ENTER</command> を押す。
 EFI シェルは起動可能なデバイスをすべて読むことができ、
 コマンドプロンプトを表示する前そのデバイスをにコンソールに表示する。
 認識したそのデバイスの起動可能パーティションは、
@@ -189,11 +333,13 @@ CDROM ドライブを探すシェルからの出力を検討する。
 
 <listitem><para>
 <!--
-Enter <command>fs<emphasis>n</emphasis>:</command> to select that
+Enter <command>fs<emphasis>n</emphasis>:</command> and press
+<command>ENTER</command> to select that
 device where <emphasis>n</emphasis> is the partition number for the
 CDROM.  The shell will now display the partition number as its prompt.
 -->
-デバイスを選ぶのに <command>fs<emphasis>n</emphasis>:</command> と入力する。
+デバイスを選ぶのに <command>fs<emphasis>n</emphasis>:</command> と入力し、
+<command>ENTER</command> を押す。
 <emphasis>n</emphasis> には CDROM のパーティション番号を指定する。
 シェルのプロンプトにパーティション番号が表示される。
 
@@ -201,35 +347,11 @@ CDROM.  The shell will now display the partition number as its prompt.
 
 <listitem><para>
 <!--
-Enter <command>elilo</command>.
-This will start the boot loader.
-<classname>elilo</classname> will display its prompt and wait for
-a kernel name to load.
-It will pick the default kernel if it receives no input within
-the timelimit (~20 seconds).
+Enter <command>elilo</command> and press <command>ENTER</command>.
+This will start the boot load sequence.
 -->
-<command>elilo</command> と入力する。
+<command>elilo</command> と入力し、<command>ENTER</command> を押す。
 これでブートローダが起動される。
-<classname>elilo</classname> は自身のプロンプトを表示し、
-ロードするカーネル名の入力待ち状態となる。
-制限時間 (20 秒) 入力がなければ、デフォルトカーネルを選択したと見なす。
-</para></listitem>
-
-<listitem><para>
-<!--
-Select a boot option, typically <classname>linux</classname> or
-<classname>linux26</classname>.
-Simply press <emphasis>Enter</emphasis> or wait for the timeout
-to take the default.
-It will display messages as it uncompresses the kernel and loads
-and uncompresses the initial root filesystem.
--->
-<classname>linux</classname> や <classname>linux26</classname> といった、
-ブートオプションを選択する。
-単に <emphasis>Enter</emphasis> を押すか、タイムアウトまで待てば、
-デフォルトを選択する。
-カーネルの展開・ロードや、
-初期 root ファイルシステムの展開といったメッセージを表示する。
 </para></listitem>
 
 </itemizedlist>
@@ -237,22 +359,168 @@ and uncompresses the initial root filesystem.
 <para> 
 
 <!--
-These steps start the installer kernel.
+As with option 1, these steps start the Debian boot loader which will
+display a menu page for you to select a boot kernel and options.
 You can also enter the shorter 
 <command>fs<emphasis>n</emphasis>:elilo</command> command at
 the shell prompt.
-Once the kernel finishes its initialization along with the usual console
-messages, it will start the Debian Installer.
+Proceed to selecting the boot kernel and options.
 -->
-以上の手順でインストーラカーネルを起動します。
+オプション 1 と同様に、
+以上の手順で起動カーネルやオプションを選択するメニューを表示する 
+Debian ブートローダを起動します。
 シェルプロンプトでもっと短く、
 <command>fs<emphasis>n</emphasis>:elilo</command> と入力することもできます。
-いったん通常のコンソールメッセージとともにカーネルの初期化が終われば、
-Debian インストーラが起動します。
+起動カーネルやオプションの選択に進んでください。
 
 </para>
 
   </sect3>
+
+  <sect3 arch="ia64" id="kernel-option-menu">
+  <title>起動カーネルやオプションの選択</title>
+
+<para>
+
+<!--
+The boot loader will display a form with a menu list and a text
+window with a <classname>Boot:</classname> prompt.
+The arrow keys select an item from the menu and any text typed
+at the keyboard will appear in the text window.
+There are also help screens which can be displayed by pressing
+the appropriate function key.
+The <classname>General</classname> help screen explains the menu
+choices and the <classname>Params</classname> screen explains
+the common command line options.
+-->
+ブートローダを、メニューリストを備えた形式や、
+<classname>Boot:</classname> プロンプトがあるテキストウィンドウの形式で
+表示します。
+矢印キーでメニューからアイテムを選べますし、
+キーボードで入力したテキストを、テキストウィンドウに表示できるでしょう。
+また、適切なファンクションキーを押して、ヘルプ画面を表示することもできます。
+<classname>General</classname> ヘルプ画面はメニューの選択肢を、
+<classname>Params</classname> 画面は、
+共通のコマンドラインオプションを説明します。
+
+</para>
+
+   <warning>
+   <title>シリアルコンソール</title>
+<para>
+
+<!--
+Some IA64 platforms have both a serial console and a keyboard and
+video card which can be configured in the EFI firmware to be
+the system console.
+The EFI console is capable of displaying and accepting input from
+both the keyboard and video and the serial port.
+The Linux kernel will take the keyboard and video devices as its
+default console if it detects a keyboard during its initialization.
+You will have to enable the serial console in the EFI boot
+manager and enter
+<command>console=ttyS0,9600n8</command> into
+the <classname>Boot:</classname> text window to install via
+the serial console.
+If you are using a serial console and forget to set it in the
+command line, you
+will be able to select the kernel and enter parameters but both
+the display and your input will go dead as soon as the kernel starts,
+requiring you to either reboot if your system does not have a keyboard
+and video display installed.
+-->
+IA64 プラットフォームでは、
+システムコンソールで EFI ファームウェアの設定をするのに、
+シリアルコンソールとキーボード & ビデオカード の両方が使えます。
+EFI コンソールは、キーボード & ビデオとシリアルポートから、
+表示や入力の受付を行うことができます。
+Linux カーネルは、初期化時にキーボードを検出すると、
+キーボードとビデオデバイスをデフォルトコンソールとして使用します。
+シリアルコンソールでインストールを行うには、
+EFI ブートマネージャでシリアルコンソールを有効にしなければならず、
+<classname>Boot:</classname> テキストウィンドウで
+<command>console=ttyS0,9600n8</command> と入力してください。
+シリアルコンソールを使用していて、コマンドラインで入力し忘れると、
+カーネルの選択やパラメータの入力はできますが、
+カーネルが起動すると同時に入出力が死んでしまいます。
+システムにキーボードやビデオがなければ、再起動する必要があるでしょう。
+</para></warning>
+
+<para>
+
+<!--
+Consult the <classname>General</classname> help screen for the
+description of the kernels and install modes most appropriate
+for your installation.
+You should also consult <xref linkend="boot-parms"/> below for any additional
+parameters that you may want to set in the <classname>Boot:</classname>
+text window.
+The kernel version you choose selects the kernel version that will be
+used for both the installation process and the installed system.
+If you encounter kernel problems with the installation, you may also
+have those same problems with the system you install.
+The following two steps will select and start the install:
+-->
+カーネルの説明を <classname>General</classname> ヘルプ画面を調べて、
+最も適切なモードをインストールしてください。
+<xref linkend="boot-parms"/> 以下でも、<classname>Boot:</classname> 
+テキストウィンドウに設定する追加パラメータについて、調べることができます。
+選択したカーネルバージョンを、
+インストール処理中とインストールしたシステムの両方で、使用することになります。
+インストール中にカーネルの問題に遭遇した場合、
+インストール後のシステムでも同じ問題に遭遇する可能性があります。
+以下の手順で選択しインストールを開始してください。
+
+</para>
+
+<itemizedlist>
+
+<listitem><para>
+<!--
+Select the kernel version and installation mode most
+appropriate to your needs with the arrow keys.
+-->
+カーネルのバージョンと目的に対して最も適切なモードを、
+矢印キーで選択する。
+</para></listitem>
+
+<listitem><para>
+<!--
+Enter any boot parameters by typing at the keyboard.
+The text will be displayed directly in the text window.
+This is where the serial console is set.
+-->
+起動パラメータをキーボード空入力する。
+このテキストはテキストウィンドウに直接表示される。
+ここでシリアルコンソールの設定を行う。
+</para></listitem>
+
+<listitem><para>
+<!--
+Press <command>ENTER</command>.  This will load and start the
+kernel.
+The kernel will display its usual initialization messages followed
+by the first screen of the Debian Installer.
+-->
+<command>ENTER</command> を押す。
+これでカーネルをロードし起動する。
+カーネルは Debian インストーラの第 1 画面に通常の初期化メッセージを表示する。
+</para></listitem> 
+
+</itemizedlist>
+
+  </sect3>
+
+<para>
+
+<!--
+Proceed to the next chapter to continue the installation where you will
+set up the language locale, network, and disk partitions.
+-->
+言語ロケール、ネットワーク、ディスクパーティションをセットアップするよう、
+インストールを続けるのには、次章に進んでください。
+
+</para>
   </sect2>
 
   <sect2 arch="ia64" id="boot-tftp"><title>TFTP での起動</title>
