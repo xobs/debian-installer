@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 24663 -->
+<!-- original version: 26264 -->
 
   <sect2 arch="arm" id="boot-tftp"><title>Amorcer à partir de TFTP</title>
 
@@ -62,21 +62,32 @@ Il se peut que vous ayez aussi à configurer les réglages de
 
 <informalexample><screen>
     NeTTrom command-&gt; setenv kerntftpserver 192.168.0.1
-    NeTTrom command-&gt; setenv kerntftpfile tftpboot.img
+    NeTTrom command-&gt; setenv kerntftpfile boot.img
     NeTTrom command-&gt; save-all
     NeTTrom command-&gt; setenv netconfig_eth0 flash
     NeTTrom command-&gt; setenv kernconfig tftp
+    NeTTrom command-&gt; setenv rootdev /dev/ram
+    NeTTrom command-&gt; setenv cmdappend root=/dev/ram
 </screen></informalexample>
 
 Seules les deux dernières commandes interfèrent avec l'amorçage normal des 
 disques. Il est donc prudent de tout sauvegarder avec
 <command>save-all</command> avant de le faire, ce qui permettra de 
 sauvegarder les réglages réseau au cas où vous auriez à réamorcer depuis le 
-réseau. Utilisez la commande <command>printenv</command> pour réafficher vos 
-réglages. Finalement, si la variable de NeTTrom <envar>cmdappend</envar> 
-a l'option <option>noinitrd</option> (qui est nécessaire à l'amorçage des 
-noyaux 2.4), vous devrez la supprimer pour que le noyau puisse amorcer avec 
-ses disques virtuels.
+réseau. 
+
+Si vous voulez installer NetWinder avec la console série, vous devez utiliser
+la commande qui suit.
+
+<informalexample><screen>
+    NeTTrom command-&gt; setenv cmdappend root=/dev/ram console=ttyS0,115200
+</screen></informalexample>
+
+Utilisez la commande <command>printenv</command> pour réafficher vos 
+réglages. 
+Finalement, si la variable de NeTTrom <envar>cmdappend</envar> 
+possède l'option <option>noinitrd</option>, vous devrez la supprimer pour que 
+le noyau puisse amorcer avec ses disques virtuels.
 
 </para>
   </sect3>
