@@ -268,6 +268,7 @@ rebuild_%:
 #
 $(STAMPS)tree-unpack-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
 	dh_testroot
+	cd .. && dpkg-checkbuilddeps
 	@rm -f $@
 
 	# This build cannot be restarted, because dpkg gets confused.
