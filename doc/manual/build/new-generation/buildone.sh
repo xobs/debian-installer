@@ -12,8 +12,8 @@ language=${2:-en}
 formats=${3:-html}
 
 ## Configuration
-cd `dirname "$0"`
-manual_path="$(echo "$PWD" | sed "s:/build/new-generation$::")"
+basedir="$(cd "$(dirname $0)"; pwd)"
+manual_path="$(echo $basedir | sed "s:/build/new-generation$::")"
 build_path="$manual_path/build/new-generation"
 cd $build_path
 
@@ -118,7 +118,12 @@ create_dvi () {
         -d $stylesheet_dsssl \
         -V tex-backend \
         $tempdir/install.${language}.profiled.xml
-    checkresult $?
+    RET=$?
+    if [ $RET -eq 1 ] ; then
+        echo "** Error $RET from 'openjade'; probably non-fatal so ignoring."
+    else
+        checkresult $RET
+    fi
 
     echo "Creating temporary .dvi file..."
 
