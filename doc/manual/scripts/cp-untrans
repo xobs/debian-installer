@@ -1,0 +1,39 @@
+#!/bin/sh
+
+# If doc-check shows outdated untranslated files, this script can
+# be used to copy the new English versions of these updated files
+# to your translation. The script will also run rev-update for you.
+
+# Note:
+# Run doc-check before you run this script.
+# It is recommended you use 'svn diff <language>' to check the
+# changes made by this script before committing.
+
+set -e
+
+if [ "$1" = "--help" ]; then
+    echo "Usage: $0 language"
+    exit 0
+fi
+
+language=${1:-pl}
+
+UFILES="$(./scripts/doc-check $language 2>/dev/null | \
+            egrep "^en\/.* \(untranslated\)$" | \
+            cut -d" " -f1 | cut -d"/" -f2- )"
+
+if [ -z "$UFILES" ] ; then
+    echo "No updated untranslated files for language '$language' found."
+    exit 0
+fi
+
+for UFILE in $UFILES; do
+    echo "Copying $UFILE from ./en to ./$language"
+    cp ./en/$UFILE ./$language/$UFILE
+done
+
+echo ""
+echo "Running rev-update..."
+./scripts/rev-update $language
+
+exit 0
