@@ -21,32 +21,34 @@ my @lists = ("pkg-lists/$type/common", "pkg-lists/$type/$deb_host_arch");
 while (@lists) {
 	my $list=pop @lists;
 	if (! -e $list) {
-		die "missing list, $list, for type $type";
+		print STDERR "warning: missing list, $list, for type $type\n";
 	}
-	open (LIST, $list) || die "open $list $!";
-	while (<LIST>) {
-		chomp;
+	else {
+		open (LIST, $list) || die "open $list $!";
+		while (<LIST>) {
+			chomp;
 
-		# includes
-		if (/^#include \"(.*)\"/) {
-			push @lists, "pkg-lists/$1";
-		}
-		
-		# comments
-		s/^#.*//;
-		next unless length;
-		
-		# kernel version substitution
-		if (/\${kernel:Version}/) {
-			foreach my $v (@kernel_versions) {
-				my $l=$_;
-				$l=~s/\${kernel:Version}/$v-$kernel_flavour/g;
-				print "$l\n";
+			# includes
+			if (/^#include \"(.*)\"/) {
+				push @lists, "pkg-lists/$1";
+			}
+			
+			# comments
+			s/^#.*//;
+			next unless length;
+			
+			# kernel version substitution
+			if (/\${kernel:Version}/) {
+				foreach my $v (@kernel_versions) {
+					my $l=$_;
+					$l=~s/\${kernel:Version}/$v-$kernel_flavour/g;
+					print "$l\n";
+				}
+			}
+			else {
+				print "$_\n";
 			}
 		}
-		else {
-			print "$_\n";
-		}
+		close LIST;
 	}
-	close LIST;
 }
