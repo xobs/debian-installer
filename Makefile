@@ -54,10 +54,9 @@ DRIVERFD_UDEBS = \
 endif
 
 # Sanity check TYPE against the list.
-ifeq (,$(filter $(TYPE),type $(TYPES_SUPPORTED)))
+ifeq (,$(filter $(TYPE),$(TYPES_SUPPORTED)))
 %:
-	@echo "unsupported type"
-	@echo "type: $(TYPE)"
+	@echo "unsupported type: $(TYPE)"
 	@echo "supported types: $(TYPES_SUPPORTED)"
 	@exit 1
 endif
@@ -66,14 +65,14 @@ endif
 -include make/arch/$(DEB_HOST_GNU_SYSTEM)
 include make/arch/$(DEB_HOST_GNU_SYSTEM)-$(DEB_HOST_GNU_CPU)
 
-build: tree_umount tree $(EXTRA_TARGETS) stats
+build: tree_umount $(TYPE)-tree-stamp $(EXTRA_TARGETS) stats
 
 image: arch-image $(EXTRA_IMAGES)
 ifeq ($(COMPRESS_IMAGE),y)
 	gzip -9f $(IMAGE)
 endif
 
-tree_mount: tree
+tree_mount: $(TYPE)-tree-stamp
 	-@sudo /bin/mount -t proc proc $(TREE)/proc
 ifndef USERDEVFS
 	-@sudo /bin/mount -t devfs dev $(TREE)/dev
@@ -87,21 +86,23 @@ ifndef USERDEVFS
 endif
 	-@if [ -L $(TREE)/proc/self ] ; then sudo /bin/umount $(TREE)/proc 2>/dev/null ; fi
 
-demo: tree
-	$(MAKE) tree_mount
+demo:
+	@$(MAKE) --no-print-directory TYPE=demo demo1
+
+demo1: tree_mount demo2 tree_umount
+demo2:
 	-@[ -f questions.dat ] && cp -f questions.dat $(TREE)/var/lib/cdebconf/
 	-@sudo chroot $(TREE) bin/sh -c "export DEBCONF_DEBUG=5 ; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; exec /usr/share/debconf/frontend /usr/bin/main-menu"
-	$(MAKE) tree_umount
 
-shell: tree
-	$(MAKE) tree_mount
+shell: tree_mount shell1 tree_umount
+shell1:
 	-@sudo chroot $(TREE) bin/sh
-	$(MAKE) tree_umount
 
 uml: $(INITRD)
 	-linux initrd=$(INITRD) root=/dev/rd/0 ramdisk_size=8192 con=fd:0,fd:1 devfs=mount
 
-demo_clean: tree_umount
+demo_clean:
+	@$(MAKE) --no-print-directory TYPE=demo tree_umount
 
 clean: demo_clean tmp_mount debian/control
 	rm -rf $(TEMP) || sudo rm -rf $(TEMP)
@@ -111,11 +112,9 @@ clean: demo_clean tmp_mount debian/control
 	rm -rf $(DEST)/$(TYPE)-* $(EXTRA_IMAGES) || sudo rm -rf $(DEST)/$(TYPE)-* $(EXTRA_IMAGES)
 	rm -f unifont-reduced-$(TYPE).bdf
 ifdef DEST_KERNEL
-	$(foreach NAME,$(KERNELNAME), \
-		rm -f $(DEST)/$(NAME); )
+	$(foreach NAME,$(KERNELNAME),rm -f $(DEST)/$(NAME);)
 else
-	$(foreach NAME,$(KERNELNAME), \
-		rm -f $(TEMP)/$(NAME); )
+	$(foreach NAME,$(KERNELNAME),rm -f $(TEMP)/$(NAME);)
 endif
 
 reallyclean: clean
@@ -151,11 +150,11 @@ sources.list.deb:
 # Get all required udebs and put in UDEBDIR.
 get_udebs: $(TYPE)-get_udebs-stamp
 $(TYPE)-get_udebs-stamp: sources.list.udeb
+	rm -f $@
 	./get-packages udeb $(UDEBS)
 	( export UDEBDIR=$(EXTRAUDEBDIR); \
 	  ./get-packages udeb $(DRIVERFD_UDEBS); )
-#	Don't stamp since the next get-packages call destroys UDEBDIR
-#	touch $(TYPE)-get_udebs-stamp
+	touch $@
 
 # Build the installer tree.
 tree: $(TYPE)-tree-stamp
@@ -165,7 +164,7 @@ $(TYPE)-tree-stamp: $(TYPE)-get_udebs-stamp debian/control
 	dpkg-checkbuilddeps
 
 	# This build cannot be restarted, because dpkg gets confused.
-	rm -rf $(TREE)
+	rm -rf $(TREE) $@
 	# Set up the basic files [u]dpkg needs.
 	mkdir -p $(DPKGDIR)/info
 	touch $(DPKGDIR)/status
@@ -241,11 +240,11 @@ ifdef DEST_KERNEL
 	install -d $(DEST)
 	set -e; \
 	$(foreach NAME,$(KERNELNAME), \
-		mv -f $(TREE)/boot/$(NAME) $(DEST)/$(NAME); )
+		mv -f $(TREE)/boot/$(NAME) $(DEST)/$(NAME);)
 else
 	set -e; \
 	$(foreach NAME,$(KERNELNAME), \
-		mv -f $(TREE)/boot/$(NAME) $(TEMP); )
+		mv -f $(TREE)/boot/$(NAME) $(TEMP)/$(NAME);)
 endif
 	-rmdir $(TREE)/boot/
 
@@ -371,7 +370,7 @@ ifeq ($(TYPE),floppy)
 endif
 
 	# Tree target ends here. Whew!
-	touch $(TYPE)-tree-stamp
+	touch $@
 
 unifont-reduced-$(TYPE).bdf: all-$(TYPE).utf
 	# Use the UTF-8 locale in rootskel-locale. This target shouldn't
@@ -418,7 +417,7 @@ $(EXTRA_IMAGES) : $(DEST)/%-image.img :  $(EXTRA_TARGETS)
                 exit 1; \
         fi;
 
-tarball: tree
+tarball: $(TYPE)-tree-stamp
 	tar czf $(DEST)/$(TYPE)-debian-installer.tar.gz $(TREE)
 
 # Make sure that the temporary mountpoint exists and is not occupied.
@@ -431,25 +430,24 @@ tmp_mount:
 
 # Create a compressed image of the root filesystem by way of genext2fs.
 initrd: $(INITRD)
-$(INITRD): TMP_FILE=$(TEMP)/image.tmp
-$(INITRD):  $(TYPE)-tree-stamp
+$(INITRD): $(TYPE)-tree-stamp
 	# Only build the font if we have rootskel-locale
 	if [ -d "$(LOCALE_PATH)/C.UTF-8" ]; then \
 	    $(MAKE) $(TREE)/unifont.bgf; \
 	fi
-	rm -f $(TMP_FILE)
+	rm -f $(TEMP)/image.tmp
 	install -d $(TEMP)
 	install -d $(DEST)
 
 	if [ $(INITRD_FS) = ext2 ]; then \
-		genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` $(TMP_FILE); \
+		genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` $(TEMP)/image.tmp; \
 	elif [ $(INITRD_FS) = romfs ]; then \
-		genromfs -d $(TREE) -f $(TMP_FILE); \
+		genromfs -d $(TREE) -f $(TEMP)/image.tmp; \
 	else \
 		echo "Unsupported filesystem type"; \
 		exit 1; \
 	fi;
-	gzip -vc9 $(TMP_FILE) > $(INITRD).tmp
+	gzip -vc9 $(TEMP)/image.tmp > $(INITRD).tmp
 	mv $(INITRD).tmp $(INITRD)
 
 # Write image to floppy
@@ -458,7 +456,7 @@ boot_floppy: $(IMAGE)
 	install -d $(DEST)
 	sudo dd if=$(IMAGE) of=$(FLOPPYDEV) bs=$(FLOPPY_SIZE)k
 
-# Write drivers  floppy
+# Write drivers floppy
 %_floppy: $(DEST)/%-image.img
 	sudo dd if=$< of=$(FLOPPYDEV) bs=$(FLOPPY_SIZE)k
 
@@ -471,8 +469,7 @@ floppy_check: $(IMAGE)
 listtypes:
 	@echo "supported types: $(TYPES_SUPPORTED)"
 
-
-stats: tree $(EXTRA_TARGETS) general-stats $(EXTRA_STATS)
+stats: $(TYPE)-tree-stamp $(EXTRA_TARGETS) general-stats $(EXTRA_STATS)
 
 COMPRESSED_SZ=$(shell expr $(shell tar czf - $(TREE) | wc -c) / 1024)
 KERNEL_SZ=$(shell expr \( $(foreach NAME,$(KERNELNAME),$(shell du -b $(TEMP)/$(NAME) 2>/dev/null | cut -f 1) +) 0 \) / 1024)
@@ -503,19 +500,16 @@ endif
 	@echo "Disk usage per package:"
 	@cd $(TEMP)/$*/ && ls -l *.udeb
 
-# These targets act on all available types.
+# These targets act on all available types (the demo target is a bit special).
 all_build:
-	set -e; for type in $(TYPES_SUPPORTED); do \
-		$(MAKE) build TYPE=$$type; \
-	done
+	set -e; \
+	$(foreach TYPE,$(TYPES_SUPPORTED),$(MAKE) build TYPE=$(TYPE);)
 all_images:
-	set -e; for type in $(TYPES_SUPPORTED); do \
-		$(MAKE) image TYPE=$$type; \
-	done
+	set -e; \
+	$(foreach TYPE,$(filter-out demo,$(TYPES_SUPPORTED)), \
+		$(MAKE) image TYPE=$(TYPE);)
 all_clean:
-	set -e; for type in $(TYPES_SUPPORTED); do \
-		$(MAKE) clean TYPE=$$type; \
-	done
+	$(foreach TYPE,$(TYPES_SUPPORTED),$(MAKE) clean TYPE=$(TYPE);)
 # Suitable for a cron job, you'll only see the stats unless a build fails.
 all_stats:
 	@echo "Image size stats"
@@ -523,6 +517,9 @@ all_stats:
 	@(set -e; $(MAKE) all_build >tmp/log 2>&1 || \
 	  (echo "build failure!"; cat tmp/log; false))
 	@rm -f tmp/log
-	@for type in $(TYPES_SUPPORTED); do \
-		$(MAKE) -s stats TYPE=$$type; \
-	done
+	@$(foreach TYPE,$(TYPES_SUPPORTED),$(MAKE) -s stats TYPE=$(TYPE);)
+
+.PHONY: build image tree_mount tree_umount demo demo1 demo2 shell shell1 uml \
+	demo_clean clean reallyclean get_udebs tree tarball tmp_mount \
+	initrd floppy boot_floppy floppy_check listtypes stats general-stats \
+	all_build all_images all_clean all_stats

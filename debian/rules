@@ -38,9 +38,6 @@ install: build
 	dh_clean -k
 	dh_install
 	install -d debian/tmp/$(IMAGEDIR)
-	# This initrd is useless (TODO and should not really be built)
-	# so remove it, do not put in tarball.
-	-rm dest/*demo*
 	cp -p dest/* debian/tmp/$(IMAGEDIR)
 	cd debian/tmp/$(IMAGEDIR) && md5sum * > MD5SUMS
 	ln -s $(DATE) debian/tmp/$(ARCHIVEDIR)/current
