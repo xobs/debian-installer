@@ -14,7 +14,7 @@ TYPE=net
 
 # List here any extra udebs that are not in the list file but that
 # should still be included on the system.
-EXTRAS=""
+EXTRAS="cdebconf-udeb"
 
 # Build tree location.
 DEST=debian-installer
@@ -117,7 +117,7 @@ tree: get_udebs
 # Library reduction.
 lib_reduce:
 	mkdir -p $(DEST)/lib
-	mklibs.sh -v -d $(DEST)/lib `find $(DEST) -type f -perm +0111`
+	mklibs.sh -v -d $(DEST)/lib `find $(DEST) -type f -perm +0111 -o -name '*.so'`
 	# Now we have reduced libraries installed .. but they are
 	# not listed in the status file. This nasty thing puts them in,
 	# and alters their names to end in -reduced to indicate that
