@@ -101,7 +101,7 @@ create_html () {
     checkresult $?
 }
 
-create_dvi ()  {
+create_dvi () {
     
     # Skip this step if the .dvi file already exists
     [ -f $tempdir/install.${language}.dvi ] && return
@@ -134,7 +134,6 @@ create_dvi ()  {
 
 create_pdf() {
     
-    create_profiled
     create_dvi
 
     echo "Creating .pdf file..."
@@ -146,7 +145,6 @@ create_pdf() {
 
 create_ps() {
     
-    create_profiled
     create_dvi
 
     echo "Creating .ps file..."
@@ -173,9 +171,9 @@ mkdir -p $destination
 for format in $formats ; do
     case $format in
 
-        html) create_html;;
-        ps)   create_ps;;
-        pdf)  create_pdf;;
+        html)  create_html;;
+        ps)    create_ps;;
+        pdf)   create_pdf;;
         *) echo "Format $format unknown or not yet supported!";;
 
     esac
