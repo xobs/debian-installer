@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- original version: 22664 -->
 <!-- revisado por nahoo, 23 octubre 2004 -->
 
@@ -5,89 +6,89 @@
   <sect2 arch="i386"><title>Particionado desde DOS o Windows</title>
 <para>
 
-Si estÃ¡ manipulando particiones FAT o NTFS existentes, es
-recomendable que usar el esquema mostrado a continuaciÃ³n o 
+Si está manipulando particiones FAT o NTFS existentes, es
+recomendable que usar el esquema mostrado a continuación o 
 herramientas nativas de Windows o DOS. De otro modo, no es realmente
 necesario particionar desde DOS o Windows, las herramientas de particionado
-de Linux generalmente harÃ¡n un trabajo mejor.
+de Linux generalmente harán un trabajo mejor.
 
 </para><para>
 
-Pero si tiene un disco IDE grande y estÃ¡ usando ya sea direccionamiento
-LBA, controladores sobrepuestos (n.t Â«overlayÂ») (aveces proporcionados por
-fabricantes de discos duros) o una BIOS nueva (fabricada despuÃ©s de 1998) que
+Pero si tiene un disco IDE grande y está usando ya sea direccionamiento
+LBA, controladores sobrepuestos (n.t «overlay») (aveces proporcionados por
+fabricantes de discos duros) o una BIOS nueva (fabricada después de 1998) que
 soporta acceso a extensiones de discos grandes, entonces debe ubicar su
-particiÃ³n de arranque del sistema Debian cuidadosamente. En
-este caso tendrÃ¡ que ubicar la particiÃ³n de arranque dentro de los
+partición de arranque del sistema Debian cuidadosamente. En
+este caso tendrá que ubicar la partición de arranque dentro de los
 primeros 1024 cilindros de su disco duro (usualmente cerca de los 524 
-megabytes, sin traducciÃ³n de la BIOS). Esto puede obligarle a
-mover una particiÃ³n FAT o NTFS existente.
+megabytes, sin traducción de la BIOS). Esto puede obligarle a
+mover una partición FAT o NTFS existente.
 
 </para>
 
    <sect3 id="lossless">
-   <title>Reparticionado sin pÃ©rdida cuando se inicia desde DOS, Win-32 u OS/2
+   <title>Reparticionado sin pérdida cuando se inicia desde DOS, Win-32 u OS/2
    </title>
 
 <para>
 
-Una de las instalaciones mÃ¡s comunes es la que se produce en sistemas que ya
+Una de las instalaciones más comunes es la que se produce en sistemas que ya
 tienen DOS (incluyendo Windows 3.1), Win32 (como Windows 95, 98, Me,
 NT, 2000, XP) o OS/2 y en los que desea instalar Debian en el mismo disco sin
 destruir el sistema anterior. Tenga en cuenta que el instalador es capaz de
 redimensionar sistemas de ficheros FAT y NTFS usados por DOS y Windows, y en la
-mayorÃ­a de los casos no necesita usar el mÃ©todo descrito a continuaciÃ³n, a menos
-que necesite mover el inicio de la particiÃ³n.
+mayoría de los casos no necesita usar el método descrito a continuación, a menos
+que necesite mover el inicio de la partición.
 
 </para><para>
 
-Antes de proseguir, deberÃ¡ decidir como dividir el
-disco. El mÃ©todo de esta secciÃ³n solamente dividirÃ¡ la particiÃ³n en
-dos. Una contendrÃ¡ el sistema operativo original y la otra
-serÃ¡ usado para Debian. Durante la instalaciÃ³n de Debian, se le
-darÃ¡ la oportunidad de usar la parte del disco correspondiente a
-Debian como mejor le parezca, esto es, como particiÃ³n de intercambio
+Antes de proseguir, deberá decidir como dividir el
+disco. El método de esta sección solamente dividirá la partición en
+dos. Una contendrá el sistema operativo original y la otra
+será usado para Debian. Durante la instalación de Debian, se le
+dará la oportunidad de usar la parte del disco correspondiente a
+Debian como mejor le parezca, esto es, como partición de intercambio
 o como sistema de ficheros.
 
 </para><para>
 
-La idea es mover toda la informaciÃ³n de la particiÃ³n al inicio
-antes de cambiar la informaciÃ³n de la particiÃ³n, de modo que nada
-se perderÃ¡. Es importante que haga lo menos posible entre el
-movimiento de la informaciÃ³n y el reparticionado, de forma que se minimicen las
+La idea es mover toda la información de la partición al inicio
+antes de cambiar la información de la partición, de modo que nada
+se perderá. Es importante que haga lo menos posible entre el
+movimiento de la información y el reparticionado, de forma que se minimicen las
 posibilidades escribir un fichero cerca del final de la 
-particiÃ³n, ya que esto reducirÃ­a la cantidad de espacio
-de la particiÃ³n que podrÃ­a utilizar.
+partición, ya que esto reduciría la cantidad de espacio
+de la partición que podría utilizar.
 
 </para><para>
 
 Lo primero que se necesita es una copia de <command>fips</command>,
 disponible en el directorio <filename>tools/</filename>
-del servidor rÃ©plica de Debian mÃ¡s cercano. Desempaquete el archivo y
+del servidor réplica de Debian más cercano. Desempaquete el archivo y
 copie los ficheros <filename>RESTORRB.EXE</filename>, 
 <filename>FIPS.EXE</filename> y <filename>ERRORS.TXT</filename> a un
 disquete arrancable. Puede crear un disquete arrancable usando la
 orden <filename>sys a:</filename> en DOS. <command>fips</command> 
-viene con una documentaciÃ³n muy buena que deberÃ­a leer. Definitivamente
-necesitarÃ¡ leer la documentaciÃ³n si usa compresiÃ³n de disco o un
-gestor de disco. Cree el disco y lea la documentaciÃ³n 
+viene con una documentación muy buena que debería leer. Definitivamente
+necesitará leer la documentación si usa compresión de disco o un
+gestor de disco. Cree el disco y lea la documentación 
 <emphasis>antes</emphasis> de defragmentar el disco.
 
 </para><para>
 
-A continuaciÃ³n necesitarÃ¡ mover todos los datos al inicio de la
-particiÃ³n. <command>defrag</command>, que viene incluido con DOS 6.0 y
-posteriores puede realizar el trabajo fÃ¡cilmente. Vea la documentaciÃ³n de 
+A continuación necesitará mover todos los datos al inicio de la
+partición. <command>defrag</command>, que viene incluido con DOS 6.0 y
+posteriores puede realizar el trabajo fácilmente. Vea la documentación de 
 <command>fips</command> para una lista de otros programas que puedan ayudarlo.
 Note que si tiene Windows 9x, debe ejecutar <command>defrag</command> 
-desde Ã©ste, puesto que DOS no reconoce el sistema de ficheros VFAT,
+desde éste, puesto que DOS no reconoce el sistema de ficheros VFAT,
 necesario para el soporte de ficheros con nombres largos, y usado
 en Windows 95 y superior.
 
 </para><para>
 
-DespuÃ©s de ejecutar el defragmentador (puede tomar un cierto
-tiempo en un disco grande), reinicie con el disquete que creÃ³ para
+Después de ejecutar el defragmentador (puede tomar un cierto
+tiempo en un disco grande), reinicie con el disquete que creó para
 <command>fips</command>. Simplemente escriba
 <filename>a:\fips</filename> y siga las instrucciones.
 
@@ -103,15 +104,15 @@ Tenga en cuenta que existen muchos otros gestores de particiones, en caso de que
 
 <para>
 
-Si estÃ¡ particionando para discos DOS, o modificando el tamaÃ±o de
+Si está particionando para discos DOS, o modificando el tamaño de
 las particiones DOS, con herramientas de Linux, sepa que muchas personas
 experimentan problemas al trabajar con las particiones FAT resultantes.
 De hecho, algunos han informado de bajo rendimiento, problemas de consistencia
-con <command>scandisk</command> u otros fallos extraÃ±os en DOS o Windows.
+con <command>scandisk</command> u otros fallos extraños en DOS o Windows.
 
 </para><para>
 
-Aparentemente, cada vez que cree o modifique una particiÃ³n para
+Aparentemente, cada vez que cree o modifique una partición para
 uso de DOS es una buena idea llenar los primeros sectores con ceros.
 Haga esto antes de ejecutar la orden <command>format</command> de
 DOS, puede ejecutar lo siguiente desde Linux:

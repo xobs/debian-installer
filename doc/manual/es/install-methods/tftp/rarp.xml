@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- original version: 15652 -->
 
 
@@ -6,69 +7,4 @@
    <title>Configurar el servidor RARP</title>
 <para>
 
-Para configurar RARP, necesita saber las direcciones Ethernet (también
-conocidas como direcciones MAC) de los ordenadores cliente que serán
-instalados.
-Si no conoce esta información, puede
-
-<phrase arch="sparc"> tomarla de los mensajes iniciales de arranque de 
-OpenPROM, use la orden <userinput>.enet-addr</userinput> de OpenBoot,
-o </phrase>
-
-arranque en modo "Rescue" (ejm. desde el disquete de rescate) y usar la
-orden <userinput>/sbin/ifconfig eth0</userinput>.
-
-</para><para>
-
-En un sistema de servidor RARP usando núcleo Linux 2.2.x,
-necesitará poblar la tabla RARP del núcleo.
-Para hacer esto, ejecte las siguientes órdenes.
-
-<informalexample>
-<para>
-
-<userinput>/sbin/rarp -s 
-<replaceable>client-hostname</replaceable>
-<replaceable>client-enet-addr</replaceable> 
-</userinput>
-
-</para><para>
-
-<userinput>/usr/sbin/arp -s 
-<replaceable>client-ip</replaceable>
-<replaceable>client-enet-addr</replaceable>
-</userinput>
-
-</para></informalexample>
-
-</para><para>
-
-Si obtiene
-
-<informalexample><screen>
-SIOCSRARP: Invalid argument
-</screen></informalexample> 
-
-probablemente necesita cargar el módulo RARP del núcleo o recompilar el
-soporte de RARP en el núcleo. Intente <userinput>modprobe rarp</userinput> y
-lugo intente la orden <command>rarp</command> nuevamente.
-
-</para><para>
-
-En un sistema de servidor RARP usando un núcleo Linux 2.4.x, no
-hay módulo RARP, y en su lugar deberá usar el programa 
-<command>rarpd</command>. El procedimiento es similar al que usa
-SunOS, descrito en el siguiente párrafo.
-
-</para><para>
-
-En SunOS, necesita asegurarse de que la dirección de hardware de Ethernet
-del cliente este listada en la base de datos "ethers" (ya sea
-en el fichero <filename>/etc/ethers</filename>, o a través de NIS/NIS+) y
-el la base de datos "hosts". Luego necesita iniciar el demonio RARP. En
-SunOS 4, llame a la orden (como superusuario):
-<userinput>/usr/etc/rarpd -a</userinput>; en SunOS 5, use
-<userinput>/usr/sbin/rarpd -a</userinput>.
-
-</para>
-  </sect2>
+Para configurar RARP, necesita saber las direcciones Ethernet (tambi

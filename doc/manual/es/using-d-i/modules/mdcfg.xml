@@ -1,25 +1,26 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- original version: 22953 -->
 <!-- Revisado por Rudy Godoy -->
 
    <sect3 id="mdcfg">
-   <title>ConfiguraciÃ³n de dispositivos multidisco (RAID)</title>
+   <title>Configuración de dispositivos multidisco (RAID)</title>
 <para>
 
-Si tiene mÃ¡s de un disco duro<footnote><para>
+Si tiene más de un disco duro<footnote><para>
 
 Siendo honestos, puede construir un MD (Metadispositivo) incluso con 
-particiones de un mismo disco fÃ­sico, pero no tiene ninguna ventaja.
+particiones de un mismo disco físico, pero no tiene ninguna ventaja.
 
 </para></footnote> en su ordenador, con <command>mdcfg</command> puede
 configurar sus discos para un mayor rendimiento y/o una mayor seguridad de los
 datos. El resultado se denomina <firstterm>Dispositivo multidisco</firstterm>
-(o como su variante mÃ¡s conocida <firstterm>RAID</firstterm>).
+(o como su variante más conocida <firstterm>RAID</firstterm>).
 
 </para><para>
 
-BÃ¡sicamente el metadispositivo es un grupo de particiones de distintos discos
-combinadas para formar un dispositivo <emphasis>lÃ³gico</emphasis>. Este
-dispositivo puede usarse como una particiÃ³n ordinaria (p.ej. puede darle 
+Básicamente el metadispositivo es un grupo de particiones de distintos discos
+combinadas para formar un dispositivo <emphasis>lógico</emphasis>. Este
+dispositivo puede usarse como una partición ordinaria (p.ej. puede darle 
 formato con <command>partman</command>, asignarle un punto de montaje, etc.).
 
 </para><para>
@@ -35,14 +36,14 @@ soportados son:
 Su principal objetivo es el rendimiento. RAID 0 divide todos los datos de
 entrada en <firstterm>franjas</firstterm> y los distribuye igualmente por 
 cada disco en el sistema RAID. Esto puede aumentar la velocidad de las 
-operaciones de lectura/escritura, pero cuando falle un disco, perderÃ¡ 
-<emphasis>todo</emphasis> (parte de la informaciÃ³n todavÃ­a estÃ¡ en el 
+operaciones de lectura/escritura, pero cuando falle un disco, perderá 
+<emphasis>todo</emphasis> (parte de la información todavía está en el 
 disco o discos que funcionan, la otra parte <emphasis>estaba</emphasis> 
-en el disco que fallÃ³).
+en el disco que falló).
 
 </para><para>
 
-Es tÃ­pico el uso de RAID 0 en una particiÃ³n para ediciÃ³n de vÃ­deo.
+Es típico el uso de RAID 0 en una partición para edición de vídeo.
 
 </para></listitem>
 </varlistentry>
@@ -51,19 +52,19 @@ Es tÃ­pico el uso de RAID 0 en una particiÃ³n para ediciÃ³n de vÃ­deo.
 <term>RAID 1</term><listitem><para>
 
 Es adecuado para los casos en los que la seguridad sea lo primordial.
-Consiste en varias (normalmente dos) particiones del mismo tamaÃ±o donde
-cada particiÃ³n contiene exactamente los mismos datos. Esto significa tres
-cosas. Primero, si un disco falla, todavÃ­a tiene una copia de los datos en los
-discos restantes. Segundo, sÃ³lo puede usar una fracciÃ³n de la capacidad
-disponible (con mÃ¡s precisiÃ³n, el tamaÃ±o de la particiÃ³n mÃ¡s pequeÃ±a del 
+Consiste en varias (normalmente dos) particiones del mismo tamaño donde
+cada partición contiene exactamente los mismos datos. Esto significa tres
+cosas. Primero, si un disco falla, todavía tiene una copia de los datos en los
+discos restantes. Segundo, sólo puede usar una fracción de la capacidad
+disponible (con más precisión, el tamaño de la partición más pequeña del 
 sistema RAID). Tercero, la carga producida por la lectura de ficheros se 
 reparte entre los discos, lo que puede ampliar el rendimiento de algunos 
-servidores, como los servidores de ficheros, que tienden a tener mÃ¡s carga 
+servidores, como los servidores de ficheros, que tienden a tener más carga 
 de lecturas que escrituras.
 
 </para><para>
 
-Opcionalmente puede tener un disco de reserva en el sistema que tomarÃ¡ el lugar
+Opcionalmente puede tener un disco de reserva en el sistema que tomará el lugar
 del disco defectuoso en caso de fallo.
 
 </para></listitem>
@@ -72,26 +73,26 @@ del disco defectuoso en caso de fallo.
 
 <term>RAID5</term><listitem><para>
 
-Es una buena elecciÃ³n entre velocidad, confiabilidad y redundancia
+Es una buena elección entre velocidad, confiabilidad y redundancia
 de datos. RAID5 divide toda la data entrante en tipos y la
-distribuye igualmente en todos los discos (similar a RAID0), a excepciÃ³n
-de uno. A diferencia de RAID0, RAID5 tambiÃ©n calcula la informaciÃ³n de
+distribuye igualmente en todos los discos (similar a RAID0), a excepción
+de uno. A diferencia de RAID0, RAID5 también calcula la información de
 <firstterm>paridad</firstterm>, la cual se escribe en el disco
-restante. El disco de paridad no es estÃ¡tico (esto serÃ­a RAID4), pero
-cambia periÃ³dicamente, de modo que la informaciÃ³n de paridad es
-distribuÃ­da igualmente en todos los discos. Cuando falla uno de los 
-discos, la parte faltante de la informaciÃ³n puede ser reconstruida
+restante. El disco de paridad no es estático (esto sería RAID4), pero
+cambia periódicamente, de modo que la información de paridad es
+distribuída igualmente en todos los discos. Cuando falla uno de los 
+discos, la parte faltante de la información puede ser reconstruida
 desde la data existente y su paridad. RAID5 debe consistir de por
 lo menos tres particiones activas. Opcionalmente, puede tener un
-disco de reserva en el arreglo el cual tomarÃ¡ el lugar del disco con fallos
+disco de reserva en el arreglo el cual tomará el lugar del disco con fallos
 en caso esto ocurra.
 
 </para><para>
 
 Como puede ver, RAID5 tiene un grado similar de confiabilidad como
-RAID1 logrando menos redundancia. Por otr lado podrÃ­a ser un poco
-mas lento en operaciones de escritura que RAID0 debido al cÃ¡lculo
-de la informaciÃ³n de paridad.
+RAID1 logrando menos redundancia. Por otr lado podría ser un poco
+mas lento en operaciones de escritura que RAID0 debido al cálculo
+de la información de paridad.
 
 </para></listitem>
 </varlistentry>
@@ -104,9 +105,9 @@ Resumiendo:
 <thead>
 <row>
   <entry>Tipo</entry>
-  <entry>Dispositivos mÃ­nimos</entry>
+  <entry>Dispositivos mínimos</entry>
   <entry>Dispositivo de reserva</entry>
-  <entry>Â¿Soporta el fallo de un disco?</entry>
+  <entry>¿Soporta el fallo de un disco?</entry>
   <entry>Espacio disponible</entry>
 </row>
 </thead>
@@ -117,7 +118,7 @@ Resumiendo:
   <entry>2</entry>
   <entry>no</entry>
   <entry>no</entry>
-  <entry>TamaÃ±o de la menor particiÃ³n multiplicado por el nÃºmero de dispositivos
+  <entry>Tamaño de la menor partición multiplicado por el número de dispositivos
   en el sistema RAID</entry>
 </row>
 
@@ -125,17 +126,17 @@ Resumiendo:
   <entry>RAID 1</entry>
   <entry>2</entry>
   <entry>opcional</entry>
-  <entry>sÃ­</entry>
-  <entry>TamaÃ±o de la menor particiÃ³n en el sistema RAID</entry>
+  <entry>sí</entry>
+  <entry>Tamaño de la menor partición en el sistema RAID</entry>
 </row>
 
 <row>
   <entry>RAID5</entry>
   <entry>3</entry>
   <entry>opcional</entry>
-  <entry>sÃ­</entry>
+  <entry>sí</entry>
   <entry>
-    TamaÃ±o de la particiÃ³n mÃ¡s pequeÃ±a multiplicada por (nÃºmero de dispositivos en RAID menos uno)
+    Tamaño de la partición más pequeña multiplicada por (número de dispositivos en RAID menos uno)
   </entry>
 </row>
 
@@ -144,32 +145,32 @@ Resumiendo:
 </para><para>
 
 Si quiere saberlo todo acerca de RAID, consulte el <ulink
-url="&url-software-raid-howto;">CÃ“MO de RAID</ulink>.
+url="&url-software-raid-howto;">CÓMO de RAID</ulink>.
 
 </para><para>
 
 Para crear un MD, necesita tener las particiones deseadas marcadas
 para su uso con RAID (puede hacerlo con <command>partman</command> en el
-menÃº <guimenu>ConfiguraciÃ³n de la particiÃ³n</guimenu> donde deberÃ­a seleccionar
-<menuchoice> <guimenu>Utilizar como:</guimenu> <guimenuitem>Usar la particiÃ³n
+menú <guimenu>Configuración de la partición</guimenu> donde debería seleccionar
+<menuchoice> <guimenu>Utilizar como:</guimenu> <guimenuitem>Usar la partición
 como un dispositivo RAID</guimenuitem> </menuchoice>).
 
 </para><warning><para>
 
-El soporte para MD es una caracterÃ­stica relativamente nueva del instalador.
-Puede que experimente algÃºn problema para algunos niveles RAID en
-combinaciÃ³n con algunos gestores de arranque si intenta usar MD para el sistema
-de ficheros raÃ­z (<filename>/</filename>). Es posible que los usuarios
-experimentados puedan solucionar estos problemas ejecutando algÃºn paso de
-configuraciÃ³n o instalaciÃ³n desde una shell.
+El soporte para MD es una característica relativamente nueva del instalador.
+Puede que experimente algún problema para algunos niveles RAID en
+combinación con algunos gestores de arranque si intenta usar MD para el sistema
+de ficheros raíz (<filename>/</filename>). Es posible que los usuarios
+experimentados puedan solucionar estos problemas ejecutando algún paso de
+configuración o instalación desde una shell.
 
 </para></warning><para>
 
-A continuaciÃ³n, debe elegir <guimenuitem>Configurar RAID software</guimenuitem>
-desde el menÃº principal de <command>partman</command>.
+A continuación, debe elegir <guimenuitem>Configurar RAID software</guimenuitem>
+desde el menú principal de <command>partman</command>.
 
 En la primera pantalla de <command>mdcfg</command> simplemente seleccione
-<guimenu>Crear un dispositivo MD</guimenu>. Se le presentarÃ¡ una lista de tipos
+<guimenu>Crear un dispositivo MD</guimenu>. Se le presentará una lista de tipos
 de MD soportados, de los que debe elegir uno (ejm. RAID 1). Los siguientes
 pasos dependen del tipo de MD seleccionado.
 
@@ -178,26 +179,26 @@ pasos dependen del tipo de MD seleccionado.
 <itemizedlist>
 <listitem><para>
 
-RAID 0 es simple &mdash; se le presentarÃ¡ una lista de particiones RAID
-disponibles y Ãºnicamente tendrÃ¡ que seleccionar las particiones que formarÃ¡n el
+RAID 0 es simple &mdash; se le presentará una lista de particiones RAID
+disponibles y únicamente tendrá que seleccionar las particiones que formarán el
 MD.
 
 </para></listitem>
 <listitem><para>
 
-RAID 1 es un poco mÃ¡s complejo. Primero, se le preguntarÃ¡ el nÃºmero de
-dispositivos activos y el nÃºmero de dispositivos de reserva que formarÃ¡n el
-MD. A continuaciÃ³n, necesita seleccionar de la lista de particiones RAID
-disponibles las que estarÃ¡n activas y las que quedarÃ¡n en reserva. El total de
+RAID 1 es un poco más complejo. Primero, se le preguntará el número de
+dispositivos activos y el número de dispositivos de reserva que formarán el
+MD. A continuación, necesita seleccionar de la lista de particiones RAID
+disponibles las que estarán activas y las que quedarán en reserva. El total de
 las particiones seleccionadas debe ser igual al que se dio unos segundos
-antes. No se preocupe. Si comete algÃºn error y selecciona un nÃºmero distinto de
-particiones, &d-i; no le dejarÃ¡ continuar hasta que solucione el problema.
+antes. No se preocupe. Si comete algún error y selecciona un número distinto de
+particiones, &d-i; no le dejará continuar hasta que solucione el problema.
 
 </para></listitem>
 <listitem><para>
 
-RAID5 tiene un procedimiento de configuraciÃ³n similar al de RAID1, con la
-excepciÃ³n que necesita usar por lo menos <emphasis>tres</emphasis> 
+RAID5 tiene un procedimiento de configuración similar al de RAID1, con la
+excepción que necesita usar por lo menos <emphasis>tres</emphasis> 
 particiones activas.
 
 </para></listitem>
@@ -207,14 +208,14 @@ particiones activas.
 
 Es perfectamente posible tener varios tipos de MD a la vez. Por ejemplo, si
 tiene tres discos duros de 200 GB dedicados para el MD, cada uno con dos
-particiones de 100 GB, puede combinar la primera particiÃ³n de los tres discos 
-en un RAID 0 (una particiÃ³n rÃ¡pida de 300 GB para ediciÃ³n de vÃ­deo) y usar las
-otras tres (2 activas, 1 de reserva) en un RAID 1 (una particiÃ³n bastante 
+particiones de 100 GB, puede combinar la primera partición de los tres discos 
+en un RAID 0 (una partición rápida de 300 GB para edición de vídeo) y usar las
+otras tres (2 activas, 1 de reserva) en un RAID 1 (una partición bastante 
 segura de 100 GB para <filename>/home</filename>).
 
 </para><para>
 
-DespuÃ©s de configurar los MD a su gusto, elija 
+Después de configurar los MD a su gusto, elija 
 <guimenuitem>Terminar</guimenuitem> en <command>mdcfg</command> para volver 
 a <command>partman</command> y crear los sistemas de ficheros en sus nuevos
 MD y asignarles los atributos habituales, como los puntos de montaje.

@@ -1,65 +1,66 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- original version: 22935 -->
 <!-- Revisado por Rudy Godoy -->
 
   <sect3 arch="ia64">
-  <title>InstalaciÃ³n del gestor de arranque <command>ELILO</command> en el disco duro</title>
+  <title>Instalación del gestor de arranque <command>ELILO</command> en el disco duro</title>
 <para>
 
 <quote>Elilo</quote> es el gestor de arranque para &architecture;. Se basa 
 en el gestor de arranque <quote>lilo</quote> para la arquitectura x86 y usa 
-un fichero de configuraciÃ³n similar. Sin embargo, en lugar de escribir en 
-el MBR o en el registro de arranque de una particiÃ³n, copia los ficheros 
-necesarios en una particiÃ³n separada con formato FAT y modifica el menÃº 
+un fichero de configuración similar. Sin embargo, en lugar de escribir en 
+el MBR o en el registro de arranque de una partición, copia los ficheros 
+necesarios en una partición separada con formato FAT y modifica el menú 
 del <guimenuitem>gestor de arranque EFI</guimenuitem> en el firmware para 
-que direccione a los ficheros en la particiÃ³n EFI. En realidad el gestor 
-de arranque <command>elilo</command> estÃ¡ compuesto de dos partes. La 
-orden <filename>/usr/sbin/elilo</filename> gestiona la particiÃ³n y copia 
-el fichero en Ã©sta. El programa <filename>elilo.efi</filename> se copia 
-en la particiÃ³n EFI y el <quote>gestor de arranque EFI</quote> (que es 
-el que realmente carga y arranca el nÃºcleo de Linux) lo ejecuta.
+que direccione a los ficheros en la partición EFI. En realidad el gestor 
+de arranque <command>elilo</command> está compuesto de dos partes. La 
+orden <filename>/usr/sbin/elilo</filename> gestiona la partición y copia 
+el fichero en ésta. El programa <filename>elilo.efi</filename> se copia 
+en la partición EFI y el <quote>gestor de arranque EFI</quote> (que es 
+el que realmente carga y arranca el núcleo de Linux) lo ejecuta.
 
 </para><para>
 
-La configuraciÃ³n e instalaciÃ³n de <quote>elilo</quote> se realiza en el Ãºltimo
-paso de la instalaciÃ³n de paquetes del sistema base. &d-i; le presentarÃ¡ una
-lista de particiones adecuadas para una particiÃ³n EFI. Seleccione la particiÃ³n
-que configurÃ³ anteriormente en la instalaciÃ³n, usualmente una particiÃ³n en el
-mismo disco que contiene su sistema de ficheros <emphasis>raÃ­z</emphasis> 
+La configuración e instalación de <quote>elilo</quote> se realiza en el último
+paso de la instalación de paquetes del sistema base. &d-i; le presentará una
+lista de particiones adecuadas para una partición EFI. Seleccione la partición
+que configuró anteriormente en la instalación, usualmente una partición en el
+mismo disco que contiene su sistema de ficheros <emphasis>raíz</emphasis> 
 (root).
 
 </para>
 
-  <warning><title>Â¡Escoja la particiÃ³n correcta!</title>
+  <warning><title>¡Escoja la partición correcta!</title>
 
 <para>
 
-El criterio para seleccionar una particiÃ³n es que tenga un sistema de ficheros
+El criterio para seleccionar una partición es que tenga un sistema de ficheros
 FAT y la marca <emphasis>boot</emphasis> establecida. Es posible que &d-i; 
 muestre varias alternativas dependiendo de lo que encuentre al analizar 
 todos los discos del sistema que contengan particiones EFI de otros 
-discos de sistema y particiones de diagnÃ³stico EFI. Recuerde, 
-<command>elilo</command> podrÃ­a dar formato a la particiÃ³n durante la 
-instalaciÃ³n, Â¡eliminando cualquier contenido previo!
+discos de sistema y particiones de diagnóstico EFI. Recuerde, 
+<command>elilo</command> podría dar formato a la partición durante la 
+instalación, ¡eliminando cualquier contenido previo!
 
 </para></warning>
 
   </sect3>
 
   <sect3 arch="ia64">
-  <title>Contenidos de una particiÃ³n EFI</title>
+  <title>Contenidos de una partición EFI</title>
 
 <para>
 
-Una particiÃ³n EFI es una particiÃ³n con un sistema de ficheros FAT en uno de 
+Una partición EFI es una partición con un sistema de ficheros FAT en uno de 
 los discos duros del sistema, generalmente en el mismo disco que contiene el 
-sistema de ficheros <emphasis>raÃ­z</emphasis>. Normalmente no estÃ¡ montada 
-mientras el sistema se ejecuta, ya que sÃ³lo la necesita el <quote>gestor de 
-arranque EFI</quote> para cargar el sistema y la parte de instalaciÃ³n en que
+sistema de ficheros <emphasis>raíz</emphasis>. Normalmente no está montada 
+mientras el sistema se ejecuta, ya que sólo la necesita el <quote>gestor de 
+arranque EFI</quote> para cargar el sistema y la parte de instalación en que
 <command>elilo</command> escribe directamente en el sistema de ficheros.
 La utilidad <command>/usr/sbin/elilo</command> escribe los siguientes ficheros
-en el directorio <filename>efi/debian</filename> de la particiÃ³n EFI durante
-la instalaciÃ³n. Tenga en cuenta que <quote>el gestor de arranque EFI</quote>
-encontrarÃ¡ esos ficheros usando la ruta
+en el directorio <filename>efi/debian</filename> de la partición EFI durante
+la instalación. Tenga en cuenta que <quote>el gestor de arranque EFI</quote>
+encontrará esos ficheros usando la ruta
 <filename>fs<emphasis>n</emphasis>:\efi\debian</filename>. Puede haber otros
 ficheros en este sistema de ficheros a medida que pasa el tiempo y el 
 sistema se actualiza o se vuelve a configurar.
@@ -72,9 +73,9 @@ sistema se actualiza o se vuelve a configurar.
 <term><filename>elilo.conf</filename></term>
 <listitem><para>
 
-Es el fichero de configuraciÃ³n que lee el gestor de arranque al iniciarse.
+Es el fichero de configuración que lee el gestor de arranque al iniciarse.
 Es una copia de <filename>/etc/elilo.conf</filename> con los nombres de los
-ficheros reescritos para hacer referencia a los ficheros en la particiÃ³n EFI.
+ficheros reescritos para hacer referencia a los ficheros en la partición EFI.
 
 </para></listitem></varlistentry>
 
@@ -83,8 +84,8 @@ ficheros reescritos para hacer referencia a los ficheros en la particiÃ³n EFI.
 <listitem><para>
 
 Es el cargador de arranque que ejecuta el <quote>gestor de arranque EFI</quote>
-para arrancar el sistema. Es el programa detrÃ¡s de la opciÃ³n 
-<guimenuitem>Debian GNU/Linux</guimenuitem> en el menÃº del 
+para arrancar el sistema. Es el programa detrás de la opción 
+<guimenuitem>Debian GNU/Linux</guimenuitem> en el menú del 
 <quote>gestor de arranque EFI</quote>.
 
 </para></listitem></varlistentry>
@@ -93,10 +94,10 @@ para arrancar el sistema. Es el programa detrÃ¡s de la opciÃ³n
 <term><filename>initrd.img</filename></term>
 <listitem><para>
 
-Es el sistema de ficheros raÃ­z usado inicialmente para arrancar el nÃºcleo. Es
+Es el sistema de ficheros raíz usado inicialmente para arrancar el núcleo. Es
 una copia del fichero referido en <filename>/etc/elilo.conf</filename>. En una
-instalaciÃ³n de Debian estÃ¡ndar serÃ¡ el fichero localizado en 
-<filename>/boot</filename> al que apunta el enlace simbÃ³lico 
+instalación de Debian estándar será el fichero localizado en 
+<filename>/boot</filename> al que apunta el enlace simbólico 
 <filename>/initrd.img</filename>.
 
 </para></listitem></varlistentry>
@@ -105,9 +106,9 @@ instalaciÃ³n de Debian estÃ¡ndar serÃ¡ el fichero localizado en
 <term><filename>readme.txt</filename></term>
 <listitem><para>
 
-Es un fichero de texto pequeÃ±o que indica que los contenidos del directorio
+Es un fichero de texto pequeño que indica que los contenidos del directorio
 se gestionan con <command>elilo</command> y que cualquier cambio local se 
-perderÃ¡ la prÃ³xima vez que se ejecute <filename>/usr/sbin/elilo</filename>.
+perderá la próxima vez que se ejecute <filename>/usr/sbin/elilo</filename>.
 
 </para></listitem></varlistentry>
 
@@ -115,10 +116,10 @@ perderÃ¡ la prÃ³xima vez que se ejecute <filename>/usr/sbin/elilo</filename>.
 <term><filename>vmlinuz</filename></term>
 <listitem><para>
 
-Es el nÃºcleo comprimido.
-Es una copia del fichero seÃ±alado en <filename>/etc/elilo.conf</filename>.
-En una instalaciÃ³n de Debian estÃ¡ndar serÃ¡ el fichero en
-<filename>/boot</filename> al que apunta el enlace simbÃ³lico
+Es el núcleo comprimido.
+Es una copia del fichero señalado en <filename>/etc/elilo.conf</filename>.
+En una instalación de Debian estándar será el fichero en
+<filename>/boot</filename> al que apunta el enlace simbólico
 <filename>/vmlinuz</filename>.
 
 </para></listitem></varlistentry>

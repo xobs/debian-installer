@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- original version: 18647 -->
 
 
@@ -6,12 +7,12 @@
 
 Linux tiene varios ficheros especiales en <filename>/dev</filename>.
 Estos ficheros se llaman ficheros de dispositivo. En el mundo Unix el
-acceso al hardware es diferente. AllÃ­ tiene un fichero especial que
+acceso al hardware es diferente. Allí tiene un fichero especial que
 en realidad ejecuta un controlador de dispositivo que le permite el
 acceso al hardware. El fichero de dispositivo es un interfaz a un 
 componente real del sistema. Los ficheros en <filename>/dev</filename>
-se comportan tambiÃ©n de manera diferente a los ficheros ordinarios. 
-A continuaciÃ³n se lista los ficheros de dispositivo mÃ¡s importantes.
+se comportan también de manera diferente a los ficheros ordinarios. 
+A continuación se lista los ficheros de dispositivo más importantes.
 
 </para><para>
 
@@ -40,10 +41,10 @@ A continuaciÃ³n se lista los ficheros de dispositivo mÃ¡s importantes.
   <entry>Disco duro IDE / CD-ROM en el segundo puerto IDE (Esclavo)</entry>
 </row><row>
   <entry><filename>hda1</filename></entry>
-  <entry>Primera particiÃ³n del primer disco duro IDE</entry>
+  <entry>Primera partición del primer disco duro IDE</entry>
 </row><row>
   <entry><filename>hdd15</filename></entry>
-  <entry>DÃ©cimo quinta particiÃ³n del cuarto disco duro IDE</entry>
+  <entry>Décimo quinta partición del cuarto disco duro IDE</entry>
 </row>
 </tbody></tgroup></informaltable>
 
@@ -59,10 +60,10 @@ A continuaciÃ³n se lista los ficheros de dispositivo mÃ¡s importantes.
   <entry>Disco duro SCSI con el siguiente ID SCSI (por ejemplo 2)</entry>
 </row><row>
   <entry><filename>sda1</filename></entry>
-  <entry>Primera particiÃ³n del primer disco duro SCSI</entry>
+  <entry>Primera partición del primer disco duro SCSI</entry>
 </row><row>
   <entry><filename>sdd10</filename></entry>
-  <entry>DÃ©cima particiÃ³n del cuarto disco duro SCSI</entry>
+  <entry>Décima partición del cuarto disco duro SCSI</entry>
 </row>
 </tbody></tgroup></informaltable>
 
@@ -85,27 +86,27 @@ A continuaciÃ³n se lista los ficheros de dispositivo mÃ¡s importantes.
   <entry>Puerto serie 1, COM2 en MS-DOS</entry>
 </row><row>
   <entry><filename>psaux</filename></entry>
-  <entry>RatÃ³n de tipo PS/2</entry>
+  <entry>Ratón de tipo PS/2</entry>
 </row><row>
   <entry><filename>gpmdata</filename></entry>
-  <entry>Pseudo dispositivo, repite datos desde el demonio GPM (ratÃ³n)</entry>
+  <entry>Pseudo dispositivo, repite datos desde el demonio GPM (ratón)</entry>
 </row>
 </tbody></tgroup></informaltable>
 
 <informaltable><tgroup cols="2"><tbody>
 <row>
   <entry><filename>cdrom</filename></entry>
-  <entry>Enlace simbÃ³lico a la unidad de CD-ROM</entry>
+  <entry>Enlace simbólico a la unidad de CD-ROM</entry>
 </row><row>
   <entry><filename>mouse</filename></entry>
-  <entry>Enlace simbÃ³lico al fichero de dispositivo del ratÃ³n</entry>
+  <entry>Enlace simbólico al fichero de dispositivo del ratón</entry>
 </row>
 </tbody></tgroup></informaltable>
 
 <informaltable><tgroup cols="2"><tbody>
 <row>
   <entry><filename>null</filename></entry>
-  <entry>Todo lo que se direccione a este dispositivo desaparecerÃ¡</entry>
+  <entry>Todo lo que se direccione a este dispositivo desaparecerá</entry>
 </row><row>
   <entry><filename>zero</filename></entry>
   <entry>Se pueden leer continuamente ceros desde este dispositivo</entry>
@@ -115,17 +116,17 @@ A continuaciÃ³n se lista los ficheros de dispositivo mÃ¡s importantes.
 </para>
 
   <sect2>
-<title>Configurar su ratÃ³n</title>
+<title>Configurar su ratón</title>
 
 <para>
 
-El ratÃ³n puede ser usado tanto en consola de Linux (con gpm) como en el
+El ratón puede ser usado tanto en consola de Linux (con gpm) como en el
 entorno de ventanas X. Los dos usos se pueden complementar si se usa el
-repetidor gpm para permitir que la seÃ±al fluya hacia el servidor X como
+repetidor gpm para permitir que la señal fluya hacia el servidor X como
 se muestra:
 <informalexample><screen>
 mouse =&#62; /dev/psaux  =&#62; gpm =&#62; /dev/gpmdata -&#62; /dev/mouse =&#62; X
-         /dev/ttyS0             (repetidor)        (enlace simbÃ³lico)
+         /dev/ttyS0             (repetidor)        (enlace simbólico)
          /dev/ttyS1
 </screen></informalexample>
 
@@ -133,24 +134,24 @@ mouse =&#62; /dev/psaux  =&#62; gpm =&#62; /dev/gpmdata -&#62; /dev/mouse =&#62;
 
 Configure el protocolo del repetidor como raw (en 
 <filename>/etc/gpm.conf</filename>) mientras configura X al protocolo de 
-ratÃ³n original en <filename>/etc/X11/XF86Config</filename> o 
+ratón original en <filename>/etc/X11/XF86Config</filename> o 
 <filename>/etc/X11/XF86Config-4</filename>.
 
 </para><para>
 
-Este enfoque de usar gpm incluso en X tiene ventajas cuando el ratÃ³n
+Este enfoque de usar gpm incluso en X tiene ventajas cuando el ratón
 se desconecta inadvertidamente. Simplemente reiniciando gpm con
 <informalexample><screen>
 usuario@debian:# /etc/init.d/gpm restart
 </screen></informalexample>
-volverÃ¡ a conectar el ratÃ³n a travÃ©s de software sin reiniciar X.
+volverá a conectar el ratón a través de software sin reiniciar X.
 
 </para><para>
 
-Si gpm se desactiva o no se instala por alguna razÃ³n, asegÃºrese de
-configurar X para leer directamente desde un dispositivo de ratÃ³n tal como
-/dev/psaux. Para mÃ¡s detalles, consulte el mini-Como 3 botones en el
-ratÃ³n en
+Si gpm se desactiva o no se instala por alguna razón, asegúrese de
+configurar X para leer directamente desde un dispositivo de ratón tal como
+/dev/psaux. Para más detalles, consulte el mini-Como 3 botones en el
+ratón en
 <filename>/usr/share/doc/HOWTO/en-txt/mini/3-Button-Mouse.gz</filename>, 
 <userinput>man gpm</userinput>, 
 <filename>/usr/share/doc/gpm/FAQ.gz</filename> y
@@ -160,24 +161,24 @@ ratÃ³n en
 
 Para PowerPC, en <filename>/etc/X11/XF86Config</filename> o
 <filename>/etc/X11/XF86Config-4</filename>, configure el dispositivo de
-ratÃ³n a <userinput>"/dev/input/mice"</userinput>. 
+ratón a <userinput>"/dev/input/mice"</userinput>. 
 
 </para><para arch="powerpc">
 
-Los nÃºcleos modernos le ofrecen la capacidad de emular un ratÃ³n de
-tres botones aunque su ratÃ³n solo tenga uno. Simplemente aÃ±ada las
-siguientes lÃ­neas al fichero <filename>/etc/sysctl.conf</filename>.
+Los núcleos modernos le ofrecen la capacidad de emular un ratón de
+tres botones aunque su ratón solo tenga uno. Simplemente añada las
+siguientes líneas al fichero <filename>/etc/sysctl.conf</filename>.
 
 <informalexample><screen>
 
-# EmulaciÃ³n de un ratÃ³n de 3 botones
-# Activar emulaciÃ³n
+# Emulación de un ratón de 3 botones
+# Activar emulación
 /dev/mac_hid/mouse_button_emulation = 1
-# Hacer que el botÃ³n del medio funcione al pulsar la tecla F11
+# Hacer que el botón del medio funcione al pulsar la tecla F11
 /dev/mac_hid/mouse_button2_keycode = 87
-# Hacer que el botÃ³n derecho funcione al pulsar la tecla F12
+# Hacer que el botón derecho funcione al pulsar la tecla F12
 /dev/mac_hid/mouse_button3_keycode = 88
-# Para usar teclas diferentes, utilice showkey para saber el cÃ³digo de Ã©stas.
+# Para usar teclas diferentes, utilice showkey para saber el código de éstas.
 
 </screen></informalexample>  
 </para>
@@ -188,28 +189,28 @@ siguientes lÃ­neas al fichero <filename>/etc/sysctl.conf</filename>.
  <title>Espacio en disco requerido para las tareas</title>
 <para>
 
-La instalaciÃ³n base de sarge para i386, incluyendo todos
-los paquetes estÃ¡ndar, requiere 178MB de espacio en disco.
+La instalación base de sarge para i386, incluyendo todos
+los paquetes estándar, requiere 178MB de espacio en disco.
 
 </para><para>
 
-La siguiente tabla lista los tamaÃ±os informados por aptitude
+La siguiente tabla lista los tamaños informados por aptitude
 para las tareas listadas en tasksel. Note que algunas tareas tienen
-componentes comunes, de modo que el tamaÃ±o total instalado para 
-dos tareas juntas podrÃ­a ser inferior al total obtenido al sumar
-sus tamaÃ±os individualmente.
+componentes comunes, de modo que el tamaño total instalado para 
+dos tareas juntas podría ser inferior al total obtenido al sumar
+sus tamaños individualmente.
 
 </para><para>
 
 <informalexample><screen>
-Tarea                            TamaÃ±o        TamaÃ±o       Espacio requerido
+Tarea                            Tamaño        Tamaño       Espacio requerido
                               instalado (MB) descarga (MB)  para instalar (MB)
 
 Base de datos SQL	           108           33           141
 Entorno de escritorio             1537          521          2058
 Servidor de ficheros                85           34           119
 Servidor de correo                  41           12            53
-Servidor de impresiÃ³n	           240           88           323 
+Servidor de impresión	           240           88           323 
 Servidor web                        71           21            92
 
 </screen></informalexample>

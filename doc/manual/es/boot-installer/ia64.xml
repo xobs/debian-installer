@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- original version: 22919 -->
 
   <sect2 arch="ia64"><title>Arranque desde un CD-ROM</title>
@@ -9,14 +10,14 @@
 
 <para>
 
-Existen tres variaciones bÃ¡sicas de los CDs de instalaciÃ³n de Debian.
-El CD <emphasis>Tarjeta de negocios</emphasis> tiene una instalaciÃ³n 
-mÃ­nima que cabe en este medio de CD de formato pequeÃ±o.
-Requiere conexiÃ³n de red para instalar el resto de la instalaciÃ³n
+Existen tres variaciones básicas de los CDs de instalación de Debian.
+El CD <emphasis>Tarjeta de negocios</emphasis> tiene una instalación 
+mínima que cabe en este medio de CD de formato pequeño.
+Requiere conexión de red para instalar el resto de la instalación
 base y tener un sistema utilizable.
-El CD <emphasis>InstalaciÃ³n de red</emphasis> tiene todos los paquetes
-para la instalaciÃ³n base pero requiere una conexiÃ³n de red a un
-sitio de rÃ©plica de Debian para instalar los paquetes 
+El CD <emphasis>Instalación de red</emphasis> tiene todos los paquetes
+para la instalación base pero requiere una conexión de red a un
+sitio de réplica de Debian para instalar los paquetes 
 adicionales que desee para tener un sistemas completo.
 El juego de CDs de Debian puede instalar un sistema completo
 desde el amplio rango de paquetes que contiene sin necesidad de 
@@ -26,76 +27,76 @@ acceder a la red.
 
 <para>
 
-La arquitectura IA-64 usa la siguiente generaciÃ³n de Interfaz de Firmware
+La arquitectura IA-64 usa la siguiente generación de Interfaz de Firmware
 Extensible (EFI) de Intel.
 A diferencia del tradicional BIOS x86 que conoce muy poco sobre el
-dispositivo de arranque, ademÃ¡s de la tabla de particiones y el 
+dispositivo de arranque, además de la tabla de particiones y el 
 registro principal de arranque (MBR), EFI puede leer y escribir
 ficheros de particiones de disco formateadas con FAT16 o FAT32.
 Esto simplifica el proceso, a menudo arcaico, de iniciar un sistema.
 El gestor de arranque del sistema y el firmware EFI que lo soporta
 tiene un sistema de ficheros entero para almacenar los ficheros
-necesarios para arrancar la mÃ¡quina.
+necesarios para arrancar la máquina.
 Esto significa que el disco de sistema en un sistema IA-64 tiene una
-particiÃ³n adicional dedicada a EFI en lugar del simple MBR o bloque
+partición adicional dedicada a EFI en lugar del simple MBR o bloque
 de arranque en sistemas mas convencionales.
 
 </para><para>
 
-El CD del instalador de Debian contiene una pequeÃ±a particiÃ³n EFI
-donde se ubican <command>ELILO</command>, su fichero de configuraciÃ³n, 
-el nÃºcleo del instalador y un sistema de ficheros adicional (initrd).
-El sistema en ejecuciÃ³n tambiÃ©n contiene una particiÃ³n EFI donde residen
+El CD del instalador de Debian contiene una pequeña partición EFI
+donde se ubican <command>ELILO</command>, su fichero de configuración, 
+el núcleo del instalador y un sistema de ficheros adicional (initrd).
+El sistema en ejecución también contiene una partición EFI donde residen
 los ficheros necesarios para arrancar el sistema.
-Estos ficheros son leÃ­bles desde el shell EFI como se describe a 
-continuaciÃ³n.
+Estos ficheros son leíbles desde el shell EFI como se describe a 
+continuación.
 
 </para><para>
 
 Muchos de los detalles de como <command>ELILO</command> realmente
 carga e inicia un sistema son transparentes para el 
-instalador. Sin embargo, el instalador debe configurar una particiÃ³n
-EFI antes de instalar el sistema base. De otra forma, la instalaciÃ³n
-de <command>ELILO</command> fallarÃ¡, lo que resultarÃ¡ en un sistema
-no arrancable. La particiÃ³n EFI se asigna y formatea en el paso de
-particionado de la instalaciÃ³n, antes de cargar cualquier paquete
-en el disco del sistema. La tarea de particionado tambiÃ©n verifica que
-una particiÃ³n EFI adecuada este presente, antes de permitir que la
-instalaciÃ³n prosiga.
+instalador. Sin embargo, el instalador debe configurar una partición
+EFI antes de instalar el sistema base. De otra forma, la instalación
+de <command>ELILO</command> fallará, lo que resultará en un sistema
+no arrancable. La partición EFI se asigna y formatea en el paso de
+particionado de la instalación, antes de cargar cualquier paquete
+en el disco del sistema. La tarea de particionado también verifica que
+una partición EFI adecuada este presente, antes de permitir que la
+instalación prosiga.
 
 </para><para>
 
-El gestor de arranque de EFI es el Ãºltimo paso de la
-inicializaciÃ³n del firmware. Ã‰ste muestra una lista de menÃº desde
-donde el usuario puede elegir una opciÃ³n.
+El gestor de arranque de EFI es el último paso de la
+inicialización del firmware. Éste muestra una lista de menú desde
+donde el usuario puede elegir una opción.
 Dependiendo del modelo del sistema y de que otro software ha sido
-cargado en el sistema, este menÃº podrÃ­a ser diferente de un
+cargado en el sistema, este menú podría ser diferente de un
 sistema a otro.
-Se deben mostrar al menos dos opciones en el menÃº,
+Se deben mostrar al menos dos opciones en el menú,
 <command>Boot Option Maintenance Menu</command> y
 <command>EFI Shell [Built-in]</command>.
-De preferencia use la primera opciÃ³n, sin embargo, si Ã©sta
-no esta disponible o por alguna razÃ³n el CD no arranca con Ã©sta,
-use la segunda opciÃ³n.
+De preferencia use la primera opción, sin embargo, si ésta
+no esta disponible o por alguna razón el CD no arranca con ésta,
+use la segunda opción.
 
 </para>
 
   <warning>
   <title>IMPORTANTE</title>
 <para>
-El gestor de arranque EFI elegirÃ¡ la acciÃ³n de arranque predeterminada,
-usualmente la primera opciÃ³n del menÃº, despuÃ©s de algunos segundos 
+El gestor de arranque EFI elegirá la acción de arranque predeterminada,
+usualmente la primera opción del menú, después de algunos segundos 
 predeterminados.
 Esto es indicado por un contador en la parte inferior de la pantalla.
-Cuando el contador expira y el sistema inicia la acciÃ³n predeterminada,
-puede que tenga que reiniciar la mÃ¡quina para continuar la instalaciÃ³n. Si la
-acciÃ³n predeterminada es Â«EFI ShellÂ», puede volver al gestor de arranque
+Cuando el contador expira y el sistema inicia la acción predeterminada,
+puede que tenga que reiniciar la máquina para continuar la instalación. Si la
+acción predeterminada es «EFI Shell», puede volver al gestor de arranque
 ejecutando <command>exit</command> en la shell.
 </para>
   </warning>
 
   <sect3 arch="ia64" id="bootable-cd">
-  <title>OpciÃ³n 1: Arrancar desde la opciÃ³n de arranque de mantenimiento del menÃº</title>
+  <title>Opción 1: Arrancar desde la opción de arranque de mantenimiento del menú</title>
 <para>
 
 </para>
@@ -103,62 +104,62 @@ ejecutando <command>exit</command> en la shell.
 <itemizedlist>
 
 <listitem><para>
-Inserte el CD en la unidad DVD/CD y reinicia la mÃ¡quina.
-El firmware mostrarÃ¡ la pÃ¡gina del gestor de arranque EFI y el menÃº
-despuÃ©s de que finalice la inicializaciÃ³n del sistema.
+Inserte el CD en la unidad DVD/CD y reinicia la máquina.
+El firmware mostrará la página del gestor de arranque EFI y el menú
+después de que finalice la inicialización del sistema.
 </para></listitem>
 
 <listitem><para>
-Elija <command>Boot From a File</command> desde el menÃº con
+Elija <command>Boot From a File</command> desde el menú con
 las teclas de desplazamiento y pulse <command>ENTER</command>.
-Esto mostrarÃ¡ una lista de dispositivos probados por el firmware.
-DeberÃ¡ obtener dos lÃ­neas de menÃº conteniendo las etiquetas
+Esto mostrará una lista de dispositivos probados por el firmware.
+Deberá obtener dos líneas de menú conteniendo las etiquetas
 <command>Debian Inst [Acpi ...</command> o
 <command>Removable Media Boot</command>.
-Si examina el resto de la lÃ­nea de menÃº, notarÃ¡ que la
-informaciÃ³n del dispositivo y el controlador son las mismas.
+Si examina el resto de la línea de menú, notará que la
+información del dispositivo y el controlador son las mismas.
 </para></listitem>
 
 <listitem><para>
 Puede elegir alguna de las entradas que se refieren a la unidad de
 CD/DVD.
-Escoja su elecciÃ³n con las teclas de desplazamiento y pulse 
+Escoja su elección con las teclas de desplazamiento y pulse 
 <command>ENTER</command>. Si elije <command>Removable Media Boot</command>
-la mÃ¡quina inmediatamente iniciarÃ¡ la secuencia de arranque.
-Si en cambio elije <command>Debian Inst [Acpi ...</command>, Ã©sta
-le mostrarÃ¡ un directorio listando la porciÃ³n arrancable del CD,
-solicitÃ¡ndole que prosiga con el paso siguiente (y adicional).
+la máquina inmediatamente iniciará la secuencia de arranque.
+Si en cambio elije <command>Debian Inst [Acpi ...</command>, ésta
+le mostrará un directorio listando la porción arrancable del CD,
+solicitándole que prosiga con el paso siguiente (y adicional).
 </para></listitem>
 
 <listitem><para>
-NecesitarÃ¡ efectuar este paso solamente si elije
+Necesitará efectuar este paso solamente si elije
 <command>Debian Inst [Acpi ...</command>.
-El listado del directorio tambiÃ©n mostrarÃ¡
-<command>[Treat like Removable Media Boot]</command> en la penÃºltima
-lÃ­nea.
-Elija esta lÃ­nea con las teclas de desplazamiento y pulse 
+El listado del directorio también mostrará
+<command>[Treat like Removable Media Boot]</command> en la penúltima
+línea.
+Elija esta línea con las teclas de desplazamiento y pulse 
 <command>ENTER</command>.
-Esto iniciarÃ¡ la secuencia de arranque.
+Esto iniciará la secuencia de arranque.
 </para></listitem>
 
 </itemizedlist>
 
 <para>
 
-Estos pasos inician el gestor de arranque de Debian el cual mostrarÃ¡
-una pÃ¡gina de menÃº para que elija un nÃºcleo de arranque y opciones.
+Estos pasos inician el gestor de arranque de Debian el cual mostrará
+una página de menú para que elija un núcleo de arranque y opciones.
 Proceda a elegirlas.
 
 </para>
   </sect3>
 
   <sect3 arch="ia64" id="boot-with-efi">
-  <title>OpciÃ³n 2: Arrancar desde el shell de EFI</title>
+  <title>Opción 2: Arrancar desde el shell de EFI</title>
 <para>
 
-Si, por alguna razÃ³n, no tiene Ã©xito usando la opciÃ³n, reinicie la
-mÃ¡quina y cuando aparezca la pantalla de gestor de arranque EFI
-deberÃ¡ haber una opciÃ³n llamada <command>EFI Shell [Built-in]</command>.
+Si, por alguna razón, no tiene éxito usando la opción, reinicie la
+máquina y cuando aparezca la pantalla de gestor de arranque EFI
+deberá haber una opción llamada <command>EFI Shell [Built-in]</command>.
 Arranque el CD del instalador de Debian con los siguientes pasos:
 
 </para>
@@ -166,22 +167,22 @@ Arranque el CD del instalador de Debian con los siguientes pasos:
 <itemizedlist>
 
 <listitem><para>
-Inserte el CD en la unidad DVD/CD y reinicie la mÃ¡quina.
-El firmware mostrarÃ¡ la pÃ¡gina del gestor de arranque EFI despuÃ©s
-que finalice la inicializaciÃ³n del sistema.
+Inserte el CD en la unidad DVD/CD y reinicie la máquina.
+El firmware mostrará la página del gestor de arranque EFI después
+que finalice la inicialización del sistema.
 </para></listitem>
 
 <listitem><para>
-Elija <command>EFI Shell</command> desde el menÃº usando las teclas de
+Elija <command>EFI Shell</command> desde el menú usando las teclas de
 desplazamiento y pulse <command>ENTER</command>.
-El shell EFI buscarÃ¡ todos los dispositivos arrancables y los
-mostrarÃ¡ en la consola antes de mostrar su cursor de ordenes.
+El shell EFI buscará todos los dispositivos arrancables y los
+mostrará en la consola antes de mostrar su cursor de ordenes.
 Las particiones arrancables reconocidas en los dispositivos
-mostrarÃ¡n un nombre de dispositivo de
+mostrarán un nombre de dispositivo de
 <filename>fs<emphasis>n</emphasis>:</filename>.
-Todas las otras particiones reconocidas serÃ¡n nombradas
+Todas las otras particiones reconocidas serán nombradas
 <filename>blk<emphasis>n</emphasis>:</filename>.
-Si inserta un CD despuÃ©s de ingresar al shell, podrÃ­a tomar
+Si inserta un CD después de ingresar al shell, podría tomar
 algunos segundos adicionales mientras inicializa la unidad de CD.
 </para>
 </listitem>
@@ -190,129 +191,129 @@ algunos segundos adicionales mientras inicializa la unidad de CD.
 Examine la salida del shell al buscar la unidad de CDROM.
 Es mas probable que sea el dispositivo <filename>fs0:</filename>,
 aunque otros dispositivos con particiones arrancables 
-tambiÃ©n serÃ¡n mostrados como
+también serán mostrados como
 <filename>fs<emphasis>n</emphasis></filename>.
 </para></listitem>
 
 <listitem><para>
 Escriba <command>fs<emphasis>n</emphasis>:</command> para elegir
-ese dispositivo donde <emphasis>n</emphasis> es el nÃºmero de particiÃ³n
-para el CDROM. Este shell le mostrarÃ¡ ahora el nÃºmero de particiÃ³n
+ese dispositivo donde <emphasis>n</emphasis> es el número de partición
+para el CDROM. Este shell le mostrará ahora el número de partición
 como su cursor.
 </para></listitem>
 
 <listitem><para>
 Escriba <command>elilo</command> y pulse <command>ENTER</command>.
-Esto iniciarÃ¡ la secuencia de arranque.
+Esto iniciará la secuencia de arranque.
 </para></listitem>
 
 </itemizedlist>
 
 <para>
 
-Como en la opciÃ³n 1, estos pasos inician el gestor de arranque de Debian
-que mostrarÃ¡ una pÃ¡gina de menÃº para que elija un nÃºcleo de arranque y
+Como en la opción 1, estos pasos inician el gestor de arranque de Debian
+que mostrará una página de menú para que elija un núcleo de arranque y
 opciones. 
-TambiÃ©n puede introducir la orden corta
+También puede introducir la orden corta
 <command>fs<emphasis>n</emphasis>:elilo</command> en el cursor del
 shell.
-Proceda a elegir el nÃºcleo de arranque y las opciones.
+Proceda a elegir el núcleo de arranque y las opciones.
 
 </para>
 
   </sect3>
 
   <sect3 arch="ia64" id="kernel-option-menu">
-  <title>Elegir el nÃºcleo de arranque y opciones</title>
+  <title>Elegir el núcleo de arranque y opciones</title>
 
 <para>
 
-El gestor de arranque mostrarÃ¡ un menÃº en forma de lista y una
+El gestor de arranque mostrará un menú en forma de lista y una
 ventana de texto con un cursor <classname>Boot:</classname>.
-Las teclas de desplazamiento seleccionan un elemento del menÃº y
-cualquier texto que se escriba en el teclado aparecerÃ¡ en la ventana
+Las teclas de desplazamiento seleccionan un elemento del menú y
+cualquier texto que se escriba en el teclado aparecerá en la ventana
 de texto.
-TambiÃ©n existen ventanas de ayuda que pueden ser mostradas al presionar
-la tecla de funciÃ³n apropiada.
+También existen ventanas de ayuda que pueden ser mostradas al presionar
+la tecla de función apropiada.
 La ventana de ayuda <classname>General</classname> explica las
-opciones del menÃº y la ventana <classname>Params</classname> explica
-las opciones comunes de lÃ­nea de ordenes.
+opciones del menú y la ventana <classname>Params</classname> explica
+las opciones comunes de línea de ordenes.
 
 </para>
 
   <title>Consola de puerto serie</title>
 <para>
-Puede realizar la instalaciÃ³n con monitor y teclado o usar una conexiÃ³n
-serie. Para configurar el monitor/teclado, seleccione la opciÃ³n que contenga
-[VGA console]. Para instalar a travÃ©s de un conexiÃ³n serie, seleccione la opciÃ³n
+Puede realizar la instalación con monitor y teclado o usar una conexión
+serie. Para configurar el monitor/teclado, seleccione la opción que contenga
+[VGA console]. Para instalar a través de un conexión serie, seleccione la opción
 que contenga [<replaceable>BAUD</replaceable> baud serial console], donde
 <replaceable>BAUD</replaceable> es la velocidad de la consola serie.
-Las opciones del menÃº estÃ¡n configuradas de antemano para los baudios mÃ¡s
+Las opciones del menú están configuradas de antemano para los baudios más
 comunes de ttyS0.
 </para>
 <para>
-En la mayorÃ­a de las circunstancias, querrÃ¡ configurar el instalador para usar
-los mismos baudios que su conexiÃ³n a la consola EFI. Si no estÃ¡ seguro del valor
-correcto para este parÃ¡metro, puede obtenerlo con la orden
+En la mayoría de las circunstancias, querrá configurar el instalador para usar
+los mismos baudios que su conexión a la consola EFI. Si no está seguro del valor
+correcto para este parámetro, puede obtenerlo con la orden
 <command>baud</command> en el shell EFI.
 </para>
 <para>
-Si no hay ninguna opciÃ³n disponible ya configurada para dispositivo serie o los
-baudios que desea usar, puede modificar la configuraciÃ³n de una de las opciones
-del menÃº. Por ejemplo, para usar una consola a 57600 baudios a travÃ©s del
+Si no hay ninguna opción disponible ya configurada para dispositivo serie o los
+baudios que desea usar, puede modificar la configuración de una de las opciones
+del menú. Por ejemplo, para usar una consola a 57600 baudios a través del
 dispositivo ttyS1, introduzca <command>console=ttyS1,57600n8</command> en la
 ventana de texto <classname>Boot:</classname>.
 </para>
 
 <note><para>
-La mayorÃ­a de las mÃ¡quinas IA-64 tienen de forma predeterminada una consola de
-9600 baudios. Es bastante poco, y el proceso de instalaciÃ³n normal tardarÃ¡
+La mayoría de las máquinas IA-64 tienen de forma predeterminada una consola de
+9600 baudios. Es bastante poco, y el proceso de instalación normal tardará
 bastante en dibujar cada pantalla. Debe considerar o bien incrementar los
-baudios para realizar la instalaciÃ³n, o realizar la instalaciÃ³n en modo
-texto. Lea el menÃº de ayuda <classname>Params</classname> para obtener
-instrucciones sobre cÃ³mo comenzar el instalador en modo texto.
+baudios para realizar la instalación, o realizar la instalación en modo
+texto. Lea el menú de ayuda <classname>Params</classname> para obtener
+instrucciones sobre cómo comenzar el instalador en modo texto.
 </para></note>
 
 <warning><para>
-Si escoge un tipo de consola incorrecta, podrÃ¡ elegir el nÃºcleo e introducir
-parÃ¡metros pero tanto la visualizaciÃ³n como la entrada se perderÃ¡n tan pronto
-inicie el nÃºcleo, requiriÃ©ndole reiniciar antes de poder empezar la instalaciÃ³n.
+Si escoge un tipo de consola incorrecta, podrá elegir el núcleo e introducir
+parámetros pero tanto la visualización como la entrada se perderán tan pronto
+inicie el núcleo, requiriéndole reiniciar antes de poder empezar la instalación.
 </para></warning>
 
 <para>
 
 Consulte la ventana de ayuda <classname>General</classname> para
-la descripciÃ³n de los nÃºcleos y modos de instalaciÃ³n mas adecuados
-para su instalaciÃ³n.
-TambiÃ©n debe consultar <xref linkend="boot-parms"/> a continuaciÃ³n,
-para cualquier parÃ¡metro adicional que pueda desear definir en la
+la descripción de los núcleos y modos de instalación mas adecuados
+para su instalación.
+También debe consultar <xref linkend="boot-parms"/> a continuación,
+para cualquier parámetro adicional que pueda desear definir en la
 ventana de texto <classname>Boot:</classname>.
-La versiÃ³n del nÃºcleo que elija selecciona la versiÃ³n que serÃ¡
-usada tanto para el proceso de instalaciÃ³n como para el sistema
+La versión del núcleo que elija selecciona la versión que será
+usada tanto para el proceso de instalación como para el sistema
 instalado.
-Si encuentra problemas de nÃºcleo en la instalaciÃ³n, es posible
-que tambiÃ©n tenga estos mismos problemas en el sistema que instale.
-Los siguientes dos pasos elegirÃ¡n e iniciarÃ¡n la instalaciÃ³n:
+Si encuentra problemas de núcleo en la instalación, es posible
+que también tenga estos mismos problemas en el sistema que instale.
+Los siguientes dos pasos elegirán e iniciarán la instalación:
 
 </para>
 
 <itemizedlist>
 
 <listitem><para>
-Elija la versiÃ³n del nÃºcleo y modo de instalaciÃ³n mas adecuado
+Elija la versión del núcleo y modo de instalación mas adecuado
 para sus necesidades con las teclas de desplazamiento.
 </para></listitem>
 
 <listitem><para>
-Introduzca cualquier parÃ¡metro de arranque escribiÃ©ndolo en el teclado.
-El texto serÃ¡ mostrado directamente en la ventana de texto.
-AquÃ­ es donde se especifican los parÃ¡metros del nÃºcleo (como los parÃ¡metros de
+Introduzca cualquier parámetro de arranque escribiéndolo en el teclado.
+El texto será mostrado directamente en la ventana de texto.
+Aquí es donde se especifican los parámetros del núcleo (como los parámetros de
 la consola serie).
 </para></listitem>
 
 <listitem><para>
-Pulse <command>ENTER</command>. Esto cargarÃ¡ e iniciarÃ¡ el nÃºcleo.
-El nÃºcleo mostrarÃ¡ sus mensajes de inicializaciÃ³n usuales, seguido
+Pulse <command>ENTER</command>. Esto cargará e iniciará el núcleo.
+El núcleo mostrará sus mensajes de inicialización usuales, seguido
 por la primera pantalla del instalador de Debian.
 </para></listitem>
 
@@ -322,8 +323,8 @@ por la primera pantalla del instalador de Debian.
 
 <para>
 
-Proceda con el siguiente capÃ­tulo para continuar la instalaciÃ³n, en donde
-configurarÃ¡ su idioma, red y particiones de disco.
+Proceda con el siguiente capítulo para continuar la instalación, en donde
+configurará su idioma, red y particiones de disco.
 
 </para>
   </sect2>
@@ -332,12 +333,12 @@ configurarÃ¡ su idioma, red y particiones de disco.
 
 <para>
 Arrancar un sistema IA64 desde la red es similar a hacerlo desde CD.
-La Ãºnica diferencia es como se carga el nÃºcleo de instalaciÃ³n.
+La única diferencia es como se carga el núcleo de instalación.
 El gestor de arranque EFI puede cargar e iniciar programas desde un
 servidor en la red.
-Una vez que el nÃºcleo es cargado y se inicia, el sistema de instalaciÃ³n
-procederÃ¡ a travÃ©s de los mismos pasos que la instalaciÃ³n de CD
-con la excepciÃ³n de que los paquetes de la instalaciÃ³n base serÃ¡n
+Una vez que el núcleo es cargado y se inicia, el sistema de instalación
+procederá a través de los mismos pasos que la instalación de CD
+con la excepción de que los paquetes de la instalación base serán
 cargados desde la red en lugar de la unidad de CD.
 
 </para>
@@ -346,11 +347,11 @@ cargados desde la red en lugar de la unidad de CD.
 
 <para>
 
-El arranque de red en un sistema ia64 requiere dos acciones especÃ­ficas
+El arranque de red en un sistema ia64 requiere dos acciones específicas
 de arquitectura. En el servidor de arranque. DHCP y TFTP deben ser
 configurados para entregar <command>elilo</command>.
-En el cliente se debe definir una nueva opciÃ³n de arranque en el
-gestor de arranque EFI, para habilitar la carga a travÃ©s de la red.
+En el cliente se debe definir una nueva opción de arranque en el
+gestor de arranque EFI, para habilitar la carga a través de la red.
 
 </para>
 
@@ -358,7 +359,7 @@ gestor de arranque EFI, para habilitar la carga a travÃ©s de la red.
   <title>Configurar el servidor</title>
 <para>
 
-Una entrada apropiada para el arranque a travÃ©s de red de un sistema
+Una entrada apropiada para el arranque a través de red de un sistema
 ia64, es como esta:
 
 <informalexample><screen>
@@ -377,9 +378,9 @@ el cliente.
 </para><para>
 
 Extraiga el fichero <filename>netboot.tar.gz</filename> en el directorio usado
-como raÃ­z para su servidor TFTP. Normalmente los directorios raÃ­z TFTP incluyen
+como raíz para su servidor TFTP. Normalmente los directorios raíz TFTP incluyen
 <filename>/var/lib/tftp</filename> y <filename>/tftpboot</filename>.
-Este fichero crearÃ¡ un Ã¡rbol de directorios <filename>debian-installer</filename> 
+Este fichero creará un árbol de directorios <filename>debian-installer</filename> 
 con los ficheros de arranque para un sistema IA-64.
 
 </para><para>
@@ -394,16 +395,16 @@ con los ficheros de arranque para un sistema IA-64.
 </screen></informalexample>
 
 <filename>netboot.tar.gz</filename> contiene un fichero
-<filename>elilo.conf</filename> que deberÃ­a funcionar en la mayorÃ­a de las
+<filename>elilo.conf</filename> que debería funcionar en la mayoría de las
 configuraciones.  Sin embargo, si necesita cambiar algo, puede encontrarlo en el
 directorio <filename>debian-installer/ia64/</filename>.
 
-Es posible tener diferentes ficheros de configuraciÃ³n para clientes
-distintos al nombrarlos usando la direcciÃ³n IP de los clientes en hexadecimal
+Es posible tener diferentes ficheros de configuración para clientes
+distintos al nombrarlos usando la dirección IP de los clientes en hexadecimal
 con el sufijo <filename>.conf</filename> en lugar de 
 <filename>elilo.conf</filename>.
-Vea la documentaciÃ³n que provee el paquete <classname>elilo</classname>
-para mÃ¡s detalles.
+Vea la documentación que provee el paquete <classname>elilo</classname>
+para más detalles.
 
 </para>
   </sect3>
@@ -418,41 +419,41 @@ arrancando EFI y seleccionando <guimenu>Boot Option Maintenance Menu</guimenu>.
 <itemizedlist>
 <listitem><para>
 
-AÃ±ada una opciÃ³n de arranque.
+Añada una opción de arranque.
 
 </para></listitem>
 <listitem><para>
 
-DeberÃ­a ver una o mÃ¡s lÃ­neas con el texto <guimenuitem>Load File
-[Acpi()/.../Mac()]</guimenuitem>.  Si hay mÃ¡s de una de estas entradas, escoja
-la que tenga la direcciÃ³n MAC de la interfaz desde la que arrancarÃ¡.
-Use las teclas flecha para resaltar su elecciÃ³n, y presione enter.
+Debería ver una o más líneas con el texto <guimenuitem>Load File
+[Acpi()/.../Mac()]</guimenuitem>.  Si hay más de una de estas entradas, escoja
+la que tenga la dirección MAC de la interfaz desde la que arrancará.
+Use las teclas flecha para resaltar su elección, y presione enter.
 
 </para></listitem>
 <listitem><para>
 
 Nombre la entrada como <userinput>Netboot</userinput> o algo similar,
-guarde y salga al menÃº de opciones de arranque.
+guarde y salga al menú de opciones de arranque.
 
 </para></listitem>
 </itemizedlist>
 
-DeberÃ¡ ver la nueva opciÃ³n de arranque que acaba de crear, y eligiÃ©ndola
-deberÃ¡ iniciar una solicitud DHCP, lo que deriva en una carga TFTP de
+Deberá ver la nueva opción de arranque que acaba de crear, y eligiéndola
+deberá iniciar una solicitud DHCP, lo que deriva en una carga TFTP de
 <filename>elilo.efi</filename> desde el servidor.
 
 </para><para>
 
-El gestor de arranque mostrarÃ¡ su cursor despuÃ©s que ha descargado y
-proceso su fichero de configuraciÃ³n. En este punto, la instalaciÃ³n
-se efectÃºa con los mismos pasos que la instalaciÃ³n desde CD. Elija
-la opciÃ³n de arranque como se muestra a continuaciÃ³n y cuando el
-nÃºcleo ha terminado de instalarse a travÃ©s de la red, se iniciarÃ¡
+El gestor de arranque mostrará su cursor después que ha descargado y
+proceso su fichero de configuración. En este punto, la instalación
+se efectúa con los mismos pasos que la instalación desde CD. Elija
+la opción de arranque como se muestra a continuación y cuando el
+núcleo ha terminado de instalarse a través de la red, se iniciará
 el instalador de Debian.
 
 </para><para>
 
-Proceda con el siguiente capÃ­tulo para continuar la instalaciÃ³n
+Proceda con el siguiente capítulo para continuar la instalación
 donde configura el idioma, red y las particiones de
 disco.
 

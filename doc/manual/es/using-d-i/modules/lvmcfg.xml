@@ -1,58 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- retain these comments for translator revision tracking -->
 <!-- original version: 22935 -->
 
    <sect3 id="lvmcfg">
-   <title>ConfiguraciÃ³n del gestor de volÃºmenes lÃ³gicos (LVM)</title>
+   <title>Configuración del gestor de volúmenes lógicos (LVM)</title>
 <para>
 
 Si trabaja con ordenadores como administrador del sistema o usuario
-<quote>avanzado</quote>, seguro que se ha visto en alguna situaciÃ³n en la que
-alguna particiÃ³n del disco (normalmente la mÃ¡s importante) tenÃ­a poco espacio,
-mientras que otras particiones tenÃ­an mucho espacio libre malgastado, y ha
+<quote>avanzado</quote>, seguro que se ha visto en alguna situación en la que
+alguna partición del disco (normalmente la más importante) tenía poco espacio,
+mientras que otras particiones tenían mucho espacio libre malgastado, y ha
 tenido que solucionarlo moviendo cosas de un lado para otro, realizando enlaces
-simbÃ³licos, etc.
+simbólicos, etc.
 
 </para><para>
 
-Para evitar la situaciÃ³n descrita puede usar Logical Volume Manager (N.T. gestor
-de volÃºmenes lÃ³gicos) (LVM). Hablando llanamente, con LVM puede combinar sus
-particiones (<firstterm>volÃºmenes fÃ­sicos</firstterm> en jerga LVM) para formar
-un disco virtual (llamado <firstterm>grupo de volÃºmenes</firstterm>), que puede
-dividirse en particiones virtuales (<firstterm>volÃºmenes
-lÃ³gicos</firstterm>). La gracia estÃ¡ en que los volÃºmenes lÃ³gicos (y por
-supuesto, los grupos de volÃºmenes que hay debajo) pueden extenderse a lo largo
+Para evitar la situación descrita puede usar Logical Volume Manager (N.T. gestor
+de volúmenes lógicos) (LVM). Hablando llanamente, con LVM puede combinar sus
+particiones (<firstterm>volúmenes físicos</firstterm> en jerga LVM) para formar
+un disco virtual (llamado <firstterm>grupo de volúmenes</firstterm>), que puede
+dividirse en particiones virtuales (<firstterm>volúmenes
+lógicos</firstterm>). La gracia está en que los volúmenes lógicos (y por
+supuesto, los grupos de volúmenes que hay debajo) pueden extenderse a lo largo
 de varios discos.
 
 </para><para>
 
-Ahora, cuando se de cuenta de que necesita mÃ¡s espacio para su vieja particiÃ³n
-<filename>/home</filename> de 160GB, simplemente, puede aÃ±adir un nuevo disco de
- 300GB al ordenador, unirlo a su nuevo grupo de volÃºmenes, y entonces
-redimensionar el volumen lÃ³gico que sostiene su sistema de ficheros
+Ahora, cuando se de cuenta de que necesita más espacio para su vieja partición
+<filename>/home</filename> de 160GB, simplemente, puede añadir un nuevo disco de
+ 300GB al ordenador, unirlo a su nuevo grupo de volúmenes, y entonces
+redimensionar el volumen lógico que sostiene su sistema de ficheros
 <filename>/home</filename> y listo - sus usuarios vuelven a tener espacio en su
-nueva particiÃ³n de 460GB. Por supuesto que este ejemplo estÃ¡
-demasiado simplificado. Si aÃºn no lo ha leÃ­do, deberÃ­a consultar el
-<ulink url="&url-lvm-howto;">CÃ“MO LVM</ulink>.
+nueva partición de 460GB. Por supuesto que este ejemplo está
+demasiado simplificado. Si aún no lo ha leído, debería consultar el
+<ulink url="&url-lvm-howto;">CÓMO LVM</ulink>.
 
 </para><para>
 
-La configuraciÃ³n LVM con el &d-i; es bastante simple. Primero, tiene que marcar
-las particiones que va a usar con volÃºmenes fÃ­sicos para el LVM. (Esto se hace
-con <command>partman</command> en el menÃº <guimenu>ConfiguraciÃ³n de la
-particiÃ³n:</guimenu> donde puede seleccionar <menuchoice> <guimenu>Utilizar
-como:</guimenu> <guimenuitem>volumen fÃ­sico para LVM</guimenuitem>
-</menuchoice>.) Entonces ejecute el mÃ³dulo <command>lvmcfg</command> (o bien
-directamente con <command>partman</command> o desde el menÃº principal del &d-i;)
-y combine los volÃºmenes fÃ­sicos en grupo(s) de volÃºmenes debajo del menÃº
-<guimenuitem>Modificar grupos de volÃºmenes (VG)</guimenuitem> 
-<!-- verificar la traducciÃ³n de este guimenuitem -->. DespuÃ©s de esto, debe
-crear volÃºmenes lÃ³gicos encima de los grupos de volÃºmenes desde el menÃº
-<guimenuitem>Modificar grupos de volÃºmenes (LV)</guimenuitem>.
+La configuración LVM con el &d-i; es bastante simple. Primero, tiene que marcar
+las particiones que va a usar con volúmenes físicos para el LVM. (Esto se hace
+con <command>partman</command> en el menú <guimenu>Configuración de la
+partición:</guimenu> donde puede seleccionar <menuchoice> <guimenu>Utilizar
+como:</guimenu> <guimenuitem>volumen físico para LVM</guimenuitem>
+</menuchoice>.) Entonces ejecute el módulo <command>lvmcfg</command> (o bien
+directamente con <command>partman</command> o desde el menú principal del &d-i;)
+y combine los volúmenes físicos en grupo(s) de volúmenes debajo del menú
+<guimenuitem>Modificar grupos de volúmenes (VG)</guimenuitem> 
+<!-- verificar la traducción de este guimenuitem -->. Después de esto, debe
+crear volúmenes lógicos encima de los grupos de volúmenes desde el menú
+<guimenuitem>Modificar grupos de volúmenes (LV)</guimenuitem>.
 
 </para><para>
 
-DespuÃ©s de volver de <command>lvmcfg</command> a <command>partman</command>,
-verÃ¡ los volÃºmenes lÃ³gicos como si fuesen particiones ordinarias (y debe
+Después de volver de <command>lvmcfg</command> a <command>partman</command>,
+verá los volúmenes lógicos como si fuesen particiones ordinarias (y debe
 tratarlas como tales).
 
 </para>
