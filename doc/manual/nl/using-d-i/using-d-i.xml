@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: using-d-i.xml,v 1.6 2004/03/16 17:17:09 mck-guest Exp $ -->
+
+ <chapter id="d-i-intro"><title>Het Debian installatiesysteem gebruiken</title>
+
+ <sect1><title>Hoe het installatiesysteem werkt</title>
+<para>
+
+Het Debian installatiesysteem bestaat uit een aantal modules die
+zijn ontwikkeld om een specifieke taak uit te voeren tijdens de installatie.
+Elke module voert zijn taak uit, waarbij vragen kunnen worden gesteld
+aan de gebruiker als dat voor die taak nodig is. Als er geen probleem optreedt,
+wordt vervolgd met de eerstvolgende module in de cyclus zonder dat
+daarvoor interactie met de gebruiker nodig is (anders dan voortgangsinformatie).
+Als er wel een probleem optreedt, wordt een scherm met een foutboodschap getoond
+en kan het menu van het installatiesysteem worden getoond zodat de gebruiker
+een alternatieve actie kan selecteren. Als er geen problemen zijn, zal de
+gebruiker het menu van het installatiesysteem nooit zien, maar gewoon de
+achtereenvolgende vragen voor iedere module beantwoorden.
+
+</para><para>
+
+Aan de vragen zelf wordt een prioriteit toegekend. En de prioriteit van de
+vragen die moeten worden gesteld, kan worden ingesteld.
+Dit betekent dat, als voor de prioriteit HIGH (de standaard waarde) is
+gekozen èn het installatiesysteem zelf kan bepalen welke acties nodig zijn
+èn het niet noodzakelijk is dat de gebruiker op de hoogte is van mogelijke
+alternatieve keuzen, dan zal het installatiesysteem zelf de keuze maken en
+de vraag niet tonen. Meldingen van kritische fouten hebben een prioriteit
+CRITICAL waardoor de gebruiker altijd geïnformeerd zal worden.
+<!-- FJP Ik weet niet of de originele tekst helemaal logisch is.
+Volgens mij zou de tweede zin moeten zijn (hij loopt trouwens ook niet):
+Thus, if the priority is set to HIGH (the default value), and the installer
+knows what to do, and the user ... //-->
+<!-- FJP Prioriteiten in caps (gebeurt ook later in tekst) //-->
+
+</para><para>
+
+Het is mogelijk dat gevorderde gebruikers zich meer thuis voelen met een
+menugestuurde interface, waarbij niet het installatiesysteem automatisch
+elke stap in volgorde uitvoert maar elke stap door de gebruiker zelf
+wordt bepaald. Om het installatiesysteem op een handmatige, menugestuurde
+manier uit te voeren, moet het opstartargument
+<userinput>DEBCONF_PRIORITY=medium</userinput> worden toegevoegd.
+<!-- FJP 'opstartargument'? //-->
+
+</para><para>
+
+De standaard schermweergave van het installatiesysteem is karakter georiënteerd
+(dit in tegenstelling tot de tegenwoordig meer vertrouwde grafische interface).
+De muis is in deze omgeving niet actief. Dit zijn de toetsen waarmee u kunt
+navigeren binnen de diverse configuratieschermen. Om `vooruit' of `terug' te gaan
+tussen getoonde knoppen of selecties, gebruikt u de  pijl <keycap>rechts</keycap>
+of <keycap>Tab</keycap> toets, respectievelijk de pijl <keycap>links</keycap> of
+<keycombo> <keycap>Shift</keycap> <keycap>Tab</keycap> </keycombo>. Met de pijlen
+<keycap>omhoog</keycap> en <keycap>omlaag</keycap> selecteert u de verschillende
+regels in een schuifbare lijst en verschuift u ook de lijst zelf. Daarnaast
+kunt u, bij lange lijsten, een letter intoetsen waadoor meteen het deel van de
+lijst zal worden getoond waarvan de regels met die letter beginnen. Ook kunt
+u met <keycap>Pagina&nbsp;omhoog</keycap> en <keycap>Pagina&nbsp;omlaag</keycap>
+de lijst per pagina verschuiven. Met de <keycap>spatiebalk</keycap> selecteert u
+opties, bijvoorbeeld bij een keuzevak. Gebruik &enterkey; om keuzes te activeren.
+<!-- FJP Pijlen en tabtoetsen beter andersom (eerst tab)! //-->
+
+</para><para arch="s390">
+
+S/390 ondersteunt geen virtuele consoles. U kunt echter een tweede en derde
+telnet sessie openen om de hieronder beschreven logboeken te bekijken.
+
+</para><para>
+
+Foutmeldingen worden omgeleid naar de derde console (bekend als 
+<userinput>tty3</userinput>). U kunt toegang krijgen tot deze console door
+op <keycombo><keycap>linker Alt</keycap><keycap>F3</keycap></keycombo>
+te drukken (houd de <keycap>linker Alt</keycap> toets vast terwijl u de 
+<keycap>F3</keycap> functietoets indrukt); u keert terug naar het hoofd
+installatiescherm met
+<keycombo><keycap>linker Alt</keycap><keycap>F1</keycap></keycombo>.
+
+</para><para>
+
+Deze meldingen kunnen ook worden teruggevonden in 
+<filename>/var/log/messages</filename>. Na de installatie wordt dit logbestand
+gekopieerd naar <filename>/var/log/installer.log</filename> op uw nieuwe
+systeem. Andere installatiemeldingen kunnen tijdens de installatie worden
+gevonden in <filename>/target/var/log/debian-installer/</filename> en, nadat de
+computer opnieuw is opgestart met het nieuwe systeem, in
+<filename>/var/log/debian-installer/</filename>.
+</para>
+ </sect1>
+
+
+ <sect1 id="modules-list"><title>Introductie van de modules</title>
+<para>
+
+<!-- FJP
+Here is a list of installer components with a brief description
+of each component's purpose. Details you might need to know about
+using a particular component are in <xref linkend="module-details"/>.//-->
+Hieronder vindt u een lijst van de modules van het installatiesysteem
+met een korte beschrijving van het doel van elke module. Details over
+het gebruik van een specifieke module staan in <xref linkend="module-details"/>.
+<!-- FJP Toevoegen dat welke modules verplicht/optioneel zijn? //-->
+
+</para>
+
+<variablelist>
+<varlistentry>
+
+<term>main-menu</term><listitem><para>
+De module 'main-menu' (hoofdmenu) toont tijdens de installatie de
+lijst met modules aan de gebruiker en start een module wanneer deze
+geselecteerd wordt. De vragen van deze module hebben prioriteit MEDIUM;
+dit betekent dat u het menu niet zult zienals u de prioriteit voor
+de installatie heeft ingesteld op HIGH of CRITICAL (HIGH is de
+standaardwaarde). Indien er echter een fout optreedt waarvoor uw
+interventie nodig is, kan de prioriteit tijdelijk worden verlaagd om
+u in de gelegenheid te stellen het probleem op te lossen en in dat
+geval kan dus het menu alsnog verschijnen.
+<!-- FJP: 'selected when it is selected' ?! //-->
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>languagechooser</term><listitem><para>
+
+De module 'languagechooser' (taalkiezer) toont een lijst van talen en
+varianten daarvan. Tijdens de installatie zullen boodschappen in de gekozen
+taal worden getoond, tenzij de vertaling voor die taal niet compleet is. Als
+een vertaling niet compleet is, worden de boodschappen in het Engels getoond.
+<!-- FJP Mogelijk hier toevoegen waarom dat relevant is?
+Alleen installer of ook defaulttaal van nieuwe systeem? //-->
+<!-- FJP Toevoegen?: als u uw systeem Engelstalig wilt hebben, kies dan als taal
+'??? (en)' (niet en_US!); u kunt daarna alsnog als land Nederland kiezen. -->
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>countrychooser</term><listitem><para>
+
+De module 'countrychooser' (landkiezer) toont een lijst van landen waaruit de
+gebruiker het land waar hij woont kan kiezen.
+<!-- FJP Mogelijk hier toevoegen waarom dat relevant is?
+Alleen keuze mirror of ook Localization in nieuwe systeem? //-->
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>ddetect</term><listitem><para>
+
+Detecteert harde schijven, zowel interne als extern op de computer aangesloten.
+<!-- FJP Is dit de juiste interpretatie? Vreemde tekst. //-->
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>pcmcia</term><listitem><para>
+
+Stelt de gebruiker in staat om PCMCIA-kaarten te configureren die in laptops worden
+gebruikt voor netwerktoegang.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>kbd-chooser</term><listitem><para>
+
+De module 'kbd-chooser' (toetsenbordkiezer) toont een lijst van toetsenborden
+waaruit de gebruiker het model kan kiezen dat overeenkomt met zijn toetsenbord.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>netcfg</term><listitem><para>
+
+Configureert de netwerkverbindingen van de computer zodat deze verbinding kan maken
+met het Internet.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>iso-scan</term><listitem><para>
+
+Zoekt naar ISO-bestandssystemen die zich zowel op een CD als op de harde schijf
+kunnen bevinden.
+<!-- FJP Dit zegt nog niet erg veel. //-->
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>choose-mirror</term><listitem><para>
+
+Deze module toont een overzicht van mirrors met het Debian Archief.
+De gebruiker kan hiermee de bron voor de installatie van Debian pakketten kiezen.
+Gewoonlijk wordt hier een CD of een mirror gekozen.
+<!-- FJP Hè, een CD is toch geen mirror??? Betere uitleg gewenst. //-->
+<!-- FJP Vertaling mirror? //-->
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>cdrom-detect</term><listitem><para>
+
+Detecteert CD-stations, zowel interne als extern op de computer aangesloten.
+<!-- FJP Wat is relatie met iso-scan? //-->
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>anna</term><listitem><para>
+
+Het acronym 'anna' staat voor "Anna's Not Nearly APT". Deze module installeert
+pakketten die zijn opgehaald vanaf de gekozen mirror.
+<!-- FJP Alle pakketten of alleen installatiesysteem? //-->
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>partman</term><listitem><para>
+
+De module 'partman' (partitie-manager) stelt de gebruiker in staat om
+harde schijven die met het systeem verbonden zijn, in te delen, bestandssystemen
+te creëren op geselecteerde partities en deze aan te sluiten op mountpunten.
+Daarnaast kent 'partman' interessante functies als het volledig geautomatiseerd
+indelen van een harde schijf en ondersteuning van LVM. Voor Debian geniet 'partman'
+de voorkeur als hulpmiddel voor het indelen van harde schijven.
+<!-- FJP Ook op andere media dan harde schijven (b.v. USB memory sticks)? //-->
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>autopartkit</term><listitem><para>
+
+Voert een automatische schijfindeling uit van een hele harde schijf op basis van
+vooraf gedefinieerde gebruikersvoorkeuren.
+<!-- FJP Zijn dit voorkeuren van de gebruiker of van het d-i team? //-->
+<!-- FJP Ook op andere media dan harde schijven (b.v. USB memory sticks)? //-->
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>partitioner</term><listitem><para>
+
+Maakt het mogelijk om harde schijven in te delen die zijn aangesloten op het
+systeem. Er wordt een schijfindelingsprogramma gekozen dat past bij het platform
+waartoe uw computer behoort.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>partconf</term><listitem><para>
+
+Toont een overzicht van partities en creëert bestandssystemen op de
+geselecteerde partities volgens de instructies van de gebruiker.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>base-installer</term><listitem><para>
+
+Installeert een basisset van pakketten die het mogelijk maken om de
+computer, nadat deze opnieuw is opgestart, onder Linux te laten
+functioneren.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>kernel-chooser</term><listitem><para>
+
+Stelt de gebruiker in staat om een bepaalde versie van de kernel van
+het besturingssysteem te kiezen als er meer dan één versie beschikbaar is.
+<!-- FJP Toevoegen? ... die past bij uw hardware. //-->
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>bootloader-installer</term><listitem><para>
+
+Installeert een opstartlader (boot loader) programma op de harde schijf. Dit
+is noodzakelijk om de computer onder Linux te laten opstarten zonder een
+diskette of CD te gebruiken. Veel opstartladers kennen de mogelijkheid om
+de gebruiker &mdash; elke keer dat de computer wordt opgestart &mdash; te
+laten kiezen uit verschillende besturingssystemen.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>baseconfig</term><listitem><para>
+
+Voorziet in configurartieschermen om de pakketten van het basissysteem in te
+stellen conform de voorkeuren van de gebruiker. Dit gebeurt normaal gesproken
+nadat de computer voor de eerste keer opnieuw is opgestart.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>shell</term><listitem><para>
+
+Stelt de gebruiker in staat vanuit het menu of in de tweede console
+een shell te starten.
+<!-- FJP Vertaling 'shell'? Zie ook 'what-is-linux.xml' //-->
+<!-- FJP Welke shell is beschikbaar? //-->
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>bugreporter</term><listitem><para>
+
+Stelt de gebruiker in staat om, wanneer problemen worden tegengekomen,
+informatie op een diskette vast te leggen. Hiermee kan later een nauwkeurig
+verslag van problemen met het installatiesysteem worden gestuurd aan de
+Debian ontwikkelaars.
+
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+
+ </sect1>
+
+
+ <sect1 id="module-details"><title>Individuele modules gebruiken</title>
+
+&module-languagechooser.xml;
+&module-countrychooser.xml;
+&module-s390-netdevice.xml;
+&module-s390-dasd.xml;
+&module-ddetect.xml;
+&module-pcmcia.xml;
+&module-kbd-chooser.xml;
+&module-netcfg.xml;
+&module-iso-scan.xml;
+&module-choose-mirror.xml;
+&module-cdrom-detect.xml;
+&module-anna.xml;
+&module-partman.xml;
+&module-autopartkit.xml;
+&module-partitioner.xml;
+&module-partconf.xml;
+&module-prebaseconfig.xml;
+&module-base-installer.xml;
+&module-kernel-chooser.xml;
+
+&module-mips-arcboot-installer.xml;
+&module-alpha-aboot-installer.xml;
+&module-i386-grub-installer.xml;
+&module-i386-lilo-installer.xml;
+&module-hppa-palo-installer.xml;
+&module-ia64-elilo-installer.xml;
+&module-s390-zipl-installer.xml;
+&module-powerpc-yaboot-installer.xml;
+&module-sparc-silo-installer.xml;
+
+&module-baseconfig.xml;
+&module-bugreporter.xml;
+&module-shell.xml;
+
+ </sect1>
+</chapter>
