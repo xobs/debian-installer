@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 11573 -->
+<!-- original version: 19099 -->
 
  <sect1 id="install-overview">
  <title>Overzicht van het installatieproces</title>
@@ -81,7 +81,7 @@ kunnen opstarten vanaf één van de CDs).
 Start de computer op met het installatiesysteem.
 
 </para></listitem>
-<listitem><para>
+<listitem arch="not-s390"><para>
 
 Selecteer de taal voor het installatiesysteem.
 
@@ -99,7 +99,7 @@ Configureer één netwerkinterface.
 </para></listitem>
 <listitem arch="s390"><para>
 
-Open een telnetverbinding met het nieuwe systeem.
+Open een ssh-verbinding met het nieuwe systeem.
 
 </para></listitem>
 <listitem arch="s390"><para>
@@ -131,6 +131,11 @@ Start de computer opnieuw op met het nieuw geïnstalleerde systeem en verzorg
 enkele initiële systeeminstellingen.
 
 </para></listitem>
+<listitem arch="s390"><para>
+
+Open een ssh-verbinding met het nieuwe systeem.
+
+</para></listitem>
 <listitem><para>
 
 Installeer aanvullende software (<firstterm>taken</firstterm>
@@ -149,28 +154,28 @@ installatietheater.
 </para><para>
 
 De installatiesoftware, <classname>debian-installer</classname>, is het
-voornaamste onderwerp van deze handleiding. Zij stuurt afhankelijk van
-het platform de juiste schijfindeler aan, installeert de Linux kernel en
-houdt vervolgens toezicht over: <classname>modconf</classname> voor het laden
-van specifieke stuurprogramma's voor hardware, <classname>dhclient</classname>
-voor het opzetten van de netwerkverbinding, <classname>debootstrap</classname>
-voor de installatie van de pakketten voor het basissysteem, en
-&boot-loader-installer;, het installatieprogramma voor de opstartlader. 
+voornaamste onderwerp van deze handleiding. Zij verzorgt de herkenning van
+hardware en laadt geschikte stuurprogramma's, gebruikt
+<classname>dhclient</classname> voor het opzetten van de netwerkverbinding,
+en start <classname>debootstrap</classname> voor de installatie van de pakketten
+voor het basissysteem.
+Er zijn nog veel meer actoren die elk een kleinere rol spelen in dit proces, maar
+<classname>debian-installer</classname> heeft haar taak volbracht op het moment
+dat u het nieuwe systeem voor het eerst opstart.
 
 </para><para>
 
 Nadat uw nieuwe basissysteem is geladen, draagt
 <classname>base-config</classname> zorg voor het aanmaken van gebruikers,
-het instellen van de tijdzone en het configureren van het installatiesysteem
-voor pakketten. Vervolgens zal het aanbieden om <classname>tasksel</classname>
-(waarmee u grote groepen gerelateerde programma's kunt selecteren voor
-installatie) te starten en daarna <classname>aptitude</classname> (waarmee
-individuele programma's geselecteerd kunnen worden).
+het instellen van de tijdzone (via <classname>tzsetup</classname>) en het
+configureren van het installatiesysteem voor pakketten (gebruik makend van
+<classname>apt-setup</classname>). Vervolgens wordt <classname>tasksel</classname>
+gestart waarmee u grote groepen gerelateerde programma's kunt selecteren voor
+installatie en waarbinnen u desgewenst <classname>aptitude</classname> kan startem
+waarmee u individuele programma's kunt selecteren.
 
 <!-- FJP Ik mis hier een beschrijving (of afzonderlijke stap)van het daadwerkelijk
-installeren van de geselecteerde pakketten.
-Tasksel is optioneel (gelukkig maar want ik haat het ;-)
-dselect als alternatief ontbreekt (in H1 wel genoemd...). //-->
+installeren van de geselecteerde pakketten. //-->
 
 </para><para>
 
@@ -190,7 +195,7 @@ gebruikersinterface.
 Is mijn vrije vertaling een verbetering?
 Zou dit hele onderwerp niet beter eerder in de handleiding behandeld kunnen worden? //-->
 
-</para><para>
+</para><para arch="not-s390">
 
 U dient zich ervan bewust te zijn dat het X Window System volledig los staat
 van <classname>debian-installer</classname> en in feite veel complexer is.

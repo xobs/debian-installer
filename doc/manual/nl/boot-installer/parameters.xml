@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 17333 untranslated -->
+<!-- original version: 18672 untranslated -->
 
  <sect1 id="boot-parms"><title>Boot Parameters</title>
 <para>
@@ -12,7 +12,7 @@ However, in some cases you'll have to help the kernel a bit.
 </para><para>
 
 If this is the first time you're booting the system, try the default
-boot parameters (i.e., don't try setting arguments) and see if it works
+boot parameters (i.e., don't try setting parameters) and see if it works
 correctly. It probably will.  If not, you can reboot later and look for
 any special parameters that inform the system about your hardware.
 
@@ -45,12 +45,6 @@ suffixed with ``k'' for kilobytes, or ``m'' for megabytes.  For
 example, both <userinput>mem=65536k</userinput> and
 <userinput>mem=64m</userinput> mean 64MB of RAM.
 
-</para><para>
-
-If your monitor is only capable of black-and-white, use the
-<userinput>mono</userinput> boot argument.  Otherwise, your
-installation will use color, which is the default.
-
 </para><para condition="supports-serial-console">
 
 If you are booting with a serial console, generally the kernel will
@@ -75,17 +69,17 @@ Alternatively, set the <envar>input-device</envar> and
 </para>
 
 
-  <sect2 id="installer-args"><title>Debian Installer Arguments</title>
+  <sect2 id="installer-args"><title>Debian Installer Parameters</title>
 <para>
 
-The installation system recognizes a few boot arguments which may be
-useful. 
+The installation system recognizes a few additional boot parameters which may
+be useful. 
 
 </para>
 
 <variablelist>
 <varlistentry>
-<term>DEBCONF_PRIORITY</term>
+<term>debconf/priority</term>
 <listitem><para>
 
 This parameter settings will set the highest priority of messages
@@ -93,18 +87,18 @@ to be displayed.
 
 </para><para>
 
-The default installation uses <userinput>DEBCONF_PRIORITY=high</userinput>.
+The default installation uses <userinput>debconf/priority=high</userinput>.
 This means that both high and critical priority messages are shown, but medium
 and low priority messages are skipped. 
 If problems are encountered, the installer adjusts the priority as needed.
 
 </para><para>
 
-If you add <userinput>DEBCONF_PRIORITY=medium</userinput> as boot parameter, you
+If you add <userinput>debconf/priority=medium</userinput> as boot parameter, you
 will be shown the installation menu and gain more control over the installation.
-When <userinput>DEBCONF_PRIORITY=low</userinput> is used, all messages are shown
+When <userinput>debconf/priority=low</userinput> is used, all messages are shown
 (this is equivalent to the <emphasis>expert</emphasis> boot method).
-With <userinput>DEBCONF_PRIORITY=critical</userinput>, the installation system
+With <userinput>debconf/priority=critical</userinput>, the installation system
 will display only critical messages and try to do the right thing without fuss.
 
 </para></listitem>
@@ -112,7 +106,7 @@ will display only critical messages and try to do the right thing without fuss.
 
 
 <varlistentry>
-<term>DEBCONF_FRONTEND</term>
+<term>debconf/frontend</term>
 <listitem><para>
 
 This boot parameter controls the type of user interface used for the
@@ -120,28 +114,28 @@ installer. The current possible parameter settings are:
 
 <itemizedlist>
 <listitem>
-<para><userinput>DEBCONF_FRONTEND=noninteractive</userinput></para>
+<para><userinput>debconf/frontend=noninteractive</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=text</userinput></para>
+<para><userinput>debconf/frontend=text</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=newt</userinput></para>
+<para><userinput>debconf/frontend=newt</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=slang</userinput></para>
+<para><userinput>debconf/frontend=slang</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=ncurses</userinput></para>
+<para><userinput>debconf/frontend=ncurses</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=bogl</userinput></para>
+<para><userinput>debconf/frontend=bogl</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=gtk</userinput></para>
+<para><userinput>debconf/frontend=gtk</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=corba</userinput></para>
+<para><userinput>debconf/frontend=corba</userinput></para>
 </listitem>
 </itemizedlist>
 
-The default front end is <userinput>DEBCONF_FRONTEND=newt</userinput>.
-<userinput>DEBCONF_FRONTEND=text</userinput> may be preferable for
-serial console installs. Other frontends but
-<userinput>newt</userinput> are not available on default install
+The default front end is <userinput>debconf/frontend=newt</userinput>.
+<userinput>debconf/frontend=text</userinput> may be preferable for
+serial console installs. Generally only the
+<userinput>newt</userinput> frontend is available on default install
 media, so this is not very useful right now.
 
 </para></listitem>
@@ -267,6 +261,15 @@ the network with DHCP and to enter the information manually.
 Set to <userinput>false</userinput> to prevent starting PCMCIA
 services, if that causes problems. Some laptops are well known for
 this misbehaviour.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>ramdisk_size</term>
+<listitem><para>
+
+If you are using a 2.2.x kernel, you may need to set &ramdisksize;.
 
 </para></listitem>
 </varlistentry>

@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 16990 untranslated -->
+<!-- original version: 18640 untranslated -->
 
  <sect1 id="module-details">
  <title>Using Individual Components</title>
@@ -21,9 +21,9 @@ the installation method you use and on your hardware.
 Let's assume the Debian Installer has booted and you are facing its
 first screen.  At this time, the capabilities of &d-i; are still quite
 limited. It doesn't know much about your hardware, preferred language,
-or even the task it should fulfill. Don't worry. Because &d-i; is quite
+or even the task it should perform. Don't worry. Because &d-i; is quite
 clever, it can automatically probe your hardware, locate the rest
-of its components and upgrade itself to a modern, well-built program.
+of its components and upgrade itself to a capable installation system.
 
 However, you still need to help &d-i; with some information it can't
 determine automatically (like selecting your preferred language, keyboard
@@ -45,18 +45,12 @@ hardware detection needs to be repeated later in the process.
 &module-kbd-chooser.xml;
 &module-s390-netdevice.xml;
 &module-s390-dasd.xml;
-&module-pcmcia.xml;
-&module-cdrom-detect.xml;
 &module-ddetect.xml;
+&module-cdrom-detect.xml;
 &module-iso-scan.xml;
-<!--
-&module-load-components;
-Insert Load installer components here; mention that it is executed later
-(after netcfg and choose mirror) if netboot installation.
--->
+&module-anna.xml;
 &module-netcfg.xml;
 &module-choose-mirror.xml;
-&module-anna.xml; <!-- should probably not be included -->
 
   </sect2>
 
@@ -68,7 +62,7 @@ At this time, after hardware detection has been executed a final time,
 &d-i; should be at its full strength, customized for the user's needs
 and ready to do some real work.
 
-As the title of this chapter indicates, the main task of the next few
+As the title of this section indicates, the main task of the next few
 components lies in partitioning your disks, creating filesystems,
 assigning mountpoints and optionally configuring closely related issues
 like LVM or RAID devices.
@@ -95,26 +89,26 @@ take some time.
 </para>
 
 &module-base-installer.xml;
-&module-kernel-chooser.xml;
   </sect2>
 
   <sect2>
   <title>Making Your System Bootable</title>
-<para>
 
-Note that multiple operating systems booting on a single machine is
-still something of a black art.  This document does not even attempt
-to document the various boot managers, which vary by architecture and
-even by subarchitecture.  You should see your boot manager's
-documentation for more information.
-
-</para><para condition="supports-nfsroot">
+<para condition="supports-nfsroot">
 
 If you are installing a diskless workstation, obviously, booting off
 the local disk isn't a meaningful option, and this step will be
 skipped. <phrase arch="sparc">You may wish to set the OpenBoot to boot
 from the network by default; see <xref
 linkend="boot-dev-select-sun"/>.</phrase>
+
+</para><para>
+
+Note that multiple operating systems booting on a single machine is
+still something of a black art.  This document does not even attempt
+to document the various boot managers, which vary by architecture and
+even by subarchitecture.  You should see your boot manager's
+documentation for more information.
 
 </para>
 
@@ -156,9 +150,9 @@ user in case something goes wrong.
 
 </para>
 
-&module-baseconfig.xml;
 &module-bugreporter.xml;
 &module-cdrom-checker.xml;
 &module-shell.xml;
+&module-baseconfig.xml;
   </sect2>
  </sect1>

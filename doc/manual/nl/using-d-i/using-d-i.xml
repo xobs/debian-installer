@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 17333 -->
+<!-- original version: 19074 -->
 
  <chapter id="d-i-intro"><title>Het Debian installatiesysteem gebruiken</title>
 
@@ -50,7 +50,7 @@ menugestuurde interface, waarbij niet het installatiesysteem automatisch
 elke stap in volgorde uitvoert maar elke stap door de gebruiker zelf
 wordt bepaald. Om het installatiesysteem op een handmatige, menugestuurde
 manier uit te voeren, moet de opstartparameter
-<userinput>DEBCONF_PRIORITY=medium</userinput> worden toegevoegd.
+<userinput>debconf/priority=medium</userinput> worden toegevoegd.
 
 </para><para>
 
@@ -58,7 +58,7 @@ Als het voor uw apparatuur noodzakelijk is om parameters mee te geven bij de
 installatie van kernelmodules, dan zal u het installatiesysteem moeten starten
 in de <quote>expert</quote> modus. Dit is mogelijk door voor het opstarten
 van het installatiesysteem ofwel het commando <command>expert</command> te
-gebruiken ofwel de opstartparameter <userinput>DEBCONF_PRIORITY=low</userinput>
+gebruiken ofwel de opstartparameter <userinput>debconf/priority=low</userinput>
 toe te voegen. De expert modus geeft u volledige controle over &d-i;.
 
 </para><para>
@@ -81,12 +81,12 @@ opties, bijvoorbeeld bij een keuzevak. Gebruik &enterkey; om keuzes te activeren
 </para><para arch="s390">
 
 S/390 ondersteunt geen virtuele consoles. U kunt echter een tweede en derde
-telnet sessie openen om de hieronder beschreven logboeken te bekijken.
+ssh sessie openen om de hieronder beschreven logboeken te bekijken.
 
 </para><para>
 
-Foutmeldingen worden omgeleid naar de derde console (bekend als 
-<userinput>tty3</userinput>). U kunt toegang krijgen tot deze console door
+Foutmeldingen worden omgeleid naar de derde console.
+U kunt toegang krijgen tot deze console door
 op <keycombo><keycap>linker Alt</keycap><keycap>F3</keycap></keycombo>
 te drukken (houd de linker <keycap>Alt</keycap> toets vast terwijl u de 
 <keycap>F3</keycap> functietoets indrukt); u keert terug naar het hoofd
@@ -97,10 +97,10 @@ installatiescherm met
 
 Deze meldingen kunnen ook worden teruggevonden in 
 <filename>/var/log/messages</filename>. Na de installatie wordt dit logbestand
-gekopieerd naar <filename>/var/log/installer.log</filename> op uw nieuwe
-systeem. Andere installatiemeldingen kunnen tijdens de installatie worden
-gevonden in <filename>/target/var/log/debian-installer/</filename> en, nadat de
-computer opnieuw is opgestart met het nieuwe systeem, in
+gekopieerd naar <filename>/var/log/debian-installer/messages</filename> op uw
+nieuwe systeem. Andere installatiemeldingen kunnen tijdens de installatie worden
+gevonden in <filename>/var/log/</filename> en, nadat de computer opnieuw is
+opgestart met het nieuwe systeem, in
 <filename>/var/log/debian-installer/</filename>.
 </para>
  </sect1>
@@ -123,13 +123,18 @@ het gebruik van een specifieke module staan in <xref linkend="module-details"/>.
 De module 'main-menu' (hoofdmenu) toont tijdens de installatie de
 lijst met modules aan de gebruiker en start een module wanneer deze
 geselecteerd wordt. De vragen van deze module hebben prioriteit MEDIUM;
-dit betekent dat u het menu niet zult zienals u de prioriteit voor
+dit betekent dat u het menu niet zult zien als u de prioriteit voor
 de installatie heeft ingesteld op HIGH of CRITICAL (HIGH is de
 standaardwaarde). Indien er echter een fout optreedt waarvoor uw
 interventie nodig is, kan de prioriteit tijdelijk worden verlaagd om
 u in de gelegenheid te stellen het probleem op te lossen en in dat
 geval kan dus het menu alsnog verschijnen.
-<!-- FJP: 'selected when it is selected' ?! //-->
+
+</para><para>
+
+U kunt het hoofdmenu van het installatiesysteem bereiken door herhaaldelijk
+de "Terug" knop te selecteren, waardoor u stapsgewijs teruggaat uit de op dat
+moment actieve module.
 
 </para></listitem>
 </varlistentry>
@@ -161,28 +166,27 @@ Alleen keuze mirror of ook Localization in nieuwe systeem? //-->
 </varlistentry>
 <varlistentry>
 
-<term>ddetect</term><listitem><para>
-
-Detecteert harde schijven, zowel interne als extern op de computer aangesloten.
-<!-- FJP Is dit de juiste interpretatie? Vreemde tekst. //-->
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
-<term>pcmcia</term><listitem><para>
-
-Stelt de gebruiker in staat om PCMCIA-kaarten te configureren die in laptops worden
-gebruikt voor netwerktoegang.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
 <term>kbd-chooser</term><listitem><para>
 
 De module 'kbd-chooser' (toetsenbordkiezer) toont een lijst van toetsenborden
 waaruit de gebruiker het model kan kiezen dat overeenkomt met zijn toetsenbord.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>hw-detect</term><listitem><para>
+
+Detecteert automatisch de meeste van de hardware in het systeem, inclusief
+netwerkkaarten, harde schijven en PCMCIA.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>cdrom-detect</term><listitem><para>
+
+Zoekt naar en koppelt een Debian installatie-CD.
 
 </para></listitem>
 </varlistentry>
@@ -211,8 +215,6 @@ kunnen bevinden.
 
 Deze module toont een overzicht van mirrors met het Debian Archief.
 De gebruiker kan hiermee de bron voor de installatie van Debian pakketten kiezen.
-Gewoonlijk wordt hier een CD of een mirror gekozen.
-<!-- FJP Hè, een CD is toch geen mirror??? Betere uitleg gewenst. //-->
 <!-- FJP Vertaling mirror? //-->
 
 </para></listitem>
@@ -223,15 +225,6 @@ Gewoonlijk wordt hier een CD of een mirror gekozen.
 
 Controleert de integriteit van een CD. Op die manier kan een gebruiker
 zich ervan verzekeren dat de installatie-CD niet beschadigd is.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
-<term>cdrom-detect</term><listitem><para>
-
-Detecteert CD-stations, zowel interne als extern op de computer aangesloten.
-<!-- FJP Wat is relatie met iso-scan? //-->
 
 </para></listitem>
 </varlistentry>
@@ -251,8 +244,8 @@ enige functionaliteit).
 <term>anna</term><listitem><para>
 
 Het acronym 'anna' staat voor "Anna's Not Nearly APT". Deze module installeert
-pakketten die zijn opgehaald vanaf de gekozen mirror.
-<!-- FJP Alle pakketten of alleen installatiesysteem? //-->
+pakketten die zijn opgehaald vanaf de gekozen mirror of CD.
+<!-- FJP Niet alle pakketten; alleen het installatiesysteem? //-->
 
 </para></listitem>
 </varlistentry>
@@ -332,16 +325,6 @@ computer, nadat deze is herstart, onder Linux te laten functioneren.
 </varlistentry>
 <varlistentry>
 
-<term>kernel-chooser</term><listitem><para>
-
-Stelt de gebruiker in staat om een bepaalde versie van de kernel van
-het besturingssysteem te kiezen als er meer dan één versie beschikbaar is.
-<!-- FJP Toevoegen? ... die past bij uw hardware. //-->
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
 <term>os-prober</term><listitem><para>
 
 Zoekt naar reeds op de computer aanwezige besturingssystemen en geeft
@@ -367,7 +350,7 @@ laten kiezen uit verschillende besturingssystemen.
 </varlistentry>
 <varlistentry>
 
-<term>baseconfig</term><listitem><para>
+<term>base-config</term><listitem><para>
 
 Voorziet in configurartieschermen om de pakketten van het basissysteem te
 configureren conform de voorkeuren van de gebruiker. Dit gebeurt normaal
