@@ -23,9 +23,11 @@ endif
 	
 	mcopy -i$@.new $(INITRD) ::\initrd.gz
 
+ifdef DISK_LABEL
 	# generate a disk label
 	./makelabel $(DISK_LABEL) > $(TEMP)/disk.lbl
 	mcopy -i$@.new $(TEMP)/disk.lbl ::disk.lbl
+endif
 
 ifdef KERNELNAME
 	# syslinux is used to make the floppy bootable
