@@ -19,12 +19,10 @@ checkresult () {
 #stylesheet_profile="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/profiling/profile.xsl"
 stylesheet_profile="style-profile.xsl"
 stylesheet_html="style-html.xsl"
-stylesheet_fo="style-fo.xsl"
 stylesheet_latex="style-latex.xsl"
 
 ## Location to our tools
 xsltprocessor=xsltproc
-foprocessor=./fop/fop.sh
 
 ## Build preparation
 dynamic="dynamic.ent"
@@ -44,7 +42,7 @@ case $arch in
 
         fdisk="fdisk.txt;cfdisk.txt"
         network="supports-tftp;supports-nfsroot"
-        boot="supports-floppy-boot"
+        boot=""
         other="supports-serial-console;rescue-needs-root-disk"
         smp="supports-smp"
         goodies=""
@@ -207,12 +205,6 @@ $xsltprocessor \
     install.${language}.profiled.xml
 checkresult $?
 
-## ...and also to the .fo...
-# $xsltprocessor --output install.${language}.fo \
-#                $stylesheet_fo install.${language}.profiled.xml
+## ...and optionally we can generate (little bit ugly) pdf/ps/txt.
+# ./buildfop.sh pdf ${language}
 # checkresult $?
-
-## ...from which we can generate (little bit ugly) pdf/ps/txt.
-# $foprocessor -fo install.${language}.fo -pdf install.${language}.pdf
-# checkresult $?
-
