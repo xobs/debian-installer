@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 18383 untranslated -->
+<!-- original version: 22026 untranslated -->
 
    <sect3 id="mdcfg">
    <title>Configuring Multidisk Device (Software RAID)</title>
@@ -53,13 +53,15 @@ The typical use for RAID0 is a partition for video editing.
 
 <term>RAID1</term><listitem><para>
 
-Is suitable for setups where reliability is on the first place.  It
+Is suitable for setups where reliability is the first concern.  It
 consists of several (usualy two) equaly sized partitions where every
-partition contains exactly the same data. This essentialy means two
+partition contains exactly the same data. This essentialy means three
 things.  First, if one of your disks fails, you still have the data
 mirrored on the remaining disks. Second, you can use only a fraction
-of the available capacity. (Exactly it is the size of the smallest
-partition in the RAID).
+of the available capacity (more precisely, it is the size of the
+smallest partition in the RAID). Third, file reads are load balanced amoung
+the disks, which can improve performance on a server, such as a file
+server, that tends to be loaded with more disk reads than writes.
 
 </para><para>
 
@@ -90,7 +92,7 @@ To sum it up:
   <entry>2</entry>
   <entry>no</entry>
   <entry>no</entry>
-  <entry>Size of the smallest device multiplied by number of devices in RAID</entry>
+  <entry>Size of the smallest partition multiplied by number of devices in RAID</entry>
 </row>
 
 <row>
@@ -98,7 +100,7 @@ To sum it up:
   <entry>2</entry>
   <entry>optional</entry>
   <entry>yes</entry>
-  <entry>Size of the smallest device in RAID</entry>
+  <entry>Size of the smallest partition in RAID</entry>
 </row>
 
 </tbody></tgroup></informaltable>
@@ -124,13 +126,12 @@ partition.
 
 </para></warning><para>
 
+Next, you should choose <guimenuitem>Configure software
+RAID</guimenuitem> from the main <command>partman</command> menu.
 On the first screen of <command>mdcfg</command> simply select
-<guimenu>Create MD device</guimenu>. You will be presented a list of
-supported types of MD devices, from which you should choose one
-(e.g. RAID1). What will follow depends on a type of selected MD.
-Generally speaking, you will have to provide some parameters and
-choose the partitions from which the MD shoud consist.
-
+<guimenuitem>Create MD device</guimenuitem>. You will be presented with
+a list of supported types of MD devices, from which you should choose
+one (e.g. RAID1). What follows depends on the type of MD you selected.
 </para>
 
 <itemizedlist>
@@ -162,7 +163,7 @@ example if you have three 200 GB hard drives dedicated to MD, each
 containing two 100 GB partitions, you can combine first partitions on
 all three disk into the RAID0 (fast 300 GB video editing partition)
 and use the other three partitions (2 active and 1 spare) for RAID1
-(quite reliable 100 GB partition for /home).
+(quite reliable 100 GB partition for <filename>/home</filename>).
 
 </para><para>
 
