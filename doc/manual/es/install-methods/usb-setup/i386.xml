@@ -2,15 +2,15 @@
 <!-- original version: 24663 -->
 
    <sect3 arch="i386">
-   <title>Particionado de la memoria USB en &arch-title;</title>
+   <title>Particionado de las memorias USB en &arch-title;</title>
 
 <para>
-Le mostraremos como configurar la memoria USB para usar
+Le mostraremos como configurar una memoria USB para usar
 la primera partición en lugar de todo el dispositivo.
 
 </para><note><para>
 
-Puesto de la mayoría de memorias USB vienen con una sola partición 
+Puesto que la mayoría de memorias USB vienen con una sola partición 
 FAT16 ya configurada, probablemente no tendrá que reparticionarlo o
 reformatearlo. Si aún así tiene que hacerlo, use
 <command>cfdisk</command> o cualquier otra herramienta de particionado
@@ -37,8 +37,8 @@ gestor de arranque.
 
 </para><para>
 
-Para poner <command>SYSLINUX</command> en la partición FAT16 de su dispositivo
-USB, instale los paquetes <classname>syslinux</classname> y
+Para poner <command>SYSLINUX</command> en la partición FAT16 de su
+memoria USB, instale los paquetes <classname>syslinux</classname> y
 <classname>mtools</classname> en su sistema, y escriba
 
 <informalexample><screen>
@@ -46,7 +46,7 @@ USB, instale los paquetes <classname>syslinux</classname> y
 </screen></informalexample>
 
 Nuevamente, tenga cuidado al usar el nombre de dispositivo correcto. La
-partición no debe estar montada cuando se inicie  <command>SYSLINUX</command>.
+partición no debe estar montada cuando ejecute <command>SYSLINUX</command>.
 Este procedimiento escribe un sector de arranque en la partición y
 crea el fichero <filename>ldlinux.sys</filename> que contiene el código
 del gestor de arranque.
@@ -54,8 +54,8 @@ del gestor de arranque.
 </para><para>
 
 Monte la partición (<userinput>mount /dev/sda1 /mnt</userinput>) y
-copie los siguientes ficheros desde los archivos de Debian, en el 
-dispositivo USB:
+copie los ficheros indicados a continuación desde los archivos de Debian
+al dispositivo USB:
 
 <itemizedlist>
 <listitem><para>
@@ -80,8 +80,9 @@ Módulos del núcleo opcionales
 </para></listitem>
 </itemizedlist>
 
-Si desea renombrar los ficheros, por favor, tenga en cuenta que 
-<command>SYSLINUX</command> sólo puede procesar nombres de ficheros DOS (8.3).
+Si desea renombrar los ficheros tenga en cuenta que 
+<command>SYSLINUX</command> sólo puede procesar nombres de ficheros
+DOS (8.3).
 
 </para><para>
 
@@ -93,8 +94,8 @@ default vmlinuz
 append initrd=initrd.gz ramdisk_size=10000 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
 </screen></informalexample>
 
-Por favor, fíjese en que el parámetro <userinput>ramdisk_size</userinput> 
-podría necesitar ser incrementado, dependiendo de la imagen que esté
+Por favor, en algunos casos es necesario incrementar el parámetro
+<userinput>ramdisk_size</userinput> dependiendo de la imagen que esté
 arrancando.
 
 </para>
