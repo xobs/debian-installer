@@ -1,81 +1,27 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 -->
+<!-- original version: 18601 -->
 
  <sect2 id="install-packages">
 <!--
- <title>Package Installation: Simple or Advanced</title>
+ <title>Package Installation</title>
 -->
- <title>パッケージのインストール: 簡単な方法と上級者向けの方法</title>
+ <title>パッケージのインストール</title>
 
 <para>
 
 <!--
-You will next be presented with a list of programs you can use to
-select packages you wish to install. You can choose between the simple
-way of selecting packages, or the more fine-grained, advanced way.  We
-recommend you start with the simple way, since you can always run the
-more advanced way at any time.
--->
-次に、インストールするパッケージを選択できるようにするプログラムリスト
-が示されるでしょう。パッケージの選択を簡単にする方法と、
-より細かく指定できる熟練者向けの方法のどちらかを選べます。
-もっと高度な方法はいつでも実行できるので、
-最初は簡単な方法で始めるようお勧めします。
-
-</para><para>
-
-<!--
-You should know that for simple installation,
-<command>base-config</command> is merely invoking the
-<command>tasksel</command> program.  For advanced package
-installation, the <command>dselect</command> or
-<command>aptitude</command> program is being run.  Any of these can be
-run at any time after installation to install (or remove) more
-packages.  If you are looking for a specific single package, after
-installation is complete, simply run <userinput>apt-get install
-<replaceable>package</replaceable></userinput>, where
-<replaceable>package</replaceable> is the name of the package you are
-looking for.
--->
-簡単な方法を選ぶと、<command>base-config</command> は単に
-<command>tasksel</command> プログラムを呼び出します。
-上級者向けの方法では、<command>dselect</command> あるいは
-<command>aptitude</command> を呼び出します。
-どちらの方法もインストールの終了後、いつでも追加パッケージの
-インストールに使えます。インストール終了後に
-ある特定のパッケージをインストールしたいときは、
-単に <userinput>apt-get install
-<replaceable>パッケージ</replaceable></userinput> を実行すれば良いです
-(ここで、<replaceable>パッケージ</replaceable> はインストールしたい
-パッケージの名前です)。
-
-</para>
-
-  <sect3 id="tasksel">
-<!--
-  <title>Simple Package Selection &mdash; The Task Installer</title>
--->
-  <title>簡単なパッケージ選択: タスクインストーラ</title>
-
-<para>
-
-<!--
-If you chose <quote>simple</quote> installation with
-<command>tasksel</command>, you will next be thrown into the Task
-Installer.  This technique offers you a number of pre-rolled software
+Next you will be offered a number of pre-rolled software
 configurations offered by Debian. You could always choose, package by
 package, what you want to install on your new machine.  This is the
-purpose of the <command>dselect</command> program, described below.
+purpose of the <command>aptitude</command> program, described below.
 But this can be a long task with around &num-of-distrib-pkgs; packages
 available in Debian!
 -->
-<command>tasksel</command> で<quote>simple (簡単)</quote>なインストール
-を選んだ場合、タスクインストーラが起動します。タスクインストーラは、
-Debian によって前もってまとめられた多数のソフトウェア設定を提供します。
+次に、Debian によって前もってまとめられた多数のソフトウェア設定が提供されます。
 もちろん、いつでも新しいマシンにインストールするパッケージを
 ひとつひとつ選ぶことができます。これは、以下で説明する
-<command>dselect</command> プログラムによるものです。しかし、Debian には
+<command>aptitude</command> プログラムによるものです。しかし、Debian には
 &num-of-distrib-pkgs; 個ものパッケージがあるので、その方法は
 時間のかかる作業となるかもしれません!
 
@@ -86,38 +32,62 @@ So, you have the ability to choose <emphasis>tasks</emphasis> first,
 and then add on more individual packages later.  These tasks loosely
 represent a number of different jobs or things you want to do with
 your computer, such as <quote>desktop environment</quote>,
-<quote>development in C</quote>, or <quote>file server</quote>.
+<quote>web server</quote>, or <quote>print server</quote>.
 -->
 そこで、まず最初に<emphasis>タスク</emphasis>を選択し、そのあとで個々の
 パッケージを追加する、ということができるようになっています。
-タスクは、<quote>デスクトップ環境</quote>、<quote>C での開発</quote>、
-<quote>ファイルサーバ</quote>のように、コンピュータでしたいであろう、
+タスクは、<quote>デスクトップ環境</quote>、<quote>ウェブサーバ</quote>、
+<quote>プリントサーバ</quote>のように、コンピュータでしたいであろう、
 いろいろな仕事や物事を大まかに表しています。
+
+<footnote>
+<para>
+
+<!--
+You should know that to present this list,
+<command>base-config</command> is merely invoking the
+<command>tasksel</command> program.  For manual package
+selection, the
+<command>aptitude</command> program is being run.  Any of these can be
+run at any time after installation to install (or remove) more
+packages.  If you are looking for a specific single package, after
+installation is complete, simply run <userinput>apt-get install
+<replaceable>package</replaceable></userinput>, where
+<replaceable>package</replaceable> is the name of the package you are
+looking for.
+-->
+このリストを示すために <command>base-config</command> は単に
+<command>tasksel</command> プログラムを呼び出していることを
+知っているべきです。手動でのパッケージ選択では、
+<command>aptitude</command> が実行されています。
+どちらの方法もインストールの終了後、いつでも追加パッケージの
+インストールに使えます。インストール終了後に
+ある特定のパッケージをインストールしたいときは、
+単に <userinput>apt-get install
+<replaceable>パッケージ</replaceable></userinput> を実行すれば良いです
+(ここで、<replaceable>パッケージ</replaceable> はインストールしたい
+パッケージの名前です)。
+</para>
+</footnote>
 
 </para><para>
 
 <!--
-For each task, you can highlight that task and select <guibutton>Task
-Info</guibutton> to see more information on that task. This will show
-you an extended description and the list of packages which will be
-installed for that task. A table showing approximate sizes of the
-various tasks for planning purposes is in <xref
-linkend="tasksel-size-list"/>.
+If you do want to choose what to install on a package by package basis,
+select the <quote>manual package selection</quote> in
+<command>tasksel</command>.
 -->
-それぞれのタスクを反転表示させて <guibutton>タスク情報 (Task Info)</guibutton>
-を選ぶと、そのタスクに関する詳しい情報を見ることができます。
-タスクの詳細とそのタスクを選択するとインストールされるパッケージの
-一覧が表示されます。いろいろなタスクの大まかなサイズの一覧が、<xref
-linkend="tasksel-size-list"/> にありますので、
-計画段階で利用すると良いでしょう。
+もし本当にベースパッケージから何かパッケージをインストールしたいのなら、
+<command>tasksel</command> 中の <quote>manual package selection</quote>
+を選択してください。
 
 </para><para>
 
 <!--
 Once you've selected your tasks, select
-<guibutton>Finish</guibutton>. At this point,
-<command>apt-get</command> will install the packages you've
-selected. Note, if you did not select any tasks at all, any standard,
+<guibutton>Ok</guibutton>. At this point,
+<command>aptitude</command> will install the packages you've
+selected. Note, even if you did not select any tasks at all, any standard,
 important, or required priority packages that are not yet present on
 your system will be installed.  This functionality is the same as
 running tasksel -s at the command line, and currently involves
@@ -125,9 +95,9 @@ a download of about 37M of archives. You will be shown the number of
 packages to be installed, and how many kilobytes of packages, if any,
 need to be downloaded.
 -->
-タスクを選び終わったら<guibutton>Finish</guibutton>を選択してください。すると
-<command>apt-get</command> が、あなたの選択したパッケージをインストールします。
-ひとつもタスクを選択しないと、standard、important、required の
+タスクを選び終わったら<guibutton>Ok</guibutton>を選択してください。すると
+<command>aptitude</command> が、あなたの選択したパッケージをインストールします。
+たとえひとつもタスクを選択しなかったとしても、standard、important、required の
 優先度を持つパッケージがインストールされます。この機能は、
 コマンドラインから tasksel -s を実行したのと同じで、
 今のところおよそ 37 メガバイトのアーカイブをダウンロードします。
@@ -144,7 +114,7 @@ To see information on more packages, either use <userinput>apt-cache
 search <replaceable>search-string</replaceable></userinput> for some
 given search string (see the <citerefentry>
 <refentrytitle>apt-cache</refentrytitle> <manvolnum>8</manvolnum>
-</citerefentry> man page), or run <command>dselect</command> or
+</citerefentry> man page), or run
 <command>aptitude</command> as described below.
 -->
 Debian には &num-of-distrib-pkgs; 個のパッケージがありますが、
@@ -155,39 +125,9 @@ search <replaceable>検索文字列</replaceable></userinput> を実行するか
 (<citerefentry>
 <refentrytitle>apt-cache</refentrytitle> <manvolnum>8</manvolnum>
 </citerefentry> のマニュアルページを参照)、以下で説明する
-<command>dselect</command> あるいは <command>aptitude</command> を実行してください。
+<command>aptitude</command> を実行してください。
 
 </para>
-  </sect3>
-
-  <sect3 id="dselect">
-<!--
-  <title>Advanced Package Selection with <command>dselect</command></title>
--->
-  <title><command>dselect</command> を使った上級者向けのパッケージ選択</title>
-
-<para>
-
-<!--
-If you are conservative user you'll probably choose the
-<command>dselect</command> program.  The <ulink
-url="&url-dselect-beginner;">dselect Tutorial</ulink> is required
-reading before you run <command>dselect</command>.
-<command>dselect</command> allows you to select individual
-<emphasis>packages</emphasis> to be installed on your system. (You
-have to be the super-user (root) when you run
-<command>dselect</command>.)
--->
-あなたが保守的なユーザならば、おそらく
-<command>dselect</command> プログラムを選ぶでしょう。<ulink
-url="&url-dselect-beginner;">dselect Tutorial</ulink> は、
-<command>dselect</command> を実行する前に必読です。
-<command>dselect</command> は、システムにインストールする
-<emphasis>パッケージ</emphasis>を個々に選択できるようにします
-(<command>dselect</command> を実行するにはスーパーユーザ (root) でなければなりません)。
-
-</para>
- </sect3>
 
  <sect3 id="aptitude">
 <!--
@@ -199,18 +139,12 @@ url="&url-dselect-beginner;">dselect Tutorial</ulink> は、
 
 <!--
 <command>Aptitude</command> is a modern program for managing
-packages. Its gui and keyboard commands somewhat resemble the famous
-<command>dselect</command>, but it has more bells and whistles
-attached, so it should not scare new users so much. (You have to try
-the integrated minesweeper!) <command>aptitude</command> allows you to
+packages. <command>aptitude</command> allows you to
 select individual packages, set of packages matching given criteria
 (for advanced users), or whole tasks.
 -->
 <command>aptitude</command> はパッケージを管理するための最新のプログラムです。
-その GUI とキーボードコマンドは、有名な <command>dselect</command> に
-いくらか似ていますが、より多くのオプション機能があるので新たなユーザを
-あまり脅えさせないはずです (あなたは完全なマインスイーパを試さなければ
-なりません!)。<command>aptitude</command> は、個々のパッケージや
+<command>aptitude</command> は、個々のパッケージや
 (上級ユーザのための) 与えられた基準と一致するパッケージセットおよび
 全タスクを選択できるようにします。
 
@@ -288,22 +222,6 @@ The most basic keybindings are:
 For more commands see the online help under the <keycap>?</keycap> key.
 -->
 上記以外のコマンドは、<keycap>?</keycap> キーでオンラインヘルプをご覧ください。
-
-</para><para>
-
-<!--
-Although <command>aptitude</command> is meant to be familiar to the
-<command>dselect</command> users, it provides much more features and
-can be customized to a great degree. (You can define you own
-keybindings, colors and package views). After installation you can
-explore <command>aptitude</command> capabilities by reading
-<filename>/usr/share/doc/aptitude/README</filename>.
--->
-<command>aptitude</command> は、<command>dselect</command> ユーザには
-なじみがあるようになっているはずですが、より多くの機能を提供し、
-とても細かくカスタマイズ (自分好みのキーバインド、色および画面に定義) できます。
-インストール後に、<filename>/usr/share/doc/aptitude/README</filename> を
-読んで <command>aptitude</command> の機能を調べられます。
 
 </para>
   </sect3>
