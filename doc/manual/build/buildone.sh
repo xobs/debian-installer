@@ -115,7 +115,7 @@ case $arch in
 	;;
     powerpc)
         archspec="powerpc;not-s390;not-m68k;not-i386;not-alpha"
-	kernelversion="2.4.22"
+	kernelversion="2.4.25"
 	
         fdisk="mac-fdisk.txt;cfdisk.txt"
         network="supports-tftp;supports-dhcp;supports-bootp;supports-nfsroot"
