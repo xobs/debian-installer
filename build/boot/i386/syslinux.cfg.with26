@@ -1,23 +1,29 @@
-display syslinux.txt
+display ${SYSDIR}syslinux.txt
 default linux
-append vga=normal initrd=initrd.gz ramdisk_size=${RAMDISK_SIZE} root=/dev/rd/0 devfs=mount,dall rw
+
+F1 ${SYSDIR}f1.txt
+F2 ${SYSDIR}f2.txt
+F3 ${SYSDIR}f3.txt
+F4 ${SYSDIR}f4.txt
+F5 ${SYSDIR}f5.txt
+F6 ${SYSDIR}f6.txt
+F7 ${SYSDIR}f7.txt
+F8 ${SYSDIR}f8.txt
+F9 ${SYSDIR}f9.txt
+F0 ${SYSDIR}f10.txt
+
+label linux
+	kernel ${KERNEL}
+	append vga=normal initrd=${INITRD} ramdisk_size=${RAMDISK_SIZE} root=/dev/rd/0 devfs=mount,dall rw
 label expert
-	kernel linux
-	append DEBCONF_PRIORITY=low vga=normal initrd=initrd.gz ramdisk_size=${RAMDISK_SIZE} root=/dev/rd/0 devfs=mount,dall rw
+	kernel ${KERNEL}
+	append DEBCONF_PRIORITY=low vga=normal initrd=${INITRD} ramdisk_size=${RAMDISK_SIZE} root=/dev/rd/0 devfs=mount,dall rw
 label linux26
-	append vga=normal initrd=initrd26.gz ramdisk_size=${RAMDISK_SIZE_26} root=/dev/rd/0 devfs=mount,dall rw
+	kernel ${KERNEL_26}
+	append vga=normal initrd=${INITRD_26} ramdisk_size=${RAMDISK_SIZE_26} root=/dev/rd/0 devfs=mount,dall rw
 label expert26
-	kernel linux26
-	append DEBCONF_PRIORITY=low vga=normal initrd=initrd26.gz ramdisk_size=${RAMDISK_SIZE_26} root=/dev/rd/0 devfs=mount,dall rw
+	kernel ${KERNEL_26}
+	append DEBCONF_PRIORITY=low vga=normal initrd=${INITRD_26} ramdisk_size=${RAMDISK_SIZE_26} root=/dev/rd/0 devfs=mount,dall rw
+
 prompt 1
 timeout 0
-F1 f1.txt
-F2 f2.txt
-F3 f3.txt
-F4 f4.txt
-F5 f5.txt
-F6 f6.txt
-F7 f7.txt
-F8 f8.txt
-F9 f9.txt
-F0 f10.txt
