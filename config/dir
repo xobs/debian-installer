@@ -53,8 +53,16 @@ INITRD=$(DEST)/$(TYPE)-initrd.gz
 IMAGE=$(DEST)/$(TYPE)-image.img
 else
 INITRD=$(DEST)/$(TYPE)-initrd.gz
+ifeq ($(DEB_HOST_ARCH),mips)
+IMAGE=$(DEST)/$(TYPE)-image.img
+else
+ifeq ($(DEB_HOST_ARCH),mipsel)
+IMAGE=$(DEST)/$(TYPE)-image.img
+else
 IMAGE=$(INITRD)
 DEST_KERNEL=1
+endif
+endif
 endif
 
 # Used in the font reduction code.
