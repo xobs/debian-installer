@@ -135,19 +135,17 @@ bf2.4 flavor. The symptom of the problem is an
   <command>GRUB</command></title>
 <para>
 
-One <emphasis>initrd=</emphasis> line in
-<filename>/etc/lilo.conf</filename> is enough to configure two
-essentials things:
+For <command>LILO</command>, you will need to configure two
+essentials things in <filename>/etc/lilo.conf</filename>:
 <itemizedlist>
 <listitem><para>
 
-tell <command>LILO</command> to load the <filename>initrd.gz</filename>
-installer as a RAM disk at boot time;
+to load the <filename>initrd.gz</filename> installer at boot time;
 
 </para></listitem>
 <listitem><para>
 
-tell the <filename>vmlinuz</filename> kernel to use this RAM disk as
+have the <filename>vmlinuz</filename> kernel use a RAM disk as
 its root partition.
 
 </para></listitem>
@@ -162,12 +160,11 @@ Here is a <filename>/etc/lilo.conf</filename> example:
 image=/boot/newinstall/vmlinuz
        label=newinstall
        initrd=/boot/newinstall/initrd.gz
+       root=/dev/ram
        append="devfs=mount,dall"
 
 </screen></informalexample>
 
-<emphasis>root=/dev/hdXYZ</emphasis> options in
-<filename>lilo.conf</filename> will be ignored in this case.
 For more details, refer to the
 <citerefentry><refentrytitle>initrd</refentrytitle>
 <manvolnum>4</manvolnum></citerefentry> and
@@ -177,7 +174,7 @@ For more details, refer to the
 
 </para><para>
 
-Procedure for <command>GRUB</command> is quite similar. Locate your
+The procedure for <command>GRUB</command> is quite similar. Locate your
 <filename>menu.lst</filename> in the <filename>/boot/grub/</filename>
 directory (sometimes in the <filename>/boot/boot/grub/</filename>),
 add the following lines:
@@ -185,15 +182,15 @@ add the following lines:
 <informalexample><screen>
 
 title  New Install
-kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram ramdisk_size=10000 devfs=mount,dall
+kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram devfs=mount,dall
 initrd (hd0,0)/boot/newinstall/initrd.gz
 
 </screen></informalexample>
 
-and reboot. Please note, that the <userinput>ramdisk_size</userinput>
-parameter may need to be increased, depending on the image you are
-booting. From now on, there should be no difference between
-<command>GRUB</command> or <command>LILO</command>.
+and reboot. Please note, that you may need an additional parameter
+<userinput>ramdisk_size=<replaceable>size in KB</replaceable></userinput>,
+depending on the image you are booting. From now on, there should be
+no difference between <command>GRUB</command> or <command>LILO</command>.
 
 </para><para>
 

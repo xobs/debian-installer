@@ -81,14 +81,19 @@ this section, we shall provide commands for SunOS 4.x, SunOS 5.x
 <para>
 
 To get the TFTP server ready to go, you should first make sure that
-<command>tftpd</command> is enabled.  This is usually enabled by having the
-following line in <filename>/etc/inetd.conf</filename>:
+<command>tftpd</command> is enabled.  This is usually enabled by having
+something like the following line in <filename>/etc/inetd.conf</filename>:
 
 <informalexample><screen>
 
-tftp dgram udp wait root /usr/sbin/tcpd in.tftpd /tftpboot
+tftp dgram udp wait nobody /usr/sbin/tcpd in.tftpd /tftpboot
 
 </screen></informalexample>
+
+Debian packages will in general set this up correctly by default when they
+are installed.
+
+</para><para>
 
 Look in that file and remember the directory which is used as the
 argument of <command>in.tftpd</command>; you'll need that below.  The
@@ -98,18 +103,18 @@ this is useful for diagnosing boot errors.  If you've had to change
 <filename>/etc/inetd.conf</filename>, you'll have to notify the
 running <command>inetd</command> process that the file has changed.
 On a Debian machine, run <userinput>/etc/init.d/inetd
-reload</userinput> (for slink/2.1 and older systems use
-<userinput>/etc/init.d/netbase reload</userinput>); on other machines,
+reload</userinput>; on other machines,
 find out the process ID for <command>inetd</command>, and run
 <userinput>kill -HUP <replaceable>inetd-pid</replaceable></userinput>.
 
-</para><para arch="i386">
+</para><note arch="i386"><para>
 
 To use the Pre-boot Execution Environment (PXE) method of TFTP
 booting, you will need a TFTP server with <userinput>tsize</userinput>
-support.  On a &debian; server, <command>tftp-hpa</command> qualifies.
+support.  On a &debian; server, the <classname>atftpd</classname> and
+<classname>tftpd-hpa</classname> packages qualify.
 
-</para><para arch="mips">
+</para></note><para arch="mips">
 
 If your TFTP server is a GNU/Linux box running Linux 2.4.X you'll need
 to set the following on your server:
@@ -187,21 +192,21 @@ default lanlinux
 prompt 1
 
 label lanlinux
-  kernel tftpboot.img
-  append load initrd=root.bin devfs=mount
+  kernel vmlinuz
+  append initrd=initrd.gz devfs=mount root=/dev/ram
 
 </screen></informalexample>
 
 <userinput>devfs=mount</userinput> is important, because without it
-there may be problems mounting the root.bin file system once the
+there may be problems mounting the initrd.gz file system once the
 kernel is booted.
 
 </para><para arch="i386">
 
-Finally, copy the <filename>tftpboot.img</filename> and
-<filename>root.bin</filename> files from the Debian ftp archive into
-the <filename>/tftpboot</filename> folder, where the bootloader will
-be looking for them.
+Finally, copy the <filename>vmlinuz</filename> and
+<filename>initrd.gz</filename> files (for the netboot installation method)
+from the Debian ftp archive into the <filename>/tftpboot</filename> folder,
+where the bootloader will be looking for them.
 
 </para>
 
