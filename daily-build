@@ -12,7 +12,7 @@ dir=`date +%Y-%m-%d`
 unset LANG LC_ALL LANGUAGE
 cvs up
 
-for t in netboot cdrom bootfloppy floppy; do
+for t in netboot cdrom bootfloppy hd-media floppy; do
     make TYPE="$t" reallyclean
 done
 for t in netboot cdrom bootfloppy floppy; do
@@ -20,10 +20,10 @@ for t in netboot cdrom bootfloppy floppy; do
     echo BUILDING INITRD FOR $t
     echo
     mkdir -p dest
-    fakeroot make TYPE="$t" initrd >& dest/$t.log
+    fakeroot make TYPE="$t" initrd >& dest/$t.log || true
     cat dest/$t.log
 done
-for t in cdrom bootfloppy floppy; do
+for t in cdrom bootfloppy hd-media floppy; do
     echo
     echo BUILDING IMAGE FOR $t
     echo
@@ -31,8 +31,11 @@ for t in cdrom bootfloppy floppy; do
     cat dest/$t.log2
     cat dest/$t.log2 >> dest/$t.log
 done
-fakeroot make all_stats > dest/stats.txt
+fakeroot make all_stats > dest/stats.txt || touch dest/stats.txt
 
+echo
+echo UPLOADING FILES
+echo
 ssh $host mkdir $basedir/$dir
 ssh $host rm -f $basedir/daily
 ssh $host ln -sf $dir $basedir/daily
