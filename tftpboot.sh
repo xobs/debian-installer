@@ -2,7 +2,7 @@
 # Boot Disk maker for TFTP prototcol.
 # Eric Delaunay, February 1998.
 # Ben Collins, March 2000,2002
-# Thiemo Seufer, 03-12-2003
+# Thiemo Seufer, 2003-12-10
 # This is free software under the GNU General Public License.
 
 # May also be set in Makefile
