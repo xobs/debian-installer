@@ -201,7 +201,7 @@ $xsltprocessor \
     --stringparam chunker.output.encoding "UTF-8" \
     --stringparam profile.arch "$archspec" \
     $stylesheet_html \
-    install.${language}.xml
+    install.${language}.profiled.xml
 #$xsltprocessor $stylesheet_html install.${language}.profiled.xml
 checkresult $?
 
