@@ -37,7 +37,7 @@ MKLIBS=mklibs
 # allowed.
 # TODO: this really needs to be determined on a per TYPE basis.
 #       libnss_nns is needed for many, but not all, install scenarios
-EXTRALIBS=/lib/libnss_dns*
+EXTRALIBS=/lib/libnss_dns* /lib/libresolv*
 
 # List here any extra udebs that are not in the list file but that
 # should still be included on the system.
