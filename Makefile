@@ -437,7 +437,9 @@ endif
 	# has been made yet.
 	cp graphic.utf all-$(TYPE).utf
 ifeq ($(TYPE),floppy)
-	cat $(DRIVEREXTRASDPKGDIR)/info/*.templates >> all-$(TYPE).utf
+	if [ -n "`find $(DRIVEREXTRASDPKGDIR)/info/ -name \\*.templates`" ]; then \
+		cat $(DRIVEREXTRASDPKGDIR)/info/*.templates >> all-$(TYPE).utf; \
+	fi
 endif
 	if [ -n "`find $(DPKGDIR)/info/ -name \\*.templates`" ]; then \
 		cat $(DPKGDIR)/info/*.templates >> all-$(TYPE).utf; \
