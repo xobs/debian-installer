@@ -1,32 +1,30 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- original version: 11648 -->
 
-  <sect2 arch="powerpc"><title>&arch-title; Boot Loaders</title>
+  <sect2 arch="powerpc"><title>Gestionnaires d'amorçage pour &arch-title;</title>
 
   <sect3><title><quote>OldWorld</quote> PowerMacs</title>
 <para>
 
-Le chargeur d'amorçage pour les machines Power Macintosh d'antan est
+Le gestionnaire d'amorçage pour les machines OldWorld Power Macintosh est
 <command>quik</command>. Vous pouvez également l'utiliser avec CHRP.
-           Le programme d'installation essayera de configurer
+Le programme d'installation essayera de configurer
 <command>quik</command> automatiquement au moment de l'étape&nbsp;:
-           «&nbsp;Make-Linux-Bootable-Directly-From-Hard-Disk&nbsp;» Cette
-           configuration fonctionne sans problème sur les
-           Powermacs 7200, 7300 et les 7600, et sur certains clones
-           Power Computing.
+«&nbsp;Make Hard Disk Bootable&nbsp;» Cette configuration fonctionne sans 
+problème sur les Powermacs 7200, 7300 et les 7600, et sur certains clones
+Power Computing.
 
 </para><para>
 
-Sur les G3 beiges, un module <filename>first.b</filename>
-           modifié pour <command>quik</command> est disponible sur
+Sur les G3 beiges, un module <filename>first.b</filename> modifié pour 
+<command>quik</command> est disponible sur
 <ulink url="http://www.cpu.lu/~mlan/ftp/quik-first.b-g3"></ulink>.
-           Pour pouvoir utiliser cette version modifiée, suivez les étapes
-           suivantes. Après avoir réamorcé sur le logiciel d'installation,
-           rendez-vous sur la console n°2. Copiez ce fichier dans votre
-           répertoire <filename>/target/boot</filename> et renommez-le sous 
+Pour pouvoir utiliser cette version modifiée, suivez ces étapes. Après avoir 
+réamorcé sur l'installateur, allez sur la console n°2. Copiez ce fichier dans 
+votre répertoire <filename>/target/boot</filename> et renommez-le sous 
 le nom <userinput>first.b</userinput> pour qu'il se substitue au fichier
-           <filename>first.b</filename> qui s'y trouve déjà. Lancez ensuite les
-           commandes suivantes&nbsp;:
+<filename>first.b</filename> qui s'y trouve déjà. Lancez ensuite les
+commandes suivantes&nbsp;:
 
 <informalexample><screen>
 
@@ -40,24 +38,21 @@ exit
 </para><para>
       
 Si vous souhaitez utiliser <command>BootX</command> pour amorcer
-           le système installé, sélectionnez simplement le noyau
-que vous souhaitez dans le répertoire <filename>Linux Kernels</filename>,
-           dé-sélectionnez l'option ramdisk, et ajoutez un périphérique
-           racine (<emphasis>root device</emphasis>) correspondant à votre
-           installation&nbsp;; p. ex. <userinput>/dev/hda8</userinput>.
+le système installé, sélectionnez simplement le noyau que vous voulez dans 
+le répertoire <filename>Linux Kernels</filename>, dé-sélectionnez l'option 
+ramdisk, et ajoutez un périphérique racine correspondant à votre
+installation&nbsp;; p. ex. <userinput>/dev/hda8</userinput>.
 
 </para><para>
 
-Pour les machines sur lesquelles l'on ne souhaite pas
-installer le <command>BootX</command> de MacOS et sur lesquelles
+Pour les machines sur lesquelles l'on ne souhaite pas installer le 
+<command>BootX</command> de MacOS et sur lesquelles
 <command>quik</command> ne fonctionne pas, une dernière possibilité
-           est d'appliquer une rustine sur l'image de la disquette de sorte
-           qu'elle devienne une disquette d'amorcage. Utilisez
-<command>ResEdit</command> dans MacOS pour modifier la ressource
-           cmdl du système, ou utilisez un éditeur binaire tel que
-<command>beav</command> pour modifier l'image
-           directement afin d'enlever les paramètres ramdisk et
-substituer un argument 
+est d'appliquer un correctif sur l'image de la disquette de sorte qu'elle 
+devienne une disquette d'amorcage. Utilisez <command>ResEdit</command> dans 
+MacOS pour modifier la ressource cmdl du système, ou utilisez un éditeur 
+binaire tel que <command>beav</command> pour modifier l'image directement 
+afin d'enlever les paramètres ramdisk et substituer un argument 
 <userinput>root=/dev/<replaceable>xxx</replaceable></userinput> qui 
 convienne. Un <ulink url="&url-powerpc-patch-floppy;">script perl</ulink> est 
 également disponible pour cette tâche.
@@ -68,26 +63,26 @@ Si la machine ne démarre pas quand l'installation est terminée
 et s'arrête avec un invite du type <prompt>boot:</prompt>, tapez
 <userinput>Linux</userinput> suivi de la touche &enterkey; (la configuration
 de démarrage par défaut contenue dans <filename>quik.conf</filename> est
-           étiquetée linux). Les étiquettes définies dans
-<filename>quik.conf</filename> seront affichées si vous pressez
-           la touche <keycap>Tab</keycap> à l'invite <prompt>boot:</prompt>. 
+étiquetée linux). Les étiquettes définies dans <filename>quik.conf</filename> 
+seront affichées si vous pressez la touche <keycap>Tab</keycap> à l'invite 
+<prompt>boot:</prompt>. 
 Vous pouvez aussi essayer de démarrer sur le programme d'installation et 
 modifier le fichier <filename>/target/etc/quik.conf</filename> 
 qui aura été placé à cet endroit au cours de l'étape précédentes&nbsp;:
-«&nbsp;Make-Linux-Bootable-Directly-From-Hard-Disk&nbsp;» Des informations
+«&nbsp;Make Hard Disk Bootable&nbsp;» Des informations
 pour travailler avec <command>quik</command> sont disponibles à
 <ulink url="&url-powerpc-quik-faq;"></ulink>.
 
 </para><para>
 
 Pour démarrer de nouveau sous MacOS sans réinitialiser la nvram,
-tapez <userinput>bye</userinput> à l'invite de l'Open Firmware (en
-           supposant que MacOS n'a pas été enlevé de la machine). Pour
-           obtenir une invite OpenFirmware, appuyez simultanément sur les
-touches 
-<keycombo><keycap>command</keycap> <keycap>option</keycap> <keycap>o</keycap></keycombo>
- d'un démarrage à froid de la machine. Si vous devez réinitialiser les 
-changements de l'OpenFirmware en nvram, appuyez simultanément sur les touches
+tapez <userinput>bye</userinput> à l'invite de l'Open Firmware (en supposant 
+que MacOS n'a pas été enlevé de la machine). Pour obtenir une invite 
+OpenFirmware, appuyez simultanément sur les touches 
+<keycombo><keycap>command</keycap> <keycap>option</keycap> <keycap>o</keycap>
+<keycap>f</keycap> </keycombo> pendant le démarrage à froid de la machine. 
+Si vous devez réinitialiser les changements de l'OpenFirmware en nvram, 
+appuyez simultanément sur les touches
 <keycombo><keycap>command</keycap> <keycap>option</keycap> <keycap>p</keycap><keycap>r</keycap> </keycombo> 
 lors d'un démarrage à froid de la machine.
 
@@ -98,57 +93,52 @@ lors d'un démarrage à froid de la machine.
 <para>
 
 Les PowerMacs récents (à partir de 1998) utilisent
-<command>yaboot</command> comme chargeur d'amorçage. Le programme
+<command>yaboot</command> comme gestionnaire d'amorçage. Le programme
 d'installation configurera <command>yaboot</command> automatiquement&nbsp;;
-        aussi, tout ce que vous avez à faire, c'est d'exécuter
-l'étape&nbsp;: «&nbsp;Make-Linux-Bootable-Directly-From-Hard-Disk&nbsp;». Si
-        elle s'achève avec succès, votre système devrait alors
-        être capable de démarrer et l'OpenFirmware sera configuré
-        pour lancer &debian;.
+aussi, tout ce que vous avez à faire, c'est d'exécuter
+l'étape&nbsp;: «&nbsp;Make Hard Disk Bootable&nbsp;». Si elle réussit, votre 
+système devrait alors être capable de démarrer et l'OpenFirmware sera 
+configuré pour lancer &debian;.
 
 </para><para>
 
-Sur les machines de type G4 et iBook, vous pouvez
-        maintenir la touche <keycap>option</keycap> enfoncée pour
-        obtenir un écran graphique, avec un bouton pour chaque système
-        d'exploitation bootable&nbsp;; pour &debian; il s'agit d'un
-        bouton avec une icône de petit pingouin.
+Sur les machines de type G4 et iBook, vous pouvez maintenir la touche 
+<keycap>option</keycap> enfoncée pour obtenir un écran graphique, avec un 
+bouton pour chaque système d'exploitation démarrable&nbsp;; pour &debian; 
+il s'agit d'un bouton avec une icône de petit pingouin.
 
 </para><para>
 
-Si vous avez conservé MacOS et qu'à un moment ou à un autre
-        la variable de l'OpenFirmware qui détermine le périphérique de
-        démarrage a été modifiée, vous devrez restaurer sa configuration.
-Pour cela, maintenez enfoncées les touches 
+Si vous avez conservé MacOS et qu'à un moment ou à un autre la variable 
+<envar>boot-device</envar> de l'OpenFirmware a été modifiée, vous devrez 
+restaurer sa configuration. Pour cela, maintenez enfoncées les touches 
 <keycombo><keycap>command</keycap> <keycap>option</keycap> <keycap>p</keycap><keycap>r</keycap> </keycombo>
 lors du démarrage à froid de la machine.
 
 </para><para>
 
 Les étiquettes définies dans <filename>yaboot.conf</filename> seront
-        affichées si vous appuyez sur la touche <keycap>Tab</keycap> à
-        l'invite <prompt>boot:</prompt>.
+affichées si vous appuyez sur la touche <keycap>Tab</keycap> à l'invite 
+<prompt>boot:</prompt>.
 
 </para><para>
 
-La ré-initialisation de l'OpenFirmware sur les matériels G3
-        et G4 les fera démarrer par défaut sur &debian; (à condition d'avoir
-        effectué un partitionnement correct et d'avoir placé la partition
-        Apple_Bootstrap en premier). Si &debian; se trouve sur un disque
-        SCSI et que MacOS se trouve sur un disque IDE, il se pourrait
-        que cela ne fonctionne pas et que vous deviez lancer
-        l'OpenFirmware et déclarer la variable <envar>boot-device</envar>
-        manuellement&nbsp;; en principe, <command>ybin</command> le fait
-        automatiquement).
+La ré-initialisation de l'OpenFirmware sur les matériels G3 et G4 les fera 
+démarrer par défaut sur &debian; (à condition d'avoir effectué un 
+partitionnement correct et d'avoir placé la partition Apple_Bootstrap en 
+premier). Si &debian; se trouve sur un disque SCSI et que MacOS se trouve sur 
+un disque IDE, il se pourrait que cela ne fonctionne pas et que vous deviez 
+lancer l'OpenFirmware et déclarer la variable <envar>boot-device</envar>
+manuellement&nbsp;; en principe, <command>ybin</command> le fait
+automatiquement).
 
 </para><para>
 
-Après avoir lancé &debian; pour la première fois, vous pourrez
-        ajouter autant d'options que vous le souhaitez (telles que les
-        options de démarrage double) dans le fichier
-<filename>/etc/yaboot.conf</filename> et démarrer <command>ybin</command> pour
-        mettre à jour votre partition de démarrage avec la nouvelle
-        configuration. S'il vous plaît, lisez le
+Après avoir lancé &debian; pour la première fois, vous pourrez ajouter autant 
+d'options que vous le souhaitez (telles que les options de démarrage double) 
+dans le fichier <filename>/etc/yaboot.conf</filename> et démarrer 
+<command>ybin</command> pour mettre à jour votre partition de démarrage avec 
+la nouvelle configuration. Lisez le
 <ulink url="&url-powerpc-yaboot-faq;">yaboot HOWTO</ulink>.
 
 </para>
