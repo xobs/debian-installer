@@ -238,6 +238,7 @@ _clean: tree_umount
 	rm -f $(TEMP)/diskusage.txt
 	rm -f $(TEMP)/all.utf
 	rm -f $(TEMP)/unifont.bdf $(TREE)/unifont.bgf
+	rm -f pkg-lists/standard-udebs pkg-lists/kernel-module-udebs
 	rm -f $(TARGET)
 	rm -rf $(TEMP)
 
@@ -661,6 +662,20 @@ $(STAMPS)extra-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
 	./makelabel $(DISK_LABEL) $(BUILD_DATE) > $(TREE)/disk.lbl
 	@touch $@
 
+# Get a list of all the standard priority udebs, excluding kernel stuff.
+pkg-lists/standard-udebs:
+	./get-packages udeb
+	grep-dctrl -FPriority -e 'required|standard|important' \
+		-sPackage apt.udeb/state/lists/*_Packages* | \
+		grep -v kernel-image | grep -v -- -modules | \
+		cut -d " " -f 2 > $@
+
+# Get a list of all kernel modules matching the kernel version.
+pkg-lists/kernel-module-udebs:
+	./get-packages udeb
+	grep-dctrl -P -e '.*-modules-$(KERNELVERSION)-$(KERNEL_FLAVOUR)' \
+		-sPackage apt.udeb/state/lists/*_Packages* | \
+		cut -d " " -f 2 > $@
 
 #
 # Write (floppy) images
