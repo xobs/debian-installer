@@ -204,12 +204,13 @@ tree-stamp:
 	-rmdir $(TREE)/boot/
 
 	# Copy in any extra files
-	if [ "$(EXTRAFILES)" ]; then \
-		for file in $(EXTRAFILES); do \
-			mkdir -p $(TREE)/`basename $$file`; \
-			cp -a $$file $(TREE)/$$file; \
-		done; \
-	fi
+ifdef EXTRAFILES
+	# Copy in any extra files
+	for file in $(EXTRAFILES); do \
+		mkdir -p $(TREE)/`basename $$file`; \
+		cp -a $$file $(TREE)/$$file; \
+	done
+endif
 
 	# Library reduction.
 	mkdir -p $(TREE)/lib
