@@ -500,7 +500,7 @@ endif
 
 # Get the list of udebs to install.
 # HACK Alert: pkg-lists/ is still sorted by TYPE instead of a dir hierarchy.
-UDEBS = $(shell set -e; ./pkg-list $(TYPE) $(KERNEL_FLAVOUR) "$(SUBARCH)" $(KERNELIMAGEVERSION)) $(EXTRAS)
+UDEBS = $(shell set -e; ./pkg-list $(TYPE) $(KERNEL_FLAVOUR) $(KERNELMAJOR) "$(SUBARCH)" $(KERNELIMAGEVERSION)) $(EXTRAS)
 
 # Get all required udebs and put them in UDEBDIR.
 $(STAMPS)get_udebs-$(targetstring)-stamp: sources.list.udeb

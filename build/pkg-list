@@ -1,17 +1,19 @@
 #!/usr/bin/perl
 # Outputs a list of udebs to install. Pass it the type of image to build as
-# the first parameter, then the kernel flavour, then the sub architecture
-# (or an empty string if there are none) and then the kernel version(s)
-# as the rest of the parameters. Reads the lists in pkg-lists.
+# the first parameter, then the kernel flavour, then the major kernel type
+# (2.4, 2.6, etc), then the sub architecture (or an empty string if there
+# are none) and then the kernel version(s) as the rest of the parameters.
+# Reads the lists in pkg-lists.
 
 use warnings;
 use strict;
 
-if (int(@ARGV) < 4) {
-	die "Usage: $0 type KERNEL_FLAVOUR SUB_ARCH KERNEL_VERSION [KERNEL_VERSION ...]\n";
+if (int(@ARGV) < 5) {
+	die "Usage: $0 type KERNEL_FLAVOUR KERNELMAJOR SUB_ARCH KERNEL_VERSION [KERNEL_VERSION ...]\n";
 }
 my $type=shift;
 my $kernel_flavour=shift;
+my $kernel_major=shift;
 my $sub_arch=shift;
 my @kernel_versions=@ARGV;
 
@@ -46,7 +48,13 @@ while (@lists) {
 
 			# includes
 			if (/^#include \"(.*)\"/) {
-				push @lists, "pkg-lists/$1";
+				my $include=$1;
+				if (-e "pkg-lists/kernel_specific/$kernel_major/$include") {
+					push @lists, "pkg-lists/kernel_specific/$kernel_major/$include";
+				}
+				else {
+					push @lists, "pkg-lists/$include";
+				}
 			}
 			
 			# comments
