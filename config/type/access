@@ -1,0 +1,23 @@
+# How big a floppy image should I make? (in kilobytes)
+FLOPPY_SIZE=1440
+
+# Other things that need buildin
+EXTRA_FLOPPIES=access_drivers 
+
+EXTRA_TARGETS=$(patsubst %,%-stamp, $(EXTRA_FLOPPIES))
+
+EXTRA_IMAGES= $(patsubst %,$(DEST)/%-image.img, $(EXTRA_FLOPPIES))
+
+EXTRA_STATS= $(patsubst %,%-stats,$(EXTRA_FLOPPIES))
+
+DRIVERFD_UDEBS = \
+	$(shell for target in $(EXTRA_FLOPPIES) ; do  grep --no-filename -v ^\# \
+		pkg-lists/$$target/common \
+		`if [ -f pkg-lists/$$target/$(DEB_HOST_ARCH) ]; then echo pkg-lists/$$target/$(DEB_HOST_ARCH); fi` \
+		| sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2\n)/g'  ; done )
+
+# List here any libraries that need to be put on the system. Generally
+# this is not needed except for libnss_* libraries, which will not be
+# automatically pulled in by the library reduction code. Wildcards are
+# allowed.
+EXTRALIBS += /lib/libnss_dns* /lib/libresolv*
