@@ -87,7 +87,7 @@ endif
 
 build: tree_umount tree  $(EXTRA_TARGETS) stats
 
-image: arch-image $(EXTRA_IMAGES)
+image: $(TREE)/unifont-reduced.bgf arch-image $(EXTRA_IMAGES) 
 
 # Include arch targets
 -include make/arch/$(DEB_HOST_GNU_SYSTEM)
@@ -102,10 +102,13 @@ else
 endif
 
 # Build the driver1 fd image
-$(DRIVER1_IMAGE) driver1: floppy-get_udebs-stamp
+driver1-stamp driver1: floppy-get_udebs-stamp
 	mkdir -p $(DRIVER1)
 	for file in $(DRIVERFD_UDEBS) ; do \
 		cp $(EXTRAUDEBDIR)/$$file*.udeb $(DRIVER1) ; done
+	touch driver1-stamp
+
+$(DRIVER1_IMAGE): driver1-stamp
 	rm -f $(DRIVER1_IMAGE)
 	install -d $(TEMP)
 	install -d $(DEST)
@@ -148,7 +151,7 @@ clean: demo_clean tmp_mount debian/control
 	        umount "$(USER_MOUNT_HACK)";\
 	    fi ; \
 	fi
-	rm -rf $(TREE) 2>/dev/null || sudo rm -rf $(TREE)
+	rm -rf $(TREE) 2>/dev/null $(TEMP)/full $(DRIVER1) || sudo rm -rf $(TREE) $(TEMP)/full $(DRIVER1)
 	dh_clean
 	rm -f *-stamp
 	rm -rf $(UDEBDIR) $(TMP_MNT) debian/build
@@ -271,7 +274,7 @@ $(TYPE)-tree-stamp: $(TYPE)-get_udebs-stamp debian/control
 	dpkg-checkbuilddeps
 
 	# This build cannot be restarted, because dpkg gets confused.
-	rm -rf $(TREE)
+	rm -rf $(TREE) $(TEMP)/full
 	# Set up the basic files [u]dpkg needs.
 	mkdir -p $(DPKGDIR)/info
 	touch $(DPKGDIR)/status
@@ -307,6 +310,7 @@ $(TYPE)-tree-stamp: $(TYPE)-get_udebs-stamp debian/control
 		oldcount=$$newcount ; \
 	done
 ifeq ($(TYPE),floppy)
+	echo -n > diskusage-extra.txt
 	oldsize=0; oldblocks=0; oldcount=0; \
 	for udeb in $(EXTRAUDEBDIR)/*.udeb ; do \
 		pkg=`basename $$udeb`; \
@@ -440,7 +444,11 @@ endif
 # has been made yet.
 all-$(TYPE).utf: $(TYPE)-tree-stamp
 	cp graphic.utf all-$(TYPE).utf
+ifeq ($(TYPE),floppy)
+	cat $(TEMP)/full/var/lib/dpkg/info/*.templates >> all-floppy.utf
+else
 	cat $(TREE)/var/lib/dpkg/info/*.templates >> all-$(TYPE).utf
+endif
 	find $(TREE) -type f | xargs strings >> all-$(TYPE).utf
 
 unifont-reduced-$(TYPE).bdf: all-$(TYPE).utf
