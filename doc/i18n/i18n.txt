@@ -123,7 +123,51 @@ Petter Reinholdtsen
    possibly your GPG key (this is not mandatory but could help in the
    future).
 
-3.1.1.2.  Request for early support for your language
+3.1.1.2.  Prerequisites
+
+   For a language to be supported completely in the installer and later
+   in the Debian distribution, at least "locale" must exist for this
+   language.
+
+   This document is not aimed at describing locales and what is the
+   information they contain. As a rough description, a locale describes
+   specific properties of a language/country combination. For instance,
+   the "de_DE" locale describes specifics of the german language in
+   Germany:
+   <unorderedlist> <listitem>
+
+   name of the days of the weeks (and abbreviations)
+   </listitem> <listitem> name of the months (and abbreviations)
+   </listitem> <listitem>
+
+   official symbol of the currency
+   </listitem> <listitem>
+
+   writing numbers
+   </listitem> <listitem>
+
+   writing dates
+   </listitem> <listitem>
+
+   writing telephone numbers
+   </listitem> <listitem>
+
+   collation order for sorting alphabetic lists
+   </listitem> <listitem>
+
+   usual paper size
+   </listitem> <listitem>
+
+   .../...
+   </listitem> </unorderedlist>
+
+   Writing a locale need to be used to the locale files format, so don't
+   be afraid by this : this part may be handled by a i18n specialist in
+   Debian, most often one of the D-I i18n coordinators. You will only
+   need to provide him/her the above informations when (s)he will need
+   it.
+
+3.1.1.3.  Request for early support for your language in Debian Installer
 
    First needed is having your language added to languagechooser (the
    package responsible for choosing language at the very beginning of the
@@ -135,7 +179,7 @@ Petter Reinholdtsen
    name for your language. In the rest of this document, the language
    code will be replaced by xx.
 
-3.1.1.3.  Indications regarding your language
+3.1.1.4.  Indications regarding your language
 
    Please provide the translation for your language name (with an initial
    capital letter if capital letters make sense in your language) and
@@ -144,7 +188,7 @@ Petter Reinholdtsen
    instance, the French translator will send a file containing the single
    word: FranÁais.
 
-3.1.1.4.  Indications about the handling of your language in Linux console
+3.1.1.5.  Indications about the handling of your language in Linux console
 
    During initial discussions with the D-I i18n coordinator you will need
    to provide details about the method for displaying your language in a
@@ -165,7 +209,7 @@ Petter Reinholdtsen
    bterm-unifont package includes all characters needed by your language.
    Content example for French: ‡‚ÈËÎÍÔÓÙ˘˚¸ˇ¿¬…»À ‘Ÿ€‹Y«∞.
 
-3.1.1.5.  Locales
+3.1.1.6.  Locales
 
    If you're aware of it, please provide the name of the most used
    locale(s) for your language. The D-I i18n coordinator will check
@@ -182,7 +226,7 @@ Petter Reinholdtsen
    country. Such checks will be made by the i18n coordinator, but your
    help will be appreciated here.
 
-3.1.1.6.  Prepare yourself to translation
+3.1.1.7.  Prepare yourself to translation
 
    If you're not used to GNU gettext files (PO files) handling and the
    use of dedicated PO files editors and tools, please refer to the
@@ -191,7 +235,7 @@ Petter Reinholdtsen
    In any cases, please refer to the Translation methods and advices for
    information and guidelines about the way you should work.
 
-3.1.1.7.  Enter the D-I team
+3.1.1.8.  Enter the D-I team
 
    Be aware that involving yourself into D-I translation is not a
    one-time work. The Debian Installer is always work in progress and
@@ -210,7 +254,7 @@ Petter Reinholdtsen
    all this development. Several D-I developers started by working on
    translations and later contributed to other pieces of code.
 
-3.1.1.8.  Follow the D-I development
+3.1.1.9.  Follow the D-I development
 
    You are strongly invited to subscribe to
    <debian-boot@lists.debian.org> and debian-i18n mailing lists.
@@ -274,17 +318,18 @@ Petter Reinholdtsen
     2. level 2 : all non core D-I material involved for user interaction
        screens during a *default priority* installation of a Debian base
        system with default choices:
+          + newt (programs)
           + base-config (programs and debconf)
           + shadow (debconf)
           + tasksel (programs, debconf, tasks)
           + iso-codes (iso_3166)
           + console-data (debconf)
           + exim4 (debconf)
-          + popularity-contest (debconf)
     3. level 3 : all non-core D-I material involved for user interaction
        screens during any type of installation of a Debian base system.
        This will include rarely used packages and packages which may
        display their screens under certain circumstances:
+          + popularity-contest (debconf)
           + discover1 (debconf)
           + aptitude (programs)
           + pppconfig (programs)
@@ -293,6 +338,7 @@ Petter Reinholdtsen
           + pcmcia-cs (debconf)
     4. level 4 : all packages which may display messages to the screen
        during any type of installation of a Debian base system:
+          + debconf (program)
           + discover1 (program)
           + dpkg (program)
           + apt (program)
@@ -380,13 +426,13 @@ Petter Reinholdtsen
 
    This includes two packages maintained by the D-I team as well as a few
    other regular Debian packages:
+     * newt
      * base-config (D-I team)
      * shadow
      * tasksel (D-I team)
      * iso-codes
      * console-data
      * exim4
-     * popularity-contest
 
    Iso-codes and console-data packages material is indeed used in D-I
    first stage but including them in the level 1 of translation would
@@ -397,7 +443,37 @@ Petter Reinholdtsen
    Please follow the order below for translating files. This means that
    you should first translate base-config, then shadow and so on...
 
-3.1.2.3.1.  Base-config
+3.1.2.3.1.  Newt
+
+   The newt package is a library (whiptail) which includes widgets used
+   by the most popular interface to the debconf software, the software
+   involved in packages configuration steps. These widgets include the
+   Yes or No widgets used by boolean templates, as well as the OK or
+   Abort buttons text.
+
+   The translation of newt is very simple as the above shows.
+   Getting files for newt 
+
+   This package is a regular Debian package. The package maintainer
+   currently does no use any CVS or SVN repository.
+
+   This package's l10n material is in one single file:
+     * po/newt.pot : whiptail widgets translatable text
+
+   Check whether an incomplete translation exists for your language:
+   http://people.debian.org/~seppy/d-i/level2/files/xx/newt_po_xx.po
+
+   If it doesn't exist, get the POT file at:
+   http://people.debian.org/~seppy/d-i/level2/POT/newt_po.pot
+   Sending files for newt 
+
+   The translation file must be reported as a bug against the newt
+   package. Mention that the file is the debconf translation.
+
+   Please see the Reporting bugs against Debian packages section of this
+   document.
+
+3.1.2.3.2.  Base-config
 
    The base-config package is the core of the second stage of the
    installation of a Debian system. It consists in a set of tasks which
@@ -452,7 +528,7 @@ Petter Reinholdtsen
    Please see the Reporting bugs against Debian packages section of this
    document.
 
-3.1.2.3.2.  Shadow
+3.1.2.3.3.  Shadow
 
    The shadow package includes several core utilities for a Unix system
    (login, passwd...) as well as the root user password setting step and
@@ -506,7 +582,7 @@ Petter Reinholdtsen
    package, built by the D-I i18n coordinator (these are called l10n
    NMUs).
 
-3.1.2.3.3.  Tasksel
+3.1.2.3.4.  Tasksel
 
    The tasksel package, called from base-config for each installation, is
    responsible for proposing tasks for trigerring the installation of
@@ -577,7 +653,7 @@ Petter Reinholdtsen
    Please see the Reporting bugs against Debian packages section of this
    document.
 
-3.1.2.3.4.  Iso-codes
+3.1.2.3.5.  Iso-codes
 
    A core D-I package (countrychooser) uses country names and codes from
    the iso-codes package. The country name translations are taken from
@@ -639,7 +715,7 @@ Petter Reinholdtsen
    should be reported as a bug against the iso-codes package. Please see
    the Reporting bugs against Debian packages section of this document.
 
-3.1.2.3.5.  Console-data
+3.1.2.3.6.  Console-data
 
    A core D-I package (kbd-chooser) uses keyboard names (and mapping
    files) from the console-data package. Thus, in order to get it
@@ -693,7 +769,7 @@ Petter Reinholdtsen
    Please see the Reporting bugs against Debian packages section of this
    document.
 
-3.1.2.3.6.  Exim4
+3.1.2.3.7.  Exim4
 
    The exim4 package installs the Exim Mail Transport Agent (MTA). It is
    installed by default on all newly installed Debian GNU/Linux systems
@@ -738,7 +814,26 @@ Petter Reinholdtsen
    Please see the Reporting bugs against Debian packages section of this
    document.
 
-3.1.2.3.7.  Popularity-contest
+3.1.2.4.  Level 3 of translations
+
+   The level 3 of translations groups together the translation of steps
+   which are not always been used during installation made with D-I.
+   These steps are optional steps and do no occur on default installs.
+
+   All packages which interact with users during second stage optional
+   steps are considered part of the level 3 of l10n for D-I.
+
+   This includes the following regular Debian packages:
+     * popularity-contest
+     * discover1 (debconf)
+     *
+     * aptitude
+     * pppconfig
+     * console-common
+     * dictionaries-common
+     * pcmcia-cs
+
+3.1.2.4.1.  Popularity-contest
 
    The popularity-contest (very often nicknamed as popcon) package is
    automatically installed on every Debian system as it is part of what
@@ -787,25 +882,7 @@ Petter Reinholdtsen
    coordinator with a short message back to you mentioning that the bug
    fix is pending.
 
-3.1.2.4.  Level 3 of translations
-
-   The level 3 of translations groups together the translation of steps
-   which are not always been used during installation made with D-I.
-   These steps are optional steps and do no occur on default installs.
-
-   All packages which interact with users during second stage optional
-   steps are considered part of the level 3 of l10n for D-I.
-
-   This includes the following regular Debian packages:
-     * discover1 (debconf)
-     *
-     * aptitude
-     * pppconfig
-     * console-common
-     * dictionaries-common
-     * pcmcia-cs
-
-3.1.2.4.1.  discover1 (debconf)
+3.1.2.4.2.  discover1 (debconf)
 
    The discover1 program is aimed at automatic recognition of hardware on
    Debian GNU/Linux systems. Originally developed by Progeny developers
@@ -849,7 +926,7 @@ Petter Reinholdtsen
    coordinator with a short message back to you mentioning that the bug
    fix is pending.
 
-3.1.2.4.2.  aptitude
+3.1.2.4.3.  aptitude
 
    The aptitude program is an combination of interactive and
    non-interactive tools for installing Debian packages. For long-time
@@ -916,7 +993,7 @@ Petter Reinholdtsen
    coordinator with a short message back to you mentioning that the bug
    fix is pending.
 
-3.1.2.4.3.  pppconfig
+3.1.2.4.4.  pppconfig
 
    The pppconfig package is dedicated at configuring PPP systems. It
    helps the users in configuring one or several PPP peers as well as PPP
@@ -952,7 +1029,7 @@ Petter Reinholdtsen
    package. Please see the Reporting bugs against Debian packages section
    of this document.
 
-3.1.2.4.4.  Console-common
+3.1.2.4.5.  Console-common
 
    The console-common package includes all tools for handling the console
    (input and output).
@@ -996,7 +1073,7 @@ Petter Reinholdtsen
    Please see the Reporting bugs against Debian packages section of this
    document.
 
-3.1.2.4.5.  dictionaries-common
+3.1.2.4.6.  dictionaries-common
 
    The dictionaries-common package includes all common tools for using
    word dictionaries in Debian.
@@ -1027,7 +1104,7 @@ Petter Reinholdtsen
    dictionaries-common package. Please see the Reporting bugs against
    Debian packages section of this document.
 
-3.1.2.4.6.  pcmcia-cs
+3.1.2.4.7.  pcmcia-cs
 
    The pcmcia-cs package includes all common tools for using PCMCIA
    devices on a Debian system.
@@ -1068,6 +1145,7 @@ Petter Reinholdtsen
    l10n for D-I.
 
    This includes the following regular Debian packages:
+     * debconf (program)
      * discover1 (program)
      * dpkg
      * apt
@@ -1077,9 +1155,45 @@ Petter Reinholdtsen
    life of a Debian system, so having them translated, though very
    tedious, is a must-have for a good localised system.
 
-   Discover1 outputs messages to the console during D-I processes.
+   Discover1 outputs messages to the console during D-I processes just
+   like debconf does.
 
-3.1.2.5.1.  discover1 (program)
+3.1.2.5.1.  debconf (program)
+
+   The debconf program is the softare which is used for user interaction
+   during Debian packages configuration step. All Debian packages should
+   use debconf when they need user input for installation-time
+   configuration.
+
+   Debconf may output information to the screen : this is why the program
+   translation is included in D-I fourth level of translation.
+   Getting files for debconf (program) 
+
+   This package is a regular Debian package. The package maintainer (the
+   D-I team) use a SVN repository. The D-I i18n coordinator handles
+   commits for l10n material.
+
+   This package's l10n material for program translation is in one file:
+
+   po/debconf.pot : program output
+
+   Check whether an incomplete translation exists for your language:
+   http://people.debian.org/~seppy/d-i/level4/files/xx/debconf_po_xx.po
+
+   If it doesn't exist, get the POT file at:
+   http://people.debian.org/~seppy/d-i/level4/POT/debconf_po.pot
+   Sending files for debconf (program) 
+
+   The translation files must be reported as bugs against the debconf
+   package. Please mention that the file is the program translation.
+   Please see the Reporting bugs against Debian packages section of this
+   document.
+
+   The translation will most often be quickly committed by the D-I i18n
+   coordinator with a short message back to you mentioning that the bug
+   fix is pending.
+
+3.1.2.5.2.  discover1 (program)
 
    The discover1 program is aimed at automatic recognition of hardware on
    Debian GNU/Linux systems. Originally developed by Progeny developers
@@ -1120,7 +1234,7 @@ Petter Reinholdtsen
    coordinator with a short message back to you mentioning that the bug
    fix is pending.
 
-3.1.2.5.2.  dpkg
+3.1.2.5.3.  dpkg
 
    The dpkg program is a low level program aimed at installing and
    removing Debian packages.
@@ -1169,7 +1283,7 @@ Petter Reinholdtsen
    may take some time because dpkg follows a very strict development
    process, being a critical tool in a Debian system.
 
-3.1.2.5.3.  apt
+3.1.2.5.4.  apt
 
    The apt program is aimed at installing and removing Debian packages
    from packages sources such as Debian HTTP/FTP mirrors, Debian CD's,
@@ -1217,7 +1331,7 @@ Petter Reinholdtsen
    process of APT is very strict, so the inclusion of l10n material may
    not occur very often. Be patient..:-)
 
-3.1.2.5.4.  Shadow
+3.1.2.5.5.  Shadow
 
    The shadow package has already been mentioned previously in this
    document as part of the level 2 of translation.
@@ -1351,7 +1465,7 @@ Petter Reinholdtsen
 3.2.2.  Installing SVN
 
    You need to install SVN (Subversion) on your system. For Debian sid or
-   sarge users, just do apt-get install svn. Users of Debian woody
+   sarge users, just do apt-get install subversion. Users of Debian woody
    release may use backports from www.backports.org. Please add this
    entry to your /etc/apt/sources.list file:
 
