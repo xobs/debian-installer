@@ -321,7 +321,8 @@ stats: tree
 	@echo "             libs: $(shell du -h --exclude=modules -s $(TREE)/lib | cut -f 1)"
 	@echo "   kernel modules: $(shell du -h -s $(TREE)/lib/modules | cut -f 1)"
 	@echo "Compresses to: $(COMPRESSED_SZ)k"
-	@echo "Single Floppy kernel must be less than: ~$(shell expr $(FLOPPY_SIZE) - $(COMPRESSED_SZ) )k"
+	@echo -n "Single Floppy kernel must be less than: ~$(shell expr $(FLOPPY_SIZE) - $(COMPRESSED_SZ) )k "
+	@echo "(currently, it is: $(shell du -h $(KERNEL) | cut -f 1))"
 	@if [ -e $(TEMP)/.floppy_free_stat ]; then \
 		echo "Single net floppy currently has `cat $(TEMP)/.floppy_free_stat` free!"; \
 	fi
