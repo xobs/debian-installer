@@ -597,7 +597,7 @@ $(BOOT): $(TEMP_BOOT)
 	install -m 644 -D $(TEMP_BOOT)$(GZIPPED) $@
 	./update-manifest $@ $(MANIFEST-BOOT)
 
-$(TEMP_BOOT): $(TEMP_INITRD) $(TEMP_KERNEL) arch_boot
+$(TEMP_BOOT): $(TEMP_INITRD) $(TEMP_KERNEL) $(TEMP_BOOT_SCREENS) arch_boot
 
 # non-bootable root images
 $(ROOT): $(TEMP_ROOT)
