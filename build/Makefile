@@ -55,7 +55,7 @@
 #
 
 # Add to PATH so dpkg will always work, and so local programs will be found.
-PATH := $(PATH):/usr/sbin:/sbin:.
+PATH := util:$(PATH):/usr/sbin:/sbin
 
 # We don't want this to be run each time we re-enter.
 ifndef DEB_HOST_ARCH
@@ -236,7 +236,7 @@ reallyclean: all_clean
 .PHONY: clean_%
 clean_%:
 	@$(submake) _clean $(shell $(submake) $(subst clean_,validate_,$@))
-	./update-manifest
+	update-manifest
 
 # The general clean rule.
 .PHONY: _clean
@@ -341,7 +341,7 @@ ifdef KERNELVERSION
 		[ -z "$$sysmap_name" ] || sysmap_opt="-F $$sysmap_name"; \
 		if [ -d $(TREE)/lib/modules/$(VERSION) ]; then \
 			mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
-			$(shell ./choose-subarch-env $(VERSION)) depmod $$sysmap_opt -q -a -b $(TREE)/ $(VERSION); \
+			$(shell choose-subarch-env $(VERSION)) depmod $$sysmap_opt -q -a -b $(TREE)/ $(VERSION); \
 		fi; \
 		[ -z "$$sysmap_name" ] || mv $$sysmap_name $(TEMP);)
 
@@ -459,7 +459,7 @@ endif
 	# Disabled for now, as it doesn't pass enough modules to the script.
 	#set -e; \
 	#if [ -e $(TREE)/etc/pcmcia/config ]; then \
-	#	./pcmcia-config-reduce.pl $(TREE)/etc/pcmcia/config \
+	#	pcmcia-config-reduce.pl $(TREE)/etc/pcmcia/config \
 	#		`if [ -d "$(EXTRADRIVERSDIR)" ]; then find $(EXTRADRIVERSDIR)/lib/modules -name \*.o -name \*.ko; fi` \
 	#		`find $(TREE)/lib/modules/ -name \*.o -or -name \*.ko` > \
 	#		$(TREE)/etc/pcmcia/config.reduced; \
@@ -511,13 +511,13 @@ endif
 
 # Get the list of udebs to install.
 # HACK Alert: pkg-lists/ is still sorted by TYPE instead of a dir hierarchy.
-UDEBS = $(shell set -e; ./get-packages udeb update >&2; ./pkg-list $(TYPE) "$(DRIVER_FOR)" $(KERNEL_FLAVOUR) $(KERNELMAJOR) "$(SUBARCH)" $(KERNELIMAGEVERSION)) $(EXTRAS)
+UDEBS = $(shell set -e; get-packages udeb update >&2; pkg-list $(TYPE) "$(DRIVER_FOR)" $(KERNEL_FLAVOUR) $(KERNELMAJOR) "$(SUBARCH)" $(KERNELIMAGEVERSION)) $(EXTRAS)
 
 # Get all required udebs and put them in UDEBDIR.
 $(STAMPS)get_udebs-$(targetstring)-stamp: sources.list.udeb
 	dh_testroot
 	@rm -f $@
-	./get-packages udeb $(UDEBS)
+	get-packages udeb $(UDEBS)
 	@touch $@
 
 # Auto-generate a sources.list.type
@@ -578,8 +578,8 @@ $(TREE)/unifont.bgf: $(TEMP)/all.utf
 $(INITRD): $(TEMP_INITRD) $(TEMP_INITRD_LIST)
 	install -m 644 -D $< $@
 	install -m 644 -D $(TEMP_INITRD_LIST) $(INITRD_LIST)
-	./update-manifest $@ $(MANIFEST-INITRD)
-	./update-manifest $(INITRD_LIST) $(MANIFEST-INITRD_LIST)
+	update-manifest $@ $(MANIFEST-INITRD)
+	update-manifest $(INITRD_LIST) $(MANIFEST-INITRD_LIST)
 
 $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 	# Only build the font if we have rootskel-locale
@@ -612,12 +612,12 @@ $(KERNEL): TEMP_REAL_KERNEL = $(TEMP)/$(shell echo ./$@ |sed 's,$(SOME_DEST)/$(E
 $(KERNEL):
 	@$(MAKE) $(STAMPS)tree-unpack-$(targetstring)-stamp $(TEMP_REAL_KERNEL)
 	install -m 644 -D $(TEMP_REAL_KERNEL) $@
-	./update-manifest $@ $(MANIFEST-KERNEL)
+	update-manifest $@ $(MANIFEST-KERNEL)
 
 # bootable images
 $(BOOT): $(TEMP_BOOT)
 	install -m 644 -D $(TEMP_BOOT)$(GZIPPED) $@
-	./update-manifest $@ $(MANIFEST-BOOT)
+	update-manifest $@ $(MANIFEST-BOOT)
 
 $(TEMP_KERNEL): $(STAMPS)tree-unpack-$(targetstring)-stamp
 
@@ -626,21 +626,21 @@ $(TEMP_BOOT): $(TEMP_INITRD) $(TEMP_KERNEL) $(TEMP_BOOT_SCREENS) arch_boot
 # non-bootable root images
 $(ROOT): $(TEMP_ROOT)
 	install -m 644 -D $(TEMP_ROOT)$(GZIPPED) $@
-	./update-manifest $@ $(MANIFEST-ROOT)
+	update-manifest $@ $(MANIFEST-ROOT)
 
 $(TEMP_ROOT): $(TEMP_INITRD) arch_root
 
 # miniature ISOs with only a boot image
 $(MINIISO): $(TEMP_MINIISO)
 	install -m 644 -D $(TEMP_MINIISO) $@
-	./update-manifest $@ $(MANIFEST-MINIISO)
+	update-manifest $@ $(MANIFEST-MINIISO)
 
 $(TEMP_MINIISO): $(TEMP_BOOT_SCREENS) arch_miniiso
 
 # various kinds of information, for use on debian-cd isos
 $(DEBIAN_CD_INFO): $(TEMP_BOOT_SCREENS)
 	(cd $(TEMP_BOOT_SCREENS); tar czf - .) > $@
-	./update-manifest $@ $(MANIFEST-DEBIAN_CD_INFO)
+	update-manifest $@ $(MANIFEST-DEBIAN_CD_INFO)
 
 # a directory full of files for netbooting
 $(NETBOOT_DIR): $(NETBOOT_DIR_TARGETS) $(TEMP_BOOT_SCREENS) $(TEMP_NETBOOT_DIR)
@@ -651,12 +651,12 @@ $(NETBOOT_DIR): $(NETBOOT_DIR_TARGETS) $(TEMP_BOOT_SCREENS) $(TEMP_NETBOOT_DIR)
 		rm -f $@/../$(link); \
 		cp -a $(TEMP_NETBOOT_DIR)/$(link) $@/..; \
 	)
-	./update-manifest $@ $(MANIFEST-NETBOOT_DIR)
+	update-manifest $@ $(MANIFEST-NETBOOT_DIR)
 
 # a tarball for netbooting
 $(NETBOOT_TAR): $(TEMP_NETBOOT_DIR)
 	(cd $(TEMP_NETBOOT_DIR); tar czf - .) > $@
-	./update-manifest $@ $(MANIFEST-NETBOOT_TAR)
+	update-manifest $@ $(MANIFEST-NETBOOT_TAR)
 
 $(TEMP_BOOT_SCREENS): arch_boot_screens
 $(TEMP_NETBOOT_DIR): arch_netboot_dir
@@ -664,14 +664,14 @@ $(TEMP_NETBOOT_DIR): arch_netboot_dir
 $(MISC): TEMP_REAL_MISC = $(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,')
 $(MISC): 
 	install -m 644 $(TEMP_REAL_MISC) $(SOME_DEST)/$(EXTRANAME)
-	./update-manifest \
+	update-manifest \
 		$(SOME_DEST)/$(EXTRANAME)$(shell basename $(TEMP_REAL_MISC)) \
 		$(MANIFEST-MISC)
 
 # Other images, e.g. driver floppies. Those are simply handled as flavours
 $(EXTRA): $(TEMP_EXTRA)
 	install -m 644 -D $(TEMP_EXTRA)$(GZIPPED) $@
-	./update-manifest $@ $(MANIFEST-EXTRA)
+	update-manifest $@ $(MANIFEST-EXTRA)
 
 $(TEMP_EXTRA): $(STAMPS)extra-$(targetstring)-stamp
 	install -d $(shell dirname $@)
@@ -710,12 +710,12 @@ $(STAMPS)extra-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
 	sort -n < $(TEMP)/diskusage.txt > $(TEMP)/diskusage.txt.new && \
 		mv $(TEMP)/diskusage.txt.new $(TEMP)/diskusage.txt
 	echo $(UDEBS) > $(TREE)/udeb_include
-	./makelabel $(DISK_LABEL) $(BUILD_DATE) > $(TREE)/disk.lbl
+	makelabel $(DISK_LABEL) $(BUILD_DATE) > $(TREE)/disk.lbl
 	@touch $@
 
 # Get a list of all the standard priority udebs, excluding kernel stuff.
 pkg-lists/standard-udebs:
-	./get-packages udeb update
+	get-packages udeb update
 	grep-dctrl -FPriority -e 'required|standard|important' \
 		-sPackage apt.udeb/state/lists/*_Packages* | \
 		grep -v kernel-image | grep -v -- -modules | \
@@ -725,7 +725,7 @@ pkg-lists/standard-udebs:
 
 # Get a list of all kernel modules matching the kernel version.
 pkg-lists/kernel-module-udebs:
-	./get-packages udeb update
+	get-packages udeb update
 	grep-dctrl -P -e '.*-modules-$(KERNELVERSION)-$(KERNEL_FLAVOUR)' \
 		-sPackage apt.udeb/state/lists/*_Packages* | \
 		cut -d " " -f 2 > $@
