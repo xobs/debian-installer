@@ -17,6 +17,11 @@ KVERS=2.4.19
 FLAVOUR=386
 KERNELNAME=vmlinuz
 endif
+ifeq "$(architecture)" "ia64"
+KVERS=2.4.19
+FLAVOUR=ia64
+KERNELNAME=vmlinuz
+endif
 ifeq "$(architecture)" "powerpc"
 KVERS=2.4.19
 FLAVOUR=powerpc
