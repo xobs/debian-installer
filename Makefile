@@ -87,7 +87,7 @@ endif
 demo: tree
 	$(MAKE) tree_mount
 	-@[ -f questions.dat ] && cp -f questions.dat $(TREE)/var/lib/cdebconf/
-	-@sudo chroot $(TREE) bin/sh -c "export DEBCONF_DEBUG=5 LANG=C.UTF-8 LC_ALL=C.UTF-8 ; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; exec /usr/share/debconf/frontend /usr/bin/main-menu"
+	-@sudo chroot $(TREE) bin/sh -c "export DEBCONF_DEBUG=5 ; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; exec /usr/share/debconf/frontend /usr/bin/main-menu"
 	$(MAKE) tree_umount
 
 shell: tree
@@ -252,7 +252,7 @@ $(TYPE)-tree-stamp: $(TYPE)-get_udebs-stamp debian/control
 	# modules.
 	$(foreach VERSION,$(KERNELVERSION), \
 		mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
-		depmod -q -a -b $(TREE)/ $(VERSION); )
+		depmod.modutils -q -a -b $(TREE)/ $(VERSION); )
 	# These files depmod makes are used by hotplug, and we shouldn't
 	# need them, yet anyway.
 	find $(TREE)/lib/modules/ -name 'modules*' \
@@ -285,16 +285,6 @@ else
 		mv -f $(TREE)/boot/$(NAME) $(TEMP); )
 endif
 	-rmdir $(TREE)/boot/
-
-ifndef NO_TERMINFO
-	# Copy terminfo files for slang frontend
-	# TODO: terminfo.udeb?
-	for file in /etc/terminfo/a/ansi /etc/terminfo/l/linux \
-		    /etc/terminfo/v/vt102; do \
-		mkdir -p $(TREE)/`dirname $$file`; \
-		cp -a $$file $(TREE)/$$file; \
-	done
-endif
 
 ifdef EXTRAFILES
 	# Copy in any extra files
