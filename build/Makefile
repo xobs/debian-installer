@@ -103,35 +103,35 @@ include config/dir
 # Useful command sequences
 #
 define submake
-$(MAKE) --no-print-directory
+  $(MAKE) --no-print-directory
 endef
 
 define recurse_once
-	@set -e; $(submake) $(1)_$(2)
+  @set -e; $(submake) $(1)_$(2)
 endef
 
 define recurse_many
-	@set -e; $(foreach var,$($(1)_SUPPORTED),$(submake) $(2)_$(3) $(1)=$(var);)
+  @set -e; $(foreach var,$($(1)_SUPPORTED),$(submake) $(2)_$(3) $(1)=$(var);)
 endef
 
 define recurse
-	$(if $($(1)_SUPPORTED),$(call recurse_many,$(1),$(2),$(3)),$(call recurse_once,$(2),$(3)))
+  $(if $($(1)_SUPPORTED),$(call recurse_many,$(1),$(2),$(3)),$(call recurse_once,$(2),$(3)))
 endef
 
 define genext2fs-userdevfs
-       genext2fs -d $(TREE) -b $(USERDEVFS_SIZE) -r 0
+  genext2fs -d $(TREE) -b $(USERDEVFS_SIZE) -r 0
 endef
 
 define genext2fs
-	genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` -r 0
+  genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` -r 0
 endef
 
 define e2fsck
-	e2fsck -fy
+  e2fsck -fy
 endef
 
 define mkcramfs
-	mkcramfs $(TREE)
+  mkcramfs $(TREE)
 endef
 
 #
@@ -153,7 +153,6 @@ medium_%:
 .PHONY: flavour_%
 flavour_%:
 	$(if $(targetstring),@$(submake) _$*)
-
 
 #
 # Validate a targetstring, echo env variables for valid ones
@@ -272,7 +271,7 @@ rebuild_%:
 
 #
 # The general tree target.
-# FIXME: This is way to convoluted.
+# FIXME: This is way too convoluted.
 #
 $(STAMPS)tree-unpack-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
 	dh_testroot
