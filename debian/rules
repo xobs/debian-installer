@@ -14,27 +14,29 @@ endif
 ARCHIVEDIR=installer-$(ARCH)
 DESTDIR=$(ARCHIVEDIR)/$(DATE)
 IMAGEDIR=$(DESTDIR)/images
+MANDIR=$(DESTDIR)/doc/manual
+MANTMP=$(shell pwd)/doc/manual/build/manual
 TARNAME=debian-installer-images_$(VERSION)_$(ARCH).tar.gz
 
 clean:
 	dh_testdir
 	dh_testroot
 	dh_clean build-stamp
+	rm -rf $(MANTMP)
 	$(MAKE) -C build reallyclean
 	$(MAKE) -C doc/devel/partman clean
 
 # Must run as root, so is not run as part of regular build.
 build-images:
-	rm -f $@
 	$(MAKE) -C build all_build stats \
 		SUITE=$(DISTRIBUTION) BUILD_DATE=$(DATE)
 	
 build: build-stamp
 build-stamp:
-	-rm -rf debian/tmp/$(DESTDIR)/doc/manual
+	rm -f $@
+	-rm -rf $(MANTMP)
 	cd doc/manual/build && \
-	        official_build=1 \
-		destination=$(shell pwd)/debian/tmp/$(DESTDIR)/doc/manual \
+	        official_build=1 destination=$(MANTMP) \
 		architectures=$(ARCH) noarchdir=1 ./build.sh
 
 	$(MAKE) -C doc/devel/partman
@@ -45,8 +47,13 @@ install: build
 	dh_testdir
 	dh_testroot
 	dh_clean -k
-	dh_install
+	dh_installdirs
+	
+	install -d debian/tmp/$(MANDIR)
+	cp -a $(MANTMP)/* debian/tmp/$(MANDIR)
+	
 	debian/rules build-images
+
 	install -d debian/tmp/$(IMAGEDIR)
 	cp -a build/dest/* debian/tmp/$(IMAGEDIR)
 	cd debian/tmp/$(IMAGEDIR) && md5sum `find . -type f` > MD5SUMS
@@ -56,7 +63,7 @@ binary-arch: install
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs
-	dh_installdocs debian/tmp/$(DESTDIR)/doc/manual
+	dh_installdocs $(MANTMP)
 	dh_installdocs -X manual doc/* -X Makefile -X partman-doc.sgml
 	dh_compress
 	dh_fixperms
