@@ -2,10 +2,11 @@
 
 ARCH=$(shell dpkg-architecture -qDEB_BUILD_ARCH)
 VERSION=$(shell LC_ALL=C dpkg-parsechangelog | grep ^Version: | cut -d ' ' -f 2)
+DATE=$(shell echo $(VERSION) | cut -d '.' -f 1)
 DISTRIBUTION=$(shell LC_ALL=C dpkg-parsechangelog | grep ^Distribution: | cut -d ' ' -f 2)
 
 ARCHIVEDIR=installer-$(ARCH)
-IMAGEDIR=$(ARCHIVEDIR)/$(VERSION)/images
+IMAGEDIR=$(ARCHIVEDIR)/$(DATE)/images
 TARNAME=debian-installer-images_$(VERSION)_$(ARCH).tar.gz
 
 # Work out the name(s) of the kernel that the demo deb should depend on.
@@ -15,7 +16,7 @@ include config/main
 include config/arch/$(DEB_HOST_GNU_SYSTEM)
 include config/arch/$(DEB_HOST_GNU_SYSTEM)-$(DEB_HOST_GNU_CPU)
 KERNELPACKAGE=$(shell perl -e 'print join(" | ", @ARGV)' \
-              $(foreach VERSION,${KERNELVERSION},kernel-image-$(VERSION)))
+              $(foreach KVERS,${KERNELVERSION},kernel-image-$(KVERS)))
 
 clean:
 	dh_testdir
@@ -39,7 +40,7 @@ install: build
 	-rm dest/*demo*
 	cp -p dest/* debian/tmp/$(IMAGEDIR)
 	cd debian/tmp/$(IMAGEDIR) && md5sum * > MD5SUMS
-	ln -s $(VERSION) debian/tmp/$(ARCHIVEDIR)/current
+	ln -s $(DATE) debian/tmp/$(ARCHIVEDIR)/current
 
 binary-arch: install  
 	dh_testdir
