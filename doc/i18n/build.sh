@@ -4,9 +4,15 @@ xsltproc=`which xsltproc`
 lynx=`which lynx`
 sgmltools=`which sgmltools`
 w3m=`which w3m`
+stylesheet=/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl
 
 if [ -n "$xsltproc" ] ; then
-    $xsltproc style-html.xsl i18n.xml
+    if [ -e "$stylesheet" ]; then
+	$xsltproc style-html.xsl i18n.xml
+    else
+	echo stylesheet missing. Please install the docbook-xsl Debian package
+	exit 1
+    fi
 else
     echo xsltproc not found. Please install the xsltproc Debian package
     exit 1
