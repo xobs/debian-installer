@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 24840 -->
+<!-- original version: 25798 -->
 
  <sect2 id="install-packages">
  <title>Installatie van pakketten</title>
@@ -23,43 +23,75 @@ U heeft dus de mogelijkheid om allereerst <emphasis>taken</emphasis> te
 selecteren en vervolgens daaraan individuele pakketten toe te voegen.
 Globaal vertegenwoordigen deze taken verschillende doeleinden waarvoor u
 uw computer zou kunnen gebruiken, zoals <quote>Desktopomgeving</quote>,
-<quote>Webserver</quote> of <quote>Printserver</quote>.
+<quote>Webserver</quote> of <quote>Printserver</quote><footnote>
 
-<footnote>
 <para>
 
-U moet weten dat <command>base-config</command> om deze lijst te tonen
-slechts het programma <command>tasksel</command> aanroept.
-Voor handmatige pakketselectie wordt het programma
-<command>aptitude</command> uitgevoerd. Elk van deze programma's kunt u na de
-installatie op elk gewenst moment zelf uitvoeren om extra pakketten te
-installeren (of te verwijderen). Als u, nadat de installatie voltooid is, op
-zoek bent naar een specifiek pakket, kunt u eenvoudig <userinput>apt-get install
-<replaceable>pakket</replaceable></userinput> uitvoeren, waarbij
+Door <command>base-config</command> wordt om deze lijst te tonen het programma <command>tasksel</command> aangeroepen. Voor handmatige pakketselectie wordt
+het programma <command>aptitude</command> uitgevoerd. Elk van deze programma's
+kunt u na de installatie op elk gewenst moment zelf uitvoeren om extra pakketten
+te installeren (of te verwijderen). Als u, nadat de installatie voltooid is, op
+zoek bent naar een specifiek pakket, kunt u eenvoudig <userinput>aptitude
+install <replaceable>pakket</replaceable></userinput> uitvoeren, waarbij
 <replaceable>pakket</replaceable> de naam is van het pakket dat u zoekt.
 
 </para>
-</footnote>
+
+</footnote>. In <xref linkend="tasksel-size-list"/> is een overzicht opgenomen
+van de voor de beschikbare taken benodigde ruimte.
+
+</para><para>
+
+Hadat u de gewenste taken heeft geselecteerd, selecteert u <guibutton>Ok</guibutton>.
+Vervolgens zal de installatie van de pakketten die behoren bij de door u
+geselecteerde taken, plaatsvinden met behulp van <command>apt-get</command>.
+
+<note><para>
+
+Zelfs als u geen enkele taak heeft geselecteerd, worden toch pakketten met
+prioriteiten 'standaard', 'belangrijk' of 'vereist' &mdash; voor zover die nog
+niet op uw systeem aanwezig waren &mdash; geïnstalleerd. Deze functionaliteit
+is hetzelfde als wanneer u <userinput>tasksel -ris</userinput> zou uitvoeren
+vanaf de opdrachtregel, en houdt op dit moment in dat ongeveer 37MB aan
+archieven zal worden gedownload. Het aantal te installeren pakketten zal
+worden getoond alsmede, als er pakketten gedownload moeten worden, de totale
+omvang daarvan (in kB).
+
+</para></note>
 
 </para><para>
 
 Als u individuele pakketten wilt kunnen selecteren voor installatie,
 selecteer dan de optie <quote>handmatige selectie van pakketten</quote>
-in <command>tasksel</command>.
+van <command>tasksel</command>. Als u naast deze optie ook één of meer taken
+selecteert, zal aptitude worden aangeroepen met de optie
+<command>--visual-preview</command>. Dit houdt in dat u de te installeren
+pakketten kunt controleren<footnote>
 
-</para><para>
+<para>
 
-Wanneer u de gewenste taken heeft geselecteerd, selecteert u <guibutton>Ok</guibutton>.
-Vervolgens zal de installatie van de door u geselecteerde pakketten
-plaatsvinden met behulp van <command>apt-get</command>. Let op: zelfs als u geen
-enkele taak heeft geselecteerd, kunnen toch pakketten met prioriteiten 'standaard',
-'belangrijk' of 'vereist' die nog niet op uw systeem aanwezig waren, geïnstalleerd
-worden. Deze functionaliteit is hetzelfde als wanneer u <userinput>tasksel -s</userinput>
-zou uitvoeren vanaf de opdrachtregel, en houdt op dit moment in dat ongeveer 37MB
-aan archieven zal worden gedownload. Het aantal te installeren pakketten zal worden
-getoond alsmede, als er pakketten gedownload moeten worden, de totale omvang daarvan
-(in kB).
-<!-- FJP: Voorlaatste zin is overbodig gedetailleerd en verwarrend. //-->
+Ook is het mogelijk om de standaard selecties wijzigen. Gebruik <menuchoice>
+<guimenu>Views</guimenu> <guimenuitem>Nieuwe Pakket-View</guimenuitem>
+</menuchoice> als u aanvullende pakketten wilt selecteren.
+
+</para>
+
+</footnote>. Als u <emphasis>geen</emphasis> taken selecteert, zal het normale
+startscherm van <command>aptitude</command> worden getoond. Nadat u uw
+selectie heeft gemaakt, toetst u <quote><userinput>g</userinput></quote> om het
+ophalen en de installatie van de pakketten te starten.
+
+<note><para>
+
+Als u de optie <quote>handmatige selectie van pakketten</quote> selecteert
+<emphasis>zonder</emphasis> daarnaast taken te selecteren, dan zal geen
+standaardinstallatie van pakketten plaatsvinden. Dit betekent dat u deze
+optie kunt gebruiken om een minimaal systeem te installeren, maar ook dat de
+verantwoordelijkheid om pakketten te selecteren die noodzakelijk zijn voor uw
+systeem maar nog niet zijn geïnstalleerd als onderdeel van het basissysteem,
+geheel bij uzelf ligt.
+
+</para></note>
 
 </para><para>
 
@@ -68,13 +100,13 @@ slechts een klein deel afgedekt door de taken uit het Taak-installatieprogamma.
 Om de informatie over de overige pakketten te bekijken, kunt u ofwel gebruik maken
 van <userinput>apt-cache search <replaceable>zoektekst</replaceable></userinput>
 (zie de man pagina voor <citerefentry><refentrytitle>apt-cache</refentrytitle>
-<manvolnum>8</manvolnum></citerefentry>), ofwel de hieronder beschreven programma's
-<command>dselect</command> of <command>aptitude</command> uitvoeren.
+<manvolnum>8</manvolnum></citerefentry>), ofwel het hieronder beschreven programma
+<command>aptitude</command> uitvoeren.
 
 </para>
 
- <sect3 id="aptitude">
- <title>Geavanceerde pakketselectie met <command>aptitude</command></title>
+  <sect3 id="aptitude">
+  <title>Geavanceerde pakketselectie met <command>aptitude</command></title>
 
 <para>
 
