@@ -1,15 +1,8 @@
 #!/bin/sh
 
-#if [ "$#" -ne 2 ]; then
-    #echo "Usage: $0 doctype lang"
-if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 lang"
-    exit 1
-fi
-
-#doctype=${1-pdf}
-#language=${2-en}
-language=${1-en}
+#doctype=${1:-pdf}
+#language=${2:-en}
+language=${1:-en}
 
 #case $doctype in
 #    pdf|ps|txt)
@@ -22,7 +15,6 @@ language=${1-en}
 #esac
 
 ## First we define some paths to various needed files
-stylesheet_fo="/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/profiling/profile.xsl"
 stylesheet_dsssl="/usr/share/sgml/docbook/stylesheet/dsssl/modular/print/docbook.dsl"
 xml_decl="/usr/share/sgml/declaration/xml.dcl"
 
@@ -30,22 +22,22 @@ xml_decl="/usr/share/sgml/declaration/xml.dcl"
 xsltprocessor=xsltproc
 
 if [ -f install.${language}.profiled.xml ] ; then
-	## ...and also to the .fo...
-	$xsltprocessor --output install.${language}.fo \
-               $stylesheet_fo install.${language}.profiled.xml
-
-	export SP_ENCODING="xml"
-	jade -t tex \
-		-o install.${language}.profiled.jtex \
+	# And use openjade to convert generate a .tex file
+	echo "Generating .tex..."
+	export SP_ENCODING="utf-8"
+	openjade -t tex \
+		-b utf-8 \
+		-o install.${language}.profiled.tex \
 		-d $stylesheet_dsssl \
-		$xml_decl \
 		install.${language}.profiled.xml
 
 	# Next we use jadetext to generate a .dvi file
 	# This needs three passes to properly generate the index (pagenumbering)
-	jadetex install.${language}.profiled.jtex
-	jadetex install.${language}.profiled.jtex
-	jadetex install.${language}.profiled.jtex
+	echo "Generating .dvi..."
+	jadetex install.${language}.profiled.tex >/dev/null
+	jadetex install.${language}.profiled.tex >/dev/null
+	jadetex install.${language}.profiled.tex >/dev/null
+	echo "Transcript written on install.nl.profiled.log."
 else
 	echo "install.${language}.profiled.xml not found; please run buildone.sh first."
 fi
