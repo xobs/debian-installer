@@ -62,6 +62,7 @@ APT_GET=apt-get --assume-yes \
 UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE)) $(EXTRAS)
 
 DPKGDIR=$(DEST)/var/lib/dpkg
+TMPDIR=./tmp
 
 build: demo_clean tree lib_reduce status_reduce stats
 
@@ -90,7 +91,7 @@ demo_clean:
 
 clean:
 	dh_clean
-	rm -rf $(DEST) $(APTDIR) $(UDEBDIR)
+	rm -rf $(DEST) $(APTDIR) $(UDEBDIR) $(TMPDIR)
 
 # Get all required udebs and put in UDEBDIR.
 get_udebs:
@@ -171,12 +172,13 @@ tree: get_udebs
 ROOT_FS_SIZE=`du -s $(DEST) | cut -f 1`
 
 # this is the temp file we are going to mount via the loop back device 
-TMP_IMAGE=/tmp/$(DEST)
+TMP_IMAGE=$(TMPDIR)/$(DEST)
 
 # this is where we'll mount the rootfs
-ROOT_IMAGE=/mnt/$(DEST)
+ROOT_IMAGE=./mnt/$(DEST)
 
 rootfs.gz:
+	dh_testroot
 	rm -f $(TMP_IMAGE)
 	if mount | grep $(ROOT_IMAGE) ; then \
 		if ! umount $(ROOT_IMAGE) ; then \
@@ -188,6 +190,7 @@ rootfs.gz:
 	mkdir -p $(ROOT_IMAGE)
 
 	# make a temporary file, all zeros, big enough to fit root filsystem
+	install -d $(TMPDIR)
 	dd if=/dev/zero of=$(TMP_IMAGE) bs=1k count=$(ROOT_FS_SIZE)
 
 	# make filesystem, don't reserve any space, 2000 bytes/inode
@@ -207,7 +210,7 @@ KERNEL=vmlinuz
 # kernel blocks is size of kernel + 50, this could be optimized 
 KERNEL_BLOCKS=$(shell SIZE=`ls -s $(KERNEL) | cut -f 2 -d " "`; \
 	let SIZE=$$SIZE+50 ; echo $$SIZE)
-# where we are making the boto disk
+# where we are making the boot disk
 FD_DEV=/dev/fd0
 
 # where we should mount it
@@ -218,6 +221,7 @@ RAMDISK_WORD=$(shell let SIZE=$(KERNEL_BLOCKS)+16384 ; echo $$SIZE)
 
 
 boot_floppy: rootfs.gz $(KERNEL)
+	dh_testroot
 	if mount | grep $(FD_MNT) ; then \
 		if ! umount $(FD_MNT) ; then \
 			echo "Error unmounting $(FD_MNT)" ; \
