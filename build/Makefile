@@ -736,7 +736,7 @@ pkg-lists/kernel-module-udebs:
 			cut -d " " -f 2 >> $@;)
 	# Add any local kernel modules to the list.
 	$(foreach VERSION,$(KERNELVERSION), \
-		find localudebs/*-modules-$(KERNELVERSION)-$(KERNEL_FLAVOUR)_*.udeb -printf '%f\n' | sed 's/_.*//' >> $@;)
+		find localudebs/*-modules-$(VERSION)-$(KERNEL_FLAVOUR)_*.udeb -printf '%f\n' | sed 's/_.*//' >> $@;)
 # The kernel version changes from build to build, so always regen the file.
 .PHONY: pkg-lists/kernel-module-udebs
 
