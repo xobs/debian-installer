@@ -1,26 +1,19 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 22285 -->
+<!-- original version: 22842 -->
+
+ <sect1 id="example-preseed">
+ <title>Příklad předkonfiguračního souboru</title>
+<para>
+
+Toto je kompletní funkční příklad předkonfiguračního souboru pro
+automatizované instalace. Způsob použití je vysvětlen v <xref
+linkend="automatic-install"/>. Před použitím souboru je vhodné
+odkomentovat některé řádky.
+
+</para>
 
 <informalexample><screen>
-# d-i preseed file, version 0.1. Copyright 2004 by Joey Hess.
-#
-# Používejte s rozvahou! Tímto nainstalujete Debian bez jakýchkoliv
-# výzev nebo varování.
-#
-# THIS SOFTWARE IS PROVIDED BY AUTHORS AND CONTRIBUTORS ``AS IS'' AND
-# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-# ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHORS OR CONTRIBUTORS BE LIABLE
-# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-# OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-# OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-# SUCH DAMAGE. Jinými slovy, pokud si tímto zničíte počítač, můžete si
-# za to sami.
-
 #### Úprava syslinux.cfg.
 
 # Upravte soubor syslinux.cfg (nebo podobný) a na konec řádku append
@@ -79,9 +72,9 @@
 # parametry zavaděči jádra stejně jako výběr jazyka/země/klávesnice.
 # Zavádíte-li z CD nebo USB, bude nastavení fungovat bez problémů.
 
-# Donutí netcfg použít konkrétní rozhraní. Normálně není potřeba,
-# protože použije jakékoliv připojené rozhraní.
-#d-i	netcfg/choose_interface	select eth0
+# netcfg zkusí použít rozhraní, jehož druhý konec je aktivní.
+# Tím pádem přeskočí výběr ze seznamu nalezených rozhraní.
+d-i	netcfg/choose_interface	select auto
 
 # Pokud dáváte přednost ručnímu nastavení sítě:
 #d-i	netcfg/disable_dhcp	boolean true
@@ -325,3 +318,5 @@ xserver-xfree86	xserver-xfree86/config/monitor/mode-list	select 1024x768 @ 60 Hz
 # karet):
 #d-i	preseed/include_command	string if $(grep -q "GUID: 0aec3050aec305000001a003"  /proc/scsi/usb-storage-*/*); then echo kraken.cfg; else echo otherusb.cfg; fi
 </screen></informalexample>
+
+ </sect1>
