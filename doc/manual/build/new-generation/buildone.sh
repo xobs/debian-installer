@@ -110,7 +110,7 @@ create_dvi ()  {
     
     echo "Creating temporary .tex file..."
 
-    # And use openjade to convert generate a .tex file
+    # And use openjade to generate a .tex file
     export SP_ENCODING="utf-8"
     /usr/bin/openjade -t tex \
         -b utf-8 \
