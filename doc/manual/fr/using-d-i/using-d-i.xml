@@ -6,25 +6,23 @@
  <sect1><title>Comment marche l'installateur</title>
 <para>
 
-The Debian Installer consists of a number of special-purpose
-components to perform each installation task. Each component performs
-its task, asking the user questions as necessary to do its job. If
-there is no problem, the next component in the sequence takes over
-without any user interaction (other than various progress messages).
-When there is a problem, the user will see an error screen, and the
-installer menu may be shown in order to select some alternative
-action. If there are no problems, the user will never see the
-installer menu, but will simply answer questions for each component
-in turn. 
+L'installateur Debian comprend plusieurs composants qui ont chacun une tâche 
+précise à accomplir. Chaque composant pose à l'utilisateur les questions
+nécessaires à l'exécution de sa tâche. Quand il n'y a pas de problème, le
+prochain composant prend la suite des opérations sans interroger 
+l'utilisateur (sauf quelques indications de progression). Quand il y a un
+problème, l'utilisateur voit un message d'erreur et le menu de l'installateur
+peut apparaître pour permettre le choix d'une autre action. Quand il n'y a
+pas de problème, l'utilisateur ne voit jamais le menu de l'installateur et il
+répond simplement aux questions qui lui sont posées par chaque composant.
 
 </para><para>
 
-The questions themselves are given priorities, and the priority
-of questions to be asked can be set. Thus if the installer knows
-what to do, and the user need not be aware of other choices which
-are available, then the installer will make the choice and not
-display the question. Serious error notifications are set to 
-priority 'critical' so the user will always be notified.
+Une question possède une priorité. Donc quand l'installateur sait ce qu'il 
+doit faire et que l'utilisateur n'a pas besoin de connaître les autres choix
+possibles, l'installateur agira sans poser de question. Les messages 
+concernant de sérieuses erreurs ont une priorité <quote>critical</quote> pour
+que l'utilisateur les reçoivent toujours. 
 
 </para><para>
 
@@ -54,57 +52,56 @@ letter you typed and use <keycap>Pg-Up</keycap> and
 
 </para><para arch="s390">
 
-Les S/390 ne supportent pas les consoles virtuelles. Vous
-          pouvez ouvrir une seconde et une troisième session telnet
-          pour visualiser les fichiers-journaux tel qu'on le décrit
-          ci-dessous.
+Les S/390 ne connaissent pas les consoles virtuelles. Vous pouvez ouvrir une 
+seconde et une troisième session telnet pour visualiser les fichiers-journaux 
+décrits ci-dessous.
 
 </para><para>
 
 Les messages d'erreur sont redirigés vers la troisième console (connue comme 
-<userinput>tty3</userinput>). Vous pouvez y accéder
-en pressant <keycombo><keycap>Left Alt</keycap><keycap>F3</keycap></keycombo> 
-en gardant la touche <keycap>Alt</keycap> enfoncée pendant que vous appuyez 
-sur la touche de fonction <keycap>F3</keycap>. Revenez en arrière sur
-avec <keycombo><keycap>Left Alt</keycap><keycap>F1</keycap></keycombo>.
+<userinput>tty3</userinput>). Vous pouvez y accéder en pressant 
+<keycombo><keycap>Left Alt</keycap><keycap>F3</keycap></keycombo> 
+(garder la touche <keycap>Alt</keycap> enfoncée pendant que vous appuyez 
+sur la touche de fonction <keycap>F3</keycap>). Revenez sur le processus
+d'installation avec 
+<keycombo><keycap>Left Alt</keycap><keycap>F1</keycap></keycombo>.
 
 </para><para>
 
 Ces messages se retrouvent aussi dans
 <filename>/var/log/messages</filename>. Après l'installation, ce
 fichier-journal est copié dans <filename>/var/log/installer.log</filename>
-           sur votre système.
-
-system. Other installation messages may be found in
-<filename>/target/var/log/debian-installer/</filename> during the
-installation, and <filename>/var/log/debian-installer/</filename>
-after the computer has been booted into the installed system.
+sur votre nouveau système. D'autres messages d'installation se trouvent,
+pendant l'installation, dans le fichier
+<filename>/target/var/log/debian-installer/</filename>, et, quand la
+machine a démarré le nouveau système, ces messages se trouvent dans
+<filename>/var/log/debian-installer/</filename>.
 
 </para>
  </sect1>
 
 
-  <sect1 id="modules-list"><title>Components Introduction</title>
+  <sect1 id="modules-list"><title>Introduction aux composants</title>
 <para>
 
-Here is a list of installer components with a brief description
-of each component's purpose. Details you might need to know about
-using a particular component are in <xref linkend="module-details"/>.
+Voici une liste des composants de l'installateur, avec une brève description
+des buts de chacun d'eux. Des précisions sur leur utilisation se trouvent
+dans <xref linkend="module-details"/>.
 
 </para>
 
 <variablelist>
 <varlistentry>
 
-<term>main-menu</term><listitem><para>
+<term>Le menu-principal</term><listitem><para>
 
-Shows the list of components to the user during installer operation,
-and starts a selected component when it is selected. Main-menu's
-questions are set to priority MEDIUM, so if your priority is set to
-HIGH or CRITICAL (HIGH is the default), you will not see the menu. On
-the other hand, if there is an error which requires your intervention,
-the question priority may be downgraded temporarily to allow you
-to resolve the problem, and in that case the menu may appear.
+affiche la liste des composants pendant les operations de l'installateur et
+lance le composant qui a été choisi. Les questions du menu principal ont la
+priorité MEDIUM, et si la priorité que vous avez choisie est HIGH ou
+CRITICAL (HIGH, par défaut), vous ne verrez pas le menu. Quand une erreur se 
+produit, qui demande votre intervention, la priorité de la question peut être
+abaissée temporairement pour vous permettre de résoudre le problème, et dans 
+ce cas, le menu apparaît.
 
 </para></listitem>
 </varlistentry>
@@ -112,18 +109,29 @@ to resolve the problem, and in that case the menu may appear.
 
 <term>languagechooser</term><listitem><para>
 
-Shows a list of languages and language variants. The installer will
-display messages in the chosen language, unless the translation for
-that language is not complete. When a translation is not complete,
-English messages are shown.
+affiche une liste des langues. L'installateur affichera les messages dans
+la langue choisie, à moins que certains messages ne soient pas traduits.
+Dans ce cas, les messages sont affichés en anglais.
 
+</para></listitem>
+</varlistentry>
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
+<term>countrychooser</term><listitem><para>
+
+Affiche la liste des pays. The user may choose the country he lives
+in. c'est désolant !!
+
+</para></listitem>
+      </varlistentry>
+<varlistentry>
+
 <term>ddetect</term><listitem><para>
 
-Detects hard disks, either installed or attached to the computer.
+
+Détecte les disques durs, installés ou attachés à l'ordinateur.
 
 </para></listitem>
 </varlistentry>
@@ -131,8 +139,8 @@ Detects hard disks, either installed or attached to the computer.
 
 <term>pcmcia</term><listitem><para>
 
-Allows the user to configure PCMCIA cards used in laptops for 
-networking.
+Permet la configuration des cartes PCMCIA utilisées par les portables pour 
+le réseau.
 
 </para></listitem>
 </varlistentry>
@@ -140,8 +148,7 @@ networking.
 
 <term>kbd-chooser</term><listitem><para>
 
-Shows a list of keyboards, from which the user chooses the model which
-matches his own.
+affiche une liste des cartes clavier.
 
 </para></listitem>
 </varlistentry>
@@ -149,8 +156,7 @@ matches his own.
 
 <term>netcfg</term><listitem><para>
 
-Configures the computer's network connections so it can communicate
-over the internet.
+Configure la connexion réseau pour la communication sur internet.
 
 </para></listitem>
 </varlistentry>
@@ -158,8 +164,8 @@ over the internet.
 
 <term>iso-scan</term><listitem><para>
 
-Looks for ISO file systems, which may be on a CD-ROM or on the 
-hard drive.
+Recherche les fichiers ISO, qui se trouvent soit sur un cédérom, soit sur un
+disque dur.
 
 </para></listitem>
 </varlistentry>
@@ -167,17 +173,66 @@ hard drive.
 
 <term>choose-mirror</term><listitem><para>
 
-Presents a list of Debian archive mirrors. The user may choose
-the source of his installation packages. Commonly, a CD-ROM or 
-network mirror are chosen.
+affiche une liste des miroirs de l'archive Debian. L'utilisateur peut
+choisir la source des paquets qu'il veut installer. Habituellement, c'est un
+cédérom ou un miroir sur le réseau qui est choisi.
 
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
+<term>cdrom-checker</term><listitem><para>
+
+veérifie l'intégrité des cédéroms. Ainsi l'utilisateur peut s'assurer que
+le cédérom d'installation n'était pas corrompu.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>lowmem</term><listitem><para>
+
+Lowmem tries to detect systems with low memory and then does various
+tricks to remove unnecessary parts of &d-i; from the memory (at the
+cost of some features).
+
+</para></listitem>
+      </varlistentry>
+<varlistentry>
+
+<term>anna</term><listitem><para>
+
+Anna's Not Nearly APT. Installs packages which have been retrieved
+from the chosen mirror.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+<term>partman</term><listitem><para>
+
+Allows the user to partition disks attached to the system, create file
+systems on the selected partitions, and attach them to the
+mountpoins. Included are also interesting features like a fully
+automatic mode or LVM support. This is the preferred partitioning tool
+in Debian.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>autopartkit</term><listitem><para>
+
+Automatically partitions an entire disk according to preset
+user preferences.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+
 <term>cdrom-detect</term><listitem><para>
 
-Detects CD-ROM drives, either installed or attached to the computer.
+Détecte les lecteurs de cédérom, installés ou attachés à la machine.
 
 </para></listitem>
 </varlistentry>
