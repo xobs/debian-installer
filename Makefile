@@ -422,12 +422,12 @@ endif
 	rm -f $(DPKGDIR)/status
 	ln -sf status.udeb $(DPKGDIR)/status
 
-ifdef NO_I18N
-	# Remove all internationalization from the templates.
+ifdef DROP_LANG
+	# Remove languages from the templates.
 	# Not ideal, but useful if you're very tight on space.
 	set -e; \
 	for FILE in $$(find $(TREE) -name "*.templates"); do \
-		perl -e 'my $$status = 0; while (<>) { if (/^[A-Z]/ || /^$$/) { if (/^(Choices|Description)-/) { $$status = 0; } else { $$status = 1; } } print if ($$status); }' < $$FILE > temp; \
+		perl -e 'my $$status=0; my $$drop=shift; while (<>) { if (/^[A-Z]/ || /^$$/) { if (/^(Choices|Description)-($$drop)/) { $$status = 0 } else { $$status = 1 } } print if ($$status); }' ${DROP_LANG} < $$FILE > temp; \
 		mv temp $$FILE; \
 	done
 endif
