@@ -29,13 +29,15 @@ foreach my $subtype (split "/", $type) {
 	}
 	push @lists, ("pkg-lists/$t/local", "pkg-lists/$t/common",
 	              "pkg-lists/$t/$deb_host_arch.cfg");
+	push @lists, "pkg-lists/$t/$deb_host_arch/$sub_arch.cfg" if $sub_arch;
 }
 
 while (@lists) {
 	my $list=pop @lists;
 	if (! -e $list) {
 		print STDERR "warning: missing list, $list, for type $type\n"
-			if $list !~ /local$/;
+			if $list !~ /local$/ && $list !~
+			m#$deb_host_arch/$sub_arch.cfg$#;
 	}
 	else {
 		open (LIST, $list) || die "open $list $!";
