@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23207 -->
+<!-- original version: 23805 -->
 
 <sect1 id="example-preseed">
 <title>Preconfiguration ファイルサンプル</title>
@@ -157,6 +157,7 @@ d-i	partman-auto/choose_recipe	select All files in one partition (recommended fo
 #	.
 
 # This makes partman automatically partition without confirmation.
+d-i	partman/confirm_write_new_label	boolean true
 d-i	partman/choose_partition	select Finish partitioning and write changes to disk
 d-i	partman/confirm			boolean	true
 
@@ -233,11 +234,9 @@ base-config	tzconfig/choose_country_zone_single boolean true
 
 # If you want to skip creation of a normal user account.
 #passwd		passwd/make-user		boolean false
-# Alternatively, you can preseed the user's name. Note that the username
-# will be derived from this; it cannot be overridden currently. The
-# username will be the (lowercase) first name of the full name.
+# Alternatively, you can preseed the user's name and login.
 #passwd		passwd/user-fullname		string Debian User
-#passwd		passwd/username			string 
+#passwd		passwd/username			string debian
 # And their password, but use caution!
 #passwd		passwd/user-password		password insecure
 #passwd		passwd/user-password-again	password insecure
