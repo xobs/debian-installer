@@ -1,63 +1,103 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 11648 -->
+<!-- original version: 14033 -->
 
-   <sect2 id="partman"><title>Partitioning Your Disks</title>
+   <sect2 id="partman"><title>Partitionner les disques</title>
 <para>
 
-Now it is time to partition your disks. If you are uncomfortable with
-partitioning, or just want to know more details, see <xref
-linkend="partitioning"/>.
+Il est temps maintenant de partitionner les disques. Si le partitionnement 
+vous inquiète ou si vous voulez des précisions supplémentaires, voyez
+<xref linkend="partitioning"/>.
 
 </para><para>
 
-First you will be given the opportunity to automatically partition
-either an entire drive, or free space on a drive. If you do not want
-to autopartition, choose <guimenuitem>Manually edit partition
-table</guimenuitem> from the menu and skip to the next
-paragraph. Otherwise you will be asked if you want <guimenuitem>All
-files in one partition</guimenuitem>, or if you rather like to have
-a <guimenuitem>Separate partition for the home
-directories</guimenuitem>. Both schemes have their pros and cons, some
-of which are discussed in <xref linkend="partitioning"/>. If you are
-unsure, choose the first one.
+Dans un premier temps, vous aurez la possibilité de partitionner un disque
+entier ou une partie d'un disque, de façon automatique. Si vous n'aimez pas
+ce côté automatique, choisissez l'option 
+<guimenuitem>Modifier la table des partitions</guimenuitem> dans le menu
+et passez au paragraphe suivant. Sinon, on vous demandera si vous voulez
+<guimenuitem>Tous les fichiers dans une seule partition</guimenuitem>,
+<guimenuitem>Une partition distincte pour le répertoire /home</guimenuitem>
+ou si vous avez prévu un <guimenuitem>système multi-utilisateur</guimenuitem>.
+Tous ces schémas ont leurs avantages et leurs inconvénients, certains sont
+discutés dans <xref linkend="partitioning"/>. Choisissez le premier si vous
+n'avez pas d'avis tranché. N'oubliez pas que le partitionnement automatique
+a besoin d'assez d'espace libre pour pouvoir fonctionner. Si vous ne lui donnez
+pas au moins 1 GB, il échouera.
+
+</para>
+
+<informaltable>
+<tgroup cols="3">
+<thead>
+<row>
+<entry>Schéma de partitionnement</entry>
+<entry>Espace minimum</entry>
+  <entry>Partitions créées</entry>
+</row>
+</thead>
+
+<tbody>
+<row>
+  <entry>Tous les fichiers dans une seule partition</entry>
+  <entry>600 MB</entry>
+  <entry><filename>/</filename>, swap</entry>
+</row><row>
+  <entry>Partition distincte pour le répertoire home</entry>
+  <entry>500 MB</entry>
+  <entry>
+    <filename>/</filename>, <filename>/home</filename>, swap
+  </entry>
+</row><row>
+  <entry>Système multi-utilisateur</entry>
+  <entry>1 GB</entry>
+  <entry>
+    <filename>/</filename>, <filename>/home</filename>,
+    <filename>/usr</filename>, <filename>/var</filename>,
+    <filename>/tmp</filename>, swap
+  </entry>
+</row>
+
+</tbody></tgroup></informaltable>
+
+<para>
+
+Sur l'écran suivant, vous verrez votre table des partitions, avec le type de 
+formattage des partitions et leur point de montage. Si vous avez choisi le
+partitionnement automatique, vous n'aurez qu'à sélectionner
+<guimenuitem>Finished partitioning</guimenuitem> dans le menu pour utiliser
+ce qui a été défini.
 
 </para><para>
 
-On the next screen you will see your partition table, how the
-partitions will be formatted, and where they will be mounted.
-If you did automatic partitioning, you should just be able to choose
-<guimenuitem>Finished partitioning</guimenuitem> from the menu to use
-what it set up.
+Choisissez dans la liste les partitions que vous voulez modifier ou supprimer.
+L'espace libre d'un disque s'affiche et vous pouvez y créer de nouvelles
+partitions. Quand vous modifiez une partition, vous pouvez choisir le type de
+la partition, le système de fichier à utiliser et le point de montage.
+Le menu de partitionnement donne aussi le choix de partitionner automatiquement
+un disque entier ou une partie de disque, si vous préférez cette méthode.
+N'oubliez pas de créer au moins deux partitions, une partition d'échange,
+<emphasis>swap</emphasis> et une partition pour le système de fichiers de la
+racine (<emphasis>root</emphasis>) qui sera monté en <filename>/</filename>.
+Si vous ne montez pas le système de fichiers de la racine, 
+<command>partman</command> ne pourra continuer que si vous corrigez le 
+problème. Mais cette situation ne se produira pas car 
+<command>partman</command> offre des valeurs par défaut qui sont raisonnables.
 
 </para><para>
 
-Select partititons from the list to modify or delete them. If you have
-free space it will also show up under a drive, and you can select it
-to create new partitions. When modifying a partition you will have the
-opportunity to choose the file system to use, and where to mount
-it. The partitioning menu also has a choice at the bottom that can be
-used to automatically partition a drive or existing free space on
-a drive, if you'd rather go that route. Be sure to create at least two
-partitions, one for <emphasis>swap</emphasis> and one for the
-<emphasis>root</emphasis> filesystem (which must be mounted as
-<filename>/</filename>). If you forget to mount the root filesystem,
-<command>partman</command> won't let you continue until you correct
-this issue.
+On peut ajouter des fonctionnalités à <command>partman</command> avec des
+modules de l'installateur. Aussi, quand vous n'avez pas tout ce qu'on vous a
+promis, vérifiez que vous avez chargé tous les modules requis, par exemple,
+<filename>partman-ext3</filename>,
+<filename>partman-xfs</filename>, ou
+<filename>partman-lvm</filename>.
 
 </para><para>
 
-Capabilities of <command>partman</command> can be extended with
-installer modules, so if you can't see all promised goodies, check if
-you have loaded all required modules
-(e.g. <filename>partman-ext3</filename>,
-<filename>partman-xfs</filename>, or
-<filename>partman-lvm</filename>).
-
-</para><para>
-
-After finishing partitioning, select <guimenuitem>Finished
-partitioning</guimenuitem> from the menu, and confirm that the
-filesystems should be created as requested.
+Quand vous êtes satisfait de vos choix de partitionnement, choisissez l'option 
+<guimenuitem>Finished partitioning</guimenuitem> du menu. Un résumé des
+modifications apportées aux disques sera affiché et on vous demandera de 
+confirmer que les systèmes de fichiers doivent être créés.
 
 </para>
    </sect2>
