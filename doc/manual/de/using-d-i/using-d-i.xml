@@ -1,96 +1,116 @@
-<!-- original version: 14559 -->
-
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 19074 -->
 
  <chapter id="d-i-intro"><title>Den Debian Installer verwenden</title>
 
  <sect1><title>Wie der Installer funktioniert</title>
 <para>
 
-Der Debian Installer besteht aus einer Reihe von Komponenten fÃ¼r spezielle
-Zwecke, die die einzelnen Installationsaufgaben Ã¼bernehmen. Jede Komponente
-fÃ¼hrt seine Aufgabe aus, und fragt vom Benutzer die dazu nÃ¶tigen Informationen
-ab. Wenn kein Problem aufgetreten ist, wird die nÃ¤chste Komponente im
-Ablauf aufgerufen, ohne dass der Benutzer eingreifen muss (other than
-various progress messages). Wenn ein Problem auftritt, wird eine Fehlermeldung
-angezeigt, und das Installer MenÃ¼ kann aufgerufen werden, um alternative
-Aktionen auszuwÃ¤hlen. Wenn keine Probleme auftreten, wird der Benutzer
-das Installer MenÃ¼ nicht zu sehen bekommen, sondern einfach die
-Fragen fÃ¼r jede Komponente der Reihe nach beantworten.
+Der Debian Installer besteht aus einer Reihe von Komponenten für spezielle
+Zwecke, die die einzelnen Installationsaufgaben übernehmen. Jede Komponente
+führt seine Aufgabe aus, und fragt vom Benutzer die dazu nötigen Informationen
+ab. Den Fragen selbst werden Prioritäten zugeteilt, und die Prioritätsstufe der
+Fragen, die gestellt werden, kann beim Start des Installers eingestellt werden.
 
 </para><para>
 
-Den Fragen selbst werden PrioritÃ¤ten zugeteilt, und die PrioritÃ¤tsstufe der
-Fragen, die gestellt werden, kann eingestellt werden. Wenn der Installer
-weiÃŸ, was zu tun ist, und der Benutzer nicht Ã¼ber die anderen
-AuswahlmÃ¶glichkeiten informiert werden muss, trifft der Installer die
-Auswahl und zeigt die Frage nicht an. Gravierende Fehlermitteilungen
-sind auf die PrioritÃ¤tsstufe 'critical' gesetzt, so dass der Benutzer
-diese immer angezeigt bekommt.
+Wenn eine Standard-Installation durchgeführt wird, werden nur wichtige Fragen
+(mit hoher Priorität) gestellt. Dies führt zu einem stark automatisierten
+Installationsprozess, der wenig Eingriffe seitens des Benutzers erfordert.
+Die Komponenten werden der automatisch der Reihe nach abgearbeitet; welche
+Komponenten gestartet werden, hängt hauptsächlich von der Installationsmethode, 
+die Sie gewählt haben, und von Ihrer Hardware ab. Der Installer wird für Fragen, 
+die dem Benutzer nicht gestellt werden, Standard-Werte eintragen.
 
 </para><para>
 
-Fortgeschrittene Benutzer werden mit einer MenÃ¼-basierten OberflÃ¤che
-leichter zurecht kommen, wo jeder Schritt vielmehr vom Benutzer kontrolliert
-wird als dass der Installer diese Schritte automatisch der Reihe nach
-ausfÃ¼hrt. Um den Installer auf die hÃ¤ndische, MenÃ¼-basierte Art zu verwenden,
-fÃ¼gen Sie den Boot-Parameter <userinput>DEBCONF_PRIORITY=medium</userinput>
+Tritt ein Problem auf, wird ein Fehler-Bildschirm angezeigt und unter Umständen
+auch das Installer-Menü, über das man eine alternative Aktion starten kann.
+Treten keine Probleme auf, wird der Benutzer das Installer-Menü nicht zu sehen
+bekommen, sondern einfach die Fragen für die einzelnen Komponenten der Reihe nach 
+beantworten. Gravierende Fehleranzeigen haben die Priorität "kritisch", so dass
+sie dem Benutzer immer angezeigt werden. 
+
+</para><para>
+
+Einige der Standard-Werte, die der Installer für Fragen benutzt, die nicht
+gestellt werden, können beeinflusst werden, indem dem &d-i; Boot-Parameter beim
+Start übergeben werden. Wenn Sie zum Beispiel eine statische Netzwerkkonfiguration
+erzwingen möchten (standardmässig, und falls verfügbar wird nämlich DHCP verwendet),
+können Sie den Boot-Parameter <userinput>netcfg/disable_dhcp=true</userinput> 
+benutzen; siehe <xref linkend="installer-args"/> für die verfügbaren Optionen.
+
+</para><para>
+
+Fortgeschrittene Benutzer werden mit einer menü-basierten Oberfläche
+leichter zurecht kommen, wo jeder Schritt eher vom Benutzer kontrolliert
+wird, als dass der Installer diese Schritte automatisch der Reihe nach
+ausführt. Um den Installer auf manuelle, menü-basierte Art zu verwenden,
+fügen Sie den Boot-Parameter <userinput>debconf/priority=medium</userinput>
 hinzu.
 
 </para><para>
 
-Die normale Installer-Anzeige ist Zeichen-basiert (im Gegensatz zu den
-heutzutage verbreiteteren grafischen OberflÃ¤chen). Die Maus funktioniert
-in dieser Umgebung nicht. Die folgenden Tasten kÃ¶nnen zum Navigieren durch
+Falls Ihre Hardware es erforderlich macht, Boot-Optionen für Kernel-Module
+anzugeben (falls diese installiert sind), müssen Sie den Installer im
+<quote>Experten</quote>-Modus starten. Dies ist entweder möglich, indem Sie
+den Installer durch den Befehl <command>expert</command> starten, oder indem
+Sie den Boot-Parameter <userinput>debconf/priority=low</userinput> anhängen.
+Der Experten-Modus erlaubt die volle Kontrolle über den &d-i;.
+
+</para><para>
+
+Die normale Installer-Anzeige ist zeichen-basiert (im Gegensatz zu den
+heutzutage verbreiteten grafischen Oberflächen). Die Maus funktioniert
+in dieser Umgebung nicht. Die folgenden Tasten können zum Navigieren durch
 die verschiedenen Dialoge benutzt werden. Der Pfeil nach
 <keycap>rechts</keycap> oder die <keycap>Tab</keycap> Taste springen
-`vorwÃ¤rts', und der Pfeil nach <keycap>links</keycap> oder
+`vorwärts', und der Pfeil nach <keycap>links</keycap> oder
 <keycombo> <keycap>Shift</keycap> <keycap>Tab</keycap> </keycombo> springen
-`rÃ¼ckwÃ¤rts' zwischen den angezeigten SchaltflÃ¤chen und Auswahlfeldern.
-Die Pfeile nach <keycap>oben</keycap> und <keycap>unten</keycap> wÃ¤hlen
+`rückwärts' zwischen den angezeigten Schaltflächen und Auswahlfeldern.
+Die Pfeile nach <keycap>oben</keycap> und <keycap>unten</keycap> wählen
 verschiedene Elemente in scrollbaren Listen aus, und scrollen auch die Liste
-selbst. ZusÃ¤tzlich kÃ¶nnen Sie einen Buchstaben tippen, um direkt zu dem
-Bereich mit Elementen zu springen, die mit diesem Buchstaben beginnen, oder
+selbst. Zusätzlich können Sie einen Buchstaben eintippen, um direkt zu den 
+Elementen zu springen, die mit diesem Buchstaben beginnen, oder sie nutzen 
 <keycap>Page-Up</keycap> und <keycap>Page-Down</keycap> zum Scrollen der
-Liste in Abschnitten verwenden. Die <keycap>Leertaste</keycap> aktiviert
-Elemente Checkboxen. Verwenden Sie &enterkey; zum Aktivieren von Auswahlen.
+Liste. Die <keycap>Leertaste</keycap> aktiviert Elemente, wie z.B Checkboxen. 
+Verwenden Sie &enterkey; um eine Auswahl, z.B. in einer Drop-down-Liste zu
+aktivieren.
 
 
 </para><para arch="s390">
 
-S/390 unterstÃ¼tzt keine virtuellen Konsolen. Sie kÃ¶nnen eine zweite und
-dritte Telnet Sitzung starten, um die Logs wie weiter unten beschrieben
-anzusehen.
+S/390 unterstützt keine virtuellen Konsolen. Sie können eine zweite und
+dritte ssh-Sitzung starten, um die Logs anzusehen, die weiter unten beschrieben
+werden. 
 
 </para><para>
 
-Fehlermeldungen werden auf die dritte Konsole umgeleitet (auch als
-<userinput>tty3</userinput> bekannt). Sie kÃ¶nnen auf diese Konsole durch
-DrÃ¼cken von
-<keycombo><keycap>Linke Alt-Taste</keycap><keycap>F3</keycap></keycombo>
-wechseln (halten Sie die <keycap>Alt-Taste</keycap> gedrÃ¼ckt, wÃ¤hrend Sie die
-<keycap>F3</keycap> Funktionstaste drÃ¼cken); zum Installer kÃ¶nnen Sie mit
-<keycombo><keycap>Linke Alt-Taste</keycap><keycap>F1</keycap></keycombo> wechseln.
+Fehlermeldungen werden auf die dritte Konsole umgeleitet. Sie können durch Drücken von
+<keycombo><keycap>Alt-Taste</keycap><keycap>F3</keycap></keycombo> auf diese
+Konsole wechseln (halten Sie die linke <keycap>Alt-Taste</keycap> gedrückt, während Sie die
+Funktionstaste <keycap>F3</keycap> drücken); zurück zum Installer-Hauptprogramm gelangen Sie mit
+<keycombo><keycap>Alt-Taste</keycap><keycap>F1</keycap></keycombo>.
 
 </para><para>
 
-Diese Meldungen kÃ¶nnen auch unter
-<filename>/var/log/messages</filename> gefunden werden. Nach der Installation
-wird diese Datei nach <filename>/var/log/installer.log</filename> auf dem
-neuen System kopiert. Andere Installationsmeldungen kÃ¶nnen wÃ¤hrend der
-Installation unter <filename>/target/var/log/debian-installer/</filename>
-und nach dem Start in das neu installierte System unter
+Diese Meldungen können auch unter <filename>/var/log/messages</filename> 
+gefunden werden. Nach der Installation wird diese Datei nach 
+<filename>/var/log/debian-installer/messages</filename> auf dem neuen System 
+kopiert. Weitere Installationsmeldungen können während der Installation unter 
+<filename>/var/log/</filename> und nach dem Start des neuen Systems unter
 <filename>/var/log/debian-installer/</filename> gefunden werden.
 
 </para>
  </sect1>
 
 
-  <sect1 id="modules-list"><title>Components Introduction</title>
+  <sect1 id="modules-list"><title>Einführung in die Komponenten</title>
 <para>
 
 Hier ist eine Liste der Installer-Komponenten mit einer kurzen
-Beschreibung der Aufgabe jeder Komponente. Details, die Sie Ã¼ber die
-Verwendung einer speziellen Komponente wissen wollen, finden Sie in
+Beschreibung der Aufgabe jeder Komponente. Details über die
+Verwendung einer speziellen Komponente finden Sie in
 <xref linked="module-details"/>.
 
 </para>
@@ -98,177 +118,214 @@ Verwendung einer speziellen Komponente wissen wollen, finden Sie in
 <variablelist>
 <varlistentry>
 
-<term>HauptmenÃ¼</term><listitem><para>
+<term>main-menu (Hauptmenü)</term><listitem><para>
 
-Zeigt die Liste der Komponenten wÃ¤hrend des Installationsvorgangs an,
-und startet eine ausgewÃ¤hlte Komponente, wenn diese aktiviert wird.
-Die Fragen des HauptmenÃ¼s sind auf die PrioritÃ¤tsstufe MEDIUM gesetzt,
-so dass Sie dieses MenÃ¼ nicht sehen, wenn die PrioritÃ¤tsstufe auf
-HIGH oder CRITICAL (HIGH ist der Standard) gesetzt ist. Andernseits
-kann die PrioritÃ¤tsstufe vorÃ¼bergehend heruntergesetzt werden,
+Zeigt die Liste der Komponenten während des Installationsvorgangs an,
+und startet eine ausgewählte Komponente, wenn diese aktiviert wird.
+Die Fragen des Hauptmenüs sind auf die Prioritätsstufe "medium" gesetzt,
+so dass Sie dieses Menü nicht sehen, wenn die Prioritätsstufe auf
+"high" oder "critical" ("high" ist der Standard) gesetzt ist. Andernseits
+kann die Prioritätsstufe vorübergehend heruntergesetzt werden,
 wenn ein Fehler vorkommt, der einen Eingriff verlangt, um Ihnen
-zu ermÃ¶glichen, das Problem zu lÃ¶sen, und in diesem Fall kann das
-MenÃ¼ erscheinen.
+zu ermöglichen, das Problem zu lösen, und in diesem Fall kann das
+Menü erscheinen.
+
+</para><para>
+
+Sie können zum Hauptmenü gelangen, indem Sie wiederholt den "Zurück"-Button
+drücken, um sich aus der zur Zeit laufenden Komponente vollständig zurückzuziehen.
 
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term>languagechooser</term><listitem><para>
+<term>languagechooser (Sprachenauswahl)</term><listitem><para>
 
 Zeigt eine Liste der Sprachen und Sprachvarianten. Der Installer zeigt
-die Meldungen in der ausgewÃ¤hlten Sprache an, es sei denn die Ãœbersetzung
-fÃ¼r diese Sprache ist nicht komplett. Ist dies der Fall, so werden die
+die Meldungen in der ausgewählten Sprache an, es sei denn die Übersetzung
+für diese Sprache ist nicht komplett. Ist dies der Fall, so werden die
 Meldungen auf Englisch angezeigt.
 
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term>countrychooser</term><listitem><para>
+<term>countrychooser (Länderauswahl)</term><listitem><para>
 
-Zeigt eine Liste der LÃ¤nder. Der Benutzer kann hier das Land auswÃ¤hlen, in
+Zeigt eine Liste der Länder. Der Benutzer kann hier das Land auswählen, in
 dem er lebt.
 
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term>ddetect</term><listitem><para>
+<term>kbd-chooser (Tastatur-Auswahl)</term><listitem><para>
 
-Erkennt Festplatten, die entweder im Computer eingebaut oder am Computer
-angeschlossen sind.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
-<term>pcmcia</term><listitem><para>
-
-ErmÃ¶glicht dem Benutzer, in Laptops fÃ¼r das Netzwerk verwendete PCMCIA-Karten
-zu konfigurieren. 
+Zeigt eine Liste von Tastaturmodellen, aus der der Benutzer das passende
+auswählt.
 
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term>kbd-chooser</term><listitem><para>
+<term>hw-detect (Hardware-Erkennung)</term><listitem><para>
 
-Zeigt eine Liste der Keyboards, aus der der Benutzer sein Modell auswÃ¤hlt.
+Erkennt automatisch die meiste Hardware des Systems, inklusive Netzwerkkarten,
+Laufwerke und PCMCIA.
 
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term>netcfg</term><listitem><para>
+<term>cdrom-detect (Suche nach einer Debian-CD)</term><listitem><para>
 
-Konfiguriert die Netzwerkverbindungen des Computers, damit er Ã¼ber das
+Sucht eine Debian-Installations-CD und bindet sie ein.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>netcfg (Netzwerkkonfiguration)</term><listitem><para>
+
+Konfiguriert die Netzwerkverbindungen des Computers, damit er über das
 Internet kommunizieren kann.
 
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term>iso-scan</term><listitem><para>
+<term>iso-scan (Suche nach ISO-Dateisystemen)</term><listitem><para>
 
 Sucht nach ISO-Datei-Systemen, die sich auf einer CD-ROM oder auf der Festplatte
-befinden kÃ¶nnen.
+befinden können.
 
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term>choose-mirror</term><listitem><para>
+<term>choose-mirror (Auswahl eines Debian-Mirrors)</term><listitem><para>
 
-PrÃ¤sentiert eine Liste von Debian-Archiv-Mirrors. Der Benutzer kann
-die Installationsquelle fÃ¼r seine Installationspakete auswÃ¤hlen. Ãœblicherweise
-wird hier eine CD-ROM oder ein Netzwerk-Mirror ausgewÃ¤hlt.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
-<term>cdrom-detect</term><listitem><para>
-
-Erkennt CD-ROM Laufwerke, die im Computer eingebaut oder an den Computer
-angeschlossen sind.
+Präsentiert eine Liste von Debian-Archiv-Mirrors. Der Benutzer kann
+die Installationsquelle für seine Installationspakete auswählen.
 
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term>anna</term><listitem><para>
+<term>cdrom-checker (Überprüfung der CD)</term><listitem><para>
 
-Anna's Not Nearly APT. Installiert Pakete, die von dem ausgewÃ¤hlten Mirror
-geholt worden sind.
+Überprüft die Integrität (Unversehrtheit) einer CD-ROM. Hiermit kann man
+überzeugen, dass die Installations-CD nicht defekt ist/korrumpiert wurde.
 
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term>partman</term><listitem><para>
+<term>lowmem (Erkennung von zuwenig Arbeitsspeicher)</term><listitem><para>
 
-ErmÃ¶glicht dem Benutzer, die am System angeschlossenen Festplatten zu
+Lowmem versucht, Systeme mit zuwenig Arbeitsspeicher zu erkennen, und vollführt
+einige Kunststücke, um unnötige Teile des &d-i; aus dem Speicher zu entfernen
+(allerdings auf Kosten einiger Funktionen).
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+
+<term>anna (Ein Tool zur Paketinstallation)</term><listitem><para>
+
+Anna's Not Nearly APT ("Anna ist nicht wirklich APT", ein APT-Ersatz für die
+Installation). Installiert Pakete, die von dem ausgewählten Mirror geholt worden sind.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>partman (Festplattenpartionierer)</term><listitem><para>
+
+Ermöglicht dem Benutzer, die am System angeschlossenen Festplatten zu
 partitionieren, Dateisysteme darauf zu erstellen und sie in die Mount-Points
-einzuhÃ¤ngen. Interessante Features wie ein komplett automatischer Modus
-oder LVM UnterstÃ¼tzung sind inkludiert. Dies ist das bevorzuge
-Partitionierungsprogramm unter Debian.
+einzuhängen. Es sind interessante Features enthalten, wie ein komplett automatischer Modus
+oder LVM-Unterstützung. Dies ist das bevorzugte Partitionierungsprogramm unter Debian.
 
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term>autopartkit</term><listitem><para>
+<term>autopartkit (Automatische Partitionierung einer ganzen Festplatte)</term><listitem><para>
 
-Partitioniert eine komplette Platte nach vorgegebenen Benutzer-Einstellungen.
+Partitioniert eine komplette Festplatte nach vorgegebenen Benutzer-Einstellungen.
 
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term>partitioner</term><listitem><para>
+<term>partitioner (Noch ein Partitionierer)</term><listitem><para>
 
-ErmÃ¶glicht dem Benutzer, die an das System angeschlossenen Platten zu
-partitionieren. Ein von der Architektur Ihres Computers abhÃ¤ngiges
+Ermöglicht dem Benutzer, die an das System angeschlossenen Platten zu
+partitionieren. Ein von der Architektur Ihres Computers abhängiges
 Partitionierungsprogramm wird verwendet.
 
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term>partconf</term><listitem><para>
+<term>partconf (Dateisysteme erstellen)</term><listitem><para>
 
-Zeigt eine Liste von Partitionen an, und erzeugt Dateisysteme auf den
-ausgewÃ¤hlten Partitionen entsprechend den Benutzereingaben.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
-<term>base-installer</term><listitem><para>
-
-Installiert die wichtigste Reihe von Paketen, die dem Computer nach dem
-Neustart den Betrieb unter Linux ermÃ¶glichen.
+Zeigt eine Liste von Partitionen an und erzeugt Dateisysteme auf den
+ausgewählten Partitionen entsprechend den Benutzereingaben.
 
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term>kernel-chooser</term><listitem><para>
+<term>lvmcfg (Konfigurieren von LVM)</term><listitem><para>
 
-ErmÃ¶glicht dem Benutzer die Auswahl einer Betriebssystem-Kernel-Version,
-wenn mehr als eine einzige verfÃ¼gbar sind.
+Unterstützt den Benutzer bei der Konfiguration des 
+<firstterm>LVM</firstterm> (Logical Volume Manager).
 
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term>bootloader-installer</term><listitem><para>
+<term>mdcfg (Software-RAID einrichten)</term><listitem><para>
+
+Erlaubt den Benutzer, ein Software-<firstterm>RAID</firstterm> 
+(Redundant Array of Inexpensive Disks) einzurichten. Dieses Software-RAID
+ist den billigen IDE-(Pseudo-Hardware)-RAID-Controllern, die man auf
+neueren Motherboards finden, für gewöhnlich überlegen.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>base-installer (Basispakete installieren)</term><listitem><para>
+
+Installiert die wichtigsten Paketen, die dem Computer nach dem
+Neustart den Betrieb unter Linux ermöglichen.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>os-prober (Andere Betriebssysteme erkennen)</term><listitem><para>
+
+Erkennt bereits installierte Betriebssysteme auf dem Rechner und leitet
+diese Informationen an den bootloader-installer weiter, der Ihnen die
+Möglichkeit gibt, erkannte Betriebssysteme zum Startmenü des Bootloaders
+hinzuzufügen. Auf diese Weise kann der Benutzer auf einfachste Weise beim
+Booten auswählen, welches Betriebssystem gestartet werden soll.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>bootloader-installer (Installation des Bootloaders)</term><listitem><para>
 
 Installiert ein Boot-Loader-Programm auf der Festplatte, welches zum
-Hochstarten des Computers ohne Verwendung einer Diskette oder CD-ROM
+Starten des Computers ohne Verwendung einer Diskette oder CD-ROM
 notwendig ist. Viele Boot-Loader erlauben dem Benutzer die Auswahl eines
-alternativen Betriebssystems bei jedem Hochstart des Computers.
+alternativen Betriebssystems bei jedem Start des Computers.
 
 </para></listitem>
 </varlistentry>
@@ -276,30 +333,28 @@ alternativen Betriebssystems bei jedem Hochstart des Computers.
 
 <term>baseconfig</term><listitem><para>
 
-Bietet Dialoge zum Einstellen der Basis-System-Pakete entsprechend
-den Benutzer-Einstellungen. Das wird normalerweise nach dem Neustart
-des Computers durchgefÃ¼hrt; es wird beim ersten Hochstarten des neuen
-Debian Systems ausgefÃ¼hrt.
+Bietet Dialoge zum Einrichten der Basis-System-Pakete entsprechend
+den Benutzer-Eingaben. Dies wird normalerweise nach dem Neustart
+des Computers durchgeführt, wenn das neue Debian-System das erste Mal läuft.
 
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term>shell</term><listitem><para>
+<term>shell (Starten einer Shell/Eingabeaufforderung)</term><listitem><para>
 
-Erlaubt dem Benutzer das AusfÃ¼hren einer Shell aus dem MenÃ¼, oder auf der
+Erlaubt dem Benutzer das Ausführen einer Shell aus dem Menü oder auf der
 zweiten Konsole.
 
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term>bugreporter</term><listitem><para>
+<term>bugreporter (Fehler berichten)</term><listitem><para>
 
-Bietet dem Benutzer die MÃ¶glichkeit, beim Auftauchen von Problemen
-Informationen auf einer Diskette abzuspeichern, um von Probleme
-mit der Installer Software den Debian-Entwicklern spÃ¤ter prÃ¤zise
-zu berichten.
+Bietet dem Benutzer die Möglichkeit, beim Auftauchen von Problemen
+Informationen auf einer Diskette abzuspeichern, um den Debian-Entwicklern später
+präzise von Probleme mit der Installer-Software berichten zu können.
 
 </para></listitem>
 </varlistentry>
@@ -308,42 +363,6 @@ zu berichten.
 
  </sect1>
 
- <sect1 id="module-details"><title>Verwenden der einzelnen Komponenten</title>
+&using-d-i-components.xml;
 
-&module-languagechooser.xml;
-&module-countrychooser.xml;
-&module-s390-netdevice.xml;
-&module-s390-dasd.xml;
-&module-ddetect.xml;
-&module-pcmcia.xml;
-&module-kbd-chooser.xml;
-&module-netcfg.xml;
-&module-iso-scan.xml;
-&module-choose-mirror.xml;
-&module-cdrom-detect.xml;
-&module-anna.xml;
-&module-partman.xml;
-&module-autopartkit.xml;
-&module-partitioner.xml;
-&module-partconf.xml;
-&module-prebaseconfig.xml;
-&module-base-installer.xml;
-&module-kernel-chooser.xml;
-
-&module-mips-arcboot-installer.xml;
-&module-alpha-aboot-installer.xml;
-&module-i386-grub-installer.xml;
-&module-i386-lilo-installer.xml;
-&module-hppa-palo-installer.xml;
-&module-ia64-elilo-installer.xml;
-&module-s390-zipl-installer.xml;
-&module-powerpc-yaboot-installer.xml;
-&module-sparc-silo-installer.xml;
-
-&module-baseconfig.xml;
-&module-bugreporter.xml;
-&module-shell.xml;
-
- </sect1>
 </chapter>
-
