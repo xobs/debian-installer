@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 22935 -->
+<!-- original version: 24677 -->
 
  <sect1 condition="bootable-usb" id="boot-usb-files">
  <title>Préparation des fichiers pour un amorçage avec une clé USB</title>
@@ -22,7 +22,7 @@ tailles inférieures, voyez <xref linkend="usb-copy-flexible"/>.
 
   <sect2 id="usb-copy-easy">
   <title>Copie des fichiers - la méthode simple</title>
-<para>
+<para arch="i386">
 
 Le fichier <filename>hd-media/boot.img.gz</filename> contient tous les
 fichiers de l'installateur, le noyau et le programme 
@@ -30,18 +30,38 @@ fichiers de l'installateur, le noyau et le programme
 d'extraire ces fichiers dans votre clé USB&nbsp;:
 
 <informalexample><screen>
-
-gzip -dc boot.img.gz >/dev/<replaceable>sda</replaceable>
-
+# zcat boot.img.gz &gt; /dev/<replaceable>sda</replaceable>
 </screen></informalexample>
+
+Bien sûr toutes les données présentes sur la clé seront détruites. Utilisez
+le bon périphérique pour votre clé&nbsp;!
+</para>
+<para arch="powerpc">
+
+Le fichier <filename>hd-media/boot.img.gz</filename> contient tous les
+fichiers de l'installateur, le noyau et le programme
+<command>yaboot</command> avec son fichier de configuration. Créez une 
+partition <quote>Apple_Bootstrap</quote> sur la clé avec la commande 
+<userinput>C</userinput> de <command>mac-fdisk</command> et mettez l'image
+avec&nbsp;:
+
+<informalexample><screen>
+# zcat boot.img.gz &gt; /dev/<replaceable>sda2</replaceable>
+</screen></informalexample>
+
 
 Bien sûr toutes les données présentes sur la clé seront détruites. Utilisez
 le bon périphérique pour votre clé&nbsp;!
 </para>
 <para>
 
-Montez ensuite la clé (<userinput>mount /dev/sda/mnt</userinput>), qui aura
-maintenant un système de fichiers FAT, et copiez une image ISO de type
+Montez ensuite la clé (<userinput>mount 
+<replaceable arch="i386">/dev/sda</replaceable>
+<replaceable arch="powerpc">/dev/sda2</replaceable>
+/mnt</userinput>), qui aura
+maintenant un système de fichiers 
+<phrase arch="i386">FAT</phrase>
+<phrase arch="powerpc">HFS</phrase>, et copiez une image ISO de type
 netinst ou businesscard. Le nom de ce fichier doit se terminer par
 <filename>.iso</filename>. Démontez la clé (<userinput>umount /mnt</userinput>)
 et voilà, c'est fait&nbsp;!
@@ -54,106 +74,14 @@ et voilà, c'est fait&nbsp;!
 
 Si vous aimez la souplesse ou si vous voulez simplement savoir ce qui se
 passe, vous pouvez utiliser la méthode suivante pour mettre les fichiers
-sur la clé. Nous montrerons comment n'utiliser que la première partition,
-au lieu de tout le périphérique.
+sur la clé. 
 </para>
 
-<note><para>
+&usb-setup-i386.xml;
+&usb-setup-powerpc.xml;
 
-La plupart des clés USB sont préconfigurés avec une seule partition FAT16.
-Vous n'aurez sans doute pas à partitionner ou à formater la clé. Si vous
-devez le faire, utilisez le programme <command>cfdisk</command> ou un autre
-programme de partitionnement et tapez&nbsp;:
-
-<informalexample><screen>
-
-mkdosfs /dev/<replaceable>sda1</replaceable>
-
-</screen></informalexample>
-
-Faites attention à utiliser le périphérique correct pour la clé. Le programme
-<command>mkdosfs</command>  se trouve dans le paquet Debian 
-<classname>dosfstools</classname>.
-
-</para></note>
-<para>
-
-Pour pouvoir lancer le noyau après l'amorçage sur la clé, nous y mettons
-un programme d'amorçage. Tous les programmes d'amorçage fonctionnent
-(p.&nbsp;ex. <command>LILO</command>), mais <command>SYSLINUX</command> est 
-préférable car il utilise une partition FAT16 et peut être reconfiguré en
-modifiant un simple fichier texte. On peut modifier la configuration du 
-programme d'amorçage avec tous les systèmes d'exploitation qui acceptent
-le système de fichiers FAT.
-
-</para>
-<para>
-
-Pour mettre <command>SYSLINUX</command> sur la partition FAT16 de la clé,
-installez les paquets <classname>syslinux</classname> et
-<classname>mtools</classname> sur votre système et tapez&nbsp;:
-
-<informalexample><screen>
-
-syslinux /dev/<replaceable>sda1</replaceable>
-
-</screen></informalexample>
-
-Encore une fois, faites bien attention à utiliser le nom correct pour la clé.
-La partition ne doit pas être montée au lancement de 
-<command>SYSLINUX</command>. Cette procédure écrit un secteur d'amorçage sur 
-la partition et crée le fichier <filename>ldlinux.sys</filename> qui contient
-le code du programme d'amorçage.
-
-</para>
-<para>
-
-Montez la partition (<userinput>mount /dev/sda1 /mnt</userinput>) et
-copiez les fichiers suivants sur la clé&nbsp;:
-
-<itemizedlist>
-<listitem><para>
-
-<filename>vmlinuz</filename> (noyau binaire)
-
-</para></listitem>
-<listitem><para>
-
-<filename>initrd.gz</filename> (image du disque virtuel initial)
-
-</para></listitem>
-<listitem><para>
-
-<filename>syslinux.cfg</filename> (fichier de configuration de SYSLINUX)
-
-</para></listitem>
-<listitem><para>
-
-Modules facultatifs du noyau
-
-</para></listitem>
-</itemizedlist>
-
-Si vous voulez modifier le nom des fichiers, remarquez que
-<command>SYSLINUX</command> ne peut traiter que des noms de type DOS (8.3).
-
-</para>
-<para>
-
-Le fichier de configuration <filename>syslinux.cfg</filename> doit contenir
-les deux lignes suivantes&nbsp;:
-
-<informalexample><screen>
-
-default vmlinuz
-append initrd=initrd.gz ramdisk_size=10000 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
-
-</screen></informalexample>
-
-Remarquez que la valeur du paramètre <userinput>ramdisk_size</userinput> 
-doit être augmentée avec la taille de l'image qui est amorcée.
-
-</para>
+<sect3>
+<title>Ajouter une image ISO</title>
 <para>
 
 Vous pouvez maintenant mettre une image ISO (businesscard, netinst ou même
@@ -177,6 +105,11 @@ Quand tout est fait, démontez la clé USB (<userinput>umount /mnt</userinput>)
 et activez la protection contre l'écriture.
 
 </para>
+</sect3>
+
+<!-- TODO: doesn't this section belong later? -->
+<sect3 arch="i386">
+   <title>Amorcer la clé USB</title>
 <warning><para>
 
 Si le système refuse de s'amorcer à partir de la clé, il se peut que la clé
@@ -185,11 +118,10 @@ programme <command>install-mbr</command> qui se trouve dans le paquet
 <classname>mbr</classname>&nbsp;:
 
 <informalexample><screen>
-
-install-mbr /dev/<replaceable>sda</replaceable>
-
+# install-mbr /dev/<replaceable>sda</replaceable>
 </screen></informalexample>
 
 </para></warning>
+</sect3>
   </sect2>
  </sect1>

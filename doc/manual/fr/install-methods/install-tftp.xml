@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 23213 -->
+<!-- original version: 24663 -->
 
  <sect1 condition="supports-tftp" id="install-tftp">
  <title>Préparer les fichiers pour amorcer depuis le réseau avec TFTP</title>
@@ -95,10 +95,9 @@ que <command>tftpd</command> est activé. Ce dernier est généralement activé
 grâce à la ligne suivante dans <filename>/etc/inetd.conf</filename>&nbsp;:
 
 <informalexample><screen>
-
 tftp dgram udp wait root /usr/sbin/tcpd in.tftpd /tftpboot
-
 </screen></informalexample>
+
 Les paquets Debian, quand ils sont installés, écrivent correctement cette
 ligne.
 </para><para> 
@@ -129,9 +128,7 @@ est une machine GNU/Linux avec Linux 2.4.X, il vous faudra effectuer la
 man&oelig;uvre suivante sur votre serveur&nbsp;:
 
 <informalexample><screen>
-
-echo 1 > /proc/sys/net/ipv4/ip_no_pmtu_disc
-
+# echo 1 &gt; /proc/sys/net/ipv4/ip_no_pmtu_disc
 </screen></informalexample>
 
 de façon à détourner la détection du MTU, sinon la PROM de l'Indy ne pourra 
@@ -141,9 +138,7 @@ s'arrêtera après le premier paquet. Vous pouvez toujours contourner ce
          bogue de la PROM grâce au noyau 2.4.X en ajustant
 
 <informalexample><screen>
-
-echo "2048 32767" > /proc/sys/net/ipv4/ip_local_port_range
-
+# echo "2048 32767" &gt; /proc/sys/net/ipv4/ip_local_port_range
 </screen></informalexample>
 
 pour fixer l'intervalle des ports source que le serveur TFTP peut utiliser.
@@ -285,7 +280,7 @@ Pour déterminer facilement ce nom et en supposant que l'adresse IP est
 </para>
 
 <informalexample><screen>
-printf '%.2x%.2x%.2x%.2x\n' 10 0 0 4
+$ printf '%.2x%.2x%.2x%.2x\n' 10 0 0 4
 </screen></informalexample>
 
 <para>
@@ -381,10 +376,8 @@ utilisant l'image <userinput>a.out</userinput> de l'architecture sur
            NFS (qui peut être le même que votre serveur TFTP)&nbsp;:
 
 <informalexample><screen>
-
 # cd /tftpboot
 # tar xvzf root.tar.gz
-
 </screen></informalexample>
 
 Assurez-vous d'utiliser le <command>tar</command> de GNU (les
@@ -408,7 +401,7 @@ Exportez votre répertoire
 
 </screen></informalexample>
 
-Note&nbsp;: «&nbsp;client&nbsp;» est le nom d'hôte ou bien
+Note&nbsp;: <replaceable>client</replaceable> est le nom d'hôte ou bien
            l'adresse IP reconnue par le serveur pour le système que
            vous allez amorcer.
 
@@ -422,9 +415,7 @@ Créez un lien symbolique depuis votre adresse IP cliente
            est 192.168.1.3, faites&nbsp;:
 
 <informalexample><screen>
-
 # ln -s debian-sparc-root 192.168.1.3
-
 </screen></informalexample>
 
 </para></listitem>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 24663 -->
+
+   <sect3 arch="i386">
+   <title>Partitionner un périphérique USB sur &arch-title;</title>
+<para>
+
+Nous montrerons comment n'utiliser que la première partition,
+au lieu de tout le périphérique.
+
+</para><note><para>
+
+La plupart des clés USB sont préconfigurés avec une seule partition FAT16.
+Vous n'aurez sans doute pas à partitionner ou à formater la clé. Si vous
+devez le faire, utilisez le programme <command>cfdisk</command> ou un autre
+programme de partitionnement pour créer cette partition et tapez&nbsp;:
+
+<informalexample><screen>
+# mkdosfs /dev/<replaceable>sda1</replaceable>
+</screen></informalexample>
+
+Faites attention à utiliser le périphérique correct pour la clé. Le programme
+<command>mkdosfs</command>  se trouve dans le paquet Debian
+<classname>dosfstools</classname>.
+
+</para></note><para>
+
+Pour pouvoir lancer le noyau après l'amorçage sur la clé, nous y mettons
+un programme d'amorçage. Tous les programmes d'amorçage fonctionnent
+(p.&nbsp;ex. <command>LILO</command>), mais <command>SYSLINUX</command> est
+préférable car il utilise une partition FAT16 et peut être reconfiguré en
+modifiant un simple fichier texte. On peut modifier la configuration du
+programme d'amorçage avec tous les systèmes d'exploitation qui acceptent
+le système de fichiers FAT.
+
+</para><para>
+
+Pour mettre <command>SYSLINUX</command> sur la partition FAT16 de la clé,
+installez les paquets <classname>syslinux</classname> et
+<classname>mtools</classname> sur votre système et faites&nbsp;:
+
+<informalexample><screen>
+# syslinux /dev/<replaceable>sda1</replaceable>
+</screen></informalexample>
+
+Encore une fois, faites bien attention à utiliser le nom correct pour la clé.
+La partition ne doit pas être montée au lancement de
+<command>SYSLINUX</command>. Cette procédure écrit un secteur d'amorçage sur
+la partition et crée le fichier <filename>ldlinux.sys</filename> qui contient
+le code du programme d'amorçage.
+
+</para><para>
+
+Montez la partition (<userinput>mount /dev/sda1 /mnt</userinput>) et
+copiez les fichiers suivants sur la clé&nbsp;:
+
+<itemizedlist>
+<listitem><para>
+
+<filename>vmlinuz</filename> (noyau binaire)
+
+</para></listitem>
+<listitem><para>
+
+<filename>initrd.gz</filename> (image du disque virtuel initial)
+
+</para></listitem>
+<listitem><para>
+
+<filename>syslinux.cfg</filename> (fichier de configuration de SYSLINUX)
+
+</para></listitem>
+<listitem><para>
+
+Modules optionnels du noyau
+
+</para></listitem>
+</itemizedlist>
+
+Si vous voulez modifier le nom des fichiers, remarquez que
+<command>SYSLINUX</command> ne peut traiter que des noms de type DOS (8.3).
+
+</para><para>
+
+Le fichier de configuration <filename>syslinux.cfg</filename> doit contenir
+les deux lignes suivantes&nbsp;:
+
+<informalexample><screen>
+default vmlinuz
+append initrd=initrd.gz ramdisk_size=12000 root=/dev/rd/0 init=/linuxrc rw
+</screen></informalexample>
+
+Remarquez que la valeur du paramètre <userinput>ramdisk_size</userinput>
+doit être augmentée avec la taille de l'image qui est amorcée.
+En cas d'échec, vous pouvez ajouter <userinput>devfs=mount,dall</userinput>
+à la ligne <quote>append</quote>
+
+</para>
+   </sect3>
