@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 16313 -->
+<!-- original version: 17789 -->
 
   <sect2 arch="i386"><title>Zavedení z CD-ROM</title>
 
@@ -132,19 +132,19 @@ bf2.4. Příznakem tohoto problému je chybová hláška
   <command>GRUB</command></title>
 <para>
 
-Jedinou řádkou <emphasis>initrd=</emphasis> v souboru
-<filename>/etc/lilo.conf</filename> nastavíte dvě důležité věci:
+Pro zavaděč <command>LILO</command> musíte v souboru
+<filename>/etc/lilo.conf</filename> nastavit dvě důležité věci:
 
 <itemizedlist>
 <listitem><para>
 
-řeknete zavaděči <command>LILO</command>, že má při zavádění použít
-soubor <filename>initrd.gz</filename> jako RAMdisk,
+říci zavaděči, že má při zavádění použít soubor
+<filename>initrd.gz</filename> jako RAMdisk,
 
 </para></listitem>
 <listitem><para>
 
-řeknete jádru <filename>vmlinuz</filename>, že má tento RAMdisk
+říci jádru <filename>vmlinuz</filename>, že má tento RAMdisk
 použít jako svou kořenovou oblast.
 
 </para></listitem>
@@ -159,12 +159,11 @@ Následuje příklad <filename>/etc/lilo.conf</filename>:
 image=/boot/newinstall/vmlinuz
        label=newinstall
        initrd=/boot/newinstall/initrd.gz
+       root=/dev/ram
        append="devfs=mount,dall"
 
 </screen></informalexample>
 
-Obvyklá volba <emphasis>root=/dev/hdXYZ</emphasis> v souboru
-<filename>lilo.conf</filename> bude tentokrát ignorována.
 Pokud vás zajímají pikantní detaily, prozkoumejte manuálové stránky
 <citerefentry> <refentrytitle>initrd</refentrytitle>
 <manvolnum>4</manvolnum> </citerefentry> a <citerefentry>
@@ -182,15 +181,15 @@ Postup pro <command>GRUB</command> je velmi podobný. Do souboru
 <informalexample><screen>
 
 title  New Install
-kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram ramdisk_size=10000 devfs=mount,dall
+kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram devfs=mount,dall
 initrd (hd0,0)/boot/newinstall/initrd.gz
 
 </screen></informalexample>
 
-a restartujte počítač. Je možné, že budete muset zvýšit hodnotu
-parametru <userinput>ramdisk_size</userinput>, protože tato je různá
-u různých typů instalace. Od teď by neměl být mezi oběma zavaděči
-žádný rozdíl.
+a restartujte počítač. Je možné, že podle typu instalace budete muset
+přidat parametr <userinput>ramdisk_size=<replaceable>velikost
+v KB</replaceable></userinput>. Od teď by neměl být mezi oběma
+zavaděči žádný rozdíl.
 
 </para><para>
 

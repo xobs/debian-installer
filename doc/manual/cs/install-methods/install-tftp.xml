@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 11648 -->
+<!-- original version: 17795 -->
 
  <sect1 condition="supports-tftp" id="install-tftp">
  <title>Příprava souborů pro zavedení ze sítě pomocí TFTP</title>
@@ -90,9 +90,14 @@ následující řádkou v souboru <filename>/etc/inetd.conf</filename>:
 
 <informalexample><screen>
 
-tftp dgram udp wait root /usr/sbin/tcpd in.tftpd /tftpboot
+tftp dgram udp wait nobody /usr/sbin/tcpd in.tftpd /tftpboot
 
 </screen></informalexample>
+
+Při instalaci z debianích balíků se o nic nemusíte starat, protože
+se tento řádek založí automaticky při instalaci balíku.
+
+<para></para>
 
 Podívejte se do souboru <filename>/etc/inetd.conf</filename> a
 zapamatujte si název adresáře, jehož jméno je za
@@ -104,19 +109,19 @@ zavádění neprobíhá tak, jak má. Pokud musíte změnit obsah souboru
 <filename>/etc/inetd.conf</filename>, musíte proces
 <command>inetd</command> upozornit, aby aktualizoval svá nastavení.
 Na počítači s Debianem stačí spustit <userinput>/etc/init.d/inetd
-reload</userinput> (pro slink/2.1 a starší použijte
-<userinput>/etc/init.d/netbase reload</userinput>).
+reload</userinput>.
 Na jiných systémech musíte zjistit ID běžícího procesu
 <command>inetd</command> a spustit <userinput>kill -HUP
 <replaceable>inetd-pid</replaceable></userinput>.
 
-</para><para arch="i386">
+</para><note><para arch="i386">
 
 Abyste mohli využít PXE (Pre-boot Execution Environment) metodu TFTP
 zavádění, musíte mít TFTP server s podporou
-<userinput>tsize</userinput>, například <command>tftp-hpa</command>.
+<userinput>tsize</userinput>, například <command>tftp-hpa</command>
+nebo <classname>atftpd</classname>.
 
-</para><para arch="mips">
+</para></note><para arch="mips">
 
 Pokud je vaším TFTP serverem GNU/Linux s jádrem 2.4.X, musíte na něm
 následujícím příkazem vypnout <quote>Path MTU discovery</quote>:
@@ -191,20 +196,22 @@ default lanlinux
 prompt 1
 
 label lanlinux
-  kernel tftpboot.img
-  append load initrd=root.bin devfs=mount
+  kernel vmlinuz
+  append initrd=initrd.gz devfs=mount root=/dev/ram
 
 </screen></informalexample>
 
-Parametr <userinput>devfs=mount</userinput> je podstatný, protože
-bez něj by nešlo připojit kořenový souborový systém ze souboru
-<filename>root.bin</filename>.
+Parametr <userinput>devfs=mount</userinput> je nezbytný, protože bez
+něj by nešlo připojit kořenový souborový systém ze souboru
+<filename>initrd.gz</filename>. Možná také budete potřebovat dodatečný
+parametr <userinput>ramdisk_size=<replaceable>velikost
+v KB</replaceable></userinput>.
 
 </para><para arch="i386">
 
-Závěrem nakopírujte do adresáře <filename>/tftpboot</filename> soubory 
-<filename>tftpboot.img</filename> a <filename>root.bin</filename>
-(naleznete je na ftp archivech Debianu).
+Závěrem nakopírujte do adresáře <filename>/tftpboot</filename> soubory
+<filename>vmlinuz</filename> a <filename>initrd.gz</filename> určené
+pro zavádění ze sítě (naleznete je na ftp archivech Debianu).
 
 </para>
 
