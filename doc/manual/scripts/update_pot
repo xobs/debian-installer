@@ -1,0 +1,17 @@
+#!/bin/sh
+
+[ ! -d ./en/ ] && exit 1
+[ ! -d ./po/ ] && mkdir po/
+
+TARGET="./integrated"
+
+cd $TARGET/
+
+[ ! -d "po/$DIR" ] && exit 1
+for XML in `ls en/*.xml` ; do
+    XML=$(basename $XML)
+    POT=$(basename $XML .xml).pot
+    xml2pot en/$XML >po/$DIR/$POT
+done
+
+exit 0

@@ -1,0 +1,64 @@
+#!/bin/bash
+
+if [ "$1" = "--help" ]; then
+    echo "Usage: $0 lang"
+    exit 0
+fi
+
+language=${1:-en}
+
+basedir="$(pwd)/$(dirname $0)"
+TARGET="./integrated"
+
+cd ./$language || exit 1
+
+TEMPDIR=/tmp/merge_xml.$$
+LOG=$TEMPDIR/merge_xml.$language.log
+[[ -d $TEMPDIR ]] || mkdir $TEMPDIR
+
+#<!ENTITY bookinfo.xml         SYSTEM "en/bookinfo.xml">
+OLD_IFS=$IFS
+IFS="
+"
+:>$TEMPDIR/entlist
+for ENT in `grep "<!ENTITY" ../build/docstruct.ent` ; do
+    echo -n "$(echo $ENT | sed "s/.*ENTITY\ *//" | sed "s/\ *SYSTEM.*$//")" >>$TEMPDIR/entlist
+    echo -n ":" >>$TEMPDIR/entlist
+    echo    "$(echo $ENT | sed "s/.*SYSTEM\ *\"en\///" | sed "s/\">//")" >>$TEMPDIR/entlist
+    
+done
+IFS=$OLD_IFS
+
+# Make sure that all files are in UTF-8 first
+# This is only necessary while we're converting translated files
+echo "Converting .xml files to UTF-8..." >>$LOG
+for FILE in `find . -name "*.xml"` ; do
+    DNAME=$(dirname $FILE); FNAME=$(basename $FILE)
+    mkdir -p $TEMPDIR/in/$DNAME
+    REGEXP="^<?.*encoding="
+    if egrep -q $REGEXP $FILE ; then
+        echo "Encoded    : $FILE" >>$LOG
+        ENC=$(egrep $REGEXP $FILE | sed "s/.*xml.*encoding=\"//" | sed "s/\"?>//")
+        iconv -f $ENC -t utf-8 $FILE | egrep -v $REGEXP >$TEMPDIR/in/$DNAME/$FNAME
+    else
+        echo "Not encoded: $FILE" >>$LOG
+        cp $FILE $TEMPDIR/in/$DNAME/$FNAME
+    fi
+done
+echo "" >>$LOG
+
+# Include lower level xml-files for all the main level xml-files
+echo "Merging .xml files per 'chapter'..." >>$LOG
+awk -v TARGET="$TEMPDIR" -v LOG=$LOG -v ENTLIST="$TEMPDIR/entlist" \
+    -f $basedir/merge_xml.awk ../build/install.${language}.xml
+
+# Copy the results to their proper location
+cd ..
+TDIR="./integrated/$language"
+[[ -d $TDIR ]] && rm $TDIR/*.xml || mkdir -p $TDIR
+cp $TEMPDIR/*.xml $TARGET/$language
+cp $LOG $TARGET/$language
+
+rm -r $TEMPDIR
+exit 0
+

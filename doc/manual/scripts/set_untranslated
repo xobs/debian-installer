@@ -1,0 +1,29 @@
+#!/bin/sh
+
+TMP_FILE="/tmp/set_untranslated.$$"
+
+if [ "$1" = "--help" ] ; then
+    echo "Usage: $0 <range> <filename>"
+    echo "       where <range> is <number> or <start:end>"
+    exit 0
+fi
+if [ $# -ne 2 ] || [ ! -f $2 ] ; then
+    echo "Usage: $0 <range> <filename>"
+    echo "       where <range> is <number> or <start:end>"
+    exit 1
+fi
+
+
+awk -f mark_untranslated.awk -v RANGE="$1" $2 >$TMP_FILE
+if [ $? -eq 0 ] ; then
+    cp $2 $2.sv
+    cp $TMP_FILE $2
+
+    echo ""
+    echo "NOTE"
+    echo "The original file has been replaced!"
+    echo "A copy of the original file was saved as '$2.sv'."
+fi
+
+rm $TMP_FILE
+exit 0
