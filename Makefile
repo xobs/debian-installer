@@ -571,16 +571,13 @@ endif
 
 SZ=$(shell expr $(shell du -b $(TEMP)/$*  | cut -f 1 ) / 1024)
 $(EXTRA_STATS) : %-stats:  
-	echo Calculating spec stats
 	@echo
 	@echo "$* size: $(SZ)k"
 ifneq (,$(FLOPPY_SIZE))
 	@echo "Free space: $(shell expr $(FLOPPY_SIZE) - $(SZ))k"
 endif
-	@echo "Disk usage per package on net_drivers:"
+	@echo "Disk usage per package:"
 	@ls -l $(TEMP)/$*/*.udeb
-	@echo
-
 
 # Upload a daily build to peope.debian.org. If you're not Joey Hess,
 # you probably don't want to use this grungy code, at least not without
