@@ -117,8 +117,9 @@ support.  On a &debian; server, the <classname>atftpd</classname> and
 
 </para></note><para arch="mips">
 
-If your TFTP server is a GNU/Linux box running Linux 2.4.X you'll need
-to set the following on your server:
+If you intend to install Debian on an SGI machine and your TFTP server is a
+GNU/Linux box running Linux 2.4, you'll need to set the following on your
+server:
 
 <informalexample><screen>
 
@@ -317,6 +318,39 @@ the <userinput>filename=</userinput> option in
 
 </para>
    </sect3>
+
+   <sect3 arch="mips">
+   <title>Broadcom BCM91250A TFTP Booting</title>
+<para>
+
+On the Broadcom BCM91250A evaluation board, you have to load the SiByl boot
+loader via TFTP which will then load and start the Debian installer.  In
+most cases, you will first obtain an IP address via DHCP but it is also
+possible to configure a static address.  In order to use DHCP, you can
+enter the following command on the CFE prompt:
+
+<informalexample><screen>
+
+ifconfig eth0 -auto
+
+</screen></informalexample>
+
+Once you have obtained an IP address, you can load SiByl with the following
+command:
+
+<informalexample><screen>
+
+boot 192.168.1.1:/boot/sibyl
+
+</screen></informalexample>
+
+You need to substitute the IP address listed in this example with either
+the name or the IP address of your TFTP server.  Once you issue this
+command, the installer will be loaded automatically.
+
+</para>
+   </sect3>
+
   </sect2>
 
 <!-- FIXME: commented out since it seems too old to be usable and a current
