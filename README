@@ -10,7 +10,9 @@ An overview of how the installer is built:
   set in the KVERS variable in the Makefile.
 * The Makefile has a TYPE variable that selects one of the lists. Eg, 
   "fakeroot make TYPE=net"
-* Apt is used to download the required udebs.
+* Apt is used to download the required udebs. This does *not* include
+  libraries; libraries used by udebs must be installed on the build system,
+  and so are build-depended on.
 * If you have some udebs that are not available on your mirror yet,
   you can drop them in localudebs/ and they will be used.
 * Dpkg is used to unpack the udebs into the build directory.

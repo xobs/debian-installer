@@ -385,19 +385,22 @@ stats: tree
 # Add your interesting stats here.
 
 
-# Upload a daily build to klecker. If you're not Joey Hess, you probably
+# Upload a daily build to peope.debian.org. If you're not Joey Hess, you probably
 # don't want to use this grungy code, at least not without overrideing
 # this:
-UPLOAD_DIR=klecker.debian.org:~/public_html/debian-installer/daily/
+UPLOAD_DIR=people.debian.org:~/public_html/debian-installer/daily/
 daily_build:
 	-cvs update
+	dpkg-checkbuilddeps
 	$(MAKE) clean
 	install -d $(DEST)
 	fakeroot $(MAKE) tarball > $(DEST)/log 2>&1
 	$(MAKE) stats > $(DEST)/$(TYPE).info
 	echo "Tree comparison" >> $(DEST)/$(TYPE).info
 	echo "" >> $(DEST)/$(TYPE).info
-	./treecompare $(TYPE)-oldtree $(TREE) >> $(DEST)/$(TYPE).info
+	if [ -d $(TYPE)-oldtree ]; then \
+		./treecompare $(TYPE)-oldtree $(TREE) >> $(DEST)/$(TYPE).info; \
+	fi
 	scp -q -B $(DEST)/log $(UPLOAD_DIR)
 	scp -q -B $(DEST)/$(TYPE)-debian-installer.tar.gz \
 		$(UPLOAD_DIR)/$(TYPE)-debian-installer-$(shell date +%Y%m%d).tar.gz
