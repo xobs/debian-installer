@@ -224,7 +224,7 @@ _clean: tree_umount
 	rm -f $(TEMP)/diskusage.txt
 	rm -f $(TEMP)/all.utf
 	rm -f $(TEMP)/unifont.bdf $(TREE)/unifont.bgf
-	rm -f $(INITRD) $(KERNEL) $(BOOT) $(ROOT) $(EXTRA)
+	rm -f $(INITRD) $(KERNEL) $(BOOT) $(ROOT) $(EXTRA) $(MINIISO)
 	rm -rf $(TEMP)
 
 
@@ -582,6 +582,10 @@ $(BOOT): $(TEMP_INITRD) arch_boot
 # non-bootable root images
 $(ROOT): $(TEMP_INITRD) arch_root
 	install -m 644 -D $(TEMP_ROOT)$(GZIPPED) $@
+
+# miniature ISOs with only a boot image
+$(MINIISO): $(TEMP_INITRD) arch_miniiso
+	install -m 644 -D $(TEMP_MINIISO) $@
 
 # Other images, e.g. driver floppies. Those are simply handled as flavours
 $(EXTRA): $(TEMP_EXTRA)
