@@ -1,41 +1,43 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 11648 -->
+<!-- original version: 18660 -->
 
   <sect2 arch="ia64"><title>Dělení disku na &arch-title;</title>
 <para>
 
-ia64 EFI firmware podporuje dva formáty tabulky oddílů &mdash;
-GPT a MS-DOS. Formát MS-DOS se typicky používá na počítačích i386 a
-pro systémy ia64 se již nedoporučuje. Instalační systém nabízí dva
-programy pro dělení disku &mdash;
-<ulink url="cfdisk.txt"><command>cfdisk</command></ulink> a
-<ulink url="parted.txt"><command>parted</command></ulink>.
-Zatímco <command>parted</command> zvládá oba formáty tabulky oddílů,
-<command>cfdisk</command> rozumí pouze formátu MS-DOS. Pokud jste měli
-původně disk rozdělený tabulkou GPT a nyní chcete vytvořit tabulku 
-oddílů ve formátu MS-DOS, je nezbytné použít program parted. Je to z
-toho důvodu, že obě tabulky leží na jiném místě disku a cfdisk neví,
-jak má tabulku GPT odstranit.
+Výchozím dělicicím programem instalačního systému je
+<command>partman</command>. <command>partman</command> se stará
+o správné rozdělení disku, správu přípojných bodů a hlavně dává pozor,
+aby jste neudělali nějakou logickou chybu, která by zabránila
+instalaci. Protože toho má na starosti víc než dost, přenechává
+samotné dělení disku programu <command>parted</command>.
+
+</para><note><title>Různé formáty tabulky oddílů</title><para>
+
+IA64 EFI firmware podporuje dva formáty tabulky oddílů &mdash; GPT
+a MS-DOS. Formát MS-DOS se typicky používá na počítačích i386 a pro
+systémy ia64 se již nedoporučuje. Přestože instalační systém nabízí
+dva programy pro dělení disku (<command>cfdisk</command>
+a <command>parted</command>), měli byste používat pouze druhý z nich,
+protože jenom <command>parted</command> zvládá oba formáty tabulky
+oddílů.
+
+</para></note><para>
+
+Pokud v <command>partman</command>u zvolíte automatické rozdělení
+disků, automaticky se na začátku prvního disku vytvoří malá EFI
+oblast. Jestliže rozdělujete disk ručně, můžete ji vytvořit stejným
+způsobem, jako třeba <emphasis>swap</emphasis>.
 
 </para><para>
 
-Důležitý rozdíl mezi oběma programy je také v tom, jak rozpoznávají
-typ oblasti. <command>cfdisk</command> využívá bajtu v tabulce
-rozdělení disku (například linuxová ext2 oblast má hodnotu 83),
-zatímco <command>parted</command> zjišťuje typ oblasti prozkoumáním
-dané oblasti. To například znamená, že dokud odkládací oblast (swap)
-nenaformátujete, <command>parted</command> ji nerozpozná. Podobně
-nebude považovat oblast za linuxovou ext2, dokud na ní nevytvoříte
-souborový systém. <command>parted</command> umí vytvářet souborové
-systémy a formátovat odkládací oblasti, takže byste toho měli využít.
-
-</para><para>
-
+Pokud byste náhodou potřebovali vytvořit tak speciální rozdělení
+disku, že by to <command>partman</command> nezvládl, můžete se
+přepnout do shellu a ručně spustit program <command>parted</command>.
 Bohužel je <command>parted</command> ovládaný z příkazové řádky a tím
-pádem se nepoužívá tak jednoduše jako <command>cfdisk</command>.
-Předpokládejme, že chcete smazat celý disk a vytvořit tabulku GPT a
-několik oblastí. Posloupnost příkazů by mohla vypadat nějak takto:
+pádem se nepoužívá tak jednoduše jako <command>partman</command>.
+Předpokládejme, že chcete smazat celý disk a vytvořit tabulku GPT
+a několik oblastí. Posloupnost příkazů by mohla vypadat nějak takto:
 
 </para><para>
 <informalexample><screen>
@@ -66,16 +68,49 @@ kontroluje výskyt vadných bloků.
   </sect2>
 
   <sect2 arch="ia64"><title>Požadavky na zaváděcí oblast</title>
-
 <para>
 
 ELILO, zavaděč na ia64, vyžaduje oblast obsahující souborový systém
 FAT. Jestliže jste použili oblasti GPT, měla by mít nastaven příznak
 <userinput>boot</userinput>; pokud jste použili oblasti MS-DOS, pak by
-měla být typu ,,EF''. Oblast musí být dostatečně velká, aby se do ní
-vešel zavaděč, jádra a případné RAMdisky. Obvykle stačí 16MB, ale
-jestli experimentujete s více jádry, klidně použijte oblast
-o velikosti 128MB. 
+měla být typu <quote>EF</quote>. Oblast musí být dostatečně velká, aby
+se do ní vešel zavaděč, jádra a případné RAMdisky. Obvykle stačí 16MB,
+ale jestli experimentujete s více jádry, klidně použijte oblast
+o velikosti 128MB.
+
+</para><para>
+
+Protože EFI Boot Manager a EFI Shell plně podporují tabulku rozdělení
+typu GPT, nemusí být zaváděcí oblast nutně první a dokonce ani nemusí
+být na stejném disku. To se hodí v případech, když tuto oblast
+zapomenete alokovat a zjistíte to až později po vytvoření
+a zformátování jiných oblastí. <command>partman</command> na tento
+problém myslí a hlídá, zda je při ukončení <command>partman</command>u
+zaváděcí EFI oblast vytvořená a zda existuje platná kořenová oblast.
+To vám dává možnost opravit rozdělení disku ještě před instalací
+balíků (což by v dané chvíli většinou nedávalo smysl). Nejjednodušší
+cesta k nápravě je zmenšit poslední oblast na disku a použít vzniklé
+volné místo právě pro zaváděcí EFI oblast.
+
+</para><para>
+
+Velmi se doporučuje vytvořit zaváděcí EFI oblast na stejném disku,
+kde leží <emphasis>kořenový</emphasis> souborový systém.
+
+</para>
+  </sect2>
+
+  <sect2 arch="ia64"><title>Diagnostické EFI oblasti</title>
+<para>
+
+EFI firmware je mnohem propracovanější než obvyklé BIOSy, které můžete
+nalézt ve většině osobních počítačů třídy x86. Někteří výrobci
+využívají možností EFI a ukládají si na systémový disk do speciální
+oblasti diagnostické programy a nástroje pro správu
+systému. Podrobnější informace o této oblasti se dozvíte v dokumentaci
+k systému. Nejjednodušší cesta k vytvoření diagnostické oblasti je
+vytvořit ji v <command>partman</command>u zároveň se zaváděcí EFI
+oblastí.
 
 </para>
   </sect2>
