@@ -1,41 +1,43 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 22935 untranslated -->
+<!-- original version: 22935 -->
 
  <sect1 id="module-details">
- <title>Using Individual Components</title>
+ <title>Die einzelnen Komponenten</title>
 <para>
 
-In this section we will describe each installer component in
-detail. The components have been grouped into stages that should
-be recognizable for users. They are presented in the order they
-appear during the install. Note that not all modules will be used
-for every installation; which modules are actually used depends on
-the installation method you use and on your hardware.
+In diesem Kapitel beschreiben wir detailiert jede Komponente des
+Installers. Die Komponenten sind in (für Benutzer sinnvolle) Gruppen
+gegliedert. Sie werden in der Reihenfolge vorgestellt, in der sie auch
+während der Installation vorkommen. Bedenken Sie, dass nicht alle Module
+bei jeder Installation benutzt werden; welche Komponenten jeweils benutzt
+werden, hängt von der Installationsmethode und Ihrer Hardware ab.
 
 </para>
 
   <sect2 id="di-setup">
-  <title>Setting up Debian Installer and Hardware Configuration</title>
+  <title>Den Debian Installer einrichten und Konfiguration der Hardware</title>
 <para>
 
-Let's assume the Debian Installer has booted and you are facing its
-first screen.  At this time, the capabilities of &d-i; are still quite
-limited. It doesn't know much about your hardware, preferred language,
-or even the task it should perform. Don't worry. Because &d-i; is quite
-clever, it can automatically probe your hardware, locate the rest
-of its components and upgrade itself to a capable installation system.
+Wir nehmen an, dass der &d-i; gebootet hat und Sie sein erstes
+Bild sehen. In diesem Moment sind die Fähigkeiten des Debian Installers noch sehr
+begrenzt. Er weiss noch nicht viel über Ihre Hardware, Ihre bevorzugte Sprache
+oder die Aufgabe, die er erledigen soll. Machen Sie sich deswegen keine Sorgen.
+Da der &d-i; sehr clever ist, kann er automatisch Ihre Hardware erkennen,
+seine restlichen, noch nicht geladenen Komponenten orten und sich selbst zu
+einem leistungsfähigen Installationssystem machen.
 
-However, you still need to help &d-i; with some information it can't
-determine automatically (like selecting your preferred language, keyboard
-layout or desired network mirror).
+Allerdings braucht er immer noch Ihre Hilfe, um einige Informationen zu bekommen,
+die er nicht automatisch erkennen kann (wie die bevorzugte Sprache, das
+Tastaturlayout oder den gewünschten Netzwerk-Spiegel-Server).
 
 </para><para>
 
-You will notice that &d-i; performs <firstterm>hardware detection</firstterm>
-several times during this stage. The first time is targeted specifically
-at the hardware needed to load installer components (e.g. your CD-ROM or
-network card). As not all drivers may be available during this first run,
-hardware detection needs to be repeated later in the process.
+Sie werden feststellen, dass der &d-i; mehrmals während dieses Schrittes
+eine <firstterm>Hardware-Erkennung</firstterm> durchführt. Das erste Mal geht
+es hauptsächlich um die Hardware, die benötigt wird, um die Installer-Komponenten
+zu laden. Weil allerdings im ersten Durchlauf möglicherweise noch nicht alle
+Treiber zur Verfügung stehen, muss die Hardware-Erkennung evtl. später noch
+einmal wiederholt werden.
 
 </para>
 
@@ -55,17 +57,17 @@ hardware detection needs to be repeated later in the process.
   </sect2>
 
   <sect2 id="di-partition">
-  <title>Partitioning and Mount Point Selection</title>
+  <title>Partitionierung und Auswahl der Einhängepunkte im Dateisystem</title>
 <para>
 
-At this time, after hardware detection has been executed a final time,
-&d-i; should be at its full strength, customized for the user's needs
-and ready to do some real work.
+Jetzt, nachdem die Hardware-Erkennung ein letztes Mal durchgeführt wurde,
+sollte der &d-i; seine volle Stärke erreicht haben, optimal abgestimmt auf
+die Bedürfnisse des Benutzers und bereit, mit der richtigen Arbeit zu beginnen.
 
-As the title of this section indicates, the main task of the next few
-components lies in partitioning your disks, creating filesystems,
-assigning mountpoints and optionally configuring closely related issues
-like LVM or RAID devices.
+Wie der Titel dieses Abschnitts vermuten lässt, liegt die Hauptaufgabe der
+jetzt folgenden Komponenten im Partitionieren Ihrer Laufwerke, Erstellen von
+Dateisystemen, Festlegen der Einhängepunkte sowie damit eng verwandter Themen
+wie der Konfiguration von LVM- oder RAID-Laufwerken.
 
 </para>
 
@@ -78,13 +80,13 @@ like LVM or RAID devices.
   </sect2>
 
   <sect2 id="di-install-base">
-  <title>Installing the Base System</title>
+  <title>Installation des Basissystems</title>
 <para>
 
-Although this stage is the least problematic, it consumes most time of
-the install because it downloads, verifies and unpacks the whole base
-system. If you have a slow computer or network connection, this could
-take some time.
+Obwohl dieser Schritt der am wenigsten problematische ist, benötigt er die
+meiste Zeit, da hier das komplette Basissystem heruntergeladen, überprüft und
+entpackt wird. Wenn Sie einen langsamen Rechner oder eine langsame
+Netzwerkverbindung haben, kann das schon einige Zeit dauern.
 
 </para>
 
@@ -92,23 +94,25 @@ take some time.
   </sect2>
 
   <sect2 id="di-make-bootable">
-  <title>Making Your System Bootable</title>
+  <title>Ihr System bootfähig machen</title>
 
 <para condition="supports-nfsroot">
 
-If you are installing a diskless workstation, obviously, booting off
-the local disk isn't a meaningful option, and this step will be
-skipped. <phrase arch="sparc">You may wish to set the OpenBoot to boot
-from the network by default; see <xref
-linkend="boot-dev-select-sun"/>.</phrase>
+Wenn Sie gerade eine Workstation ohne Festplatte installieren, ist das
+Booten von Festplatte natürlich keine sinnvolle Sache; deswegen wird
+der Schritt in diesem Fall übersprungen.
+<phrase arch="sparc">Sie sollten vielleicht OpenBoot so einstellen, dass
+standardmäßig per Netzwerk gebootet wird; siehe dazu
+<xref linkend="boot-dev-select-sun"/>.</phrase>
 
 </para><para>
 
-Note that multiple operating systems booting on a single machine is
-still something of a black art.  This document does not even attempt
-to document the various boot managers, which vary by architecture and
-even by subarchitecture.  You should see your boot manager's
-documentation for more information.
+Bedenken Sie, dass es manchmal noch so etwas wie schwarze Magie ist,
+mehrere Betriebssysteme auf einem einzigen Rechner zu booten. Dieses
+Dokument versucht erst gar nicht, die vielen Bootmanager zu beschreiben,
+die sich architektur-abhängig sehr unterscheiden (manchmal sogar
+innerhalb der Unterarchitekturen). Sie sollten deshalb die Dokumentation
+Ihres Bootmanagers zu Hilfe nehmen, wenn Sie mehr Informationen brauchen.
 
 </para>
 
@@ -129,11 +133,12 @@ documentation for more information.
   </sect2>
 
   <sect2 id="di-finish">
-  <title>Finishing the First Stage</title>
+  <title>Stufe 1 der Installation beenden</title>
 <para>
 
-These are the last bits to do before rebooting to your new Debian. It
-mostly consists of tidying up after the &d-i;.
+Dies sind die letzten Dinge, die noch erledigt werden müssen, bevor Sie
+Ihr neues Debian booten können. Hauptsächlich müssen Sie noch ein wenig
+hinter dem &d-i; den Dreck wegmachen :-).
 
 </para>
 
@@ -141,12 +146,12 @@ mostly consists of tidying up after the &d-i;.
   </sect2>
 
   <sect2 id="di-miscellaneous">
-  <title>Miscellaneous</title>
+  <title>Verschiedenes</title>
 <para>
 
-The components listed in this section are usually not involved in the
-installation process, but are waiting in the background to help the
-user in case something goes wrong.
+Die Komponenten, die wir hier auflisten, sind normalerweise nicht am
+Installationsprozess beteiligt, warten aber im Hintergrund, um den
+Benutzer zu unterstützen, falls etwas schief läuft.
 
 </para>
 
