@@ -30,13 +30,6 @@ ifeq (,$(filter $(TYPE),type $(TYPES_SUPPORTED)))
 ERROR_TYPE = 1
 endif
 
-ifndef KERNELIMAGEVERSION
-KERNELIMAGEVERSION=${KERNELVERSION}
-endif
-ifndef KERNELIMAGEVERSION_SECOND
-KERNELIMAGEVERSION_SECOND=${KERNELVERSION_SECOND}
-endif
-
 # Add to PATH so dpkg will always work, and so local programs will
 # be found.
 PATH:=$(PATH):/usr/sbin:/sbin:.
@@ -51,7 +44,13 @@ APT_GET=apt-get --assume-yes \
 	-o Dir::Cache=$(CWD)$(APTDIR)/cache
 
 # Get the list of udebs to install. Comments are allowed in the lists.
-UDEBS=$(shell grep --no-filename -v ^\# pkg-lists/base pkg-lists/$(TYPE)/common `if [ -f pkg-lists/$(TYPE)/$(architecture) ]; then echo pkg-lists/$(TYPE)/$(architecture); fi` | sed -e 's/$${kernel:Version}/$(KERNELIMAGEVERSION)/g' -e 's/$${kernel_second:Version}/$(KERNELIMAGEVERSION_SECOND)/g') $(EXTRAS)
+UDEBS = \
+	$(shell grep --no-filename -v ^\# \
+			pkg-lists/base \
+			pkg-lists/$(TYPE)/common \
+			`if [ -f pkg-lists/$(TYPE)/$(DEB_HOST_ARCH) ]; then echo pkg-lists/$(TYPE)/$(DEB_HOST_ARCH); fi` \
+		| sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2\n)/g' \
+	) $(EXTRAS)
 
 # Scratch directory.
 BASE_TMP=./tmp/
@@ -63,10 +62,6 @@ TREE=$(TEMP)/tree
 
 DPKGDIR=$(TREE)/var/lib/dpkg
 TMP_MNT:=$(shell pwd)/mnt/
-
-# This is the kernel image that we will boot from.
-KERNEL=$(TEMP)/$(KERNELNAME)
-KERNEL_SECOND=$(TEMP)/$(KERNELNAME_SECOND)
 
 ifdef ERROR_TYPE
 all:
@@ -272,12 +267,9 @@ endif
 	# Set up modules.dep, ensure there is at least one standard dir (kernel
 	# in this case), so depmod will use its prune list for archs with no
 	# modules.
-	mkdir -p $(TREE)/lib/modules/$(KERNELVERSION)/kernel
-	depmod -q -a -b $(TREE)/ $(KERNELVERSION)
-ifdef KERNELVERSION_SECOND
-	mkdir -p $(TREE)/lib/modules/$(KERNELVERSION_SECOND)/kernel
-	depmod -q -a -b $(TREE)/ $(KERNELVERSION_SECOND)
-endif
+	$(foreach VERSION,$(KERNELVERSION), \
+		mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
+		depmod -q -a -b $(TREE)/ $(KERNELVERSION); )
 	# These files depmod makes are used by hotplug, and we shouldn't
 	# need them, yet anyway.
 	find $(TREE)/lib/modules/ -name 'modules*' \
@@ -287,10 +279,8 @@ endif
 
 	# Move the kernel image out of the way, into a temp directory
 	# for use later. We don't need it bloating our image!
-	mv -f $(TREE)/boot/$(KERNELNAME) $(KERNEL)
-ifdef KERNELNAME_SECOND
-	mv -f $(TREE)/boot/$(KERNELNAME_SECOND) $(KERNEL_SECOND)
-endif
+	$(foreach NAME,$(KERNELNAME), \
+		mv -f $(TREE)/boot/$(NAME) $(TEMP); )
 	-rmdir $(TREE)/boot/
 
 	# Copy terminfo files for slang frontend
@@ -411,9 +401,9 @@ $(INITRD):
 	gzip -vc9 $(TMP_FILE) > $(INITRD)
 
 # hppa boots a lifimage, which can contain an initrd and two kernels (one 32 and one 64 bit)
-lifimage: Makefile initrd $(DEST)/$(TYPE)-lifimage $(KERNEL) $(KERNEL_SECOND)
+lifimage: Makefile initrd $(DEST)/$(TYPE)-lifimage
 $(DEST)/$(TYPE)-lifimage:
-	palo -f /dev/null -k $(KERNEL) -k $(KERNEL_SECOND) -r $(INITRD) -s $(DEST)/$(TYPE)-lifimage \
+	palo -f /dev/null $(foreach NAME,$(KERNELNAME),-k $(TEMP)/$(NAME)) -r $(INITRD) -s $(DEST)/$(TYPE)-lifimage \
 		-c "0/linux HOME=/ ramdisk_size=8192 initrd=0/ramdisk rw"
 
 # Create a bootable floppy image. i386 specific. FIXME
@@ -474,7 +464,7 @@ boot_floppy_check: floppy_image
 	cmp $(FLOPPYDEV) $(FLOPPY_IMAGE)
 
 COMPRESSED_SZ=$(shell expr $(shell tar czf - $(TREE) | wc -c) / 1024)
-KERNEL_SZ=$(shell expr $(shell du -b $(KERNEL) | cut -f 1) / 1024)
+KERNEL_SZ=$(shell expr \( $(foreach NAME,$(KERNELNAME),$(shell du -b $(TEMP)/$(NAME) | cut -f 1) +) 0 \) / 1024)
 stats: tree
 	@echo
 	@echo "System stats for $(TYPE)"
@@ -485,7 +475,9 @@ stats: tree
 	@echo "$(shell du -h -s $(TREE)/lib/modules | cut -f 1) kernel modules)"
 	@echo "Initrd size: $(COMPRESSED_SZ)k"
 	@echo "Kernel size: $(KERNEL_SZ)k"
+ifneq (,$(FLOPPY_SIZE))
 	@echo "Free space: $(shell expr $(FLOPPY_SIZE) - $(KERNEL_SZ) - $(COMPRESSED_SZ))k"
+endif
 	@echo "Disk usage per package:"
 	@sed 's/^/  /' < diskusage-$(TYPE).txt
 # Add your interesting stats here.
