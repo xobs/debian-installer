@@ -269,10 +269,15 @@ ifdef USERDEVFS
 	mknod $(TREE)/dev/rd/0 b 1 0
 endif
 
-	# Move the kernel image out of the way, into a temp directory
-	# for use later.
+	# Move the kernel image out of the way, either into a temp directory
+	# for use later, or to dest.
+ifdef DEST_KERNEL
+	$(foreach NAME,$(KERNELNAME), \
+		mv -f $(TREE)/boot/$(NAME) $(DEST)/$(NAME); )
+else
 	$(foreach NAME,$(KERNELNAME), \
 		mv -f $(TREE)/boot/$(NAME) $(TEMP); )
+endif
 	-rmdir $(TREE)/boot/
 
 ifndef NO_TERMINFO
