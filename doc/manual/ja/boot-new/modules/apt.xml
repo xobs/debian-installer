@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23498 -->
+<!-- original version: 23845 -->
 
  <sect2 id="configure-apt">
  <title>APT の設定</title>
@@ -21,16 +21,16 @@ via a program called <command>apt-get</command>, from the
 <!--
 Note that the actual program that installs packages is called
 <command>dpkg</command>.  However, this package is more of a low-level
-tool.  <command>apt-get</command> will invoke <command>dpkg</command>
-as appropriate; it is a higher-level too, however, because it knows to
-install other packages which are required for the package you're
+tool.  <command>apt-get</command> is a higher-level tool as it will
+invoke <command>dpkg</command> as appropriate and also because it knows
+to install other packages which are required for the package you're
 trying to install, as well as how to retrieve the package from your
 CD, the network, or wherever.
 -->
 実際にパッケージをインストールするプログラムは <command>dpkg</command>
 です。しかしこのパッケージはむしろ低レベルなツールです。
 <command>apt-get</command> は、適切に <command>dpkg</command>
-を起動します。APT は高レベルなツールです。なぜなら APT は、
+を起動する，より高レベルなツールです。なぜなら APT は、
 あなたが今インストールしようとしているパッケージが必要とする
 別のパッケージをインストールしなければならないことを知っているからです。
 また、そのパッケージを CD やネットワークなどの媒体から取得する方法を
@@ -39,24 +39,26 @@ CD, the network, or wherever.
 </para>
 </footnote>
 <!--
-Other package maintenance front-ends, like <command>dselect</command>,
-<command>aptitude</command> and <command>synaptic</command> also use
-and depend on <command>apt</command>. These front-ends are recommended
-for new users, since they integrate some other features (package
+Other front-ends for package management, like <command>aptitude</command>,
+<command>synaptic</command> and the older <command>dselect</command> also
+use and depend on <command>apt-get</command>. These front-ends are recommended
+for new users, since they integrate some additional features (package
 searching and status checks) in a nice user interface.
 -->
-<command>dselect</command> のような他のパッケージメンテナンスフロントエンド
-としては、<command>aptitude</command> や <command>synaptic</command>
-もまた使用され、<command>apt</command> に依存しています。
-これらフロントエンドは、洗練されたユーザインターフェイスに他のいくつかの特徴
+<command>aptitude</command> のようなパッケージ管理用のフロントエンド
+としては、他に <command>synaptic</command> や以前からの <command>dselect</command>
+も使用され、<command>apt-get</command> に依存しています。
+これらフロントエンドは、洗練されたユーザインターフェイスにいくつかの追加された特徴
 (パッケージの検索や状態のチェック) が統合されているので、新規ユーザにお薦めです。
 
+</para><para>
+
 <!--
-APT must be configured, however, so that it knows where to retrieve
-packages from.  The helper application which assists in this task is
-called <command>apt-setup</command>.
+APT must be configured so that it knows where to retrieve packages from.
+The helper application which assists in this task is called
+<command>apt-setup</command>.
 -->
-しかし、パッケージの取得先を知るには、APT の設定が必要です。
+パッケージの取得先を知るには、APT の設定が必要です。
 この作業を助けてくれるのが、<command>apt-setup</command> というツールです。
 
 </para><para>
@@ -134,94 +136,69 @@ HTTP を使います。しかし不必要に APT ソースを追加すると
 If you plan on installing the rest of your system via the network, the
 most common option is to select the <userinput>http</userinput>
 source.  The <userinput>ftp</userinput> source is also acceptable, but
-tends to be a little slower making connections.
+tends to be somewhat slower making connections.
 -->
 システムの残りの部分をネットワーク経由でインストールするつもりでしたら、
 通常は <userinput>http</userinput> ソースを選択します。
 <userinput>ftp</userinput> ソースも使えますが、
-ftp は接続が少しだけ遅くなる傾向があります。
+ftp は接続がやや遅くなる傾向があります。
 
 </para><para>
 
 <!--
-The next step during the configuration of network packages sources is
+The next step during the configuration of network package sources is
 to tell <command>apt-setup</command> which country you live in.  This
-configures which of the official Debian Internet mirror network you
-connect to.  Depending on which country you select, you will be given
-a list of possible machines.  It's generally fine to pick the one at
-the top of the list, but any of them should work. It will be tested
-afterwards, however, and you should select a different one if you see
-any issue. Notice that the mirror list provided by the installation
-was generated when this Debian version was released and some mirrors
-might not be available if some time (a few months) has elapsed between
-the release and your installation.
+configures which of the official Debian Internet mirrors you will
+connect to.  Depending on which country you select, you will be presented
+with a list of possible servers.  It's generally fine to pick the one at
+the top of the list, but any of them should work. Note however that the
+mirror list provided by the installation was generated when this version
+of Debian was released and some mirrors may no longer be available.
 -->
 ネットワーク上からのパッケージ取得設定の次の段階は、
 <command>apt-setup</command> にあなたが住んでいる国を教えることです。
 この情報を使って、Debian の公式ミラーサイトのうちどれに接続するかを
-決定します。国を選ぶと、利用可能なマシンの一覧が表示されます。
-一覧のうちの一番上を選べば良いはずですが、
-もちろんどれを選んでも構いません。あとでテストされるでしょうけれど、
-問題に気づいた場合は異なるものを選択すべきです。
-インストール用に提供されているミラーリストは、この Debian バージョンが
-リリースされた時に生成されたものです。リリース時からしばらく (数ヶ月)
-経ってインストールする場合には、一部のミラーが利用できなくなっているかも
-しれないので注意してください。
+決定します。国を選ぶと、利用可能なサーバの一覧が表示されます。
+一覧のうちの一番上を選べば良いはずですが、もちろんどれを選んでも構いません。
+とはいえインストール用に提供されているミラーリストは、このバージョンの
+Debian がリリースされた時に生成されたものです。一部のミラーが廃止され
+利用できなくなっているかもしれないので注意してください。
 
 </para><para>
 
 <!--
-If you are installing via HTTP, you will be asked to configure your
-proxy server. A proxy server is a server that will forward all your
-HTTP requests to the Internet and is used when you have limited
-connectivity to the Internet.  This is sometimes required by people
-behind firewalls (only the proxy server can access the Internet), on
-corporate networks, etc. Most home users will not need to setup a
-proxy server, although some ISPs might provide proxy servers for their
+After you have selected a mirror, you will be asked if a proxy server
+should be used. A proxy server is a server that will forward all your
+HTTP and/or FTP requests to the Internet and is most often used to regulate
+and optimize access to the Internet on corporate networks. In some networks
+only the proxy server is allowed access to the Internet, in which case you
+will have to enter the name of the proxy server. You may also have to
+include an user name and password. Most home users will not need to specify
+a proxy server, although some ISPs may provide proxy servers for their
 users.
 -->
-HTTP 経由でインストールする場合は、プロキシサーバの設定を尋ねられます。
-プロキシサーバはすべての HTTP リクエストをインターネットに転送し、
-インターネットへの接続を制限した場合に使用されるサーバです。
-この設定は、(プロキシサーバだけがインターネットにアクセスできる)
-ファイアウォールの内側や会社のネットワークを使用している場合に必要に
-なることが多いです。一部の ISP はユーザにプロキシサーバを提供している
+ミラーサイトを選択した後に、プロキシサーバを使用するかを尋ねられます。
+プロキシサーバはすべての HTTP や FTP リクエストをインターネットに転送し、
+企業のネットワーク上でインターネットへのアクセスを制限し最適化するために
+最もよく使用されるサーバです。ネットワークによっては Proxy サーバだけが
+インターネットへの接続を許可されるので、そのような場合には Proxy サーバ名を
+入力しなければなりません。さらに、ユーザ名およびパスワードを含めなければ
+ならないかもしれません。一部の ISP はユーザにプロキシサーバを提供している
 かもしれませんが、ほとんどのホームユーザはセットアップにプロキシサーバ
-を必要としないでしょう。
+を指定する必要はないでしょう。
 
 </para><para>
 
 <!--
-Notice that if you are planning the installation of many different
-Debian systems, a proxy server might be helpful to reduce the traffic
-load when all those systems try to connect to the Internet to retrieve
-new packages (or security patches). You might want to consider setting
-up a system and carefully installing a proxy server with a cache, and
-then install other systems pointing to the proxy server so they all
-benefit from the cached content.
+After you select a mirror, your new network package source will be tested.
+If all goes well, you will be prompted whether you want to add another
+package source. If you have any problems using the package source you selected,
+try using a different mirror (either from your country list or from the
+global list), or try using a different network package source.
 -->
-たくさんの異なるシステムへの Debian のインストールを計画している場合は、
-それらすべてのシステムが新しいパッケージ (あるいはセキュリティパッチ)
-を検索するためにインターネットに接続しようとする時に、プロキシサーバが
-トラフィック負荷を軽減する助けになるかもしれないということに注目してください。
-システムを設定し、キャッシュを備えたプロキシサーバを注意深くインストール
-してから、そのプロキシサーバを示すことで他のシステムをインストールして、
-キャッシュされた内容から恩恵を受けたいと考えるかもしれません。
-
-</para><para>
-
-</para><para>
-
-<!--
-Finally, your new network package source will be tested.  If all goes
-well, you will be prompted whether you want to do it all over again
-with another network source. If you have any issue with your source
-package try using a different mirror site (from your country list or
-from your global list) or try using a different network package source.
--->
-最後に、設定した新しいパッケージ取得先がテストされます。
-テストが無事終了すれば、さらに別のパッケージ取得先を設定するか
-どうかを尋ねられます。ソースパッケージに問題があった場合には、
+ミラーサイトの選択後、設定した新しいパッケージ取得先がテストされます。
+テストが無事終了すれば、さらに別のパッケージ取得先を追加するかどうかを
+尋ねられます。選択したパッケージソースを使って問題があった場合には、
 (自分の国リストあるいは全体リストとは) 別のミラーサイトを試してみるか、
 別のネットワークパッケージソースを用いて試してみてください。
 

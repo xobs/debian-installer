@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23502 -->
+<!-- original version: 23660 -->
 
  <sect2 arch="not-s390" id="PPP">
  <title>PPP の設定</title>
@@ -8,38 +8,37 @@
 <para>
 
 <!--
-If your computer is not connected to a network, you will next be asked
-whether you wish to install the rest of the system using PPP. PPP is a
-protocol often to establish dialup connections with modems, in order
-to configure it you will need some information on how to setup this
-connection from your Internet Services Provider (ISP). If you don't
-have a modem in your computer, your should probably skip this step.
+If no network was configured during the first stage of the installation,
+you will next be asked whether you wish to install the rest of the system
+using PPP. PPP is a protocol used to establish dialup connections with modems.
+If you configure the modem at this point, the installation system will be able
+to download additional packages or security updates from the Internet during
+the next steps of the installation.
+If you don't have a modem in your computer or if you prefer to configure
+your modem after the installation, you can skip this step.
 -->
-コンピュータがネットワークに繋がっていない場合、次にシステムの残りの
-部分のインストールに PPP を用いるかどうかを選択します。
-PPP はモデムでダイアルアップ接続を確立するためによく使われるプロトコルで、
-設定するには、インターネットサービスプロバイダ (ISP) から、
-接続の設定方法についての情報が必要になります。コンピュータで
-モデムを使用していなければ、おそらくこの段階はスキップすべきでしょう。
+インストールのファーストステージでネットワークの設定をしなかった場合、
+次にシステムの残りの部分のインストールに PPP を用いるかどうかを選択します。
+PPP はモデムでダイアルアップ接続を確立するために使用されるプロトコルです。
+この時点でモデムの設定をすれば、インストールの次のステップの間にインターネット
+からの追加パッケージやセキュリティアップデートをダウンロードできるでしょう。
+コンピュータにモデムが無ければ、あるいはインストールの後でモデムの設定を
+する方が良いのなら、この段階をスキップすることができます。
 
 </para><para>
 
-<!-- Move this to needed-info.xml? (jfs) -->
-
 <!--
-If your ISP only provides software to configure the dialup access for
-some operating systems you will need to ask them for the information
-needed below which will includes: phone number, username, password and
-DNS servers (optional). Some ISPs provide installation guidelines for
-Linux distributions. You can use that information even if they don't
+In order to configure your PPP connection, you will need some information
+from your  Internet Service Provider (ISP), including phone number, username,
+password and DNS servers (optional). Some ISPs provide installation guidelines
+for Linux distributions. You can use that information even if they don't
 specifically target Debian since most of the configuration parameters
 (and software) is similar amongst Linux distributions.
 -->
-もし ISP が一部のオペレーティングシステムのためのダイアルアップアクセス
-設定用のソフトウェアを提供しているだけなら、以下の情報を ISP
-に尋ねる必要があります -- 電話番号、ユーザ名、パスワードおよび DNS
-サーバ (オプション)。一部の ISP では Linux ディストリビューション向けの
-インストールガイドラインを提供しています。たとえ特に Debian を対象と
+PPP 接続を設定するために、電話番号、ユーザ名、パスワードおよび DNS サーバ
+(オプション) などを含むインターネットサービスプロバイダ (ISP) からの
+いくつかの情報が必要になります。一部の ISP では Linux ディストリビューション
+向けのインストールガイドラインを提供しています。たとえ特に Debian を対象と
 していなくても、設定パラメータ (およびソフトウェア) のほとんどは Linux
 ディストリビューション間で似かよっているので、その情報が使えます。
 
@@ -62,7 +61,7 @@ for the name of your dialup connection, that you name it
 
 <!--
 Hopefully, the <command>pppconfig</command> program will walk you
-through a pain-free PPP connection setup.  However, if it does not
+through a trouble-free PPP connection setup.  However, if it does not
 work for you, see below for detailed instructions.
 -->
 おそらく <command>pppconfig</command> プログラムを使えば、苦労する
@@ -234,4 +233,29 @@ the <classname>gnudip</classname> package.
 <classname>gnudip</classname> パッケージが必要です。
 
 </para>
+
+  <sect3 id="PPPOE">
+<!--
+  <title>Setting Up PPP over Ethernet (PPPOE)</title>
+-->
+  <title>Ethernet 越しの PPP (PPPOE) の設定</title>
+
+<para>
+
+<!--
+PPPOE is a protocol related to PPP used for some broadband connections.
+There is currently no support in base configuration to help you set
+this up. However, the necessary software has been installed, which means
+you can configure PPPOE manually at this stage of the installation by
+switching to VT2 and running <command>pppoeconf</command>.
+-->
+PPPOE は一部のブロードバンド接続に使用される PPP 関連のプロトコルです。
+今のところ、設定を手助けするような基本設定中でのサポートはありません。
+とはいえ、必要なソフトウェアはインストールされました。それはインストールの
+このステージで VT2 に切り替えて、<command>pppoeconf</command> を実行することで
+手動で PPPOE を設定できることを意味しています。
+
+</para>
+
+  </sect3>
  </sect2>
