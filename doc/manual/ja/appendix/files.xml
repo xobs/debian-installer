@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23058 -->
+<!-- original version: 24663 -->
 
 
  <sect1 id="linuxdevices"><title>Linux のデバイス</title>
@@ -142,13 +142,12 @@ to allow the signal to flow to the X server as shown:
 マウスを使用できます。
 以下で示すような、gpm リピータの信号を X サーバに流れるようにすれば、
 双方で使用するような互換性を持つことができます。
+
 <informalexample><screen>
-mouse =&#62; /dev/psaux  =&#62; gpm =&#62; /dev/gpmdata -&#62; /dev/mouse =&#62; X
+mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; X
          /dev/ttyS0             (repeater)        (symlink)
          /dev/ttyS1
 </screen></informalexample>
-
-</para><para>
 
 <!--
 Set the repeater protocol to be raw (in <filename>/etc/gpm.conf</filename>) while
@@ -165,19 +164,22 @@ raw に設定してください。
 <!--
 This approach to use gpm even in X has advantages when the mouse is
 unplugged inadvertently.  Simply restarting gpm with
+
 <informalexample><screen>
-user@debian:# /etc/init.d/gpm restart
+# /etc/init.d/gpm restart
 </screen></informalexample>
+
 will re-connect the mouse in software without restarting X.
 -->
 X の中で gpm を使用するこのアプローチは、
 マウスが不注意に抜かれた場合にも利点があります。
 単純に
+
 <informalexample><screen>
-user@debian:# /etc/init.d/gpm restart
+# /etc/init.d/gpm restart
 </screen></informalexample>
-として gpm を再起動すると、
-X を再起動しなくても、
+
+として gpm を再起動すると、X を再起動しなくても、
 ソフトウェア的にマウスを再接続することができます。
 
 </para><para>
@@ -223,7 +225,6 @@ when your mouse only has one button. Just add the following lines to
 <filename>/etc/sysctl.conf</filename> に以下の行を記述してください。
 
 <informalexample><screen>
-
 # 3-button mouse emulation 
 # turn on emulation
 /dev/mac_hid/mouse_button_emulation = 1
@@ -232,8 +233,8 @@ when your mouse only has one button. Just add the following lines to
 # Send right mouse button signal with the F12 key
 /dev/mac_hid/mouse_button3_keycode = 88
 # For different keys, use showkey to tell you what the code is.
+</screen></informalexample>
 
-</screen></informalexample>  
 </para>
   </sect2>
  </sect1>
@@ -276,21 +277,18 @@ Print server                        240         83         323
 Mail server                          41         12          53
 File server                          85         34         119
 SQL database                        108         33         141
-
 </screen></informalexample>
 -->
-<!--nabetaro: タスクの名前は aptitude にあわせてそのままにしておきます -->
 <informalexample><screen>
 タスク                         インストール ダウンロード インストールに
                                 サイズ (MB)  サイズ (MB) 必要な空き容量 (MB)
 
-Desktop                            1537        521        2058
-Web server                           71         21          92
-Print server                        240         83         323
-Mail server                          41         12          53
-File server                          85         34         119
-SQL database                        108         33         141
-
+デスクトップ環境                   1537        521        2058
+ウェブサーバ                         71         21          92
+印刷サーバ                          240         83         323
+メールサーバ                         41         12          53
+ファイルサーバ                       85         34         119
+SQL データベース                    108         33         141
 </screen></informalexample>
 
 </para>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23059 -->
+<!-- original version: 24663 -->
 
  <sect1 id="linux-upgrade">
  <title>Unix/Linux System システムからの &debian; のインストール</title>
@@ -78,9 +78,7 @@ ext3 ファイルシステムを作成するには、以下のようにします。
 (今回の例ではこのパーティションを root パーティションとします)
 
 <informalexample><screen>
-
- $ mke2fs -j /dev/hda6
-
+# mke2fs -j /dev/hda6
 </screen></informalexample>
 
 <!--
@@ -101,14 +99,10 @@ Debian スワップパーティションにするパーティション番号に、
 読み替えてください)
 
 <informalexample><screen>
-
- $ mkswap /dev/hda5
- $ sync; sync; sync
- $ swapon /dev/hda5
-
+# mkswap /dev/hda5
+# sync; sync; sync
+# swapon /dev/hda5
 </screen></informalexample>
-
-</para><para>
 
 <!--
 Mount one partition as <filename>/mnt/debinst</filename> (the
@@ -123,10 +117,8 @@ referenced later below.
 以降の説明ではこれを使用します。
 
 <informalexample><screen>
-
- $ mkdir /mnt/debinst
- $ mount /dev/hda6 /mnt/debinst
-
+# mkdir /mnt/debinst
+# mount /dev/hda6 /mnt/debinst
 </screen></informalexample>
 
 </para>
@@ -176,12 +168,10 @@ manually. Make a work folder for extracting the .deb into:
 まず .deb を展開するために作業フォルダを次のように作ってください。
 
 <informalexample><screen>
-
- $ mkdir work
- $ cd work
-
+# mkdir work
+# cd work
 </screen></informalexample>
-</para><para>
+
 <!--
 The <command>debootstrap</command> binary is located in the Debian
 archive (be sure to select the proper file for your
@@ -199,11 +189,9 @@ pool</ulink> から <command>debootstrap</command> .deb をダウンロードして、
 バイナリをインストールする際には root 権限を持つ必要があるでしょう。
 
 <informalexample><screen>
-
- $ ar -xf debootstrap_0.X.X_arch.deb
- $ cd /
- $ zcat &#60; /full-path-to-work/work/data.tar.gz | tar xv
-
+# tar -xf debootstrap_0.X.X_arch.deb
+# cd /
+# gzip -dc /full-path-to-work/work/data.tar.gz | tar xv
 </screen></informalexample>
 
 </para>
@@ -264,19 +252,15 @@ in the <command>debootstrap</command> command:
 <userinput>sparc</userinput>.
 
 <informalexample><screen>
-
- $ /usr/sbin/debootstrap --arch ARCH &releasename; \
+# /usr/sbin/debootstrap --arch ARCH &releasename; \
      /mnt/debinst http://http.us.debian.org/debian
-
 </screen></informalexample>
 
 </para>
-
   </sect2>
 
   <sect2>
   <title>基本システムの設定</title>
-
 <para>
 
 <!--
@@ -288,10 +272,9 @@ Now you've got a real Debian system, though rather lean, on disk.
 そこに <command>chroot</command> してください。
 
 <informalexample><screen>
-
- $ chroot /mnt/debinst /bin/bash
-
+# chroot /mnt/debinst /bin/bash
 </screen></informalexample>
+
 </para>
 
    <sect3>
@@ -304,12 +287,8 @@ You need to create <filename>/etc/fstab</filename>.
 <filename>/etc/fstab</filename> を作る必要があります。
 
 <informalexample><screen>
-
- # editor /etc/fstab
-
+# editor /etc/fstab
 </screen></informalexample>
-
-</para><para>
 
 <!--
 Here is a sample you can modify to suit:
@@ -317,7 +296,6 @@ Here is a sample you can modify to suit:
 以下のサンプルを自分に合うように編集できます。
 
 <informalexample><screen>
-
 # /etc/fstab: static file system information.
 #
 # file system    mount point   type    options                  dump pass
@@ -334,10 +312,7 @@ proc             /proc         proc    defaults                 0    0
 /dev/XXX         /var          ext2    rw,nosuid,nodev          0    2
 /dev/XXX         /usr          ext2    rw,nodev                 0    2
 /dev/XXX         /home         ext2    rw,nosuid,nodev          0    2
-
 </screen></informalexample>
-
-</para><para>
 
 <!--
 Use <userinput>mount -a</userinput> to mount all the file systems you
@@ -349,12 +324,8 @@ file systems individually use:
 また、ファイルシステムを別々にマウントするには、以下のようにしてください。
 
 <informalexample><screen>
-
- # mount /path  # 例:  mount /usr
-
+# mount /path   # 例: mount /usr
 </screen></informalexample>
-
-</para><para>
 
 <!--
 You can mount the proc file system multiple times and to arbitrary
@@ -368,28 +339,23 @@ proc ファイルシステムは、どこでも何度でもマウントすることができますが、
 以下のように先に進む前に必ず proc をマウントしてください。
 
 <informalexample><screen>
-
- # mount -t proc proc /proc
-
+# mount -t proc proc /proc
 </screen></informalexample>
 
 </para>
-
    </sect3>
 
    <sect3>
    <title>キーボードの設定</title>
-
 <para>
 
 <!--
 To configure your keyboard:
 -->
 キーボードを設定するには次のようにしてください。
+
 <informalexample><screen>
-
- # dpkg-reconfigure console-data
-
+# dpkg-reconfigure console-data
 </screen></informalexample>
 
 </para>
@@ -405,19 +371,14 @@ To configure networking, edit
 <filename>/etc/resolv.conf</filename>, and
 <filename>/etc/hostname</filename>.
 -->
-<!--nabetaro etc/hostname じゃなくて /etc/hostname だとおもわれ -->
 ネットワークの設定をするには、
 <filename>/etc/network/interfaces</filename>,
 <filename>/etc/resolv.conf</filename>, 
 <filename>/etc/hostname</filename> を編集してください。
 
 <informalexample><screen>
-
- # editor /etc/network/interfaces 
-
+# editor /etc/network/interfaces 
 </screen></informalexample>
-
-</para><para>
 
 <!--
 Here are some simple examples from
@@ -454,8 +415,6 @@ iface lo inet loopback
 #     gateway 192.168.0.1
 </screen></informalexample>
 
-</para><para>
-
 <!--
 Enter your nameserver(s) and search directives in
 <filename>/etc/resolv.conf</filename>:
@@ -464,38 +423,27 @@ Enter your nameserver(s) and search directives in
 ネームサーバと search ディレクティブを入力してください。
 
 <informalexample><screen>
-
- # editor /etc/resolv.conf
-
+# editor /etc/resolv.conf
 </screen></informalexample>
-
-</para><para>
 
 <!--
 A simple <filename>/etc/resolv.conf</filename>:
 -->
 シンプルな <filename>/etc/resolv.conf</filename> は以下になります。
+
 <informalexample><screen>
-
-# search hqdom.local\000
-# nameserver 10.1.1.36
-# nameserver 192.168.9.100
-
+search hqdom.local\000
+nameserver 10.1.1.36
+nameserver 192.168.9.100
 </screen></informalexample>
-
-</para><para>
 
 <!--
 Enter your system's host name (2 to 63 characters):
 -->
 システムのホスト名 (2 から 63 文字) を入力してください。
 <informalexample><screen>
-
- # echo DebianHostName &#62; /etc/hostname
-
+# echo DebianHostName &gt; /etc/hostname
 </screen></informalexample>
-
-</para><para>
 
 <!--
 If you have multiple network cards, you should arrange the names of
@@ -514,7 +462,6 @@ interface name (eth0, eth1, etc.) that you expect.
 
    <sect3>
    <title>タイムゾーン、ユーザ、APT の設定</title>
-
 <para>
 
 <!--
@@ -525,10 +472,9 @@ sources by running
 <command>apt</command> ソースの選択を行うには、以下のコマンドを実行します。
 
 <informalexample><screen>
-
- # /usr/sbin/base-config new
-
+# /usr/sbin/base-config new
 </screen></informalexample>
+
 </para>
    </sect3>
 
@@ -544,10 +490,8 @@ English, install the locales support package and configure it:
 次のように locales サポートパッケージをインストール・設定します。
 
 <informalexample><screen>
-
- # apt-get install locales
- # dpkg-reconfigure locales
-
+# apt-get install locales
+# dpkg-reconfigure locales
 </screen></informalexample>
 
 <!--
@@ -565,7 +509,6 @@ ASCII や latin1 以外の文字セットを持つ locale を使用する前には、
 
   <sect2>
   <title>カーネルのインストール</title>
-
 <para>
 
 <!--
@@ -577,12 +520,8 @@ and a boot loader. Identify available pre-packaged kernels with
 次のようにして、あらかじめパッケージ化したカーネルを確認してください。
 
 <informalexample><screen>
-
- # apt-cache search kernel-image
-
+# apt-cache search kernel-image
 </screen></informalexample>
-
-</para><para>
 
 <!--
 Then install your choice using its package name.
@@ -590,9 +529,7 @@ Then install your choice using its package name.
 次に、選んだパッケージ名を使ってインストールしてください。
 
 <informalexample><screen>
-
- # apt-get install kernel-image-2.X.X-arch-etc
-
+# apt-get install kernel-image-<replaceable>2.X.X-arch-etc</replaceable>
 </screen></informalexample>
 
 </para>
@@ -647,7 +584,6 @@ Here is a basic <filename>/etc/lilo.conf</filename> as an example:
 以下は基本的な <filename>/etc/lilo.conf</filename> の例です。
 
 <informalexample><screen>
-
 boot=/dev/hda6
 root=/dev/hda6
 install=/boot/boot-menu.b
@@ -655,7 +591,6 @@ delay=20
 lba32
 image=/vmlinuz
 label=Debian
-
 </screen></informalexample>
 
 </para><para arch="powerpc">
@@ -687,7 +622,6 @@ Here is a basic <filename>/etc/yaboot.conf</filename> as an example:
 以下は基本的な <filename>/etc/yaboot.conf</filename> の例です。
 
 <informalexample><screen>
-
 boot=/dev/hda2
 device=hd:
 partition=6
@@ -696,7 +630,6 @@ magicboot=/usr/lib/yaboot/ofboot
 timeout=50
 image=/vmlinux
 label=Debian
-
 </screen></informalexample>
 
 <!--
