@@ -2,7 +2,10 @@
 
 if [ -z "$languages" ]; then
 	# Please add languages only if they build properly.
-	languages="en cs es fr ja nl pt_BR" # ca da de el eu it ru
+	# languages="en cs es fr ja nl pt_BR" # ca da de el eu it ru
+
+	# Buildlist of languages to be included on RC2 CD's
+	languages="en cs fr ja"
 fi
 
 if [ -z "$architectures" ]; then
