@@ -193,7 +193,7 @@ TEMP=$(BASE_TMP)$(TYPE)
 TREE=$(TEMP)/tree
 
 DPKGDIR=$(TREE)/var/lib/dpkg
-TMP_MNT=`pwd`/mnt/
+TMP_MNT:=$(shell pwd)/mnt/
 
 # This is the kernel image that we will boot from.
 KERNEL=$(TEMP)/$(KERNELNAME)
