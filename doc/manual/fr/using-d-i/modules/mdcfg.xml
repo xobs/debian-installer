@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 22935 -->
+<!-- original version: 22953 -->
 
 <sect3 id="mdcfg">
  <title>Configuration d'un périphérique à plusieurs disques (RAID logiciel)</title>
@@ -60,7 +60,29 @@ Vous pouvez aussi avoir un disque de rechange qui prendra la place du disque
 défectueux en cas de problème.  
   </para></listitem>
 </varlistentry>
+<varlistentry>
+
+<term>RAID5</term><listitem><para>
+Ce type est un bon compromis entre vitesse, fiabilité et redondance des 
+données. RAID5, comme RAID0, divise toutes les données entrantes en bandes et 
+les distribue également sur tous les disques. Mais contrairement à RAID0, RAID5
+calcule aussi l'information de <firstterm>parité</firstterm>, qui est écrite
+sur le disque restant. Le disque de parité n'est pas fixe (ce serait RAID4), il
+change périodiquement et ainsi l'information de parité est distribuée également
+sur tous les disques. Quand l'un des disques s'arrête, la partie manquante des
+données peut être calculée avec les données restantes et la parité. RAID5 doit
+comporter au moins trois partitions actives. Vous pouvez aussi avoir un disque
+de rechange qui prendra la place du disque défectueux en cas de problème.
+</para>
+<para>
+Comme vous le voyez, RAID5 est aussi fiable que RAID1 tout en évitant de la
+redondance. D'un autre côté, il sera un tout petit peu moins rapide dans les
+opérations d'écriture que RAID0, à cause du calcul de l'information de
+parité.
+</para></listitem>
+</varlistentry>
 </variablelist>
+
 Pour résumer&nbsp;:
 
 <informaltable>
@@ -90,6 +112,17 @@ Pour résumer&nbsp;:
   <entry>facultatif</entry>
   <entry>oui</entry>
   <entry>Taille de la plus petite partition dans le RAID</entry>
+</row>
+
+<row>
+  <entry>RAID5</entry>
+  <entry>3</entry>
+  <entry>facultatif</entry>
+  <entry>oui</entry>
+  <entry>
+    Taille de la plus petite partition multipliée par le nombre des 
+périphériques dans le RAID moins un.
+  </entry>
 </row>
 
 </tbody></tgroup></informaltable>
@@ -138,6 +171,10 @@ partitions RAID celles qui seront actives et celles qui resteront en réserve.
 Le nombre de ces partitions devra être égal à celui donné l'instant d'avant.
 Mais, si vous n'indiquez pas le même chiffre, le &d-i; ne vous laissera pas
 continuer et vous demandera une correction.
+</para></listitem>
+<listitem><para>
+RAID5 se configure comme RAID1, mais vous devez utiliser au moins trois
+partitions actives.
 </para></listitem>
 </itemizedlist>
 
