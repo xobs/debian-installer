@@ -1,0 +1,125 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: boot-usb-files.xml 24677 2005-01-01 23:01:40Z fjpop-guest $ -->
+
+ <sect1 condition="bootable-usb" id="boot-usb-files">
+ <title>Preparing Files for USB Memory Stick Booting</title>
+
+<para>
+
+For preparing the USB stick you will need a system where GNU/Linux is
+already running and where USB is supported. You should ensure that the
+usb-storage kernel module is loaded (<userinput>modprobe
+usb-storage</userinput>) and try to find out which SCSI device the USB
+stick has been mapped to (in this example
+<filename>/dev/sda</filename> is used). To write to your stick, you
+will probably have to turn off its write protection switch.
+
+</para><para>
+
+Note, that the USB stick should be at least 128 MB in size (smaller
+setups are possible if you follow <xref linkend="usb-copy-flexible"/>).
+
+</para>
+
+  <sect2 id="usb-copy-easy">
+  <title>Copying the files - the easy way</title>
+<para arch="i386">
+
+There is an all-in-one file <filename>hd-media/boot.img.gz</filename>
+which contains all the installer files (including the kernel) as well
+as <command>SYSLINUX</command> and its configuration file. You only
+have to extract it directly to your USB stick:
+
+<informalexample><screen>
+# zcat boot.img.gz &gt; /dev/<replaceable>sda</replaceable>
+</screen></informalexample>
+
+Of course this will destroy anything already on the device, so take
+care that you use the correct device name for your USB stick.
+
+</para><para arch="powerpc">
+
+There is an all-in-one file <filename>hd-media/boot.img.gz</filename>
+which contains all the installer files (including the kernel) as well
+as <command>yaboot</command> and its configuration file. Create a
+partition of type "Apple_Bootstrap" on your USB stick using
+<command>mac-fdisk</command>'s <userinput>C</userinput> command and
+extract the image directly to that:
+
+<informalexample><screen>
+# zcat boot.img.gz &gt; /dev/<replaceable>sda2</replaceable>
+</screen></informalexample>
+
+Of course this will destroy anything already on the device, so take
+care that you use the correct device name for your USB stick.
+
+</para><para>
+
+After that, mount the USB memory stick (<userinput>mount
+<replaceable arch="i386">/dev/sda</replaceable>
+<replaceable arch="powerpc">/dev/sda2</replaceable>
+/mnt</userinput>), which will now have
+<phrase arch="i386">a FAT filesystem</phrase>
+<phrase arch="powerpc">an HFS filesystem</phrase>
+on it, and copy a Debian netinst or businesscard ISO image to it.
+Please note that the file name must end in <filename>.iso</filename>.
+Unmount the stick (<userinput>umount /mnt</userinput>) and you are done.
+
+</para>
+  </sect2>
+
+  <sect2 id="usb-copy-flexible">
+  <title>Copying the files - the flexible way</title>
+<para>
+
+If you like more flexibility or just want to know what's going on, you
+should use the following method to put the files on your stick.
+
+</para>
+
+&usb-setup-i386.xml;
+&usb-setup-powerpc.xml;
+
+   <sect3>
+   <title>Adding an ISO image</title>
+<para>
+
+Now you should put any Debian ISO image (businesscard, netinst or even
+a full one) onto your stick (if it fits). The file name of such an
+image must end in <filename>.iso</filename>.
+
+</para><para>
+
+If you want to install over the network, without using an ISO image,
+you will of course skip the previous step. Moreover you will have to
+use the initial ramdisk from the <filename>netboot</filename>
+directory instead of the one from <filename>hd-media</filename>,
+because <filename>hd-media/initrd.gz</filename> does not have network
+support.
+
+</para><para>
+
+When you are done, unmount the USB memory stick (<userinput>umount
+/mnt</userinput>) and activate its write protection switch.
+
+</para>
+   </sect3>
+
+   <!-- TODO: doesn't this section belong later? -->
+   <sect3 arch="i386">
+   <title>Booting the USB stick</title>
+<warning><para>
+
+If your system refuses to boot from the memory stick, the stick may
+contain an invalid master boot record (MBR). To fix this, use the
+<command>install-mbr</command> command from the package
+<classname>mbr</classname>:
+
+<informalexample><screen>
+# install-mbr /dev/<replaceable>sda</replaceable>
+</screen></informalexample>
+
+</para></warning>
+   </sect3>
+  </sect2>
+ </sect1>
