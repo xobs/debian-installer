@@ -61,11 +61,7 @@ of the installation prior to loading any packages on the system disk.
 The partitioning task also verifies that a suitable EFI partition is
 present before allowing the installation to proceed.
 
-</para>
-
-  <sect3 arch="ia64" id="boot-from-cd">
-  <title>Booting from the EFI Shell</title>
-<para>
+</para><para>
 
 The EFI Boot Manager is started as the last step of the firmware
 initialization.
@@ -74,8 +70,96 @@ an option.
 Depending on the model of system and what other software has been
 loaded on the system, this menu may be different from one system
 to another.
-In any event, there should be one option called
-<command>EFI Shell [Built-in]</command>.
+There should be two menu items displayed,
+<command>Boot Option Maintenance Menu</command> and
+<command>EFI Shell (Built-in)</command>.
+Using the first option is preferred, however, if that
+option is not available or the CD for some reason does not
+boot with it, use the second option.
+
+</para>
+
+  <warning>
+  <title>IMPORTANT</title>
+<para>
+The EFI Boot Manager will select a default boot action, typically
+the first menu choice, within a pre-set number of seconds.
+This is indicated by a countdown at the bottom of the screen.
+Once the timer expires and the systems starts the default action,
+you will have to reboot the machine in order to continue the installation.
+</para>
+  </warning>
+
+  <sect3 arch="ia64" id="bootable-cd">
+  <title>Option 1: Booting from the Boot Option Maintenance Menu</title>
+<para>
+
+</para>
+
+<itemizedlist>
+
+<listitem><para>
+Insert the CD in the DVD/CD drive and reboot the machine.
+The firmware will display the EFI Boot Manager page and menu after
+it completes its system initialization.
+</para></listitem>
+
+<listitem><para>
+Select <command>Boot Maintenance Menu</command> from the menu
+with the arrow keys and press <command>ENTER</command>.
+This will display a new menu.
+</para></listitem>
+
+<listitem><para>
+Select <command>Boot From a File</command> from the menu
+with the arrow keys and press <command>ENTER</command>.
+This will display a list of devices probed by the firmware.
+You should see two menu lines containing either the label
+<command>Debian Inst [Acpi ...</command> or
+<command>Removable Media Boot</command>.
+If you examine the rest of the menu line, you will notice that
+the device and controller information should be the same.
+</para></listitem>
+
+<listitem><para>
+You can choose either of the entries that refer to the CD/DVD
+drive.
+Select your choice with the arrow keys and press <command>ENTER</command>.
+If you choose <command>Removable Media Boot</command> the machine
+will immediately start the boot load sequence.
+If you choose <command>Debian Inst [Acpi ...</command> instead, it
+will display a directory listing of the bootable portion of the
+CD, requiring you to proceed to the next (additional) step.
+</para></listitem>
+
+<listitem><para>
+You will only need this step if you chose
+<command>Debian Inst [Acpi ...</command>.
+The directory listing will also show
+<command>[Treat like Removable Media Boot]</command> on the next to
+the last line.
+Select this line with the arrow keys and press <command>ENTER</command>.
+This will start the boot load sequence.
+</para></listitem>
+
+</itemizedlist>
+
+<para>
+
+These steps start the Debian boot loader which will display a
+menu page for you to select a boot kernel and options.
+Proceed to selecting the boot kernel and options.
+
+</para>
+  </sect3>
+
+  <sect3 arch="ia64" id="boot-with-efi">
+  <title>Option 2: Booting from the EFI Shell</title>
+<para>
+
+If, for some reason, option 1 is not successful, reboot the machine
+and when the EFI Boot Manager screen appears there should be
+one option called <command>EFI Shell [Built-in]</command>.
 Boot the Debian Installer CD with the following steps:
 
 </para>
@@ -83,12 +167,15 @@ Boot the Debian Installer CD with the following steps:
 <itemizedlist>
 
 <listitem><para>
-Insert the CD in the DVD/CD drive.
+Insert the CD in the DVD/CD drive and reboot the machine.
+The firmware will display the EFI Boot Manager page and menu after
+it completes system initialization.
 </para></listitem>
 
 <listitem><para>
-Select <command>EFI Shell</command> from the menu.
-The EFI Shell will read all of the bootable devices and display
+Select <command>EFI Shell</command> from the menu with the arrow keys
+and press <command>ENTER</command>.
+The EFI Shell will scan all of the bootable devices and display
 them to the console before displaying its command prompt.
 The recognized bootable partitions on devices will show a device name of
 <filename>fs<emphasis>n</emphasis>:</filename>.
@@ -107,43 +194,119 @@ other devices with bootable partitions will also show up as
 </para></listitem>
 
 <listitem><para>
-Enter <command>fs<emphasis>n</emphasis>:</command> to select that
+Enter <command>fs<emphasis>n</emphasis>:</command> and press
+<command>ENTER</command> to select that
 device where <emphasis>n</emphasis> is the partition number for the
 CDROM.  The shell will now display the partition number as its prompt.
 </para></listitem>
 
 <listitem><para>
-Enter <command>elilo</command>.
-This will start the boot loader.
-<classname>elilo</classname> will display its prompt and wait for
-a kernel name to load.
-It will pick the default kernel if it receives no input within
-the timelimit (~20 seconds).
-</para></listitem>
-
-<listitem><para>
-Select a boot option, typically <classname>linux</classname> or
-<classname>linux26</classname>.
-Simply press <emphasis>Enter</emphasis> or wait for the timeout
-to take the default.
-It will display messages as it uncompresses the kernel and loads
-and uncompresses the initial root filesystem.
+Enter <command>elilo</command> and press <command>ENTER</command>.
+This will start the boot load sequence.
 </para></listitem>
 
 </itemizedlist>
 
 <para> 
 
-These steps start the installer kernel.
+As with option 1, these steps start the Debian boot loader which will
+display a menu page for you to select a boot kernel and options.
 You can also enter the shorter 
 <command>fs<emphasis>n</emphasis>:elilo</command> command at
 the shell prompt.
-Once the kernel finishes its initialization along with the usual console
-messages, it will start the Debian Installer.
+Proceed to selecting the boot kernel and options.
 
 </para>
 
   </sect3>
+
+  <sect3 arch="ia64" id="kernel-option-menu">
+  <title>Selecting the Boot Kernel and Options</title>
+
+<para>
+
+The boot loader will display a form with a menu list and a text
+window with a <classname>Boot:</classname> prompt.
+The arrow keys select an item from the menu and any text typed
+at the keyboard will appear in the text window.
+There are also help screens which can be displayed by pressing
+the appropriate function key.
+The <classname>General</classname> help screen explains the menu
+choices and the <classname>Params</classname> screen explains
+the common command line options.
+
+</para>
+
+   <warning>
+   <title>Serial Console</title>
+<para>
+
+Some IA64 platforms have both a serial console and a keyboard and
+video card which can be configured in the EFI firmware to be
+the system console.
+The EFI console is capable of displaying and accepting input from
+both the keyboard and video and the serial port.
+The Linux kernel will take the keyboard and video devices as its
+default console if it detects a keyboard during its initialization.
+You will have to enable the serial console in the EFI boot
+manager and enter
+<command>console=ttyS0,9600n8</command> into
+the <classname>Boot:</classname> text window to install via
+the serial console.
+If you are using a serial console and forget to set it in the
+command line, you
+will be able to select the kernel and enter parameters but both
+the display and your input will go dead as soon as the kernel starts,
+requiring you to either reboot if your system does not have a keyboard
+and video display installed.
+</para></warning>
+
+<para>
+
+Consult the <classname>General</classname> help screen for the
+description of the kernels and install modes most appropriate
+for your installation.
+You should also consult <xref linkend="boot-parms"/> below for any additional
+parameters that you may want to set in the <classname>Boot:</classname>
+text window.
+The kernel version you choose selects the kernel version that will be
+used for both the installation process and the installed system.
+If you encounter kernel problems with the installation, you may also
+have those same problems with the system you install.
+The following two steps will select and start the install:
+
+</para>
+
+<itemizedlist>
+
+<listitem><para>
+Select the kernel version and installation mode most
+appropriate to your needs with the arrow keys.
+</para></listitem>
+
+<listitem><para>
+Enter any boot parameters by typing at the keyboard.
+The text will be displayed directly in the text window.
+This is where the serial console is set.
+</para></listitem>
+
+<listitem><para>
+Press <command>ENTER</command>.  This will load and start the
+kernel.
+The kernel will display its usual initialization messages followed
+by the first screen of the Debian Installer.
+</para></listitem> 
+
+</itemizedlist>
+
+  </sect3>
+
+<para>
+
+Proceed to the next chapter to continue the installation where you will
+set up the language locale, network, and disk partitions.
+
+</para>
   </sect2>
 
   <sect2 arch="ia64" id="boot-tftp"><title>Booting with TFTP</title>
