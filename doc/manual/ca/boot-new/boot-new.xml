@@ -1,50 +1,51 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 21672 untranslated -->
+<!-- original version: 21672 -->
 
 <chapter id="boot-new">
- <title>Booting Into Your New Debian System</title>
+ <title>Arrancada en el vostra nou sistema Debian</title>
 
- <sect1 id="base-boot"><title>The Moment of Truth</title>
+ <sect1 id="base-boot"><title>El moment de la veritat</title>
 <para>
 
-Your system's first boot on its own power is what electrical engineers
-call the <quote>smoke test</quote>.
+La primera arrencada del vostre sistema pels seus propis mitjans és el que els
+enginyers electrònics anomenen la <quote>prova de foc</quote>.
 
 </para><para>
 
-If you are booting directly into Debian, and the system doesn't start
-up, either use your original installation boot media, or insert the
-custom boot floppy if you have one, and reset your system.  This way,
-you will probably need to add some boot arguments like
-<userinput>root=<replaceable>root</replaceable></userinput>, where
-<replaceable>root</replaceable> is your root partition, such as
-<filename>/dev/sda1</filename>.
+Si esteu arrencant directament amb Debian, i el sistema no comença a
+funcionar, utilitzeu el vostre medi d'instal·lació original, o bé inseriu
+el disquet d'arrencada personalitzat si en teniu, i torneu a inicieu el
+vostra sistema. D'aquesta manera, probablement necessitareu afegir algun
+argument d'arrencada com
+<userinput>root=<replaceable>arrel</replaceable></userinput>, on
+<replaceable>l'arrel</replaceable> és la vostra partició arrel, com per
+exemple <filename>/dev/sda1</filename>.
 
 </para>
 
-  <sect2 arch="m68k"><title>BVME 6000 Booting</title>
+  <sect2 arch="m68k"><title>Arrencada en un BVME 6000</title>
 <para>
 
-If you have just performed a diskless install on a BVM or Motorola
-VMEbus machine: once the system has loaded the
-<command>tftplilo</command> program from the TFTP server, from the
-<prompt>LILO Boot:</prompt> prompt enter one of:
+Si acabeu de realitzar una instal·lació sense disc en una màquina BVM o
+Motorola VMEbus: un cop el sistema hagi carregat el programa
+<command>tftplilo</command> des del servidor TFTP, entreu un dels següents en
+l'indicador <prompt>LILO Boot:</prompt>:
 
 <itemizedlist>
 <listitem><para>
 
-<userinput>b6000</userinput> followed by &enterkey;
-to boot a BVME 4000/6000
+<userinput>b6000</userinput> seguit de &enterkey;
+per arrencar un BVME 4000/6000
 
 </para></listitem><listitem><para>
 
-<userinput>b162</userinput> followed by &enterkey;
-to boot an MVME162
+<userinput>b162</userinput> seguit de &enterkey;
+per arrencar un MVME162
 
 </para></listitem><listitem><para>
 
-<userinput>b167</userinput> followed by &enterkey;
-to boot an MVME166/167
+<userinput>b167</userinput> seguit de &enterkey;
+per arrencar un MVME166/167
 
 </para></listitem>
 </itemizedlist>
@@ -53,90 +54,88 @@ to boot an MVME166/167
 
    </sect2>
 
-  <sect2 arch="m68k"><title>Macintosh Booting</title>
+  <sect2 arch="m68k"><title>Arrencada en un Macintosh</title>
 
 <para>
 
-Go to the directory containing the installation files and start up the
-<command>Penguin</command> booter, holding down the
-<keycap>command</keycap> key.  Go to the
-<userinput>Settings</userinput> dialogue (<keycombo>
-<keycap>command</keycap> <keycap>T</keycap> </keycombo>), and locate
-the kernel options line which should look like
-<userinput>root=/dev/ram video=font:VGA8x16</userinput> or similar.
+Aneu al directori que conté els fitxers d'instal·lació i inicieu el programa
+d'arrencada <command>Penguin</command>, prement la tecla
+<keycap>command</keycap>. Aneu al diàleg d'<userinput>Arranjament</userinput>
+(<keycombo><keycap>command</keycap> <keycap>T</keycap> </keycombo>), i
+localitzeu la línia d'opcions del nucli, que hauria d'assemblar-se a
+<userinput>root=/dev/ram video=font:VGA8x16</userinput>.
 
 </para><para>
 
-You need to change the entry to
+Haureu de canviar l'entrada a
 <userinput>root=/dev/<replaceable>yyyy</replaceable></userinput>.
-Replace the <replaceable>yyyy</replaceable> with the Linux name of the
-partition onto which you installed the system
-(e.g. <filename>/dev/sda1</filename>); you wrote this down earlier.
-The <userinput>video=font:VGA8x8</userinput> is recommended especially
-for users with tiny screens. The kernel would pick a prettier (6x11)
-font but the console driver for this font can hang the machine, so
-using 8x16 or 8x8 is safer at this stage.  You can change this at any
-time.
+Reemplaceu les <replaceable>yyyy</replaceable> amb el nom Linux de la partició
+on vau instal·lar el sistema (p.ex. <filename>/dev/sda1</filename>); heu anotat
+això abans. Es recomana l'opció <userinput>video=font:VGA8x8</userinput>
+especialment als usuaris amb pantalles petites. El nucli seleccionaria una font
+més maca (6x11) però com que el controlador de la consola per aquesta font pot
+penjar la màquina, és més segur utilitzar 8x16 o 8x8 en aquesta fase. Podeu
+canviar-ho en qualsevol moment.
 
 </para><para>
 
-If you don't want to start GNU/Linux immediately each time you start,
-uncheck the <userinput>Auto Boot</userinput> option. Save your
-settings in the <filename>Prefs</filename> file using the
-<userinput>Save Settings As Default</userinput> option.
+Si no voleu arrencar el GNU/Linux immediatament cada vegada que inicieu,
+desseleccioneu l'opció <userinput>Auto Arrencada</userinput>. Deseu el vostre
+arranjament al fitxer <filename>Prefs</filename> utilitzant l'opció
+<userinput>Desa l'arranjament com a perdeterminat</userinput>.
 
 </para><para>
 
-Now select <userinput>Boot Now</userinput> (<keycombo>
-<keycap>command</keycap> <keycap>B</keycap> </keycombo>) to start your
-freshly installed GNU/Linux instead of the RAMdisk installer system.
+Seleccioneu ara <userinput>Arrencar ara</userinput> (<keycombo>
+<keycap>command</keycap> <keycap>B</keycap> </keycombo>) per iniciar el
+GNU/Linux recent instal·lat en comptes del sistema d'instal·lació RAMdisk.
 
 </para><para>
 
-Debian should boot, and you should see the same messages as
-when you first booted the installation system, followed by some new
-messages. 
+Debian hauria d'arrencar, i hauríeu de veure el mateix missatge que quan
+vau arrencar el sistema d'instal·lació per primera vegada, seguit per alguns
+missatges nous.
 
 </para>
    </sect2>
 
 
-  <sect2 arch="powerpc"><title>OldWorld PowerMacs</title>
+  <sect2 arch="powerpc"><title>PowerMacs OldWorld</title>
 <para>
 
-If the machine fails to boot after completing the installation, and
-stops with a <prompt>boot:</prompt> prompt, try typing
-<userinput>Linux</userinput> followed by &enterkey;. (The default boot
-configuration in <filename>quik.conf</filename> is labeled Linux). The
-labels defined in <filename>quik.conf</filename> will be displayed if
-you press the <keycap>Tab</keycap> key at the <prompt>boot:</prompt>
-prompt. You can also try booting back into the installer, and editing
-the <filename>/target/etc/quik.conf</filename> placed there by the
-<guimenuitem>Install <command>Quik</command> on a Hard
-Disk</guimenuitem> step. Clues for dealing with
-<command>quik</command> are available at <ulink
-url="&url-powerpc-quik-faq;"></ulink>.
+Si la màquina falla en arrencar després de completar la instal·lació, i
+es para amb un indicador <prompt>boot:</prompt>, intenteu-ho teclejant
+<userinput>Linux</userinput> seguit de &enterkey;. (La configuració
+d'arrencada predeterminada a <filename>quik.conf</filename> té l'etiqueta
+Linux). Les etiquetes definides a <filename>quik.conf</filename> es
+mostraran si premeu la tecla <keycap>Tab</keycap> a l'indicador
+<prompt>boot:</prompt>. També podeu provar d'arrencar de nou amb
+l'instal·lador, i editar el <filename>/target/etc/quik.conf</filename> que
+el pas <guimenuitem>Instal·la el <command>Quik</command> al disc dur</guimenuitem>
+ha col·locat allà. A <ulink url="&url-powerpc-quik-faq;"></ulink> podeu trobar
+pistes per tractar amb el <command>quik</command>.
 
 </para><para>
 
-To boot back into MacOS without resetting the nvram, type
-<userinput>bye</userinput> at the OpenFirmware prompt (assuming MacOS
-has not been removed from the machine). To obtain an OpenFirmware
-prompt, hold down the <keycombo> <keycap>command</keycap>
+Per arrencar de nou en el MacOS sense reinicialitzar la nvram, teclegeu
+<userinput>bye</userinput> a l'indicador del OpenFirmware (suposant que
+el MacOS no s'hagi tret de la màquina). Per obtenir un indicador de
+l'OpenFirmware, manteniu premudes les tecles <keycombo> <keycap>command</keycap>
 <keycap>option</keycap> <keycap>o</keycap> <keycap>f</keycap>
-</keycombo> keys while cold booting the machine. If you need to reset
-the OpenFirmware nvram changes to the MacOS default in order to boot
-back to MacOS, hold down the <keycombo> <keycap>command</keycap>
+</keycombo> mentre feu una arrencada en fred de la màquina. Si necessiteu
+desfer els canvis i tornar als valors predeterminats de l'OpenFirmware de
+la nvram per tal de tornar a arrencar el MacOS, mantingueu premudes les
+tecles <keycombo> <keycap>command</keycap>
 <keycap>option</keycap> <keycap>p</keycap> <keycap>r</keycap>
-</keycombo> keys while cold booting the machine.
+</keycombo> mentre arrenqueu la màquina en fred.
 
 </para><para>
 
-If you use <command>BootX</command> to boot into the installed system,
-just select your desired kernel in the <filename>Linux
-Kernels</filename> folder, un-choose the ramdisk option, and add
-a root device corresponding to your installation;
-e.g. <userinput>/dev/hda8</userinput>.
+Si utilitzeu <command>BootX</command> per arrencar amb el sistema instal·lat,
+només seleccioneu el nucli desitjat en la carpeta <filename>Linux
+Kernels</filename>, deseleccioneu l'opció ramdisk, i afegiu un dispositiu
+arrel que correspongui amb la vostra instal·lació; p. ex.
+<userinput>/dev/hda8</userinput>.
 
 </para>
    </sect2>
@@ -145,67 +144,69 @@ e.g. <userinput>/dev/hda8</userinput>.
   <sect2 arch="powerpc"><title>NewWorld PowerMacs</title>
 <para>
 
-On G4 machines and iBooks, you can hold down the
-<keycap>option</keycap> key and get a graphical screen with a button
-for each bootable OS, &debian; will be a button with a small penguin
-icon.
+A les màquines G4 i als iBooks, podeu mantenir la tecla
+<keycap>option</keycap> premuda i obtindreu una pantalla gràfica amb
+un botó per a cada sistema operatiu arrencable; el &debian; serà el
+botó amb la icona d'un petit pingüí.
 
 </para><para>
 
-If you kept MacOS and at some point it changes the OpenFirmware
-<envar>boot-device</envar> variable you should reset OpenFirmware to
-its default configuration.  To do this hold down the <keycombo>
-<keycap>command</keycap> <keycap>option</keycap> <keycap>p</keycap>
-<keycap>r</keycap> </keycombo> keys while cold booting the machine.
+Si manteniu el MacOS i en algun punt us canvia la variable
+<envar>boot-device</envar> de l'OpenFirmware hauríeu de tornar a
+assignar a l'OpenFirmware la seva configuració predeterminada. Per fer
+això manteniu les tecles <keycombo><keycap>command</keycap>
+<keycap>option</keycap> <keycap>p</keycap> <keycap>r</keycap>
+</keycombo> premudes mentre arrenqueu la màquina en fred.
 
 </para><para>
 
-The labels defined in <filename>yaboot.conf</filename> will be
-displayed if you press the <keycap>Tab</keycap> key at the
-<prompt>boot:</prompt> prompt.
+Es mostraran les etiquetes definides a <filename>yaboot.conf</filename>
+si premeu la tecla <keycap>Tab</keycap> a l'indicador
+<prompt>boot:</prompt>.
 
 </para><para>
 
-Resetting OpenFirmware on G3 or G4 hardware will cause it to boot
-&debian; by default (if you correctly partitioned and placed the
-Apple_Bootstrap partition first).  If you have &debian; on a SCSI disk
-and MacOS on an IDE disk this may not work and you will have to enter
-OpenFirmware and set the <envar>boot-device</envar> variable,
-<command>ybin</command> normally does this automatically.
+Reinicialitzar l'OpenFirmware en el maquinari dels G3 o G4 causarà que
+arranqui &debian; de manera predeterminada (si heu fet les particions
+correctament i heu situat la partició de l'Apple_Bootstrap en primer lloc).
+Si teniu &debian; en un disc SCSI i el MacOS en un disc IDE, pot ser que
+això no funcioni i que hàgiu d'entrar a l'OpenFirmware i configurar la
+variable <envar>boot-device</envar>; normalment el <command>ybin</command>
+fa això automàticament.
 
 </para><para>
 
-After you boot &debian; for the first time you can add any additional
-options you desire (such as dual boot options) to
-<filename>/etc/yaboot.conf</filename> and run <command>ybin</command>
-to update your boot partition with the changed configuration.  Please
-read the <ulink url="&url-powerpc-yaboot-faq;">yaboot HOWTO</ulink>
-for more information.
+Després d'arrencar &debian; per primer cop podreu afegir qualsevol opció
+addicional que desitgeu (com opcions per a l'arrencada dual) a
+<filename>/etc/yaboot.conf</filename> i executar <command>ybin</command>
+per actualitzar la taula de particions la configuració de la qual hàgiu
+canviat. Si us plau, per més informació llegiu el
+<ulink url="&url-powerpc-yaboot-faq;">yaboot HOWTO</ulink>.
 
 </para>
    </sect2>
  </sect1>
 
  <sect1 id="base-config">
- <title>Debian Post-Boot (Base) Configuration</title>
+ <title>Configuració (bàsica) de Debian després de l'arrencada</title>
 
 <para>
 
-After booting, you will be prompted to complete the configuration of
-your basic system, and then to select what additional packages you
-wish to install.  The application which guides you through this
-process is called <classname>base-config</classname>. Its concept is
-very similar to the &d-i; from the first stage.  Indeed,
-<classname>base-config</classname> consists of a number of specialized
-components, where each component handles one configuration task,
-contains <quote>hidden menu in the background</quote> and also uses
-the same navigation system.
+Després d'arrencar, se us indicarà que completeu la configuració del
+vostre sistema bàsic, i posteriorment que seleccioneu els paquets
+addicionals que desitgeu instal·lar. L'aplicació que us guiarà a través
+d'aquest procés s'anomena <classname>base-config</classname>. El seu
+concepte és molt similar al del &d-i; de la primera etapa. De fet,
+el <classname>base-config</classname> consisteix en diversos components
+especialitzats, cadascun dels quals s'encarrega d'una tasca de configuració,
+conté <quote>menús amagats al darrera</quote> i també utilitza el mateix
+sistema de navegació.
 
 </para><para>
 
-If you wish to re-run the <classname>base-config</classname> at any
-point after installation is complete, as root run
-<userinput>base-config</userinput>.
+Si desitgeu tornar a executar el <classname>base-config</classname>
+en qualsevol moment després que hagi acabat la instal·lació,
+executeu com a root <userinput>base-config</userinput>.
 
 </para>
 
@@ -220,68 +221,68 @@ point after installation is complete, as root run
  </sect1>
 
  <sect1 id="login">
- <title>Log In</title>
+ <title>L'entrada</title>
 
 <para>
 
-After you've installed packages, you'll be presented with the login
-prompt.  Log in using the personal login and password you
-selected. Your system is now ready to use.
+Després que hàgiu instal·lat els paquets, s'us presentarà un
+indicador d'entrada (login). Entreu utilitzant el nom d'usuari
+personal i la contrasenya que hàgiu seleccionat. El vostre sistema
+és a punt per ésser utilitzat.
 
 </para><para>
 
-If you are a new user, you may want to explore the documentation which
-is already installed on your system as you start to use it. There are
-currently several documentation systems, work is proceeding on
-integrating the different types of documentation. Here are a few
-starting points.
+Si sou un usuari nou, potser voleu explorar la documentació que ja està
+instal·lada en el sistema quan comenceu a utilitzar-lo. Actualment hi ha
+diversos sistemes de documentació; s'està fent feina per integrar els
+diferents tipus de documentació. Aquí teniu alguns punts de partida.
 
 </para><para>
 
-Documentation accompanying programs you have installed is in
-<filename>/usr/share/doc/</filename>, under a subdirectory named after
-the program.  For example, the APT User's Guide for using
-<command>apt</command> to install other programs on your system, is
-located in
-<filename>/usr/share/doc/apt/guide.html/index.html</filename>.
+La documentació que acompanya als programes que teniu instal·lats és a
+<filename>/usr/share/doc/</filename>, sota un subdirectori que s'anomena
+com el programa. Per exemple, la Guia d'usuari de l'APT per utilitzar
+<command>apt</command> per instal·lar altres programes en el sistema, es
+troba a <filename>/usr/share/doc/apt/guide.html/index.html</filename>.
 
 </para><para>
 
- 
-In addition, there are some special folders within the
-<filename>/usr/share/doc/</filename> hierarchy. Linux HOWTOs are
-installed in <emphasis>.gz</emphasis> format, in
-<filename>/usr/share/doc/HOWTO/en-txt/</filename> and
-<filename>/usr/share/doc/HOWTO/en-txt/mini/</filename>. The
-<filename>/usr/share/doc/HTML/index.html</filename> contains
-browse-able indexes of documentation installed by
+Addicionalment, hi ha algunes carpetes especials dins de la
+jerarquia de <filename>/usr/share/doc/</filename>. Els
+COM ES FA de Linux s'instal·len en format
+<emphasis>.gz</emphasis>, a
+<filename>/usr/share/doc/HOWTO/en-txt/</filename> i
+<filename>/usr/share/doc/HOWTO/en-txt/mini/</filename>. La
+<filename>/usr/share/doc/HTML/index.html</filename> conté
+índexs navegables de la documentació instal·lada pel
 <command>dhelp</command>.
 
 </para><para>
 
-One easy way to view these documents is to <userinput>cd
-/usr/share/doc/</userinput>, and type <userinput>lynx</userinput>
-followed by a space and a dot (the dot stands for the current
-directory).
+Una manera senzilla de veure aquests documents és amb
+<userinput>cd /usr/share/doc/</userinput>, i teclejant
+<userinput>lynx</userinput> seguit per un espai i un punt (el
+punt es referix al directori actual).
 
 </para><para>
 
-You can also type <userinput>info
-<replaceable>command</replaceable></userinput> or <userinput>man
-<replaceable>command</replaceable></userinput> to see documentation on
-most commands available at the command prompt. Typing
-<userinput>help</userinput> will display help on shell commands. And
-typing a command followed by <userinput>--help</userinput> will
-usually display a short summary of the command's usage. If a command's
-results scroll past the top of the screen, type <userinput>|
-more</userinput> after the command to cause the results to pause
-before scrolling past the top of the screen. To see a list of all
-commands available which begin with a certain letter, type the letter
-and then two tabs.
+També podeu teclejar <userinput>info
+<replaceable>ordre</replaceable></userinput> o <userinput>man
+<replaceable>ordre</replaceable></userinput> per veure la
+documentació de la major part d'ordres disponibles a la línia de
+comandes. Teclejant <userinput>help</userinput> es mostrarà
+ajuda sobre les ordres de l'intèrpret. I teclejant una ordre
+seguida de <userinput>--help</userinput> es visualitzarà usualment
+un sumari curt de la utilització de l'ordre. Si el resultat d'una
+ordre es desplaça passada la part superior de la pantalla, teclegeu
+<userinput>| more</userinput> després de l'ordre per fer que els
+resultats s'aturin abans de desplaçar-se fora de la pantalla. Per
+veure una llista de totes les ordres disponibles que comencen amb una
+certa lletra, teclegeu la lletra i després dos tabuladors.
 
 </para><para>
 
-For a more complete introduction to Debian and GNU/Linux, see
+Per una introducció més completa a Debian i al GNU/Linux, vegeu
 <filename>/usr/share/doc/debian-guide/html/noframes/index.html</filename>.
 
 </para>
