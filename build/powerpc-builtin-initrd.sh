@@ -7,7 +7,7 @@
 arch=${architecture:-$(dpkg --print-architecture)}
 
 # Print a usage message and exit if the argument count is wrong.
-if [ $# != 6 ]; then
+if [ $# != 6 -a $# != 7 ]; then
 echo "Usage: $0 vmlinux System.map initrd.gz builddir destdir kvers" 1>&2
 	cat 1>&2 << EOF
 
@@ -17,6 +17,7 @@ echo "Usage: $0 vmlinux System.map initrd.gz builddir destdir kvers" 1>&2
 	builddir: temporary directory where the kernel-build tree is unpacked to.
 	destdir: destination directory for the kernel images with builtin initrd.
 	kvers: version of the kernel to build
+	imagetype: kind of image to build (defaults to all).
 EOF
 
 	exit -1
@@ -39,6 +40,16 @@ destdir=$5
 
 # Set this to the kernel version used.
 kvers=$6
+
+# Set this to the images to build : only all or chrp-rs6k are currently supported
+if [ $# = 6 ]; then 
+	imagetypes="chrp chrp-rs6k prep"
+else case $7 in
+	chrp-rs6k)
+		imagetypes="chrp-rs6k"
+	;;
+esac
+fi
 
 # Make sure the files are available, $sysmap can be /dev/null
 for file in "$kernel" "$initrd"; do
@@ -84,7 +95,7 @@ make -C $builddir/kernel-build-$kvers/arch/ppc/boot	\
 	OBJCOPY=objcopy	$configs zImage.initrd
 
 # Copying build directories to destdir.
-for subarch in chrp chrp-rs6k prep; do
+for subarch in $imagetypes; do
 	cp $builddir/kernel-build-$kvers/arch/ppc/boot/images/zImage.initrd.$subarch \
 		$destdir/vmlinuz-$subarch.initrd
 done
