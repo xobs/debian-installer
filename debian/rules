@@ -1,15 +1,91 @@
 #! /usr/bin/make -f
 
 TYPES=cdrom cdrom144 net
+# Where to place the files in the pkg
+INSTALL_ROOT=var\/www\/debian
+# Where to fetch old files from the woody ftp tree
+DEBIAN_ARCHIVE=http://localhost/debian
+# The URL with the http:// stripped and backslashes quoted
+DEBIAN_ARCHIVE_Q=localhost\/debian
+#
+# Iterate over each kernel 
+#
+KERNELS_alpha    := 2.4.20-generic
+KERNELS_arm      :=
+KERNELS_hppa     := 
+# FIXME hppa kernel not uploaded yet
+# KERNELS_hppa     := 2.4.19-32
+KERNELS_i386     := 2.4.20-386
+KERNELS_ia64	 := 
+# FIXME ia64 kernel not uploaded yet
+# KERNELS_ia64     := 2.4.20
+KERNELS_m68k     := 2.2.20-mac
+KERNELS_mips     := 
+KERNELS_mipsel   :=
+# FIXME uncomment when the infinite loop bug #172828 is fixed
+# KERNELS_mips   := 2.4.19-r4k-ip22
+# KERNELS_mipsel := 2.4.19-r3k-kn02 2.4.19-r4k-kn04
+KERNELS_powerpc  := 2.4.19-powerpc
+KERNELS_s390     := 2.4.17-s390-tape 2.4.19-s390
+KERNELS_sparc    := 2.2.20-sun4cdm
+
+
+ARCH=$(shell dpkg-architecture -qDEB_BUILD_ARCH)
+VERSION=$(shell LC_ALL=C dpkg-parsechangelog | grep ^Version: | sed 's/^Version: *//')
+DIST=$(shell LC_ALL=C dpkg-parsechangelog | grep ^Distribution: | sed 's/^Distribution: *//')
+PACKAGE=debian-installer-$(ARCH)
+DISKS_ROOT=$(INSTALL_ROOT)\/dists\/$(DIST)\/main\/disks-$(ARCH)\/$(VERSION)
+WOODY_DISKS_ROOT=$(DEBIAN_ARCHIVE_Q)\/dists\/woody\/main\/disks-$(ARCH)\/current
 
 clean:
+	dh_testdir
+	dh_testroot
 	for TYPE in $(TYPES) ; do \
 		$(MAKE) TYPE=$$TYPE clean ; \
 	done
+	rm -rf  debian/build debian/$(PACKAGE)  *-stamp wget-cache
+	rm -rf debian/*.install debian/*.dirs
+	dh_clean
 
+configure: configure-stamp debian/$(PACKAGE).dirs debian/$(PACKAGE).install
+configure-stamp:
+	# Fetch some files from woody, that are not built but useful.
+	mkdir -p wget-cache
+	(cd wget-cache ; wget --base=$(DEBIAN_ARCHIVE) -x -i ../debian/wget-files )
+	touch configure-stamp
+	
 build:
-	for TYPE in $(TYPES) ; do \
-		$(MAKE) TYPE=$$TYPE stats cd_content ; \
+	mkdir -p debian/build
+	for KERNEL in $(KERNELS_$(ARCH)) ; do \
+		for TYPE in $(TYPES) ; do \
+			$(MAKE) KERNELVERSION=$$KERNEL TYPE=$$TYPE stats cd_content ; \
+			mkdir -p debian/build/$$KERNEL ; \
+			cp -R dest/* debian/build/$$KERNEL ; \
+		done ; \
 	done
 
-binary-arch: build
+binary-indep:
+
+binary-arch: install
+
+install: configure  
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs       --package $(PACKAGE)
+	dh_installdocs       --package $(PACKAGE)
+	dh_installchangelogs --package $(PACKAGE)
+	dh_compress	     --package $(PACKAGE)
+	dh_install           --package $(PACKAGE)
+	( cd debian/$(PACKAGE)/$(DISKS_ROOT) ; md5sum `find . -type f` > md5sum.txt )
+	dh_gencontrol --package $(PACKAGE)  -- -n$(PACKAGE)_$(VERSION)_all.deb 
+	dh_builddeb   --package $(PACKAGE)  --filename=$(PACKAGE)_$(VERSION)_all.deb
+
+binary: binary-indep binary-arch 
+.PHONY: build clean binary-indep binary-arch binary install 
+
+debian/$(PACKAGE).dirs: debian/$(PACKAGE).dirs.in
+	sed  's/@DISKS_ROOT@/$(DISKS_ROOT)/' < $< > $@
+
+debian/$(PACKAGE).install: debian/$(PACKAGE).install.in
+	sed  's/@DISKS_ROOT@/$(DISKS_ROOT)/' < $< | sed 's/@WOODY_DISKS_ROOT@/$(WOODY_DISKS_ROOT)/'  > $@
