@@ -34,6 +34,9 @@ foreach my $subtype (split "/", $type) {
 	push @lists, "pkg-lists/$t/$deb_host_arch/$sub_arch.cfg" if $sub_arch;
 }
 
+my %collect;
+my %exclude;
+
 while (@lists) {
 	my $list=pop @lists;
 	if (! -e $list) {
@@ -71,32 +74,41 @@ while (@lists) {
 				foreach my $v (@kernel_versions) {
 					my $l=$_;
 					$l=~s/\${kernel:Version}/$v-$kernel_flavour/g;
-					printpackage($l);
+					collectpackage($l);
 				}
 				next; # move on to the next line
 			}
-			printpackage($_);
+			collectpackage($_);
 		}
 		close LIST;
 	}
 }
 
-# Print a package, possibly expanding dependencies.
-sub printpackage {
+foreach my $p (sort keys %collect) {
+	print "$p\n" unless $exclude{$p};
+}
+
+# Add a package, possibly expanding dependencies.
+sub collectpackage {
 	my $line=shift;
 	if ($line=~/^(.*) \*$/) {
 		# Asterisk at end means include all dependencies of this
 		# package.
-		print "$1\n";
-		printdeps($1);
+		$collect{$1}=1;
+		collectdeps($1);
+	}
+	if ($line=~/^(.*) \-$/) {
+		# Minus sign at the end means exclude this package from the
+		# list.
+		$exclude{$1}=1;
 	}
 	else {
-		print "$line\n";
+		$collect{$line}=1;
 	}
 }
 
-# Recursively print dependencies of package.
-sub printdeps {
+# Recursively add dependencies of package.
+sub collectdeps {
 	my $package=shift;
 	my %seendeps;
 	if (@_) {
@@ -111,8 +123,8 @@ sub printdeps {
 	foreach my $dep (@deps) {
 		chomp $dep;
 		$dep=~s/^\s*Depends:\s*//;
-		print "$dep\n";
+		$collect{$dep}=1;
 		$seendeps{$dep}=1;
-		printdeps($dep, \%seendeps);
+		collectdeps($dep, \%seendeps);
 	}
 }
