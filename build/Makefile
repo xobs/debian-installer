@@ -131,7 +131,7 @@ define e2fsck
 endef
 
 define mkcramfs
-  mkcramfs $(TREE)
+  mkcramfs -z $(TREE)
 endef
 
 #
@@ -591,7 +591,7 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 		else \
 			$(genext2fs) $(TEMP)/initrd; \
 		fi; \
-		$(e2fsck) $(TEMP)/initrd || true;; \
+		$(e2fsck) $(TEMP)/initrd || true ;; \
 	cramfs) \
 		$(mkcramfs) $(TEMP)/initrd ;; \
 	*) \
@@ -673,7 +673,8 @@ $(TEMP_EXTRA): $(STAMPS)extra-$(targetstring)-stamp
 	install -d $(TREE)
 	set -e; case $(INITRD_FS) in \
 	ext2) \
-		genext2fs -d $(TREE) -b $(IMAGE_SIZE) -r 0 $@ ;; \
+		genext2fs -d $(TREE) -b $(IMAGE_SIZE) -r 0 $@ ; \
+		$(e2fsck) $@ || true ;; \
 	cramfs) \
 		$(mkcramfs) $@ ;; \
 	*) \
