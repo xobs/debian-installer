@@ -12,6 +12,10 @@ architecture    := $(shell dpkg-architecture -qDEB_HOST_ARCH)
 
 # The version of the kernel to use.
 
+ifeq "$(architecture)" "hppa"
+KERNELVERSION=2.4.19-32
+KERNELNAME=vmlinux-${KERNELVERSION}
+endif
 ifeq "$(architecture)" "i386"
 KERNELVERSION=2.4.19-386
 KERNELNAME=vmlinuz
@@ -284,8 +288,10 @@ $(TYPE)-tree-stamp:
 	# Clean up after dpkg.
 	rm -rf $(DPKGDIR)/updates
 	rm -f $(DPKGDIR)/available $(DPKGDIR)/*-old $(DPKGDIR)/lock
-	# Set up modules.dep
-	mkdir -p $(TREE)/lib/modules/$(KERNELVERSION)/
+	# Set up modules.dep, ensure there is at least one standard dir (kernel
+	# in this case), so depmod will use its prune list for archs with no
+	# modules.
+	mkdir -p $(TREE)/lib/modules/$(KERNELVERSION)/kernel
 	depmod -q -a -b $(TREE)/ $(KERNELVERSION)
 	# These files depmod makes are used by hotplug, and we shouldn't
 	# need them, yet anyway.
@@ -391,6 +397,12 @@ $(INITRD):
 	install -d $(DEST)
 	genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` $(TMP_FILE)
 	dd if=$(TMP_FILE) bs=1k | gzip -v9 > $(INITRD)
+
+# hppa boots a lifimage, which can contain an initrd and two kernels (one 32 and one 64 bit)
+lifimage: Makefile initrd $(DEST)/$(TYPE)-lifimage $(KERNEL) $(KERNEL_SECOND)
+$(DEST)/$(TYPE)-lifimage:
+	palo -f /dev/null -k $(KERNEL) -r $(INITRD) -s $(DEST)/$(TYPE)-lifimage \
+		-c "0/linux HOME=/ ramdisk_size=8192 initrd=0/ramdisk rw"
 
 # Create a bootable floppy image. i386 specific. FIXME
 # 1. make a dos filesystem image
