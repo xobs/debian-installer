@@ -52,6 +52,16 @@
 # "vga=normal", and "devfs=mount,dall" and the installer will still boot
 # ok. We'll probably remove these from the shipped file eventually.
 
+#### Misc.
+
+# d-i preseeding is inherently not secure. Nothing in the installer checks
+# for attempts at buffer overflows or other exploits of the values of a
+# preseed file like this one. Only use preseed files from trusted
+# locations! To drive that home, and because it's generally useful, here's
+# a way to run any shell command you'd like inside the installer,
+# automatically.
+#d-i	preseed/command		string	echo hi mom; rm -rf /
+
 #### Network configuration.
 
 # Of course, this won't work if you're loading your preseed file from the
@@ -94,8 +104,22 @@ d-i	mirror/suite		string unstable
 
 # Choosing the disk to destroy^Winstall to.
 # TODO!
-# This makes partman erase the entire disk and put one big partition on it.
+
+
+# You can choose from any of the predefined recipes:
 d-i	partman-auto/choose_recipe	select All files in one partition (recommended for new users)
+#d-i	partman-auto/choose_recipe	select Desktop machine
+#d-i	partman-auto/choose_recipe	select Multi-user workstation
+# If you want, you could provide your own partman-auto recipe in a udeb,
+# get that loaded into the installer, and set these variables to make it be
+# used:
+#d-i	partman-auto/choose_recipe	select expert
+#d-i	partman-auto/expert_recipe	string /my-recipe
+# Of you could abuse things to download your recipe from the net, if you
+# really wanted to:
+#d-i	preseed/command		string wget http://url/to/recipe -O /my-recipe
+
+# This makes partman automatically partition without confirmation.
 d-i	partman/choose_partition	select Finish partitioning and write changes to disk
 d-i	partman/confirm			boolean	true
 
