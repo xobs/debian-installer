@@ -478,7 +478,9 @@ $(EXTRA_TARGETS) : %-stamp : $(TYPE)-get_udebs-stamp
 	for file in $(shell grep --no-filename -v ^\#  pkg-lists/$*/common \
 		`if [ -f pkg-lists/$*/$(DEB_HOST_ARCH) ]; then echo pkg-lists/$*/$(DEB_HOST_ARCH); fi` \
 	  	| sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2\n)/g' ) ; do \
-			cp $(EXTRAUDEBDIR)/$$file* ${TEMP}/$*  ;	done
+			cp $(EXTRAUDEBDIR)/$$file* ${TEMP}/$*  ; \
+			echo $$file >> ${TEMP}/$*/udeb_include; \
+	done
 	touch $@
 
 
