@@ -1,6 +1,6 @@
 <CHRP-BOOT>
 <COMPATIBLE>
-MacRISC
+MacRISC MacRISC3 MacRISC4
 </COMPATIBLE>
 <DESCRIPTION>
 Debian GNU/Linux PowerPC first stage CDROM bootloader
