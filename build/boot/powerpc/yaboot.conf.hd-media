@@ -1,0 +1,21 @@
+## This yaboot.conf is for hd-media booting only, do not use as reference.
+## Debian GNU/Linux PowerPC (sarge)
+
+default=install
+root=/dev/ram
+
+message=/boot.msg
+
+image=/vmlinux
+	label=install
+	initrd=/initrd.gz
+	initrd-size=${RAMDISK_SIZE}
+	append="devfs=mount,dall --"
+	read-only
+
+image=/vmlinux
+	label=expert
+	initrd=/initrd.gz
+	initrd-size=${RAMDISK_SIZE}
+	append="DEBCONF_PRIORITY=low devfs=mount,dall --"
+	read-only
