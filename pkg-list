@@ -18,10 +18,10 @@ my $deb_host_arch=`dpkg-architecture -qDEB_HOST_ARCH`;
 chomp $deb_host_arch;
 
 my @lists = ("pkg-lists/$type/common", "pkg-lists/$type/$deb_host_arch",
-             "pkg-lists/$type/local");
+             "pkg-lists/$type/local", "pkg-lists/local");
 while (@lists) {
 	my $list=pop @lists;
-	if (! -e $list) {
+	if (! -e $list && $list !~ /local$/) {
 		print STDERR "warning: missing list, $list, for type $type\n";
 	}
 	else {
