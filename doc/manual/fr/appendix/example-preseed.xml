@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 23805 -->
+<!-- original version: 24518 -->
 
 <sect1 id="example-preseed">
 <title>Exemple de fichier de préconfiguration</title>
@@ -10,7 +10,18 @@ Ce fichier est un exemple complet et fonctionnel de fichier de
 préconfiguration pour les installations automatiques. Son usage est expliqué
 dans <xref linkend="automatic-install"/>. N'hésitez pas à modifier certaines
 lignes avant d'utiliser ce fichier.
+
+<note><para>
+Pour bien présenter cet exemple, nous avons dû couper certaines lignes.
+C'est le caractère <quote>\</quote> qui marque ces coupures, avec un 
+renfoncement à la ligne suivante. Dans un vrai fichier de préconfiguration, les
+lignes doivent êtres jointes en <emphasis>une seule ligne</emphasis>.
+Si vous ne le faites pas, la préconfiguration échouera avec des conséquences
+imprévisibles.
+</para></note>
+
 </para>
+
 
 <informalexample><screen>
 #### Modification de syslinux.cfg.
@@ -65,16 +76,23 @@ lignes avant d'utiliser ce fichier.
 
 # La première commande est exécutée aussi tôt que possible, juste après
 # la lecture du fichier.
-#d-i	preseed/early_command		string wget http://url/to/my.udeb -O /tmp/my.udeb ; udpkg -i /tmp/my.udeb
+#d-i preseed/early_command		string \
+#    wget http://url/to/my.udeb -O /tmp/my.udeb; udpkg -i /tmp/my.udeb
+
 # Cette commande est exécutée juste avant que l'installation ne se termine,  
 # mais quand le répertoire /target est encore utilisable.
-#d-i	preseed/late_command		string for deb in /hd-media/*.deb; do cp $deb /target/tmp; chroot /target dpkg -i /tmp/$(basename $deb); done
+#d-i preseed/late_command		string \ 
+#    for deb in /hd-media/*.deb; do cp $deb /target/tmp; \
+#    chroot /target dpkg -i /tmp/$(basename $deb); done
+
 # Cette commande est exécutée au moment où base-config commence.
 #base-config	base-config/early_command	string echo hi mom
+
 # Cette commande est exécutée après base-config, juste avant la connexion.
 # C'est un bon moyen d'installer les paquets que vous voulez ou d'affiner la
 # la configuration du système.
-#base-config	base-config/late_command	string apt-get install zsh; chsh -s /bin/zsh
+#base-config base-config/late_command	string \
+#    apt-get install zsh; chsh -s /bin/zsh
 
 #### Configuration du réseau.
 
@@ -100,8 +118,8 @@ lignes avant d'utiliser ce fichier.
 # machine, prennent le pas sur les valeurs déclarées ici. Cependant,
 # cette déclaration empêche que les questions ne soient posées même si les
 # valeurs viennent de dhcp.
-d-i	netcfg/get_hostname	string unassigned-hostname
-d-i	netcfg/get_domain	string unassigned-domain
+d-i  netcfg/get_hostname	string unassigned-hostname
+d-i  netcfg/get_domain	        string unassigned-domain
 
 # Supprimer le dialogue irritant sur la clé WEP.
 d-i	netcfg/wireless_wep	string 
@@ -121,27 +139,36 @@ d-i	mirror/http/proxy	string
 
 # Si le système possède un espace libre, vous pouvez ne partitionner que cet
 # espace.
-#d-i	partman-auto/init_automatically_partition	select Use the largest continuous free space
+#d-i partman-auto/init_automatically_partition	\
+#    select Use the largest continuous free space
+
 # Vous pouvez aussi choisir un disque entier. Le format de son nom peut être
 # donné selon le format devfs ou le format traditionnel.
 # Par exemple, pour utiliser le premier disque connu sous devfs&nbsp;:
 d-i	partman-auto/disk	string /dev/discs/disc0/disc
 
 # Vous pouvez choisir parmi tous les schémas prédefinis&nbsp;:
-d-i	partman-auto/choose_recipe	select Tous les fichiers dans une 
-seule partition (recommandé aux débutants)
+d-i partman-auto/choose_recipe	    select \
+    Tous les fichiers dans une seule partition (recommandé aux débutants)
 #d-i	partman-auto/choose_recipe	select Desktop machine
 #d-i	partman-auto/choose_recipe	select Multi-user workstation
+
 # Ou donner vous-même votre schéma...
 # Le format des schémas est expliqué dans le fichier 
 # devel/partman-auto-recipe.txt.
-# Si vous avez la possibilité d'obtenir un schéma dans l'environnemt de
+# Si vous avez la possibilité d'obtenir un schéma dans l'environnement de
 # l'installateur, vous pouvez simplement pointer sur lui.
 #d-i	partman-auto/expert_recipe_file	string /hd-media/recipe
+
 # Sinon, vous pouvez écrire un schéma en une seule ligne. L'exemple suivant
 # crée une petite partition /boot, une partition swap convenable, et utilise le
 # reste de l'espace libre pour la partition racine&nbsp;:
-#d-i	partman-auto/expert_recipe	string boot-root :: 20 50 100 ext3 $primary{ } $bootable{ } method{ format } format{ } use_filesystem{ } filesystem{ ext3 } mountpoint{ /boot } .  500 10000 1000000000 ext3 method{ format } format{ } use_filesystem{ } filesystem{ ext3 } mountpoint{ / } .  64 512 300% linux-swap method{ swap } format{ } . 
+#d-i partman-auto/expert_recipe	     string boot-root :: \
+#    20 50 100 ext3 $primary{ } $bootable{ } method{ format } format{ } \
+#    use_filesystem{ } filesystem{ ext3 } mountpoint{ /boot } .  \
+#    500 10000 1000000000 ext3 method{ format } format{ } \
+#    use_filesystem{ } filesystem{ ext3 } mountpoint{ / } .  \
+#    64 512 300% linux-swap method{ swap } format{ } . 
 # Pour explication, voici le même schéma dans une forme plus lisible&nbsp;:
 # 	boot-root ::
 # 	40 50 100 ext3
@@ -160,9 +187,10 @@ seule partition (recommandé aux débutants)
 #	.
 
 # Partman créera automatiquement les partitions sans demander de confirmation.
-d-i     partman/confirm_write_new_label boolean true
-d-i	partman/choose_partition	select Finish partitioning and write changes to disk
-d-i	partman/confirm			boolean	true
+d-i partman/confirm_write_new_label    boolean true
+d-i partman/choose_partition	       select \
+#   Finish partitioning and write changes to disk
+d-i partman/confirm		       boolean true
 
 #### Installation du programme d'amorçage.
 
@@ -170,14 +198,17 @@ d-i	partman/confirm			boolean	true
 # LILO, décommentez la ligne suivante&nbsp;:
 #d-i	grub-installer/skip		boolean true
 
+
 # Il n'y a aucun danger à donner ce paramètre&nbsp;: il installe grub sur le
 # secteur d'amorçage principal s'il n'existe aucun autre système d'exploitation
 # sur la machine.
 d-i	grub-installer/only_debian	boolean true
+
 # Ce paramètre installe grub sur le secteur d'amorçage principal même s'il
 # existe un autre système d'exploitation, ce qui est moins sûr car il pourrait
 # ne pas savoir amorcer cet autre système.
 d-i	grub-installer/with_other_os	boolean true
+
 # Vous pouvez aussi l'installer ailleurs que dans le secteur d'amorçage 
 # principal. Décommentez et modifiez les lignes suivantes&nbsp;:
 #d-i	grub-installer/bootdev		string (hd0,0)
@@ -218,17 +249,21 @@ base-config	tzconfig/gmt		boolean true
 # Alaska, Hawaii, Aleutian, Arizona East-Indiana, Indiana-Starke, Michigan, 
 # Samoa, autre)
 base-config	tzconfig/choose_country_zone/US	select Eastern
+
 # Si vous avez dit à l'installateur que vous habitez au Canada.
 # (Choix : Newfoundland, Atlantic, Eastern, Central,
 # East-Saskatchewan, Saskatchewan, Mountain, Pacific, Yukon, autre)
 base-config	tzconfig/choose_country_zone/CA	select Eastern
+
 # Si vous avez dit à l'installateur que vous habitez au Brésil. (Choix : 
 # East, West, Acre, DeNoronha, autre)
 base-config	tzconfig/choose_country_zone/BR	select East
+
 # Beaucoup de pays n'ont qu'un seul fuseau horaire. Si vous avez dit à 
 # l'installateur que vous habitez dans l'un de ces pays, vous pouvez le choisir
 # avec cette question.
 base-config	tzconfig/choose_country_zone_single boolean true
+
 # Cette question est posée pour les pays qui n'appartiennent pas à la liste
 # précédente et qui ont plusieurs fuseaux horaires. Vous pouvez préconfigurer
 # l'un des fuseaux ou <quote>autre</quote>.
@@ -243,10 +278,12 @@ base-config	tzconfig/choose_country_zone_single boolean true
 
 # Si vous voulez ne pas créer d'utilisateur&nbsp;:
 #passwd		passwd/make-user		boolean false
+
 # Vous pouvez aussi présélectionner le nom de l'utilisateur et son identifiant
 # de connexion.
 #passwd		passwd/user-fullname		string Debian User
 #passwd		passwd/username			string debian
+
 # Et le mot de passe, mais faites attention&nbsp;!
 #passwd		passwd/user-password		password insecure
 #passwd		passwd/user-password-again	password insecure
@@ -262,6 +299,7 @@ base-config	apt-setup/uri_type	select http
 base-config	apt-setup/country	select enter information manually
 base-config	apt-setup/hostname	string http.us.debian.org
 base-config	apt-setup/directory	string /debian
+
 # Ne faire le choix que d'un miroir.
 base-config	apt-setup/another	boolean false
 
@@ -288,7 +326,9 @@ tasksel		tasksel/first	multiselect Desktop environment
 
 # Pendant une installation normale, exim pose seulement deux questions. Voici
 # comment les éviter. Une préconfiguration plus complexe est possible.
-exim4-config	exim4/dc_eximconfig_configtype	select no configuration at this time
+exim4-config exim4/dc_eximconfig_configtype \
+    select no configuration at this time
+
 # C'est une bonne idée d'indiquer ici le nom de l'utilisateur que vous avez 
 # créé. Si vous n'indiquez aucune valeur, le courrier pour postmaster ira dans
 # /var/mail/mail.
@@ -318,8 +358,10 @@ xserver-xfree86		xserver-xfree86/autodetect_monitor	boolean true
 # présélectionner l'adresse <quote>medium</quote>, qui est toujours disponible.
 # L'adresse <quote>simple</quote> peut ne pas être disponible et l'adresse
 # <quote>advanced</quote> pose trop de questions.
-xserver-xfree86	xserver-xfree86/config/monitor/selection-method	select medium
-xserver-xfree86	xserver-xfree86/config/monitor/mode-list	select 1024x768 @ 60 Hz
+xserver-xfree86	xserver-xfree86/config/monitor/selection-method	\
+    select medium
+xserver-xfree86	xserver-xfree86/config/monitor/mode-list \
+    select 1024x768 @ 60 Hz
 
 ###### Les autres questions.
 
@@ -337,12 +379,15 @@ xserver-xfree86	xserver-xfree86/config/monitor/mode-list	select 1024x768 @ 60 Hz
 # séparant par des espaces&nbsp;; tous seront chargés. Ces fichiers peuvent
 # à leur tout contenir d'autres directives de préconfiguration ou d'inclusion.
 # Notez que si les fichiers sont relatifs, ils seront pris dans le répertoire 
-# ou se trouve le fichier qui les inclut.
+# où se trouve le fichier qui les inclut.
 #d-i	preseed/include	string x.cfg
+
 # D'une manière plus souple, cela exécute des commandes du shell et si le 
 # résultat donne les noms de ces fichiers, ils sont inclus. Par exemple,
 # pour changer de configuration, selon tel périphérique de stockage USB,
 # dans ce cas, un lecteur carte intégré&nbsp;:
-#d-i	preseed/include_command	string if $(grep -q "GUID: 0aec3050aec305000001a003"  /proc/scsi/usb-storage-*/*); then echo kraken.cfg; else echo otherusb.cfg; fi
+#d-i preseed/include_command	string \
+#    if $(grep -q "GUID: 0aec3050aec305000001a003" /proc/scsi/usb-storage-*/*); \
+#   then echo kraken.cfg; else echo otherusb.cfg; fi
 </screen></informalexample>
 </sect1>
