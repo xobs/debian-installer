@@ -1,0 +1,200 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 15221 untranslated -->
+
+ <sect1 id="boot-troubleshooting">
+ <title>Troubleshooting the Install Process</title>
+<para>
+</para>
+
+  <sect2 id="unreliable-floppies">
+  <title>Floppy Disk Reliability</title>
+
+<para>
+
+The biggest problem for people installing Debian for the first time
+seems to be floppy disk reliability.
+
+</para><para>
+
+The boot floppy is the floppy with the worst problems, because it
+is read by the hardware directly, before Linux boots.  Often, the
+hardware doesn't read as reliably as the Linux floppy disk driver, and
+may just stop without printing an error message if it reads incorrect
+data. There can also be failures in the Driver Floppies most of which
+indicate themselves with a flood of messages about disk I/O errors.
+
+</para><para>
+
+If you are having the installation stall at a particular floppy, the
+first thing you should do is re-download the floppy disk image and
+write it to a <emphasis>different</emphasis> floppy. Simply
+reformatting the old
+floppy may not be sufficient, even if it appears that the floppy was
+reformatted and written with no errors. It is sometimes useful to try
+writing the floppy on a different system.
+
+</para><para>
+
+One user reports he had to write the images to floppy
+<emphasis>three</emphasis> times before one worked, and then
+everything was fine with the third floppy.
+
+</para><para>
+
+Other users have reported that simply rebooting a few times with the
+same floppy in the floppy drive can lead to a successful boot. This is
+all due to buggy hardware or firmware floppy drivers.
+
+</para>
+  </sect2>
+
+  <sect2><title>Boot Configuration</title>
+
+<para>
+
+If you have problems and the kernel hangs during the boot process,
+doesn't recognize peripherals you actually have, or drives are not
+recognized properly, the first thing to check is the boot parameters,
+as discussed in <xref linkend="boot-parms"/>.
+
+</para><para>
+
+If you are booting with your own kernel instead of the one supplied
+with the installer, be sure that <userinput>CONFIG_DEVFS</userinput> is set in
+your kernel.  The installer requires
+<userinput>CONFIG_DEVFS</userinput>.
+
+</para><para>
+
+Often, problems can be solved by removing add-ons and peripherals, and
+then trying booting again.  <phrase arch="i386">Internal modems, sound
+cards, and Plug-n-Play devices can be especially problematic.</phrase>
+
+</para><para>
+
+There are, however, some limitations in our boot floppy set with
+respect to supported hardware.  Some Linux-supported platforms might
+not be directly supported by our boot floppies.  If this is the case,
+you may have to create a custom boot disk (see
+<xref linkend="rescue-replace-kernel"/>), or investigate network
+installations.
+
+</para><para>
+
+If you have a large amount of memory installed in your machine, more
+than 512M, and the installer hangs when booting the kernel, you may
+need to include a boot argument to limit the amount of memory the
+kernel sees, such as <userinput>mem=512m</userinput>.
+
+</para>
+  </sect2>
+
+  <sect2 id="kernel-msgs">
+  <title>Interpreting the Kernel Startup Messages</title>
+
+<para>
+
+During the boot sequence, you may see many messages in the form
+<computeroutput>can't find <replaceable>something</replaceable>
+</computeroutput>, or <computeroutput>
+<replaceable>something</replaceable> not present</computeroutput>,
+<computeroutput>can't initialize <replaceable>something</replaceable>
+</computeroutput>, or even <computeroutput>this driver release depends
+on <replaceable>something</replaceable> </computeroutput>.
+Most of these messages are harmless. You
+see them because the kernel for the installation system is built to
+run on computers with many different peripheral devices. Obviously, no
+one computer will have every possible peripheral device, so the
+operating system may emit a few complaints while it looks for
+peripherals you don't own. You may also see the system pause for a
+while. This happens when it is waiting for a device to respond, and
+that device is not present on your system. If you find the time it
+takes to boot the system unacceptably long, you can create a
+custom kernel later (see <xref linkend="kernel-baking"/>).
+
+</para>
+  </sect2>
+
+
+  <sect2 id="problem-report">
+  <title>Bug Reporter</title>
+<para>
+
+If you get through the initial boot phase but cannot complete the
+install, the bug reporter menu choice may be helpful. It copies system
+error logs and configuration information to a user-supplied floppy.
+This information may provide clues as to what went wrong and how to
+fix it.  If you are submitting a bug report you may want to attach
+this information to the bug report.
+
+</para><para>
+
+Other pertinent installation messages may be found in
+<filename>/target/var/log/debian-installer/</filename> during the
+installation, and <filename>/var/log/debian-installer/</filename>
+after the computer has been booted into the installed system.
+
+</para>
+  </sect2>
+
+  <sect2 id="submit-bug">
+  <title>Submitting Bug Reports</title>
+<para>
+
+If you still have problems, please submit a bug report.  Send an email
+to <email>submit@bugs.debian.org</email>.  You
+<emphasis>must</emphasis> include the following as the first lines of
+the email:
+
+<informalexample><screen>
+
+Package: installation-reports
+Version: <replaceable>version</replaceable>
+
+</screen></informalexample>
+
+Be sure to fill in <replaceable>version</replaceable> with the
+version of the debian-installer that you used. The version number can
+be found if you press <keycap>F1</keycap> key on the
+<prompt>boot:</prompt> prompt of your installation media. You should
+also mention where did you download the installation media, or the
+source of a CD you bought.
+
+</para><para>
+
+You should also include the following information in your bug report.
+If you use the program <command>reportbug</command> to submit your 
+report, this information will be included automatically.
+
+<informalexample><screen>
+
+<phrase arch="i386">
+flavor:        <replaceable>flavor of image you are using</replaceable>
+</phrase>
+architecture:  &architecture; 
+model:         <replaceable>your general hardware vendor and model</replaceable>
+memory:        <replaceable>amount of RAM</replaceable>
+scsi:          <replaceable>SCSI host adapter, if any</replaceable>
+cd-rom:        <replaceable>CD-ROM model and interface type, e.g., ATAPI</replaceable>
+network card:  <replaceable>network interface card, if any</replaceable>
+pcmcia:        <replaceable>details of any PCMCIA devices</replaceable>
+
+</screen></informalexample>
+
+</para><para>
+
+Depending on the nature of the bug, it also might be useful to report
+whether you are installing to IDE or SCSI disks, other peripheral
+devices such as audio, disk capacity, and the model of video card.
+
+</para><para>
+
+In the bug report, describe what the problem is, including the last
+visible kernel messages in the event of a kernel hang.  Describe the
+steps that you did which brought the system into the problem state.
+
+</para>
+
+  </sect2>
+
+ </sect1>

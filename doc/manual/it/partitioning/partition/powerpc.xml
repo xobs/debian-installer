@@ -1,0 +1,55 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 11648 untranslated -->
+
+
+  <sect2 arch="powerpc"><title>Partitioning Newer PowerMacs</title>
+<para>
+
+If you are installing onto a NewWorld PowerMac you must create a
+special bootstrap partition to hold the boot loader. The size of this
+partition must be 800KB and its partition type must be
+<emphasis>Apple_Bootstrap</emphasis>.  If the bootstrap partition is
+not created with the <emphasis>Apple_Bootstrap</emphasis> type your
+machine cannot be made bootable from the hard disk.  This partition
+can easily be created in <command>mac-fdisk</command> using the
+<userinput>b</userinput> command.
+
+</para><para>
+
+The special partition type Apple_Bootstrap is required to prevent
+MacOS from mounting and damaging the bootstrap partition, as there are
+special modifications made to it in order for OpenFirmware to boot it
+automatically.
+
+</para><para>
+
+Note that the bootstrap partition is only meant to hold 3 very small
+files: the <command>yaboot</command> binary, its configuration
+<filename>yaboot.conf</filename>, and a first stage OpenFirmware
+loader <command>ofboot.b</command>.  It need not and must not be
+mounted on your file system nor have kernels or anything else copied
+to it. The <command>ybin</command> and <command>mkofboot</command>
+utilities are used to manipulate this partition.
+
+</para><para>
+
+In order for OpenFirmware to automatically boot &debian; the bootstrap
+partition should appear before other boot partitions on the disk,
+especially MacOS boot partitions.  The bootstrap partition should be
+the first one you create. However, if you add a bootstrap partition
+later, you can use <command>mac-fdisk</command>'s
+<userinput>r</userinput> command to reorder the partition map so the
+bootstrap partition comes right after the map (which is always
+partition 1). It's the logical map order, not the physical address
+order, that counts.
+
+</para><para>
+
+Apple disks normally have several small driver partitions. If you
+intend to dual boot your machine with MacOSX, you should retain these
+partitions and a small HFS partition (800k is the minimum size). That
+is because MacOSX, on every boot, offers to initialize any disks which do
+not have active MacOS partitions and driver partitions.
+
+</para>
+  </sect2>

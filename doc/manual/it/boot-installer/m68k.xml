@@ -1,0 +1,192 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 11648 untranslated -->
+
+
+  <sect2 arch="m68k"><title>Booting from Hard Disk</title>
+
+&boot-installer-intro-hd.xml;
+
+  </sect2>
+
+  <sect2 arch="m68k"><title>Booting from AmigaOS</title>
+<para>
+
+In the <command>Workbench</command>, start the Linux installation
+process by double-clicking on the <guiicon>StartInstall</guiicon> icon
+in the <filename>debian</filename> directory.
+
+</para><para>
+
+You may have to press the &enterkey; key twice after the Amiga
+installer program has output some debugging information into a window.
+After this, the screen will go grey, there will be a few seconds'
+delay. Next, a black screen with white text should come up, displaying
+all kinds of kernel debugging information.  These messages may scroll
+by too fast for you to read, but that's OK.  After a couple of
+seconds, the installation program should start automatically, so you
+can continue down at <xref linkend="init-config"/>.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="m68k"><title>Booting from Atari TOS</title>
+<para>
+
+At the GEM desktop, start the Linux installation process by
+double-clicking on the <guiicon>bootstra.prg</guiicon> icon in the
+<filename>debian</filename> directory and clicking
+<guibutton>Ok</guibutton> at the program options dialog box.
+
+</para><para>
+
+You may have to press the &enterkey; key after the Atari
+bootstrap program has output some debugging information into a
+window. After this, the screen will go grey, there will be a few
+seconds' delay.  Next, a black screen with white text should come up,
+displaying all kinds of kernel debugging information. These messages
+may scroll by too fast for you to read, but that's OK. After a couple
+of seconds, the installation program should start automatically, so
+you can continue below at <xref linkend="init-config"/>.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="m68k"><title>Booting from 68k MacOS</title>
+<para>
+
+At the MacOS desktop, start the Linux installation process by
+double-clicking on the <guiicon>Penguin Prefs</guiicon> icon in
+the <filename>debian</filename> directory. The
+<command>Penguin</command> booter will start up. Go to the
+<guimenuitem>Settings</guimenuitem> item in the
+<guimenu>File</guimenu> menu, click the
+<guilabel>Kernel</guilabel> tab.  Select the kernel
+(<filename>linux.bin</filename>) and ramdisk
+(<filename>root.bin</filename>) images in the
+<filename>debian</filename> directory by clicking on the corresponding
+buttons in the upper right corner, and navigating the file select
+dialogs to locate the files. Close the <guilabel>Settings</guilabel>
+dialog, save the settings and start the bootstrap using the
+<guimenuitem>Boot Now</guimenuitem> item in the
+<guimenu>File</guimenu> menu.
+
+</para><para>
+
+The <command>Penguin</command> booter will output some debugging
+information into a window. After this, the screen will go grey, there
+will be a few seconds' delay. Next, a black screen with white text
+should come up, displaying all kinds of kernel debugging
+information. These messages may scroll by too fast for you to read,
+but that's OK. After a couple of seconds, the installation program
+should start automatically, so you can continue below at 
+<xref linkend="init-config"/>.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="m68k"><title>Booting from a CD-ROM</title>
+
+&boot-installer-intro-cd.xml;
+
+<para>
+
+Currently, the only &arch-title; subarchitecture that
+supports CD-ROM booting is the BVME6000. The easiest route In that
+case will be to use a 
+<ulink url="&url-debian-cd-vendors;">set of Debian CDs</ulink>. 
+Simply insert your CD, reboot, and proceed to the next chapter.  
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="m68k" id="boot-tftp"><title>Booting with TFTP</title>
+
+&boot-installer-intro-net.xml;
+
+<para>
+
+After booting the VMEbus systems you will be presented with the LILO
+<prompt>Boot:</prompt> prompt.  At that prompt enter one of the
+following to boot Linux and begin installation proper of the Debian
+software using vt102 terminal emulation:
+
+<!-- Because the &enterkey; definition uses <keycap>,    -->
+<!-- we use <screen> instead of <userinput> in this list -->
+
+<itemizedlist>
+<listitem><para>
+
+type <screen>i6000 &enterkey;</screen> to install a BVME4000/6000
+
+</para></listitem>
+<listitem><para>
+
+type <screen>i162 &enterkey;</screen> to install an MVME162
+
+</para></listitem>
+<listitem><para>
+
+type <screen>i167 &enterkey;</screen> to install an MVME166/167
+
+</para></listitem>
+    </itemizedlist>
+
+</para><para>
+
+You may additionally append the string
+<screen>TERM=vt100</screen> to use vt100 terminal emulation,
+e.g., <screen>i6000 TERM=vt100 &enterkey;</screen>.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="m68k" id="boot-from-floppies">
+  <title>Booting from Floppies</title>
+<para>
+
+For most m68k architectures, booting from a local filesystem is the
+recommended method.
+
+</para><para>
+
+Booting from the boot floppy is supported only for Atari and VME
+(with a SCSI floppy drive on VME) at this time. 
+
+</para>
+ </sect2>
+
+
+  <sect2 arch="m68k"><title>Macintosh Limitations</title>
+<para>
+
+In the case of Macintosh, you must retain the original Mac system and
+boot from it. It is <emphasis>essential</emphasis> that, when booting
+MacOS in preparation for booting the Penguin linux loader, you must
+hold the <keycap>shift</keycap> key down to prevent extensions from
+loading. If you
+don't use MacOS except for loading linux, you can accomplish the same
+thing by removing all extensions and control panels from the Mac's
+System Folder. Otherwise extensions may be left running and cause
+random problems with the running linux kernel.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="m68k"><title>Penguin Boot Parameters</title>
+<para>
+
+In the Penguin boot program, choose <guimenu>File</guimenu> -&gt;
+<guimenuitem>Settings...</guimenuitem>, then switch to the
+<guilabel>Options</guilabel> tab.  Boot parameters may be typed in to
+the text entry area.  If you will always want to use these settings,
+select <guimenu>File</guimenu> -&gt; <guimenuitem>Save Settings as
+Default</guimenuitem>.
+
+</para>
+  </sect2>
