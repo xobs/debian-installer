@@ -18,6 +18,7 @@ for dir in $PACKAGES; do
     (
     	needsupload=no
         cd $dir
+	dpkg-parsechangelog >/dev/null 2>&1 || (echo "Changelog for $dir broken; skipping" ; exit 1) || continue
         ver=$(dpkg-parsechangelog | grep ^Version | cut -d: -f 2)
         pkg=$(dpkg-parsechangelog | grep ^Source | cut -d: -f 2)
         archver=$(madison $pkg | grep unstable  | grep source | cut -d\| -f 2)
