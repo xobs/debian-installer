@@ -1,0 +1,38 @@
+#!/bin/sh -e
+
+if [ ! -d pkg-lists ]; then
+    echo "You must run this from the build directory"
+    exit 1
+fi
+
+host=people.debian.org
+basedir=public_html/d-i/images
+dir=`date +%Y-%m-%d`
+
+unset LANG LC_ALL LANGUAGE
+cvs up
+make reallyclean
+
+for t in netboot cdrom floppy; do
+    echo
+    echo BUILDING INITRD FOR $t
+    echo
+    mkdir -p dest
+    fakeroot make TYPE="$t" initrd >& dest/$t.log
+    cat dest/$t.log
+done
+for t in cdrom floppy; do
+    echo
+    echo BUILDING IMAGE FOR $t
+    echo
+    fakeroot make -k TYPE="$t" image >& dest/$t.log2 || true # This is allowed to fail
+    cat dest/$t.log2
+    cat dest/$t.log2 >> dest/$t.log
+done
+
+ssh $host mkdir $basedir/$dir
+ssh $host rm -f $basedir/daily
+ssh $host ln -sf $dir $basedir/daily
+scp tmp/cdrom/vmlinuz dest/*-image.img dest/*-initrd.gz dest/*.log $host:$basedir/$dir/
+
+make reallyclean
