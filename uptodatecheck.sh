@@ -8,7 +8,7 @@ if ! which madison 2>&1 >/dev/null; then
 	exit 1
 fi
 
-PACKAGES="anna main-menu retriever/cdrom retriever/choose-mirror retriever/file retriever/wget rootskel libdebian-installer tools/autopartkit tools/ddetect tools/base-installer tools/grub-installer tools/kdetect tools/lilo-installer tools/lmod-detect-pci tools/cdebconf tools/netcfg tools/partkit tools/prebaseconfig tools/cdrom-detect tools/selectdevice tools/udpkg utils"
+PACKAGES="anna main-menu retriever/cdrom retriever/choose-mirror retriever/file retriever/net rootskel libdebian-installer tools/autopartkit tools/ddetect tools/base-installer tools/grub-installer tools/lilo-installer tools/cdebconf tools/netcfg tools/partkit tools/prebaseconfig tools/cdrom-detect tools/selectdevice tools/udpkg utils tools/disk-detect"
 
 cd ..
 
