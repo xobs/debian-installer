@@ -9,7 +9,7 @@
 # README for details.
 
 # The version of the kernel to use.
-KVERS=2.4.1
+KVERS=2.4.2
 
 # The type of system to build. Determines what udebs are unpacked into
 # the system. See the .list files for various types. You may want to
