@@ -13,7 +13,7 @@ architecture    := $(shell dpkg-architecture -qDEB_HOST_ARCH)
 # The version of the kernel to use.
 
 ifeq "$(architecture)" "i386"
-KVERS=2.4.12
+KVERS=2.4.16
 FLAVOUR=386
 endif
 
@@ -233,7 +233,7 @@ tree-stamp:
 	    echo "WARNING: $(TREE)/dev/console isn't a character device as it should."; \
 	    echo "This does probably mean that you should start again with root rights."; \
 	fi
-	
+
 	# Move the kernel image out of the way, into a temp directory
 	# for use later. We don't need it bloating our image!
 	mv -f $(TREE)/boot/vmlinuz $(KERNEL)
@@ -264,6 +264,10 @@ endif
 	mkdir -p $(TREE)/lib
 	$(MKLIBS) -d $(TREE)/lib `find $(TREE) -type f -perm +0111 -o -name '*.so'`
 
+	# Add missing symlinks for libraries
+	# (Needed for mklibs.py)
+#	/sbin/ldconfig -n $(TREE)/lib $(TREE)/usr/lib
+
 	# Remove any libraries that are present in both usr/lib and lib,
 	# from lib. These were unnecessarily copied in by mklibs, and
 	# we want to use the ones in usr/lib instead since they came 
@@ -271,7 +275,7 @@ endif
 	for lib in `find $(TREE)/usr/lib/lib* -type f -printf "%f\n" | cut -d . -f 1 | sort | uniq`; do \
 		rm -f $(TREE)/lib/$$lib.*; \
 	done
-	
+
 	# Now we have reduced libraries installed .. but they are
 	# not listed in the status file. This nasty thing puts them in,
 	# and alters their names to end in -reduced to indicate that
@@ -284,16 +288,16 @@ endif
 	done
 
 	# Reduce status file to contain only the elements we care about.
-	egrep -i '^((Status|Provides|Depends|Package|Description|installer-menu-item):|$$)' \
+	egrep -i '^((Status|Provides|Depends|Package|Description|installer-menu-item|Description-..):|$$)' \
 		$(DPKGDIR)/status > $(DPKGDIR)/status.udeb
 	rm -f $(DPKGDIR)/status
 	ln -sf status.udeb $(DPKGDIR)/status
-	
+
 	# Strip all kernel modules, just in case they haven't already been
 	for module in `find $(TREE)/lib/modules/ -name '*.o'`; do \
 	    strip -R .comment -R .note -g -x $$module; \
 	done
-	
+
 	# Remove some unnecessary dpkg files.
 	for file in `find $(TREE)/var/lib/dpkg/info -name '*.md5sums' -o \
 	    -name '*.postrm' -o -name '*.prerm' -o -name '*.preinst' -o \
@@ -315,27 +319,16 @@ tmp_mount:
 	fi
 	mkdir -p $(TMP_MNT)
 
-# Create a compressed image of the root filesystem.
-# 1. make a temporary file large enough to fit the filesystem.
-# 2. mount that file via the loop device, create a filesystem on it
-# 3. copy over the root filesystem
-# 4. unmount the file, compress it
-#
-## TODO: get rid of the root requirement by using genext2fs instead
+# Create a compressed image of the root filesystem by way of genext2fs.
+
 initrd: Makefile tmp_mount tree $(INITRD)
 $(INITRD): TMP_FILE=$(TEMP)/image.tmp
 $(INITRD):
 	dh_testroot
-	umount $(TMP_MNT) || true
 	rm -f $(TMP_FILE)
 	install -d $(TEMP)
-	dd if=/dev/zero of=$(TMP_FILE) bs=1k count=`expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)`
-	# FIXME: 2000 bytes/inode (choose that better?)
-	mke2fs -F -m 0 -i 2000 -O sparse_super $(TMP_FILE)
-	mount -t ext2 -o loop $(TMP_FILE) $(TMP_MNT)
-	cp -a $(TREE)/* $(TMP_MNT)/
-	umount $(TMP_MNT)
 	install -d $(DEST)
+	genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` $(TMP_FILE)
 	dd if=$(TMP_FILE) bs=1k | gzip -v9 > $(INITRD)
 
 # Create a bootable floppy image. i386 specific. FIXME
@@ -346,14 +339,14 @@ floppy_image: Makefile initrd tmp_mount $(FLOPPY_IMAGE)
 $(FLOPPY_IMAGE):
 	dh_testroot
 	install -d $(DEST)
-	
+
 	dd if=/dev/zero of=$(FLOPPY_IMAGE) bs=1k count=$(FLOPPY_SIZE)
 	mkfs.msdos -i deb00001 -n 'Debian Installer' -C $(FLOPPY_IMAGE)	$(FLOPPY_SIZE)
 	mount -t vfat -o loop $(FLOPPY_IMAGE) $(TMP_MNT)
-	
+
 	cp $(KERNEL) $(TMP_MNT)/linux
 	cp $(INITRD) $(TMP_MNT)/initrd.gz
-	
+
 	cp syslinux.cfg $(TMP_MNT)/
 	todos $(TMP_MNT)/syslinux.cfg
 	umount $(TMP_MNT)
