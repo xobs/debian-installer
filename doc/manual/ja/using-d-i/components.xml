@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 17510 -->
+<!-- original version: 18640 -->
 
  <sect1 id="module-details">
  <title>それぞれのコンポーネントの使用法</title>
@@ -36,7 +36,7 @@ first screen.  At this time, the capabilities of &d-i; are still quite
 limited. It doesn't know much about your hardware, preferred language,
 or even the task it should perform. Don't worry. Because &d-i; is quite
 clever, it can automatically probe your hardware, locate the rest
-of its components and upgrade itself to a modern, well-built program.
+of its components and upgrade itself to a capable installation system.
 -->
 Debian Installer が起動して、最初の画面が表示されていると仮定しましょう。
 このとき、&d-i; の機能はまだ制限されています。
@@ -44,7 +44,7 @@ Debian Installer が起動して、最初の画面が表示されていると仮定しましょう。
 しかし心配しないでください。
 &d-i; は非常に賢いので、ハードウェアの自動検出をしたり、
 コンポーネントの残りを見つけたり、
-新しくよくできたプログラムに自分自身をアップグレードすることができます。
+高性能なインストールシステムに自分自身をアップグレードすることができます。
 
 <!--
 However, you still need to help &d-i; with some information it can't
@@ -79,18 +79,12 @@ hardware detection needs to be repeated later in the process.
 &module-kbd-chooser.xml;
 &module-s390-netdevice.xml;
 &module-s390-dasd.xml;
-&module-pcmcia.xml;
-&module-cdrom-detect.xml;
 &module-ddetect.xml;
+&module-cdrom-detect.xml;
 &module-iso-scan.xml;
-<!--
-&module-load-components;
-Insert Load installer components here; mention that it is executed later
-(after netcfg and choose mirror) if netboot installation.
--->
+&module-anna.xml;
 &module-netcfg.xml;
 &module-choose-mirror.xml;
-&module-anna.xml; <!-- should probably not be included -->
 
   </sect2>
 
@@ -146,27 +140,11 @@ take some time.
 </para>
 
 &module-base-installer.xml;
-&module-kernel-chooser.xml;
   </sect2>
 
   <sect2>
   <title>システムの起動可能化</title>
-<para>
-
-<!--
-Note that multiple operating systems booting on a single machine is
-still something of a black art.  This document does not even attempt
-to document the various boot managers, which vary by architecture and
-even by subarchitecture.  You should see your boot manager's
-documentation for more information.
--->
-同一マシンで複数の OS を起動させるのは、まだかなり魔術的です。
-本文書では、様々なブートマネージャ 
-(アーキテクチャによって、さらにサブアーキテクチャによってさえ変わる) 
-を文書化することは試みません。
-より詳細にはブートマネージャのドキュメントをご覧ください。
-
-</para><para condition="supports-nfsroot">
+<para condition="supports-nfsroot">
 
 <!--
 If you are installing a diskless workstation, obviously, booting off
@@ -181,6 +159,21 @@ linkend="boot-dev-select-sun"/>.</phrase>
 <phrase arch="sparc">デフォルトでネットワークから起動するよう、
 OpenBoot に設定したいかもしれません。
 <xref linkend="boot-dev-select-sun"/> をご覧ください。</phrase>
+
+</para><para>
+
+<!--
+Note that multiple operating systems booting on a single machine is
+still something of a black art.  This document does not even attempt
+to document the various boot managers, which vary by architecture and
+even by subarchitecture.  You should see your boot manager's
+documentation for more information.
+-->
+同一マシンで複数の OS を起動させるのは、まだかなり魔術的です。
+本文書では、様々なブートマネージャ 
+(アーキテクチャによって、さらにサブアーキテクチャによってさえ変わる) 
+を文書化することは試みません。
+より詳細にはブートマネージャのドキュメントをご覧ください。
 
 </para>
 
@@ -230,9 +223,9 @@ user in case something goes wrong.
 
 </para>
 
-&module-baseconfig.xml;
 &module-bugreporter.xml;
 &module-cdrom-checker.xml;
 &module-shell.xml;
+&module-baseconfig.xml;
   </sect2>
  </sect1>
