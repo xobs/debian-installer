@@ -1,52 +1,54 @@
-<!-- original version: 11648 -->
+<!-- original version: 22935 -->
 
 
-  <sect2 arch="sparc" id="sparc-cpus"><title>CPU, Main Boards, und Video Unterstützung</title>
+  <sect2 arch="sparc" id="sparc-cpus"><title>CPUs, Mainboards und Videounterstützung</title>
 <para>
 
-Momentan unterstützt der <emphasis>&architecture;</emphasis> Port
-einige Typen von Sparc Systemen. Die verbreitetsten Namen für
-Sparc Systeme sind sun4, sun4c, sun4m, sun4d und sun4u. Momentan unterstützen
-wir keine sehr alte sun4 Hardware. Die anderen Systeme werden jedoch
+Momentan unterstützt die <emphasis>&architecture;</emphasis>-Portierung
+einige Typen von Sparc-Systemen. Die verbreitetsten Namen für
+Sparc-Systeme sind sun4, sun4c, sun4m, sun4d und sun4u. Momentan unterstützen
+wir keine sehr alte sun4-Hardware. Die anderen Systeme werden jedoch
 unterstützt. Sun4d wurde davon am wenigsten getestet, erwarten Sie
 also mögliche Probleme im Bezug auf die Stabilität des Kernels. Sun4c
-und Sun4m, die am stärksten verbreitete ältere Sparc Hardware,
-beinhaltet solce Systeme wie die SparcStation 1, 1+, IPC, IPX und die
-SparcStation LX, 5, 10 und 20. Die UltraSPARC Systemklasse fällt unter
-die sun4u Kategorie, und wird mit dem sun4u Set der Installationsimages
-unterstützt. Bekannte nicht unterstützte Systeme sind der
-AP1000 Multicomputer und der Tadpole Sparcbook 1. Siehe die
-<ulink url="&url-sparc-linux-faq;">Linux for SPARCProcessors FAQ</ulink> 
-für komplette Informationen.
+und Sun4m, die am stärksten verbreitete ältere Sparc-Hardware,
+beinhaltet solche Systeme wie die SparcStation 1, 1+, IPC, IPX und die
+SparcStation LX, 5, 10 und 20. Die UltraSPARC-Systemklasse fällt unter
+die sun4u-Kategorie und wird mit dem sun4u-Satz der Installationsimages
+unterstützt. Bekanntermaßen nicht unterstützte Systeme sind der
+AP1000 Multicomputer und der Tadpole Sparcbook 1. Lesen Sie die
+<ulink url="&url-sparc-linux-faq;">Linux for SPARCProcessors-FAQ</ulink> 
+für detaillierte Informationen.
 
 </para>
 
    <sect3><title>Speicherkonfiguration</title>
 <para>
 
-Einige ältere Sun Workstations, besonders die Sun IPX und die Sun IPC,
-haben die Speicherbänke an fixierten Stellen im physikalischen Speicher.
-Wenn die Bänke also nicht gefüllt sind, existieren Löcher im physikalischen
-Speicherplatz. Die Linux Installation benötigt einen zusammenhängenden
-Speicherblock, in welches der Kernel die initialisierungs-RAMdisk laden
-kann. Ist dieser nicht verfügbar, so führt das zu einer `Data Access Exception'.
+Bei einigen älteren Sun-Arbeitsplatzrechnern, besonders die Sun IPX und die Sun IPC,
+befinden sich die Speicherbänke an fixen Stellen im physikalischen Speicherbereich.
+Wenn die Bänke nicht besetzt sind, existieren deshalb Lücken im physikalischen
+Speicher. Die Linux-Installation jedoch benötigt einen zusammenhängenden
+Speicherblock, um den Kernel und die Initial-RAMdisk zu laden. 
+Ist dieser nicht verfügbar, führt das zu einer `Data Access Exception'
+(Datenzugriffs-Fehler).
 
 </para><para>
 
 Daher müssen Sie den Speicher so konfigurieren, dass der kleinste
-zusammenhängende Speicherblock mindestens 8Mb hat. In der oben
-zitierten IPX und IPC sind die Speicherbänke in 16Mb Bereiche
+zusammenhängende Speicherblock mindestens 8MB hat. In den oben
+zitierten IPX und IPC sind die Speicherbänke in 16MB Bereiche
 eingeteilt. Das bedeutet, dass Sie eine ausreichend große
-SIMM in der Bank Null haben müssen, um den Kernel und die RAMdisk zu
-beinhalten. In diesem Fall sind 4Mb <emphasis>not</emphasis> ausreichend.
+SIMM in der Bank 0 (1. Steckplatz) haben müssen, um den Kernel 
+und die RAMdisk fassen zu können. In diesem Fall sind 
+4MB <emphasis>nicht</emphasis> ausreichend.
 
 </para><para>
 
 Beispiel:
-In einer Sun IPX haben Sie eine 16Mb SIMM und eine 4Mb SIMM. Es gibt
-vier SIMM Bänke (0,1,2,3). [Bank Null ist am weitesten weg von den
-SBUS Anschlüssen]. Hier müssen Sie die 16Mb SIMM in Bank 0 installieren;
-es wird empfohlen, die 4Mb SIMM in Bank 2 zu installieren.
+In einer Sun IPX haben Sie einen 16MB SIMM und einen 4MB SIMM. Es gibt
+vier SIMM-Steckplätze (0,1,2,3). (Platz 0 ist am weitesten entfernt von den
+SBUS-Anschlüssen). Hier müssen Sie den 16MB SIMM in Steckplatz 0 installieren;
+es wird empfohlen, den 4MB SIMM in Platz 2 zu installieren.
 
 </para>
    </sect3>
@@ -54,28 +56,29 @@ es wird empfohlen, die 4Mb SIMM in Bank 2 zu installieren.
    <sect3><title>Grafikkonfiguration</title>
 <para>
 
-Speziell im Falle von älteren Sun Workstations ist relativ
-häufig ein Onboard Framebuffer, der mittlerweile ersetzt
-wurde (zum Beispiel durch den bwtwo in einer Sun IPC), und eine
-SBUS Karte mit einem später wahrscheinlich beschleunigten Buffer
-wird dann in den SBUS Slot gesteckt. Unter Solaris/SunOS bereitet
-das keine Probleme, da beide Karten initialisiert werden.
+Im speziellen Fall von älteren Sun-Workstations ist es relativ 
+verbreitet, dass ein Onboard-Framebuffer vorhanden ist 
+(der später ersetzt wurde, zum Beispiel der bwtwo in einer Sun IPC) 
+und eine SBUS-Karte im SBUS-Slot gesteckt wird, die 
+wahrscheinlich beschleunigten Pufferspeicher enthält.
+Unter Solaris/SunOS bereitet das keine Probleme, da beide 
+Karten initialisiert werden.
 
 </para><para>
 
-Mit Linux kann das jedoch ein Problem erzeugen, dadurch dass der
-Boot PROM Monitor seine Ausgabe auf dieser zusätzlichen Karte anzeigt;
-die Linux Kernel Boot-Meldungen können dann zum Original Onboard
-Framebuffer umgeleitet werden, während <emphasis>keine</emphasis>
-Fehlermeldungen auf dem Bildschirm erscheinen, während die
+Mit Linux könnte das ein Problem werden, weil der Boot-PROM-Monitor 
+seine Meldungen auf dieser zusätzlichen Karte anzeigt, 
+die Boot-Meldungen des Linux-Kernels jedoch zum 
+Original-Onboard-Framebuffer umgeleitet werden, sodass <emphasis>keine</emphasis>
+Fehlermeldungen auf dem Bildschirm erscheinen, obwohl die
 Maschine scheinbar beim Laden der RAMdisk hängt.
 
 </para><para>
 
-Um dieses Problem zu vermeiden, schließen Sie den Bildschirm (wenn benötigt)
-an die Video Karte im niedrigsten nummerierten SBUS Slot an (Am Motherboard
-zählt die Karte als niedriger als auf den externen Slots). Alternativ
-ist es möglich, eine serielle Konsole zu verwenden.
+Um dieses Problem zu vermeiden, schließen Sie den Bildschirm (wenn nötig)
+an die Video-Karte im SBUS-Slot mit der niedrigsten Nummer an (eine
+Onboard-Karte ist niedriger nummeriert als externe Slots) 
+Alternativ ist es möglich, eine serielle Konsole zu verwenden.
 
 </para>
    </sect3>
