@@ -546,8 +546,6 @@ sources.list.deb:
 $(TREE)/unifont.bgf: $(TEMP)/all.utf
 	# Use the UTF-8 locale in rootskel-locale. This target shouldn't
 	# be called when it is not present anyway.
-	# reduce-font is part of package libbogl-dev
-	# unifont.bdf is part of package bf-utf-source
 	# The locale must be generated after installing the package locales
 	set -e; \
 	CHARMAP=`LOCPATH=$(LOCALE_PATH) LC_ALL=C.UTF-8 locale charmap`; \
