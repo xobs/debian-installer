@@ -1,17 +1,19 @@
 #!/usr/bin/perl
 # Outputs a list of udebs to install. Pass it the type of image to build as
-# the first parameter, then the kernel flavour, then the major kernel type
-# (2.4, 2.6, etc), then the sub architecture (or an empty string if there
-# are none) and then the kernel version(s) as the rest of the parameters.
-# Reads the lists in pkg-lists.
+# the first parameter. The second parameter can point to a different image
+# type which the image is a driver disk for. Next the kernel flavour, then
+# the major kernel type (2.4, 2.6, etc), then the sub architecture (or an
+# empty string if there are none) and then the kernel version(s) as the rest
+# of the parameters. Reads the lists in pkg-lists.
 
 use warnings;
 use strict;
 
 if (int(@ARGV) < 5) {
-	die "Usage: $0 type KERNEL_FLAVOUR KERNELMAJOR SUB_ARCH KERNEL_VERSION [KERNEL_VERSION ...]\n";
+	die "Usage: $0 type DRIVER_FOR KERNEL_FLAVOUR KERNELMAJOR SUB_ARCH KERNEL_VERSION [KERNEL_VERSION ...]\n";
 }
 my $type=shift;
+my $driver_for=shift;
 my $kernel_flavour=shift;
 my $kernel_major=shift;
 my $sub_arch=shift;
@@ -20,79 +22,17 @@ my @kernel_versions=@ARGV;
 my $deb_host_arch=`dpkg-architecture -qDEB_HOST_ARCH`;
 chomp $deb_host_arch;
 
-my @lists = ("pkg-lists/local");
-my $t="";
-foreach my $subtype (split "/", $type) {
-	if (! length $t) {
-		$t=$subtype;
-	}
-	else {
-		$t="$t/$subtype";
-	}
-	push @lists, ("pkg-lists/$t/local", "pkg-lists/$t/common",
-	              "pkg-lists/$t/$deb_host_arch.cfg");
-	push @lists, "pkg-lists/$t/$deb_host_arch/$sub_arch.cfg" if $sub_arch;
-}
-
-my %collect;
-my %exclude;
-
-while (@lists) {
-	my $list=pop @lists;
-	if (! -e $list) {
-		print STDERR "warning: missing list, $list, for type $type\n"
-			if $list !~ /local$/ && $list !~ m#$deb_host_arch/$sub_arch.cfg$#;
-	}
-	else {
-		open (LIST, $list) || die "open $list $!";
-		while (<LIST>) {
-			chomp;
-
-			# includes
-			if (/^#include \"(.*)\"/) {
-				my $include=$1;
-				if (-e "pkg-lists/kernel_specific/$kernel_major/$deb_host_arch/$sub_arch/$include") {
-					push @lists, "pkg-lists/kernel_specific/$kernel_major/$deb_host_arch/$sub_arch/$include";
-				}
-				if (-e "pkg-lists/kernel_specific/$kernel_major/$deb_host_arch/$include") {
-					push @lists, "pkg-lists/kernel_specific/$kernel_major/$deb_host_arch/$include";
-				}
-				if (-e "pkg-lists/kernel_specific/$kernel_major/$include") {
-					push @lists, "pkg-lists/kernel_specific/$kernel_major/$include";
-				}
-				else {
-					push @lists, "pkg-lists/$include";
-				}
-			}
-			
-			# comments
-			s/^#.*//;
-			next unless length;
-			
-			# normal kernel version substitution
-			if (/\${kernel:Version}/) {
-				foreach my $v (@kernel_versions) {
-					my $l=$_;
-					$l=~s/\${kernel:Version}/$v-$kernel_flavour/g;
-					collectpackage($l);
-				}
-				next; # move on to the next line
-			}
-			collectpackage($_);
-		}
-		close LIST;
-	}
-}
-
-foreach my $p (sort keys %collect) {
-	print "$p\n" unless $exclude{$p};
+my ($collect, $exclude)=getlists($type);
+my ($parentcollect, $parentexclude)=getlists($driver_for) if length $driver_for;
+foreach my $p (sort keys %$collect) {
+	print "$p\n" unless $exclude->{$p};
 
 	# Warn about missing deps. This is not perfect, in since pkgdeps
 	# ignores dependencies on virtual packages and does not support
 	# alternates. Still, it will catch most common mistakes.
 	foreach my $dep (pkgdeps($p)) {
-		if (! $collect{$dep} && ! $exclude{$dep}) {
-			print STDERR "** warning: in $type, $p has unsatisfied dependency on $dep\n";
+		if (! $collect->{$dep} && ! $exclude->{$dep} && ! $parentcollect->{$dep}) {
+			warning("in $type, $p has unsatisfied dependency on $dep");
 		}
 	}
 }
@@ -100,34 +40,35 @@ foreach my $p (sort keys %collect) {
 # Add a package, possibly expanding dependencies.
 sub collectpackage {
 	my $line=shift;
+	my $collect=shift;
+	my $exclude=shift;
 	if ($line=~/^(.*) \*$/) {
 		# Asterisk at end means include all dependencies of this
 		# package.
-		$collect{$1}=1;
-		collectdeps($1);
+		$collect->{$1}=1;
+		collectdeps($1, $collect);
 	}
 	elsif ($line=~/^(.*) \-$/) {
 		# Minus sign at the end means exclude this package from the
 		# list.
-		$exclude{$1}=1;
+		$exclude->{$1}=1;
 	}
 	else {
-		$collect{$line}=1;
+		$collect->{$line}=1;
 	}
 }
 
 # Recursively add dependencies of package.
 sub collectdeps {
 	my $package=shift;
+	my $collect=shift;
 	my %seendeps;
 	%seendeps=%{shift()} if @_;
 	return if $seendeps{$package};
+	$seendeps{$package}=1;
 	foreach my $dep (pkgdeps($package)) {
-		chomp $dep;
-		$dep=~s/^\s*Depends:\s*//;
-		$collect{$dep}=1;
-		$seendeps{$dep}=1;
-		collectdeps($dep, \%seendeps);
+		$collect->{$dep}=1;
+		collectdeps($dep, $collect, \%seendeps);
 	}
 }
 
@@ -151,4 +92,79 @@ sub pkgdeps {
 		}
 	}
 	return @ret;
+}
+
+# Return two hash references, one of udebs to include, one to exclude.
+sub getlists {
+	my $type=shift;
+
+	my %collect;
+	my %exclude;
+	
+	my @lists = ("pkg-lists/local");
+	my $t="";
+	foreach my $subtype (split "/", $type) {
+		if (! length $t) {
+			$t=$subtype;
+		}
+		else {
+			$t="$t/$subtype";
+		}
+		push @lists, ("pkg-lists/$t/local", "pkg-lists/$t/common",
+		              "pkg-lists/$t/$deb_host_arch.cfg");
+		push @lists, "pkg-lists/$t/$deb_host_arch/$sub_arch.cfg" if $sub_arch;
+	}
+
+	while (@lists) {
+		my $list=pop @lists;
+		if (! -e $list) {
+			warning("missing list, $list, for type $type")
+				if $list !~ /local$/ && $list !~ m#$deb_host_arch/$sub_arch.cfg$#;
+		}
+		else {
+			open (LIST, $list) || die "open $list $!";
+			while (<LIST>) {
+				chomp;
+	
+				# includes
+				if (/^#include \"(.*)\"/) {
+					my $include=$1;
+					if (-e "pkg-lists/kernel_specific/$kernel_major/$deb_host_arch/$sub_arch/$include") {
+						push @lists, "pkg-lists/kernel_specific/$kernel_major/$deb_host_arch/$sub_arch/$include";
+					}
+					if (-e "pkg-lists/kernel_specific/$kernel_major/$deb_host_arch/$include") {
+						push @lists, "pkg-lists/kernel_specific/$kernel_major/$deb_host_arch/$include";
+					}
+					if (-e "pkg-lists/kernel_specific/$kernel_major/$include") {
+						push @lists, "pkg-lists/kernel_specific/$kernel_major/$include";
+					}
+					else {
+						push @lists, "pkg-lists/$include";
+					}
+				}
+				
+				# comments
+				s/^#.*//;
+				next unless length;
+				
+				# normal kernel version substitution
+				if (/\${kernel:Version}/) {
+					foreach my $v (@kernel_versions) {
+						my $l=$_;
+						$l=~s/\${kernel:Version}/$v-$kernel_flavour/g;
+						collectpackage($l, \%collect, \%exclude);
+					}
+					next; # move on to the next line
+				}
+				collectpackage($_, \%collect, \%exclude);
+			}
+			close LIST;
+		}
+	}
+
+	return \%collect, \%exclude;
+}
+
+sub warning {
+	print STDERR "** warning: @_\n";
 }
