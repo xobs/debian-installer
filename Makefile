@@ -390,12 +390,17 @@ ifdef EXTRADRIVERS
 		$(wildcard $(foreach dir,$(EXTRADRIVERS),$(dir)/*.udeb))
 endif
 
-	# Library reduction.
+	# Library reduction. Existing libs from udebs are put in the udeblibs
+	# directory and mklibs is made to use those in preference to the
+	# system libs.
+	rm -rf $(TEMP)/udeblibs
+	mkdir -p $(TEMP)/udeblibs
+	-cp -a `find $(TREE)/lib $(TREE)/usr/lib -type f -name '*.so.*'` $(TEMP)/udeblibs
 	mkdir -p $(TREE)/lib
-	$(MKLIBS) -v -d $(TREE)/lib --root=$(TREE) `find $(TEMP) -type f -perm +0111 -o -name '*.so'`
+	$(MKLIBS) -L $(TEMP)/udeblibs -v -d $(TREE)/lib --root=$(TREE) `find $(TEMP) -type f -perm +0111 -o -name '*.so' | grep -v udeblibs`
+	rm -rf $(TEMP)/udeblibs
 
 	# Add missing symlinks for libraries
-	# (Needed for mklibs.py)
 	/sbin/ldconfig -n $(TREE)/lib $(TREE)/usr/lib
 
 	# Remove any libraries that are present in both usr/lib and lib,
@@ -405,18 +410,6 @@ endif
 	set -e; \
 	for lib in `find $(TREE)/usr/lib/ -name "lib*" -type f -printf "%f\n" | cut -d . -f 1 | sort | uniq`; do \
 		rm -f $(TREE)/lib/$$lib.*; \
-	done
-
-	# Now we have reduced libraries installed .. but they are
-	# not listed in the status file. This nasty thing puts them in,
-	# and alters their names to end in -reduced to indicate that
-	# they have been modified.
-	set -e; \
-	for package in $$(dpkg -S `find $(TREE)/lib -type f -not -name '*.o' -not -name '*.ko' -not -name '*.dep' -not -name 'S[0-9][0-9]*' | \
-			sed s:$(TREE)/::` | cut -d : -f 1 | \
-			sort | uniq); do \
-		dpkg -s $$package | sed "s/$$package/$$package-reduced/g" \
-			>> $(DPKGDIR)/status; \
 	done
 
 	# Reduce status file to contain only the elements we care about.

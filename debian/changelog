@@ -47,7 +47,19 @@ debian-installer (20040210) UNRELEASED; urgency=low
     - set the syslinux timeout to 0 on floppys, to match the CD
     - put syslinux boot screens back on boot floppy and hd-media
     - copy System.map to $(TEMP) instead of deleting it, I understand sparc
-      needs this.
+      needs this
+    - add the libiw27-udeb to every list that includes netcfg
+    - add libdebconfclient to pkg-lists/base; it is marginally smaller than
+      having mklibs copy in the system one. Remove build-dep.
+    - same for libdebian-installer-4-udeb, although it is not currently any
+      smaller
+    - before running mklibs, copy all the libs from lib and usr/lib in the
+      initrd to a temporary directory, and add that to mklib's search path
+      with -L. This will make it avoid copying in large versions of libs from
+      the build system if there is already a small version available in the
+      initrd.
+    - removed the slow, buggy code that added unneccessary and often wrong
+      "-reduced" entries to the status file
   * Sylvain Ferriol
     - Add plip-modules to the net_drivers floppy.
 
