@@ -74,6 +74,8 @@ case "$arch" in
 	fi
 	if (grep -q "ARCH_NETWINDER=y" $tmp); then
 		cat $rootimage >>$tftpimage
+	else
+		cat $rootimage >>$tftpimage
 	fi
 	;;
     mipsel) t-rex -k $tftpimage.tmp -r $rootimage -o $tftpimage ;;
