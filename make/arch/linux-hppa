@@ -5,5 +5,5 @@ ifdef FLOPPY_SIZE
 # (one 32 and one 64 bit)
 $(IMAGE): $(INITRD)
 	palo -f /dev/null $(foreach NAME,$(KERNELNAME),-k $(TEMP)/$(NAME)) -r $^ -s $@ \
-		-c "0/linux HOME=/ ramdisk_size=8192 initrd=0/ramdisk rw"
+		-c "0/linux HOME=/ root=/dev/ram initrd=0/ramdisk ramdisk_size=8192 devfs=mount,dall"
 endif # FLOPPY_SIZE
