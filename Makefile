@@ -69,7 +69,7 @@ endif
 # the system. See the .list files for various types. You may want to
 # override this on the command line.
 #TYPE=net
-TYPE=cdrom
+TYPE=net
 
 # The library reducer to use. Can be mklibs.sh or mklibs.py.
 MKLIBS=mklibs
@@ -225,7 +225,7 @@ uml: initrd
 demo_clean:
 	-@sudo chroot $(TREE) bin/sh -c "bin/umount /dev ; bin/umount /proc" &> /dev/null
 
-clean: demo_clean tmp_mount
+clean: demo_clean tmp_mount debian/control
 	if [ "$(USER_MOUNT_HACK)" ] ; then \
 	    if mount | grep -q "$(USER_MOUNT_HACK)"; then \
 	        umount "$(USER_MOUNT_HACK)";\
@@ -275,7 +275,10 @@ compiled-stamp: $(SOURCEDIR)/udeb-sources-stamp
 	mv $(SOURCEDIR)/*.udeb $(APTDIR)/cache/archives
 	touch compiled-stamp
 	
-
+# Ensure this exists.
+debian/control: debian/control.in
+	sed "s/@UDEB_DEPENDS@/$$deps/" < $< > $@
+	
 # 
 # Get all required udebs and put in UDEBDIR.
 get_udebs: $(TYPE)-get_udebs-stamp
@@ -338,7 +341,7 @@ $(TYPE)-get_udebs-stamp:
 
 # Build the installer tree.
 tree: get_udebs $(TYPE)-tree-stamp
-$(TYPE)-tree-stamp:
+$(TYPE)-tree-stamp: debian/control
 	dh_testroot
 
 	dpkg-checkbuilddeps
