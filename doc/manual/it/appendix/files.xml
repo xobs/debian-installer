@@ -1,22 +1,30 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 18647 untranslated -->
+<!-- original version: 18647 -->
 
-
- <sect1 id="linuxdevices"><title>Linux Devices</title>
+ <sect1 id="linuxdevices"><!-- <title>Linux Devices</title> -->
+<title>I device linux</title>
 <para>
 
-In Linux you have various special files in
+<!-- In Linux you have various special files in
 <filename>/dev</filename>. These files are called devices files. In
 the Unix world accessing hardware is different.  There you have a
 special file which actually runs a driver which in turn accesses the
 hardware. The device file is an interface to the actual system
 component. Files under <filename>/dev</filename> also behave
 differently than ordinary files. Below are the most important device
-files listed.
+files listed. -->
+
+In Linux sotto <filename>/dev</filename> sono presenti diversi file
+speciali, chiamati file di device. Nel mondo Unix si accede alle
+periferiche in modo particolare: c'è un file speciale che in realtà
+esegue un driver che a sua volta accede all'hardware. Il file di device
+è un'interfaccia verso il componente reale del sistema. Inoltre i file
+sotto <filename>/dev</filename> si comportano in modo diverso dai file
+ordinari. Segue un elenco dei file di device più significativi.
 
 </para><para>
 
-<informaltable><tgroup cols="2"><tbody>
+<!-- <informaltable><tgroup cols="2"><tbody>
 <row>
   <entry><filename>fd0</filename></entry>
   <entry>First Floppy Drive</entry>
@@ -111,95 +119,246 @@ files listed.
   <entry><filename>zero</filename></entry>
   <entry>One can endlessly read zeros out of this device</entry>
 </row>
+</tbody></tgroup></informaltable> -->
+
+<informaltable><tgroup cols="2"><tbody>
+<row>
+  <entry><filename>fd0</filename></entry>
+  <entry>Primo lettore di dischetti</entry>
+</row><row>
+  <entry><filename>fd1</filename></entry>
+  <entry>Secondo lettore di dischetti</entry>
+</row>
+</tbody></tgroup></informaltable>
+
+<informaltable><tgroup cols="2"><tbody>
+<row>
+  <entry><filename>hda</filename></entry>
+  <entry>Disco fisso o lettore CD IDE presente sulla prima porta IDE (Master)</entry>
+</row><row>
+  <entry><filename>hdb</filename></entry>
+  <entry>Disco fisso o lettore CD IDE presente sulla prima porta IDE (Slave)</entry>
+</row><row>
+  <entry><filename>hdc</filename></entry>
+  <entry>Disco fisso o lettore CD IDE presente sulla seconda porta IDE (Master)</entry>
+</row><row>
+  <entry><filename>hdd</filename></entry>
+  <entry>Disco fisso o lettore CD IDE presente sulla seconda porta IDE (Slave)</entry>
+</row><row>
+  <entry><filename>hda1</filename></entry>
+  <entry>Prima partizione del primo disco fisso IDE</entry>
+</row><row>
+  <entry><filename>hdd15</filename></entry>
+  <entry>Quindicesima partizione del quarto disco fisso IDE</entry>
+</row>
+</tbody></tgroup></informaltable>
+
+<informaltable><tgroup cols="2"><tbody>
+<row>
+  <entry><filename>sda</filename></entry>
+  <entry>Il disco fisso SCSI con l'ID SCSI più basso (p.e. 0)</entry>
+</row><row>
+  <entry><filename>sdb</filename></entry>
+  <entry>Il disco fisso SCSI con l'ID SCSI successivo (p.e. 1)</entry>
+</row><row>
+  <entry><filename>sdc</filename></entry>
+  <entry>Il disco fisso SCSI con l'ID SCSI ulteriore (p.e. 2)</entry>
+</row><row>
+  <entry><filename>sda1</filename></entry>
+  <entry>Prima partizione del primo disco fisso SCSI</entry>
+</row><row>
+  <entry><filename>sdd10</filename></entry>
+  <entry>Decima partizione del quarto disco fisso SCSI</entry>
+</row>
+</tbody></tgroup></informaltable>
+
+<informaltable><tgroup cols="2"><tbody>
+<row>
+  <entry><filename>sr0</filename></entry>
+  <entry>Il lettore CD SCSI con l'ID SCSI più basso</entry>
+</row><row>
+  <entry><filename>sr1</filename></entry>
+  <entry>Il lettore CD SCSI con l'ID SCSI successivo</entry>
+</row>
+</tbody></tgroup></informaltable>
+
+<informaltable><tgroup cols="2"><tbody>
+<row>
+  <entry><filename>ttyS0</filename></entry>
+  <entry>Porta seriale 0, COM1 sotto MS-DOS</entry>
+</row><row>
+  <entry><filename>ttyS1</filename></entry>
+  <entry>Porta seriale 1, COM2 sotto MS-DOS</entry>
+</row><row>
+  <entry><filename>psaux</filename></entry>
+  <entry>Device del mouse PS/2</entry>
+</row><row>
+  <entry><filename>gpmdata</filename></entry>
+  <entry>Pseudo device, usato dal demone GPM per ritrasmettere i dati del mouse</entry>
+</row>
+</tbody></tgroup></informaltable>
+
+<informaltable><tgroup cols="2"><tbody>
+<row>
+  <entry><filename>cdrom</filename></entry>
+  <entry>Link simbolico al lettore CD</entry>
+</row><row>
+  <entry><filename>mouse</filename></entry>
+  <entry>Link simbolico al file di device del mouse</entry>
+</row>
+</tbody></tgroup></informaltable>
+
+<informaltable><tgroup cols="2"><tbody>
+<row>
+  <entry><filename>null</filename></entry>
+  <entry>Qualunque cosa trasmessa a questo device scomparirà</entry>
+</row><row>
+  <entry><filename>zero</filename></entry>
+  <entry>Vi si possono leggere infiniti zero</entry>
+</row>
 </tbody></tgroup></informaltable>
 
 </para>
 
   <sect2>
-<title>Setting Up Your Mouse</title>
+<!-- <title>Setting Up Your Mouse</title> -->
+<title>Configurazione del mouse</title>
 
 <para>
 
-The mouse can be used in both the Linux console (with gpm) and the X window
+<!-- The mouse can be used in both the Linux console (with gpm) and the X window
 environment. The two uses can be made compatible if the gpm repeater is used
-to allow the signal to flow to the X server as shown:
+to allow the signal to flow to the X server as shown: -->
+
+Il mouse può essere utilizzato sia in console (con gpm) che in ambiente
+X Window. Le due modalità di utilizzo sono compatibili se si utilizza
+il ripetitore di dati di gpm per permettere al segnale di passare
+al server X, come mostrato di seguito:
+
 <informalexample><screen>
 mouse =&#62; /dev/psaux  =&#62; gpm =&#62; /dev/gpmdata -&#62; /dev/mouse =&#62; X
-         /dev/ttyS0             (repeater)        (symlink)
+         /dev/ttyS0             (ripetitore)      (link simbolico)
          /dev/ttyS1
 </screen></informalexample>
 
 </para><para>
 
-Set the repeater protocol to be raw (in <filename>/etc/gpm.conf</filename>) while
+<!-- Set the repeater protocol to be raw (in <filename>/etc/gpm.conf</filename>) while
 setting X to the original mouse protocol in <filename>/etc/X11/XF86Config</filename>
-or <filename>/etc/X11/XF86Config-4</filename>.
+or <filename>/etc/X11/XF86Config-4</filename>. -->
+
+Si imposti come "raw" il protocollo del ripetitore (in <filename>/etc/gpm.conf</filename>),
+mentre in <filename>/etc/X11/XF86Config</filename> o
+<filename>/etc/X11/XF86Config-4</filename> si imposti per X il protocollo
+originario del mouse.
 
 </para><para>
 
-This approach to use gpm even in X has advantages when the mouse is
-unplugged inadvertently.  Simply restarting gpm with
+<!-- This approach to use gpm even in X has advantages when the mouse is
+unplugged inadvertently.  Simply restarting gpm with -->
+
+L'utilizzo di gpm anche in X si dimostra vantaggioso nel caso il mouse
+venga inavvertitamente scollegato. Basterà semplicemente rilanciare gpm
+con
 <informalexample><screen>
 user@debian:# /etc/init.d/gpm restart
 </screen></informalexample>
-will re-connect the mouse in software without restarting X.
+
+<!-- will re-connect the mouse in software without restarting X. -->
+per riconnettere via software il mouse senza dover rilanciare X.
 
 </para><para>
 
-If gpm is disabled or not installed with some reason, make sure to set X to
+<!-- If gpm is disabled or not installed with some reason, make sure to set X to
 read directly from the mouse device such as /dev/psaux. For details, refer
 to the 3-Button Mouse mini-Howto at
-<filename>/usr/share/doc/HOWTO/en-txt/mini/3-Button-Mouse.gz</filename>, 
-<userinput>man gpm</userinput>, 
-<filename>/usr/share/doc/gpm/FAQ.gz</filename>, and 
+<filename>/usr/share/doc/HOWTO/en-txt/mini/3-Button-Mouse.gz</filename>,
+<userinput>man gpm</userinput>,
+<filename>/usr/share/doc/gpm/FAQ.gz</filename>, and
+<ulink url="&url-xfree86;current/mouse.html">README.mouse</ulink>. -->
+
+Se gpm è disabilitato, o per qualche ragione non è installato, ci si
+assicuri di impostare X affinché legga direttamente il device del mouse,
+ad esempio /dev/psaux. Per dettagli si faccia riferimento al 3-Button
+Mouse mini-Howto presso <filename>/usr/share/doc/HOWTO/en-txt/mini/3-Button-Mouse.gz</filename>,
+a <userinput>man gpm</userinput>, <filename>/usr/share/doc/gpm/FAQ.gz</filename> e
 <ulink url="&url-xfree86;current/mouse.html">README.mouse</ulink>.
 
 </para><para arch="powerpc">
 
-For PowerPC, in <filename>/etc/X11/XF86Config</filename> or
+<!-- For PowerPC, in <filename>/etc/X11/XF86Config</filename> or
 <filename>/etc/X11/XF86Config-4</filename>, set the mouse device to
-<userinput>"/dev/input/mice"</userinput>. 
+<userinput>"/dev/input/mice"</userinput>. -->
+
+Per i PowerPC, si imposti il device del mouse come
+<userinput>"/dev/input/mice"</userinput>, in <filename>/etc/X11/XF86Config</filename>
+o <filename>/etc/X11/XF86Config-4</filename>.
 
 </para><para arch="powerpc">
 
-Modern kernels give you the capability to emulate a three-button mouse
+<!-- Modern kernels give you the capability to emulate a three-button mouse
 when your mouse only has one button. Just add the following lines to
-<filename>/etc/sysctl.conf</filename> file.
+<filename>/etc/sysctl.conf</filename> file. -->
 
-<informalexample><screen>
+I kernel attuali permettono di emulare un mouse a tre tasti con un mouse
+ad un solo tasto. &Egrave; sufficiente aggiungere le righe seguenti al
+file <filename>/etc/sysctl.conf</filename>.
 
-# 3-button mouse emulation 
+<!-- <informalexample><screen>
+
+# 3-button mouse emulation
 # turn on emulation
 /dev/mac_hid/mouse_button_emulation = 1
 # Send middle mouse button signal with the F11 key
 /dev/mac_hid/mouse_button2_keycode = 87
 # Send right mouse button signal with the F12 key
 /dev/mac_hid/mouse_button3_keycode = 88
-# For different keys, use showkey to tell you what the code is.
+# For different keys, use showkey to tell you what the code is. -->
 
-</screen></informalexample>  
+<informalexample><screen>
+
+# Emulazione di mouse a 3 tasti
+# attiva l'emulazione
+/dev/mac_hid/mouse_button_emulation = 1
+# invia il segnale del tasto mediano con F11
+/dev/mac_hid/mouse_button2_keycode = 87
+# invia il segnale del tasto di destra con F12
+/dev/mac_hid/mouse_button3_keycode = 88
+# in caso si vogliano usare tasti diversi da F11 e F12, con
+# showkey si possono ottenere i codici corrispondenti
+
+</screen></informalexample>
 </para>
   </sect2>
  </sect1>
 
  <sect1 id="tasksel-size-list">
- <title>Disk Space Needed for Tasks</title>
+<!-- <title>Disk Space Needed for Tasks</title> -->
+ <title>Spazio necessario per i task di tasksel</title>
 <para>
 
-The base sarge installation for i386, including all standard packages,
-requires 178MB of disk space.
+<!-- The base sarge installation for i386, including all standard packages,
+requires 178MB of disk space. -->
+
+L'installazione base di sarge per i386, compresi tutti i pacchetti
+standard, richiede 178MB di spazio sul disco fisso.
 
 </para><para>
 
-The following table lists sizes reported by aptitude for the tasks listed in
+<!-- The following table lists sizes reported by aptitude for the tasks listed in
 tasksel. Note that some tasks have overlapping constituents, so the total
 installed size for two tasks together may be less than the total obtained by
-adding the numbers up. 
+adding the numbers up. -->
+
+La tabella seguente elenca le dimensioni dei task proposti in tasksel, secondo
+quanto riportato da aptitude. Si noti che alcuni task hanno dei componenti in
+comune, per cui lo spazio realmente occupato da due task installati assieme
+potrebbe essere minore della somma teorica.
 
 </para><para>
 
-<informalexample><screen>
-Task                              Installed  Download   Space Needed 
+<!-- <informalexample><screen>
+Task                              Installed  Download   Space Needed
                                   Size (MB)  Size (MB)  To Install (MB)
 
 Desktop                            1537        521        2058
@@ -208,6 +367,19 @@ Print server                        240         83         323
 Mail server                          41         12          53
 File server                          85         34         119
 SQL database                        108         33         141
+
+</screen></informalexample> -->
+
+<informalexample><screen>
+Task                     Dimensioni       Dimensioni    Spazio necessario
+                         installato (MB)  scarico (MB)  all'installazione (MB)
+
+Desktop                        1537          521          2058
+Web server                       71           21            92
+Print server                    240           83           323
+Mail server                      41           12            53
+File server                      85           34           119
+SQL database                    108           33           141
 
 </screen></informalexample>
 </para>
