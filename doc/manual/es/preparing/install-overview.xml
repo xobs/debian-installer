@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- retain these comments for translator revision tracking -->
-<!-- original version: 11573 -->
+<!-- original version: 18859 -->
 
  <sect1 id="install-overview">
  <title>Descripción del proceso de instalación</title> 
 <para>
 
 Primeramente, solo una nota sobre reinstalaciones. Con Debian,
-la ocasión en la que se requiera una re-instalación de su
-sistema sera¡ muy rara, tal vez una falla mecánica en el disco 
+la ocasión en la que se requiera una reinstalación de su
+sistema sera muy rara, tal vez una falla mecánica en el disco 
 duro sea el caso mas común.
 
 </para><para>
@@ -23,19 +22,19 @@ para trabajar correctamente en el nuevo sistema operativo.
 
 En &debian;, es mas probable que su sistema operativo pueda ser
 reparado en lugar de reemplazarlo si las cosas van mal. Las actualizaciones
-nunca requieren una total reinstalación, usted siempre podrá actualizar
+nunca requieren una reinstalación total, siempre podrá actualizar
 sobre el mismo sistema. Y los programas casi siempre son compatibles con
 las versiones sucesivas del sistema operativo. Si una nueva versión del
-programa requiere soporte de software adicional, el sistema de paquetes
+programa requiere soporte adicional de software, el sistema de paquetes
 de Debian se asegura que todo el software necesario sea automáticamente
 identificado e instalado. El punto es, se ha puesto mucho esfuerzo para
 evitar la necesidad de reinstalación, así que tenga esto en cuenta como
-la opción mas remota. El instalador <emphasis>no</emphasis> esta diseñado
+la opción mas lejana. El instalador <emphasis>no</emphasis> esta diseñado
 para reinstalar sobre un sistema existente.
 
 </para><para>
 
-Esta es la hoja de ruta para los pasos que realizará durante el proceso
+Esta es la hoja de ruta de los pasos que realizará durante el proceso
 de instalación.
 
 </para>
@@ -49,7 +48,7 @@ necesaria antes de iniciar la instalación.
 </para></listitem>
 <listitem><para>
 
-Haga copias de seguridad de sus datos o documentación existentes en el
+Hacer copias de seguridad de sus datos o documentación existentes en el
 disco duro donde planea realizar la instalación.
 
 </para></listitem>
@@ -62,13 +61,14 @@ Crear un espacio particionable para Debian en su disco duro.
 
 Ubicar y/o descargar el software del instalador y los ficheros
 de cualquier controlador especializado que su máquina requiera
-(excepto para usuarios del CD de Debian).
+(excepto para usuarios de CD de Debian).
 
 </para></listitem>
 <listitem><para>
 
-Colocar cintas/disquetes/memorias USB de arranque o colocar ficheros de 
-arranque (los usuarios de CD puede arrancar desde uno de los CDs).
+Colocar cintas/disquetes/memorias USB o ubicar ficheros de 
+arranque (la mayoría de los usuarios de CD pueden arrancar desde uno de 
+estos).
 
 </para></listitem>
 <listitem><para>
@@ -94,18 +94,18 @@ Configurar una interfaz de red.
 </para></listitem>
 <listitem arch="s390"><para>
 
-Abrir una conexión de telnet al nuevo sistema.
+Abrir una conexión ssh al nuevo sistema.
 
 </para></listitem>
 <listitem arch="s390"><para>
 
-Colocar uno o mas DASDs (Direct Access Storage Device).
+Conectar uno o mas DASDs (Direct Access Storage Device).
 
 </para></listitem>
 
 <listitem><para>
 
-Crear y montar las particiones en las que se instalará Debian.
+Crear y montar las particiones en las que instalará Debian.
 
 </para></listitem>
 <listitem><para>
@@ -126,17 +126,22 @@ Iniciar el sistema recientemente instalado por primera vez y realizar
 algunas configuraciones iniciales del sistema.
 
 </para></listitem>
+<listitem arch="s390"><para>
+
+Abrir una conexión ssh al nuevo sistema.
+
+</para></listitem>
 <listitem><para>
 
 Instalar software adicional (por medio de <firstterm>tareas</firstterm>
-y/o <firstterm>paquetes</firstterm>) a su criterio.
+y/o <firstterm>paquetes</firstterm>)i, según su criterio.
 
 </para></listitem>
 </orderedlist>
 
 <para>
 
-Si usted tiene problemas durante la instalación, es de gran
+Si tiene problemas durante la instalación, es de gran
 utilidad el conocer que paquetes están involucrados y cuales pasos
 fueron realizados.
 Presentando los actores principales de este drama de instalación.
@@ -144,37 +149,37 @@ Presentando los actores principales de este drama de instalación.
 </para><para>
 
 El software de instalación <classname>debian-installer</classname>, es
-la principal razón de este manual. Este dirige el programa de 
-particionamiento específico para cada arquitectura, instala el núcleo
-Linux y luego supervisa <classname>modconf</classname> para cargar
-controladores de hardware específicos, <classname>dhclient</classname>
-para configurar la conexión de red, <classname>debbootstrap</classname>
-para instalar los paquetes del sistema base y &boot-loader-installer;, el
-instalador del gestor de arranque. Muchos mas actores realizan pequeñas 
-partes de este proceso, pero <classname>debian-installer</classname> habrá
-finalizado su tarea cuando usted inicie el nuevo sistema por primera vez.
+la principal razón de este manual. Éste detecta el hardware y carga
+los controladores apropiados, usa <classname>dhcp-client</classname>
+para configurar la conexión de red, y ejecuta
+<classname>debbootstrap</classname> para instalar los paquetes del 
+sistema base. Muchos mas actores realizan pequeñas partes de este proceso, 
+pero <classname>debian-installer</classname> habrá finalizado su tarea 
+cuando inicie el nuevo sistema por primera vez.
 
 </para><para>
 
-Además de cargar el nuevo sistema base, <classname>base-config</classname>
-supervisa la adición de usuarios, configuración de zona horaria y la
-configuración de sistema de instalación de paquetes. Luego ofrecer cargar
-<classname>tasksel</classname> el cual instalará grupos de diversos 
-programas relacionados y en su turno <classname>aptitude</classname> 
-le permitirá elegir paquetes de software individuales.
+Después de arrancar el nuevo sistema base, <classname>base-config</classname>
+supervisa la adición de usuarios, configuración de zona horaria (a través
+de <classname>tzsetup</classname>, y la configuración del sistema de 
+instalación de paquetes (usando <classname>apt-setup</classname>). Luego 
+carga <classname>tasksel</classname> el cual puede ser usado para elegir
+grandes grupos de programas relacionados, y en su turno 
+<classname>aptitude</classname> le permitirá elegir paquetes de software 
+individuales.
 
 </para><para>
 
-Cuando finaliza <classname>debian-installer</classname>, antes de que 
-se cargue el sistema inicial usted tiene solamente un sistema muy básico
+Cuando finaliza <classname>debian-installer</classname>, antes de la
+primera ejecución del sistema, tendrá solamente un sistema muy básico
 de interfaz de línea de ordenes. La interfaz gráfica que muestra las ventanas
-en su monitor no será instalado a menos que usted elija durante los
+en su monitor no será instalada a menos que lo elija durante los
 pasos finales tanto con <classname>tasksel</classname> o 
 <classname>aptitude</classname>. Es opcional debido a que muchos
 sistemas &debian; son servidores que realmente no necesitan una interfaz
 gráfica de usuario para hacer su trabajo.
 
-</para><para>
+</para><para arch="not-s390">
 
 Debe saber que el sistema X esta completamente separado del 
 <classname>debian-installer</classname> y de hecho es mucho más
