@@ -20,6 +20,8 @@ and then add on more individual packages later.  These tasks loosely
 represent a number of different jobs or things you want to do with
 your computer, such as <quote>desktop environment</quote>,
 <quote>web server</quote>, or <quote>print server</quote>.
+<xref linkend="tasksel-size-list"/> lists the space requirements for
+the available tasks.
 
 <footnote>
 <para>
@@ -31,7 +33,7 @@ selection, the
 <command>aptitude</command> program is being run.  Any of these can be
 run at any time after installation to install (or remove) more
 packages.  If you are looking for a specific single package, after
-installation is complete, simply run <userinput>apt-get install
+installation is complete, simply run <userinput>aptitude install
 <replaceable>package</replaceable></userinput>, where
 <replaceable>package</replaceable> is the name of the package you are
 looking for.
@@ -40,23 +42,55 @@ looking for.
 
 </para><para>
 
-If you do want to choose what to install on a package by package basis,
-select the <quote>manual package selection</quote> in
-<command>tasksel</command>.
-
-</para><para>
-
 Once you've selected your tasks, select
 <guibutton>Ok</guibutton>. At this point,
 <command>aptitude</command> will install the packages you've
-selected. Note, even if you did not select any tasks at all, any standard,
+selected.
+
+<note><para>
+
+Even if you did not select any tasks at all, any standard,
 important, or required priority packages that are not yet present on
 your system will be installed.  This functionality is the same as
-running <userinput>tasksel -s</userinput> at the command line, and
+running <userinput>tasksel -ris</userinput> at the command line, and
 currently involves
 a download of about 37M of archives. You will be shown the number of
 packages to be installed, and how many kilobytes of packages, if any,
 need to be downloaded.
+
+</para></note>
+
+</para><para>
+
+If you do want to choose what to install on a package by package basis,
+select the <quote>manual package selection</quote> option in
+<command>tasksel</command>. If you select one or more tasks alongside
+this option, aptitude will be called with the <command>--visial-preview</command>
+option. This means you will be able to review
+
+<footnote><para>
+
+You can also change the default selections. If you would like to select any
+additional package, use <menuchoice> <guimenu>View</guimenu>
+<guimenuitem>New Package View</guimenuitem> </menuchoice>.
+
+</para></footnote>
+ 
+the packages that are to be installed. If you do not select any tasks, the
+normal <command>aptitude</command> screen will be displayed. After making
+your selections you should press <quote><userinput>g</userinput></quote> to
+start the download and installation of packages.
+
+<note><para>
+
+If you choose <quote>manual package selection</quote>
+<emphasis>without</emphasis> selecting any tasks, no packages will be installed
+by default. This means you can use this option if you want to install a minimal
+system, but also that the responsibility for selecting any packages not
+installed as part of the base system (before the reboot) that might be required
+for your system lies with you.
+
+</para></note>
 
 </para><para>
 
