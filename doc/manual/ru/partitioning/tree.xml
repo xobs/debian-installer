@@ -3,68 +3,68 @@
 
 
  <sect1 id="directory-tree">
- <title>The Directory Tree</title>
-<para>&debian; adheres to the <ulink url="&url-fhs-home;">Filesystem Hierarchy Standard</ulink> for directory and file naming. This standard allows users and software programs to predict the location of files and directories. The root level directory is represented simply by the slash <filename>/</filename>. At the root level, all Debian systems include these directories: <informaltable> <tgroup cols="2">
+ <title>Дерево каталогов</title>
+<para>&debian; придерживается <ulink url="&url-fhs-home;">Filesystem Hierarchy Standard</ulink> для каталогов и имён файлов. Этот стандарт позволяет пользователям и программному обеспечению быть уверенным в расположении файлов и каталогов. Уровень корневого каталога представляется просто косой чертой <filename>/</filename>. На корневом уровне, все системы Debian содержат следующие каталоги: <informaltable> <tgroup cols="2">
 <thead>
 <row>
-  <entry>Directory</entry><entry>Content</entry>
+  <entry>Каталог</entry><entry>Содержимое</entry>
 </row>
 </thead>
 
 <tbody>
 <row>
   <entry><filename>bin</filename></entry>
-  <entry>Essential command binaries</entry>
+  <entry>Весьма важные исполняемые команды</entry>
 </row><row>
   <entry><filename>boot</filename></entry>
-  <entry>Static files of the boot loader</entry>
+  <entry>Статичные файлы системного загрузчика</entry>
 </row><row>
   <entry><filename>dev</filename></entry>
-  <entry>Device files</entry>
+  <entry>Файлы устройств</entry>
 </row><row>
   <entry><filename>etc</filename></entry>
-  <entry>Host-specific system configuration</entry>
+  <entry>Настройки системы данной машины</entry>
 </row><row>
   <entry><filename>home</filename></entry>
-  <entry>User home directories</entry>
+  <entry>Домашние каталоги пользователей</entry>
 </row><row>
   <entry><filename>lib</filename></entry>
-  <entry>Essential shared libraries and kernel modules</entry>
+  <entry>Весьма важные библиотеки общего пользования и модули ядра</entry>
 </row><row>
   <entry><filename>mnt</filename></entry>
-  <entry>Mount point for mounting a file system temporarily</entry>
+  <entry>Точки монтирования для временно монтируемых файловых систем</entry>
 </row><row>
   <entry><filename>proc</filename></entry>
-  <entry>Virtual directory for system information</entry>
+  <entry>Виртуальный каталог для системной информации</entry>
 </row><row>
   <entry><filename>root</filename></entry>
-  <entry>Home directory for the root user</entry>
+  <entry>Домашний каталог суперпользователя</entry>
 </row><row>
   <entry><filename>sbin</filename></entry>
-  <entry>Essential system binaries</entry>
+  <entry>Весьма важные системные исполняемые файлы</entry>
 </row><row>
   <entry><filename>tmp</filename></entry>
-  <entry>Temporary files</entry>
+  <entry>Временные файлы</entry>
 </row><row>
   <entry><filename>usr</filename></entry>
-  <entry>Secondary hierarchy</entry>
+  <entry>Вторичная иерархия</entry>
 </row><row>
   <entry><filename>var</filename></entry>
-  <entry>Variable data</entry>
+  <entry>Изменяемые данные</entry>
 </row><row>
   <entry><filename>opt</filename></entry>
-  <entry>Add-on application software packages</entry>
+  <entry>Дополнительное программное обеспечение</entry>
 </row>
 </tbody></tgroup></informaltable>
 </para>
 
-<para>The following is a list of important considerations regarding directories and partitions. </para>
+<para>Далее следует список важных предположений относительно каталогов и разделов. </para>
 <itemizedlist>
-<listitem><para>The root partition <filename>/</filename> must always physically contain <filename>/etc</filename>, <filename>/bin</filename>, <filename>/sbin</filename>, <filename>/lib</filename> and <filename>/dev</filename>, otherwise you won't be able to boot. Typically 100 MB is needed for the root partition, but this may vary. </para></listitem>
-<listitem><para><filename>/usr</filename>: all user programs (<filename>/usr/bin</filename>), libraries (<filename>/usr/lib</filename>), documentation (<filename>/usr/share/doc</filename>), etc., are in this directory. This part of the file system needs most of the space. You should provide at least 500 MB of disk space. If you want to install more packages you should increase the amount of space you give this directory. </para></listitem>
-<listitem><para><filename>/home</filename>: every user will put his data into a subdirectory of this directory. The size of this depends on how many users will be using the system and what files are to be stored in their directories. Depending on your planned usage you should reserve about 100 MB for each user, but adapt this value to your needs. </para></listitem>
-<listitem><para><filename>/var</filename>: all variable data like news articles, e-mails, web sites, the packaging system cache, etc. will be placed under this directory. The size of this directory depends greatly on the usage of your computer, but for most people will be dictated by the package management tool's overhead. If you are going to do a full installation of just about everything Debian has to offer, all in one session, setting aside 2 or 3 gigabytes of space for <filename>/var</filename> should be sufficient. If you are going to install in pieces (that is to say, install services and utilities, followed by text stuff, then X, ...), you can get away with 300 - 500 megabytes in <filename>/var</filename>. If hard drive space is at a premium and you don't plan on doing major system updates, you can get by with as little as 30 or 40 megabytes in <filename>/var</filename>. </para></listitem>
-<listitem><para><filename>/tmp</filename>: if a program creates temporary data it will most likely go in <filename>/tmp</filename>. 20-50 MB should usually be enough. </para></listitem>
+<listitem><para>Корневой раздел <filename>/</filename> всегда должен физически содержать<filename>/etc</filename>, <filename>/bin</filename>, <filename>/sbin</filename>, <filename>/lib</filename> и <filename>/dev</filename>, иначе невозможно будет загрузиться. Обычно, для корневого раздела требуется 100 МБ, но этот размер может варьироваться. </para></listitem>
+<listitem><para>В <filename>/usr</filename> хранятся: все пользовательские программы (<filename>/usr/bin</filename>) , библиотеки (<filename>/usr/lib</filename>), документация (<filename>/usr/share/doc</filename>) и так далее. Этой части файловой системы требуется много места. Вы должны выделить как минимум 500 МБ дискового пространства. Если вы захотите установить ещё пакеты, то должны увеличивать место для этого каталога. </para></listitem>
+<listitem><para>Каталог <filename>/home</filename>: каждый пользователь будет размещать данные в своём подкаталоге этого каталога. Его размер зависит от количества пользователей в системе и какие файлы они будут хранить в своих каталогах. В зависимости от планируемого использования вы должны зарезервировать около 100МБ для каждого пользователя, но подгоняйте это значения под свои требования. </para></listitem>
+<listitem><para>Каталог <filename>/var</filename> содержит все изменяющиеся данные типа новостных статей, электронной почты, веб сайтов, кэша системы пакетов и т.д. Размер каталога целиком зависит от степени использования компьютера, но для большинства людей он определяется нагрузкой на систему управления пакетами. Если собираетесь сделать установку всего, что предлагает Debian, всё за раз, то размер 2 или 3 гигабайта для <filename>/var</filename>должно хватить. Если вы собираетесьустанавливаться частями (то есть, установить сервисы и утилиты, потом программы для работы с текстом, потом X, ...), то вы можете ужаться до 300 - 500 мегабайт в <filename>/var</filename>. Если пространство жёсткого диска дорого и вы не планируете делать глобальных обновлений системы, то вам будет достаточно 30 или 40 мегабайт для <filename>/var</filename>. </para></listitem>
+<listitem><para><filename>/tmp</filename>: если программа создаёт временные данные, то они скорее всего будут в <filename>/tmp</filename>. 20-50МБ обычно достаточно. </para></listitem>
 </itemizedlist>
 
  </sect1>
