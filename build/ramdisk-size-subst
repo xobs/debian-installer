@@ -1,0 +1,8 @@
+#!/bin/sh
+# Given a ramdisk filename in $1, and a syslinux or other config file on
+# stdin, substitutes ${RAMDISK_SIZE} in the input with an appropriave
+# ramdisk_size value for the given initrd.
+set -e
+# expr's round down is ok, I think; ext2 disks are a multiple of 1024 bytes
+ramdisk_size=$(expr $(zcat "$1" | wc --bytes) / 1024)
+sed s/'${RAMDISK_SIZE}'/$ramdisk_size/g
