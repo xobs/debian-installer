@@ -26,7 +26,6 @@ done
 # Only run madison once, to make it fast remotely.
 tmp=$(tempfile)
 $MADISON $pkgs > $tmp
-echo $tmp
 
 printf "%-25s %-15s %-15s %s\n" udeb "version in cvs" "version in sid" "needs upload"
 
