@@ -17,8 +17,19 @@ if (! @kernel_versions || ! length $kernel_flavour || ! length $type) {
 my $deb_host_arch=`dpkg-architecture -qDEB_HOST_ARCH`;
 chomp $deb_host_arch;
 
-my @lists = ("pkg-lists/$type/common", "pkg-lists/$type/$deb_host_arch",
-             "pkg-lists/$type/local", "pkg-lists/local");
+my @lists = ("pkg-lists/local");
+my $t="";
+foreach my $subtype (split "/", $type) {
+	if (! length $t) {
+		$t=$subtype;
+	}
+	else {
+		$t="$t/$subtype";
+	}
+	push @lists, ("pkg-lists/$t/local", "pkg-lists/$t/common",
+	              "pkg-lists/$t/$deb_host_arch");
+}
+
 while (@lists) {
 	my $list=pop @lists;
 	if (! -e $list) {
