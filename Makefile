@@ -309,7 +309,7 @@ ifdef VERSIONED_SYSTEM_MAP
 		mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
 		if [ -e $(TREE)/boot/System.map-$(VERSION) ]; then \
 			depmod -F $(TREE)/boot/System.map-$(VERSION) -q -a -b $(TREE)/ $(VERSION); \
-			rm -f $(TREE)/boot/System.map-$(VERSION); \
+			mv $(TREE)/boot/System.map-$(VERSION) $(TEMP); \
 		else \
 			depmod -q -a -b $(TREE)/ $(VERSION); \
 		fi;)
@@ -319,7 +319,7 @@ else
 		mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
 		if [ -e $(TREE)/boot/System.map ]; then \
 			depmod -F $(TREE)/boot/System.map -q -a -b $(TREE)/ $(VERSION); \
-			rm -f $(TREE)/boot/System.map; \
+			mv $(TREE)/boot/System.map $(TEMP); \
 		else \
 			depmod -q -a -b $(TREE)/ $(VERSION); \
 		fi;)
