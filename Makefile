@@ -16,9 +16,14 @@ TYPE=net
 # should still be included on the system.
 EXTRAS=""
 
+# set DEBUG to y if you want to get the source for and compile 
+# debug versions of the needed udebs
+DEBUG=n
+
 # Build tree location.
 DEST=debian-installer
 
+CWD:=$(shell pwd)/
 # Directory apt uses for stuff.
 APTDIR=apt
 
@@ -28,6 +33,9 @@ UDEBDIR=udebs
 # Local directory that is searched for udebs, to avoid downloading.
 # (Or for udebs that are not yet available for download.)
 LOCALUDEBDIR=localudebs
+
+# Directory where debug versions of udebs will be built.
+DEBUGUDEBDIR=debugudebs
 
 # Figure out which sources.list to use. The .local one is preferred,
 # so you can set up a locally preferred one (and not accidentially cvs
@@ -44,10 +52,11 @@ PATH:=$(PATH):/usr/sbin:/sbin:.
 # All these options makes apt read the right sources list, and
 # use APTDIR for everything so it need not run as root.
 APT_GET=apt-get --assume-yes \
-	-o Dir::Etc::sourcelist=./$(SOURCES_LIST) \
-	-o Dir::State=$(APTDIR)/state \
+	-o Dir::Etc::sourcelist=$(CWD)$(SOURCES_LIST) \
+	-o Dir::State=$(CWD)$(APTDIR)/state \
 	-o Debug::NoLocking=true \
-	-o Dir::Cache=$(APTDIR)/cache
+	-o Dir::Cache=$(CWD)$(APTDIR)/cache \
+
 
 # Comments are allowed in the lists.
 UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE)) $(EXTRAS)
@@ -67,7 +76,10 @@ demo:
 	sudo chroot $(DEST) bin/sh -c "export DEBCONF_FRONTEND=text DEBCONF_DEBUG=5; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; /usr/share/debconf/frontend /usr/bin/main-menu"
 	$(MAKE) demo_clean
 
+
 shell:
+	mkdir -p $(DEST)/proc 
+	sudo chroot $(DEST) bin/sh -c "if ! mount | grep ^proc ; then bin/mount proc -t proc /proc; fi"
 	sudo chroot $(DEST) bin/sh
 
 demo_clean:
@@ -75,6 +87,7 @@ demo_clean:
 		sudo chroot $(DEST) bin/sh -c "if mount | grep ^proc ; then bin/umount /proc ; fi" &> /dev/null; \
 		sudo chroot $(DEST) bin/sh -c "rm -rf /etc /var"; \
 	fi
+
 
 clean:
 	dh_clean
@@ -93,7 +106,16 @@ get_udebs:
 		package=`echo $$file | cut -d _ -f 1`; \
 		needed=`echo $$needed | sed "s/$$package *//"`; \
 	done; \
-	$(APT_GET) -dy install $$needed
+	if [ $(DEBUG) = y ] ; then \
+	mkdir -p $(DEBUGUDEBDIR); \
+	cd $(DEBUGUDEBDIR); \
+	export DEB_BUILD_OPTIONS="debug"; \
+	$(APT_GET) source --build --yes $$needed; \
+	cd ..; \
+	else \
+	$(APT_GET) -dy install $$needed; \
+	fi; \
+
 	# Now the udebs are in APTDIR/cache/archives/ and maybe LOCALUDEBDIR,
 	# but there may be other udebs there too besides those we asked for.
 	# So link those we asked for to UDEBDIR, renaming them to more useful
@@ -107,6 +129,10 @@ get_udebs:
 		fi; \
 		if [ -e $(LOCALUDEBDIR)/$$package\_* ]; then \
 			ln -f $(LOCALUDEBDIR)/$$package\_* \
+				$(UDEBDIR)/$$package.udeb; \
+		fi; \
+		if [ -e $(DEBUGUDEBDIR)/$$package\_*.udeb ]; then \
+			ln -f $(DEBUGUDEBDIR)/$$package\_*.udeb \
 				$(UDEBDIR)/$$package.udeb; \
 		fi; \
 	done
