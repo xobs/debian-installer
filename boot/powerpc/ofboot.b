@@ -8,6 +8,6 @@ Debian GNU/Linux PowerPC first stage CDROM bootloader
 <BOOT-SCRIPT>
 " screen" output
 load-base release-load-area
-boot cd:,\boot\yaboot
+boot cd:,\install\powermac\yaboot
 </BOOT-SCRIPT>
 </CHRP-BOOT>
