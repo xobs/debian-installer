@@ -180,7 +180,6 @@ sed s/\"en/\"..\\/${language}/ docstruct.ent >>$dynamic
 ## And finally we use two pass encoding (needed for correct <xref>s)
 
 ## First we profile the document for our architecture...
-
 $xsltprocessor \
     --xinclude \
     --stringparam profile.arch "$archspec" \
@@ -188,21 +187,13 @@ $xsltprocessor \
     --output install.${language}.profiled.xml \
     $stylesheet_profile \
     install.${language}.xml
-
-#$xsltprocessor --stringparam profile.arch "$archspec" \
-#               --stringparam profile.condition "$cond" \
-#               --output install.${language}.profiled.xml \
-#               $stylesheet_profile install.${language}.xml
 checkresult $?
 
-# ...then we convert it to the .html...
+## ...then we convert it to the .html...
 $xsltprocessor \
     --xinclude \
-    --stringparam chunker.output.encoding "UTF-8" \
-    --stringparam profile.arch "$archspec" \
     $stylesheet_html \
     install.${language}.profiled.xml
-#$xsltprocessor $stylesheet_html install.${language}.profiled.xml
 checkresult $?
 
 ## ...and also to the .fo...
