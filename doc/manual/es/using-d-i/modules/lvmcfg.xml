@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 22935 -->
+<!-- original version: 25496 -->
 <!-- revisado jfs, 31 octubre 2004 -->
 
    <sect3 id="lvmcfg">
@@ -31,7 +31,7 @@ En esta situación, cuando detecte que necesita más espacio para su vieja partici
 <filename>/home</filename> de 160 GB, simplemente puede añadir un nuevo disco de
 300 GB al ordenador, unirlo al grupo de volúmenes existente, y entonces
 redimensionar el volumen lógico que sostiene su sistema de ficheros
-<filename>/home</filename> y ¡presto!. Sus usuarios vuelven a tener espacio 
+<filename>/home</filename> y ¡presto!, sus usuarios vuelven a tener espacio 
 en su nueva partición de 460 GB. Por supuesto, este ejemplo está muy simplificado. 
 Si aún no lo ha leído, debería consultar el
 <ulink url="&url-lvm-howto;">CÓMO LVM</ulink>.
@@ -50,6 +50,45 @@ y combine los volúmenes físicos en un grupo o grupos de volúmenes debajo del men
 Después de esto, debe
 crear volúmenes lógicos encima de los grupos de volúmenes desde el menú
 <guimenuitem>Modificar los volúmenes lógicos (LV)</guimenuitem>.
+
+<note arch="powerpc"><para>
+
+No hay un mecanismo estándar para identificar particiones que
+contienen datos LVM en hardware Apple Power Macintosh. No funcionará
+el mecanismo descrito para crear volúmenes físicos y grupos de volúmenes
+en este hardware en particular. Existe una alternativa a esta limitación
+siempre y cuando esté familiarizado con las herramientas LVM subyacentes.
+
+</para><para>
+
+Para hacer un instalación en hardware Power Macintosh con volúmenes
+lógicos debe crear todas las particiones de su disco como volúmenes
+lógicos como se hace habitualmente. En el menú <guimenu>Configuración
+de la martición</guimenu> debería seleccionar 
+<menuchoice><guimenu>Usar como:</guimenu> 
+<guimenuitem>No usar</guimenuitem></menuchoice> par estas particiones
+(no se le mostrará la opción para utilizar las particiones como
+un volumen físico). Cuando haya creado todas las particiones deberá
+arrancar el gestor de volúmenes lógicos, como es habitual. Sin embargo,
+dado que no se ha creado ningún volúmen físico deberá acceder al
+intérprete de órdenes en el segundo terminal virtual 
+(consulte <xref linkend="shell"/>) y crearlas manualmente.
+
+</para><para>
+
+Utilice la orden <command>pvcreate</command> en el indicador del
+intérprete de órdenes para crear un volumen físico en cada una de 
+las particiones que haya elegido. Después utilice la orden
+<command>vgcreate</command> para crear cada uno de los grupo de volúmenes 
+que desea. Puede ignorar cualquier error sobre suma de control incorrecta
+en la cabecera de las áreas de metadatos y fallos de fsync mientras
+hace esto. Una vez haya creado todos los grupos de volúmenes debería
+volver al primer terminal virtual e ir directamente a los elementos
+del menú <command>lvmcfg</command> para la gestión de volúmenes
+lógicos. Aquí verá sus grupos de volúmenes y podrá crear los 
+volúmenes lógicos que necesite como se hace habitualmente.
+
+</para></note>
 
 </para><para>
 
