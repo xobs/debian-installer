@@ -115,7 +115,7 @@ APT_GET=apt-get --assume-yes \
 	-o Dir::Cache=$(CWD)$(APTDIR)/cache
 
 # Get the list of udebs to install. Comments are allowed in the lists.
-UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE) `if [ -d lists/$(architecture) ]; then echo lists/$(architecture)/$(TYPE); fi` | sed 's/$${kernel:Version}/$(KVERS)/g' | sed 's/$${kernel:Flavour}/$(FLAVOUR)/g') $(EXTRAS)
+UDEBS=$(shell grep --no-filename -v ^\# pkg-lists/base pkg-lists/$(TYPE)/common `if [ -f pkg-lists/$(TYPE)/$(architecture) ]; then echo pkg-lists/$(TYPE)/$(architecture); fi` | sed 's/$${kernel:Version}/$(KVERS)/g' | sed 's/$${kernel:Flavour}/$(FLAVOUR)/g') $(EXTRAS)
 
 DPKGDIR=$(TREE)/var/lib/dpkg
 TEMP=./tmp
@@ -131,7 +131,7 @@ build: demo_clean tree stats
 
 demo: tree
 	sudo chroot $(TREE) bin/sh -c "if ! mount | grep ^proc ; then bin/mount proc -t proc /proc; fi"
-	-sudo chroot $(TREE) bin/sh -c "export DEBCONF_FRONTEND=slang DEBCONF_DEBUG=5; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; /usr/share/debconf/frontend /usr/bin/main-menu"
+	sudo chroot $(TREE) bin/sh -c "export DEBCONF_FRONTEND=default_fe DEBCONF_DEBUG=5; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; /usr/share/debconf/frontend /usr/bin/main-menu"
 	$(MAKE) demo_clean
 
 shell: tree
@@ -268,7 +268,7 @@ endif
 
 	# Library reduction.
 	mkdir -p $(TREE)/lib
-	$(MKLIBS) -d $(TREE)/lib `find $(TREE) -type f -perm +0111 -o -name '*.so'`
+	$(MKLIBS) -v -d $(TREE)/lib `find $(TREE) -type f -perm +0111 -o -name '*.so'`
 
 	# Add missing symlinks for libraries
 	# (Needed for mklibs.py)
