@@ -67,7 +67,7 @@ create_html () {
     create_profiled
     $xsltprocessor \
         --xinclude \
-        --stringparam base.dir ./results/${language}.${arch}/html/ \
+        --stringparam base.dir ./$destination/${language}.${arch}/html/ \
         $stylesheet_html \
         $tempdir/install.${language}.profiled.xml
     checkresult $?
@@ -83,6 +83,7 @@ create_dvi ()  {
 		-b utf-8 \
 		-o $tempdir/install.${language}.tex \
 		-d $stylesheet_dsssl \
+		-V tex-backend \
 		$tempdir/install.${language}.profiled.xml
 
 	# Next we use jadetext to generate a .dvi file
@@ -99,18 +100,18 @@ create_pdf() {
     
     create_profiled
     create_dvi
-    mkdir -p results/${language}.${arch}/pdf
+    mkdir -p $destination/${language}.${arch}/pdf
     dvipdf $tempdir/install.${language}.dvi
-    mv install.${language}.pdf results/${language}.${arch}/pdf
+    mv install.${language}.pdf $destination/${language}.${arch}/pdf
 }
 
 create_ps() {
     
     create_profiled
     create_dvi
-    mkdir -p results/${language}.${arch}/ps
+    mkdir -p $destination/${language}.${arch}/ps
     dvips $tempdir/install.${language}.dvi
-    mv install.${language}.ps results/${language}.${arch}/ps
+    mv install.${language}.ps $destination/${language}.${arch}/ps
 }
 
 stylesheet_dir="stylesheets"
@@ -122,8 +123,15 @@ xml_decl="/usr/share/sgml/declaration/xml.dcl"
 
 xsltprocessor=/usr/bin/xsltproc
 
+
+if [ -z $destination ]; then
+    destination="results"
+fi
+
 tempdir=${language}.temp
 mkdir -p $tempdir
+
+
 
 ## Create the profiled XML file...
 
