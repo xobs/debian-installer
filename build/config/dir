@@ -51,6 +51,13 @@ SOURCES_LIST = $(if $(wildcard sources.list.local),sources.list.local,sources.li
 # Used in the font reduction code.
 LOCALE_PATH = $(TREE)/usr/lib/locale
 
+# This directory structure allows netboot dirs for multiple arches to
+# cooexist on a single tftp server. The debian-installer files are also
+# isolated into their own directory so the tftp server can be used for
+# other purposes too. Anything outside this directory should be a symlink
+# to a file in it.
+NETBOOT_PATH = debian-installer/$(ARCH)
+
 # The files we may want to have in dest/
 INITRD = $(SOME_DEST)/$(EXTRANAME)initrd.gz
 INITRD_LIST = $(SOME_DEST)/$(EXTRANAME)initrd.list
@@ -60,7 +67,8 @@ ROOT = $(SOME_DEST)/$(EXTRANAME)root.img$(GZIPPED)
 EXTRA = $(SOME_DEST)/$(EXTRANAME).img$(GZIPPED)
 MINIISO = $(SOME_DEST)/$(EXTRANAME)mini.iso
 DEBIAN_CD_INFO = $(SOME_DEST)/$(EXTRANAME)debian-cd_info.tar.gz
-PXE_BOOT = $(SOME_DEST)/$(EXTRANAME)pxeboot.tar.gz
+NETBOOT_DIR = $(SOME_DEST)/$(EXTRANAME)debian-installer
+NETBOOT_TAR = $(SOME_DEST)/$(EXTRANAME)netboot.tar.gz
 MISC = $(foreach name,$(MISCNAME),$(SOME_DEST)/$(EXTRANAME)$(name))
 
 # some intersting files in tmp/ we may need
@@ -72,7 +80,7 @@ TEMP_ROOT = $(TEMP)/root.img
 TEMP_MINIISO = $(TEMP)/mini.iso
 TEMP_EXTRA = $(TEMP)/$(EXTRANAME).img
 TEMP_BOOT_SCREENS = $(TEMP)/boot_screens
-TEMP_PXE_BOOT = $(TEMP)/pxe_boot
+TEMP_NETBOOT_DIR = $(TEMP)/dir_tree
 TEMP_CD_TREE = $(TEMP)/cd_tree
 TEMP_POWERPC_INITRD = $(TEMP)/powerpc_initrd_tree
 

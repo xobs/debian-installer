@@ -246,7 +246,7 @@ _clean: tree_umount
 	rm -f $(TEMP)/all.utf
 	rm -f $(TEMP)/unifont.bdf $(TREE)/unifont.bgf
 	rm -f pkg-lists/standard-udebs pkg-lists/kernel-module-udebs
-	rm -f $(TARGET)
+	rm -rf $(TARGET)
 	rm -rf $(TEMP)
 
 #
@@ -619,18 +619,29 @@ $(MINIISO): $(TEMP_MINIISO)
 
 $(TEMP_MINIISO): $(TEMP_BOOT_SCREENS) arch_miniiso
 
-# various kinds of information, for use on debian-cd isos.
+# various kinds of information, for use on debian-cd isos
 $(DEBIAN_CD_INFO): $(TEMP_BOOT_SCREENS)
 	(cd $(TEMP_BOOT_SCREENS); tar czf - .) > $@
 	./update-manifest $@ $(MANIFEST-DEBIAN_CD_INFO)
 
-# a tarball for pxe netbooting.
-$(PXE_BOOT): $(TEMP_BOOT_SCREENS) $(TEMP_PXE_BOOT)
-	(cd $(TEMP_PXE_BOOT); tar czf - .) > $@
-	./update-manifest $@ $(MANIFEST-PXE_BOOT)
+# a directory full of files for netbooting
+$(NETBOOT_DIR): $(NETBOOT_DIR_TARGETS) $(TEMP_BOOT_SCREENS) $(TEMP_NETBOOT_DIR)
+	rm -rf $(SOME_DEST)/$(EXTRANAME)/debian-installer
+	mkdir -p $(SOME_DEST)/$(EXTRANAME)/debian-installer
+	cp -a $(TEMP_NETBOOT_DIR)/debian-installer/* $@
+	$(foreach link,$(NETBOOT_DIR_LINKS), \
+		rm -f $@/../$(link); \
+		cp -a $(TEMP_NETBOOT_DIR)/$(link) $@/..; \
+	)
+	./update-manifest $@ $(MANIFEST-NETBOOT_DIR)
+
+# a tarball for netbooting
+$(NETBOOT_TAR): $(TEMP_NETBOOT_DIR)
+	(cd $(TEMP_NETBOOT_DIR); tar czf - .) > $@
+	./update-manifest $@ $(MANIFEST-NETBOOT_TAR)
 
 $(TEMP_BOOT_SCREENS): arch_boot_screens
-$(TEMP_PXE_BOOT): arch_pxe_boot
+$(TEMP_NETBOOT_DIR): arch_netboot_dir
 
 $(MISC): TEMP_REAL_MISC = $(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,')
 $(MISC): 
