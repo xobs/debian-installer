@@ -72,11 +72,16 @@ for i in `find $builddir/kernel-build-$kvers -name \*.o`; do touch $i; done
 rm -f $builddir/kernel-build-$kvers/arch/ppc/boot/chrp/image.o
 rm -f `find $builddir/kernel-build-$kvers -name .depend`
 
+# Extract meaningful config options from .config file.
+configs=""
+configs="`grep CONFIG_ALL_PPC=y "$builddir/kernel-build-$kvers/.config" || true`"
+configs="$configs `grep CONFIG_VGA_CONSOLE=y "$builddir/kernel-build-$kvers/.config" || true`"
+configs="$configs `grep CONFIG_SERIAL_CONSOLE=y "$builddir/kernel-build-$kvers/.config" || true`"
+
 # Actual build of the kernels with builtin initrd.
-make -C $builddir/kernel-build-$kvers/arch/ppc/boot		\
-	TOPDIR=`pwd`/$builddir/kernel-build-$kvers OBJCOPY=objcopy	\
-  	CONFIG_ALL_PPC=y CONFIG_VGA_CONSOLE=y			\
-	CONFIG_SERIAL_CONSOLE=y zImage.initrd
+make -C $builddir/kernel-build-$kvers/arch/ppc/boot	\
+	TOPDIR=`pwd`/$builddir/kernel-build-$kvers	\
+	OBJCOPY=objcopy	$configs zImage.initrd
 
 # Copying build directories to destdir.
 for subarch in chrp chrp-rs6k prep; do
