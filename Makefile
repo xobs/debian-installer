@@ -142,7 +142,7 @@ compile-udebs: compiled-stamp
 compiled-stamp: $(SOURCEDIR)/udeb-sources-stamp
 	mkdir -p $(APTDIR)/cache/archives
 	for d in ` ls $(SOURCEDIR) | grep -v stamp ` ; do  \
-		 ( cd $(SOURCEDIR)/$$d ; dpkg-buildpackage -uc -us || true  ) ; \
+		 ( unset MAKEFLAGS ; unset MAKELEVEL ; cd $(SOURCEDIR)/$$d ; dpkg-buildpackage -uc -us || true  ) ; \
 	done 
 	mv $(SOURCEDIR)/*.udeb $(APTDIR)/cache/archives
 	touch compiled-stamp
