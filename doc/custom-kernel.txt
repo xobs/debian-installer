@@ -1,0 +1,80 @@
+Building Debian Installer images with a custom kernel.
+
+So you want to build a custom version of the Debian Installer? This
+document assumes basic familiarity with bilding Debian packages from
+source. The techniques described here are aimed mostly at replacing the
+kernel, which is the most common piece to need to replace, but similar
+techniques can be used to replace any other udeb used by this modular
+installer with a custom version.
+
+Step 1. Kernel deb
+
+You need to find or produce a kernel deb for the kernel you want to use
+with d-i. This can be built in the standard Debian way with make-kpkg. The
+kernel should be built with the following things built in:
+
+	devfs (does not need to automount on boot)
+	tmpfs
+	unix domain sockets support
+	ext2
+
+Most everything else can be modular, and it's a good idea to enable pretty
+much everything. A good starting place is the kernel config from an
+existing official Debian kernel.
+
+Once you have the kernel-image.deb, install it for the next step. On i386,
+you should also install the kernel-pcmcia-modules file. You do not need to
+boot into the new kernel.
+
+Step 2. Kernel udebs
+
+Unpack the source package linux-kernel-di-386 (other arches, replace
+386 with your arch). In its source tree, edit the kernel-versions file.
+Each line in this file is a kernel version, you can comment out all but
+one, and modify that one to match the version of your custom kernel.
+
+Make sure the build dependencies of linux-kernel-di-386 are satisfied
+(you will need to install the kernel-wedge package), and build the package.
+This will produce several udebs.
+
+Step 3. Initrds and images
+
+Unpack the debian-installer source package. Make sure the many build
+dependencies are satisfied. Check that build/config/i386.cfg has a
+KERNELVERSION field that matches the version of your custom kernel (other
+arches, replace 386 with your arch).
+
+Copy the udebs that were produced in step 2 into the build/localudebs
+directory. Go to the build directory and type "make list" to see a list
+of possible targets. For example, if you want to build floppy images, use
+this command:
+
+	fakeroot make build_floppy_boot build_floppy_root
+
+If you're looking to build a complete Debian CD, the target to use is
+"build_cdrom_isolinux" (and see step 4).
+
+It turns out to be much easier to build a mini CD containing just d-i,
+which you can do with the "build_miniiso" target.
+
+Look in the build/dest directory for the images. The MANIFEST file will
+list every file you built and its purpose. Note that the
+build_cdrom_isolinux target does not produce an entire ISO image, but just
+the initrd to go on one. However, the build_miniiso target does produce a
+bootable ISO image (amoung other things), and the floppy targets do produce
+floppy images.
+
+Step 4. Building a full Debian CD image
+
+If you have an initrd for a CD, and some kernel udebs, and a kernel deb,
+you probably want to stick them all on a Debian CD. There are two ways to
+do this. You can install the debian-cd package and read its documentation.
+Be warned that using debian-cd is difficult, and requires a local Debian
+mirror. Or you could try to remaster an existing Debian ISO using the
+technique described here: 
+	http://wiki.debian.net/index.cgi?DebianInstallerModify
+
+Neither of these routes will be as polished or easy as steps 1-3. We
+recommend that you don't try to build a full Debian CD unless you really
+absolutely need one. An alternative is to build a miniiso (as
+described in step 3).
