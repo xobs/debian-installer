@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="ISO-8859-2"?>
+<!-- $Id$ -->
+<!-- original version: 14350 -->
+
+  <sect2 arch="ia64"><title>Zavedení z CD-ROM</title>
+
+&boot-installer-intro-cd.xml;
+
+<emphasis condition="FIXME">Not yet written.</emphasis>
+
+  </sect2>
+
+  <sect2 arch="ia64" id="boot-tftp"><title>Zavedení z TFTP</title>
+
+&boot-installer-intro-net.xml;
+
+<para>
+
+Zavedení systému &arch-title; ze sítě vyžaduje dva architekturně
+specifické zásahy. Na straně zaváděcího serveru musí být DHCP a TFTP
+nastaveny pro zaslání souboru <command>elilo</command> a na klientovi
+musíte v zavaděči EFI definovat novou zaváděcí volbu, kterou povolíte
+stahování ze sítě.
+
+</para>
+
+   <sect3 arch="ia64" id="boot-tftp-server">
+   <title>Nastavení TFTP serveru</title>
+<para>
+
+Vhodný TFTP záznam pro zavádění ze sítě vypadá nějak takto:
+
+<informalexample><screen>
+
+host mcmuffin {
+        hardware ethernet 00:30:6e:1e:0e:83;
+        fixed-address 10.0.0.21;
+        filename "elilo.efi";
+}
+
+</screen></informalexample>
+
+Cílem je dostat <command>elilo.efi</command> na klienta.
+
+</para><para>
+
+Ve svém tftpboot adresáři vytvořte podadresář
+<filename>ia64/</filename> a nakopírujte do něj soubory
+<filename>vmlinuz</filename> a <filename>initrd.gz</filename>
+ze zrcadla Debianu z adresáře <filename>netboot</filename>.
+
+</para><para>
+
+Dále do adresáře tftpboot nakopírujte soubor
+<filename>elilo.efi</filename>, který je obvykle součástí balíku
+<classname>elilo</classname> v adresáři
+<filename>/usr/lib/elilo</filename> nebo
+<filename>/boot/efi</filename>. Vhodná kopie se nachází také na
+zrcadle Debianu v adresáři <filename>netboot</filename>.
+
+</para><para>
+
+Na stejném místě vytvořte soubor <filename>elilo.conf</filename>,
+který určuje, jak se bude <command>elilo.efi</command> chovat po
+nahrání na klienta (jaké se nahraje jádro, initrd, apod.). Ukázkový
+soubor je k dispozici na zrcadle Debianu v adresáři
+<filename>netboot</filename>.
+
+Dokonce je možné mít různé konfigurační soubory pro různé
+klienty. Místo souboru <filename>elilo.conf</filename> totiž můžete
+pojmenovat konfigurační soubory podle IP adresy klienta zapsané
+v šestnáctkové soustavě s příponou
+<filename>.conf</filename>. Podrobnosti naleznete v dokumentaci
+k balíku <classname>elilo</classname>.
+
+</para>
+   </sect3>
+
+   <sect3 arch="ia64" id="boot-tftp-client">
+   <title>Nastavení klienta</title>
+<para>
+
+Nastavení klienta pro podporu zavádění z TFTP začněte zavedením do EFI
+a aktivováním menu <guimenu>Boot Option Maintenance Menu</guimenu>.
+
+<itemizedlist>
+<listitem><para>
+
+Přidejte zaváděcí volbu.
+
+</para></listitem>
+<listitem><para>
+
+Vyberte řádek <guimenuitem>Load File
+[Acpi()/.../Mac()]</guimenuitem> a stiskněte &enterkey;.
+
+</para></listitem>
+<listitem><para>
+
+Záznam pojmenujte třeba <userinput>Netboot</userinput>, uložte jej
+a vraťte se zpět do menu se zaváděcími volbami.
+
+</para></listitem>
+</itemizedlist>
+
+Měli byste vidět právě vytvořenou položku. Tu stačí vybrat a provede
+se DHCP dotaz vedoucí k nahrání <filename>elilo.efi</filename> z TFTP
+serveru.
+
+</para>
+
+   </sect3>
+  </sect2>

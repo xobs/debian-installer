@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 11648 -->
+<!-- original version: 14337 -->
 
   <sect2 arch="i386"><title>Zavedení z CD-ROM</title>
 
@@ -159,6 +159,7 @@ Následuje příklad <filename>/etc/lilo.conf</filename>:
 image=/boot/newinstall/vmlinuz
        label=newinstall
        initrd=/boot/newinstall/initrd.gz
+       append="devfs=mount,dall"
 
 </screen></informalexample>
 
@@ -181,13 +182,15 @@ Postup pro <command>GRUB</command> je velmi podobný. Do souboru
 <informalexample><screen>
 
 title  New Install
-kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram ramdisk_size=8192 devfs=mount,dall
+kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram ramdisk_size=10000 devfs=mount,dall
 initrd (hd0,0)/boot/newinstall/initrd.gz
 
 </screen></informalexample>
 
-a restartujte počítač. Od teď by neměl být mezi oběma zavaděči žádný
-rozdíl.
+a restartujte počítač. Je možné, že budete muset zvýšit hodnotu
+parametru <userinput>ramdisk_size</userinput>, protože tato je různá
+u různých typů instalace. Od teď by neměl být mezi oběma zavaděči
+žádný rozdíl.
 
 </para><para>
 

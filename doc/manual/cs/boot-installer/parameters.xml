@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 11648 -->
+<!-- original version: 14350 -->
 
  <sect1 id="boot-parms"><title>Zaváděcí parametry</title>
 <para>
@@ -137,7 +137,9 @@ probíhat. Dostupné volby jsou:
 
 Standardní rozhraní je <userinput>DEBCONF_FRONTEND=newt</userinput>.
 Pro instalaci přes sériovou konzolu může být vhodnější
-<userinput>DEBCONF_FRONTEND=text</userinput>.
+<userinput>DEBCONF_FRONTEND=text</userinput>. Standardní instalační
+média momentálně podporují pouze rozhraní <userinput>newt</userinput>,
+tudíž je tato volba spíše příslibem do budoucna.
 
 </para></listitem>
 </varlistentry>
@@ -222,6 +224,48 @@ Tyto problémy byly hlášeny na Amize 1200 a SE/30.
 
 Tyto problémy byly hlášeny na hppa.
 
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>debian-installer/probe/usb</term>
+<listitem><para>
+
+Pokud hledání USB zařízení způsobuje problémy, nastavte tento parametr
+na hodnotu <userinput>false</userinput>.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>netcfg/use_dhcp</term>
+<listitem><para>
+
+Standardně se &d-i; snaží získat nastavení sítě přes DHCP. Je-li
+získáno nějaké nastavení, instalační systém se na nic nebude ptát
+a automaticky bude pokračovat v instalaci. K ručnímu nastavení sítě se
+dostanete pouze v případě, že dotaz na DHCP server selže.
+
+</para><para>
+
+Máte-li tedy na místní síti DHCP server, ale z nějakého důvodu jej
+nechcete použít (protože např. pro účely instalace vrací špatné
+hodnoty), můžete použít parametr
+<userinput>netcfg/use_dhcp=false</userinput>, kterým zabráníte
+automatickému nastavení sítě přes DHCP a rovnou budete požádáni
+o ruční nastavení síťových údajů.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>hw-detect/start_pcmcia</term>
+<listitem><para>
+
+Pokud chcete zabránit startu PCMCIA služeb, nastavte tento parametr na
+hodnotu <userinput>false</userinput>. Některé notebooky jsou totiž
+nechvalně známé tím, že při startu PCMCIA služeb zaseknou celý systém.
+ 
 </para></listitem>
 </varlistentry>
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 11648 -->
+<!-- original version: 14033 -->
 
    <sect2 id="partman">
    <title>Rozdělení disků</title>
@@ -13,17 +13,57 @@ dodatku <xref linkend="partitioning"/>.
 </para><para>
 
 Nejprve vám bude nabídnuta možnost automaticky rozdělit buď celý disk,
-nebo volné místo na disku. Pokud nechcete využít automatické dělení
-disku, zvolte z menu <guimenuitem>Ručně upravit tabulku
-oblastí</guimenuitem> a přeskočte na další odstavec. Pokračujete-li
-v automatickém rozdělování, bude se další otázka ptát, zda chcete mít
-<guimenuitem>Všechny soubory v jedné oblasti</guimenuitem>, nebo zda
-chcete vyhradit <guimenuitem>Samostatnou oblast pro domovské
-adresáře</guimenuitem>. Obě možnosti mají svá pro a proti, některé
+nebo volné místo na disku. Tato volba se někdy nazývá
+<quote>asistované</quote> rozdělení, protože do dělení můžete sami
+zasáhnout. Pokud nechcete využít automatické dělení disku, zvolte
+z menu <guimenuitem>Ručně upravit tabulku oblastí</guimenuitem>
+a přeskočte na další odstavec. Pokračujete-li v automatickém
+rozdělování, bude se další otázka ptát, zda chcete mít
+<guimenuitem>Všechny soubory v jedné oblasti</guimenuitem>,
+<guimenuitem>Samostatnou oblast pro domovské adresáře</guimenuitem>
+nebo zda plánujete provozovat <guimenuitem>Víceuživatelský
+systém</guimenuitem>. Všechny možnosti mají svá pro a proti, některé
 argumenty jsou zmíněny v dodatku <xref linkend="partitioning"/>. Pokud
-si nejste jisti, zvolte první možnost.
+si nejste jisti, zvolte první možnost. Pamatujte však, že asistované
+dělení vyžaduje určitou minimální velikost volného místa, se kterým
+může pracovat. Nemáte-li k dispozici zhruba 1GB volného místa (závisí
+na zvoleném způsobu dělení), asistované dělení selže.
 
-</para><para>
+</para>
+
+<informaltable>
+<tgroup cols="3">
+<thead>
+<row>
+  <entry>Způsob dělení</entry>
+  <entry>Minimální místo</entry>
+  <entry>Vytvořené oblasti</entry>
+</row>
+</thead>
+
+<tbody>
+<row>
+  <entry>Všechny soubory v jedné oblasti</entry>
+  <entry>600MB</entry>
+  <entry><filename>/</filename>, swap</entry>
+</row><row>
+  <entry>Samostatná oblast pro domovské adresáře</entry>
+  <entry>500MB</entry>
+  <entry>
+    <filename>/</filename>, <filename>/home</filename>, swap
+  </entry>
+</row><row>
+  <entry>Víceuživatelský systém</entry>
+  <entry>1GB</entry>
+  <entry>
+    <filename>/</filename>, <filename>/home</filename>,
+    <filename>/usr</filename>, <filename>/var</filename>,
+    <filename>/tmp</filename>, swap
+  </entry>
+</row>
+</tbody></tgroup></informaltable>
+
+<para>
 
 Na další obrazovce se zobrazí tabulka rozdělení disku(ů) společně
 s informacemi o souborových systémech a přípojných bodech. Pokud jste
@@ -45,7 +85,9 @@ Nezapomeňte vytvořit aspoň dvě oblasti &mdash; jednu pro
 pro <emphasis>kořenový souborový systém</emphasis> (který musí být
 připojen jako <filename>/</filename>). Bez připojeného kořenového
 souborového systému vám <command>partman</command> nedovolí
-pokračovat. Chcete-li s rozdělováním pomoci, můžete kdykoliv
+pokračovat. Tato situace by však neměla nastat, protože
+<command>partman</command> standardně nabízí rozumné přednastavené
+hodnoty. Chcete-li s rozdělováním pomoci, můžete kdykoliv
 z rozdělovacího menu vybrat možnost <guimenuitem>Automaticky rozdělit
 disk</guimenuitem> nebo <guimenuitem>Automaticky rozdělit volné
 místo</guimenuitem>.
@@ -63,8 +105,9 @@ se, že máte nahrány příslušné moduly
 </para><para>
 
 Pokud jste s rozdělením disků spokojeni, vyberte z nabídky
-<guimenuitem>Ukončit rozdělování</guimenuitem> a potvrďte, že opravdu
-chcete vytvořit nové souborové systémy.
+<guimenuitem>Ukončit rozdělování</guimenuitem>. Zobrazí se seznam
+provedených změn a budete požádáni o potvrzení, zda opravdu chcete
+vytvořit nové souborové systémy.
 
 </para>
    </sect2>
