@@ -1,22 +1,29 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 -->
+<!-- original version: 18767 -->
 
  <sect1 id="installation-media">
  <title>Medios de instalación</title>
+
+
+<para>
+
+Esta sección le ayudará a determinar cuales son los diferentes tipo de
+medio que puede usar para instalar Debian. Por ejemplo, si tiene una
+unidad de disquete en su máquina, ésta puede ser usada para instalar 
+Debian. Existe un capitulo entero dedicado a este asunto
+<xref linkend="install-methods"/>, el cual lista las ventajas y
+desventajas de cada tipo de medio. Podría querer referirse a esta
+página cuando llege a esa sección.
+
+</para>
 
   <sect2 condition="supports-floppy-boot"><title>Disquetes</title>
 
 <para>
 
-En muchos casos, usted tendrá que hacer el primer arranque desde
+En muchos casos, tendrá que hacer el primer arranque desde
 disquetes. Generalmente, todo lo que necesita es una unidad 
 de disquetes de alta densidad (1440 kilo-bytes) de 3.5 pulgadas.
-
-</para><para arch="m68k">
-
-También se proveen imágenes de disquetes de doble densidad (720 k)
-para máquinas Atari.
 
 </para><para arch="powerpc">
 
@@ -59,7 +66,7 @@ por estos discos de arranque (como las unidades Mitsumi y Matsushita).
 Sin embargo, estos modelos pueden requerir parámetros especiales
 en el arranque u otros ajustes para hacerlos funcionar, y el arranque
 desde estas interfaces no estándar es poco probable. El 
-<ulink url="&url-cd-howto;">Linux CD-ROM HOWTO</ulink> contiene información 
+<ulink url="&url-cd-howto;">COMO de Linux CD-ROM</ulink> contiene información 
 en detalle sobre el uso de CD-ROMs con Linux.
 
 </para><para arch="i386"> 
@@ -75,10 +82,10 @@ En RiscPCs, los CD-ROMs SCSI también están soportados.
 
 </para><para arch="mipsel"> 
 
-En DECstations, el arranque desde CD-ROM requiere una unidad con
-capacidad de trabajar con un tamaño de bloque lógico de 512 bytes.
-Muchas de las unidades CD-ROM SCSI que se venden para el mercado
-de PC no tienen esta capacidad. Si su unidad de CD-ROM tiene un
+En DECstations, el arranque desde CD-ROM requiere una unidad de
+CD-ROM SCSI con capacidad de trabajar con un tamaño de bloque lógico 
+de 512 bytes. Muchas de las unidades CD-ROM SCSI que se venden para 
+el mercado de PC no tienen esta capacidad. Si su unidad de CD-ROM tiene un
 puente etiquetado "Unix/PC" o "512/2048", colóquelo en la 
 posición "Unix" o "512".
 
@@ -116,7 +123,8 @@ param1=valor1 param2=valor2 ...</userinput>
 <para>
 
 El arranque del sistema de instalación desde el disco duro es
-otra opción para muchas arquitecturas.
+otra opción para muchas arquitecturas. Esto requerirá algún otro
+sistema operativo para cargar el instalador desde el disco duro.
 
 </para><para arch="m68k">
 
@@ -126,7 +134,7 @@ de instalación preferido para la mayoría de máquinas &architecture;.
 </para><para arch="sparc">
 
 Aunque &arch-title; no permite arrancar desde SunOS (Solaris),
-usted puede instalar desde una partición SunOS (particiones UFS).
+puede instalar desde una partición SunOS (particiones UFS).
 
 </para>
   </sect2>
@@ -135,9 +143,9 @@ usted puede instalar desde una partición SunOS (particiones UFS).
 
 <para>
 
-Muchas máquinas Debian requieren su unidad de disquetes y/o CD-ROM
+Muchas máquinas Debian requieren una unidad de disquetes y/o CD-ROM
 solamente para instalar el sistema o para propósitos de rescate.
-Si usted maneja algunos servidores, probablemente haya pensado en omitir
+Si maneja algunos servidores, probablemente haya pensado en omitir
 estas unidades y usar un dispositivo de memoria USB para instalar y
 (cuando sea necesario) recuperar el sistema. Esto también es útil
 para máquinas pequeñas que no tienen espacio para unidades innecesarias.
@@ -149,7 +157,7 @@ para máquinas pequeñas que no tienen espacio para unidades innecesarias.
 
 <para condition="supports-tftp">
 
-Usted también puede <emphasis>arrancar</emphasis> su sistema a través
+También puede <emphasis>arrancar</emphasis> su sistema a través
 de la red. <phrase arch="mips">Este es el método de instalación preferido
 para Mips.</phrase>
 
@@ -157,13 +165,11 @@ para Mips.</phrase>
 
 La instalación sin disco, usando arranque a través de red desde una red
 de área local y el montar a través de NFS todos los sistemas de ficheros
-locales, es otra opción &mdash; que probablemente necesite como mínimo
-&minimum-memory-with-nfsroot; de memoria RAM para una instalación sin
-disco.
+locales, es otra opción.
 
 </para><para>
 
-Después  de que el núcleo del sistema operativo esté instalado, usted puede
+Después  de que el núcleo del sistema operativo esté instalado, puede
 instalar el resto de sus sistema a través de una variedad de conexiones
 de red (incluyendo PPP después de la instalación del sistema base), 
 a través de FTP, HTTP o NFS.
@@ -175,11 +181,11 @@ a través de FTP, HTTP o NFS.
 
 <para>
 
-Si usted está ejecutando otro sistema de tipo Unix, puede usarlo
-para instalar &debian; sin necesidad de usar el &d-i; descrito en el
-resto de este manual. Este tipo de instalación puede ser útil para usuarios
-con hardware que no puede soportarse de ninguna manera o en máquinas que no
-pueden tener paralizaciones. Si usted está interesado en este método, pase a
+Si está ejecutando otro sistema de tipo Unix, puede usarlo para 
+instalar &debian; sin necesidad de usar el &d-i; descrito en el resto de 
+este manual. Este tipo de instalación puede ser útil para usuarios con 
+hardware que no puede soportarse de ninguna manera o en máquinas que no
+pueden tener paralizaciones. Si está interesado en este método, pase a
 <xref linkend="linux-upgrade"/>.
 
 </para>
@@ -202,38 +208,17 @@ instalado en la mayor cantidad de hardware.
 
 Generalmente, el sistema de instalación de Debian incluye soporte para 
 disquetes, unidades IDE, disquetes IDE, dispositivos IDE en puerto paralelo,
-controladoras y unidades SCSI. Los sistemas de archivo soportados
-incluyen MINIX, FAT, extensiones FAT Win-32 (VFAT), entre otras (observe que
-NTFS no está soportado por el sistema de instalación; puede añadirlo más
-tarde, como se describe en <xref linked="kernel-baking"/>).
+controladoras y unidades SCSI. Los sistemas de ficheros soportados
+incluyen MINIX, FAT, extensiones FAT Win-32 (VFAT) y NTFS, entre otros.
 
 </para><para arch="i386">
 
-Las interfaces de disco que emulan la interfaz de disco duro ``AT'',
+Las interfaces de disco que emulan la interfaz de disco duro "AT",
 con frecuencia llamadas MFM, RLL, IDE o ATA están soportadas. Las
 controladoras de disco duro muy antiguas de 8 bits usadas en los ordenadores
 IBM XT están soportadas sólo como módulo. Las controladoras de disco SCSI
 de muchos fabricantes están soportadas. Vea <ulink url="&url-hardware-howto;">
-Linux Hardware Compatibility HOWTO</ulink> para más detalles.
-
-</para><para arch="i386">
-
-Los dispositivos no soportados son las unidades IDE SCSI y algunas
-controladoras SCSI, incluyendo
-<itemizedlist>
-  <listitem><para>
-Los adaptadores SCSI compatibles con el protocolo EATA-DMA, como 
-SmartCache III/IV, la familia de controladoras SmartRAID y las 
-controladoras DPT PM2011B y PM2012B.
-
-</para></listitem>
-  <listitem><para>
-
-La familia de controladoras SCSI 53c7 NCR (pero están soportadas las
-controladoras 53c8 y 5380)
-
-</para></listitem>
-</itemizedlist>
+COMO de compatibilidad de hardware de Linux</ulink> para más detalles.
 
 </para><para arch="m68k">
 
@@ -246,7 +231,6 @@ módulo. Los Mac soportan el sistema de ficheros (FAT) Atari. Amiga soporta
 el sistema de ficheros FAT, y el HFS como módulo.
 
 </para><para arch="sparc"> 
-
 
 Cualquier sistema de almacenamiento soportado por el núcleo Linux está
 también soportado por el sistema de arranque. Los siguientes controladores
@@ -275,15 +259,15 @@ NCR y Symbios 53C8XX
 </para></listitem>
 </itemizedlist>
 
-Los discos IDE (como el UltraSPARC 5) también están soportados. Vea
-<ulink url="&url-sparc-linux-faq;">Linux for SPARC Processors FAQ</ulink>
+Los sistemas IDE (como el UltraSPARC 5) también están soportados. Vea
+<ulink url="&url-sparc-linux-faq;">FAQ de Linux para procesadores SPARC</ulink>
 para mayor información sobre hardware SPARC soportado por el núcleo
 Linux.
 
 </para><para arch="alpha">
 
 Cualquier sistema de almacenamiento soportado por el núcleo de Linux
-también está soportado por el sistema de inicio. Los siguientes
+también está soportado por el sistema de arranque. Los siguientes
 controladores SCSI están soportados por el núcleo predeterminado:
 
 <itemizedlist>
@@ -305,8 +289,8 @@ Adaptec AIC7xxx
 </itemizedlist>
 
 Los discos IDE también están soportados. Observe, sin embargo, que en
-muchos sistemas la consola SRM es incapaz de iniciar desde discos
-IDE, y el Jensen es incapaz de iniciar desde disquetes (consulte el
+muchos sistemas la consola SRM no puede arracar desde discos
+IDE, y el Jensen no puede arrancar desde disquetes (consulte el
 <ulink url="&url-jensen-howto;"></ulink> para más información sobre cómo
 iniciar Jensen)
 
@@ -314,7 +298,7 @@ iniciar Jensen)
 
 Cualquier sistema de almacenamiento soportado por el núcleo de Linux
 también está soportado por el sistema de inicio. Observe que el núcleo
-actual de Linux no tiene soporte para disquetes en sistema CHRP.
+actual de Linux no tiene ningún soporte para disquetes en sistemas CHRP.
 
 </para><para arch="hppa">
 
@@ -331,8 +315,8 @@ también está soportado por el sistema de inicio.
 
 Cualquier sistema de almacenamiento soportado por el núcleo de Linux
 también está soportado por el sistema de inicio. Esto significa que
-los DADs FBA y ECKD están soportados con el anterior esquema de disco
-de Linux (ldl) y el nuevo esquema de disco común S/390 (cdl).
+los DADs FBA y ECKD están soportados con el anterior esquema de discos
+de Linux (ldl) y el nuevo esquema común de discos para S/390 (cdl).
 
 </para>
 
