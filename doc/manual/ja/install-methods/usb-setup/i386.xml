@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="EUC-JP"?>
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 24663-->
+
+   <sect3 arch="i386">
+   <title>&arch-title; での USB スティックのパーティション分割</title>
+<para>
+
+<!--
+We will show how to setup the memory stick to use the first partition,
+instead of the entire device.
+-->
+デバイス全体ではなく、メモリスティックの最初のパーティションを
+セットアップする方法を示します。
+
+</para><note><para>
+
+<!--
+Since most USB sticks come pre-configured with a single FAT16
+partition, you probably won't have to repartition or reformat the
+stick.  If you have to do that anyway, use <command>cfdisk</command>
+or any other partitioning tool for creating a FAT16 partition and then
+create the filesystem using:
+-->
+ほとんどの USB スティックは、
+FAT16 パーティション 1 つであらかじめ設定されているので、
+おそらく USB スティックのパーティション分割のやり直しや、
+再フォーマットは必要ないでしょう。
+どうしてもしなければならない場合は、
+<command>cfdisk</command> や他のパーティション分割ツールを使って、
+FAT16 パーティションを作成して以下を入力してください。
+
+<informalexample><screen>
+# mkdosfs /dev/<replaceable>sda1</replaceable>
+</screen></informalexample>
+
+<!--
+Take care that you use the correct device name for your USB stick. The
+<command>mkdosfs</command> command is contained in the
+<classname>dosfstools</classname> Debian package.
+-->
+USB スティックの正確なデバイス名を使用する事に注意してください。
+<command>mkdosfs</command> は、
+<classname>dosfstools</classname> Debian パッケージに含まれています。
+
+</para></note><para>
+
+<!--
+In order to start the kernel after booting from the USB stick, we will
+put a boot loader on the stick. Although any boot loader
+(e.g. <command>LILO</command>) should work, it's convenient to use
+<command>SYSLINUX</command>, since it uses a FAT16 partition and can
+be reconfigured by just editing a text file. Any operating system
+which supports the FAT file system can be used to make changes to the
+configuration of the boot loader.
+-->
+USB スティックから起動してカーネルをスタートするために、
+USB スティックにブートローダを配置します。
+どのブートローダ (例: <command>LILO</command>) も動作しますが、
+FAT16 パーティションを使用し、
+テキストファイルを編集するだけで再設定できるので、
+<command>SYSLINUX</command> を使用するのが便利です。
+
+</para><para>
+
+<!--
+To put <command>SYSLINUX</command> on the FAT16 partition on your USB
+stick, install the <classname>syslinux</classname> and
+<classname>mtools</classname> packages on your system, and do:
+-->
+USB スティックの FAT16 パーティションに <command>SYSLINUX</command> 
+を置くには、<classname>syslinux</classname> パッケージと 
+<classname>mtools</classname> パッケージをシステムにインストールして、
+以下を実行してください。
+
+<informalexample><screen>
+# syslinux /dev/<replaceable>sda1</replaceable>
+</screen></informalexample>
+
+<!--
+Again, take care that you use the correct device name. The partition
+must not be mounted when starting <command>SYSLINUX</command>. This
+procedure writes a boot sector to the partition and creates the file
+<filename>ldlinux.sys</filename> which contains the boot loader code.
+-->
+繰り返しますが、正確なデバイス名を使用するよう注意してください。
+<command>SYSLINUX</command> の開始時には、
+このパーティションをマウントしてはなりません。
+この手順ではパーティションにブートセクタを書き込み、
+ブートローダコードを含んでいるファイル <filename>ldlinux.sys</filename> 
+を作成します。
+
+</para><para>
+
+<!--
+Mount the partition (<userinput>mount /dev/sda1 /mnt</userinput>) and
+copy the following files from the Debian archives to the stick:
+-->
+このパーティションをマウントし (<userinput>mount /dev/sda1 /mnt</userinput>)、
+以下のファイルを Debian アーカイブから USB スティックへコピーしてください。
+
+<itemizedlist>
+<listitem><para>
+
+<filename>vmlinuz</filename> (カーネルバイナリ)
+
+</para></listitem>
+<listitem><para>
+
+<filename>initrd.gz</filename> (初期 RAM ディスクイメージ)
+
+</para></listitem>
+<listitem><para>
+
+<filename>syslinux.cfg</filename> (SYSLINUX 設定ファイル)
+
+</para></listitem>
+<listitem><para>
+
+<!--
+Optional kernel modules
+-->
+追加カーネルモジュール
+
+</para></listitem>
+</itemizedlist>
+
+<!--
+If you want to rename the files, please note that
+<command>SYSLINUX</command> can only process DOS (8.3) file names.
+-->
+ファイル名を変更したければ、<command>SYSLINUX</command> は 
+DOS (8.3) のファイル名しか処理できないことに注意してください。
+
+</para><para>
+
+<!--
+The <filename>syslinux.cfg</filename> configuration file should
+contain the following two lines:
+-->
+<filename>syslinux.cfg</filename> 設定ファイルには、
+以下の 2 行を含まなければなりません。
+
+<informalexample><screen>
+default vmlinuz
+append initrd=initrd.gz ramdisk_size=12000 root=/dev/rd/0 init=/linuxrc rw
+</screen></informalexample>
+
+<!--
+Please note that the <userinput>ramdisk_size</userinput> parameter
+may need to be increased, depending on the image you are booting.
+If the boot fails, you can try adding <userinput>devfs=mount,dall</userinput>
+to the <quote>append</quote> line.
+-->
+起動するイメージに応じて、<userinput>ramdisk_size</userinput> パラメータを、
+増やす必要があることに注意してください。
+起動に失敗する場合は、<quote>append</quote> 行に、
+<userinput>devfs=mount,dall</userinput> と追加してみてください。
+</para>
+   </sect3>
