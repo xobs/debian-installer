@@ -1,0 +1,502 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: i386.xml,v 1.7 2004/01/05 17:08:24 mck-guest Exp $ -->
+
+  <sect2 arch="i386"><title>Εκκίνηση από ένα CD-ROM</title>
+
+&boot-installer-intro-cd.xml;
+
+<para>
+
+Πιθανόν να χρειαστεί να ρυθμίσετε το hardware σας όπως υποδεικνύεται
+στο <xref linkend="boot-dev-select"/>. Μετά βάλτε το CD-ROM στη
+συσκευή και επανεκκινήστε. Το σύστημα θα ξεκινήσει και θα βρεθείτε
+μπροστά στην 
+προτροπή εκκίνησης <prompt>boot:</prompt>.  Εδώ μπορείτε να βάλετε τα
+δικα σας ορίσματα για την εκκίνηση ή απλά να πιέσετε &enterkey;.
+
+</para><para>
+
+Το CD #1 του επίσημου σετ των Debian CD-ROM για την αρχιτεκτονική
+&arch-title; θα εμφανίσει μια προτροπή <prompt>boot:</prompt> για την
+πλειοψηφία του  hardware. Πιέστε 
+<keycap>F3</keycap> για να δείτε τη λίστα των διαθέσιμων επιλογών του
+πυρήνα με τις οποίες να εκκινήσετε. Απλά εισάγετε το όνομα της
+προτίμησής σας (idepci,
+vanilla, compact, bf24) στην προτροπή  <prompt>boot:</prompt>
+ακολουθούμενη από το  &enterkey;.
+
+</para><para>
+
+Αν το hardware σας δεν υποστηρίζει την εκκίνηση από πολλαπλές εικόνες,
+τοποθετήστε ένα από τα άλλα CD στη συσκευή. Φαίνεται ότι οι
+περισσότερες συσκευές SCSI CD-ROM δεν υποστηρίζουν εκκίνηση με
+πολλαπλές εικόνες με  <command>isolinux</command>, οπότε οι χρήστες 
+με SCSI CD-ROM θα έπρεπε να δικιμάσουν είτε το  CD2 (vanilla) ή το
+CD3 (compact), ή το  CD5 (bf2.4). 
+
+</para><para>
+
+Τα CD  2 έως 5 θα ξεκινήσουν το καθένα μια διαφορετική  ``γεύση'' 
+ανάλογα με το ποιο CD-ROM εισάγεται. Δείτε το <xref
+						 linkend="kernel-choice"/>
+για μια συζήτηση των διαφορετικών αυτών "γεύσεων".  Αυτός είναι ο
+τρόπος με τον οποίο οι διαφορετικές αυτές γεύσεις βρίσκονται στα
+διαφορετικά CD-ROM:
+
+<variablelist>
+<varlistentry>
+<term>CD 1</term><listitem><para>
+
+Επιτρέπει μια επιλογή από εικόνες πυρήνων για την εκκίνηση  (η γεύση
+idepci είναι η προεπιλογή στην περίπτωση που δεν κάνετε μια
+συγκεκριμένη επιλογή). 
+
+</para></listitem></varlistentry>
+<varlistentry>
+<term>CD 2</term><listitem><para>
+
+Εκκίνηση με την γεύση  `vanilla' .
+
+</para></listitem></varlistentry>
+<varlistentry>
+<term>CD 3</term><listitem><para>
+
+Εκκίνηση με τη γεύση  `compact'.
+
+</para></listitem></varlistentry>
+<varlistentry>
+<term>CD 4</term><listitem><para>
+
+Εκκίνηση με τη γεύση `idepci' .
+
+</para></listitem></varlistentry>
+<varlistentry>
+<term>CD 5</term><listitem><para>
+
+Εκκίνηση με τη γεύση  `bf2.4'.
+
+</para></listitem></varlistentry>
+
+ </variablelist>
+
+</para><para>
+
+Αν το σύστημά σας δεν ξεκινά κατευθείαν από το  CD-ROM, ή απλά δεν
+φαίνεται να δουλεύει, μην απογοητεύεστε; μπορείτε απλά να τρέξετε την εντολή
+<command>E:\install\boot.bat</command> σε DOS (αντικαθιστώντας το 
+<userinput>E:</userinput> με οποιοδήποτε γράμμα αποδίδει το DOS στη
+συσκευή CD-ROM) για να ξεκινήσετε τη διαδικασία εγκατάστασης. Κατόπιν,
+προχωρήστε στην ενότητα  <xref linkend="init-config"/>.
+
+</para><para>
+
+Επίσης, αν θέλετε να εγκαταστήσετε από μια κατάτμηση  FAT (DOS), έχετε
+την επιλογή να ξεκινήσετε τον εγκαταστάτη από τον σκληρό δίσκο. Δείτε
+το
+<xref linkend="install-from-dos"/> για περισσότερες πληροφορίες για
+την εγκατάσταση με αυτή τη μέθοδο.
+
+</para><para>
+
+Συσκευές USB CD-ROM υποστηρίζονται από τη γεύση `bf2.4'. Συσκευές
+FireWire που υποστηρίζονται από τους οδηγούς ohci1394 και sbp2 είναι δυνατόν
+επίσης να μπορούν να χρησιμοποιηθούν με τη γεύση `bf2.4'.
+
+</para>
+  </sect2>
+
+
+
+  <sect2 arch="i386" id="install-from-dos">
+  <title>Εκκίνηση από διαμέριση  DOS</title>
+
+&boot-installer-intro-hd.xml;
+
+<para>
+
+Εκκίνηση σε  DOS (όχι Windows) χωρίς το φόρτωμα οποιωνδήποτε
+οδηγών. Για να το κάνετε αυτό, πρέπει να πιέσετε  <keycap>F8</keycap>
+την ακριβώς κατάλληλη στιγμή (και προαιρετικά να επιλέξετε την επιλογή
+`safe mode command prompt only').  Μπείτε στον υποκατάλογο που
+αντιστοιχεί στη "γεύση"¨που διαλέξατε, πχ.,
+
+<informalexample><screen>
+
+cd c:\current\compact
+
+</screen></informalexample>.  
+
+Στη συνέχεια, εκτελέστε <command>install.bat</command>.
+Ο πυρήνας θα φορτώσει και θα ξεκινήσει το σύστημα εγκατάστασης.
+
+</para><para>
+
+Pl3
+Παρακαλώ προσέξτε, ότι υπάρχει προς το παρόν ένα πρόβλημα με το
+loadlin (#142421) που εμποδίζει τη χρήση του 
+ <filename>install.bat</filename> για τη "γεύση"  bf2.4.
+ Το σύμπτωμα του προβλήματος είναι το μήνυμα σφάλματος 
+<computeroutput>invalid compressed format</computeroutput>.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="i386" id="boot-initrd">
+  <title>Εκκίνηση από το linux χρησιμοποιώντας το <command>LILO</command></title>
+<para>
+
+Μια απλή γραμμή  <emphasis>initrd=</emphasis> στο αρχείο
+<filename>/etc/lilo.conf</filename> είναι αρκετή για τη ρύθμιση δυο
+ουσιαστικών πραγμάτων:
+<itemizedlist>
+<listitem><para>
+
+να πει στο  <command>LILO</command> να φορτώσει τον εγκαταστάτη  <filename>root.bin</filename>
+σαν ένα δισκο RAM κατά την εκκίνηση;
+
+</para></listitem>
+<listitem><para>
+
+να πει στον πυρήνα  <filename>linux.bin</filename> να χρησιμοποιήσει
+αυτό το δίσκο RAM σαν τη ριζική του κατάτμηση .
+
+</para></listitem>
+</itemizedlist>
+
+Εδώ είναι ένα παράδειγμα  του <filename>/etc/lilo.conf</filename> αρχείου:
+
+</para><para>
+
+<informalexample><screen>
+
+image=/boot/newinstall/linux.bin
+       label=newinstall
+       initrd=/boot/newinstall/root.bin
+
+</screen></informalexample>
+
+Επιλογές τύπου <emphasis>root=/dev/hdXYZ</emphasis> στο
+<filename>lilo.conf</filename> θα αγνοηθούν στην περίπτωση αυτή.
+Για περισσότερες λεπτομέρειες, αναφερθείτε στις σελίδες χρήσης του
+<citerefentry><refentrytitle>initrd</refentrytitle>
+<manvolnum>4</manvolnum></citerefentry> και
+<citerefentry><refentrytitle>lilo.conf</refentrytitle>
+<manvolnum>5</manvolnum></citerefentry>. Τρέξτε τώρα το
+<userinput>lilo</userinput> και επανεκκινήστε.
+
+</para><para>
+
+Μπορείτε να παρακολουθήσετε την μαγεία του
+μηχανισμού <filename>initrd</filename> σε δράση αρκετές φορές κατά τη
+διάρκεια της εκκίνησης.
+
+<itemizedlist>
+<listitem><para>
+
+πρίν από το φόρτωμα ακόμα του πυρήνα, το <command>LILO</command>
+εμφανίζει μια πολύ μεγαλύτερη  <computeroutput>Loading
+<replaceable>γραμμή</replaceable>......</computeroutput> προόδου με περισσότερες
+τελείες από ότι συνήθως, δείχνοντας την πρόοδο της φόρτωσης του δίσκου RAM.
+
+</para></listitem>
+<listitem><para>
+
+Θα πρέπει να δείτε την ειδοποίηση <computeroutput>RAM disk driver
+initialized</computeroutput>, κατά την εκκίνηση του ρολογιού
+πραγματικού χρόνου, απόδειξη ότι ο πυρήνας σας όντως υποστηρίζει ένα
+δίσκο RAM.
+
+</para></listitem>
+<listitem><para>
+
+Τέλος, αν δεν δείτε το μήνυμα <computeroutput>RAMDISK: ext2 filesystem
+found at block 0</computeroutput> αμέσως μετά τον έλεγχο των
+διαμερίσεων, αυτ οφείλεται πιθανόν ο πυρήνας σας δεν έχει την
+δυνατότητα υποστήριξης <filename>initrd</filename>.
+
+</para></listitem>
+</itemizedlist>
+
+</para><para condition="FIXME">
+
+Τώρα θα πρέπει να δείτε τον εγκαταστάτη debian να τρέχει. Αν δεν
+χρησιμοποιείτε κάποιο αφαιρέσιμο μέσο, θα θέλατε να ελέγξετε από νωρίς
+ότι η δικτυακή σας σύνδεση δουλεύει κανονικά <emphasis>πριν</emphasis>
+προχωρήσετε σε μια αμετάκλητη διαμέριση του σκληρού σας δίσκου. Ίσως
+λοιπόν να πρέπει να φορτώσετε με <userinput>insmod</userinput> κάποια
+επιπλέον modules του πυρήνα για το σκοπό αυτό,
+για παράδειγμα για το δικτυακό σας interface. Είναι η στιγμή να
+<emphasis>μην</emphasis> ακολουθήσετε τα βήματα που υποδεικνύονται από
+τον <command>debian-installer</command>. Προχωρήστε αμέσως στο  <userinput>Mount a
+Previously-Initialized Partition</userinput>, και προσαρτήστε την
+διαμέριση στην οποία αποθηκεύσατε τα modules που εξάγατε
+αποσυμπιέζοντας  το αρχείο
+<filename>drivers.tgz</filename> (<xref linkend="files-lilo"></xref>).
+
+</para>
+
+<!-- Ideally, configure Device Driver Modules should support the
+following (insmod-ing from the hard-disk) and not only from a floppy.
+That would avoid the need to open a shell -->
+
+<para>
+
+Μετά ανοίξτε μια άλλη εικονική κονσόλα και χρησιμοποιήστε ένα κέλυφος
+(κοιτάξτε το 
+<xref linkend="shell"/>) για να βρείτε τους οδηγούς στον
+κατάλογο <filename>/target</filename> που μόλις αναρτήσατε. Φορτώστε
+με <userinput>insmod</userinput> αυτά που χρειάζεστε.
+
+</para><para>
+
+Πηγαίνετε στο  <xref linkend="configure-network"/> στο μενού
+<command>debian-installer</command> του εγκαταστάτη, και κάντε 
+<userinput>ping</userinput> επιτέλους στον καθρέφτη debian της
+προτίμησής σας.
+Συγχαρητήρια!
+
+</para><para>
+
+Χρησιμοποιήστε το  <userinput>Unmount a Partition</userinput> αν
+σύμφωνα με την προηγούμενη παράγραφο προσαρτήσατε κάποια διαμέριση,
+πηγαίνετε με ασφάλεια πίσω στα βήματα της διαμέρισης του δίσκου στην
+αρχή του 
+<command>debian-installer</command> και ακολουθήστε τη συνηθισμένη
+διαδικασία έχοντας σαν κέρδος και το δίκτυο. 
+Στο στάδιο αυτό, είναι δυνατόν (αν και λίγο επικίνδυνο), να διαγράψετε
+όλες τις προηγούμενες διαμερίσεις από το σκληρό σας δίσκο και να
+κάνετε μια πολύ "καθαρή" εγκατάσταση. Ο μόνος κίνδυνος είναι ότι ο
+δίσκος σας δεν θα είναι εκκινήσιμος για ένα σύντομο χρονικό διάστημα.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="i386"><title>Εκκίνηση από δισκέτες</title>
+<para>
+
+Θα έχετε ήδη κατεβάσει τις εικόνες των δισκετών που χρειάζεστε και
+δημιουργήσει τις αντίστοιχες δισκέτες από τις εικόνες στο <xref linkend="create-floppy"/>.
+Αν υπάρχει ανάγκη μπορείτε ακόμα και να τροποποιήσετε το rescue
+floppy; δείτε στο  
+<xref linkend="rescue-replace-kernel"/>.
+
+</para><para>
+
+Για να εκκινήσετε από τη δισκέτα εκκίνησης του εγκαταστάτη,
+τοποθετήστε την στη βασική συσκευή δισκέτας, κλείστε το σύστημά σας
+όπως θα κάνατε συνήθως και ξεκινήστε το ξανά.
+
+</para><para>
+
+Για εγκατάσταση από μια συσκευή  LS-120 (ATAPI version) με ένα σύνολο
+από δισκέτες, θα πρέπει να προσδιορίσετε την εικονική τοποθεσία της
+συσκευής της δισκέτας. Αυτό γίνεται με τη χρήση του ορίσματος
+εκκίνησης <emphasis>root=</emphasis>, που δίνει τη συσκευή στην οποία
+απεικονίζει ο οδηγός ide-floppy τη συσκευή. Για παράδειγμα, αν η
+συσκευή σας είναι συνδεδεμένη σαν πρώτη IDE συσκευή στο δεύτερο
+καλώδιο,
+ πληκτρολογήστε <userinput>linux.bin root=/dev/hdc</userinput> στην
+προτροπή εκκίνησης. Εγκατάσταση από LS120 υποστηρίζεται μόνο από
+πυρήνες 2.4 και νεώτερους.
+
+</para><para>
+
+Σημειώστε ότι σε κάποια μηχανήματα, ο συνδυασμός <keycombo><keycap>Control</keycap>
+<keycap>Alt</keycap> <keycap>Delete</keycap></keycombo> δεν
+επανεκκινεί το σύστηνα κανονικά, οπότε συνίσταται μια "σκληρή"
+επανεκκίνηση.  
+Αν κάνετε την εγκατάσταση από ένα υπάρχον λειτουργικό σύστημα (πχ., από
+ένα DOS κουτί) δεν έχετε κάποια επιλογή. Διαφορετικά, κάνετε μια
+"σκληρή" επανεκκίνηση ενώ  ξεκινάτε το μηχάνημά σας.
+
+</para><para>
+
+Θα γίνει πρόσβαση της συσκευής δισκέτας, και θα δείτε μια οθόνη που
+εισάγει το rescue floppy και τελειώνει με την προτροπή  <prompt>boot:</prompt>.
+
+</para><para>
+
+Αν χρησιμοποιείτε έναν εναλακτικό τρόπο για να ξεκινήσετε το σύστημά
+σας, ακολουθήστε τις οδηγίες και περιμένετε την εμφάνιση της προτροπής
+<prompt>boot:</prompt>.
+Αν ξεκινάτε από δισκέτες μικρότερες από 1.44MB,
+<phrase condition="rescue-needs-root-disk"> ή, στην πραγματικότητα,
+  όποτε ξεκινάτε από μια δισκέτα για την συγκεκριμένη αρχιτεκτονική σας,
+</phrase> θα πρέπει να χρησιμοποιήσετε τη μέθοδο με ramdisk, και θα
+χρειαστείτε τη δισκέτα Root.
+
+</para><para>
+
+Στην προτροπή <prompt>boot:</prompt> μπορείτε να κάνετε δυο
+πράγματα. Μπορείτε να πιέσετε τα πλήκτρα  <keycap>F1</keycap> έως και
+<keycap>F10</keycap> για να δείτε μερικές σελίδες χρήσιμων
+πληροφοριών, ή να εκκινήσετε το σύστημα.
+
+</para><para>
+
+Πληροφορίες για τις παραμέτρους εκκίνησης που μπορεί να είναι χρήσιμες
+μπορούν να βρεθούν πιέζοντας τα πλήκτρα  <keycap>F4</keycap>
+και<keycap>F5</keycap>.  Αν προσθέσετε οποιεσδήποτε παραμέτρους στην
+γραμμή εντολών εκκίνησης, βεβαιωθείτε ότι πληκτρολογείτε τη μέθοδο
+εκκίνησης (η προεπιλεγμένη είναι η 
+<userinput>linux</userinput>) και ένα διάστημα πριν την πρώτη
+παράμετρο (πχ.,
+<userinput>linux floppy=thinkpad</userinput>). Αν πιέσετε απλά το &enterkey;,
+αυτό ισοδυναμεί με το να πληκτρολογήσετε <userinput>linux</userinput>
+χωρίς καμμιά ειδική παράμετρο.
+
+</para><para>
+
+Η δισκέτα ονομάζεται δισκέτα "διάσωσης" γιατί μπορείτε να τη
+χρησιμοποιήσετε για να ξεκινήσετε το σύστημά σας και να κάνετε κάποιες
+επισκευές αν τυχόν παρουσιαστεί κάποιο πρόβλημα που καθιστά το δίσκο
+σας μη εκκινήσιμο. Συνεπώς, θα πρέπει να φυλάξετε τη δισκέτα αυτή
+κάπου μετά την εγκατάσταση του συστήματός σας. Πιέζοντας
+το  <keycap>F3</keycap> θα σας δώσει περισσότερες πληροφορίες για το
+πώς μπορείτε να χρησιμοποιήσετε τη δισκέτα rescue.
+
+</para><para>
+
+Όταν πιέσετε το  &enterkey;, θα πρέπει να δείτε το μήνυμα 
+<computeroutput>Loading...</computeroutput>, ακολουθούμενο από το 
+<computeroutput>Uncompressing Linux...</computeroutput>, και στη
+συνέχεια μια οθόνη γεμάτη με πληροφορίες σχετικά με το hardware στο
+σύστημά σας. Περισσότερες πληροφορίες σχετικά με τη φάση αυτή της
+διαδικασίας εκκίνησης μπορείτε να βρείτε παρακάτω στο  <xref linkend="kernel-msgs"/>.
+
+</para><para>
+
+If you choose a non-default boot method, e.g., ``ramdisk'' or
+``floppy'', you will be prompted to insert the Root Floppy. Insert the
+Root Floppy into the first disk drive and press &enterkey;.  (If
+you choose floppy1 insert the Root Floppy into the second disk drive.)
+
+</para><para>
+
+After booting from the rescue floppy, the root floppy is
+requested. Insert the root floppy and press &enterkey;, and the
+contents are loaded into memory. The installer program
+<command>debian-installer</command> is automatically launched.
+
+</para>
+  </sect2>
+  
+  <sect2 arch="i386"><title>Παράμετροι εκκίνησης για i386 </title>
+<para>
+
+Αν εκκινήσετε από τη δισκέτα διάσωσης ή από ένα CD-ROM θα βρεθείτε
+μπροστά στην προτροπή εκκίνησης , <prompt>boot:</prompt>.
+Λεπτομέρειες για τη χρήση των παραμέτρων εκκίνησης με τη δισκέτα
+διάσωσης Details μπορούν να βρεθούν στο  <xref
+					    linkend="boot-from-floppies"/>.
+Αν ξεκινάτε από ένα υπάρχον λειτουργικό σύστημα, θα πρέπει να
+χρησιμοποιήσετε άλλα μέσα για να θέσετε παραμέτρους εκκίνησης. Για
+παράδειγμα, αν εγκαθιστάτε από  DOS, μπορείτε να διορθώσετε το
+αρχείο <filename>install.bat</filename> με οποιονδήποτε διορθωτή κειμένου.
+
+</para><para>
+
+Μερικά συστήματα έχουν δισκέτες με ``ανεστραμμένα  DCLs''. Αν δείτε
+λάθη κατά το διάβασμα της δισκέτας, ακόμα κι όταν ξέρετε ότι η δισκέτα
+είναι εντάξει, δοκιμάστε την παράμετρο 
+ <userinput>floppy=thinkpad</userinput>.
+
+</para><para>
+
+Σε μερικά συστήματα, όπως το IBM PS/1 ή το  ValuePoint (που έχει
+οδηγούς δίσκου  ST-506), ο οδηγός IDE πιθανόν να μην αναγνωρίζεται
+κανονικά.  Κι εδώ, προσπαθήστε αρχικά χωρίς παραμέτρους και δείτε αν
+ ο οδηγός  IDE αναγνωρίζεται κανονικά.  Αν όχι, προσδιορίστε τη
+γεωμετρία του δίσκου σας
+(κύλινδροι, κεφαλές και τομείς), και χρησιμοποιήστε την παράμετρο 
+<userinput>hd=<replaceable>cylinders</replaceable>,<replaceable>heads</replaceable>,<replaceable>sectors</replaceable></userinput>.
+
+</para><para>
+
+Αν έχετε κάποιο πολύ παλιό μηχάνημα, και ο πυρήνας "κρεμάει" μετά τη
+φάση 
+<computeroutput>Checking 'hlt' instruction...</computeroutput>, τότε
+θα πρέπει να δοκιμάσετε το όρισμα
+εκκίνησης <userinput>no-hlt</userinput>, που απενεργοποιεί αυτόν τον έλεγχο.
+
+</para><para>
+
+Αν η οθόνη σας αρχίζει να εμφανίζει κάποια περίεργη εικόνα κατά την
+εκκίνηση του πυρήνα,
+πχ. γίνεται εντελώς λευκή, εντελώς μαύρη ή δείχνει άσχετα έγχρωμα
+pixel, πιθανόν το σύστημά σας να έχει μια προβληματική κάρτα οθόνης
+που δεν αλλάζει σωστά σε κατάσταση framebuffer.  
+Τότε μπορείτε να χρησιμοποιήσετε  τις παραμέτρους εκκίνησης 
+<userinput>video=vga16:off</userinput> για να απενεργοποιήσετε την
+κονσόλα framebuffer. Ο επιλογέας γλώσσας δε θα εμφανιστεί και μόνο η
+αγγλική γλώσσα θα είναι διαθέσιμη στη διάρκεια της εγκατάστασης λόγω
+των περιορισμένων δυνατοτήτων της κονσόλας. Δείτε το 
+ <xref linkend="boot-parms"/> για λεπτομέρειες.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="i386">
+  <title>Πάγωμα του συστήματος κατά τη φάση ρύθμισης της PCMCIA</title>
+
+<para>
+
+Μερικά μοντέλα φορητών που παράγονται από τη DELL είναι γνωστό ότι
+παγώνουν μόλις η ανίχνευση της συσκευής PCMCIA προσπαθεί να
+προσπελάσει κάποιες διευθύνσεις. Αν αντιμετωπίσετε αυτό το πρόβλημα
+δοκιμάστε την παρακάτω μέθοδο:
+<itemizedlist>
+<listitem><para>
+
+προετοιμάστε το root σύστημα αρχείων και εγκαταστήστε τον πυρήνα και
+τα  modules, αλλά μην ξεκινήσετε αμέσως τη ρύθμιση της PCMCIA 
+
+</para></listitem>
+<listitem><para>
+
+μπείτε στο κέλυφος του συστήματος (δείτε το <xref linkend="shell"/>
+για λεπτομέρειες)
+
+</para></listitem>
+<listitem><para>
+
+και εκτελέστε την εντολή: 
+<userinput>echo exclude port 0x810-0x81f >>
+/target/etc/pcmcia/config.opts</userinput>
+
+</para></listitem>
+<listitem><para>
+
+τώρα επιστρέψτε στο κυρίως μενού και τρέξτε το κομμάτι το σχετικό με
+τη ρύθμιση της PCMCIA
+
+</para></listitem>
+</itemizedlist>
+
+</para>
+  </sect2>
+
+  <sect2 arch="i386">
+  <title>Πάγωμα του συστήματος κατά το φόρτωμα των USB modules</title>
+<para>
+
+Η γεύση  bf2.4 συνήθως προσπαθεί να εγκαταστήσει τους οδηγούς για  USB
+και USB πληκτρολόγιο για να  επιτρέψει έτσι την εγκατάσταση για
+χρήστες με μερικά μη συνηθισμένα πληκτρολόγια USB.
+Υπάρχουν όμως μερικά προβληματικά συστήματα USB για τα οποία ο οδηγός
+κρεμάει κατά τη φόρτωση. Μια δυνατή αντιμετώπιση είναι η απενργοποίηση
+του ελεγκτή  USB από τις κεντρικές ρυθμίσεις του BIOS. Ένας άλλος
+τρόπος είναι η εισαγωγή του ορίσματος  <userinput>nousb</userinput>
+κατά την προτροπή εκκίνησης, που θα αποτρέψει το φόρτωμα των modules
+ακόμα και αν έχει γίνει ανίχνευση υλικού USB.
+
+</para>
+  </sect2>
+
+
+
+
+

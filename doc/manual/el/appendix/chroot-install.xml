@@ -1,0 +1,588 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: chroot-install.xml,v 1.5 2003/11/20 06:39:20 mck Exp $ -->
+
+ <sect1 id="linux-upgrade">
+ <title>Εγκαθιστώντας το  Debian GNU/Linux από ένα Σύστημα Unix/Linux</title>
+
+<para>
+
+Η ενότητα αυτή εξηγεί πώς να εγκαταστήσετε το Debian GNU/Linux από ένα
+υπάρχον from Unix ή Linux σύστημα, χωρίς τη χρήση του βασισμένου στις
+ncurses, και οδηγούμενου από το μενού εγκαταστάτη όπως εξηγείται στο
+υπόλοιπο αυτού του εγχειριδίου. Αυτό το  "cross-install"
+HOWTO έχει ζητηθεί από χρήστες που αλλάζουν σε Debian GNU/Linux από
+διανομές όπως οι Redhat, Mandrake, και SUSE. Στην ενότητα αυτή
+προϋποθέτουμε κάποια
+οικειότητα στην εισαγωγή εντολών *nix και πλοήγησης στο σύστημα
+αρχείων. 
+Εδώ, η παρακίνηση <prompt>$</prompt> συμβολίζει μια εντολή που πρέπει
+να εισαχθεί στο υπάρχον σύστημα του χρήστη, ενώ το  <prompt>#</prompt>
+αναφέρεται σε μια εντολή που θα εισαχθεί στο περιβάλλον Debian chroot.
+
+</para><para>
+
+Από τη στιγμή που έχετε ρυθμίσει το καινούριο Debian σύστημά σας
+σύμφωνα με τις προτιμήσεις σας, μπορείτε να μεταφέρετε τα υπάρχοντα
+δεδομένα σας (αν υπάρχουν) σε αυτό, και να συνεχίσετε να δουλεύετε. 
+Πρόκειται λοιπόν για μια εγκατάσταση Debian GNU/Linux με  "μηδενικό
+χρόνο μη-λειτουργίας". 
+Είναι επίσης και ένας έξυπνος τρόπος να αντιμετωπίσει κανείς δυσκολίες
+με  hardware που διαφορετικά δεν είναι φιλικό με διάφορα μέσα
+εκκίνησης ή εγκατάστασης.
+
+</para>
+
+  <sect2>
+  <title>Ξεκινώντας</title>
+<para>
+
+Με τα διαθέσιμα  *nix εργαλεία διαμέρισης, επαναδιαμερίστε τον σκληρό
+σας δίσκο όπως απαιτείται, δημιουργώντας τουλάχιστον ένα σύστημα
+αρχείων και ένα διαμέρισμα swap. Χρειάζεστε τουλάχιστον 
+150MB διαθέσιμου χώρου για μια εγκατάσταση μόνο με κονσόλα,
+ή τουλάχιστον 300MB αν σκοπεύετε να εγκαταστήσετε  το περιβάλλον X.
+
+</para><para>
+
+Για να δημιουργήσετε συστήματα αρχείων στις διαμερίσεις σας. Για
+παράδειγμα, για να δημιουργήσετε ένα σύστημα αρχείων ext3 στην
+διαμέριση  <filename>/dev/hda6</filename> (που είναι η βασική
+διαμέριση του παραδείγματος μας):
+
+<informalexample><screen>
+
+ $ mke2fs -j /dev/hda6
+
+</screen></informalexample>
+
+Αν αντίθετα θέλετε να δημιουργήσετε ένα σύστημα αρχείων ext2,
+παραλείψετε την παράμετρο  <userinput>-j</userinput>.
+
+</para><para>
+
+Διαμορφώστε και ενεργοποιήσετε μια διαμέριση swap (αντικαταστήστε τον
+αριθμό της διαμέρισης με αυτόν της διαμέρισης swap του δικού σας
+συστήματος Debian):
+
+<informalexample><screen>
+
+ $ mkswap /dev/hda5
+ $ sync; sync; sync
+ $ swapon /dev/hda5
+
+</screen></informalexample>
+
+</para><para>
+
+Προσαρτήστε μια διαμέριση σαν <filename>/mnt/debinst</filename> (το
+σημείο εγκατάστασης που θα γίνει το ριζικό σύστημα αρχείων 
+(<filename>/</filename>) στο καινούριο σύστημά σας). 
+Το όνομα του σημείου προσάρτησης είναι αυστηρά αυθαίρετο, δείτε
+αναφορά σε αυτό παρακάτω.
+
+<informalexample><screen>
+
+ $ mkdir /mnt/debinst
+ $ mount /dev/hda6 /mnt/debinst
+
+</screen></informalexample>
+
+</para>
+  </sect2>
+
+  <sect2>
+  <title>Εγκαθιστώντας με το<command>debootstrap</command></title>
+<para>
+
+Το εργαλείο που χρησιμοποιεί ο εγκαταστάτης του Debian, και που
+αναγνωρίζεται σαν ο επίσημος τρόπος για να εγκαταστήσετε ένα βασικό
+σύστημα Debian, είναι το
+<command>debootstrap</command>. Χρησιμοποιεί
+το <command>wget</command>, αλλά κατά τα άλλα εξαρτάται μόνο από την 
+<classname>glibc</classname>. Εγκαταστήστε το <command>wget</command>
+αν δεν είναι ήδη εγκατεστημένο στο σύστημά σας, και στη συνέχεια κατεβάστε
+και εγκαταστήστε το  <command>debootstrap</command>.
+
+</para><para>
+
+Αν έχετε ένα σύστημα βασισμένο σε rpm πακέτα, μπορείτε να
+χρησιμοποιήσετε το alien για να μετατρέψετε το πακέτο 
+.deb σε .rpm, ή κατεβάστε μια έκδοση rpm από το 
+<ulink url="http://people.debian.org/~blade/install/debootstrap"></ulink>
+
+</para><para>
+
+Ή μπορείτε να ακολουθήσετε την παρακάτω διαδικασία για να το
+εγκαταστήσετε χειροκίνητα. Δημιουργήστε έναν φάκελο εργασίας για την
+αποσυμπίεση εκεί το πακέτου .deb:
+
+<informalexample><screen>
+
+ $ mkdir work
+ $ cd work
+
+</screen></informalexample>
+</para><para>
+
+Το δυαδικό αρχείο <command>debootstrap</command> βρίσκεται στην
+αρχειοθήκη του Debian (βεβαιωθείτε ότι διαλέγετε το σωστό αρχείο για
+την αρχιτεκτονική σας). Κατεβάστε το
+πακέρο <command>debootstrap</command> .deb από το <ulink url="http://ftp.debian.org/debian/pool/main/d/debootstrap/">
+    pool</ulink>, αντιγράψτε το πακέτο στο φάκελο εργασίας, και
+αποσυμπιέστε τα δυαδικά αρχεία από αυτό. Πρέπει να έχετε προνόμια του
+χρήστη  root για να εγκαταστήσετε τα δυαδικά αρχεία.
+
+<informalexample><screen>
+
+ $ ar -xf debootstrap_0.X.X_arch.deb
+ $ cd /
+ $ zcat &#60; /full-path-to-work/work/data.tar.gz | tar xv
+
+</screen></informalexample>
+
+</para>
+  </sect2>
+
+  <sect2>
+  <title>Τρέξτε το <command>debootstrap</command> (Με δικτυακή σύνδεση)</title>
+<para>
+
+<command>Το debootstrap</command> μπορεί όταν το τρέξετε να κατεβάσει
+τα απαραίτητα αρχεία αυτόματα από την αρχειοθήκη. Μπορείτε να
+αντικαταστήσετε το <userinput>http.us.debian.org/debian</userinput>
+στο παράδειγμα που ακολουθεί με οποιοδήποτε καθρέφτη της αρχειοθήκης
+του Debian, κατά προτίμηση με κάποιον που να βρίσκεται δικτυακά κοντά
+σας. Οι διάφοροι καθρέφτες αναφέρονται στο
+<ulink url="http://www.debian.org/misc/README.mirrors"></ulink>.
+
+</para><para>
+
+Αν έχετε ένα CD με την έκδοση woody του Debian προσαρτημένου στο 
+<filename>/cdrom</filename>, μπορείτε να αντικαταστήσετε ένα URL
+αρχείου αντί του ενός http URL: <userinput>file:/cdrom/debian/</userinput>
+
+</para><para>
+
+Αντικαταστήστε ένα από τα ακόλουθα για την αρχιτεκτονική 
+<replaceable>ARCH</replaceable> 
+στην εντολή  <command>debootstrap</command>: 
+
+<userinput>alpha</userinput>, 
+<userinput>arm</userinput>,
+<userinput>hppa</userinput>, 
+<userinput>i386</userinput>, 
+<userinput>ia64</userinput>, 
+<userinput>m68k</userinput>,
+<userinput>mips</userinput>, 
+<userinput>mipsel</userinput>, 
+<userinput>powerpc</userinput>, 
+<userinput>s390</userinput>, ή
+<userinput>sparc</userinput>.
+
+<informalexample><screen>
+
+ $ /usr/sbin/debootstrap --arch ARCH woody \
+     /mnt/debinst http://http.us.debian.org/debian
+
+</screen></informalexample>
+
+</para>
+
+  </sect2>
+
+  <sect2>
+  <title>Τρέξτε το <command>debootstrap</command> 
+  (Χρησιμοποιώντας το <filename>basedebs.tar</filename>)</title>
+<para>
+
+Το <command>debootstrap</command> μπορεί να χρησιμοποιήσει το αρχείο
+<filename>basedebs.tar</filename>, αν το έχετε ήδη κατεβάσει έγκαιρα. 
+Το <filename>basedebs.tar</filename> αρχείο δημιουργείται μόνο μια
+φορά στο τόσο, οπότε μπορείτε να πάρετε την πιο πρόσφατη έκδοση του
+βασικού συστήματος απλά κατευθύνοντας
+το <command>debootstrap</command> άμεσα σε ένα μια από τις αρχειοθήκες
+του Debian archive όπως δείξαμε στην προηγούμενη ενότητα.
+
+</para><para>
+
+Το αρχείο <filename>basedebs.tar</filename> βρίσκεται στον
+κατάλογο <filename>base-images-current</filename> της αρχειοθήκης του  Debian
+για την αρχιτεκτονική σας, για παράδειγμα: 
+<ulink url="http://http.us.debian.org/debian/dists/woody/main/disks-&architecture;/base-images-current/basedebs.tar"></ulink>
+
+</para><para>
+
+Αντικαταστήστε μια από τις παρακάτω για το
+όρισμα <replaceable>ARCH</replaceable> της εντολής
+<command>debootstrap</command>: 
+
+<userinput>alpha</userinput>, 
+<userinput>arm</userinput>,
+<userinput>hppa</userinput>, 
+<userinput>i386</userinput>, 
+<userinput>ia64</userinput>, 
+<userinput>m68k</userinput>,
+<userinput>mips</userinput>, 
+<userinput>mipsel</userinput>, 
+<userinput>powerpc</userinput>, 
+<userinput>s390</userinput>, ή
+<userinput>sparc</userinput>.
+<informalexample><screen>
+ 
+$ /usr/sbin/debootstrap --arch ARCH --unpack-tarball \
+    /path-to-downloaded/basedebs.tar woody /mnt/debinst
+
+</screen></informalexample>
+</para>
+  </sect2>
+
+  <sect2>
+  <title>Ρύθμιση του βασικού συστήματος</title>
+
+<para>
+
+Τώρα έχετε ένα πραγματικό, αν και σκιώδες, σύστημα Debian στο δίσκο σας.
+<command>Chroot</command> σε αυτό:
+
+<informalexample><screen>
+
+ $ chroot /mnt/debinst /bin/bash
+
+</screen></informalexample>
+</para>
+
+   <sect3>
+   <title>Προσαρτήστε τις Διαμερίσεις</title>
+<para>
+
+Πρέπει να δημιουργήσετε το αρχείο <filename>/etc/fstab</filename>.
+
+<informalexample><screen>
+
+ # editor /etc/fstab
+
+</screen></informalexample>
+
+</para><para>
+
+Εδώ υπάρχει ένα δείγμα που μπορείτε να τροποποιήσετε ώστε να ταιριάζει
+στις ανάγκες σας:
+
+<informalexample><screen>
+
+# /etc/fstab: static file system information.
+#
+# file system    mount point   type    options                  dump pass
+/dev/XXX         /             ext2    defaults                 0    0
+/dev/XXX         /boot         ext2    ro,nosuid,nodev          0    2
+
+/dev/XXX         none          swap    sw                       0    0
+proc             /proc         proc    defaults                 0    0
+
+/dev/fd0         /mnt/floppy   auto    noauto,rw,sync,user,exec 0    0
+/dev/cdrom       /mnt/cdrom    iso9660 noauto,ro,user,exec      0    0
+
+/dev/XXX         /tmp          ext2    rw,nosuid,nodev          0    2
+/dev/XXX         /var          ext2    rw,nosuid,nodev          0    2
+/dev/XXX         /usr          ext2    rw,nodev                 0    2
+/dev/XXX         /home         ext2    rw,nosuid,nodev          0    2
+
+</screen></informalexample>
+
+</para><para>
+
+Χρησιμοποιήστε την εντολή  <userinput>mount -a</userinput> για να
+προσαρτήσετε όλα τα συστήματα αρχείων που έχετε προσδιορίσει στο 
+ <filename>/etc/fstab</filename>, ή για να προσατήσετε μεμονωμένα
+ συστήματα αρχείων χρησιμοποιήστε την εντολή:
+
+<informalexample><screen>
+
+ # mount /path  # e.g.:  mount /usr
+
+</screen></informalexample>
+
+</para><para>
+
+Μπορείτε να προσαρτήσετε το σύστημα αρχείων proc αρκετές φορές και σε
+αυθαίρετες τοποθεσίες, αν και το σημείο /proc είναι το σύνηθες. Αν δεν
+χρησιμοποιήσατε την εντολή
+<userinput>mount -a</userinput>, βεβαιωθείτε να προσαρτήσετε το proc
+πρίν συνεχίσετε:
+
+<informalexample><screen>
+
+ # mount -t proc proc /proc
+
+</screen></informalexample>
+
+</para>
+
+<para>
+Ένας χρήστης του RedHat αναφέρει ότι στο σύστημά του, αυτή η εντολή
+θα πρέπει να είναι 
+
+<informalexample><screen>
+
+ # mount -t none proc /proc
+
+</screen></informalexample>
+</para>
+   </sect3>
+
+   <sect3>
+   <title>Ρύθμιση του πληκτρολογίου</title>
+
+<para>
+
+Για να ρυθμίσετε το πληκτρολόγιο τρέξτε:
+
+<informalexample><screen>
+
+ # dpkg-reconfigure console-data
+
+</screen></informalexample>
+
+</para>
+   </sect3>
+
+   <sect3>
+   <title>Ρύθμιση Δικτύου</title>
+<para>
+
+Για να ρυθμίσετε το δίκτυο, εκδόστε τα αρχεία 
+<filename>/etc/network/interfaces</filename>,
+<filename>/etc/resolv.conf</filename>, και
+<filename>etc/hostname</filename>.
+
+<informalexample><screen>
+
+ # editor /etc/network/interfaces 
+
+</screen></informalexample>
+
+</para><para>
+
+Εδώ είναι μερικά απλά παραδείγματα από το
+<filename>/usr/share/doc/ifupdown/examples</filename>:
+
+<informalexample><screen>
+######################################################################
+# /etc/network/interfaces -- configuration file for ifup(8), ifdown(8)
+# See the interfaces(5) manpage for information on what options are 
+# available.
+######################################################################
+
+# We always want the loopback interface.
+#
+auto lo
+iface lo inet loopback
+
+# To use dhcp:
+#
+# auto eth0
+# iface eth0 inet dhcp
+
+# An example static IP setup: (broadcast and gateway are optional)
+#
+# auto eth0
+# iface eth0 inet static
+#     address 192.168.0.42
+#     network 192.168.0.0
+#     netmask 255.255.255.0
+#     broadcast 192.168.0.255
+#     gateway 192.168.0.1
+</screen></informalexample>
+
+</para><para>
+
+Βάλτε τις ρυθμίσεις των nameserver(s) και search directives στο
+<filename>/etc/resolv.conf</filename>:
+
+<informalexample><screen>
+
+ # editor /etc/resolv.conf
+
+</screen></informalexample>
+
+</para><para>
+
+Ένα απλό αρχείο <filename>/etc/resolv.conf</filename>:
+
+<informalexample><screen>
+
+# search hqdom.local\000
+# nameserver 10.1.1.36
+# nameserver 192.168.9.100
+
+</screen></informalexample>
+
+</para><para>
+
+Εισάγετε το όνομα του υπολογιστή σας (2 έως 63 χαρακτήρες):
+
+<informalexample><screen>
+
+ # echo DebianHostName &#62; /etc/hostname
+
+</screen></informalexample>
+
+</para><para>
+
+Αν έχετε περισσότερες από μια κάρτες δικτύου, θα πρέπει να
+διευθετήσετε τα ονόματα των
+driver modules στο αρχείο <filename>/etc/modules</filename> με την
+επιθυμητή σειρά. Έτσι κατά τη διάρκεια της εκκίνησης, κάθε κάρτα θα
+συσχετιστεί με το όνομα του 
+interface  (eth0, eth1, etc.) που περιμένετε.
+
+</para>
+   </sect3>
+
+   <sect3>
+   <title>Ρύθμιση της Χρονικής Ζώνης, Χρηστών και του APT</title>
+
+<para>
+
+Ρυθμίστε τη χρονική σας ζώνη, προσθέστε έναν κανονικό χρήστη και
+επιλέξτε τις πηγές του <command>apt</command>
+τρέχοντας
+
+<informalexample><screen>
+
+ # /usr/sbin/base-config
+
+</screen></informalexample>
+</para>
+   </sect3>
+
+   <sect3>
+   <title>Ρύθμιση των Locales</title>
+<para>
+
+Για να ρυθμίσετε το  locale σας ώστε να χρησιμοποιήσετε μια γλώσσα
+διαφορετική από τα αγγλικά, εγκαταστήσετε το πακέτο υποστήριξης
+locales και ρυθμίστε το:
+
+<informalexample><screen>
+
+ # apt-get install locales
+ # dpkg-reconfigure locales
+
+</screen></informalexample>
+
+ΠΑΡΑΤΗΡΗΣΗ: Το Apt πρέπει να έχει ρυθμιστεί από πριν, πχ. στη διάρκεια
+της φάσης της βασικής ρύθμισης base-config.
+Πριν χρησιμοποιήστε locales με σύνολα χαρακτήρων διαφορετικά από ASCII
+ή latin1, παρακαλώ να συμβουλευθείτε το κατάλληλο localisation HOWTO.
+
+</para>
+   </sect3>
+  </sect2>
+
+  <sect2>
+  <title>Εγκατάσταση ενός Πυρήνα</title>
+
+<para>
+
+Αν θέλετε να εκκινήσετε το σύστημα αυτό, πιθανόν να θέλετε να να
+εγκαταστήσετε έναν πυρήνα Linux και ένα boot loader. Προσδιορίστε τους
+διαθέσιμους προ-πακεταρισμένους πυρήνες με την εντολή
+
+<informalexample><screen>
+
+ # apt-cache search kernel-image
+
+</screen></informalexample>
+
+</para><para>
+
+Στη συνέχεια εγκαταστήστε την επιλογή σας χρησιμοποιώντας το όνομα του
+αντίστοιχου πακέτου.
+
+<informalexample><screen>
+
+ # apt-get install kernel-image-2.X.X-arch-etc
+
+</screen></informalexample>
+
+</para>
+  </sect2>
+
+  <sect2>
+<title>Ρυθμίση του Boot Loader</title>
+<para>
+
+Για να καταστήσετε το Debian GNU/Linux σύστημά σας εκκινήσιμο,
+ρυθμίστε τον boot
+loader ώστε να φορτώνει τον εγκατεστημένο πυρήνα με την καινούρια
+ριζική διαμέρισή σας.
+
+</para><para arch="i386">
+
+Ελέγξτε το <userinput>man lilo.conf</userinput> για οδηγίες σχετικά με
+τη ρύθμιση του bootloader. Αν διατηρείτε το σύστημα που
+χρησιμοποιήσατε για την εγκατάσταση του Debian, απλά προσθέστε μια
+επιλογή για την εγκατάσταση του  Debian στο υπάρχον αρχείο σας
+lilo.conf. Μπορείτε επίσης να αντιγράψετε το αρχείο αυτό στο καινούριο
+σας σύστημα και να το εκδόσετε από εκεί. Μετά την ολοκλήρωση των
+διορθώσεων σας, τρέξτε το lilo (θυμηθείτε ότι θα χρησιμοποιήσει το
+αντίστοιχο lilo.conf από το σύστημα μέσα από το οποίο το τρέχετε).
+
+</para><para arch="i386">
+
+Εδώ είναι ένα /etc/lilo.conf σαν παράδειγμα:
+
+<informalexample><screen>
+
+boot=/dev/hda6
+root=/dev/hda6
+install=/boot/boot-menu.b
+delay=20
+lba32
+image=/vmlinuz
+label=Debian
+
+</screen></informalexample>
+
+</para><para arch="powerpc">
+
+Ελέγξτε με <userinput>man yaboot.conf</userinput> για οδηγίες σχετικά
+με τη ρύθμιση του bootloader.  Αν διατηρείτε το σύστημα που
+χρησιμοποιήσατε για την εγκατάσταση του Debian, απλά προσθέστε μια
+επιλογή για την εγκατάσταση του  Debian στο υπάρχον αρχείο σας
+yaboot.conf. Μπορείτε επίσης να αντιγράψετε το αρχείο αυτό στο καινούριο
+σας σύστημα και να το εκδόσετε από εκεί. Μετά τις διορθώσεις, τρέξτε
+το ybin (θυμηθείτε ότι θα χρησιμοποιήσει το αρχείο
+yaboot.conf σχετικά με το σύστημα μέσα από το οποίο το τρέχετε).
+
+</para><para arch="powerpc">
+
+Εδώ είναι ένα βασικό /etc/yaboot.conf σαν παράδειγμα:
+
+<informalexample><screen>
+
+boot=/dev/hda2
+device=hd:
+partition=6
+root=/dev/hda6
+magicboot=/usr/lib/yaboot/ofboot
+timeout=50
+image=/vmlinux
+label=Debian
+
+</screen></informalexample>
+
+Σε κάποια συστήματα, μπορεί να πρέπει να
+χρησιμοοποιήσετε <userinput>ide0:</userinput> αντί για <userinput>hd:</userinput>. 
+
+</para><para arch="not-i386;not-powerpc">
+
+<phrase condition="FIXME">
+ΔΙΟΡΘΩΣΕ ΜΕ: Κάποιος μπορεί τελικά να προσφέρει ένα παράδειγμα για
+αυτή την αρχιτεκτονική.
+</phrase>
+
+</para>
+  </sect2>
+ </sect1>
