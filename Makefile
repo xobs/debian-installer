@@ -158,6 +158,8 @@ clean: demo_clean tmp_mount debian/control
 	rm -rf $(UDEBDIR) $(EXTRAUDEBDIR) $(TMP_MNT) debian/build
 	rm -rf $(DEST)/$(TYPE)-* || sudo rm -rf $(DEST)/$(TYPE)-*
 	rm -f unifont-reduced-$(TYPE).bdf
+	$(foreach NAME,$(KERNELNAME), \
+		rm -f $(TEMP)/$(NAME); )
 
 reallyclean: clean
 	rm -rf $(APTDIR) $(DEST) $(BASE_TMP) wget-cache $(SOURCEDIR)
@@ -207,10 +209,12 @@ $(TYPE)-get_udebs-stamp:
 	$(APT_GET) autoclean
 	# If there are local udebs, remove them from the list of things to
 	# get. Then get all the udebs that are left to get.
-	needed="$(UDEBS) $(DRIVERFD_UDEBS)"; \
+	# Note that the trailing blank on the next line is significant. It
+	# makes the sed below always work.
+	needed="$(UDEBS) $(DRIVERFD_UDEBS) "; \
 	for file in `find $(LOCALUDEBDIR) -name "*_*" -printf "%f\n" 2>/dev/null`; do \
 		package=`echo $$file | cut -d _ -f 1`; \
-		needed=`echo " $$needed " | sed "s/ $$package */ /"`; \
+		needed=`echo " $$needed " | sed "s/ $$package / /"`; \
 	done; \
 	if [ "$(DEBUG)" = y ] ; then \
 		mkdir -p $(DEBUGUDEBDIR); \
