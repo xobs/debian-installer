@@ -165,12 +165,7 @@ create_dvi () {
         -d $stylesheet_dsssl \
         -V tex-backend \
         $tempdir/install.${language}.profiled.xml
-    RET=$?
-    if [ $RET -eq 1 ] && [ -s $tempdir/install.${language}.tex ] ; then
-        echo "Warning: recieved error $RET from 'openjade'; probably non-fatal so ignoring."
-    else
-        [ $RET -ne 0 ] && return $RET
-    fi
+    RET=$?; [ $RET -ne 0 ] && return $RET
 
     echo "Info: creating temporary .dvi file..."
 
