@@ -136,12 +136,16 @@ APT_GET=apt-get --assume-yes \
 # Get the list of udebs to install. Comments are allowed in the lists.
 UDEBS=$(shell grep --no-filename -v ^\# pkg-lists/base pkg-lists/$(TYPE)/common `if [ -f pkg-lists/$(TYPE)/$(architecture) ]; then echo pkg-lists/$(TYPE)/$(architecture); fi` | sed 's/$${kernel:Version}/$(KVERS)/g' | sed 's/$${kernel:Flavour}/$(FLAVOUR)/g') $(EXTRAS)
 
-DPKGDIR=$(TREE)/var/lib/dpkg
-TEMP=./tmp
-TMP_MNT=`pwd`/mnt/
+# Scratch directory.
+BASE_TMP=./tmp/
+# Per-type scratch directory.
+TEMP=$(BASE_TMP)$(TYPE)
 
 # Build tree location.
 TREE=$(TEMP)/tree
+
+DPKGDIR=$(TREE)/var/lib/dpkg
+TMP_MNT=`pwd`/mnt/
 
 # This is the kernel image that we will boot from.
 KERNEL=$(TEMP)/$(KERNELNAME)
@@ -164,14 +168,14 @@ demo_clean:
 		sudo chroot $(TREE) bin/sh -c "if mount | grep ^proc ; then bin/umount /proc ; fi" &> /dev/null; \
 	fi
 
-clean: demo_clean
+clean: demo_clean tmp_mount
 	dh_clean
 	rm -f *-stamp
-	rm -rf $(TREE) $(APTDIR) $(UDEBDIR) $(TEMP) $(DEST) $(TMP_MNT)
+	rm -rf $(TREE) $(APTDIR) $(UDEBDIR) $(BASE_TEMP) $(DEST) $(TMP_MNT)
 
 # Get all required udebs and put in UDEBDIR.
-get_udebs: get_udebs-stamp
-get_udebs-stamp:
+get_udebs: $(TYPE)-get_udebs-stamp
+$(TYPE)-get_udebs-stamp:
 	mkdir -p $(APTDIR)/state/lists/partial
 	mkdir -p $(APTDIR)/cache/archives/partial
 	$(APT_GET) update
@@ -225,12 +229,12 @@ get_udebs-stamp:
 		fi; \
 	done
 
-	touch get_udebs-stamp
+	touch $(TYPE)-get_udebs-stamp
 
 
 # Build the installer tree.
-tree: get_udebs tree-stamp
-tree-stamp:
+tree: get_udebs $(TYPE)-tree-stamp
+$(TYPE)-tree-stamp:
 	dh_testroot
 
 	dpkg-checkbuilddeps
@@ -331,7 +335,7 @@ endif
 	    rm $$file; \
 	done
 
-	touch tree-stamp
+	touch $(TYPE)-tree-stamp
 
 tarball: tree
 	tar czf $(DEST)/$(TYPE)-debian-installer.tar.gz $(TREE)
@@ -345,11 +349,9 @@ tmp_mount:
 	mkdir -p $(TMP_MNT)
 
 # Create a compressed image of the root filesystem by way of genext2fs.
-
 initrd: Makefile tmp_mount tree $(INITRD)
 $(INITRD): TMP_FILE=$(TEMP)/image.tmp
 $(INITRD):
-	dh_testroot
 	rm -f $(TMP_FILE)
 	install -d $(TEMP)
 	install -d $(DEST)
@@ -428,25 +430,39 @@ stats: tree
 # you probably don't want to use this grungy code, at least not without
 # overriding this:
 UPLOAD_DIR=people.debian.org:~/public_html/debian-installer/daily/
+ALL_TYPES=$(shell find pkg-lists -type d -maxdepth 1 -mindepth 1 -not -name CVS -printf '%f\n')
 daily_build:
 	-cvs update
 	dpkg-checkbuilddeps
 	$(MAKE) clean
+
 	install -d $(DEST)
-	fakeroot $(MAKE) tarball > $(DEST)/log 2>&1
-	$(MAKE) stats > $(DEST)/$(TYPE).info
+	rm -f $(DEST)/info
+	touch $(DEST)/info
+	set -e; \
+	for type in $(ALL_TYPES); do \
+		$(MAKE) sub_daily_build TYPE=$$type USER_MOUNT_HACK=$(shell pwd)/$(DEST)/tmp-mnt.img; \
+	done
+	mail $(shell whoami) -s "today's build info" < $(DEST)/info
+
+sub_daily_build:
+	fakeroot $(MAKE) tarball > $(DEST)/$(TYPE).log 2>&1
+	$(MAKE) floppy_image >> $(DEST)/$(TYPE).log 2>&1
+	$(MAKE) stats | grep -v ^make > $(DEST)/$(TYPE).info
 	echo "Tree comparison" >> $(DEST)/$(TYPE).info
 	echo "" >> $(DEST)/$(TYPE).info
 	if [ -d $(TYPE)-oldtree ]; then \
 		./treecompare $(TYPE)-oldtree $(TREE) >> $(DEST)/$(TYPE).info; \
 	fi
-	scp -q -B $(DEST)/log $(UPLOAD_DIR)
+	scp -q -B $(DEST)/$(TYPE).log $(UPLOAD_DIR)
 	scp -q -B $(DEST)/$(TYPE)-debian-installer.tar.gz \
 		$(UPLOAD_DIR)/$(TYPE)-debian-installer-$(shell date +%Y%m%d).tar.gz
+	scp -q -B $(FLOPPY_IMAGE) $(UPLOAD_DIR)/images/
 	scp -q -B $(DEST)/$(TYPE).info \
 		$(UPLOAD_DIR)/$(TYPE).info-$(shell date +%Y%m%d)
+	echo "Type: $(TYPE)" >> $(DEST)/info
+	cat $(DEST)/$(TYPE).info >> $(DEST)/info
 	rm -rf $(TYPE)-oldtree
-	-mv $(TREE) $(TYPE)-oldtree && rm -f tree-stamp
-	mail $(shell whoami) -s "today's build info" < $(DEST)/$(TYPE).info
+	-mv $(TREE) $(TYPE)-oldtree && rm -f $(TYPE)-tree-stamp
 
 .PHONY: tree
