@@ -1,9 +1,17 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 -->
-
+<!-- original version: 24419 -->
 
   <sect2 arch="i386"><title>Partitionieren auf &arch-title;-Systemen</title>
 <para>
+
+Wenn Sie bereits ein anderes Betriebssystem wie DOS oder Windows auf Ihrem
+Rechner haben und zusätzlich zu Debian auch behalten möchten, müssen Sie
+unter Umständen die entsprechende Partition verkleinern, um Platz für die
+Debian-Installation zu schaffen. Der Installer unterstützt die Änderung der
+Größe sowohl von FAT- wie auch von NTFS-Dateisystemen; wählen Sie einfach
+die Partition aus und ändern Sie ihre Größe.
+
+</para><para>
 
 Das PC-BIOS an sich erlegt dem Partitionieren von Festplatten
 zusätzliche Beschränkungen auf. Es gibt ein Limit, wie viele
@@ -11,8 +19,8 @@ zusätzliche Beschränkungen auf. Es gibt ein Limit, wie viele
 eine Festplatte enthalten darf. Zusätzlich gibt es mit BIOS-Versionen vor
 1994-98 eine Einschränkung, wo auf der Platte die bootfähige Partition liegen
 darf. Mehr Informationen finden Sie im
-<ulink url="&url-partition-howto;">Linux Partition HOWTO</ulink> und in der
-<ulink url="&url-phoenix-bios-faq-large-disk;">Phoenix BIOS FAQ</ulink>,
+<ulink url="&url-partition-howto;">Linux-Partition-HOWTO</ulink> und in der
+<ulink url="&url-phoenix-bios-faq-large-disk;">Phoenix-BIOS-FAQ</ulink>,
 aber dieses Kapitel wird Ihnen einen kurzen Überblick geben, um Ihnen zu
 helfen, die meisten Situationen zu meistern.
 
@@ -29,9 +37,9 @@ können Sie pro Festplatte nur eine erweiterte Partition haben.
 
 </para><para>
 
-Linux beschränkt die Partitionen pro Platte auf 15 für SCSI-Festplatten
+Linux beschränkt die Partitionen pro Platte auf 15 bei SCSI-Festplatten
 (3 nutzbare primäre Partitionen, 12 logische Partitionen) und auf 63
-für IDE-Festplatten (3 nutzbare primäre Partitionen, 60 logische Partitionen).
+bei IDE-Festplatten (3 nutzbare primäre Partitionen, 60 logische Partitionen).
 Allerdings bietet das normale &debian;-System nur 20 Devices
 (Geräteschnittstellen) für Partitionen, deswegen können Sie nicht auf
 Partitionen höher als 20 installieren, außer Sie erstellen manuell
@@ -49,7 +57,7 @@ BIOS-Translation ungefähr 524 Megabyte).
 </para><para>
 
 Diese Einschränkung betrifft Sie nicht, wenn Sie ein BIOS haben, das neuer
-als 1995-98 (abhängig vom Hersteller) ist und die <quote>Enhanced
+als 1995&ndash;98 (abhängig vom Hersteller) ist und die <quote>Enhanced
 Disk Drive Support Specification</quote> unterstützt. Sowohl LILO, der
 LInux-LOader, wie auch Debians Alternative <command>mbr</command> müssen
 das BIOS nutzen, um den Kernel von der Platte in den RAM zu laden.
@@ -65,9 +73,9 @@ hat, da Linux für den Festplattenzugriff das BIOS dann nicht mehr benötigt.
 Wenn Sie eine große Festplatte haben, müssen Sie möglicherweise
 Techniken zur Zylinder-Übersetzung (»cylinder translation«) benutzen, die
 über das BIOS eingestellt werden, wie z.B. LBA (Logical Block Addressing)
-oder CHS Translation Mode (auf <quote>Large</quote> einstellen).
+oder CHS Translation Mode (auf <quote>Large</quote> (groß) einstellen).
 Mehr Informationen über das Thema große Festplatten finden Sie im
-<ulink url="&url-large-disk-howto;">Large Disk HOWTO</ulink>.
+<ulink url="&url-large-disk-howto;">Large Disk-HOWTO</ulink>.
 Wenn Sie ein Zylinder-Übersetzungs-Schema nutzen, Ihr BIOS aber nicht die
 »Large Disk Access Extensions« unterstützt, muss Ihre Bootpartition innerhalb
 des <emphasis>übersetzten</emphasis> Bereichs der ersten 1024 Zylinder liegen.
@@ -78,8 +86,8 @@ Der empfohlene Weg, mit dieser Problematik umzugehen, ist, eine kleine
 Partition (5-10MB sollten reichen) am Anfang der Platte zu erzeugen, die
 dann als Bootpartition genutzt wird; danach können Sie in dem verbleibenden
 Bereich Partitionen nach Ihren Vorstellungen anlegen. Diese Boot-Partition
-<emphasis>muss</emphasis> als <filename>/boot</filename> gemountet werden
-(ins Dateisystem eingehängt werden), da dort der oder die Linux-Kernel
+<emphasis>muss</emphasis> als <filename>/boot</filename> gemountet
+(ins Dateisystem eingehängt) werden, da dort der oder die Linux-Kernel
 gespeichert werden. Diese Konfiguration sollte auf allen Systemen funktionieren,
 egal, ob LBA oder CHS Translation genutzt wird und unabhängig davon, ob
 Ihr BIOS die Large Disk Access Extensions unterstützt.
