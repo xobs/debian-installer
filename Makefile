@@ -69,6 +69,8 @@ TEMP=$(BASE_TMP)$(TYPE)
 # Build tree location.
 TREE=$(TEMP)/tree
 
+LOCALE_PATH=$(TREE)/usr/lib/locale
+
 # CD Image tree location
 CD_IMAGE_TREE=$(TEMP)/cd_image_tree
 
@@ -430,17 +432,17 @@ endif
 
 
 unifont-reduced-$(TYPE).bdf: all-$(TYPE).utf
-	# Need to use an UTF-8 based locale to get reduce-font working.
-	# Any will do.  en_IN seem fine and was used by boot-floppies
+	# Use the UTF-8 locale in rootskel-locale. This target shouldn't
+	# be called when it is not present anyway.
 	# reduce-font is part of package libbogl-dev
 	# unifont.bdf is part of package bf-utf-source
 	# The locale must be generated after installing the package locales
-	CHARMAP=`LC_ALL=en_IN.UTF-8 locale charmap`; \
+	CHARMAP=`LOCPATH=$(LOCALE_PATH) LC_ALL=C.UTF-8 locale charmap`; \
             if [ UTF-8 != "$$CHARMAP" ]; then \
-	        echo "error: required locale en_IN.UTF-8 is missing!"; \
+	        echo "error: Trying to build unifont.bgf without rootskel-locale!"; \
 	        exit 1; \
 	    fi
-	LC_ALL=en_IN.UTF-8 reduce-font /usr/src/unifont.bdf < all-$(TYPE).utf > $@.tmp
+	LOCPATH=$(LOCALE_PATH) LC_ALL=C.UTF-8 reduce-font /usr/src/unifont.bdf < all-$(TYPE).utf > $@.tmp
 	mv $@.tmp $@
 
 $(TREE)/unifont.bgf: unifont-reduced-$(TYPE).bdf
@@ -486,7 +488,11 @@ tmp_mount:
 # Create a compressed image of the root filesystem by way of genext2fs.
 initrd: $(INITRD)
 $(INITRD): TMP_FILE=$(TEMP)/image.tmp
-$(INITRD):  $(TYPE)-tree-stamp $(TREE)/unifont.bgf
+$(INITRD):  $(TYPE)-tree-stamp
+# Only build the font if we have rootskel-locale
+	if [ -d "$(LOCALE_PATH)/C.UTF-8" ]; then \
+	    $(MAKE) $(TREE)/unifont.bgf; \
+	fi
 	rm -f $(TMP_FILE)
 	install -d $(TEMP)
 	install -d $(DEST)
