@@ -285,9 +285,9 @@ stats:
 	@echo Installed udebs: $(UDEBS)
 	@echo Total system size: $(shell du -h -s $(DEST) | cut -f 1)
 	@echo Compresses to: $(COMPRESSED_SZ)k
-	@echo Single Floppy kernel must be less than: ~$(shell expr 1400 - $(COMPRESSED_SZ) )k
+	@echo Single Floppy kernel must be less than: ~$(shell expr $(FLOPPY_SIZE) - $(COMPRESSED_SZ) )k
 	@if [ -e $(TMPDIR)/.floppy_free_stat ]; then \
-		echo Floppy currently has `cat $(TMPDIR)/.floppy_free_stat` free!; \
+		echo Single net floppy currently has `cat $(TMPDIR)/.floppy_free_stat` free!; \
 	fi
 # Add your interesting stats here.
 
