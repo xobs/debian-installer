@@ -64,26 +64,324 @@ A more detailed overview of how the installer is built:
 
 ------------
 
-Notes on the build/config makefile fragments:
 
-Nowe that most of the structure is in place, making new versions of d-i is
-mostly a matter of filling in Makefile variables, and new rules for anything
-unusual or new. Here are some guidelines on what you need to fill in.
+The debian-installer build system
+---------------------------------
 
-Top level specifies supported subarches, media or flavours supported with 
-SUBARCHES_SUPPORTED, MEDIUM_SUPPORTED, or FLAVOUR SUPPORTED - a list of
-subarches, media of flavours - each of which is a subdirectory under <arch>.
-The names have no special significance.
+The build system is designed to allow the addition of configurations
+with minimal effort. It achieves this by evaluating some magic
+variables from the configuration snippet and feeding some generic
+rules you hopefully never need to know about. The configuration
+snippets live in the config/ directory and are organized in a
+hierarchical tree structure, the directory names therein have also a
+specific meaning. It follows a config/$ARCH/$SUBARCH/$MEDIUM/$FLAVOUR
+scheme, where $ARCH is mandatorily the debian architecture name. For
+the other three, the requirement is you need to use at least one.
 
-A typical 'leaf' .cfg file specifies:
+$SUBARCH is supposed to be the subarchitecture. For e.g. m68k this
+would be something like "amiga" or "atari", i386 doesn't use it.
+
+$MEDIUM is the boot medium, like "cdrom", "floppy", "netboot".
+
+$FLAVOUR distinguishes between other differences, like 2.4 vs. 2.6
+kernels, or several floppy images.
+
+Note: You don't have to follow this usage strictly, the variable naming
+is merely a hint. It could also have been named as $LEVEL1/$LEVEL2/LEVEL3.
+
+Note2: The resulting file tree in the dest/ directory has a similiar
+$SUBARCH/$MEDIUM/$FLAVOUR layout. It can be slightly adapted with the
+EXTRANAME and DEST_SOME variables.
+
+A example tree layout looks like this:
+
+config
+|-- i386
+|   |-- cdrom
+|   |   |-- el-torito-2.6.cfg
+|   |   |-- el-torito.cfg
+|   |   |-- isolinux-2.6.cfg
+|   |   `-- isolinux.cfg
+|   |-- cdrom.cfg
+|   |-- floppy
+|   |   |-- boot.cfg
+|   |   |-- cd-drivers.cfg
+|   |   `-- root.cfg
+|   |-- floppy.cfg
+|   |-- hd-media
+|   |   `-- 2.6.cfg
+|   |-- hd-media.cfg
+|   |-- monolithic
+|   |   `-- 2.6.cfg
+|   |-- monolithic.cfg
+|   |-- netboot
+|   |   `-- 2.6.cfg
+|   `-- netboot.cfg
+`-- i386.cfg
+
+In the first level, you have an $ARCH directory, and an $ARCH.cfg
+configuration snippet, which needs to define what to use from the tree
+below, and can also define commonly used variables for all
+configurations of this architecture. An example $ARCH.cfg would look
+like this:
+
+SUBARCH_SUPPORTED = r4k-ip22 r5k-ip22 sb1-swarm-bn miniiso
+
+KERNELMAJOR = 2.4
+KERNELMINOR = 25
+KERNEL_FLAVOUR = di
+KERNELIMAGEVERSION = $(KERNELVERSION)
+KERNELNAME = $(foreach ver,$(KERNELVERSION),vmlinux-$(ver))
+
+VERSIONED_SYSTEM_MAP = t
+
+arch_boot_screens:
+
+The SUBARCH_SUPPORTED line defines what to look up in the next
+directory level. In this case, these are the configuration snippets
+r4k-ip22.cfg, r5k-ip22.cfg, sb1-swarm-bn.cfg and miniiso.cfg. Each of
+those snippets can define a MEDIUM_SUPPORTED variable, which
+opens the next subdirectory level. Those subdirectories have to have
+the name of their subarchitecture, for the example above e.g. r4k-ip22
+or sb1-swarm-bn.
+
+The various KERNEL* variables are common for all configurations of this
+architecture, so they were moved upwards from the leaf configuration
+snippets. The same can be done for make rules.
+
+Caveats:
+- You can re-/undefine variables defined in a higher level, but you
+  can't do that for rules. Make will complain about it.
+- Use always recusively expanded variables (that is '=', not ':=').
+  Make works though the tree by recursively calling itself. If you
+  use simply expanded variables, the variables of higher levels (like
+  *_SUPPORTED) won't get re-evaluated, and things will break.
+
+
+Interesting Variables in configuration snippets
+-----------------------------------------------
+
+First, mandatory variables:
+
+SUBARCH_SUPPORTED
+MEDIUM_SUPPORTED
+FLAVOUR_SUPPORTED
+  As already explained, they define what configurations the build
+  system should look for. They cause the definition of SUBARCH,
+  MEDIUM and FLAVOUR for for every snippet they invoke that way.
+  At least one of them must be defined.
+
+KERNELMAJOR
+  The high part of the kernel version, like "2.6". Unluckily, this is
+  what the kernel people call MAJOR.MINOR.
+
 KERNELVERSION
+  The version of the kernel .udeb package, like "2.4.26-r4k-ip22"
+
 KERNEL_FLAVOUR
-KERNELNAME
+  The flavour of the kernel .udeb package. This has nothing to do with
+  FLAVOUR. It has always a value of "di" these days.
+
 KERNELIMAGEVERSION
-and 
+  The version part of the kernel image's name.
+
+KERNELNAME
+  The full name of the kernel image. If you build an EXTRA target (e.g.
+  for a driver floppy), this variable has to be empty.
+
 TYPE
+  This variable points to the subdirectory in pkg-lists/ which should
+  be used for this config. E.g. $TYPE=cdrom means that
+  pkg-lists/cdrom/local, pkg-lists/cdrom/common and
+  pkg-lists/cdrom/<arch> are used. Defaults to $(MEDIUM)/.
 
-TYPE is the thing that specifies which pkg-list files are used. 
-e.g. $TYPE=cdrom means that pkg-lists/cdrom/local, pkg-lists/cdrom/common and
-pkg-lists/cdrom/<arch> are used.
 
+Targets:
+
+TARGET
+  Define this variable in the leaf configuration snippet to one or more
+  of the following generic targets, and any local target you want to
+  run.
+
+INITRD
+  Create an gzipped initrd.gz.
+
+KERNEL
+  Create the kernel image.
+
+BOOT
+  Create an optinally gzipped bootable image. This creates kernel,
+  initrd and boot screens, and depends on the arch_boot rule, where the
+  image creation is handled.
+
+ROOT
+  Create an optionally gzipped root image. This creates an initrd and
+  depends on the arch_root rule, where the image creation is handled.
+
+EXTRA
+  This creates a file system image with driver .udebs in it.
+
+MINIISO
+  This creates a mini ISO image, by creating the boot screens and
+  depending on arch_miniiso rule, where the image creation is handled.
+
+DEBIAN_CD_INFO
+  This provides the boot screens in a gzipped tarball.
+
+MISC
+  This copies files to the destination directory of your configuration.
+
+MANIFEST-INITRD
+MANIFEST-KERNEL
+MANIFEST-BOOT
+MANIFEST-ROOT
+MANIFEST-EXTRA
+MANIFEST-MINIISO
+MANIFEST-DEBIAN_CD_INFO
+MANIFEST-MISC
+  These variables correspond to the generic targets and hold their
+  description which is added to the MANIFEST file in the dest/
+  directory. 
+
+TEMP_INITRD
+TEMP_KERNEL
+TEMP_BOOT
+TEMP_ROOT
+TEMP_MINIISO
+TEMP_EXTRA
+TEMP_BOOT_SCREENS
+TEMP_CD_TREE
+TEMP_POWERPC_INITRD
+  Those are intermediate targets. Everything is built for them, the
+  generic targets copy the stuff they are interested in over to the
+  dest/ and add the MANIFEST entry. They are useful as dependencies for
+  things which needs to be built but shouldn't show up in the
+  destination directory. You should never need to redefine them.
+
+
+Other useful variables for configuration snippets:
+
+EXTRANAME
+  This allows to vary the name of the dest/ target a bit. Example:
+  EXTRANAME = $(MEDIUM)/    leads to: floppy/netboot.img
+  EXTRANAME = $(MEDIUM)-    leads to: floppy-netboot.img
+  Nice to avoid subdirectories with only a single file in it.
+
+DEST
+  The destination directory of your configuration.
+  Caveat: Always use $(DEST), not ./dest/foo/...  The latter will only
+  work for one specific location, and fails if you relocate the
+  configuration snippet in the tree. DEST changes its definition for
+  every leaf configuration appropriately.
+
+SOME_DEST
+  Like DEST, but with the last path element removed. Mostly useful in
+  combination with EXTRANAME.
+
+TEMP
+  The intermediate directory, where everything is built.
+  Caveat: Always build stuff in TEMP, and then install to DEST from
+  there. Doing this differently tends to turn into a mess.
+  Caveat2: Always use $(TEMP), not ./tmp/foo/...  The latter will only
+  work for one specific leaf configuration. TEMP changes its definition
+  for every leaf configuration appropriately.
+
+DROP_LANG
+  Purge unwanted locales. Mostly useful for space constrained media.
+
+VERSIONED_SYSTEM_MAP
+  If set, the kernel's System.map is expected to have an unique
+  filename for each kernel of this architecture.
+
+USERDEVFS
+  If set, it's assumed the kernel has no devfs and needs appropriate
+  device entries in the initrd's /dev/ directory.
+
+FLOPPY_SIZE
+IMAGE_SIZE
+USERDEVFS_SIZE
+  ??? The size of the image to create. ???
+
+DISK_LABEL
+MEDIA_TYPE
+  ??? The image's descriptive name. ???
+
+DEBIAN_VERSION
+  The debian version descriptive name.
+
+DOS_VOLUME_ID
+DOS_VOLUME_LABEL
+  ??? Volume ID and label. ???
+
+GZIPPED
+  Create gzipped images. This works only for the BOOT, ROOT and EXTRA
+  targets.
+
+EXTRADRIVERS
+  This variable points to the directories where additional driver
+  .udebs reside. This causes these .udebs to be considered in the font
+  reduction step, so the characters needed for them are kept.
+
+EXTRATARGETS
+  Additional targets which are run before the ones in TARGET. This is
+  e.g. useful to build the additional driver images first, and then
+  use their intermediate tree for EXTRADRIVERS.
+
+UPX
+  If this variable is set, it should point to a usable UPX compressor.
+  This is then used to create UPX compressed kernels.
+
+SYSLINUX_OPTS
+  Additional syslinux options.
+
+SPLASH_RLE
+  The syslinux splash screen file.
+
+INITRD_FS
+  The filesystem to use for initrds, needs to be built into the kernel.
+  ext2 or cramfs.
+
+WRITE_MEDIA
+  Add you configuration's name if it can be written to a raw device.
+  Mostly useful for floppies.
+
+
+Variables useful for testing:
+
+FLOPPYDEV
+  The device name to use for writing a image to a raw device.
+
+QEMU
+  The name of the qemu emulator binary.
+
+EXTRAS
+  Add additional .udebs to the target image.
+
+EXTRAFILES
+  Add additional files to the target image.
+
+MIRROR
+  The mirror to get .deb and .udeb packages from. Defaults to the same
+  as the host machine uses.
+
+SUITE
+  The suite to use for the build. Defaults to unstable.
+
+
+Rules invoked from the various targets:
+
+arch_boot:
+  The bootable image TEMP_BOOT is created in this rule, usually from
+  TEMP_KERNEL and TEMP_INITRD, and probably from TEMP_BOOT_SCREENS and
+  other files.
+
+arch_root:
+  The root image TEMP_ROOT is created in this rule, usually from
+  TEMP_INITRD, and probably some other files.
+
+arch_boot_screens:
+  The boot screens in TEMP_BOOT_SCREENS are created here.
+
+arch_miniiso:
+  The mini ISO image TEMP_MINIISO is built here, from whatever the
+  particular (sub-)architecture needs for it.
