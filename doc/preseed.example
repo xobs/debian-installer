@@ -107,7 +107,7 @@ d-i	mirror/country		string enter information manually
 d-i	mirror/http/hostname	string http.us.debian.org
 d-i	mirror/http/directory	string /debian
 d-i	mirror/suite		string testing
-#d-i	mirror/http/proxy	string http://192.168.1.1:3128/
+d-i	mirror/http/proxy	string 
 
 ### Partitioning.
 
@@ -189,28 +189,28 @@ base-config	base-config/login	note
 ###### Time zone setup.
 
 # Controls whether or not the hardware clock is set to GMT.
-tzconfig	tzconfig/gmt		boolean true
+base-config	tzconfig/gmt		boolean true
 
 # If you told the installer that you're in the United States, then you
 # can set the time zone using this variable.
 # (Choices are: Eastern, Central, Mountain, Pacific, Alaska, Hawaii,
 # Aleutian, Arizona East-Indiana, Indiana-Starke, Michigan, Samoa, other)
-tzconfig	tzconfig/choose_country_zone/US	select Eastern
+base-config	tzconfig/choose_country_zone/US	select Eastern
 # If you told it you're in Canada.
 # (Choices are: Newfoundland, Atlantic, Eastern, Central,
 # East-Saskatchewan, Saskatchewan, Mountain, Pacific, Yukon, other)
-tzconfig	tzconfig/choose_country_zone/CA	select Eastern
+base-config	tzconfig/choose_country_zone/CA	select Eastern
 # If you told it you're in Brazil. (Choices are: East, West, Acre,
 # DeNoronha, other)
-tzconfig	tzconfig/choose_country_zone/BR	select East
+base-config	tzconfig/choose_country_zone/BR	select East
 # Many countries have only one time zone. If you told the installer you're
 # in one of those countries, you can choose its standard time zone via this
 # question.
-tzconfig	tzconfig/choose_country_zone_single boolean true
+base-config	tzconfig/choose_country_zone_single boolean true
 # This question is asked as a fallback for countries other than those
 # listed above, which have more than one time zone. You can preseed one of
 # the time zones, or "other".
-#tzconfig	tzconfig/choose_country_zone_multiple select 
+#base-config	tzconfig/choose_country_zone_multiple select 
 
 ###### Account setup.
 
@@ -224,9 +224,10 @@ tzconfig	tzconfig/choose_country_zone_single boolean true
 
 # If you want to skip creation of a normal user account.
 #passwd		passwd/make-user		boolean false
-# Alternatively, you can preseed the user's name.
-#passwd		passwd/user-fullname		string Joey Hess
-#passwd		passwd/username			string joey
+# Alternatively, you can preseed the user's name. Note that the username
+# will be derived from this; it cannot be overridden currently. The
+# username will be the (lowercase) first name of the full name.
+#passwd		passwd/user-fullname		string Debian User
 # And their password, but use caution!
 #passwd		passwd/user-password		password insecure
 #passwd		passwd/user-password-again	password insecure
@@ -236,21 +237,21 @@ tzconfig	tzconfig/choose_country_zone_single boolean true
 # This question controls what source the second stage installation uses
 # for packages. Choices are cdrom, http, ftp, filesystem, edit sources list
 # by hand
-apt-setup	apt-setup/uri_type	select http
+base-config	apt-setup/uri_type	select http
 
 # If you choose ftp or http, you'll be asked for a country and a mirror.
-apt-setup	apt-setup/country	select enter information manually
-apt-setup	apt-setup/hostname	string http.us.debian.org
-apt-setup	apt-setup/directory	string /debian
+base-config	apt-setup/country	select enter information manually
+base-config	apt-setup/hostname	string http.us.debian.org
+base-config	apt-setup/directory	string /debian
 # Stop after choosing one mirror.
-apt-setup	apt-setup/another	boolean false
+base-config	apt-setup/another	boolean false
 
 # You can choose to install non-free and contrib software.
-#apt-setup	apt-setup/non-free	boolean true
-#apt-setup	apt-setup/contrib	boolean true
+#base-config	apt-setup/non-free	boolean true
+#base-config	apt-setup/contrib	boolean true
 
 # Do enable security updates.
-apt-setup	apt-setup/security-updates	boolean true
+base-config	apt-setup/security-updates	boolean true
 
 ###### Package selection.
 
@@ -276,15 +277,28 @@ exim4-config	exim4/dc_postmaster		string
 
 ###### X Configuration.
 
-# TODO
-# Standard questions asked during a high priority install are:
-#Select the desired X server driver.
-#Attempt mouse device autodetection?
-#Attempt monitor autodetectio?.
-#Is your monitor a LCD device?
-#Choose a method for selecting your monitor characteristics.
-#Enter your monitor's horizontal sync range.
-#Enter your monitor's vertical refresh range.
+# Preseeding Debian's X config is possible, but you probably need to know
+# some details about the video hardware of the machine, since Debian's X
+# configurator does not do fully automatic configuration of everything.
+
+# X can detect the right driver for some cards, but if you're preseeding,
+# you override whatever it chooses. Still, vesa will work most places.
+#xserver-xfree86	xserver-xfree86/config/device/driver	select vesa
+
+# A caveat with mouse autodetection is that if it fails, X will retry it
+# over and over. So if it's preseeded to be done, there is a possibility of
+# an infinite loop if the mouse is not autodetected.
+#xserver-xfree86	xserver-xfree86/autodetect_mouse	boolean true
+
+# Monitor autodetection is recommended.
+xserver-xfree86		xserver-xfree86/autodetect_monitor	boolean true
+# Uncomment if you have a LCD display.
+#xserver-xfree86	xserver-xfree86/config/monitor/lcd	boolean true
+# X has three configuration paths for the monitor. Here's how to preseed
+# the "medium" path, which is always available. The "simple" path may not
+# be available, and the "advanced" path asks too many questions.
+xserver-xfree86	xserver-xfree86/config/monitor/selection-method	select medium
+xserver-xfree86	xserver-xfree86/config/monitor/mode-list	select 1024x768 @ 60 Hz
 
 ###### Everything else.
 
