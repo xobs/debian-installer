@@ -1,60 +1,64 @@
-<!-- retain these comments for translator revision tracking -->
-<!-- original version: 21994 untranslated -->
+<!-- original version: 21994 -->
 
-  <sect2 arch="sparc"><title>Booting from NFS</title>
+  <sect2 arch="sparc"><title>Booten per NFS</title>
 <para>
 
-To install the system via NFS, simply select
-<userinput>NFS</userinput> for the location of the images and files
-and follow the instructions provided.  You will be prompted for the
-<filename>server:/directory</filename> where the images are located.
+Um das System per NFS zu installieren, wählen Sie einfach 
+<userinput>NFS</userinput> als Ort für die Images und Dateien aus 
+und folgen Sie den Instruktionen, die Ihnen angeboten werden.
+Sie werden nach dem <filename>server:/directory</filename> gefragt, 
+wo die Images liegen.
 
 </para>
   </sect2>
 
 
-  <sect2 arch="sparc" id="boot-tftp"><title>Booting with TFTP</title>
+  <sect2 arch="sparc" id="boot-tftp"><title>Booten per TFTP</title>
 
 &boot-installer-intro-net.xml;
 
 <para>
 
-On machines with OpenBoot, simply enter the boot monitor on the
-machine which is being installed (see 
-<xref linkend="invoking-openboot"/>).
-Use the command <userinput>boot net</userinput> to boot from a TFTP
-and RARP server, or try <userinput>boot net:bootp</userinput> or
-<userinput>boot net:dhcp</userinput> to boot from a TFTP and BOOTP
-or DHCP server. Some older OpenBoot revisions require using
-the device name, such as <userinput>boot le()</userinput>; these
-probably don't support BOOTP nor DHCP.
+Auf Systemen mit OpenBoot gehen Sie in den Boot-Monitor auf der 
+Maschine, die installiert werden soll 
+(siehe <xref linkend="invoking-openboot"/>).
+Nutzen Sie <userinput>boot net</userinput>, um von einem 
+TFTP-RARP-Server zu booten; Sie können auch 
+<userinput>boot net:bootp</userinput> oder 
+<userinput>boot net:dhcp</userinput> versuchen, um von einem 
+TFTP-BOOTP- oder DHCP-Server zu booten. Einige ältere Versionen von 
+OpenBoot benötigen auch den Gerätenamen im Boot-Kommando, wie z.B. 
+<userinput>boot le()</userinput>; diese unterstützen unter Umständen 
+weder BOOTP noch DHCP.
 
 </para>
   </sect2>
 
 
-  <sect2 arch="sparc"><title>Booting from a CD-ROM</title>
+  <sect2 arch="sparc"><title>Booten von einer CD-ROM</title>
 
 &boot-installer-intro-cd.xml;
 
 <para>
 
-Most OpenBoot versions support the <userinput>boot cdrom</userinput>
-command which is simply an alias to boot from the SCSI device on ID 6
-(or the secondary master for IDE based systems). You may have to use
-the actual device name for older OpenBoot versions that don't support
-this special command. Note that some problems have been reported on Sun4m
-(e.g., Sparc 10s and Sparc 20s) systems booting from CD-ROM.
+Die meisten OpenBoot-Versionen unterstützen das 
+<userinput>boot cdrom</userinput>-Kommando, das einfach nur ein Alias 
+ist für das Booten vom SCSI-Gerät mit der ID 6 (oder vom Master des 
+zweiten IDE-Kanals bei IDE-Systemen). Bei älteren OpenBoot-Versionen, 
+die diese spezielle Kommando noch nicht unterstützen, 
+müssen Sie manchmal den Gerätenamen direkt verwenden. 
+Beachten Sie, dass auf Sun4m-Systemen (z.B. Sparc 10s und Sparc 20s) 
+von Problemen berichtet wurde im Zusammenhang mit dem Booten von CD-ROM.
 
 </para>
   </sect2>
 
 
   <sect2 arch="sparc">
-  <title>Booting from Floppies</title>
+  <title>Booten von Floppy-Disks</title>
 <para>
 
-To boot from floppy on a Sparc, use 
+Um ein Sparc-System von einer Floppy-Diskette zu booten, benutzen Sie 
 <informalexample><screen>
 
 Stop-A -> OpenBoot: "boot floppy"
@@ -62,42 +66,44 @@ Stop-A -> OpenBoot: "boot floppy"
 </screen></informalexample>
 </para><para>
 
-Be warned that the newer Sun4u (ultra) architecture does not support
-floppy booting. A typical error message is <computeroutput>Bad magic
-number in disk label - Can't open disk label package</computeroutput>.
-Furthermore, a number of Sun4c models (such as the IPX) do not support
-the compressed images found on the disks, so also are not supported.
+Seien Sie gewarnt, dass neuere Systeme der Sun4u-(ultra-)Architektur das
+Booten von Floppy nicht unterstützen. Eine typische Fehlermeldung ist:
+<computeroutput>Bad magic number in disk label - Can't open disk 
+label package</computeroutput>. Ausserdem unterstützt eine Reihe von 
+Sun4c-Modellen (wie der IPX) die komprimierten Images auf den Disks nicht, 
+also wird auch hier das Booten per Floppy nicht unterstützt.
 
 </para><para>
 
-Several Sparcs (e.g. Ultra 10) have an OBP bug that prevents them from
-booting (instead of not supporting booting at all). The appropriate
-OBP update can be downloaded as product ID 106121 from
-<ulink url="http://sunsolve.sun.com"></ulink>.
+Mehrere Sparc-Systeme (z.B. Ultra 10) haben einen OBP-Fehler, der Sie 
+daran hindert, Debian zu booten (anders als das Problem, dass das 
+Booten von Debian überhaupt nicht unterstützt wird). Das nötige OBP-Update 
+kann unter der Produkt-ID 106121 von <ulink url="http://sunsolve.sun.com"></ulink> 
+heruntergeladen werden.
 
 </para><para>
 
-If you are booting from the floppy, and you see messages such as 
+Wenn Sie von Floppy-Disk starten und Meldungen wie diese sehen:
 <informalexample><screen>
 
 Fatal error: Cannot read partition
 Illegal or malformed device name
 
 </screen></informalexample>
-then it is possible that floppy booting is simply not supported on
-your machine.
+ist es möglich, dass das Booten von Floppy von Ihrem Rechner einfach 
+nicht unterstützt wird.
 
 </para>
   </sect2>
 
-  <sect2 arch="sparc"><title>IDPROM Messages</title>
+  <sect2 arch="sparc"><title>IDPROM-Meldungen</title>
 <para>
 
-If you cannot boot because you get messages about a problem with
-``IDPROM'', then it's possible that your NVRAM battery, which holds
-configuration information for you firmware, has run out.  See the
-<ulink url="&url-sun-nvram-faq;">Sun NVRAM FAQ</ulink> for more
-information.
+Wenn Sie nicht booten können und Meldungen über ein Problem mit
+``IDPROM'' erhalten, ist möglicherweise die NVRAM-Batterie leer, 
+die die Konfigurationsdaten der Firmware sichert. Lesen Sie 
+die <ulink url="&url-sun-nvram-faq;">Sun NVRAM FAQ</ulink>, wenn Sie 
+mehr Informationen brauchen.
 
 </para>
   </sect2>
