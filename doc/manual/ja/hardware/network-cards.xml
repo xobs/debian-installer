@@ -1,13 +1,16 @@
+<?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: network-cards.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+<!-- $Id$ -->
+<!-- original version: 11568 -->
 
  <sect1 id="network-cards">
- <title>Network Connectivity Hardware</title>
+ <title>ネットワーク接続機器</title>
 
 <para arch="i386">
 
 <!-- last updated for kernel-image_2.0.36-2 -->
 
+<!--
 Some network interface cards (NICs) are not supported by most Debian
 installation disks, such as AX.25 cards and protocols; 3Com EtherLink
 Plus (3c505) and EtherLink16 (3c507); NI5210 cards; generic NE2100
@@ -26,34 +29,79 @@ FDDI networks are also not supported by the installation disks, both
 cards and protocols. You can create a custom kernel which supports an
 otherwise unsupported card and then substitute in the installer (see
 <xref linkend="rescue-replace-kernel"/>).
+-->
+Debian のインストールディスクでは、以下のネットワークインターフェース
+カード (NIC) がサポートされていません。
+AX.25 カードやプロトコルのもの; 
+3Com Etherlink Plus (3c505) と EtherLink16 (3c507); 
+NI5210 カード; generic NE2100 カード; NI6510 と NI16510 EtherBlaster カード; 
+SEEQ 8005 カード; Schneider &amp; Koch G16 カード; 
+Ansel Communications EISA 3200; Winbond-840 ベースカード (例 Realtek-100A); 
+いくつかの新しい Tulip ベースカード; 
+Zenith Z-Note ビルトインネットワークカードが未サポートです。
+以下のカードは "bf2.4" フレーバーでサポートしています。
+Winbond-840 ベースカード、新しめの Tulip ベースカード、
+National Semiconductor DP8381x/DP8382x シリーズ、 
+Sundance ST201 "Alta"です。
+マイクロチャンネル (MCA) ネットワークカードは、
+標準のインストーラではサポートされていませんが、
+情報を得るのに <ulink url="&url-linux-mca;">Linux on MCA</ulink> や、
+<ulink url="&url-linux-mca-discussion;">Linux MCA ディスカッションアーカイブ
+</ulink> でご覧になれます (古いです)。
+FDDI ネットワークも、カード、プロトコルともにインストールディスクでは
+サポートされていません。
+サポートされていないカードをサポートする別のカーネルを作成し、
+インストーラを置き換えることは可能です
+(<xref linkend="rescue-replace-kernel"/> をご覧ください)。
 
 </para><para arch="i386">
 
+<!--
 As for ISDN, the D-channel protocol for the (old) German 1TR6 is not 
 supported; Spellcaster BRI ISDN boards are also not supported by the
 &d-i;.
+-->
+ISDN に関しては、(古い) German 1TR6 用の D チャンネルプロトコル
+はサポートされておらず、Spellcaster BRI ISDN ボードも &d-i; では
+サポートされていません。
 
 </para><para arch="i386">
 
+<!--
 Sound devices are not supported by default. But as already mentioned above:
 if you want to use your own kernel please go to 
 <xref linkend="kernel-baking"/> for further information.
+-->
+サウンドデバイスは標準ではサポートされていません。
+しかしすでに上で述べたように、独自のカーネルを使用するために、
+さらなる情報を得る場合は <xref linkend="kernel-baking"/> をご覧ください。
 
 </para>
 
 <para arch="m68k">
 
+<!--
 Any network interface card (NIC) supported by the Linux kernel should
 also be supported by the boot disks.  You may need to load your
 network driver as a module.  Again, see 
 <ulink url="&url-m68k-faq;"></ulink> for complete details. 
+-->
+Linux カーネルがサポートしているすべてのネットワークインターフェースカード
+(NIC) が、起動ディスクにおいてもサポートされています。
+お使いのネットワークドライバをモジュールとしてロードする必要があるでしょう。
+完全な詳細については、もう一度 <ulink url="&url-m68k-faq;"></ulink>
+をご覧ください。
 
 </para>
 
 <para arch="sparc">
 
+<!--
 The following network interface cards (NICs) are supported from the bootable
 kernel directly:
+-->
+以下のネットワークインターフェースカード (NIC) は、
+起動用カーネルで直接サポートされています。
 
 <itemizedlist>
  <listitem><para>
@@ -72,10 +120,18 @@ Sun Happy Meal
 
 </para><para arch="sparc">
 
+<!--
 The following network interface cards are supported as modules.  They
 can be enabled once the drivers are installed during the setup.
 However, due to the magic of OpenPROM, you still should be able to
 boot from these devices:
+-->
+以下のネットワークインターフェースカードは、
+モジュールとしてサポートされています。
+これらのデバイスは、セットアップ中にドライバをインストールすることで
+利用できるようになります。
+ただし、OpenPROM の魔法を使えば、
+これらのデバイスから起動することもできるはずです。
 
 <itemizedlist>
  <listitem><para>
@@ -98,69 +154,122 @@ MyriCOM Gigabit Ethernet
 
 </para><para arch="alpha">
 
+<!--
 Any network interface card (NIC) supported by the Linux kernel should
 also be supported by the boot disks.  Support for the built-in DECChip
 (Tulip) Ethernet on many Alpha models is compiled directly into the
 kernel. For other cards, you may need to load your network driver as a
 module.
+-->
+Linux カーネルがサポートしているすべてのネットワークインターフェースカード
+(NIC) が、起動ディスクにおいてもサポートされています。
+Alpha マシンの多数にビルトインされている DECChip (Tulip) 
+イーサネットに関しても、そのサポートがカーネルに直接組み込まれています。
+他のカードに関しては、お使いになるネットワークドライバを
+モジュールとしてロードする必要があるでしょう。
 
 </para><para arch="powerpc"> 
 
+<!--
 Any network interface card (NIC) supported by the Linux kernel should
 also be supported by the boot disks.  You may need to load your
 network driver as a module.
+-->
+Linux カーネルがサポートしているすべてのネットワークインターフェースカード
+(NIC) が、起動ディスクにおいてもサポートされています。
+ただ、お使いになるネットワークドライバをモジュールとしてロードする必要が
+あるでしょう。
 
 </para><para arch="hppa">
-
+<!--
 Any network interface card (NIC) supported by the Linux kernel should
 also be supported by the boot disks.  You may need to load your
 network driver as a module.
+-->
+Linux カーネルがサポートしているすべてのネットワークインターフェースカード
+(NIC) が、起動ディスクにおいてもサポートされています。
+ただ、お使いになるネットワークドライバを
+モジュールとしてロードする必要があるでしょう。
 
 </para><para arch="mips">
 
+<!--
 Any network interface card (NIC) supported by the Linux kernel should
 also be supported by the boot disks.  You may need to load your
 network driver as a module.
+-->
+Linux カーネルがサポートしているすべてのネットワークインターフェースカード
+(NIC) が、起動ディスクにおいてもサポートされています。
+ただ、お使いになるネットワークドライバを
+モジュールとしてロードする必要があるでしょう。
 
 </para><para arch="mipsel">
 
+<!--
 Due to kernel limitations only the onboard network interfaces on
 DECstations are supported, TurboChannel option network cards currently
 do not work.
+-->
+カーネルの制限で、DECstation にオンボードで搭載されている
+ネットワークインターフェースのみサポートしています。
+オプションの TurboChannel ネットワークカードは現在動作しません。
 
 </para><para arch="s390">
 
+<!--
 Any network interface card (NIC) supported by the Linux kernel are
 also be supported by the boot disks.  All network drivers are compiled
 as modules so you need to load one first during the initial network
 setup. The list of supported network devices is:
+-->
+Linux カーネルがサポートしているすべてのネットワークインターフェースカード
+(NIC) が、起動ディスクにおいてもサポートされています。
+全てのネットワークドライバは、モジュールとしてコンパイルされていますので、
+最初のネットワークセットアップで必要なものをロードできます。
+以下、サポートするネットワークデバイスのリストです。
 
 <itemizedlist>
  <listitem><para>
 
+<!--
 Channel to Channel (CTC) or ESCON connection (real or emulated)
- 
+-->
+Channel to Channel (CTC) または ESCON 接続 (リアルもしくはエミュレーション)
+
 
 </para></listitem>
  <listitem><para>
 
+<!--
 lcs: OSA-2 Token Ring/Ethernet or OSA-Express Fast Ethernet
           (non-QDIO)
+-->
+lcs: OSA-2 Token Ring/Ethernet または OSA-Express Fast Ethernet
+          (非 QDIO)
 
 </para></listitem>
 <listitem><para>
 
+<!--
 Inter-User Communication Vehicle (IUCV) - available for VM
           guests only
+-->
+Inter-User Communication Vehicle (IUCV) - VM ゲストのみ有効
 
 </para></listitem>
 <listitem><para>
 
+<!--
 qeth: OSA-Express in QDIO mode / HiperSockets - this requires
 a second initrd with the OCO modules from 
 <ulink url="http://oss.software.ibm.com/developerworks/opensource/linux390/index.shtml">developerWorks</ulink>. 
 Please read <xref linkend="ipl-tape"/> for information how to get or
 create such a second initrd.
+-->
+qeth: QDIO モードの OSA-Express / HiperSockets - 
+<ulink url="http://oss.software.ibm.com/developerworks/opensource/linux390/index.shtml">developerWorks</ulink> より OCO モジュール込みの
+2 次 initrd が必要です。
+2 次 initrd の取得・作成方法の情報は <xref linkend="ipl-tape"/> をご覧ください。
 
 </para></listitem>
 </itemizedlist>
@@ -169,13 +278,17 @@ create such a second initrd.
 
 <para arch="arm">
 
+<!--
 The following network interface cards are supported directly by the
 boot disks on NetWinder and CATS machines:
+-->
+以下のネットワークインターフェースカードは NetWinder や CATS マシン用の
+起動ディスクで直接サポートしています。
 
 <itemizedlist>
  <listitem><para>
 
-    PCI-based NE2000
+    PCI ベースの NE2000
  
 
 </para></listitem>
@@ -188,8 +301,12 @@ boot disks on NetWinder and CATS machines:
 
 </para><para arch="arm">
 
+<!--
 The following network interface cards are supported directly by the
 boot disks on RiscPCs:
+-->
+以下のネットワークインターフェースカードは RiscPC 用の起動ディスクで
+直接サポートしています。
 
 <itemizedlist>
  <listitem><para>
@@ -211,16 +328,27 @@ boot disks on RiscPCs:
 
 </para><para arch="arm">
 
+<!--
 If your card is mentioned in the lists above, the complete installation
 can be carried out from the network with no need for CD-ROMs or floppy 
 disks.
+-->
+上記のリストにあなたのカードがある場合は、ネットワークから
+インストールを行えます。CD-ROM やフロッピーディスクは必要ありません。
 
 </para><para arch="arm">
 
+<!--
 Any other network interface card (NIC) supported by the Linux kernel
 should also be supported by the boot disks.  You may need to load your
 network driver as a module; this means that you will have to install
 the operating system kernel and modules using some other media.  
+-->
+Linux カーネルがサポートしているすべてのネットワークインターフェースカード
+(NIC) が、起動ディスクにおいてもサポートされています。
+ネットワークドライバをモジュールとしてロードする必要があるかもしれません。
+これは別のメディアを使って基本システムのカーネルとモジュールを
+インストールする必要があるかもしれないということです。
 
 </para>
 
