@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 22935 -->
+<!-- original version: 25291 -->
 
    <sect3 id="lvmcfg">
    <title>Logisch volumebeheer (LVM) instellen</title>
@@ -50,6 +50,41 @@ de fysieke volumes samen tot één of meerdere volumegroepen. Vervolgens
 dient u nog vanuit de menukeuze <guimenuitem>Logische volumes (LV)
 aanpassen</guimenuitem> de logische volumes te creëren bovenop de
 volumegroepen.
+
+<note arch="powerpc"><para>
+
+Voor Apple Power Macintosh systemen bestaat geen algemeen geaccepteerde
+standaard om partities te identificeren die LVM-gegevens bevatten.
+Op deze apparatuur zal bovenstaande procedure daardoor niet werken.
+Er is echter een werkbare oplossing voor deze beperking; deze vereist
+wel dat u bekend bent met de onderliggende LVM hulpprogramma's.
+
+</para><para>
+
+Om logische volumes te installeren op Power Macintosh systemen, creëert
+u eerst op de gebruikelijke wijze alle fysieke partities voor uw
+logische volumes. Selecteer in het menu <guimenu>Partitie-instellingen</guimenu>
+de optie <menuchoice><guimenu>Use as:</guimenu> <guimenuitem>Deze partitie
+niet gebruiken</guimenuitem></menuchoice> voor deze partities (de optie
+om de partitie te gebruiken als fysiek volume zal niet worden getoond).
+Als u klaar bent met het creëren van alle partities, start u de logisch
+volumebeheerder. Omdat echter nog geen fysieke volumes zijn aangemaakt,
+dient u deze nu handmatig aan te maken in de shell die beschikbaar is op
+de tweede virtuele terminal (zie <xref linkend="shell"/>).
+
+</para><para>
+
+Gebruik in de shell vanaf de prompt het commando <command>pvcreate</command>
+om voor elk van de door u gekozen partities een fysiek volume te creëren.
+Gebruik vervolgens het commando <command>vgcreate</command> om de gewenste
+volumegroepen aan te maken. U kunt eventuele foutmeldingen over onjuiste
+'metadata area header checksums' en 'fsync failures' veilig negeren. Als u
+klaar bent met het creëren van de volumegroepen, schakelt u terug naar de
+eerste virtuele terminal en kiest u in <command>lvmcfg</command> direct de
+menuopties voor logisch volumebeheer. Uw volumegroepen zullen worden getoond
+en u kunt op de gebruikelijke wijze de logische volumes aanmaken.
+
+</para></note>
 
 </para><para>
 
