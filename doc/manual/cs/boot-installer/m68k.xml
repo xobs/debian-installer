@@ -1,11 +1,54 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 18672 -->
+<!-- original version: 19278 -->
 
   <sect2 arch="m68k"><title>Zavedení z pevného disku</title>
 
 &boot-installer-intro-hd.xml;
 
+<para>
+
+Jediný způsob instalace na &arch-title; Amigách a Macintoshích je
+zavedením z pevného disku. (Pro Atari existují i jiné možnosti.)
+<emphasis>Jinými slovy: z CD se nedá zavádět.</emphasis> &arch-title;
+podarchitektury mohou použít jeden ze tří ramdisků:
+<filename>cdrom</filename> (na CD se nazývá
+<filename>root.bin</filename>), <filename>hd-media</filename>
+a <filename>nativehd</filename>. Tyto tři ramdisky se liší pouze tím,
+kde očekávají instalační balíčky. <filename>cdrom</filename> používá
+pro získání zbytku instalačního programu CD mechaniku,
+<filename>hd-media</filename> používá obraz CD uložený na pevném disku
+a konečně <filename>nativehd</filename> využívá pro instalaci balíků
+síť.
+
+</para><para>
+
+Některé podarchitektury mají k dispozici linuxová jádra řady 2.4
+i starší 2.2 (spolu s odpovídajícími ramdisky). Pokud si můžete
+vybrat, vždy nejprve zkuste instalaci s jádrem 2.4.x. M68k Macintoshe
+zatím nemají funkční 2.4 jádro.
+
+</para><para>
+
+Ujistěte se, že mezi zaváděcími parametry jádra uvedete
+i <userinput>root=/dev/ram</userinput>. Amiga a Atari momentálně
+nepracují s <firstterm>bogl</firstterm>em, takže pokud uvidíte chyby
+týkající se boglu, použijte parametr jádra
+<userinput>debian-installer/framebuffer=false</userinput>.
+
+</para><para>
+ 
+Jestliže používáte linuxové jádro řady 2.2, ujistěte se, používáte
+odpovídající ramdisk (viz <ulink
+url="&disturl;/main/installer-&architecture;/current/images/MANIFEST">MANIFEST</ulink>
+a že jste jádru zadali parametr &ramdisksize;.
+
+</para><para>
+
+Pokud máte s instalací problémy, podívejte se na
+<ulink url="&url-m68k-cts-faq;">cts's &arch-title; &d-i; FAQ</ulink>.
+
+</para>
   </sect2>
 
   <sect2 arch="m68k"><title>Zavedení z AmigaOS</title>
@@ -54,9 +97,17 @@ můžete přeskočit na <xref linkend="d-i-intro"/>.
   <sect2 arch="m68k"><title>Zavedení z 68k MacOS</title>
 <para>
 
+Macy vyžadují zavaděč <command>Penguin</command>. Pokud nemůžete
+pracovat se <command>Stuffit</command> archívy, můžete použít
+&penguin19.hfs;, což je obraz hfs disku s rozbaleným
+<command>Penguin</command>em. Jak tento obraz dostanete na disketu se
+dozvíte v kapitole <xref linkend="create-floppy"/>.
+
+</para><para>
+
 Na MacOS desktopu spusťte instalační proces dvojitým poklikáním
 na ikonu <guiicon>Penguin Prefs</guiicon> v adresáři
-<filename>debian</filename>. Tím se spustí zavaděč
+<filename>Penguin</filename>. Tím se spustí zavaděč
 <command>Penguin</command>. Jděte do nabídky
 <guimenuitem>Settings</guimenuitem> v menu <guimenu>File</guimenu> a
 klikněte na záložku <guilabel>Kernel</guilabel>. Vyberte obrazy jádra
@@ -80,18 +131,47 @@ program, takže můžete přeskočit na <xref linkend="d-i-intro"/>.
   </sect2>
 
 
+  <sect2 arch="m68k">
+  <title>Zaváděcí parametry programu <command>Penguin</command></title>
+<para>
+
+V zavaděči <command>Penguin</command> vyberte <guimenu>File</guimenu>
+-&gt; <guimenuitem>Settings...</guimenuitem> a přepněte se do záložky
+<guilabel>Options</guilabel>. Parametry můžete zadat do textového
+pole. Pokud chcete tyto parametry používat vždy, vyberte
+<guimenu>File</guimenu> -&gt; <guimenuitem>Save Settings as
+Default</guimenuitem>.
+
+</para>
+  </sect2>
+
+
+  <sect2 arch="m68k"><title>Omezení počítačů Macintosh</title>
+<para>
+
+V případě Macintoshů musíte zachovat původní operační systém a zavádět
+z něj. Je <emphasis>důležité</emphasis>, abyste při zavádění MacOS za
+účelem spuštění zavaděče <command>Penguin</command> drželi stisknutou
+klávesu <keycap>shift</keycap>. Tím totiž zabráníte nahrání rozšíření,
+která mohou způsobit běžícímu linuxovému jádru náhodné problémy.
+Pokud používáte MacOS pouze pro zavedení linuxu, můžete stejného
+výsledku dosáhnout odstraněním všech rozšíření a ovládacích panelů ze
+systémové složky MacOS.
+
+</para>
+  </sect2>
+
+
   <sect2 arch="m68k"><title>Zavedení z CD-ROM</title>
-
-&boot-installer-intro-cd.xml;
-
 <para>
 
 Momentálně jediná podarchitektura &arch-title; podporující zavádění
-z CD-ROM je BVME6000. V takovém případě bude nejjednodušší použít
-<ulink url="&url-debian-cd-vendors;">sadu debianích CD</ulink>.
-Vložte CD do mechaniky, restartujte a přejděte k další kapitole.
+z CD-ROM je BVME6000.
 
 </para>
+
+&boot-installer-intro-cd.xml;
+
   </sect2>
 
 
@@ -140,8 +220,8 @@ takto: <screen>i6000 TERM=vt100 &enterkey;</screen>.)
   <title>Zavedení z disket</title>
 <para>
 
-Pro většinu počítačů založených na architektuře m68k se doporučuje
-zavést instalační systém z lokálního souborového systému.
+Pro většinu počítačů založených na architektuře &arch-title; se
+doporučuje zavést instalační systém z lokálního souborového systému.
 
 </para><para>
 
@@ -150,34 +230,3 @@ Zavedení z diskety momentálně podporují jenom Atari a VME
 
 </para>
  </sect2>
-
-
-  <sect2 arch="m68k"><title>Omezení počícačů Macintosh</title>
-<para>
-
-V případě Macintoshů musíte zachovat původní operační systém a zavádět
-z něj. Je <emphasis>důležité</emphasis>, abyste při zavádění MacOS za
-účelem spuštění zavaděče <command>Penguin</command> drželi stisknutou
-klávesu <keycap>shift</keycap>. Tím totiž zabráníte nahrání rozšíření,
-která mohou způsobit běžícímu linuxovému jádru náhodné problémy.
-Pokud používáte MacOS pouze pro zavedení linuxu, můžete stejného
-výsledku dosáhnout odstraněním všech rozšíření a ovládacích panelů ze
-systémové složky MacOS.
-
-</para>
-  </sect2>
-
-
-  <sect2 arch="m68k">
-  <title>Zaváděcí parametry programu <command>Penguin</command></title>
-<para>
-
-V zavaděči <command>Penguin</command> vyberte <guimenu>File</guimenu>
--&gt; <guimenuitem>Settings...</guimenuitem> a přepněte se do záložky
-<guilabel>Options</guilabel>. Parametry můžete zadat do textového
-pole. Pokud chcete tyto parametry používat vždy, vyberte
-<guimenu>File</guimenu> -&gt; <guimenuitem>Save Settings as
-Default</guimenuitem>.
-
-</para>
-  </sect2>

@@ -37,31 +37,91 @@ Debianí CD obsahují men¹í verzi EFI oblasti, kde je ulo¾eno
 a prvotní souborový systém (initrd). (Samozøejmì, ¾e EFI oblast je
 pøítomna i v nainstalovaném systému.)
 
-</para>
-
-   <sect3 arch="ia64" id="boot-from-cd">
-   <title>Zavádìní z EFI shellu</title>
-<para>
+</para><para>
 
 Zavadìè EFI se spou¹tí jako postední krok inicializace
 firmwaru. Zobrazí menu, ze kterého si mù¾ete vybrat rùzné
-polo¾ky. Manu se mù¾e na rùzných systémech li¹it, ale v¾dy by se tam
-mìla vyskytovat polo¾ka <command>EFI Shell
-[Built-in]</command>. Instalaèní CD zavadete následujícími kroky:
+polo¾ky. Menu se mù¾e na rùzných systémech li¹it, ale vìt¹inou by se
+tam mìly vyskytovat polo¾ky <command>Boot Option Maintenance
+Menu</command> a <command>EFI Shell (Built-in)</command>. První metoda
+je preferovaná, ale pokud není dostupná, nebo s ní CD neumí zavádìt,
+pou¾ijte druhou mo¾nost.
+
+</para><warning><title>Dùle¾ité</title><para>
+
+Zavadìè EFI po nìjaké dobì spustí implicitní akci, obvykle první
+polo¾ku z menu. (Odpoèítávání je vidìt dole na obrazovce.) Pokud
+propásnete správný okam¾ik, budete muset poèítaè znovu restartovat.
+
+</para></warning>
+
+   <sect3 arch="ia64" id="bootable-cd">
+   <title>Mo¾nost 1: Zavádìní z menu Boot Option Maintenance</title>
+
+<itemizedlist>
+<listitem><para>
+
+Vlo¾te CD do DVD/CD mechaniky a restartujte poèítaè. Po dokonèení
+inicializace systému se zobrazí menu zavadìèe EFI.
+
+</para></listitem>
+<listitem><para>
+
+Ze zavádìcího menu vyberte ¹ipkami <command>Boot Maintenance</command>
+a stisknìte &enterkey; - zobrazí se nové menu.
+
+</para></listitem>
+<listitem><para>
+
+V nìm vyberte <command>Boot From a File</command>, co¾ vám nabídne
+seznam zaøízení, které firmware na¹el. Mezi nimi by mìly být øádky
+obsahující text <command>Debian Inst [Acpi ...</command> nebo
+<command>Removable Media Boot</command> (zbytek øádku by mìl být
+stejný). 
+
+</para></listitem>
+<listitem><para>
+
+Z obou mo¾ností ukazujících na DVD/CD mechaniku si jednu
+vyberte. Volba <command>Removable Media Boot</command> okam¾itì spustí
+zavádìní, zatímco <command>Debian Inst [Acpi ...</command> je¹tì
+zobrazí výpis adresáøe ze zavádìcí èásti CD, ve kterém musíte vybrat
+<command>[Treat like Removable Media Boot]</command>.
+
+</para></listitem>
+</itemizedlist>
+
+<para>
+
+Nyní se zobrazí uvítací obrazovka instalaèního systému Debianu, kde si
+mù¾ete vybrat jádro a pøípadné parametry.
+
+</para>
+   </sect3>
+
+
+   <sect3 arch="ia64" id="boot-with-efi">
+   <title>Volba 2: Zavádìní z EFI shellu</title>
+<para>
+
+Pokud se zavádìní prvním zpùsobem nezdaøí, zaveïte instalaèní CD
+následujícími kroky:
 
 </para>
 
 <itemizedlist>
 <listitem><para>
 
-Vlo¾te CD do DVD/CD mechaniky.
+Vlo¾te CD do DVD/CD mechaniky a restartujte poèítaè. Po dokonèení
+inicializace systému se zobrazí menu zavadìèe EFI.
 
 </para></listitem>
 <listitem><para>
 
-Ze zavádìcího menu vyberte <command>EFI Shell</command>.  EFI Shell si
-zjistí v¹echna zaveditelná zaøízení a zobrazí je na
-konzoli. Rozpoznaná zavádìcí zaøízení budou zobrazena ve tvaru
+Ze zavádìcího menu vyberte ¹ipkami <command>EFI Shell</command>
+a stisknìte &enterkey;.  EFI Shell si zjistí v¹echna zaveditelná
+zaøízení a zobrazí je na konzoli. Rozpoznaná zavádìcí zaøízení budou
+zobrazena ve tvaru
 <filename>fs<replaceable>n</replaceable>:</filename>, v¹echna ostatní
 bloková zaøízení budou pojmenována
 <filename>blk<replaceable>n</replaceable>:</filename>.
@@ -76,25 +136,14 @@ pravdìpodobností to bude zaøízení <filename>fs0:</filename>.
 <listitem><para>
 
 Pro výbìr po¾adovaného zaøízení zadejte
-<command>fs<replaceable>n</replaceable>:</command>, kde 
-<replaceable>n</replaceable> je èíslo oblasti. Toto èíslo se nyní
-zobrazí jako souèást výzvy.
+<command>fs<replaceable>n</replaceable>:</command>, kde
+<replaceable>n</replaceable> je èíslo oblasti a stisknìte
+&enterkey;. Toto èíslo se nyní zobrazí jako souèást výzvy.
 
 </para></listitem>
 <listitem><para>
 
-Zadejte pøíkaz <command>elilo</command>, co¾ spustí zavadìè.
-<classname>elilo</classname> zobrazí svou výzvu a bude èekat na název
-jádra, které má zavést.
-
-</para></listitem>
-<listitem><para>
-
-Zadejte svou volbu, obvykle <classname>linux</classname> nebo
-<classname>linux26</classname>. Chcete-li pou¾ít implicitní jádro,
-jednodu¹e stiskìte klávesy &enterkey;, nebo poèkejte dvacet sekund
-a jádro se zavede samo. Bìhem zavádìní jádra uvidíte spousty výpisù,
-ale tìch si vìt¹inou nemusíte v¹ímat.
+Zadejte pøíkaz <command>elilo</command>, co¾ spustí zavádìní.
 
 </para></listitem>
 </itemizedlist>
@@ -102,8 +151,9 @@ ale tìch si vìt¹inou nemusíte v¹ímat.
 <para>
 
 V EFI shellu té¾ mù¾ete pou¾ít zkrácenou variantu zápisu:
-<command>fs<replaceable>n</replaceable>:elilo</command>.  Jen co se
-jádro zavede, mìli byste vidìt úvodní obrazovku instalaèního programu.
+<command>fs<replaceable>n</replaceable>:elilo</command>.  Nyní se
+zobrazí uvítací obrazovka instalaèního systému Debianu, kde si mù¾ete
+vybrat jádro a pøípadné parametry.
 
 </para>
    </sect3>

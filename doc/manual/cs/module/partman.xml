@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 18660 -->
+<!-- original version: 19059 -->
 
    <sect3 id="partman">
    <title>Rozdělení disků</title>
@@ -81,13 +81,79 @@ EFI oblast</guimenuitem>.
 
 </para><para>
 
+Seznam oblastí může vypadat třeba takto:
+
+<!-- TODO: show some flags here (lightning, skull, smiley) -->
+<informalexample><screen>
+  IDE1 master (hda) - 6.4 GB WDC AC36400L
+       1. primární   16.4 MB    ext2   /boot
+       2. primární  551.0 MB    swap   swap
+       3. primární    5.8 GB    ntfs
+          pri/log     8.2 MB    VOLNÉ MÍSTO
+
+  IDE1 slave (hdb) - 80.0 GB ST380021A
+       1. primární   15.9 MB    ext3
+       2. primární  996.0 MB    fat16
+       3. primární    3.9 GB    xfs    /home
+       5. logická     6.0 GB    ext3   /
+       6. logická     1.0 GB    ext3   /var
+       7. logická   498.8 GB    ext3
+       8. logická   551.5 GB    swap   swap
+       9. logická    65.8 GB    ext2
+</screen></informalexample>
+
+Jak je vidět, v počítači jsou dva pevné disky rozdělené na několik
+oblastí. Každý řádek popisující oblast zobrazuje její pořadí, typ,
+velikost, volitelné příznaky, souborový systém a (pokud existuje)
+přípojný bod.
+
+</para><para>
+
 Pokud chcete v tabulce něco změnit, vyberte ze seznamu objekt, který
 chcete upravit a stiskněte &enterkey;. Objektem je míněn disk, oblast
 nebo volné místo. S každým objektem můžete provádět různé
-akce. Vybráním disku na něm můžete vytvořit novou tabulku oblastí,
-vybráním volného místa můžete vytvořit nové oblasti a vybráním oblasti
-ji můžete upravit nebo smazat. Úpravy oblasti spočívají v nastavení
-souborového systému, přípojného bodu a volitelných parametrů.
+akce.
+
+</para><para>
+
+Jestliže vyberete dosud nedotčený disk, na kterém nejsou ani oblasti
+ani volné místo, bude vám nabídnuta možnost vytvoření nové tabulky
+oblastí (to je nutné k tomu, abyste mohli vytvářet oblasti). Po této
+akci se pod vybraným diskem zobrazí řádka nadepsaná <quote>VOLNÉ
+MÍSTO</quote>.
+
+</para><para>
+
+Vyberete-li volné místo, <command>partman</command> vám nabídne
+vytvoření nové oblasti. Nejprve musíte odpovědět několik základních
+otázek jako velikost nové oblasti, typ (primární nebo logická)
+a umístění (na začátku nebo na konci volného místa). Poté se zobrazí
+detailní pohled na novou oblast. Naleznete zde volby jako přípojný
+bod, volby připojení, zaváděcí příznak nebo způsob použití. Pokud vám
+nevyhovují přednastavené hodnoty, můžete je upravit dle
+libosti. Například výběrem volby <guimenuitem>Použít
+jako:</guimenuitem> můžete změnit souborový systém dané oblasti včetně
+možnosti použít oblast jako odkládací prostor, softwarový RAID, LVM
+nebo ji nepoužít vůbec. Další příjemnou vlastností je možnost
+zkopírovat na oblast stávající data z jiné oblasti. Až budete
+s oblastí spokojeni, vyberte položku <guimenuitem>Skončit
+s nastavováním oblasti</guimenuitem>, což vás vrátí zpět do hlavní
+obrazovky rozdělování disků.
+
+</para><para>
+
+Pokud se rozhodnete, že chcete něco změnit na stávajícíc oblasti,
+jednoduše ji vyberte a stiskněte &enterkey;. Ocitnete se ve stejné
+obrazovce jako při vytváření nové oblasti a tedy máte i stejné
+možnosti nastavení. Jedna věc, která nemusí být na první pohled zcela
+zřejmá je fakt, že u většiny oblastí můžete změnit jejich velikost -
+stačí vybrat položku, která zobrazuje velikost oblasti. Změna
+velikosti by měla fungovat minimálně se souborovými systémy fat16,
+fat32, ext2, ext3 a swap. Pokud se vám oblast nelíbí, můžete ji
+z tohoto menu i smazat.
+
+</para><para>
+
 Nezapomeňte vytvořit aspoň dvě oblasti &mdash; jednu pro
 <emphasis>odkládací prostor</emphasis> (<quote>swap</quote>) a jednu
 pro <emphasis>kořenový souborový systém</emphasis> (který musí být
@@ -118,7 +184,7 @@ se, že máte nahrány příslušné moduly
 
 </para><para>
 
-Pokud jste s rozdělením disků spokojeni, vyberte z nabídky
+Až budete s rozdělením disků hotovi, vyberte z nabídky
 <guimenuitem>Ukončit rozdělování</guimenuitem>. Zobrazí se seznam
 provedených změn a budete požádáni o potvrzení, zda opravdu chcete
 vytvořit nové souborové systémy.
