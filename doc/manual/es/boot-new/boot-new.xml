@@ -1,18 +1,18 @@
 <!-- original version: 16340 -->
 
 <chapter id="boot-new">
- <title>Arrancar en su nuevo sistema Debian</title>
+ <title>Arrancar su nuevo sistema Debian</title>
 
  <sect1 id="base-boot"><title>El momento de la verdad</title>
 <para>
 
-El primer arranque de su sistema en si mismo es lo que los ingenieros
+El primer arranque autónomo de su sistema es lo que los ingenieros
 eléctricos llaman <quote>la prueba de humo</quote>.
 
 </para><para arch="s390">
 
 Elija la opción <guimenuitem>Finalizar la instalación</guimenuitem> 
-la cual apagará¡ el sistema puesto que en este caso el reiniciado no
+la cual apagará el sistema puesto que en este caso el reiniciado no
 esta soportado en &arch-title;. Por lo que necesitará efectuar IPL
 de GNU/Linux desde el DASD que haya elegido para el sistema de
 ficheros raíz durante los primeros pasos de la instalación.
@@ -35,7 +35,7 @@ como <userinput>root=<replaceable>root</replaceable></userinput>, donde
 Si ha efectuado una instalación si disco en una máquina BMV o Motorola
 VMEbus: una vez que el sistema ha cargado el programa
 <command>tftplilo</command> desde el servidor TFTP, en el cursor
-<prompt>LILO Boot:</prompt> ingrese alguno de:
+<prompt>LILO Boot:</prompt> ingrese alguna de las siguietnes ordenes:
 
 <itemizedlist>
 <listitem><para>
@@ -64,11 +64,11 @@ para arrancar un MVME166/167
 
 <para>
 
-Ingrese al directorio donde se ubican los ficheros de instalación e
+Ingrese al directorio donde se localizan los ficheros de instalación e
 inicie el arrancador <command>Penguin</command> manteniendo presionada
 la tecla <keycap>command</keycap> key. Ingrese al diálogo
 <userinput>Settings</userinput> (<keycombo>
-<keycap>command</keycap> <keycap>T</keycap> </keycombo>), y ubique
+<keycap>command</keycap> <keycap>T</keycap> </keycombo>), y localice
 la línea de opciones de núcleo que debe ser como
 <userinput>root=/dev/ram video=font:VGA8x16</userinput> o similar.
 
@@ -81,10 +81,10 @@ la partición en la que ha instalado el sistema.
 (ejm. <filename>/dev/sda1</filename>); debió haber anotado esto antes.
 Se recomienda la entrada <userinput>video=font:VGA8x8</userinput> 
 especialmente para usuarios con pantallas pequeñas. El núcleo podría
-elegir un tipo de letra mas simpático (6x11) pero el controlador de
-consola para este tipo de letra podría colapsar la máquina, por lo
-que es mas seguro usar 8x16 o 8x8 en esta etapa. Puede cambiarlo
-en cualquier momento.
+elegir un tipo de letra mas conveniente (6x11) pero el controlador de
+consola para este tipo de letra podría hacer colapsar la máquina, 
+por lo que es más seguro usar 8x16 o 8x8 en esta etapa. Puede cambiar
+esto en cualquier momento.
 
 </para><para>
 
@@ -103,7 +103,7 @@ en RAMdisk.
 </para><para>
 
 Debian deberá arrancar y usted deberá ver los mismos mensajes que
-cuando anteriormente arranco el sistema de instalación, seguidos de 
+cuando arranco anteriormente el sistema de instalación, seguidos de 
 algunos mensajes nuevos.
 
 </para>
@@ -114,29 +114,29 @@ algunos mensajes nuevos.
 <para>
 
 Si la máquina falla al arrancar después de finalizar la instalación
-y para con un cursor <prompt>boot:</prompt>, intente escribir
+y se detiene mostrando el cursor <prompt>boot:</prompt>, intente escribir
 <userinput>Linux</userinput> seguido de &enterkey;. (La configuración
-de arranque predeterminada en <filename>quik.conf</filename> esta
+de arranque predeterminada en <filename>quik.conf</filename> está
 etiquetada como Linux). Las etiquetas definidas en 
 <filename>quik.conf</filename> serán mostradas si presiona la tecla
 <keycap>Tab</keycap> en el cursor <prompt>boot:</prompt>.
 También puede intentar regresar al instalador y editar el fichero
-<filename>/target/etc/quik.conf</filename> que ha sido ubicado allí
+<filename>/target/etc/quik.conf</filename> que ha sido colocado allí
 por el paso <guimenuitem>Install <command>Quik</command> on a Hard
-Disk</guimenuitem>. Algunas pistas para	adecuar  
-<command>quik</command> están disponibles en <ulink
+Disk</guimenuitem>. Puede encontrar algunas pistas para adaptar 
+<command>quik</command> a su caso en <ulink
 url="&url-powerpc-quik-faq;"></ulink>.
 
 </para><para>
 
 Para regresar a MacOS sin reiniciar la nvram, escriba
-<userinput>bye</userinput>  en el cursor de OpenFirmware (asumiendo que
+<userinput>bye</userinput> en el cursor de «OpenFirmware» (asumiendo que
 MacOS no ha sido borrado de la máquina). Para obtener el cursor,
 mantenga presionadas las teclas <keycombo> <keycap>command</keycap>
 <keycap>option</keycap> <keycap>o</keycap> <keycap>f</keycap>
-</keycombo> mientras la máquina reinicia en frío. Si necesita reiniciar
+</keycombo> mientras la máquina reinicia en frío. Si necesita restaurar
 los cambios hechos a la nvram de OpenFirmware al modo predeterminado
-de MacOS a modo de arrancar nuevamente en MacOS, mantenga presionado la
+de MacOS a modo de arrancar nuevamente en MacOS, mantenga presionadas la
 teclas <keycombo> <keycap>command</keycap>
 <keycap>option</keycap> <keycap>p</keycap> <keycap>r</keycap>
 </keycombo> mientras se arranca la máquina en frío.
@@ -180,9 +180,9 @@ mostradas si presiona la tecla <keycap>Tab</keycap> en el cursor
 
 El reinicio de OpenFirmware en hardware G3 o G4 causará que se
 arranque &debian; en forma predeterminada (si ha particionado
-correctamente y ubicado la partición Apple_Bootstrap primero. 
+correctamente y localizado la partición «Apple_Bootstrap» primero. 
 Si tiene &debian; en un disco SCSI y MacOS en un disco IDE esto
-podría no funcionar y tendrá que ingresar al OpenFirmware para
+podría no funcionar y tendrá que ingresar al «OpenFirmware» para
 configurar la variable <envar>boot-device</envar>,
 usualmente <command>ybin</command> hace esto automáticamente.
 
@@ -193,7 +193,7 @@ adicionales que desee (como opciones de arranque dual) a
 <filename>/etc/yaboot.conf</filename> y ejecutar <command>ybin</command>
 para actualizar la partición de arranque con la nueva configuración. 
 Para más información, por favor lea el 
-<ulink url="&url-powerpc-yaboot-faq;">COMO de yaboot</ulink>.
+<ulink url="&url-powerpc-yaboot-faq;">CÓMO de yaboot</ulink>.
 
 </para>
    </sect2>
@@ -211,14 +211,14 @@ instalar. La aplicación que le guía en este proceso se llama
 al &d-i; desde la primera etapa. De hecho, 
 <classname>base-config</classname> esta constituido por un número de 
 componentes especializados, donde cada componente gestiona una tarea
-de configuración, contiene <quote>menú oculto en el segundo plano</quote>
+de configuración, contiene un <quote>menú oculto en el segundo plano</quote>
 y también usa el mismo sistema de navegación.
 
 </para><para>
 
 Si desea volver a ejecutar <classname>base-config</classname> en cualquier
-momento después de finalizada la instalación,como superusuario ejecute
-<userinput>base-config</userinput>.
+momento después de finalizada la instalación, ejecute como superusuario la
+orden <userinput>base-config</userinput>.
 
 </para>
 
@@ -238,7 +238,7 @@ momento después de finalizada la instalación,como superusuario ejecute
 <para>
 
 Después de que ha instalado paquetes, se le presentará el cursor de
-ingreso. Ingrese usando la cuenta personal y clave que eligió.Ahora
+ingreso. Ingrese usando la cuenta personal y clave que eligió. Ahora
 su sistema esta listo para ser usado.
 
 </para><para>
@@ -247,22 +247,22 @@ Si es un usuario novato, tal vez quiera explorar la documentación que
 ya esta instalada en su sistema, tan pronto como empiece a usarlo.
 Existen diversos sistemas de documentación, se esta trabajando en
 integrar los diferentes tipos de documentación. Aquí algunos 
-puntos sobre donde empezar.
+puntos sobre donde empezar a buscar.
 
 </para><para>
 
 La documentación que acompaña a los programas que ha instalado
 se encuentra en <filename>/usr/share/doc/</filename>, bajo un
-directorio nombrado como el programa. Por ejemplo, la Guía de
-usuario de APT por usar <command>apt</command> para instalar 
-otros programas en su sistema, se ubica en
+directorio nombrado como el programa. Por ejemplo, la «Guía de
+usuario de APT», por usar <command>apt</command> para instalar 
+otros programas en su sistema, se localiza en
 <filename>/usr/share/doc/apt/guide.html/index.html</filename>.
 
 </para><para>
 
 
 Adicionalmente, existen algunos directorios especiales dentro de
-la jerarquía de<filename>/usr/share/doc/</filename>. Los COMOs
+la jerarquía de <filename>/usr/share/doc/</filename>. Los CÓMOs
 de Linux están instalados en formato <emphasis>.gz</emphasis>,
 dentro de <filename>/usr/share/doc/HOWTO/en-txt/</filename> y
 <filename>/usr/share/doc/HOWTO/en-txt/mini/</filename>. El fichero
@@ -272,7 +272,7 @@ dentro de <filename>/usr/share/doc/HOWTO/en-txt/</filename> y
 
 </para><para>
 
-Una forma fácil de ver estos documentos es realizar
+Una forma fácil de visualizar estos documentos es efectuar
 <userinput>cd /usr/share/doc/</userinput>, y escribir 
 <userinput>lynx</userinput> seguido de un espacio y un punto (el
 punto se refiere al directorio actual).
@@ -282,7 +282,7 @@ punto se refiere al directorio actual).
 También puede escribir <userinput>info 
 <replaceable>orden</replaceable></userinput> o <userinput>man
 <replaceable>orden</replaceable></userinput> para ver la 
-documentación de la mayoría de comandos disponibles en la línea
+documentación de la mayoría de ordenes disponibles en la línea
 de ordenes. El escribir <userinput>help</userinput> mostrará ayuda
 sobre ordenes de shell. Y el escribir una orden seguida de
 <userinput>--help</userinput> usualmente mostrará un breve resumen
@@ -291,7 +291,7 @@ al tamaño de la pantalla, escriba<userinput>| more</userinput> después
 de la orden para hacer que los resultados se pausen antes de pasar
 el tamaño de la pantalla. Para ver una lista de todas las ordenes
 disponibles que empiezan con cierta letra, escriba la letra y
-luego presione dos veces tab.
+luego presione dos veces la tecla «tab».
 
 </para><para>
 
