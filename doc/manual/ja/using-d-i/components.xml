@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="EUC-JP"?>
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: components.xml 14602 2004-05-02 16:31:59Z mck-guest $ -->
+<!-- original version: 14602 -->
+
+ <sect1 id="module-details">
+ <title>それぞれのコンポーネントの使用法</title>
+<para>
+
+<!--
+In this section we will describe each installer component in
+detail. The components are logically grouped together to
+a user-recognisable parts as they appear during the install.
+-->
+本節では、各インストーラコンポーネントの詳細について述べていきます。
+コンポーネントは、インストール中に現れるユーザが認識する部分で、
+論理的にグループ化されます。。
+
+</para>
+
+  <sect2>
+  <title>Debian Installer のセットアップとハードウェアの設定</title>
+<para>
+
+<!--
+Let's assume the Debian Installer has booted and you are facing its
+first screen.  At this time, &d-i; is still quite incapable. It
+doesn't know much about your computer hardware, preferred language, or
+even the task it should fulfil. Don't worry. Because &d-i; is quite
+clever, it can automatically probe for your hardware, locate the rest
+of its components and upgrade itself to a modern, well-built program.
+-->
+Debian Installer が起動して、最初の画面が表示されていると仮定しましょう。
+このとき、&d-i; はまだなにもできません。
+あなたのコンピュータのハードウェア、希望する言語、
+完了すべきタスクなどに関してあまり知りません。
+心配しないでください。
+&d-i; は非常に賢いので、ハードウェアの自動検出をしたり、
+コンポーネントの残りを見つけたり、
+新しく頑丈なプログラムに自分自体をアップグレードすることができます。
+
+<!--
+However, you still need to help &d-i; with some tasks it can't guess
+easily (like selecting your preferred language, keyboard layout or
+desired network mirror).
+-->
+しかし、
+(希望する言語、キーボードレイアウト、使用するネットワークミラーの選択のように)
+いくつかのタスクで簡単には推測できないので、
+&d-i; を助けてあげる必要があります。
+
+</para>
+
+&module-languagechooser.xml;
+&module-countrychooser.xml;
+&module-s390-netdevice.xml;
+&module-s390-dasd.xml;
+&module-ddetect.xml;
+&module-pcmcia.xml;
+&module-kbd-chooser.xml;
+&module-netcfg.xml;
+&module-iso-scan.xml;
+&module-choose-mirror.xml;
+&module-cdrom-detect.xml;
+&module-lowmem.xml;
+&module-anna.xml;
+  </sect2>
+
+  <sect2>
+  <title>パーティション分割とマウントポイント選択</title>
+<para>
+
+<!--
+At this time, &d-i; should be in its full strength, customized for
+user's needs and ready to do some real work.
+-->
+この時に、&d-i; はユーザのニーズでカスタマイズされ、
+いくつかの実際の作業を行う準備ができ、十分な強さにあるはずです。
+
+<!--
+As the title of this chapter states, the main task of the next few
+components lies in partitioning your disks, creating filesystems,
+assigning mountpoints and configuring closely related issues like LVM
+or RAID devices.
+-->
+本章の状態のタイトルのように、
+次の少数のコンポーネントの主要なタスクは、ディスクのパーティションを分割し、
+ファイルシステムを作成し、マウントポイントを割り当てて、
+LVM や RAID 装置のような密接に関係する件の設定を行うことです。
+
+</para>
+
+&module-partman.xml;
+&module-autopartkit.xml;
+&module-partitioner.xml;
+&module-partconf.xml;
+&module-lvmcfg.xml;
+&module-mdcfg.xml;
+  </sect2>
+
+  <sect2>
+  <title>基本システムのインストール</title>
+<para>
+
+<!--
+Albeit this part is the least problematic, it consumes most time of
+the install, because it downloads, verifies and unpacks the whole base
+system. If you have a slow computer or network connection, this could
+take some time.
+-->
+この部分が最も問題でないとはいえ、全体の基本システムをダウンロード、確認、
+展開にインストールのほとんどの時間を費やします。
+遅いコンピュータや遅いネットワーク接続しか持っていなければ、
+ある程度時間がかかるかもしれません。
+
+</para>
+
+&module-base-installer.xml;
+&module-kernel-chooser.xml;
+  </sect2>
+
+  <sect2>
+  <title>システムの起動可能化</title>
+<para>
+
+<!--
+Note that multiple operating systems booting on a single machine is
+still something of a black art.  This document does not even attempt
+to document the various boot managers, which vary by architecture and
+even by subarchitecture.  You should see your boot manager's
+documentation for more information.
+-->
+同一マシンで複数の OS を起動させるのは、まだかなり魔術的です。
+本文書では、様々なブートマネージャ 
+(アーキテクチャによって、さらにサブアーキテクチャによってさえ変わる) 
+を文書化することは試みません。
+より詳細にはブートマネージャのドキュメントをご覧ください。
+
+</para><para condition="supports-nfsroot">
+
+<!--
+If you are installing a diskless workstation, obviously, booting off
+the local disk isn't a meaningful option, and this step will be
+skipped. <phrase arch="sparc">You may wish to set the OpenBoot to boot
+from the network by default; see <xref
+linkend="boot-dev-select-sun"/>.</phrase>
+-->
+ディスクなしワークステーションにインストールするなら、
+明らかに、ローカルディスクから起動すること意味のある選択ではありませんし、
+このステップをスキップするでしょう。
+<phrase arch="sparc">デフォルトでネットワークから起動するよう、
+OpenBoot に設定したいかもしれません。
+<xref linkend="boot-dev-select-sun"/> をご覧ください。</phrase>
+
+</para>
+
+&module-os-prober.xml;
+&module-alpha-aboot-installer.xml;
+&module-hppa-palo-installer.xml;
+&module-i386-grub-installer.xml;
+&module-i386-lilo-installer.xml;
+&module-ia64-elilo-installer.xml;
+&module-mips-arcboot-installer.xml;
+&module-mipsel-colo-installer.xml;
+&module-mipsel-delo-installer.xml;
+&module-powerpc-yaboot-installer.xml;
+&module-s390-zipl-installer.xml;
+&module-sparc-silo-installer.xml;
+  </sect2>
+
+  <sect2>
+  <title>第 1 ステージ完了</title>
+<para>
+
+<!--
+These are the last bits to do before rebooting to your new Debian. It
+mostly consists of tidying up after the &d-i;.
+-->
+新しい Debian に対して再起動前に行う最後の一片です。
+ほとんどが &d-i; の後の片付けとなっています。
+
+</para>
+
+&module-prebaseconfig.xml;
+  </sect2>
+
+  <sect2>
+  <title>その他</title>
+<para>
+
+<!--
+Following components are usually not involved in the installation
+process, but they are awaiting in the background to help the user in
+case something goes wrong.
+-->
+以下のコンポーネントは、通常インストールプロセスに関係ありません。
+しかし、何かがうまく行かない時にユーザを助けるように、
+バックグラウンドで待っています。
+
+</para>
+
+&module-baseconfig.xml;
+&module-bugreporter.xml;
+&module-cdrom-checker.xml;
+&module-shell.xml;
+  </sect2>
+ </sect1>
