@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 22026 -->
+<!-- original version: 22953 -->
 
    <sect3 id="mdcfg">
    <title>Meervoudige schijfapparaten configureren (Software-RAID)</title>
@@ -68,7 +68,34 @@ bestandsserver.
 </para><para>
 
 Desgewenst kunt u een reserve harde schijf in de reeks opnemen die bij
-een storing de plaats zal innemen van een defecte schijf.
+een storing de plaats zal innemen van de defecte schijf.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>RAID5</term><listitem><para>
+
+Is een goed compromis tussen snelheid, betrouwbaarheid en redundantie van
+gegevens. Bij RAID5 worden binnenkomende gegevens gesplitst in stripes en
+gelijkmatig verdeeld over alle harde schijven op één na (vergelijkbaar met
+RAID0). In afwijking van RAID0, wordt bij RAID5 ook
+<firstterm>pariteits</firstterm>informatie berekend die op de overgebleven
+schijf wordt weggeschreven. De harde schijf met de pariteitsinformatie is
+niet statisch (dat zou RAID4 zijn), maar wordt periodiek gewijzigd zodat de
+pariteitsinformatie gelijkelijk wordt verdeeld over de schijven. Als één van
+de schijven defect raakt, kunnen de ontbrekende gegevens worden berekend op
+basis van de resterende gegevens en hun pariteit. RAID5 dient te zijn
+opgebouwd uit tenminste drie actieve partities. Desgewenst kunt u een reserve
+harde schijf in de reeks opnemen die bij een storing de plaats zal innemen
+van de defecte schijf.
+
+</para><para>
+
+Zoals u kunt zien, heeft RAID5 een vergelijkbare mate van betrouwbaarheid
+als RAID1 terwijl de opslag minder redundant is. Aan de andere kant is het,
+in verband met de berekening van de partiteitsinformatie, mogelijk iets
+trager bij schrijfoperaties dan RAID0 .
 
 </para></listitem>
 </varlistentry>
@@ -105,6 +132,17 @@ Samenvattend:
   <entry>Grootte van de kleinste partitie in de RAID</entry>
 </row>
 
+<row>
+  <entry>RAID5</entry>
+  <entry>3</entry>
+  <entry>naar keuze</entry>
+  <entry>ja</entry>
+  <entry>
+    Grootte van de kleinste partitie vermenigvuldigd met
+    (het aantal apparaten in de RAID minus één)
+  </entry>
+</row>
+
 </tbody></tgroup></informaltable>
 
 </para><para>
@@ -122,8 +160,12 @@ als:</guimenu> <guimenuitem>fysiek volume voor RAID</guimenuitem></menuchoice>.
 
 </para><warning><para>
 
-Op dit moment is het niet mogelijk om MD te gebruiken voor de
-root-partitie (<filename>/</filename>).
+<!--Support for MD is a relatively new addition to the installer.
+You may experience problems for some RAID levels and in combination
+with some bootloaders if you try to use MD for the root
+(<filename>/</filename>) filesystem. For experienced users, it may be
+possible to work around some of these problems by executing some
+configuration or installation steps manually from a shell.-->
 
 </para></warning><para>
 
@@ -155,6 +197,13 @@ reserve partities. Het aantal partities dat u selecteert moet gelijk zijn
 aan het aantal dat u zojuist heeft opgegeven. Maak u geen zorgen; als u
 een fout maakt en een afwijkend aantal partities selecteert, zal &d-i;
 u beletten verder te gaan totdat dit gecorrigeerd is.
+
+</para></listitem>
+<listitem><para>
+
+De configuratieprocedure voor RAID5 is vergelijkbaar met die voor RAID1.
+Het enige verschil is dat u tenminste <emphasis>3</emphasis> actieve
+partities dient te gebruiken.
 
 </para></listitem>
 </itemizedlist>
