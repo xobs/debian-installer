@@ -1,0 +1,63 @@
+<!-- original version: 11648 -->
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+
+  <sect2 arch="powerpc"><title>Particionando en Nuevos PowerMacs</title>
+<para>
+
+Si está instalando &debian; en un PowerMac NewWorld, debe crear una partición
+especial de inicio para alojar el asistente de inicio del sistema.
+El temaño de esta partición tiene que ser de 800KB y debe ser
+del tipo <emphasis>Apple_Bootstrap</emphasis>. Si esta partición
+no es del tipo <emphasis>Apple_Bootstrap</emphasis>, su máquina
+no será iniciable desde el disco duro. Esta partición puede ser
+creada fácilmente en <command>mac-fdisk</command> usando el comando
+<userinput>b</userinput>.
+
+</para><para>
+
+Esta partición especial del tipo Apple_Bootstrap, es requerida
+para prevenir que MacOS monte y dañe severamente la partición
+de inicio, ya que existen modificaciones especiales por parte
+de este sistema operativo para que OpenFirmware se inicie
+automáticamente.
+
+</para><para>
+
+Note que esta partición de inicio está pensada para alojar sólo
+tres pequeños archivos: El binario de <command>yaboot</command>, 
+el archivo de configuración, llamado <filename>yaboot.conf</filename>, 
+y la parte inicial del asistente de inicio OpenFirmware 
+<command>ofboot.b</command>.
+
+No necesita ni debe ser montado en su sistema de archivos, ni tampoco
+tener núcleos o cualquier fichero distinto a los ya mencionados en esta
+partición. Las órdenes <command>ybin</command> y 
+<command>mkofboot</command> son utilidades generalmente usadas para 
+manipular esta partición.
+
+</para><para>
+
+Para que OpenFirmware logre iniciar automáticamente &debian; 
+la partición de inicio debe estar antes que cualquier partición
+en el disco, especialmente antes que las particiones de MacOS.
+Por lo mismo, esta partición debe ser la primera que debe crear.
+Sin embargo, si agrega esta partición luego de haber creado otras
+particiones, puede usar la orden <userinput>r</userinput> en
+<command>mac-fdisk</command> para organizar nuevamente el mapa
+de particiones, dejandolo así bien establecido 
+(la partición ya mencionada, se convierte en la partición 1). 
+En realidad, lo que importa es el mapa lógico del disco y no las 
+direcciones físicas.
+
+</para><para>
+
+Los discos de Apple normalmente poseen una gran cantidad de pequeñas
+particiones con ciertos controladores para los dispositivos. Si
+intenta usar doble arranque en su máquina con MacOSX, debe dejar
+intactas esas particiones junto con una partición del tipo HFS
+(800k es el tamaño mínimo). Esto se debe a que MacOSX, en cada
+arranque de sistema ofrece una lista de particiones para ser iniciadas,
+específicamente las que no están activas en MacOS, o bien,
+que contienen controladores para dispositivos.
+  </sect2>

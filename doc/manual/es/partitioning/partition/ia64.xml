@@ -1,0 +1,99 @@
+<!-- original version: 11648 -->
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<sect2 arch="ia64"><title>Particionado en &arch-title;</title>
+<para>
+
+El EFI firmware para la arquitectura ia64 soporta dos tipos de
+tabla de particiones, GPT y MS-DOS. MS-DOS es el formato que
+normalmente se usa en computadores i386, por lo tanto
+no es lo recomendado para un sistema ia64. El instalador
+provee dos programas para el particionamiento,
+<ulink url="cfdisk.txt"><command>cfdisk</command></ulink> y
+<ulink url="parted.txt"><command>parted</command></ulink>.
+<command>parted</command> logra manejar tablas de particiones
+del tipo GPT Y MS-DOS, mientras que <command>cfdisk</command> 
+únicamente logra manejar tabla de particiones MS-DOS.
+Es muy importante saber que si su disco ha sido previamente
+establecido con una tabla de particiones del tipo GPT, y ahora desea
+usar tablas del tipo MS-DOS, debe usar el programa
+<command>parted</command> para crear la nueva partición. Esto
+se debe a que las dos tablas usan diferentes áreas del disco,
+y <command>cfdisk</command> no sabe como eliminar
+la tabla GPT.
+
+</para><para>
+
+Una diferencia importante entre <command>cfdisk</command> y
+<command>parted</command> es la forma por la cual identifican
+las particiones. <command>cfdisk</command> usa un byte
+en la tabla de particiones (por ejemplo, 83 para una partición
+linux del tipo ext2), mientras que <command>parted</command> 
+identifica el ``tipo'' de partición examinando el contenido
+de esta. Esto significa que <command>parted</command>
+no considerará una partición de intercambio (swap) a menos que
+se encuentre formateada con este tipo.
+De igual manera, no considerará una partición del tipo ext2
+a menos que se cree un sistema de archivos de este tipo en ella.
+<command>parted</command> permite crear sistemas de archivos
+y dar formato como una partición de intercambio, lo que es
+bastante recomendable hacerlo directamente desde allí.
+
+</para><para>
+
+Desafortunadamente, <command>parted</command> se usa
+mediante la línea de comandos y por lo tanto no es tan
+fácil de usar como <command>cfdisk</command>.
+Asumiendo de que desea eliminar totalmente todas sus particiones
+y luego crear una tabla GPT junto con otras particiones mas, entonces
+debería usar algo similar a este conjunto de comandos:
+
+</para><para>
+<informalexample><screen>
+
+      mklabel gpt
+      mkpartfs primary fat 0 50
+      mkpartfs primary linux-swap 51 1000
+      mkpartfs primary ext2 1001 3000
+      set 1 boot on
+      print
+      quit
+
+</screen></informalexample>
+</para><para>
+
+Eso crearía una nueva tabla de particiones, además tres
+particiones para ser usadas como la partición de inicio,
+partición de intercambio, y sistema raíz, respectivamente. 
+Finalmente, especifica que la partición 1 (EFI) será la partición
+de inicio. Las particiones son especificadas en Megabytes, con las 
+respectivas compensaciones al inicio y al final del disco. 
+Por ejemplo, si crea una partición de 1999MB del tipo ext2, se 
+compensarán los sectores del disco, de tal forma
+que quedarán 1001MB desde el inicio del disco. Note que formatear una 
+partición de intercambio usando <command>parted</command> puede tomar 
+ciertos minutos, ya que revisa la partición en busqueda de 
+bloques dañados.
+
+</para>
+  </sect2>
+
+  <sect2 arch="ia64"><title>Requisitos de la partición de inicio</title>
+
+<para>
+
+ELILO, el asistente de inicio en ia64, requiere una partición de tipo
+FAT. Si usa una tabla de particiones del tipo GPT, entonces ésta
+partición debe estar marcada como <userinput>boot</userinput> (iniciable);
+en caso contrario, si usa una tabla de particiones del tipo
+MS-DOS, la partición debe ser del tipo "EF". La partición
+debe ser suficientemente grande para almacenar al asistente
+de inicio del sistema y cualquier núcleo y discos RAM que desee
+usar para iniciar el sistema. 
+Un tamaño mínimo para esta partición debería ser de alrededor de 16MB, pero si
+va a hacer tales cosas como desarrollar, o experimentar
+con diferentes núcleos, sería mejor una partición de 128MB
+de tamaño.
+
+</para>
+  </sect2>
