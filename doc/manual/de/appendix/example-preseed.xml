@@ -6,7 +6,7 @@
 
 <para>
 
-Dies ein komplettes, funktionierendes Beispiel einer Voreinstellungs-Datei für
+Dies ist ein komplettes, funktionierendes Beispiel einer Voreinstellungs-Datei für
 eine automatische Installation. Wie Sie es benutzen, ist in
 <xref linkend="automatic-install"/> beschrieben. Vielleicht sollten Sie
 bei einigen Zeilen der Datei das Kommentarzeichen entfernen, bevor Sie sie benutzen.
@@ -17,7 +17,7 @@ bei einigen Zeilen der Datei das Kommentarzeichen entfernen, bevor Sie sie benut
 #### Modifikation von syslinux.cfg.
 
 # Editieren Sie die syslinux.cfg (oder eine ähnliche Datei) und fügen Sie
-# Kernelparameter an das Ende der »append«-Zeile an.
+# Kernelparameter an das Ende der "append"-Zeile an.
 #
 # Zumindest sollten Sie einen Parameter hinzufügen, der dem Installer sagt,
 # woher er seine Voreinstellungs-Datei bekommt.
@@ -53,7 +53,7 @@ bei einigen Zeilen der Datei das Kommentarzeichen entfernen, bevor Sie sie benut
 # standardmäßig für den Installer hinzugefügt werden). Wird diese Zahl
 # überschritten, werden 2.4-Kernel die überzähligen einfach ignorieren
 # und 2.6-Kernel werden eine Kernel-Panic melden.
-# Einige der Standardoptionen, wie 'vga=normal' und 'devfs=mount',
+# Einige der Standardoptionen wie "vga=normal" und "devfs=mount"
 # können bei den meisten Installationen getrost entfernt werden, wodurch
 # Sie mehr Optionen für Voreinstellungen frei haben.
 
@@ -62,7 +62,7 @@ bei einigen Zeilen der Datei das Kommentarzeichen entfernen, bevor Sie sie benut
 # Den d-i voreinzustellen, ist von Natur aus nicht sicher. Nichts im Installer
 # überprüft auf Versuche eines Pufferüberlaufs oder anderweitiger Ausnutzung
 # der Werte einer Voreinstellungs-Datei wie dieser. Benutzen Sie nur
-# Voreinstellungs-Dateien von vertrauenswürdigen Stellen! Um dies sicherzustellen
+# Voreinstellungs-Dateien aus vertrauenswürdigen Quellen! Um dies sicherzustellen
 # und weil es auch generell nützlich ist, bekommen Sie hier eine Möglichkeit,
 # jegliche Shell-Befehle, den Sie gerne im Installer hätten, automatisch zu
 # starten.
@@ -76,7 +76,7 @@ bei einigen Zeilen der Datei das Kommentarzeichen entfernen, bevor Sie sie benut
 # Dieser Befehl wird ausgeführt, wenn base-config startet.
 #base-config	base-config/early_command	string echo hi mom
 # Dieses Kommando wird ausgeführt, wenn base-config fertig ist, direkt vor dem
-# »Login:«-Prompt. An dieser Stelle wäre eine gute Möglichkeit, einen Satz Pakete zu installieren,
+# "Login:"-Prompt. An dieser Stelle wäre eine gute Möglichkeit, einen Satz Pakete zu installieren,
 # die Sie haben möchten, oder die Konfiguration des Systems zu optimieren.
 #base-config	base-config/late_command	string apt-get install zsh; chsh -s /bin/zsh
 
@@ -111,7 +111,7 @@ d-i	netcfg/wireless_wep	string
 # Der verrückte DHCP-Hostname, den einige ISPs als eine Art Passwort benutzen.
 #d-i	netcfg/dhcp_hostname	string radish
 
-#### Einstellungen für Mirror-Server.
+#### Einstellungen für den Mirror-Server.
 
 d-i	mirror/country		string enter information manually
 d-i	mirror/http/hostname	string http.us.debian.org
@@ -177,7 +177,7 @@ d-i	grub-installer/only_debian	boolean true
 # Betriebssysteme erkannt werden. Es ist nicht sehr sicher, da so möglicherweise
 # die anderen Systeme nicht mehr gestartet werden können.
 d-i	grub-installer/with_other_os	boolean true
-# Wenn Sie alternativ an einen anderen Ort als den MBR installieren möchten,
+# Wenn Sie alternativ an einen anderen Ort als in den MBR installieren möchten,
 # entfernen Sie hier die Kommentarzeichen und passen Sie die Zeilen an:
 #d-i	grub-installer/bootdev		string (hd0,0)
 #d-i	grub-installer/only-debian	boolean false
@@ -185,7 +185,7 @@ d-i	grub-installer/with_other_os	boolean true
 
 ##### Die erste Installationsstufe beenden.
 
-# Die letzte Meldung »Installation abgeschlossen« unterdrücken.
+# Die letzte Meldung "Installation abgeschlossen" unterdrücken.
 d-i	prebaseconfig/reboot_in_progress	note 
 
 
@@ -260,7 +260,7 @@ base-config	apt-setup/directory	string /debian
 # Den Dialog nach der Auswahl des Mirrors beenden (keine weitere Paketquelle angeben).
 base-config	apt-setup/another	boolean false
 
-# Sie können wählen, ob Sie Software aus dem »non-free«- und »contrib«-Zweig
+# Sie können wählen, ob Sie Software aus dem "non-free"- und "contrib"-Zweig
 # installieren möchten.
 #base-config	apt-setup/non-free	boolean true
 #base-config	apt-setup/contrib	boolean true
@@ -288,7 +288,7 @@ tasksel		tasksel/first	multiselect Desktop environment
 exim4-config	exim4/dc_eximconfig_configtype	select no configuration at this time
 # Es ist eine gute Idee, für diese Einstellung den Benutzernamen zu wählen,
 # den Sie erstellt haben. Wenn Sie es leer lassen, bedeutet das, das
-# Mails für den »postmaster« nach /var/mail/mail gehen.
+# Mails für den "postmaster" nach /var/mail/mail gehen.
 exim4-config	exim4/dc_postmaster		string 
 
 ###### Konfiguration des X-Servers.
@@ -335,7 +335,7 @@ xserver-xfree86	xserver-xfree86/config/monitor/mode-list	select 1024x768 @ 60 Hz
 # Datei integrieren. Jegliche Einstellungen in diesen Dateien werden die
 # Werte aus dieser Datei überschreiben. Es können mehr als eine Datei angegeben
 # werden, getrennt durch Leerzeichen; alle werden geladen. Die integrierten
-# Dateien können ebenfalls wieder »preseed/include«-Regeln enthalten.
+# Dateien können ebenfalls wieder "preseed/include"-Regeln enthalten.
 # Bedenken Sie: wenn Sie relative Dateipfade angeben, gehen diese von dem
 # gleichen Verzeichnis aus, wie die Voreinstellungs-Datei, in der sie integriert
 # sind.

@@ -4,33 +4,33 @@
  <sect1 id="boot-parms"><title>Boot-Parameter</title>
 <para>
 
-Boot-Parameter sind Parameter für den Linux-Kernel, die generell 
+Boot-Parameter sind Parameter für den Linux-Kernel, die generell
 genutzt werden, damit Peripheriegeräte korrekt behandelt werden können.
-In den meisten Fällen kann der Kernel Informationen über die Geräte 
-automatisch erkennen. In einigen Fällen jedoch müssen Sie ihm ein 
+In den meisten Fällen kann der Kernel Informationen über die Geräte
+automatisch erkennen. In einigen Fällen jedoch müssen Sie ihm ein
 bisschen helfen.
 
 </para><para>
 
-Wenn Sie das Debian-System das erste Mal booten, versuchen Sie es mit 
-den Standardparametern (was bedeutet: geben Sie keine Parameter an) 
-und schauen Sie, ob es korrekt funktioniert. Vielleicht tut es das. 
-Falls nicht, können Sie später erneut starten und spezielle Parameter 
-ausprobieren, die den Kernel über Ihre Hardware informieren. 
+Wenn Sie das Debian-System das erste Mal booten, versuchen Sie es mit
+den Standardparametern (was bedeutet: geben Sie keine Parameter an)
+und schauen Sie, ob es korrekt funktioniert. Vielleicht tut es das.
+Falls nicht, können Sie später erneut starten und spezielle Parameter
+ausprobieren, die den Kernel über Ihre Hardware informieren.
 
 </para><para>
 
-Informationen über viele Boot-Parameter finden Sie im 
+Informationen über viele Boot-Parameter finden Sie im
 <ulink url="http://www.tldp.org/HOWTO/BootPrompt-HOWTO.html"> Linux
-BootPrompt HOWTO</ulink>, inklusive Tipps für problematische Hardware. 
-Dieses Kapitel enthält nur einen Abriss der wichtigsten Parameter. 
-Einige allgemeine Parameter sind in <xref linkend="boot-troubleshooting"/> 
+BootPrompt-HOWTO</ulink>, inklusive Tipps für problematische Hardware.
+Dieses Kapitel enthält nur einen Abriss der wichtigsten Parameter.
+Einige allgemeine Parameter sind in <xref linkend="boot-troubleshooting"/>
 beschrieben.
 
 </para><para>
 
-Wenn der Kernel bootet, sollte ziemlich früh während des Prozesses 
-eine Nachricht wie 
+Wenn der Kernel bootet, sollte ziemlich früh während des Prozesses
+eine Nachricht wie
 
 <informalexample><screen>
 
@@ -39,34 +39,34 @@ Memory:<replaceable>avail</replaceable>k/<replaceable>total</replaceable>k avail
 </screen></informalexample>
 
 erscheinen.
-<replaceable>Total</replaceable> sollte der Summe des installierten 
-Arbeitsspeichers in Kilobyte entsprechen. Wenn dem nicht so ist, 
-müssen Sie den Parameter <userinput>mem=<replaceable>ram</replaceable></userinput> 
-verwenden, wobei <replaceable>ram</replaceable> durch den Gesamtwert des RAMs 
-ersetzt werden muss (mit einem nachfolgenden ``k'' für Kilobyte oder ``m'' 
-für Megabyte). Ein Beispiel: sowohl <userinput>mem=65536k</userinput> 
+<replaceable>Total</replaceable> sollte der Summe des installierten
+Arbeitsspeichers in Kilobyte entsprechen. Wenn dem nicht so ist,
+müssen Sie den Parameter <userinput>mem=<replaceable>ram</replaceable></userinput>
+verwenden, wobei <replaceable>ram</replaceable> durch den Gesamtwert des RAMs
+ersetzt werden muss (mit einem nachfolgenden "k" für Kilobyte oder "m"
+für Megabyte). Ein Beispiel: sowohl <userinput>mem=65536k</userinput>
 wie auch <userinput>mem=64m</userinput> entsprechen 64MB RAM.
 
 </para><para condition="supports-serial-console">
 
-Wenn Sie von einer seriellen Konsole aus booten, wird der Kernel dies 
-normalerweise automatisch erkennen. 
+Wenn Sie von einer seriellen Konsole aus booten, wird der Kernel dies
+normalerweise automatisch erkennen.
 <phrase arch="mipsel">(Allerdings nicht auf DECstations.)</phrase>
-Wenn der Rechner, den Sie per serieller Konsole installieren wollen, 
-auch eine Grafikkarte (für Framebuffer) und eine Tastatur hat, müssen 
-Sie dem Kernel das Boot-Argument 
-<userinput>console=<replaceable>device</replaceable></userinput> 
-mitgeben, wobei <replaceable>device</replaceable> Ihrer seriellen 
-Schnittstelle entspricht, also normalerweise etwas wie 
+Wenn der Rechner, den Sie per serieller Konsole installieren wollen,
+auch eine Grafikkarte (für Framebuffer) und eine Tastatur hat, müssen
+Sie dem Kernel das Boot-Argument
+<userinput>console=<replaceable>device</replaceable></userinput>
+mitgeben, wobei <replaceable>device</replaceable> Ihrer seriellen
+Schnittstelle entspricht, also normalerweise etwas wie
 <filename>ttyS0</filename>.
 
 </para><para arch="sparc">
 
-Auf &arch-title;-Systemen heißen die seriellen Schnittstellen 
+Auf &arch-title;-Systemen heißen die seriellen Schnittstellen
 <filename>ttya</filename> oder <filename>ttyb</filename>.
-Alternativ können Sie die <envar>input-device</envar> und 
-<envar>output-device</envar> OpenPROM-Variablen auf 
-<filename>ttya</filename> setzen. 
+Alternativ können Sie die <envar>input-device</envar>- und
+<envar>output-device</envar>-OpenPROM-Variablen auf
+<filename>ttya</filename> setzen.
 
 </para>
 
@@ -78,15 +78,15 @@ Das Installationssystem kennt ein paar zusätzliche Boot-Parameter, <footnote>
 
 <para>
 
-Bedenken Sie, das der Kernel maximal 8 Kommandozeilen-Optionen und 
-8 Environment-Optionen (inklusive der Optionen, die standardmäßig für 
-den Installer hinzugefügt werden) akzeptiert. Werden diese Grenzen 
-überschritten, wird ein 2.4er Kernel überzählige Optionen ignorieren, 
-ein 2.6er Kernel erzeugt eine Kernel-Panic. 
+Bedenken Sie, das der Kernel maximal 8 Kommandozeilen-Optionen und
+8 Umgebungs-Optionen (inklusive der Optionen, die standardmäßig für
+den Installer hinzugefügt werden) akzeptiert. Werden diese Grenzen
+überschritten, wird ein 2.4er Kernel überzählige Optionen ignorieren,
+ein 2.6er Kernel erzeugt eine Kernel-Panic.
 
 </para>
 
-</footnote>die vielleicht nützlich sein könnten. 
+</footnote>die vielleicht nützlich sein könnten.
 
 </para>
 
@@ -101,19 +101,19 @@ Dieser Parameter legt die höchste mögliche Prioritätsstufe fest
 </para><para>
 
 Die Standardinstallation nutzt <userinput>debconf/priority=high</userinput>.
-Dies bedeutet, dass Meldungen mit hoher und kritischer Priorität angezeigt 
-werden, Meldungen mit Priorität medium oder niedrig werden unterdrückt. 
+Dies bedeutet, dass Meldungen mit hoher und kritischer Priorität angezeigt
+werden, Meldungen mit Priorität medium oder niedrig werden unterdrückt.
 Treten Probleme auf, verändert der Installer die Priorität nach Bedarf.
 
 </para><para>
 
-Wenn Sie <userinput>debconf/priority=medium</userinput> als Boot-Parameter 
-angeben, wird das Installationsmenü angezeigt und gibt Ihnen mehr Kontrolle 
-über die Installation. Wird <userinput>debconf/priority=low</userinput> 
-benutzt, werden alle Meldungen angezeigt (dies entspricht dem 
+Wenn Sie <userinput>debconf/priority=medium</userinput> als Boot-Parameter
+angeben, wird das Installationsmenü angezeigt und gibt Ihnen mehr Kontrolle
+über die Installation. Wird <userinput>debconf/priority=low</userinput>
+benutzt, werden alle Meldungen angezeigt (dies entspricht dem
 <emphasis>Experten</emphasis>-Modus).
-Bei <userinput>debconf/priority=critical</userinput> zeigt das 
-Installationssystem nur kritische Meldungen an und versucht, ohne viel 
+Bei <userinput>debconf/priority=critical</userinput> zeigt das
+Installationssystem nur kritische Meldungen an und versucht, ohne viel
 Klamauk das Richtige zu tun.
 
 </para></listitem>
@@ -124,7 +124,7 @@ Klamauk das Richtige zu tun.
 <term>DEBIAN_FRONTEND</term>
 <listitem><para>
 
-Dieser Boot-Parameter kontrolliert die Art der Benutzer-Schnittstelle, 
+Dieser Boot-Parameter kontrolliert die Art der Benutzer-Schnittstelle,
 die für den Installer benutzt wird. Mögliche Einstellungen sind:
 
 <itemizedlist>
@@ -147,11 +147,11 @@ die für den Installer benutzt wird. Mögliche Einstellungen sind:
 </listitem>
 </itemizedlist>
 
-<userinput>DEBIAN_FRONTEND=newt</userinput> ist das Standard-Frontend. 
-<userinput>DEBIAN_FRONTEND=text</userinput> könnte man bevorzugt für 
-Installationen per serieller Konsole nutzen. Allgemein ist auf 
-Standard-Installationsmedien nur das <userinput>newt</userinput>-Frontend 
-vorhanden, deswegen ist dieser Parameter im Moment noch nicht so sehr 
+<userinput>DEBIAN_FRONTEND=newt</userinput> ist das Standard-Frontend.
+<userinput>DEBIAN_FRONTEND=text</userinput> könnte man bevorzugt für
+Installationen per serieller Konsole nutzen. Allgemein ist auf
+Standard-Installationsmedien nur das <userinput>newt</userinput>-Frontend
+vorhanden, deswegen ist dieser Parameter im Moment noch nicht so sehr
 nützlich.
 
 </para></listitem>
@@ -162,8 +162,8 @@ nützlich.
 <term>BOOT_DEBUG</term>
 <listitem><para>
 
-Dieser Boot-Parameter legt fest, wie ausführlich der Bootvorgang 
-protokolliert wird. 
+Dieser Boot-Parameter legt fest, wie ausführlich der Bootvorgang
+protokolliert wird.
 
 <variablelist>
 <varlistentry>
@@ -224,7 +224,7 @@ die Installation in vielen verschiedenen Sprachen anbieten zu können.
 Falls der Framebuffer auf Ihrem System Probleme macht, können Sie ihn 
 mit dem Parameter <userinput>debian-installer/framebuffer=false</userinput> 
 deaktivieren. Symptome für diese Probleme können Fehlermeldungen über 
-»bterm« oder »boql« sein sowie ein schwarzer Bildschirm oder ein 
+"bterm" oder "boql" sein sowie ein schwarzer Bildschirm oder ein 
 Einfrieren des Systems ein paar Minuten nach dem Installationsstart.
 
 </para><para arch="i386">
@@ -291,7 +291,7 @@ Phänomene.
 <term>preseed/url</term>
 <listitem><para>
 
-Geben Sie die URL einer Preconfiguration-Datei an, die heruntergeladen 
+Geben Sie die URL einer Voreinstellungs-Datei an, die heruntergeladen 
 und benutzt wird, um die Installation zu automatisieren. Siehe auch 
 <xref linkend="automatic-install"/>.
 
@@ -302,7 +302,7 @@ und benutzt wird, um die Installation zu automatisieren. Siehe auch
 <term>preseed/file</term>
 <listitem><para>
 
-Geben Sie die URL einer Preconfiguration-Datei an, die geladen werden kann, 
+Geben Sie die URL einer Voreinstellungs-Datei an, die geladen werden kann, 
 um die Installation zu automatisieren. Siehe auch 
 <xref linkend="automatic-install"/>.
 
