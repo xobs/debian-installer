@@ -126,6 +126,10 @@ define genext2fs
 	genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` -r 0
 endef
 
+define mkcramfs
+	mkcramfs $(TREE)
+endef
+
 #
 # A generic recursion rule
 #
@@ -570,16 +574,19 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 	fi
 	install -d $(TEMP)
 
-	if [ $(INITRD_FS) = ext2 ]; then \
+	case $(INITRD_FS) in \
+	ext2) \
 		if [ "" != "$(USERDEVFS)" ]; then \
 			$(genext2fs-userdevfs) $(TEMP)/initrd; \
 		else \
 			$(genext2fs) $(TEMP)/initrd; \
-		fi \
-	else \
+		fi ;; \
+	cramfs) \
+		$(mkcramfs) $(TEMP)/initrd ;; \
+	*) \
 		echo "Unsupported filesystem type"; \
-		exit 1; \
-	fi;
+		exit 1 ;; \
+	esac
 	gzip -v9f $(TEMP)/initrd
 
 # raw kernel images
@@ -634,12 +641,15 @@ $(EXTRA): $(TEMP_EXTRA)
 $(TEMP_EXTRA): $(STAMPS)extra-$(targetstring)-stamp
 	install -d $(shell dirname $@)
 	install -d $(TREE)
-	set -e; if [ $(INITRD_FS) = ext2 ]; then \
-		genext2fs -d $(TREE) -b $(IMAGE_SIZE) -r 0 $@; \
-	else \
+	set -e; case $(INITRD_FS) in \
+	ext2) \
+		genext2fs -d $(TREE) -b $(IMAGE_SIZE) -r 0 $@ ;; \
+	cramfs) \
+		$(mkcramfs) $@ ;; \
+	*) \
 		echo "Unsupported filesystem type"; \
-                exit 1; \
-	fi;
+		exit 1 ;; \
+	esac
 	$(if $(GZIPPED),gzip -v9f $(TEMP_EXTRA))
 
 $(STAMPS)extra-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
