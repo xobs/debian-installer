@@ -1,3 +1,12 @@
+#!/usr/bin/make -f
+#
+# Debian Installer system makefile.
+# Copyright 2001 by Joey Hess <joeyh@debian.org>.
+# Licensed under the terms of the GPL.
+#
+# This makefile builds a debian-installer system from a collection of
+# udebs.
+
 # The type of system to build. Determines what udebs are unpacked into
 # the system. See the .list files for various types. You may want to
 # override this on the command line.
