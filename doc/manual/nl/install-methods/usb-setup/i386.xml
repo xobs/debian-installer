@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 24628 untranslated -->
+<!-- original version: 24663 untranslated -->
 
    <sect3 arch="i386">
    <title>USB stick partitioning on &arch-title;</title>
@@ -14,12 +14,10 @@ Since most USB sticks come pre-configured with a single FAT16
 partition, you probably won't have to repartition or reformat the
 stick.  If you have to do that anyway, use <command>cfdisk</command>
 or any other partitioning tool for creating a FAT16 partition and then
-type
+create the filesystem using:
 
 <informalexample><screen>
-
-mkdosfs /dev/<replaceable>sda1</replaceable>
-
+# mkdosfs /dev/<replaceable>sda1</replaceable>
 </screen></informalexample>
 
 Take care that you use the correct device name for your USB stick. The
@@ -40,12 +38,10 @@ configuration of the boot loader.
 
 To put <command>SYSLINUX</command> on the FAT16 partition on your USB
 stick, install the <classname>syslinux</classname> and
-<classname>mtools</classname> packages on your system, and type
+<classname>mtools</classname> packages on your system, and do:
 
 <informalexample><screen>
-
-syslinux /dev/<replaceable>sda1</replaceable>
-
+# syslinux /dev/<replaceable>sda1</replaceable>
 </screen></informalexample>
 
 Again, take care that you use the correct device name. The partition
@@ -90,14 +86,14 @@ The <filename>syslinux.cfg</filename> configuration file should
 contain the following two lines:
 
 <informalexample><screen>
-
 default vmlinuz
-append initrd=initrd.gz ramdisk_size=10000 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
-
+append initrd=initrd.gz ramdisk_size=12000 root=/dev/rd/0 init=/linuxrc rw
 </screen></informalexample>
 
 Please note that the <userinput>ramdisk_size</userinput> parameter
 may need to be increased, depending on the image you are booting.
+If the boot fails, you can try adding <userinput>devfs=mount,dall</userinput>
+to the <quote>append</quote> line.
 
 </para>
    </sect3>

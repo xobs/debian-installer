@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23664 untranslated -->
+<!-- original version: 24663 untranslated -->
 
  <sect2 arch="alpha" id="alpha-firmware">
  <title>Alpha Console Firmware</title>
@@ -223,14 +223,10 @@ system's console firmware and whether or not <command>MILO</command> is
 available:
 
 <informalexample><screen>
-
-SRM -> aboot
-SRM -> MILO
-ARC -> MILO
-
+SRM -&gt; aboot
+SRM -&gt; MILO
+ARC -&gt; MILO
 </screen></informalexample>
-
-</para><para condition="FIXME">
 
 Because <command>MILO</command> is not available for any of the Alpha
 systems currently in production (as of February 2000), and because it
@@ -272,42 +268,33 @@ prefix, and will be listed in the output of the <userinput>show dev</userinput> 
 like this (edited slightly):
 
 <informalexample><screen>
-
->>> show dev
+&gt;&gt;&gt; show dev
 ewa0.0.0.9.0               EWA0              08-00-2B-86-98-65
 ewb0.0.0.11.0              EWB0              08-00-2B-86-98-54
 ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
-
 </screen></informalexample>
 
 You first need to set the boot protocol:
+
 <informalexample><screen>
-
->>> set ewa0_protocol bootp
-
+&gt;&gt;&gt; set ewa0_protocol bootp
 </screen></informalexample>
 
 Then check the medium type is correct:
 
 <informalexample><screen>
-
->>> set ewa0_mode <replaceable>mode</replaceable>
-
+&gt;&gt;&gt; set ewa0_mode <replaceable>mode</replaceable>
 </screen></informalexample>
 
-You can get a listing of valid modes with <userinput>>>>set ewa0_mode</userinput>.
+You can get a listing of valid modes with <userinput&gt;&gt;&gt;>set ewa0_mode</userinput>.
 
 </para><para>
 
 Then, to boot from the first Ethernet interface, you would type:
 
 <informalexample><screen>
-
->>> boot ewa0 -flags ""
-
+&gt;&gt;&gt; boot ewa0 -flags ""
 </screen></informalexample>
-
-</para><para>
 
 This will boot using the default kernel parameters as included in the
 netboot image.
@@ -325,9 +312,7 @@ the &d-i; images.  For example, to boot from <userinput>ewa0</userinput>
 and use a console on the first serial port, you would type: 
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot ewa0 -flags &quot;root=/dev/ram ramdisk_size=16384 console=ttyS0&quot;
-
 </screen></informalexample>
 
 </para>
@@ -339,9 +324,7 @@ and use a console on the first serial port, you would type:
 Type
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot xxxx -flags 0
-
 </screen></informalexample>
 
 where <replaceable>xxxx</replaceable> is your CD-ROM drive in SRM notation.
@@ -370,22 +353,18 @@ boot loader.
   <title>Booting from Floppies with the SRM Console</title>
 <para>
 
-At the SRM prompt (<prompt>&gt;&gt;&gt;</prompt>), issue the following
+At the SRM prompt (<prompt&gt;&gt;&gt;></prompt>), issue the following
 command:
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot dva0 -flags 0
-        
 </screen></informalexample>
 
 possibly replacing <filename>dva0</filename> with the actual device
 name.  Usually, <filename>dva0</filename> is the floppy; type
 
 <informalexample><screen>
-
 &gt;&gt;&gt; show dev
-        
 </screen></informalexample>
 
 to see the list of devices (e.g., if you want to boot from a CD).
@@ -397,11 +376,11 @@ If everything works OK, you will eventually see the Linux kernel boot.
 
 If you want to specify kernel parameters when booting via
 <command>aboot</command>, use the following command:
-<informalexample><screen>
 
+<informalexample><screen>
 &gt;&gt;&gt; boot dva0 -file linux.bin.gz -flags "root=/dev/fd0 load_ramdisk=1 arguments"
-        
 </screen></informalexample>
+
 (typed on one line), substituting, if necessary, the actual SRM boot
 device name for <filename>dva0</filename>, the Linux boot device name for
 <filename>fd0</filename>, and the desired kernel parameters for
@@ -441,12 +420,8 @@ If you want to specify all the bits explicitly (for example, to supply
 additional parameters), you can use a command like this:
 
 <informalexample><screen>
-
-MILO&gt; boot fd0:linux.bin.gz root=/dev/fd0 load_ramdisk=1 <!-- arguments -->
-        
+MILO> boot fd0:linux.bin.gz root=/dev/fd0 load_ramdisk=1 <!-- arguments -->
 </screen></informalexample>
-
-</para><para>
 
 If you are booting from something other than a floppy, substitute
 <filename>fd0</filename> in the above example with the appropriate device name
@@ -455,4 +430,3 @@ MILO command reference.
 
 </para>
  </sect2>
-
