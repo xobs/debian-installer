@@ -426,6 +426,14 @@ endif
 		$(DPKGDIR)/status > $(DPKGDIR)/status.new
 	mv $(DPKGDIR)/status.new $(DPKGDIR)/status
 
+	# Add a dummy entry for the debian installer itself to the status
+	# file, giving the overall version of this build.
+	echo "Package: debian-installer" >> $(DPKGDIR)/status
+	echo "Status: install ok intalled" >> $(DPKGDIR)/status
+	echo "Version: $(subst _,-,$(targetstring))-$(BUILD_DATE)" >> $(DPKGDIR)/status
+	echo "Description: debian installation image" >> $(DPKGDIR)/status
+	echo " " >> $(DPKGDIR)/status
+
 ifdef DROP_LANG
 	# Remove languages from the templates.
 	# Not ideal, but useful if you're very tight on space.
