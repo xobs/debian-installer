@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23678 untranslated -->
+<!-- original version: 25152 untranslated -->
 
  <sect1 id="kernel-baking"><title>Compiling a New Kernel</title>
 <para>
@@ -22,13 +22,6 @@ handle hardware or options not included in the stock kernel, such as
 APM or SMP
 
 </para></listitem>
-
-<listitem arch="i386"><para>
- 
-The compact and idepci flavors don't come with sound. Although
-the vanilla kernel does, it might not work for other reasons.  
-
-</para></listitem>
 <listitem><para>
 
 optimize the kernel by removing useless drivers to speed up boot
@@ -38,7 +31,7 @@ time
 <listitem><para>
 
 use options of the kernel which are not supported by the default
-kernel (such as network firewalling)
+kernel (such as high memory support)
 
 </para></listitem>
 <listitem><para>
@@ -81,8 +74,8 @@ log of the active config file for the build.
 </para><para>
 
 Note that you don't <emphasis>have</emphasis> to compile your kernel
-the ``Debian way''; but we find that using the packaging system to
-manage your kernel is actually safer and easier.  In fact, you can get
+the <quote>Debian way</quote>; but we find that using the packaging system
+to manage your kernel is actually safer and easier.  In fact, you can get
 your kernel sources right from Linus instead of
 <classname>kernel-source-&kernelversion;</classname>, yet still use the
 <classname>kernel-package</classname> compilation method.
@@ -96,32 +89,38 @@ contains a brief tutorial.
 
 </para><para>
 
-Hereafter, we'll assume your kernel source will be located in
-<filename>/usr/local/src</filename> and that your kernel version is
-&kernelversion;.  As root, create a directory under
-<filename>/usr/local/src</filename> and change the owner of that
-directory to your normal non-root account.  As your normal non-root
-account, change your directory to where you want to unpack the kernel
-sources (<userinput>cd /usr/local/src</userinput>), extract the kernel
-sources (<userinput>tar xjf
-/usr/src/kernel-source-&kernelversion;.tar.bz2</userinput>), change your
-directory to it (<userinput>cd
-kernel-source-&kernelversion;/</userinput>). 
+Hereafter, we'll assume you have free rein over your machine and will
+extract your kernel source to somewhere in your home directory<footnote>
+
+<para>
+
+There are other locations where you can extract kernel sources and build
+your custom kernel, but this is easiest as it does not require special
+permissions.
+
+</para>
+
+</footnote>. We'll also assume that your kernel version is
+&kernelversion;. Make sure you are in the directory to where you want to
+unpack the kernel sources, extract them using <userinput>tar xjf
+/usr/src/kernel-source-&kernelversion;.tar.bz2</userinput> and change
+to the directory <filename>kernel-source-&kernelversion;</filename>
+that will have been created.
 
 </para><para>
 
 Now, you can configure your kernel.  Run <userinput>make
-xconfig</userinput> if X11 is installed, configured and being run,
+xconfig</userinput> if X11 is installed, configured and being run; run
 <userinput>make menuconfig</userinput> otherwise (you'll need
-<classname>ncurses-dev</classname> installed). Take the time to read
+<classname>libncurses5-dev</classname> installed). Take the time to read
 the online help and choose carefully. When in doubt, it is typically
 better to include the device driver (the software which manages
 hardware peripherals, such as Ethernet cards, SCSI controllers, and so
 on) you are unsure about.  Be careful: other options, not related to a
 specific hardware, should be left at the default value if you do not
-understand them.  Do not forget to select ``Kernel module loader'' in
-``Loadable module support'' (it is not selected by default).  If not
-included, your Debian installation will experience problems.
+understand them.  Do not forget to select <quote>Kernel module loader</quote>
+in <quote>Loadable module support</quote> (it is not selected by default).
+If not included, your Debian installation will experience problems.
 
 </para><para>
 
@@ -132,10 +131,10 @@ parameters.  To do that, do <userinput>make-kpkg clean</userinput>.
 
 Now, compile the kernel: 
 <userinput>fakeroot make-kpkg --revision=custom.1.0 kernel_image</userinput>. 
-The version number of ``1.0'' can be changed at will; this is just a
-version number that you will use to track your kernel builds.
-Likewise, you can put any word you like in place of ``custom'' (e.g.,
-a host name).  Kernel compilation may take quite a while, depending on
+The version number of <quote>1.0</quote> can be changed at will; this is just
+a version number that you will use to track your kernel builds.
+Likewise, you can put any word you like in place of <quote>custom</quote>
+(e.g., a host name).  Kernel compilation may take quite a while, depending on
 the power of your machine.
 
 </para><para condition="supports-pcmcia">
@@ -154,7 +153,7 @@ like any package.  As root, do <userinput>dpkg -i
 ../kernel-image-&kernelversion;-<replaceable>subarchitecture</replaceable>_custom.1.0_&architecture;.deb</userinput>.
 The <replaceable>subarchitecture</replaceable> part is an optional
 sub-architecture,
-<phrase arch="i386"> such as ``i586'', </phrase>
+<phrase arch="i386"> such as <quote>i586</quote>, </phrase>
 depending on what kernel options you set.
 <userinput>dpkg -i kernel-image...</userinput> will install the
 kernel, along with some other nice supporting files.  For instance,
