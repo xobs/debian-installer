@@ -1,0 +1,33 @@
+This is a checklist of steps involved in updating d-i to use a new version
+of the kernel.
+
+ 1. New kernel deb enters the archive.
+ 2. Update linux-kernel-di package to use new kernel.
+ 3. Compare available modules in new kernel and add any that are useful for
+    installation to an appropriate udeb.
+ 4. Update build/config/ KERNELVERSION to use new kernel (only commit once
+    udebs are accepted).
+ 5. Make sure images still build, as sometimes new kernels will overflow
+    floppies, etc. If not go back to step 3 and refactor.
+ 6. Do initial test installs, which must be done against unstable to
+    use the new kernel udebs from unstable or using hand-build CD
+    images.
+ 7. New kernel deb enters testing. 
+ 8. Update rootskel's debian-installer/kernel/image and/or
+    debian-installer/kernel/image-2.6 templates to use the version number
+    of the new kernel. (Not necessary for all arches.)
+ 9. Update base-installer's postinst to change any hard-coded kernel
+    versions. (Not necessary for all arches.)
+10. Update debian-cd's tasks/debian-installer+kernel, tasks/debian-installer,
+    and tasks/exclude-sarge for new kernel.
+11. Test to make sure 24, 32, and 48 mb installs still work. New kernels
+    and added/changed modules sometimes break lowmem.
+12. Get new debian-cd uploaded and theoretically into testing. (Never
+    done so far.)
+13. Get ftp-master to propigate all the updated udebs into testing.
+    Until this point, naive users will be unable to use some sid_d-i
+    install images as the needed udebs will not be in testing.
+14. Full user testing, etc.
+15. Get ftp-master to remove kernel udebs for the old kernel version
+    from testing. This will *break* some old released install media
+    (floppy, netboot, not cdrom), but it's necessary before release.
