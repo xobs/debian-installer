@@ -17,31 +17,12 @@ time.
 		underneath.
 	- ppp support
 		  Not as important for analog dialup, as for ISDN, pppoe.
-	- some architectures
-		amd64 (unofficial)
-		s/390
-			- zipl-installer, not available(?)
-			- ssh (the support is finished in the glibc cvs and openssh package),
-			  this needs the possibility to restart cdebconf.
-			- language-/countrychooser at the begining is annoying
-			- cdebconf
-			  - text frontend don't respect dumb terminal definition, should disable
-			    translations.
-			  - as discussed, default items should be prefixed with an asterisk or
-			    similar.
-			- s390-netdevice
-			  - iucv support.
-			  - fails silent the first time on the test machine, needs some debug
-			    and the file /proc/chandev from the testmachine.
 
 	
 [60%] Needs some work, but does its grunt work
 ---------------------------------------------------------------------
 	- I18N
-		Mostly done, still filling in minor holes. Mostly
-                BIDI support (Hebrew, Arabic...). Countrychooser
-		short list translation (patch exists but increases
-		the package size a lot)
+		Mostly done, still filling in minor holes.
 	- translations
 		Varying languages translated to varying degrees.
 		http://people.debian.org/~seppy/d-i/translation-status.html
@@ -56,17 +37,14 @@ time.
 		anymore.
         - disk selector, partitioner
 		We have switched to partman everything except a couple of
-		subarches.
-	- wireless support
-		Seems to generally work most of the time.
+		subarches and s390.
 	- bugreporter-udeb
 		only supports saving to floppy, which many lack
+		should offer a way to save via network or to usb stick
 	- post-reboot configuration
 		base-cofig is stable, though it could use more polish
 		i18n is needed.
 		Some questions repeat questions from d-i.
-	- linda support for udebs, to catch all the common gotchas
-		(lintian support in progress)
 	- web site
 		http://www.debian.org/devel/debian-installer/
 		Could be better laid out, lacking some sections, other
@@ -75,14 +53,13 @@ time.
 		No automatic propagation to testing.
 		No source propigation for udeb sources!
 	- pcmcia support
-		- may work, may not.. (many failure reports)
-		- cardbus is broken
-		- Probably need to re-run hw-detect after loading pcmcia from
-		  the net_driver floppy.
+		Much improved, generally works now.
 	- low memory support
 		Where "low" is 32-46 mb!
 		Works, but user must be careful to set up swap ASAP.
 		There is no sanity checking, and some bad failure modes.
+		Zboob's patch for ultra-lowmem needs work and is not yet
+		integrated.
         - user documentation
 		Short term we have the INSTALLATION-HOWTO, but the real
 		install manual is still being polished.
@@ -92,22 +69,21 @@ time.
 	- 2.6 support
 		Works on i386, with minor bugs.
 		Many modules are not included in udebs yet.
-		sid_d-i works on powerpc, at least newworld. Testing on
+		works on powerpc, at least newworld. Testing on
 		other subarches needed, especially G5 and oldworld (with
-		mkvmlinuz). sarge_d-i needs new busybox.
+		mkvmlinuz).
 	- some architectures
 		i386
 		ia64
-		powerpc (some subarches)
+		powerpc
 		mips
 			SGI (mips/r4k-ip22 and mips/r5k-ip22)
 				- fix parted's DVH disk labels support (#239371)
 				- install dvhtool
-				- X can't figure out a usable config in an
-				  Indy (XFree86: #249614)
 			Broadcom SWARM (mips/sb1-swarm-bn)
 				- Needs a working boot loader in the archive
 			Documentation, manual
+			XXX the above may be somewhat out of date
 		mipsel
 			DECstation (mipsel/r3k-kn02 and mipsel/r4k-kn04)
 				- cannot boot from CD (see end of #241231)
@@ -119,11 +95,15 @@ time.
 				- boot: use: execute rd_start=0x{initrd-start} rd_size=0x{initrd-size} console=ttyS0,{console-speed}
 				- debconf should output progess on the LCD
 			Documentation, manual
+			XXX the above may be somewhat out of date
 		m68k (some subarches)
 		alpha
 		sparc
 		arm (some subarches)
 		hppa
+		amd64 (unofficial)
+		s/390
+			needs ssh support for base-config run
 
 [90%] Single missing important feature or bug.
 ---------------------------------------------------------------------
@@ -143,8 +123,6 @@ time.
 		It can break due to testing package churn. cdebootstrap
 		would fix this; also debootstrap/apt/archive changes in
 		progress to add Base: overrides to Packages files.
-	- dhcp
-		Needs to switch to busybox's internal one to save space.
 
 [100%] Those shouldn't need to be touched any more 
        (famous last words)
@@ -162,6 +140,7 @@ time.
         - install media build system
 	- kernel-package integration
         - library reduction
+	- wireless support
 
 Common problems and transitions
 ===============================
