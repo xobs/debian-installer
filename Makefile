@@ -157,10 +157,6 @@ get_udebs:
 		fi; \
 	done
 
-# This is a list of the devices we want to create
-DEVS=console kmem mem null ram0 ram tty1 tty2 tty3 tty4 hda hdb hdc hdd fd0
-# TODO: this should be its own udeb we just install.
-PROTOTYPE_ROOTFS=rootfs
 
 # Build the installer tree.
 tree: get_udebs
@@ -179,11 +175,6 @@ tree: get_udebs
 	# Clean up after dpkg.
 	rm -rf $(DPKGDIR)/updates
 	rm -f $(DPKGDIR)/available $(DPKGDIR)/*-old $(DPKGDIR)/lock
-	mkdir -p $(DEST)/dev $(DEST)/proc $(DEST)/mnt $(DEST)/var/log
-	cp -dpR $(PROTOTYPE_ROOTFS)/* $(DEST)/
-	find $(DEST) -depth -type d -path "*CVS*" -exec rm -rf {} \;
-	$(foreach DEV, $(DEVS), \
-	(cp -dpR /dev/$(DEV) $(DEST)/dev/ ) ; )
 	mkdir -p $(DEST)/lib/modules/$(KVER)/
 	depmod -q -a -b $(DEST)/ $(KVER)
 	# Move the kernel image out of the way, into a temp directory
