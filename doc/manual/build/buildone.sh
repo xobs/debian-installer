@@ -20,7 +20,11 @@ cd $build_path
 
 stylesheet_dir="$build_path/stylesheets"
 stylesheet_profile="$stylesheet_dir/style-profile.xsl"
-stylesheet_html="$stylesheet_dir/style-html.xsl"
+if [ ! "$web_build" ]; then
+    stylesheet_html="$stylesheet_dir/style-html.xsl"
+else
+    stylesheet_html="$stylesheet_dir/style-html-web.xsl"
+fi
 stylesheet_html_single="$stylesheet_dir/style-html-single.xsl"
 stylesheet_fo="$stylesheet_dir/style-fo.xsl"
 stylesheet_dsssl="$stylesheet_dir/style-print.dsl"
