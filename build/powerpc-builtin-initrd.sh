@@ -57,11 +57,14 @@ for file in "$builddir" "$destdir"; do
 done
 
 # Unpack the kernel source tree, if not present.
-tar -C $builddir -xjf /usr/src/kernel-build-$kvers.tar.bz2
+if [ ! -d $builddir/kernel-build-$kvers ]; then
+	tar -C $builddir -xjf /usr/src/kernel-build-$kvers.tar.bz2
+fi
 
 # Copy kernel, System.map and initrd to the build tree.
 cp $kernel $builddir/kernel-build-$kvers
 cp $sysmap $builddir/kernel-build-$kvers
+mkdir -p $builddir/kernel-build-$kvers/arch/ppc/boot/images
 cp $initrd $builddir/kernel-build-$kvers/arch/ppc/boot/images/ramdisk.image.gz
 
 # Cleanup.
@@ -71,7 +74,7 @@ rm -f `find $builddir/kernel-build-$kvers -name .depend`
 
 # Actual build of the kernels with builtin initrd.
 make -C $builddir/kernel-build-$kvers/arch/ppc/boot		\
-	TOPDIR=$builddir/kernel-build-$kvers OBJCOPY=objcopy	\
+	TOPDIR=`pwd`/$builddir/kernel-build-$kvers OBJCOPY=objcopy	\
   	CONFIG_ALL_PPC=y CONFIG_VGA_CONSOLE=y			\
 	CONFIG_SERIAL_CONSOLE=y zImage.initrd
 
