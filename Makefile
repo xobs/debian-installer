@@ -68,7 +68,10 @@ include make/arch/$(DEB_HOST_GNU_SYSTEM)-$(DEB_HOST_GNU_CPU)
 
 build: tree_umount tree $(EXTRA_TARGETS) stats
 
-image: arch-image $(EXTRA_IMAGES) 
+image: arch-image $(EXTRA_IMAGES)
+ifeq ($(COMPRESS_IMAGE),y)
+	gzip -9f $(IMAGE)
+endif
 
 tree_mount: tree
 	-@sudo /bin/mount -t proc proc $(TREE)/proc
