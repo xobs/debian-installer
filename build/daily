@@ -1,0 +1,118 @@
+#!/bin/sh -e
+
+# daily stuff for debian-installer
+# succesor of daily-build
+
+# this scripts allows to seperate build and upload
+
+
+usage () {
+	echo $0 requires a subcommand, these subcommands are available
+	awk -F\) '/subcommand$/ { print " ", $1 }' $0
+	echo
+}
+
+if [ $# -lt 1 ]; then
+	usage
+	exit 1
+fi
+
+
+overview () {
+    LANG=C echo "$(dpkg --print-architecture) ($(date)) $(whoami)@$(hostname | cut -d . -f 1) $1" >> dest/overview.log
+}
+
+build () {
+[ -n "$ROOTCMD" ] || ROOTCMD="fakeroot"
+unset LANG LC_ALL LANGUAGE || true
+(cd ../debian && svn up || true)
+svn up || true
+
+# Override $TARGETS with custom makefile targets.
+if [ -z "$TARGETS" ]; then
+	TARGETS="$($ROOTCMD make all_list |grep '^build')"
+fi
+
+$ROOTCMD make reallyclean
+mkdir dest
+touch dest/overview.log
+for t in $TARGETS; do
+    (
+    echo
+    echo BUILDING IMAGE FOR $t
+    echo
+    if $ROOTCMD make $t; then
+	overview "$t success"
+    else
+	overview "$t failed"
+    fi
+    ) 2>&1 | tee dest/$t.log # This is allowed to fail
+done
+$ROOTCMD make $(echo $TARGETS | sed 's/build_/stats_/g') | 2>&1 tee dest/stats.txt # This is allowed to fail
+
+}
+
+# Set these in the environment to override.
+if [ -z "$HOST" ]; then
+	HOST=people.debian.org
+fi
+if [ -z "$BASEDIR" ]; then
+	# Please don't change this. If you need it to be something else,
+	# override the variable.
+	BASEDIR=public_html/d-i/images
+fi
+if [ -z "$DIR" ]; then
+	DIR=`date +%Y-%m-%d`
+fi
+if [ "$HOST" = "local" ]; then
+	SYNC="rsync"
+	SYNC_BASEDIR="$BASEDIR"
+else
+	CALL="ssh $HOST"
+	SYNC="rsync -e ssh"
+	SYNC_BASEDIR="$HOST:$BASEDIR"
+fi
+
+upload () {
+
+echo
+echo UPLOADING FILES
+echo
+
+
+$CALL mkdir -p $BASEDIR/${DIR}_RSYNC_IN_PROGRESS
+$CALL test ! -d $BASEDIR/daily || $CALL cp -a $BASEDIR/daily/* $BASEDIR/${DIR}_RSYNC_IN_PROGRESS/
+$SYNC --stats -rvl --safe-links --delete -e ssh dest/ $SYNC_BASEDIR/${DIR}_RSYNC_IN_PROGRESS/
+$CALL rm -rf $BASEDIR/$DIR
+$CALL mv $BASEDIR/${DIR}_RSYNC_IN_PROGRESS $BASEDIR/$DIR
+$CALL rm -rf $BASEDIR/daily
+$CALL ln -sf $DIR $BASEDIR/daily
+}
+
+
+if [ ! -d pkg-lists ]; then
+    echo "You must run this from the build directory"
+    exit 1
+fi
+
+case $1 in
+build)  # subcommand
+    build
+    ;;
+upload)  # subcommand
+    upload
+    ;;
+bau)  # subcommand
+    # this is for compatiblity with "daily-build"
+    build
+    upload
+    ;;
+*)
+    echo $1 is not a valid subcommand.
+    usage
+    exit 1
+    ;;
+esac
+
+
+# end of script
