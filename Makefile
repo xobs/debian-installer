@@ -517,7 +517,7 @@ stats-driver1:
 	@echo
 	@echo "Driver1 size: $(shell du -s -h  $(DRIVER1) | cut -f 1 ) "
 	@echo "Disk usage per package on driver1:"
-	@sed 's/^/  /' < diskusage-extra.txt
+	@ls -l $(EXTRAUDEBDIR)/*.udeb
 	@echo
 
 stats-:
