@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 14359 -->
+<!-- original version: 20054 -->
 
- <sect1 id="boot-parms"><title>Paramètres de démarrage</title>
+ <sect1 id="boot-parms"><title>Paramètres d'amorçage</title>
 <para>
 
-Les paramètres de démarrage sont des paramètres passés au noyau Linux pour
+Les paramètres d'amorçage sont des paramètres passés au noyau Linux pour
 s'assurer que les périphériques seront correctement pris en compte. Dans la
 plupart des cas le noyau détecte les périphériques, mais parfois vous devez
 l'aider un peu.
@@ -45,25 +45,21 @@ machine, vous devrez utiliser le paramètre
 par «&nbsp;k&nbsp;» pour kilo-octets ou «&nbsp;m&nbsp;» pour méga-octets. Par 
 exemple, <userinput>mem=65536k</userinput> et <userinput>mem=64m</userinput> 
 sont équivalents pour forcer l'utilisation de 64&nbsp;Mo de mémoire vive.
-
-</para><para>
-
-Si votre moniteur est noir et blanc, utilisez le paramètre
-<userinput>mono</userinput>. Sinon, votre installation se fera en couleur, ce
-      qui est l'option par défaut.
+</para>
 
 </para><para condition="supports-serial-console">
 
-Si vous démarrez à travers la console série, en général, le noyau la
-détecte automatiquement <phrase arch="mipsel">(sauf pour les
-      DECstations)</phrase>. Si vous avez une carte vidéo
-      («&nbsp;framebuffer&nbsp;») et un clavier également connectés à
-      l'ordinateur que vous voulez démarrer à l'aide de la console
-      série, vous devrez peut-être passer l'option
+Si vous démarrez avec la console série, en général, le noyau la
+détecte automatiquement 
+<phrase arch="mipsel">(sauf pour les DECstations)</phrase>. 
+Si une carte vidéo («&nbsp;framebuffer&nbsp;») et un clavier sont également 
+connectés à l'ordinateur que vous voulez démarrer à l'aide de la console 
+série, vous devrez peut-être passer l'option
 <userinput>console=<replaceable>device</replaceable></userinput> au noyau, où
 <replaceable>device</replaceable> est votre interface série, c'est-à-dire 
 quelque chose comme <filename>ttyS0</filename>.
   </para>
+
 <para arch="sparc">
 Pour &arch-title;, les interfaces série sont <filename>ttya</filename> ou
 <filename>ttyb</filename>. Alternativement, mettez les
@@ -72,17 +68,17 @@ Pour &arch-title;, les interfaces série sont <filename>ttya</filename> ou
 </para>
 
 
- <sect2 id="installer-args"><title>Arguments pour l'installateur Debian</title>
+ <sect2 id="installer-args"><title>Paramètres pour l'installateur Debian</title>
 <para>
 
-Le système d'installation reconnaît quelques arguments qui peuvent s'avérer 
+Le système d'installation reconnaît quelques arguments qui peuvent être 
 utiles. 
 
 </para>
 
 <variablelist>
 <varlistentry>
-<term>DEBCONF_PRIORITY</term>
+<term>debconf/priority</term>
 <listitem><para>
 
 Ce paramètre sert à déclarer la priorité des messages à afficher. 
@@ -90,7 +86,7 @@ Ce paramètre sert à déclarer la priorité des messages à afficher.
 </para><para>
 
 Dans l'installation par défaut, ce paramètre est égal à
-<userinput>DEBCONF_PRIORITY=high</userinput>. Cela signifie que les messages
+<userinput>debconf/priority=high</userinput>. Cela signifie que les messages
 avec des priorités <quote>high</quote> et <quote>critical</quote> seront
 affichés, mais non les messages avec des priorités <quote>medium</quote> et
 <quote>low</quote>. Si des problèmes apparaissent, l'installateur fixe la
@@ -98,12 +94,12 @@ priorité comme il est nécessaire.
 
 </para><para>
 
-Si vous ajoutez le paramètre <userinput>DEBCONF_PRIORITY=medium</userinput>
+Si vous ajoutez le paramètre <userinput>debconf/priority=medium</userinput>
 au démarrage, vous obtiendrez le menu d'installation et un contrôle plus fin 
 du processus d'installation. Si vous ajoutez 
-<userinput>DEBCONF_PRIORITY=low</userinput>, tous les messages seront affichés,
+<userinput>debconf/priority=low</userinput>, tous les messages seront affichés,
 c'est l'équivalent de la méthode de démarrage <emphasis>expert</emphasis>.
-Si vous utilisez <userinput>DEBCONF_PRIORITY=critical</userinput>, seuls les
+Si vous utilisez <userinput>debconf/priority=critical</userinput>, seuls les
 messages critiques seront affichés et l'installateur fera ce qu'il faut pour
 tout faire correctement.
 
@@ -112,7 +108,7 @@ tout faire correctement.
 
 
 <varlistentry>
-<term>DEBCONF_FRONTEND</term>
+<term>debconf/frontend</term>
 <listitem><para>
 
 Ce paramètre contrôle le type d'interface qu'utilisera l'installateur.
@@ -120,28 +116,29 @@ Voici les valeurs possibles actuellement&nbsp;:
 
 <itemizedlist>
 <listitem>
-<para><userinput>DEBCONF_FRONTEND=noninteractive</userinput></para>
+<para><userinput>debconf/frontend=noninteractive</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=text</userinput></para>
+<para><userinput>debconf/frontend=text</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=newt</userinput></para>
+<para><userinput>debconf/frontend=newt</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=slang</userinput></para>
+<para><userinput>debconf/frontend=slang</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=ncurses</userinput></para>
+<para><userinput>debconf/frontend=ncurses</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=bogl</userinput></para>
+<para><userinput>debconf/frontend=bogl</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=gtk</userinput></para>
+<para><userinput>debconf/frontend=gtk</userinput></para>
 </listitem><listitem>
-<para><userinput>DEBCONF_FRONTEND=corba</userinput></para>
+<para><userinput>debconf/frontend=corba</userinput></para>
 </listitem>
 </itemizedlist>
 
-L'interface par défaut est <userinput>DEBCONF_FRONTEND=newt</userinput>.
-<userinput>DEBCONF_FRONTEND=text</userinput> est peut-être préférable pour les 
+L'interface par défaut est <userinput>debconf/frontend=newt</userinput>.
+<userinput>debconf/frontend=text</userinput> est peut-être préférable pour les 
 installations avec une console série. Les autres interfaces ne sont pas 
-disponibles sur les supports d'installation, et donc 
+disponibles sur les supports d'installation, et ne sont pas utiles pour
+l'instant.
 
 </para></listitem>
 </varlistentry>
@@ -151,7 +148,7 @@ disponibles sur les supports d'installation, et donc
 <term>BOOT_DEBUG</term>
 <listitem><para>
 
-Passer ce paramètre augmentera la verbosité des journaux du démarrage.
+Passer ce paramètre augmentera la loquacité des journaux du démarrage.
 
 <variablelist>
 <varlistentry>
@@ -218,7 +215,7 @@ l'installation.
 
 </para><para arch="i386">
 
-L'argument <userinput>video=vga16:off</userinput> peut être utilisé pour
+Le paramètre <userinput>video=vga16:off</userinput> peut être utilisé pour
 désactiver le tampon video. De tels problèmes ont
 été rencontrés sur un Dell Inspiron avec la carte graphique Radeon Mobile.
 
@@ -270,6 +267,26 @@ les services PCMCIA. Certains portables connaissent des problèmes avec les
 PCMCIA.
 	  </para></listitem>
 </varlistentry>
+
+<varlistentry>
+<term>preseed/url</term>
+<listitem><para>
+
+Indique l'URL d'un fichier de préconfiguration à utiliser pour
+automatiser l'installation. Voyez <xref linkend="automatic-install"/>.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>ramdisk_size</term>
+<listitem><para>
+
+Si vous utilisez un noyau de la série 2.2.x, vous aurez besoin de
+déclarer &ramdisksize;.
+
+</para></listitem>
+</varlistentry>
+
 
 </variablelist>
   </sect2>
