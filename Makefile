@@ -184,11 +184,10 @@ tree: get_udebs
 tarball: build
 	tar czf ../debian-installer.tar.gz $(DEST)
 
-# Make sure that the temporary mountpoint is not occupied,
-# and make it.
+# Make sure that the temporary mountpoint exists and is not occupied.
 tmp_mount:
 	dh_testroot
-	if mount | grep $(TMP_MNT) && ! umount $(TMP_MNT) ; then \
+	if mount | grep -q $(TMP_MNT) && ! umount $(TMP_MNT) ; then \
 		echo "Error unmounting $(TMP_MNT)" 2>&1 ; \
 		exit 1; \
 	fi
