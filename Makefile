@@ -88,7 +88,7 @@ endif
 
 build: tree_umount tree  $(EXTRA_TARGETS) stats
 
-image: $(TREE)/unifont-reduced.bgf arch-image $(EXTRA_IMAGES) 
+image: $(TREE)/unifont.bgf arch-image $(EXTRA_IMAGES) 
 
 # Include arch targets
 -include make/arch/$(DEB_HOST_GNU_SYSTEM)
@@ -444,7 +444,7 @@ unifont-reduced-$(TYPE).bdf: all-$(TYPE).utf
 	# The locale must be generated after installing the package locales
 	LC_ALL=en_IN.UTF-8 reduce-font /usr/src/unifont.bdf < all-$(TYPE).utf > $@
 
-$(TREE)/unifont-reduced.bgf: unifont-reduced-$(TYPE).bdf
+$(TREE)/unifont.bgf: unifont-reduced-$(TYPE).bdf
 	# bdftobogl is part of package libbogl-dev
 	bdftobogl -b unifont-reduced-$(TYPE).bdf > $@
 
