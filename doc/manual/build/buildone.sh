@@ -20,6 +20,7 @@ cd $build_path
 stylesheet_dir="$build_path/stylesheets"
 stylesheet_profile="$stylesheet_dir/style-profile.xsl"
 stylesheet_html="$stylesheet_dir/style-html.xsl"
+stylesheet_html_single="$stylesheet_dir/style-html-single.xsl"
 stylesheet_fo="$stylesheet_dir/style-fo.xsl"
 stylesheet_dsssl="$stylesheet_dir/style-print.dsl"
 
@@ -101,6 +102,56 @@ create_html () {
     checkresult $?
 }
 
+create_text () {
+
+    create_profiled
+
+    echo "Creating temporary .html file..."
+
+    /usr/bin/xsltproc \
+        --xinclude \
+        --output $tempdir/install.${language}.html \
+        $stylesheet_html_single \
+        $tempdir/install.${language}.profiled.xml
+    checkresult $?
+
+    # Replace some unprintable characters
+    cat $tempdir/install.${language}.html | \
+        sed "s:\&#8211;:-:g        # n-dash
+             s:\&#8212;:--:g       # m-dash
+             s:\&#8220;:\&quot;:g  # different types of quotes
+             s:\&#8221;:\&quot;:g
+             s:\&#8222;:\&quot;:g
+             s:«\|»:\&quot;:g      # quotes in Russian translation
+             s:\&#8230;:...:g      # ellipsis
+             s:\&#8482;: (tm):g    # trademark" \
+        >$tempdir/install.${language}.corr.html
+    checkresult $?
+
+    echo "Creating .txt file..."
+
+    # Set encoding for output file
+    case $language in
+        cs)
+            CHARSET=ISO-8859-2
+            ;;
+        ja)
+            CHARSET=EUC-JP
+            ;;
+        ru)
+            CHARSET=KOI8-R
+            ;;
+        *)
+            CHARSET=ISO-8859-1
+            ;;
+    esac
+    
+    w3m -dump $tempdir/install.${language}.corr.html \
+        -o display_charset=$CHARSET \
+        >$destination/install.${language}.txt
+    checkresult $?
+}
+
 create_dvi () {
     
     # Skip this step if the .dvi file already exists
@@ -179,6 +230,7 @@ for format in $formats ; do
         html)  create_html;;
         ps)    create_ps;;
         pdf)   create_pdf;;
+        txt)   create_text;;
         *) echo "Format $format unknown or not yet supported!";;
 
     esac
