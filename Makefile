@@ -231,7 +231,7 @@ _clean: tree_umount
 	rm -f $(TEMP)/diskusage.txt
 	rm -f $(TEMP)/all.utf
 	rm -f $(TEMP)/unifont.bdf $(TREE)/unifont.bgf
-	rm -f $(INITRD) $(KERNEL) $(BOOT) $(ROOT) $(EXTRA) $(MINIISO) $(DEBIAN_CD_INFO)
+	rm -f $(TARGET)
 	rm -rf $(TEMP)
 
 #
