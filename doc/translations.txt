@@ -35,7 +35,7 @@ How to get files to be translated
 
 - After reading informations there, start by the 1st stage translations by
   using the 1st stage resources and more particularly 
-  http://people.debian.org/~barbier/d-i/l10n/xx 
+  http://people.debian.org/~seppy/d-i/1st-stage/
   where xx is your language ISO code (or xx_YY for languages which have 
   flavours, such as pt_BR or zh_*).
 
@@ -46,11 +46,11 @@ How to get files to be translated
 - Look at the STATUS.utf8.txt file
 
 - For files reported as missing, go and pick up the POT file at
-  http://people.debian.org/~barbier/d-i/l10n/POT/
- 
+  http://people.debian.org/~seppy/d-i/1st-stage/POT/
+  
   Example: 
   "Missing file: debian-installer/packages/countrychooser/debian/po/ar.po"
- --> pick up http://people.debian.org/~barbier/d-i/l10n/POT/countrychooser.pot
+ --> pick up http://people.debian.org/~seppy/d-i/1st-stage/POT/countrychooser.pot
 
   Rename this file to xx.po and start working on it
 
@@ -58,7 +58,7 @@ How to get files to be translated
   so it can be used to keep track of who is in charge of the translations.
 
 - For files reported as incomplete, get the file in
-  http://people.debian.org/~barbier/d-i/l10n/xx and complete it. Don't
+  http://people.debian.org/~seppy/d-i/files/xx and complete it. Don't
   forget to first contact the original translator (see the PO file header
   metadata, specifically 'Last-Translator'). You should refrain from
   translating/revising a file until you have talked with the original
@@ -68,7 +68,7 @@ How to get files to be translated
   Rename this file to xx.po and start working on it
 
 - Getting 2nd stage files
- * base-config: hosted on alioth. Uses CVS
+ * base-config: hosted on alioth. Uses subversion
  * tasksel    : also hosted on alioth. Uses subversion
  * aptitude   : hosted on alioth. Uses subversion
  * discover1  : hosted on alioth. Uses CVS
@@ -116,7 +116,7 @@ How to remain consistent among packages
 Some strings are identical in two or more packages. Please try to
 translate them consistently.
 
-The ranking page (http://people.debian.org/~barbier/d-i/l10n/rank.txt) will
+The ranking page (http://people.debian.org/~seppy/d-i/1st-stage/rank.txt) will
 show you the merged file status when your translation reaches 100%.
 
 If you reach 100% and nothing show up there, then you're fine: all
@@ -125,10 +125,12 @@ identical strings have been translated.
 If you see something like: (Merged PO file: 800t16f), then you got
 inconsistencies.
 
-Look at the http://people.debian.org/~barbier/d-i/l10n/xx/xx.po and search
+##### OUTDATED INFORMATION
+Look at the http://people.debian.org/~seppy/d-i/1st-stage/xx/xx.po and search
 "fuzzy" markers there. They will show you which strings are inconsistently
 translated. If you've properly used the Project-Id-Version, the package name
 will also appear.
+##### END OF OUTDATED INFORMATION
 
 
 How to update existing translations
@@ -320,11 +322,11 @@ No CVS/SVN repository:
     apt-get source pcmcia-cs
 
  base-config (debconf) : 
-    http://cvs.alioth.debian.org/cgi-bin/cvsweb.cgi/base-config/
+    uses Subversion (no anonymous access possible currently)
  apt (programs)
     http://cvs.debian.org/apt/?cvsroot=deity
  aptitude (programs)
-    http://cvs.alioth.debian.org/cgi-bin/cvsweb.cgi/aptitude/
+    uses Subversion (no anonymous access possible currently)
  discover1 (debconf)
     http://cvs.alioth.debian.org/cgi-bin/cvsweb.cgi/pkg-discover/
  dpkg (programs, including dselect):
@@ -336,8 +338,8 @@ No CVS/SVN repository:
  interface widgets used by debconf. On mosts systems, the "dialog" interface
  is used, which require to translate widgets from the "newt" package.
 
- Dennis Stampfer has status pages similar to Denis Barbier status
- pages for these "2nd-stage" package. You may find these statistics
+ Status pages similar to 1ststage status pages exist for these "2nd-stage"
+ package. You may find these statistics
  at:
 
  http://people.debian.org/~seppy/d-i/2nd-stage/
@@ -383,18 +385,14 @@ package instead of just sitting in the countrychooser package.
 For this reason, you need to translate the iso_3166.tab file in the
 iso-codes package:
 
- - http://cvs.alioth.debian.org/cgi-bin/cvsweb.cgi/iso-codes/iso_3166/?cvsroot=pkg-isocodes
- - get iso_3166.pot or the incomplete file for your language
- - copy iso_3166.pot file to xx.po or use the existing xx.po 
+ - check whether an incomplete translation exists for your language:
+   http://people.debian.org/~seppy/d-i/2nd-stage/files/XX/iso-codes_iso_3166_XX.po
+ - If it doesn't exist, get the POT file at:
+   http://people.debian.org/~seppy/d-i/2nd-stage/POT/iso-codes_iso_3166.pot
+ - copy iso-codes_iso_3166.pot file to xx.po or use the existing xx.po 
    and translate country names there or complete the existing translation
 
 CVS commit access may be requested to the iso-codes package maintainer.
-
-If a file already exists for your language, do the following:
-
- - get iso_3166.pot
- - msgmerge -U xx.po iso_3166.pot
- - update xx.po
 
 The countrychooser package includes a mechanism for using an interim
 translated file instead of iso-codes package translations. This allows
@@ -414,11 +412,11 @@ The kbd-chooser package uses keyboard names from the console-data package.
 Thus, in order to get it completely translated, translators need to
 translate console-data debconf templates.
 
-First check on http://people.debian.org/~barbier/intl/l10n/po-debconf/<code>
+First check on http://people.debian.org/~pmachard/intl/l10n/po-debconf/<code
 (where <code> is your language code) if this file is already translated.
 
 If it is not shown, then you may get the templates.pot file at:
-http://people.debian.org/~barbier/intl/l10n/po-debconf/pot#console-data
+http://people.debian.org/~pmachard/intl/l10n/po-debconf/pot#console-data
 
 Pick up the templates.pot file, modify it and send it back with a
 bugreport to the package "console-data, with the "l10n" and "patch"
@@ -432,6 +430,12 @@ you discover such packages, and fix it if you find errors.
 
 --------------------------------------------------------------------------
 Changelog:
+
+2004/06/12 Christian Perrier
+  - Change all references to D. Barbier pages to Dennis Stampfer or Pierre
+    Machard pages
+  - Change reference from CVS to SVN for base-config
+  - Adapt instructions for ISO-3166 translations
 
 2004/04/17 Jean Christophe Andre
   - Completed the SVN section (alioth account, SVN co & ci)
