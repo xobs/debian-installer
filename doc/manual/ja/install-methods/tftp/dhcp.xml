@@ -1,16 +1,25 @@
+<?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: dhcp.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+<!-- $Id$ -->
+<!-- original version: 11648 -->
 
 
   <sect2 condition="supports-dhcp" id="dhcpd">
-   <title>Setting up a DHCP server</title>
+   <title>DHCP サーバの設定</title>
 <para>
 
+<!--
 At the time of this writing, there is only one DHCP server which is
 free software, namely ISC <command>dhcpd</command>.  In &debian;, this
 is available in the <classname>dhcp</classname> package.  Here is a
 sample configuration file for it (usually
 <filename>/etc/dhcpd.conf</filename>):
+-->
+このマニュアルの執筆の時点では、フリーソフトウェアの DHCP サーバは
+ISC の <command>dhcpd</command> だけしかありません。
+&debian; では、これは <classname>dhcp</classname> パッケージに入っています。
+次に示すのは、<classname>dhcp</classname> の設定ファイル
+(普通は <filename>/etc/dhcpd.conf</filename>) の例です。
 
 <informalexample><screen>
 
@@ -38,6 +47,7 @@ host clientname {
 
 </para><para>
 
+<!--
 In this example, there is one server
 <replaceable>"servername"</replaceable> which performs all of the work
 of DHCP, server, TFTP server, and network gateway.  You will almost
@@ -45,19 +55,34 @@ certainly need to change the domain-name options, as well as the
 server name and client hardware address.  The
 <replaceable>"filename"</replaceable> option should be the name of the
 file which will be retrieved via TFTP.
+-->
+この例では、<replaceable>"servername"</replaceable> というサーバがひとつあり、
+DHCP サーバ, TFTP サーバ, ネットワークゲートウェイの仕事をすべて行っています。
+domain-name オプション、サーバ名、クライアントのハードウェアアドレスは、
+必ず変更する必要があります。
+<replaceable>"filename"</replaceable> オプションは TFTP 経由で取得するファイルの名前です。
 
 </para><para>
 
+<!--
 After you have edited the <command>dhcpd</command> configuration file,
 restart it with <userinput>/etc/init.d/dhcpd restart</userinput>.
+-->
+<command>dhcpd</command> の設定ファイルの編集を終えたら、
+<userinput>/etc/init.d/dhcpd restart</userinput> によって
+<command>dhcpd</command> を再起動してください。
 
 </para>
 
    <sect3 arch="i386">
-   <title>PXE Booting</title>
+   <title>PXE ブート</title>
 <para>
+<!--
 Here is another example for a <filename>dhcp.conf</filename> using the
 Pre-boot Execution Environment (PXE) method of TFTP.
+-->
+ここでは TFTP の Pre-boot Execution Environment (PXE) 法を用いた、
+<filename>dhcp.conf</filename> の例を示します。
 
 <informalexample><screen>
 
@@ -99,9 +124,14 @@ group {
 
 </screen></informalexample>
 
+<!--
 Note that for PXE booting, the client filename <filename>pxelinux.0</filename>
 is a boot loader, not a kernel image (see <xref linkend="tftp-images"/>
 below).
+-->
+PXE ブートでは、クライアントのファイル名はカーネルイメージではなく、
+ブートローダであることに注意してください。
+(以下 <xref linkend="tftp-images"/> 参照)
 
 </para>
    </sect3>

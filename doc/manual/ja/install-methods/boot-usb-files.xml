@@ -1,11 +1,14 @@
+<?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: boot-usb-files.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+<!-- $Id$ -->
+<!-- original version: 11648 -->
 
  <sect1 condition="bootable-usb" id="boot-usb-files">
- <title>Preparing Files for USB Memory Stick Booting</title>
+ <title>USB メモリスティックでの起動用ファイルの準備</title>
 
 <para>
 
+<!--
 For preparing the USB stick you will need a system where GNU/Linux is
 already running and where USB is supported. You should assure that the
 usb-storage kernel module is loaded (<userinput>modprobe
@@ -13,22 +16,41 @@ usb-storage</userinput>) and try to find out which SCSI device the USB
 stick has been mapped to (in this example
 <filename>/dev/sda</filename> is used). To write to your stick, you
 will probably have to turn off its write protection switch.
+-->
+USB スティックの準備のため、GNU/Linux が既に動いていて、USB をサポートしているシステムが必要になります。
+usb-storage カーネルモジュールがロード (<userinput>modprobe 
+usb-storage</userinput>) されるのを保証し、
+USB スティックの SCSI デバイス (この例では <filename>/dev/sda</filename> 
+を使用します) へのマッピングを検出を試行するべきです。
+おそらく USB スティックに書き込むために、
+ライトプロテクトスイッチを切らなければなりません。
 
 </para><para>
 
+<!--
 Note, that the USB stick should be at least 128 MB in size (smaller
 setups are possible if you follow <xref linkend="usb-copy-flexible"/>).
+-->
+USB スティックは少なくとも 128 MB のサイズがなければなりません
+(<xref linkend="usb-copy-flexible"/> のようにすれば、
+より小さなセットアップが可能です)。
 
 </para>
 
   <sect2 id="usb-copy-easy">
-  <title>Copying the files - the easy way</title>
+  <title>ファイルのコピー - 簡単な方法</title>
 <para>
 
+<!--
 There is an all-in-one file <filename>hd-media/boot.img.gz</filename>
 which contains all the installer files (including the kernel) as well
 as <command>SYSLINUX</command> and its configuration file. You only
 have to extract it directly to to your USB stick:
+-->
+<command>SYSLINUX</command> や その設定ファイルと同様に、
+(カーネルを含む) インストーラの全ファイルが入った
+<filename>hd-media/boot.img.gz</filename> という
+オールインワンファイルがあります。
 
 <informalexample><screen>
 
@@ -36,36 +58,59 @@ gzip -dc boot.img.gz >/dev/<replaceable>sda</replaceable>
 
 </screen></informalexample>
 
+<!--
 Of course this will destroy anything already on the device, so take
 care that you use the correct device name for your USB stick.
+-->
+もちろんこれはデバイス上の既存データを破壊しますので、
+正しい USB スティックのデバイス名を使用するよう注意してください。
 
 </para><para>
 
+<!--
 After that, mount the USB memory stick (<userinput>mount /dev/sda
 /mnt</userinput>), which will now have a FAT filesystem on it, and
 copy a Debian netinst or businesscard ISO image to it. Please note
 that the file name must end in <filename>.iso</filename>. Unmount the
 stick (<userinput>umount /mnt</userinput>) and you are done.
+-->
+その後、USB メモリスティック (現在 FAT ファイルシステムを持つ) をマウントし
+(<userinput>mount /dev/sda/mnt</userinput>)、
+それに Debian netinst か 名刺型 ISO イメージをコピーしてください。
+ファイル名は <filename>.iso</filename> で終わらなければならないことに注意してください。
+終わったら、USB スティックをアンマウントしてください (<userinput>umount /mnt</userinput>)。
 
 </para>
   </sect2>
 
   <sect2 id="usb-copy-flexible">
-  <title>Copying the files - the flexible way</title>
+  <title>ファイルのコピー - 柔軟な方法</title>
 <para>
 
+<!--
 If you like more flexibility or just want to know what's going on, you
 should use the following method to put the files on your stick. We
 will show how to setup the memory stick to use the first partition,
 instead of entire device.
+-->
+もっと柔軟なものを好むか、何が起きているか知りたいだけならば、
+以下の USB スティックにファイルを置く方法を使用すべきです。
+デバイス全体ではなく、メモリスティックの最初のパーティションを
+セットアップする方法を示します。
 
 </para><note><para>
 
+<!--
 Since most USB sticks come pre-configured with a single FAT16
 partition, you probably won't have to repartition or reformat the
 stick.  If you have to do that anyway, use <command>cfdisk</command>
 or any other partitioning tool for creating a FAT16 partition and then
 type
+-->
+ほとんどの USB スティックは FAT16 パーティション 1 つで設定されているので、
+おそらく USB スティックのパーティション分割のやり直しや、
+再フォーマットは必要ないでしょう。
+とにかくしなければならい場合は、<command>cfdisk</command> や他のパーティション分割ツールを使って、FAT16 パーティションを作成して以下を入力してください。
 
 <informalexample><screen>
 
@@ -73,12 +118,19 @@ mkdosfs /dev/<replaceable>sda1</replaceable>
 
 </screen></informalexample>
 
+<!--
 Take care that you use the correct device name for your USB stick. The
 <command>mkdosfs</command> command is contained in the
 <classname>dosfstools</classname> Debian package.
+-->
+USB スティックの正確なデバイス名を使用する事に注意してください。
+<command>mkdosfs</command> は、
+<classname>dosfstools</classname> Debian パッケージに含まれています。
+
 
 </para></note><para>
 
+<!--
 In order to start the kernel after booting from the USB stick, we will
 put a boot loader on the stick. Although any boot loader
 (e.g. <command>LILO</command>) should work, it's convenient to use
@@ -86,12 +138,26 @@ put a boot loader on the stick. Although any boot loader
 be reconfigured by just editing a text file. Any operating system
 which supports the FAT file system can be used to make changes to the
 configuration of the boot loader.
+-->
+USB スティックから起動してカーネルをスタートするために、
+USB スティックにブートローダを置きます。
+どのブートローダ (例: <command>LILO</command>) も動作しますが、
+FAT16 パーティションを使用し、
+テキストファイルを編集するだけで再設定できるので、
+<command>SYSLINUX</command> を使用するのが便利です。
+
 
 </para><para>
 
+<!--
 To put <command>SYSLINUX</command> on the FAT16 partition on your USB
 stick, install the <classname>syslinux</classname> and
 <classname>mtools</classname> packages on your system, and type
+-->
+USB スティックの FAT16 パーティションに <command>SYSLINUX</command> 
+を置くには、<classname>syslinux</classname> パッケージと 
+<classname>mtools</classname> パッケージをシステムにインストールして、
+以下を入力してください。
 
 <informalexample><screen>
 
@@ -99,46 +165,68 @@ syslinux /dev/<replaceable>sda1</replaceable>
 
 </screen></informalexample>
 
+<!--
 Again, take care that you use the correct device name. The partition
 must not be mounted when starting <command>SYSLINUX</command>. This
 procedure writes a boot sector to the partition and creates the file
 <filename>ldlinux.sys</filename> which contains the boot loader code.
+-->
+繰り返しますが、正確なデバイス名を使用するよう注意してください。
+<command>SYSLINUX</command> の開始時には、
+このパーティションをマウントしてはなりません。
+この手順はパーティションにブートセクタを書き、
+ブートローダコードを含んでいるファイル <filename>ldlinux.sys</filename> を作成します。
 
 </para><para>
 
+<!--
 Mount the parition (<userinput>mount /dev/sda1 /mnt</userinput>) and
 copy the following files from the Debian archives to the stick:
+-->
+このパーティションをマウントして (<userinput>mount /dev/sda1 /mnt</userinput>)、
+以下のファイルを Debian アーカイブから USB スティックへコピーしてください。
 
 <itemizedlist>
 <listitem><para>
 
-<filename>vmlinuz</filename> (kernel binary)
+<filename>vmlinuz</filename> (カーネルバイナリ)
 
 </para></listitem>
 <listitem><para>
 
-<filename>initrd.gz</filename> (initial ramdisk image)
+<filename>initrd.gz</filename> (初期 RAM ディスクイメージ)
 
 </para></listitem>
 <listitem><para>
 
-<filename>syslinux.cfg</filename> (SYSLINUX configuration file)
+<filename>syslinux.cfg</filename> (SYSLINUX 設定ファイル)
 
 </para></listitem>
 <listitem><para>
 
+<!--
 Optional kernel modules
+-->
+追加カーネルモジュール
 
 </para></listitem>
 </itemizedlist>
 
+<!--
 If you want to rename the files, please note that
 <command>SYSLINUX</command> can only process DOS (8.3) file names.
+-->
+ファイル名を変更したければ、<command>SYSLINUX</command> は 
+DOS (8.3) のファイル名しか処理できないことに注意してください。
 
 </para><para>
 
+<!--
 The <filename>syslinux.cfg</filename> configuration file should
 contain the following two lines:
+-->
+<filename>syslinux.cfg</filename> 設定ファイルは、
+以下の 2 行を含んでいなければならないでしょう。
 
 <informalexample><screen>
 
@@ -147,30 +235,54 @@ append initrd=initrd.gz ramdisk_size=8192 root=/dev/rd/0 init=/linuxrc devfs=mou
 
 </screen></informalexample>
 
+<!--
 Now you should put any Debian ISO image (businesscard, netinst or even
 a full one) onto your stick (if it fits). The file name of such an
 image must end in <filename>.iso</filename>.
+-->
+今度は、Debian ISO イメージ (名刺、netinst、完全版) を、
+USB スティックに (入るならば) 入れましょう。
+ISO イメージのファイル名は <filename>.iso</filename> で終わっていなければなりません。
 
 </para><para>
 
+<!--
 If you want to install over the network, without using an ISO image,
 you will of course skip the previous step. Moreover you will have to
 use the initial ramdisk from the <filename>netboot</filename>
 directory instead of the one from <filename>hd-media</filename>,
 because <filename>hd-media/initrd.gz</filename> does not have network
 support.
+-->
+ISO イメージを使わずネットワーク越しにインストールしたければ、
+もちろん前の手順をスキップしてください。
+さらに、<filename>hd-media/initrd.gz</filename> 
+はネットワークをサポートしないので、
+<filename>hd-media</filename> のものの代わりに、 
+<filename>netboot</filename> ディレクトリにある初期 RAM ディスクを使わなければならないでしょう。
 
 </para><para>
 
+<!--
 When you are done, unmount the USB memory stick (<userinput>umount
 /mnt</userinput>) and activate its write protection switch.
+-->
+終わったら、USB メモリスティックを アンマウントし 
+(<userinput>umount /mnt</userinput>)、
+ライトプロテクトスイッチを有効にしてください。
 
 </para><warning><para>
 
+<!--
 If your system refuses to boot from the memory stick, the stick may
 contain an invalid master boot record (MBR). To fix this, use the
 <command>install-mbr</command> command from the package
 <classname>mbr</classname>:
+-->
+システムがメモリスティックから起動できなければ、
+このスティックには無効なマスターブートレコード (MBR) があります。
+これを修正するために、<classname>mbr</classname> パッケージの 
+<command>install-mbr</command> コマンドを次のように使用してください。
 
 <informalexample><screen>
 

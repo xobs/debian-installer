@@ -1,25 +1,41 @@
+<?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: create-floppy.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+<!-- $Id$ -->
+<!-- original version: 11648 -->
 
  <sect1 condition="supports-floppy-boot" id="create-floppy">
- <title>Creating Floppies from Disk Images</title>
+ <title>ディスクイメージからのフロッピーの作成</title>
 <para>
 
+<!--
 Bootable floppy disks are commonly used to boot the installer system
 for machines with a floppy drive. Floppies can also be used for
 installation of the kernel and modules on most systems.
+-->
+フロッピードライブのついているマシンで
+インストーラシステムを起動するには、
+起動可能なフロッピーディスクを用いるのが一般的です。
 
 </para><para arch="powerpc">
 
+<!--
 Floppy disk booting reportedly fails on Mac USB floppy drives.
+-->
+Mac USB フロッピードライブでは
+フロッピーディスクからの起動はできないそうです。
 
 </para><para arch="m68k">
 
+<!--
 Floppy disk booting is not supported on Amigas or
 68k Macs.
+-->
+Amiga や 68k Mac では、
+フロッピーからの起動はサポートされていません。
 
 </para><para>
 
+<!--
 Disk images are files containing the complete contents of a floppy
 disk in <emphasis>raw</emphasis> form.  Disk images, such as
 <filename>boot.img</filename>, cannot simply be copied to floppy
@@ -28,32 +44,61 @@ disk in <emphasis>raw</emphasis> mode.  This is required because these
 images are raw representations of the disk; it is required to do a
 <emphasis>sector copy</emphasis> of the data from the file onto the
 floppy.
+-->
+ディスクイメージは、フロッピーディスクの完全な内容を
+<emphasis>そのまま</emphasis> の形式で含むファイルです。
+<filename>boot.img</filename> のようなディスクイメージは、
+フロッピーディスクに単純にコピーすることはできません。
+イメージファイルをフロッピーディスクに
+<emphasis>そのまま</emphasis> の形式で書き込むには、
+特別なプログラムを用います。
+これらのイメージがディスクの内容の raw イメージであるためです。
+これらのファイルからフロッピーへは、
+データの <emphasis>セクタコピー</emphasis> が必要になります。
 
 </para><para>
 
+<!--
 There are different techniques for creating floppies from disk images,
 which depend on your platform.  This section describes how to create
 floppies from disk images on different platforms.
+-->
+プラットフォームによって、
+ディスクイメージからフロッピーを作成する方法は異なります。
+この節では、それぞれのプラットフォームにおいて、
+ディスクイメージからフロッピーを作成する方法を説明します。
 
 </para><para>
 
+<!--
 No matter which method you use to create your floppies, you should
 remember to flip the tab on the floppies once you have written them,
 to ensure they are not damaged unintentionally.
+-->
+どの方法でフロッピーを作成するにせよ、
+一旦イメージを書き込んだら忘れずにフロッピーのツメをずらして書き込み禁止にし、
+不注意で壊すことがないようにしましょう。
 
 </para>
 
-  <sect2><title>Writing Disk Images From a Linux or Unix System</title>
+  <sect2><title>Linux や Unix システムでのディスクイメージの書き込み</title>
 <para>
 
+<!--
 To write the floppy disk image files to the floppy disks, you will
 probably need root access to the system.  Place a good, blank floppy
 in the floppy drive.  Next, use the command
+-->
+フロッピーディスクイメージをフロッピーディスクに書き込むためには、
+おそらくシステムの root 権限が必要になるでしょう。
+質の良い、空のフロッピーディスクをフロッピードライブに挿入し、
+次のコマンドを使ってください。
 
 <informalexample><screen>
 dd if=<replaceable>file</replaceable> of=/dev/fd0 bs=1024 conv=sync ; sync
 </screen></informalexample>
 
+<!--
 where <replaceable>file</replaceable> is one of the floppy disk image
 files (see <xref linkend="downloading-files"/> for what
 <replaceable>file</replaceable> should be).
@@ -66,9 +111,29 @@ is out and the disk has stopped revolving before you remove it from
 the drive. On some systems, you'll have to run a command to eject the
 floppy from the drive (on Solaris, use <command>eject</command>, see
 the manual page).
+-->
+<replaceable>file</replaceable> のところには、
+フロッピーディスクイメージのどれかの名前を書きます。
+(<replaceable>file</replaceable> をどうするかは、
+<xref linkend="downloading-files"/> を参照してください)
+<filename>/dev/fd0</filename> はフロッピーディスク装置に
+よく使われている名前ですが、
+あなたのワークステーションでは異なるかもしれません
+(Solaris では <filename>/dev/fd/0</filename> になります)。
+このコマンドは、Unix がフロッピーディスクへの書き込みを終える前に
+終了してプロンプトを返すかもしれません。
+そのため、フロッピードライブのディスク使用中のランプを見て、
+ランプが消えていること、
+およびディスクの回転が止まっていることを確認した後に、
+フロッピーディスクをドライブから取り出してください。
+システムによっては、
+ドライブからフロッピーディスクを取り出すには、
+なんらかのコマンド実行が必要となることもあります
+(Solaris 上では <command>eject</command> を使ってください。
+詳しくはマニュアルページを見てください)。
 
 </para><para>
-
+<!--
 Some systems attempt to automatically mount a floppy disk when you
 place it in the drive. You might have to disable this feature before
 the workstation will allow you to write a floppy in <emphasis>raw
@@ -84,12 +149,35 @@ where <replaceable>floppy_name</replaceable> is the name the floppy
 disk was given when it was formatted (unnamed floppies default to the
 name <filename>unnamed_floppy</filename>).  On other systems, ask your
 system administrator.
+-->
+システムによっては、
+ドライブに挿入されたフロッピーディスクを自動的にマウントしようとします。
+そのようなワークステーションで、フロッピーディスクにイメージを 
+<emphasis>raw mode</emphasis> 形式で書き込むには、
+この自動マウント機能を無効にしなければならないかもしれません。
+残念ながら、これをどのように行うかは OS によって異なります。
+Solaris では、ボリューム管理を使わないようにすれば、
+フロッピーに raw mode でアクセスできます。
+まずフロッピーが自動マウントされていることを確認します
+(ファイルマネージャの <command>volcheck</command> などのプログラムを使ってください)。
+つぎに <command>dd</command> コマンドを前述の形式で使います。
+ただし <filename>/dev/fd0</filename> は
+<filename>/vol/rdsk/<replaceable>floppy_name</replaceable></filename>
+に置き換えます。ここで <replaceable>floppy_name</replaceable> は、
+フロッピーディスクのフォーマット時に与えた名前です
+(名前をつけない場合のデフォルトは <filename>unnamed_floppy</filename> です)。
+その他のシステムでは、システム管理者にお尋ねください。
 
 </para><para arch="powerpc"> 
 
+<!--
 If writing a floppy on powerpc Linux, you will need to eject it. The
 <command>eject</command> program handles this nicely; you might need
 to install it.
+-->
+powerpc Linux 上でフロッピーを書き込む場合、排出が必要になります。
+<command>eject</command> プログラムはこれをうまく扱いますが、
+インストールしなければならないでしょう。
 
 </para>
 

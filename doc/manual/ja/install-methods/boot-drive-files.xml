@@ -1,27 +1,47 @@
+<?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: boot-drive-files.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+<!-- $Id$ -->
+<!-- original version: 11648 -->
 
  <sect1 condition="bootable-disk" id="boot-drive-files">
- <title>Preparing Files for Hard Disk Booting</title>
+ <title>ハードディスク起動ファイルの準備</title>
 <para>
 
+<!--
 The installer may be booted using boot files placed on an
 existing hard drive partition, either launched from another operating
 system or by invoking a boot loader directly from the BIOS.
+-->
+このインストーラは、
+ハードディスクパーティションに配置したファイルから起動できます。
+別の OS から起動することもできますし、
+BIOS から直接ブートローダを起動することもできます。
 
 </para><para>
 
+<!--
 A full, "pure network" installation can be achieved using this
 technique. This avoids all hassles of removable media, like finding
 and burning CD images or struggling with too numerous and 
 <xref linkend="unreliable-floppies"/> unreliable floppy disks.
+-->
+この方法を使えば、完全な「ピュアネットワーク」インストールを行うことができます。
+これは、CDメディアを探して焼いたり、
+たくさんの <xref linkend="unreliable-floppies"/>
+信頼できないフロッピーディスクを相手に苦闘したり、
+といったリムーバブルメディアのすべての激論を避けることができます。
+
 
 </para><para arch="i386">
 
+<!--
 The installer cannot boot from files on an NTFS file system.
+-->
+インストーラは NTFS ファイルシステムからは起動できません。
 
 </para><para arch="powerpc"> 
 
+<!--
 The installer cannot boot from files on an HFS+ file system.  MacOS
 System 8.1 and above may use HFS+ file systems; NewWorld PowerMacs all
 use HFS+. To determine whether your existing file system is HFS+,
@@ -30,63 +50,104 @@ file systems appear as <userinput>Mac OS Standard</userinput>, while
 HFS+ file systems say <userinput>Mac OS Extended</userinput>. You must
 have an HFS partition in order to exchange files between MacOS and
 Linux, in particular the installation files you download.
+-->
+インストーラは、HFS+ ファイルシステムにあるファイルから起動できます。
+MacOS System 8.1 以上ならば HFS+ ファイルシステムが使えます。
+NewWorld PowerMac はすべて HFS+ を使っています。
+現在のファイルシステムが HFS+ かどうかを調べるには、
+調べたいボリュームに対して <userinput>情報をみる (Get Info)</userinput>
+を実行してください。
+HFS ファイルシステムなら <userinput>Mac OS Standard</userinput>、
+HFS+ ファイルシステムなら <userinput>Mac OS Extended</userinput> となります。
+MacOS と Linux の間でファイル
+(特にインストール用にダウンロードしたファイル)
+をやりとりするためには、HFS パーティションが必要です。
 
 </para><para arch="powerpc"> 
 
+<!--
 Different programs are used for hard disk installation system booting,
 depending on whether the system is a ``NewWorld'' or an ``OldWorld''
 model.
+-->
+ハードディスクからのインストールシステムの起動には、
+システムが ``NewWorld'' モデルか ``OldWorld'' モデルかによって、
+別々のプログラムを使います。
 
 </para>
 
   <sect2 arch="i386" id="files-lilo">
-  <title>Hard disk installer booting using <command>LILO</command> or
-  <command>GRUB</command></title>
+  <title><command>LILO</command> や
+  <command>GRUB</command>を使用したハードディスクからのインストーラの起動</title>
 <para>
 
+<!--
 This section explains how to add to or even replace an existing linux
 installation using either <command>LILO</command> or
 <command>GRUB</command>.
+-->
+本節では、<command>LILO</command> や <command>GRUB</command> 
+のどちらかを使用して、linux を追加したり、
+既存の linux を交換する方法について説明します。
 
 </para><para>
 
+<!--
 At boot time, both bootloaders support loading in memory not
 only the kernel, but also a disk image. This RAM disk can be used as
 the root file-system by the kernel. Choose the flavor in 
 <xref linkend="kernel-choice"/> that best fits your taste, and you 
 will be (almost) done.
+-->
+起動時に、カーネルだけでなくディスクイメージをメモリに読み込むのを、
+どちらのブートローダでもサポートしています。
+この RAM ディスクは カーネルが root ファイルシステムとして使うことができます。
+<xref linkend="kernel-choice"/> にある、もっともあなた好みのフレーバーを選んでください。
+それで (ほとんど) 終わりです。
 
 </para><para>
 
+<!--
 Copy the following two or three files from the Debian archives in a
 convenient location on your hard drive, for instance in
 <filename>/boot/newinstall/</filename>.
+-->
+以下の 2, 3 のファイルを、
+Debian アーカイブからあなたのハードディスクの適当な場所
+ (例 <filename>/boot/newinstall/</filename>) にコピーしてください。
+
 
 <itemizedlist>
 <listitem><para>
 
-<filename>vmlinuz</filename> (kernel binary)
+<filename>vmlinuz</filename> (カーネルバイナリ)
 
 </para></listitem>
 <listitem><para>
 
-<filename>initrd.gz</filename> (ramdisk image)
+<filename>initrd.gz</filename> (ram ディスクイメージ)
 
 </para></listitem>
 <listitem><para>
 
-<filename>drivers.tgz</filename> (optional kernel modules) 
+<filename>drivers.tgz</filename> (追加カーネルモジュール) 
 
 </para></listitem>
 </itemizedlist>
 
+<!--
 Extract recursively everything <emphasis>now</emphasis> (easier than
 later). Remember on which physical partition
 (e.g. <filename>/dev/hda4</filename>) are the <filename>.o</filename>
 drivers you just extracted from <filename>drivers.tgz</filename>.
+-->
+<emphasis>今</emphasis> (後でやるより簡単です)、 すべてを再帰的に展開してください。
+物理パーティション (例: /dev/hda4) は、
+<filename>drivers.tgz</filename> から抽出した <filename>.o</filename> ドライバだということを覚えていてください。
 
 </para><para>
 
+<!--
 You can also replace <filename>vmlinuz</filename> and
 <filename>drivers.tgz</filename> by your custom kernel and the
 carefully chosen drivers that you will need for the installation, for
@@ -98,20 +159,38 @@ Do not forget that your custom kernel must have (at least) the
 mandatory built-in kernel features required to boot and launch the
 installer. The floppy-related stuff after the list of features is
 irrelevant to you.
+-->
+さらに、<filename>vmlinuz</filename> や <filename>drivers.tgz</filename> を、
+カスタムカーネルや、あなたがインストールに必要な吟味して選んだドライバ 
+(例えば新しくてサポートされていないネットワークインターフェイス用モジュール) 
+を置き換えることができます。
+あなたのカスタムカーネルは (少なくとも) <filename>RAMDISK</filename> と 
+<filename>initrd</filename> 機能が <emphasis>内蔵</emphasis> 
+されていなければならないことを忘れないでください。
+インストーラを起動したり実行するのに、
+他の内蔵カーネルに必須な機能のリストに関しては、
+<xref linkend="rescue-replace-kernel"/> の冒頭を参照してください。
+機能リストの後のフロッピーに関連する項目は、あなたと無関係です。
+
 
 </para><para>
 
+<!--
 Finally, to configure the bootloader proceed to 
 <xref linkend="boot-initrd"/>.
+-->
+最後に、ブートローダを設定するため、
+<xref linkend="boot-initrd"/> に進んでください。
 
 </para>
   </sect2>
 
 
   <sect2 arch="powerpc" id="files-oldworld">
-  <title>Hard Disk Installer Booting for OldWorld Macs</title>
+  <title>OldWorld Mac におけるハードディスクからのインストーラの起動</title>
 <para>
 
+<!--
 The <filename>boot-floppy-hfs</filename> floppy uses
 <application>miBoot</application> to launch Linux installation, but
 <application>miBoot</application> cannot easily be used for hard disk
@@ -122,9 +201,20 @@ MacOS and Linux after your Debian installation is complete. For the
 Performa 6360, it appears that <command>quik</command> cannot make the
 hard disk bootable.  So <application>BootX</application> is required
 on that model.
+-->
+<filename>boot-floppy-hfs</filename> フロッピーは、Linux インストールシステムの
+起動に <application>miBoot</application> を使います。
+しかし <application>miBoot</application> をハードディスクからの起動に使うのは簡単ではありません。
+MacOS から起動する <application>BootX</application> は、
+ハードディスクに置かれたファイルからの起動をサポートしています。
+<application>BootX</application> は、Debian のインストールが完了した後に、
+MacOS と Linux をデュアルブートさせるのにも使えます。
+Performa 6360 では、<command>quik</command> はハードディスクを起動できるようにはできません。
+そのためこのモデルでは <application>BootX</application> が必要です。
 
 </para><para>
 
+<!--
 Download and unstuff the <application>BootX</application>
 distribution, available from <ulink url="&url-powerpc-bootx;"></ulink>, 
 or in the
@@ -138,14 +228,27 @@ archive. Within the package, there is an empty folder called
 <filename>disks-powerpc/current/powermac</filename> folder, and place
 them in the <filename>Linux Kernels</filename> folder. Then place the
 <filename>Linux Kernels</filename> folder in the active System Folder.
+-->
+<application>BootX</application> の配布パッケージを <ulink url="&url-powerpc-bootx;"></ulink> から、
+あるいは Debian http/ftp ミラーや 公式 Debian CD の
+<filename>dists/woody/main/disks-powerpc/current/powermac</filename> 
+ディレクトリから入手して、unstuff してください。
+アーカイブから取り出すには <application>Stuffit Expander</application> を使ってください。
+パッケージの中には、<filename>Linux Kernels</filename> という名前の空のフォルダがあります。
+<filename>linux.bin</filename> と <filename>ramdisk.image.gz</filename> を
+<filename>disks-powerpc/current/powermac</filename> フォルダからダウンロードして、
+これらを <filename>Linux Kernels</filename> フォルダに置いて下さい。
+そうしたら、<filename>Linux Kernels</filename> フォルダをアクティブな
+System Folder に置いて下さい。
 
 </para>
   </sect2>
 
   <sect2 arch="powerpc" id="files-newworld">
-  <title>Hard Disk Installer Booting for NewWorld Macs</title>
+  <title>NewWorld Mac におけるハードディスクからのインストーラの起動</title>
 <para>
 
+<!--
 NewWorld PowerMacs support booting from a network or an ISO9660
 CD-ROM, as well as loading ELF binaries directly from the hard
 disk. These machines will boot Linux directly via
@@ -154,13 +257,30 @@ directly from an ext2 partition, as well as dual-booting with
 MacOS. Hard disk booting of the installer is particularly appropriate
 for newer machines without floppy drives. <command>BootX</command> is
 not supported and must not be used on NewWorld PowerMacs.
+-->
+NewWorld PowerMac は、ネットワークや
+ISO9660 CD-ROM からの起動をサポートしており、
+またハードディスクに置かれた ELF バイナリを直接ロードして起動することも可能です。
+これらのマシンでは <command>yaboot</command> を使って直接 Linux を起動できます。
+<command>yaboot</command> はカーネルと RAM ディスクを直接 ext2 パーティションから
+ロードでき、MacOS とのデュアルブートにすることもできます。
+ハードディスクからのインストーラの起動は、
+特にフロッピードライブのない最近のマシンには向いているでしょう。
+<command>BootX</command> は NewWorld PowerMac をサポートしておらず、
+使うべきではありません。
 
 </para><para>
 
+<!--
 <emphasis>Copy</emphasis> (not move) the following four files which
 you downloaded earlier from the Debian archives, onto the root level
 of your hard drive (this can be accomplished by
 <keycap>option</keycap>-dragging each file to the hard drive icon).
+-->
+前に Debian アーカイブからダウンロードした次に示すファイルを、
+ハードドライブの root 階層に <emphasis>コピー</emphasis> (移動では駄目)
+してください (各ファイルを、
+<keycap>option</keycap> を押しながらハードドライブアイコンにドラッグします)。
 
 <itemizedlist>
 <listitem><para>
@@ -170,7 +290,7 @@ of your hard drive (this can be accomplished by
 </para></listitem>
 <listitem><para>
 
-<filename>root.bin</filename> (from inside the images-1.44 folder)
+<filename>root.bin</filename> (images-1.44 フォルダにあります)
 
 </para></listitem>
 <listitem><para>
@@ -187,15 +307,25 @@ of your hard drive (this can be accomplished by
 
 </para><para>
 
+<!--
 Make a note of the partition number of the MacOS partition where you
 place these files. If you have the MacOS <command>pdisk</command>
 program, you can use the L command to check for the partition
 number. You will need this partition number for the command you type
 at the Open Firmware prompt when you boot the installer.
+-->
+これらのファイルを置いた MacOS パーティションの
+パーティション番号を記録しておきましょう。
+MacOS の <command>pdisk</command> プログラムがあれば、
+L コマンドでパーティション番号を確認できます。
+このパーティション番号は、インストーラを起動させたときに
+Open Firmware プロンプトから入力するコマンドで必要となります。
 
 </para><para>
 
 To boot the installer, proceed to <xref linkend="boot-newworld"/>.
+インストーラを起動させるには、
+<xref linkend="boot-newworld"/> に進んでください。
 
 </para>
   </sect2>
