@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 -->
+<!-- original version: 18685 -->
 
  <sect1 id="minimum-hardware-reqts">
 <title>必要な最低限のハードウェア</title>
@@ -71,7 +71,7 @@ recommended.
 <tbody>
 <row>
   <entry>デスクトップなし</entry>
-  <entry>16 メガバイト</entry>
+  <entry>32 メガバイト</entry>
   <entry>450 メガバイト</entry>
 </row><row>
   <entry>デスクトップあり</entry>
@@ -106,31 +106,36 @@ of programs by referring to <xref linkend="tasksel-size-list"/>.
 <!--
 This is a small server profile, useful for a stripped down server
 which does not have a lot of niceties for shell users.  It includes an
-FTP server, a web server, DNS, NIS, and POP. For these 50MB of disk
+FTP server, a web server, DNS, NIS, and POP. For these 100MB of disk
 space would suffice, and then you would need to add space
 for any data you serve up.
 -->
 小規模かつ簡素なサーバで、気難しいシェルユーザをあまりたくさんは
 抱えていない場合の値です。
 FTP サーバ、ウェブサーバ、DNS、NIS、POP をやらせるとしたら、
-ディスク領域は 50MB で足りるでしょう。
+ディスク領域は 100MB で足りるでしょう。
 後は提供するデータに応じた容量を追加する必要があるでしょう。
 
 </para></listitem>
 </varlistentry>
 
 <varlistentry arch="not-s390">
- <term>ダイヤルアップ</term>
+ <term>デスクトップ</term>
  <listitem><para>
 
 <!--
 A standard desktop box, including the X window system, graphics
 applications, sound, editors, etc.  Size of the packages will be
 around 500MB.
+A standard desktop box, including the X window system, full desktop
+environemtns, sound, editors, etc.  You'll need about 2 GB using the
+standard desktop task, though it can be done in far less.
 -->
 標準的なデスクトップマシンで、X Window System、
-グラフィックアプリケーション、サウンド、エディタなどが入ります。
-これらのパッケージのサイズは、だいたい 500MB 程度になるでしょう。
+全デスクトップ環境、サウンド、エディタなどが入ります。
+標準デスクトップタスクを使用すれば、約 2GB が必要ですが、
+それより少なくても実行できます。
+
 
 </para></listitem>
 </varlistentry>
@@ -177,8 +182,10 @@ always best to be generous when considering the space for your own
 files and data.  Notably, the Debian <filename>/var</filename>
 partition contains a lot of state information.  The
 <command>dpkg</command> files (with information on all installed
-packages) can easily consume 20MB; with logs and the rest, you should
-usually allocate at least 50MB for <filename>/var</filename>.
+packages) can easily consume 20MB; with logs and the rest.
+<command>apt-get</command> puts downloaded packages here before they are
+installed. You should
+usually allocate at least 100MB for <filename>/var</filename>.
 -->
 これらのサイズには、通常存在するユーザファイル、メール、
 データなどは含まれていないことにご注意ください。
@@ -188,8 +195,10 @@ usually allocate at least 50MB for <filename>/var</filename>.
 システムの状態に関するたくさんの情報が置かれます。
 <command>dpkg</command> のファイル 
 (インストールされたパッケージすべてに関する情報)
-は簡単に 20MB を消費します。ログなどもありますので、
-<filename>/var</filename> には最低 50MB は割り当てておくべきでしょう。
+は、ログなどもありますので、簡単に 20MB を消費します。
+<command>apt-get</command> はインストールする前にダウンロードしたパッケージを、
+ここに置きます。
+<filename>/var</filename> には最低 100MB は割り当てておくべきでしょう。
 
 </para>
 

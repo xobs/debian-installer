@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 -->
+<!-- original version: 18767 -->
 
  <sect1 id="pre-install-bios-setup">
  <title>インストール前に行うハードウェア・OS の設定</title>
@@ -223,66 +223,18 @@ amount of RAM in your system.
 <para>
 
 <!--
-If you have no AT-style keyboard and only a USB model, you will need
-to enable legacy AT keyboard emulation in your BIOS setup. Consult
+If you have no AT-style keyboard and only a USB model, you may need
+to enable legacy AT keyboard emulation in your BIOS setup. Only do this if
+the installation system fails to use your keyboard in USB mode. Consult
 your main board manual and look in the BIOS for "Legacy keyboard
-emulation" or "USB keyboard support" options. It must be enabled in
-order to boot the installation system.  If you enabled this option and
-it is working for you, you are fine and can go ahead.
+emulation" or "USB keyboard support" options. 
 -->
 AT 形式のキーボードがなく、USB のものしかない場合、
 BIOS 設定で legacy AT keyboard emulation を有効にする必要があります。
+キーボードを USB モードで使用するときに、インストールシステムが失敗するなら、
+単にこれだけしてください。
 マザーボードのマニュアルを調べて、"Legacy keyboard emulation" とか
 "USB keyboard support" といった BIOS 設定に入ってください。
-インストールシステムを起動するには、これを有効にしなければなりません。
-これを有効にしてうまく行くようなら、そのまま先に進んでください。
-
-</para><para>
-
-<!--
-If you cannot find this option, it might be that it is always enabled
-and you can continue. It also might mean that the BIOS does not
-provide any emulation support (bad luck here).
--->
-このオプションがなければ、常に有効になっているのかもしれません。
-その場合は先に進めます。
-あるいは BIOS が、エミュレーションを一切サポートしていないのかもしれません
-(これは運が悪い場合)。
-
-</para><para>
-
-<!--
-If you find the option and enable it, but the emulation stops working
-soon after the kernel started, then you have bad luck too. You could
-try the "bf2.4" flavor where the root floppy brings USB modules. If
-you are installing with floppy disks, you would need the keyboard once
-before the USB modules can be loaded. Specifying the "keytimer" option
-at boot prompt may help in this case.
--->
-オプションがあって、それを有効にしても、
-カーネルが起動してしばらくするとエミュレーションが効かなくなってしまう場合、
-これも運が悪かったことになります。
-"bf2.4" フレーバでは root フロッピーに USB モジュールが入っているので、
-これを試してみることもできます。
-フロッピーからインストールしている場合、
-USB モジュールのロード前にキーボード入力が必要となります。
-この場合は、ブートプロンプトに "keytimer" オプションを指定してください。
-
-</para><para>
-
-<!--
-Sometimes, the emulation hangs but it wakes up after few minutes, so
-you could wait some time and try to continue. To fix this behavior,
-you could load Linux' own drivers for USB keyboards. For this, use
-"modconf" (Step "Configure Device Driver Modules") and load usb-uhci
-or usb-ohci modules.
--->
-場合によっては、エミュレーションがハングした後、
-数分経つとまた使えるようになることもあります。
-ですのでしばらく待って、もう一度試してみてください。
-この状態を治すには、Linux 自身の USB キーボードドライバをロードします。
-これには "modconf" ("Configure Device Driver Modules" の段階) を用いて、
-usb-uhci か usb-ohci モジュールをロードします。
 
 </para>
    </sect3>
