@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- original version: 23664 -->
+<!-- revisado jfs, 21 noviembre 2004 -->
 
  <sect2 arch="alpha" id="alpha-firmware">
  <title>Firmware de consola Alpha</title>
@@ -7,8 +8,8 @@
 
 El firmware de consola está almacenado en una memoria flash ROM y
 se inicia cuando se enciende o reinicia un sistema Alpha. Existen
-dos diferentes modelos de especificación de consola usados en los
-sistema Alpha, y por lo tanto dos clases de firmware de consola
+dos modelos diferentes de especificación de consola usados en los
+sistema Alpha, y, por lo tanto, dos clases de firmware de consola
 disponibles:
 
 </para>
@@ -32,57 +33,59 @@ disponibles:
 
 <para>
 
-Desde la perspectiva del usuario, la diferencia más importante entre
-SRM y ARC es que la elección del tipo de la consola restringe el posible
-esquema de particionado para el disco duro del cual desea arrancar.
+La diferencia más importante entre SRM y ARC, desde la perspectiva del
+usuario, es que la elección del tipo de la consola restringe el
+posible esquema de particionado para el disco duro del cual desea
+arrancar.
 
 </para><para>
 
 ARC requiere usar una tabla de particiones MS-DOS (como la que crea
 <command>cfdisk</command>) para el disco de arranque. Por consiguiente
-las tablas de particiones MS-DOS son el formato «nativo» de partición
+las tablas de particiones MS-DOS están en el formato «nativo» de partición
 cuando se arranca desde ARC. De hecho, puesto que AlphaBIOS contiene
 una utilidad de particionado de disco, podría preferir particionar
 sus discos desde los menús del firmware antes de instalar Linux.
 
 </para><para>
 
-Contrariamente, SRM es <emphasis>incompatible</emphasis> con tablas de
+Por otro lado, SRM es <emphasis>incompatible</emphasis> con tablas de
 partición MS-DOS. 
 <footnote><para>Específicamente, el formato del sector de arranque 
 requerido por la especificación del subsistema de la consola entra en
 conflicto con la ubicación de la tabla de particiones DOS.
 </para></footnote> Puesto que Tru64 Unix usa el formato de etiquetas de
-disco de BSD, este es el formato de partición «nativo» para instalaciones
+disco de BSD, éste es el formato de partición «nativo» para instalaciones
 SRM.
 
 </para><para>
 
 GNU/Linux es el único sistema operativo en Alpha que se puede arrancar
 desde ambos tipos de la consola, pero &debian; &release; solamente puede
-arrancarse en sistemas con SRM.  Si tiene un sistema Alpha para el cual
-no hay ninguna versión de SRM disponible, si tendrá un sistema de 
+arrancarse en sistemas con SRM.  No podrá usar el instalador de 
+&debian; &release; si tiene un sistema Alpha para el cual
+no se dispone de ninguna versión de SRM, si va a utilizar un sistema de 
 arranque dual con Windows NT, o bien si su dispositivo de arranque exige
-la consola ARC para su inicialización BIOS, no podrá usar el
-instalador de &debian; &release;.  Sin embargo, sí que podrá correr
-&debian; &release; en tales sistemas si usa otra media de instalación;
+la consola ARC para su inicialización BIOS.
+Sin embargo, sí que podrá correr
+&debian; &release; en estos sistemas si usa otra medio de instalación;
 por ejemplo, puede instalar Debian woody con MILO y luego actualizar el
 sistema a &debian; &release;.
 
 </para><para>
 
-Debido a que <command>MILO</command> no está disponible para ningún
+Es recomendable que use SRM siempre que sea posible 
+dado que <command>MILO</command> no está disponible para ningún
 de los sistemas Alpha actualmente en producción (hasta febrero de
-2000), y debido a que ya no es necesario comprar licencias de OpenVMS o
-Tru64 Unix para tener firmware SRM en su Alpha antigua, es recomendable
-que use SRM siempre que sea posible.
+2000), y a que ya no es necesario comprar licencias de OpenVMS o
+Tru64 Unix para tener firmware SRM en su Alpha antigua.
 
 </para><para>
 
-La siguiente tabla resume las combinaciones de sistema/consola
-disponibles y soportadas (vea <xref linkend="alpha-cpus"/> para
-saber los nombres de los tipos de sistema). Si la palabra «ARC» aparece
-a continuación de un nombre, hace referencia a cualquiera de las consolas
+La siguiente tabla resume las combinaciones de sistema y consola
+disponibles y soportadas (puede consultar los distintos nombres
+de los tipos de sistema en  <xref linkend="alpha-cpus"/>)
+Un nombre seguido de la palabra «ARC» hace referencia a cualquiera de las consolas
 compatibles con ARC.
 
 </para><para>
@@ -140,7 +143,7 @@ compatibles con ARC.
   <entry>solamente SRM</entry>
 </row><row>
   <entry>nautilus</entry>
-  <entry>ARC (vea el manual de la placa base) o SRM</entry>
+  <entry>ARC (consulte el manual de la placa base) o SRM</entry>
 </row><row>
   <entry>noname</entry>
   <entry>ARC o SRM</entry>
@@ -185,46 +188,47 @@ compatibles con ARC.
 
 </para><para>
 
-Generalmente, ninguna de estas consolas puede arrancar Linux directamente,
+Por regla general ninguna de estas consolas puede arrancar Linux directamente,
 por lo que se requiere la asistencia de un gestor de arranque 
 intermedio. Para la consola SRM, se usa <command>aboot</command>,
-un gestor de arranque pequeño e independiente de plataforma.  Vea (el
-desafortunadamente desactualizado) <ulink
-url="&url-srm-howto;">COMO de SRM</ulink> para mayor información acerca
-de <command>aboot</command>.
+un gestor de arranque pequeño e independiente de plataforma.  
+Para obtener más información sobre <command>aboot</command>
+consulte
+<ulink url="&url-srm-howto;">COMO de SRM</ulink> (desafortunadamente
+está desactualizado).
 
 </para><para>
 
-La mayoría de AlphaServers y todos los productos actuales de servidor
+La mayoría de los AlphaServers y todos los productos actuales de servidor
 y estación de trabajo contienen tanto SRM como AlphaBIOS en su
-firmware. Para máquinas con «mitad de flash» como las diversas placas
+firmware. Para máquinas con «mitad de flash», como es el caso de diversas placas
 de evaluación, es posible cambiar de una versión a otra al re-grabar
-el firmware. También, una vez que sea instalado SRM, es posible
+el firmware. También es posible
 ejecutar ARC/AlphaBIOS desde un disquete (usando la orden 
-<command>arc</command>). Por estas razones, recomendamos cambiarlo
-a SRM antes de instalar &debian;.
+<command>arc</command>) una vez que sea instalado SRM.
+Recomendamos cambiar a SRM antes de instalar &debian; por estas razones.
 
 </para><para>
 
 Como en otras arquitecturas, debería instalar la revisión de firmware
 más reciente disponible. 
-<footnote><para>Excepto en Jensen, donde Linux no está soportado
-en versiones de firmware superiores a 1.7 - Vea
-<ulink url="&url-jensen-howto;"></ulink> para mayor información
-</para></footnote> antes de instalar &debian;.  Para Alpha, las
-actualizaciones de firmware pueden obtenerse en
+<footnote><para>Excepto en Jensen, donde no se tiene soporte para Linux 
+en versiones de firmware superiores a 1.7 - Para más información consulte
+<ulink url="&url-jensen-howto;"></ulink>.
+</para></footnote> antes de instalar &debian;.
+Puede obtener las actualizaciones de firmware para Alpha en 
 <ulink url="&url-alpha-firmware;">Actualizaciones de firmware de Alpha</ulink>.
 
 </para>
  </sect2>
 
 
-  <sect2 arch="alpha"><title>Arrancar con TFTP</title>
+  <sect2 arch="alpha"><title>Arranque con TFTP</title>
 <para>
 
-En SRM, las interfaces Ethernet se nombran con el prefijo
+En SRM, se nombran las interfaces Ethernet con el prefijo
 <userinput>ewa</userinput>, y se muestran con la orden
-<userinput>show dev</userinput>, como este ejemplo
+<userinput>show dev</userinput>. Como se muestra en este ejemplo
 (editado un poco):
 
 <informalexample><screen>
@@ -243,7 +247,7 @@ Primero debe configurar el protocolo de arranque:
 
 </screen></informalexample>
 
-Luego verificar que el tipo de medio sera correcto:
+Luego debe verificar que el tipo de medio es el correcto:
 
 <informalexample><screen>
 
@@ -271,14 +275,14 @@ conforme están incluidos en la imagen de arranque de red.
 
 </para><para>
 
-Si desea usar la consola de serie, <emphasis>deberá</emphasis>
+Si desea usar una consola en el puerto serie, <emphasis>deberá</emphasis>
 pasar el parámetro <userinput>console=</userinput> al núcleo.
 Esto se puede hacer usando el argumento <userinput>-flags</userinput>
-para la orden <userinput>boot</userinput> de SRM. Los puertos serie
+con la orden <userinput>boot</userinput> de SRM. Los puertos serie
 se nombran de forma similar a sus ficheros correspondientes en
-<userinput>/dev</userinput>. Además, cuando se especifican parámetros
-de núcleo adicionales, hay que repetir ciertas opciónes implícitas
-que las imagenes de &d-i; requieren.  Por ejemplo, para arrancar desde
+<userinput>/dev</userinput>. Además hay que repetir ciertas opciónes 
+implícitas que las imagenes de &d-i; requieren cuando se especifican
+parámetros de núcleo adicionales,.  Por ejemplo, para arrancar desde
 <userinput>ewa0</userinput> y usar una consola en el primer puerto
 serie, debería escribir:
 
@@ -291,7 +295,7 @@ serie, debería escribir:
 </para>
   </sect2>
 
-  <sect2 arch="alpha"><title>Arrancar desde CD-ROM con la consola SRM</title>
+  <sect2 arch="alpha"><title>Arranque desde CD-ROM con la consola SRM</title>
 <para>
 
 Escriba
@@ -316,9 +320,10 @@ de su subarquitectura (vea <xref linkend="alpha-cpus"/>), luego
 introduzca <filename>\milo\linload.exe</filename> como gestor de 
 arranque y <filename>\milo\<replaceable>subarq</replaceable></filename>
 (donde
-<replaceable>subarq</replaceable> es el nombre de subarquitectura apropiado)
-como la ruta de sistema operativo en el menú «OS Selection Setup». Las
-máquinas «ruffian» son una excepción: necesita usar 
+<replaceable>subarq</replaceable> es el nombre de subarquitectura correspondiente)
+como la ruta de sistema operativo en el menú «OS Selection Setup» 
+(Selección de sistema operativo, N. del T.). Las
+máquinas «ruffian» son una excepción: deberá usar 
 <filename>\milo\ldmilo.exe</filename> como gestor de arranque.
 
 </para>
@@ -326,11 +331,10 @@ máquinas «ruffian» son una excepción: necesita usar
 
 
   <sect2 arch="alpha" condition="supports-floppy-boot">
-  <title>Arrancar desde disquetes con la consola SRM</title>
+  <title>Arranque desde disquetes con la consola SRM</title>
 <para>
 
-En el cursor de SRM (<prompt>&gt;&gt;&gt;</prompt>), escriba la
-siguiente orden:
+Debe escribir la siguiente orden en el indicador de comandos de SRM (<prompt>&gt;&gt;&gt;</prompt>):
 
 <informalexample><screen>
 
@@ -339,8 +343,7 @@ siguiente orden:
 </screen></informalexample>
 
 posiblemente reemplazando <filename>dva0</filename> con el nombre real
-del dispositivo. Usualmente, <filename>dva0</filename> es la unidad
-de disquete; escriba
+del dispositivo. La unidad de disquete es habitualmente <filename>dva0</filename>. Escriba:
 
 <informalexample><screen>
 
@@ -349,16 +352,17 @@ de disquete; escriba
 </screen></informalexample>
 
 para ver la lista de dispositivos (por ejemplo, si desea arrancar
-desde un CD). Note que si está arrancando a través de MILO, el
-argumento <command>-flags</command> no se tiene en cuenta, por lo que
+desde un CD). Tenga en cuenta que si está arrancando a través de MILO, el
+argumento <command>-flags</command> se descartará, por lo que
 simplemente puede escribir <command>boot dva0</command>.
-Si todo funciona correctamente, eventualmente verá el arranque
-del núcleo Linux.
+Podrá ver el arranque del núcleo Linux
+si todo funciona correctamente.
 
 </para><para>
 
-Si desea especificar parámetros de núcleo específicos cuando arranque
-a través de <command>aboot</command>, use la siguiente orden:
+Use la siguiente orden
+si desea especificar parámetros de núcleo específicos cuando arranque
+a través de <command>aboot</command>:
 <informalexample><screen>
 
 &gt;&gt;&gt; boot dva0 -file linux.bin.gz -flags "root=/dev/fd0 load_ramdisk=1 argumentos"
@@ -367,19 +371,19 @@ a través de <command>aboot</command>, use la siguiente orden:
 (escrita en una sola línea). Substituya, en caso de que sea necesario, el 
 nombre real del dispositivo de arranque SRM por <filename>dva0</filename>, el
 nombre del dispositivo de arranque de Linux por <filename>fd0</filename>, y
-los parámetros de núcleo deseados por <filename>argumentos</filename>.
+los parámetros de núcleo que desee por <filename>argumentos</filename>.
 
 </para><para>
 
-Si desea especificar parámetros de núcleo cuando arranque a través de
-<command>MILO</command>, tendrá que interrumpir la carga cuando acceda
-a MILO. Vea <xref linkend="booting-from-milo"/>.
+Tendrá que interrumpir la carga cuando acceda a <command>MILO</command>
+si desea especificar parámetros de núcleo cuando arranque a través de
+éste. Lea <xref linkend="booting-from-milo"/>.
 </para>
   </sect2>
 
 
   <sect2 arch="alpha" condition="supports-floppy-boot">
-  <title>Arrancar desde disquetes con la consola ARC o AlphaBIOS</title>
+  <title>Arranque desde disquetes con la consola ARC o AlphaBIOS</title>
 
 <para>
 
@@ -390,17 +394,19 @@ operativo. Arranque usando la nueva entrada creada.
 </para>
   </sect2>
 
- <sect2 arch="alpha" condition="FIXME" id="booting-from-milo"><title>Arrancar con MILO</title>
+ <sect2 arch="alpha" condition="FIXME" id="booting-from-milo"><title>Arranque con MILO</title>
 <para>
 
-MILO contenido en el medio de arranque esta configurado para proceder
-directamente hacia Linux. Si desea intervenir, todo lo que necesita es
-presionar espacio durante la cuenta atrás de MILO.
+El MILO que se incluye en el medio de arranque está configurado para
+proceder directamente hacia Linux de forma automática. Si desea
+intervenir, todo lo que necesita es presionar espacio durante la
+cuenta atrás de MILO.
 
 </para><para>
 
-Si desea especificar todos los argumentos explícitamente (por ejemplo,
-proveer parámetros adicionales, puede usar una orden como la siguiente:
+Puede usar una orden como la siguiente
+si desea especificar todos los argumentos explícitamente (por ejemplo,
+proveer parámetros adicionales:
 
 <informalexample><screen>
 
@@ -413,7 +419,7 @@ MILO&gt; boot fd0:linux.bin.gz root=/dev/fd0 load_ramdisk=1 <!-- arguments -->
 Si está arrancando desde otro dispositivo que no sea un disquete, sustituya
 <filename>fd0</filename> en el ejemplo anterior, por el nombre de dispositivo
 apropiado en la notación de Linux. La orden <command>help</command> le
-dará una referencia resumida de la orden MILO.
+dará una referencia resumida de la ordenes en MILO.
 
 </para>
  </sect2>
