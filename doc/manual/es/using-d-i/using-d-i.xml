@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 11648 -->
+<!-- original version: 18639 -->
 
  <chapter id="d-i-intro"><title>Usando el instalador de Debian</title>
 
@@ -8,23 +8,38 @@
 
 El instalador de Debian consiste de un número de componentes de 
 propósito específico para realizar cada tarea de instalación. Cada
-componente realiza su tarea, haciendo las preguntas que sean necesarias
-para realizar su trabajo al usuario. Si no hubiese problema, el siguiente
-componente en la secuencia toma el control sin ninguna intervención del
-usuario (otra que varios mensajes de progreso). Cuando existe un problema,
-el usuario verá el error en pantalla, y podría ser mostrado el menú del 
-instalador para que éste elija alguna acción alternativa. Si no hubiese
-problemas, el usuario nunca verá el menú del instalador, a excepción
-de simplemente responder preguntas para el componente de turno.
+componente realiza su tarea, formulado al usuario las preguntas que 
+sean necesarias para realizar su trabajo. Estas preguntas tienen 
+prioridades determinadas, y la prioridad de las preguntas a ser 
+formuladas se define cuando se inicia el instalador.
 
 </para><para>
 
-Las preguntas por si mismas tienen prioridades, y la prioridad de 
-las preguntas a ser formuladas puede ser cambiada. De este modo si
-el instalador sabe que hacer, y el usuario no necesita conocer las
-otras opciones disponibles, entonces el instalador hará la elección
-y no mostrará la pregunta. Las notificaciones de errores serios tienen
+Cuando se realiza una instalación estándar, solamente se formulará las
+preguntas esenciales (prioridad alta). Esto tiene como consecuencia un
+proceso de instalación altamente automatizado con poca interacción del
+usuario. Los componentes son automáticamente ejecutados en secuencia; la
+ejecución de cual de éstos principalmente depende del método de instalación
+que use y de su hardware. El instalador usará los valores predeterminados
+para las preguntas que no son formuladas.
+
+</para><para>
+
+Cuando existe un problema, el usuario verá el error en pantalla, y 
+podría ser mostrado el menú del instalador para que éste elija alguna 
+acción alternativa. Si no hubiese problemas, el usuario nunca verá el
+menú del instalador, a excepción de simplemente responder preguntas 
+para el componente de turno. Las notificaciones de errores serios tienen
 prioridad 'critical' de este modo el usuario siempre será notificado.
+
+</para><para>
+
+Algunos de los valores predeterminados que usa el instalador pueden ser
+modificados al pasar argumentos de arranque cuando se inicia el &d-i;.
+Si, por ejemplo, desea forzar la configuración de red estática (se
+usa DHCP como predeterminado si esta disponible), puede añadir el
+parámetro de arranque <userinput>netcfg/disable_dhcp=true</userinput>.
+Vea <xref linkend="installer-args"/> para las opciones disponibles.
 
 </para><para>
 
@@ -33,26 +48,35 @@ gestionada por menús, donde cada paso es controlado por el usuario
 en lugar de que el instalador realice cada paso automáticamente en
 secuencia. Para usar el instalador en modo manual, gestionado por
 menús, añada el argumento de arranque 
-<userinput>DEBCONF_PRIORITY=medium</userinput>.
+<userinput>debconf/priority=medium</userinput>.
+
+</para><para>
+
+Si su hardware requiere que pase opciones a los módulos del núcleo 
+conforme son instalados, necesitará iniciar el instalador en modo
+<quote>expert</quote>. Esto puede realizarse ya sea usando la orden
+<command>expert</command> al iniciar al instalador o añadiendo el
+argumento de arranque <userinput>debconf/priority=low</userinput>.
+El modo expert le da control total sobre el &d-i;.
 
 </para><para>
 
 El entorno normal del instalador es basado en caracteres (opuesto a la,
-ahora mas familiar, interfaz gráfica). El ratón no es operativo en este
+ahora mas familiar, interfaz gráfica). El ratón no esta operativo en este
 entorno. Aquí algunas teclas que usted puede usar para navegar entre
 los diversos diálogos. La tecla de flecha <keycap>derecha</keycap> o
-<keycap>Tab</keycap> mueven `adelante', y la tecla de flecha 
+<keycap>Tab</keycap> desplazan 'adelante', y la tecla de flecha 
 <keycap>izquierda</keycap> o <keycombo> <keycap>Shift</keycap> 
-<keycap>Tab</keycap> </keycombo> mueven `atrás' entre los botones y 
+<keycap>Tab</keycap> </keycombo> desplazan 'atrás' entre los botones y 
 opciones mostrados.
 Las teclas de flecha <keycap>arriba</keycap> y <keycap>abajo</keycap> 
-eligen diferentes items dentro de la lista desplazarle, y también
+eligen diferentes elementos dentro de la lista desplazable, y también
 desplazan a la lista en si. En adición, en listas largas, usted puede
 escribir una letra para hacer que la lista se desplace directamente
-a la sección con items que se inicien con la letra que ha escrito y
+a la sección con elementos que se inicien con la letra que ha escrito y
 usar <keycap>Re-Pág</keycap> y <keycap>Av-Pág</keycap> para 
 desplazarse entre la lista por secciones. La <keycap>barra espaciadora</keycap>
-selecciona un item como un checkbox. Use &enterkey; para activar las 
+selecciona un elemento como un checkbox. Use &enterkey; para activar las 
 elecciones.
 
 </para><para arch="s390">
@@ -63,9 +87,9 @@ a continuación.
 
 </para><para>
 
-Los mensajes de error son redirecionados a la tercera consola (conocida
-como <userinput>tty3</userinput>). Usted puede acceder a esta consola al
-presionar <keycombo><keycap>Alt Izq</keycap><keycap>F3</keycap></keycombo>
+Los mensajes de error son redireccionados a la tercera consola Puede 
+acceder a ésta presionando 
+<keycombo><keycap>Alt Izq</keycap><keycap>F3</keycap></keycombo>
 (mantenga presionada la tecla <keycap>Alt</keycap> mientras presiona la
 tecla de función <keycap>F3</keycap>); regrese al proceso principal del
 instalador con
@@ -75,11 +99,11 @@ instalador con
 
 Estos mensajes también pueden ser encontrados en 
 <filename>/var/log/messages</filename>. Luego de la instalación, este
-registro es copiado a <filename>/var/log/installer.log</filename> en
-su nuevo sistema. Otros mensajes de instalación pueden ser encontrados
-en <filename>/target/var/log/debian-installer/</filename> durante la
-instalación, y <filename>/var/log/debian-installer/</filename> luego
-de que la máquina haya sido iniciada con el sistema instalado.
+registro es copiado a <filename>/var/log/debian-installer/messages</filename>
+en su nuevo sistema. Otros mensajes de instalación pueden ser encontrados
+en <filename>/var/log/</filename> durante la instalación, y 
+<filename>/var/log/debian-installer/</filename> luego
+de que el ordenador haya sido iniciado con el sistema instalado.
 
 </para>
  </sect1>
@@ -102,12 +126,17 @@ pueden ser encontrados en <xref linkend="module-details"/>.
 
 Muestra al usuario la lista de componentes durante el trabajo del
 instalador, e inicia el componente elegido cuando éste es seleccionado.
-Las preguntas de main-menu tienen prioridad MEDIUM, de modo que si
-su prioridad es configurada a HIGH o CRITICAL (HIGH es el predeterminado),
-usted no verá el menú. Por otro lado, si existe un error que requiere
+Las preguntas de main-menu tienen prioridad medium, de modo que si
+su prioridad es definida a high o critical (high es el predeterminado),
+no verá el menú. Por otro lado, si existe un error que requiere
 de su intervención, la prioridad de la pregunta puede ser disminuida
 temporalmente para permitirle resolver el problema, y en este caso
 el menú podría aparecer.
+
+</para><para>
+
+Puede volver al menú principal eligiendo el botón "Regresar" repetidas
+veces hasta salir del componente que esta ejecutando.
 
 </para></listitem>
 </varlistentry>
@@ -118,7 +147,7 @@ el menú podría aparecer.
 Muestra una lista de idiomas y su variantes. El instalador mostrará
 los mensajes en el idioma elegido, a menos que la traducción para
 este idioma no este completa. Cuando una traducción no esta
-completa se muestran los mensajes en inglés.
+completa los mensajes se muestran en inglés.
 
 </para></listitem>
 </varlistentry>
@@ -133,27 +162,27 @@ donde vive.
 </varlistentry>
 <varlistentry>
 
-<term>ddetect</term><listitem><para>
-
-Detecta los discos duros, ya sea instalados o conectados al computador.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
-<term>pcmcia</term><listitem><para>
-
-Permite al usuario configurar las tarjetas PCMCIA usadas para redes en los
-computadores portátiles.
-
-</para></listitem>
-</varlistentry>
-<varlistentry>
-
 <term>kbd-chooser</term><listitem><para>
 
-Muestra la lista de teclados, de la cual el usuario debe elegir el modelo
-que mas se adecue al suyo.
+Muestra una lista de teclados, de la cual el usuario elije el modelo
+que corresponda al suyo.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>hw-detect</term><listitem><para>
+
+Detecta automáticamente la mayoría del hardware del sistema, incluyendo
+tarjetas de red, discos duros y PCMCIA.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>cdrom-detect</term><listitem><para>
+
+Busca y monta un CD de instalación de Debian.
 
 </para></listitem>
 </varlistentry>
@@ -179,17 +208,28 @@ el disco duro.
 
 <term>choose-mirror</term><listitem><para>
 
-Presenta una lista de los espejos del archivo de Debian. El usuario
-puede elegir la fuente de sus paquetes de instalación. Comúnmente,
-se eligen un CD-ROM o un espejo de red.
+Presenta una lista de las réplicas del archivo de Debian. El usuario
+puede elegir la fuente de instalación de sus paquetes.
 
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term>cdrom-detect</term><listitem><para>
+<term>cdrom-checker</term><listitem><para>
 
-Detecta dispositivos CD-ROM, ya sea instalados o conectados al computador.
+Verifica la integridad de un CD-ROM. De esta forma el usuario puede
+asegurarse por si mismo/misma que el CD-ROM de instalación no está
+corrupto.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>lowmem</term><listitem><para>
+
+Lowmem intenta detectar sistemas con poca memoria y entonces realiza 
+varios trucos para eliminar partes innecesarias del &d-i; en la memoria
+(con el costo de algunas características).
 
 </para></listitem>
 </varlistentry>
@@ -198,7 +238,7 @@ Detecta dispositivos CD-ROM, ya sea instalados o conectados al computador.
 <term>anna</term><listitem><para>
 
 Anna ni de cerca APT. Instala paquetes que han sido recuperados
-del espejo elegido.
+desde la réplica elegida o de CD-ROM.
 
 </para></listitem>
 </varlistentry>
@@ -207,10 +247,10 @@ del espejo elegido.
 <term>partman</term><listitem><para>
 
 Permite al usuario particionar los discos conectados al sistema, crear
-sistemas de ficheros en las particiones seleccionadas, y añadirlos a los
+sistemas de ficheros en las particiones seleccionadas y añadirlos a los
 puntos de montaje. También están incluidas características interesantes
 como un modo totalmente automático o soporte LVM. Esta es la herramienta
-de particionamiento preferida en Debian.
+de particionado preferida en Debian.
 
 </para></listitem>
 </varlistentry>
@@ -228,8 +268,8 @@ de usuario pre-definidas.
 <term>partitioner</term><listitem><para>
 
 Permite al usuario particionar los discos conectados al sistema.
-Se elige un programa de particionamiento apropiado para la 
-arquitectura de su computador.
+Se elige un programa de particionado apropiado para la 
+arquitectura de su ordenador.
 
 </para></listitem>
 </varlistentry>
@@ -237,8 +277,28 @@ arquitectura de su computador.
 
 <term>partconf</term><listitem><para>
 
-Muestra una lista de particiones, y crea sistemas de ficheros en las
+Muestra una lista de particiones y crea sistemas de ficheros en las
 particiones seleccionadas de acuerdo a instrucciones del usuario.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>lvmcfg</term><listitem><para>
+
+Ayuda al usuario con la configuración de
+<firstterm>LVM</firstterm> (Logical Volume Manager).
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>mdcfg</term><listitem><para>
+
+Permite al usuario configurar <firstterm>RAID</firstterm> 
+(Redundant Array of Inexpensive Disks) por software. Este RAID por
+software generalmente es superior a los ordinarios controladores RAID IDE 
+(pseudo hardware) que se encuentran en las nuevas placas base.
 
 </para></listitem>
 </varlistentry>
@@ -247,16 +307,20 @@ particiones seleccionadas de acuerdo a instrucciones del usuario.
 <term>base-installer</term><listitem><para>
 
 Instala el conjunto de paquetes mas básico que permitirán al
-computador operar bajo Linux cuando es reiniciado.
+ordenador operar bajo Linux cuando sea reiniciado.
 
 </para></listitem>
 </varlistentry>
 <varlistentry>
 
-<term>kernel-chooser</term><listitem><para>
+<term>os-prober</term><listitem><para>
 
-Permite al usuario elegir una versión del núcleo del sistema
-operativo, si hay mas de una versión disponible.
+Detecta los sistemas operativos instalados actualmente en el
+ordenador y pasa esta información a bootloader-installer, el
+que podría ofrecerle la capacidad de añadir los sistemas
+operativos encontrados al menú de inicio del gestor de arranque.
+De esta manera el usuario podría fácilmente elegir que sistema
+operativo arrancar al momento de inicio.
 
 </para></listitem>
 </varlistentry>
@@ -265,7 +329,7 @@ operativo, si hay mas de una versión disponible.
 <term>bootloader-installer</term><listitem><para>
 
 Instala un gestor de arranque en el disco duro, el cual es necesario
-para que el computador inicie usando Linux sin usar un disco flexible
+para que el ordenador arranque usando Linux sin usar un disco flexible
 o CD-ROM. Muchos gestores de arranque permiten al usuario elegir un
 sistema operativo alternativo cada vez que el computador se inicia.
 
@@ -277,7 +341,7 @@ sistema operativo alternativo cada vez que el computador se inicia.
 
 Provee diálogos para configurar los paquetes del sistema base de
 acuerdo a las preferencias del usuario. Esto se hace normalmente 
-después de reiniciar el computador; es la 'primera ejecución' del
+después de reiniciar el ordenador; es la 'primera ejecución' del
 nuevo sistema Debian.
 
 </para></listitem>
@@ -286,7 +350,7 @@ nuevo sistema Debian.
 
 <term>shell</term><listitem><para>
 
-Permite al usuario ejecutar un shell ya sea desde el menú, o en 
+Permite al usuario ejecutar un shell ya sea desde el menú o en 
 la segunda consola.
 
 </para></listitem>
@@ -296,9 +360,9 @@ la segunda consola.
 <term>bugreporter</term><listitem><para>
 
 Provee una forma de que el usuario pueda guardar información en un
-disco flexible cuando se encuentre un problema, a modo de luego 
-informar adecuadamente los problemas de software del instalador a los
-desarrolladores Debian.
+disco flexible cuando se encuentre un problema, de modo que después
+pueda informar adecuadamente los problemas de software del instalador 
+a los desarrolladores de Debian.
 
 </para></listitem>
 </varlistentry>
@@ -307,41 +371,6 @@ desarrolladores Debian.
 
  </sect1>
 
- <sect1 id="module-details"><title>Usando componentes individuales</title>
+&using-d-i-components.xml;
 
-&module-languagechooser.xml;
-&module-countrychooser.xml;
-&module-s390-netdevice.xml;
-&module-s390-dasd.xml;
-&module-ddetect.xml;
-&module-pcmcia.xml;
-&module-kbd-chooser.xml;
-&module-netcfg.xml;
-&module-iso-scan.xml;
-&module-choose-mirror.xml;
-&module-cdrom-detect.xml;
-&module-anna.xml;
-&module-partman.xml;
-&module-autopartkit.xml;
-&module-partitioner.xml;
-&module-partconf.xml;
-&module-prebaseconfig.xml;
-&module-base-installer.xml;
-&module-kernel-chooser.xml;
-
-&module-mips-arcboot-installer.xml;
-&module-alpha-aboot-installer.xml;
-&module-i386-grub-installer.xml;
-&module-i386-lilo-installer.xml;
-&module-hppa-palo-installer.xml;
-&module-ia64-elilo-installer.xml;
-&module-s390-zipl-installer.xml;
-&module-powerpc-yaboot-installer.xml;
-&module-sparc-silo-installer.xml;
-
-&module-baseconfig.xml;
-&module-bugreporter.xml;
-&module-shell.xml;
-
- </sect1>
 </chapter>
