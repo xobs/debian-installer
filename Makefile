@@ -54,7 +54,11 @@ DPKGDIR=$(DEST)/var/lib/dpkg
 build: tree lib_reduce status_reduce stats
 
 demo:
-	chroot $(DEST) bin/sh
+	mkdir -p $(DEST)/proc 
+	sudo chroot $(DEST) bin/sh -c "if ! mount | grep ^proc ; then bin/mount proc -t proc /proc; fi"
+	sudo chroot $(DEST) usr/bin/debconf-loadtemplate /var/lib/dpkg/info/*.templates
+#	sudo chroot $(DEST) usr/share/debconf/frontend /usr/bin/main-menu
+	sudo chroot $(DEST) bin/sh
 
 clean:
 	dh_clean
