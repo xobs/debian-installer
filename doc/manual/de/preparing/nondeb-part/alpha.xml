@@ -1,92 +1,94 @@
-<!-- retain these comments for translator revision tracking -->
-<!-- $Id: alpha.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
+<!-- original version: 14559 -->
 
 
-  <sect2 arch="alpha"><title>Partitioning in Tru64 UNIX</title>
+  <sect2 arch="alpha"><title>Partitionieren in Tru64 UNIX</title>
 <para>
 
-Tru64 UNIX, formerly known as Digital UNIX, which is in turn formerly
-known as OSF/1, uses the partitioning scheme similar to the BSD `disk
-label', which allows for up to eight partitions per disk drive.  The
-partitions are numbered `1' through to `8' in
-Linux and ``lettered'' `a' through to `h' in UNIX.
-Linux kernels 2.2 and higher always correspond `1' to
-`a', `2' to `b' and so on.  For
-example, <filename>rz0e</filename> in Tru64 UNIX would most likely be called
-<filename>sda5</filename> in Linux.
+Tru64 UNIX, ehemals bekannt als Digital UNIX, welches wiederum vorher
+als OSF/1 bekannt war, verwendet ein Partitionsschema, das ähnlich den
+BSD `disk labels' ist, welches bis zu acht Partitionen pro Laufwerk
+erlaubt. Die Partitionen werden in Linux von `1' bis `8' durchnummeriert,
+und in UNIX von `a' bis `h' ``durchbuchstabiert''. Im Linux Kernel ab
+Version 2.2 entspricht `1' `a', `2' `b' und so weiter. Zum Beispiel,
+<filename>rz0e</filename> in Tru64 UNIX wird unter Linux am ehesten
+mit <filename>sda5</filename> benannt.
 
 </para><para>
 
-Partitions in the disk label may overlap.  Moreover, the `c' partition
-is required to span the entire disk (thus overlapping all other
-non-empty partitions).  Under Linux this makes <filename>sda3</filename>
-identical to <filename>sda</filename> (<filename>sdb3</filename> to <filename>sdb</filename>, if
-present, and so on).  Apart from satisfying this requirement, you
-should carefully avoid creating overlapping partitions.
+Partitionen im Disk-Label können überlappen. Ferner wird die `c'-Partition
+benötigt, die die ganze Platte umfassen soll (alle nicht-leeren Partitionen
+überlappen). Unter Linux macht das <filename>sda3</filename> identisch zu
+<filename>sda</filename> (<filename>sdb3</filename> zu
+<filename>sdb</filename>, wenn vorhanden, und so weiter). Abgesehen davon,
+dass Sie diese Bedingung erfüllen, sollten Sie überlappende Partitionen
+vermeiden.
 
 </para><para>
 
-Another conventional requirement is for the `a' partition to start from
-the beginning of the disk, so that it always includes the boot block
-with the disk label. If you intend to boot Debian from that disk, you
-need to size it at least 2MB to fit aboot and perhaps a kernel.
+Eine andere übliche Bedingung ist, dass die `a'-Partition am Anfang der
+Festplatte anfängt, sodass Sie immer den Bootblock mit dem Disk-Label
+enthält. Wenn Sie vorsehen, Debian von dieser Festplatte zu booten, müssen
+Sie mindestens 2MB hierfür einplanen, damit mindestens ein Bootblock und
+gegebenenfalls ein Kernel darauf passen.
 
 </para><para>
 
-Note that these two partitions are only required for compatibility;
-you must not put a file system onto them, or you'll destroy data.  If
-you're not going to share the disk with Tru64 Unix or one of the free
-4.4BSD-Lite derived operating systems (FreeBSD, OpenBSD, or NetBSD),
-you can ignore these requirements, and use the partitioning tool from
-the Debian boot disks.  See <xref linkend="partition-programs"/> for details.
+Beachten Sie, dass diese zwei Partitionen nur für die Kompatibilität
+benötigt werden; Sie dürfen kein Dateisystem darauf erstellen, sonst
+zerstören Sie Daten. Wenn Sie nicht vorhaben, die Festplatte mit Tru64-UNIX
+oder einem der freien von 4.4BSD-Lite abgeleiteten Betriebssysteme
+(FreeBSD, OpenBSD oder NetBSD) zu teilen, können Sie diese Bedingungen
+ignorieren und das Partitionierungsprogramm von den Debian Bootdisketten
+verwenden. Siehe <xref linkend="partition-programs"/> für Details.
 
 </para><para>
 
-Disks can be partitioned with the graphical disk configuration tool that
-is accessible through the Application Manager, or with the command-line
-<command>disklabel</command> utility.  Partition type for the Linux file
-system should be set to `resrvd8'.  This can only be done via
-<command>disklabel</command>; however, all other configuration can easily be
-performed with the graphical tool.
+Festplatten können entweder mit dem grafischen Plattenkonfigurationswerkzeug,
+auf das man durch den Application Manager Zugriff hat, oder mit dem
+Kommandozeilenprogramm <command>disklabel</command> partitioniert werden.
+Der Partitionstyp für das Linux-Dateisystem sollte auf `reservd8' gesetzt
+werden. Das ist nur mit <command>disklabel</command> möglich; die restliche
+Konfiguration kann mit dem grafischen Werkzeug durchgeführt werden.
 
 </para><para>
 
-It is possible, and indeed quite reasonable, to share a swap partition
-between UNIX and Linux.  In this case it will be needed to do a
-<command>mkswap</command> on that partition every time the system is rebooted
-from UNIX into Linux, as UNIX will damage the swap signature.  You may
-want to run <command>mkswap</command> from the Linux start-up scripts before
-adding swap space with <command>swapon -a</command>.
+Es ist möglich, und sogar sinnvoll, eine Swap-Partition mit UNIX und Linux
+zu teilen. In diesem Fall muss jedoch <command>mkswap</command> bei jedem
+Neustart von UNIX nach Linux ausgeführt werden, da UNIX die Signatur
+der Swap-Partition beschädigt. Sie werden <command>mkswap</command>
+von den Linux Start-Up Skripten vor dem Hinzufügen von Swap-Space mit
+<command>swapon -</command> ausführen wollen.
 
 </para><para>
 
-If you want to mount UNIX partitions under Linux, note that Digital UNIX
-can use two different file system types, UFS and AdvFS, of which Linux
-only understands the former.
+Wenn Sie UNIX-Partitionen unter Linux einhängen wollen, müssen Sie beachten,
+dass Digital UNIX zwei verschiedene Dateisysteme, UFS und AdvFS, benutzen
+kann, Linux jedoch nur UFS versteht.
 
 </para>
   </sect2>
 
-  <sect2 arch="alpha"><title>Partitioning in Windows NT</title>
+  <sect2 arch="alpha"><title>Partitionierung unter Windows NT</title>
 
 <para>
 
-Windows NT uses the PC-style partition table.  If you are manipulating
-existing FAT or NTFS partitions, it is recommended that you use the
-native Windows NT tools (or, more conveniently, you can also
-repartition your disk from the AlphaBIOS setup menu).  Otherwise, it
-is not really necessary to partition from Windows; the Linux
-partitioning tools will generally do a better job.  Note that when you
-run NT, the Disk Administrator may offer you to write a ``harmless
-signature'' on non-Windows disks if you have any.  <emphasis>Never</emphasis> let
-it do that, as this signature will destroy the partition information.
+Windows NT benutzt eine Partitionstabelle, wie sie beim PC verwendet wird.
+Wenn Sie eine existierende FAT- oder NTFS-Partition verändern wollen, wird
+empfohlen, die nativen Windows NT-Werkzeuge (oder das AlphaBIOS
+Setup-Menü) zu verwenden. Ansonsten ist es nicht wirklich notwendig,
+von Windows aus zu partitionieren; die Linux-Partitionsprogramme führen
+ihre Arbeit im Normalfall besser durch. Beachten Sie: wenn Sie Windows NT
+starten, wird Ihnen der Disk Administrator möglicherweise anbieten, eine
+``harmlose Signatur'' auf nicht-Windows Festplatten zu schreiben, falls
+Sie welche haben. Lassen Sie das <emphasis>nie</emphasis> tun, da diese
+Signatur die Partitionesinformationen zerstören wird.
 
 </para><para>
 
-If you plan to boot Linux from an ARC/AlphaBIOS/ARCSBIOS console, you
-will need a (small) FAT partition for MILO.  5 Mb is quite
-sufficient.  If Windows NT is installed, its 6 Mb bootstrap partition
-can be employed for this purpose.
+Wenn Sie vorhaben, Linux von einer ARC/AlphaBios/ARCBIOS-Konsole aus
+hochzustarten, benötigen Sie eine (kleine) FAT Partition für MILO. 5MB
+reichen hierfür aus. Wenn Windows NT installiert ist, kann dessen 6MB große
+Bootstrap-Partition hierfür verwendet werden.
 
 </para>
   </sect2>

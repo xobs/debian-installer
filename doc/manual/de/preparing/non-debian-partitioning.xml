@@ -1,24 +1,24 @@
-<!-- retain these comments for translator revision tracking -->
-<!-- $Id: non-debian-partitioning.xml 12756 2004-04-06 22:23:56Z fjpop-guest $ -->
+<!-- original version: 14559 $ -->
 
  <sect1 id="non-debian-partitioning">
- <title>Pre-Partitioning for Multi-Boot Systems</title>
+ <title>Vor dem Partitionieren von Multiboot-Systemen</title>
 <para>
 
-Partitioning your disk simply refers to the act of breaking up your
-disk into sections. Each section is then independent of the others.
-It's roughly equivalent to putting up walls inside a house; if you add
-furniture to one room it doesn't affect any other room.
+Das Partitionieren Ihrer Festplatten ist das Aufteilen Ihrer Festplatte
+in einzelne Abschnitte. Jeder Abschnitt ist von den anderen unabhängig. Es
+ist so ähnlich wie das Aufstellen von Wänden in Ihrem Haus; wenn Sie in
+einem Raum ein Möbelstück aufstellen, beeinflusst das die anderen Räume
+nicht.
 
 </para><para arch="s390">
 
-Whenever this section talks about ``disks'' you should translate this
-into a DASD or VM minidisk in the &arch-title; world. Also a machine means
-an LPAR or VM guest in this case.
+Wenn dieser Abschnitt von ``Platten'' handelt, sollten Sie das mit
+DSAD oder VM minidisk in der &arch-title; Welt übersetzen. Mit einem Rechner
+ist in diesem Fall ein LPAR oder VM-Gast gemeint.
 
 </para><para>
 
-If you already have an operating system on your system
+Wenn Sie bereits ein Betriebssystem 
 
 <phrase arch="i386">
 (Windows 9x, Windows NT/2000/XP, OS/2, MacOS, Solaris, FreeBSD, &hellip;)
@@ -32,38 +32,41 @@ If you already have an operating system on your system
 (VM, z/OS, OS/390, &hellip;)
 </phrase>
 
-and want to stick Linux on the same disk, you will need to repartition
-the disk. Debian requires its own hard disk partitions. It cannot be
-installed on Windows or MacOS partitions. It may be able to share some
-partitions with other Linux systems, but that's not covered here. At
-the very least you will need a dedicated partition for the Debian
-root.
+auf Ihrem System installiert haben und Linux auf die gleiche Festplatte
+installieren möchten, müssen Sie sie neu partitionieren. Debian benötigt
+eigene Festplatten-Partitionen. Es kann nicht auf Windows- oder MacOS
+Partitionen installiert werden. Es kann möglicherweise Partitionen mit
+anderen Linux-Systemen teilen, was hier jedoch nicht behandelt wird.
+Sie brauchen mindestens eine Partition, die dem Hauptverzeichnis von
+Debian gewidmet ist.
 
 </para><para>
 
-You can find information about your current partition setup by using
-a partitioning tool for your current operating system
+Sie können Informationen über Ihre bisherigen Partitionen mit einem
+Partitionierungs-Tool Ihres aktuellen Betriebssystems
 
-<phrase arch="i386">, such as fdisk or PartitionMagic</phrase>
+<phrase arch="i386">, wie etwa fdisk oder PartitionMagic</phrase>
 
-<phrase arch="powerpc">, such as Drive Setup, HD Toolkit, or MacTools</phrase>
+<phrase arch="powerpc">, wie etwa Drive Setup, HD Toolkit, oder MacTools</phrase>
 
-<phrase arch="m68k">, such as HD SC Setup, HDToolBox, or SCSITool</phrase>
+<phrase arch="m68k">, wie etwa HD SC Setup, HDToolBox, oder SCSITool</phrase>
 
-<phrase arch="s390">, such as the VM diskmap</phrase>
+<phrase arch="s390">, wie der VM diskmap</phrase>
 
-. Partitioning tools always provide a way to show existing partitions
-without making changes.
+herausfinden. Partitionierungsprogramme bieten immer eine Möglichkeit,
+existierende Partitionen anzuzeigen, ohne Änderungen vorzunehmen.
 
 </para><para>
 
-In general, changing a partition with a file system already on
-it will destroy any information there. Thus you should always make
-backups before doing any repartitioning.  Using the analogy of the
-house, you would probably want to move all the furniture out of the
-way before moving a wall or you risk destroying it.
+Normalerweise zerstört eine Änderung einer Partition mit einem Dateisystem
+alle Daten, die darauf gespeichert sind. Daher sollten Sie vor einer
+Neupartitionierung immer alle Ihre Daten sichern. Denken Sie an die
+Analogie mit dem Haus, auch dort würden Sie Ihr Mobiliar aus dem Zimmer
+räumen, bevor Sie die Mauer einbauen, da Sie ansonsten riskieren, es zu
+zerstören.
 
-<phrase arch="i386"> Luckily, there is an alternative for some users; see 
+<phrase arch="i386"> Glücklicherweise gibt es für einige Benutzer eine
+Alternative; Siehe 
 <xref linkend="lossless"/>. </phrase>
 </para>
 
@@ -73,116 +76,116 @@ way before moving a wall or you risk destroying it.
 
 </para><para>
 
-If your computer has more than one hard disk, you may want to dedicate
-one of the hard disks completely to Debian. If so, you don't need to
-partition that disk before booting the installation system; the
-installer's included partitioning program can handle the job nicely.
+Wenn Ihr Rechner mehr als eine Festplatte hat, möchten Sie möglicherweise
+eine der Festplatten komplett für Debian verwenden. Wenn dies der Fall
+ist, müssen Sie diese Festplatte nicht partitionieren, bevor Sie das
+Installationssystem hochstarten; das beim Installer inkludierte
+Partitionierungsprogramm kann diese Aufgabe problemlos übernehmen.
 
 </para><para>
 
-If your machine has only one hard disk, and you would like to
-completely replace the current operating system with &debian;,
-you also can wait to partition as part of the installation process
-(<xref linkend="partman"/>), after you have booted the
-installation system.  However this only works if you plan to boot the
-installer system from tapes, CD-ROM or files on a connected machine.
-Consider: if you boot from files placed on the hard disk, and then
-partition that same hard disk within the installation system, thus
-erasing the boot files, you'd better hope the installation is
-successful the first time around.  At the least in this case, you
-should have some alternate means of reviving your machine like the
-original system's installation tapes or CDs.
+Wenn Ihr Gerät nur eine Festplatte hat, und Sie Ihr Betriebssystem komplett
+durch &debian; ersetzen wollen, können Sie mit dem Partitionieren auch
+warten, bis es als Teil des Installationsprozesses aufgerufen wird
+(<xref linked="partman"/>), nachdem Sie das Installationssystem gestartet
+haben. Das funktioniert jedoch nur, wenn Sie den Installer von
+System-Tapes, CD-ROM oder Dateien auf einem verbundenen Gerät starten.
+Denken Sie daran: wenn Sie von Dateien hochstarten, die sich auf der
+Festplatte befinden, und diese Festplatte im Installationsvorgang neu
+partitionieren, sollten Sie besser hoffen, dass die Installation gleich
+auf Anhieb erfolgreich funktioniert. Zumindest sollten Sie in diesem
+Fall eine alternative Methode zum wiederherstellen des Systems wie zum
+Beispiel die CDs oder Tapes der Originalinstallation bereithalten.
 
 </para><para>
 
-If your machine already has multiple partitions, and enough space can
-be provided by deleting and replacing one or more of them, then you
-too can wait and use the Debian installer's partitioning program. You
-should still read through the material below, because there may be
-special circumstances like the order of the existing partitions within
-the partition map, that force you to partition before installing
-anyway.
+Wenn Ihr Gerät bereits mehrere Partitionen hat und genug Platz durch das
+Löschen oder Ersetzen von einer oder mehreren von ihnen geschaffen werden
+kann, dann können Sie auch warten und das Partitionierungsprogramm des
+Debian Installers verwenden. Sie sollten sich trotzdem die folgenden
+Informationen durchlesen, da es spezielle Umstände wie die Reihenfolge
+der existierenden Partitionen innerhalb der Partitionstabelle gibt,
+die Sie dazu zwingen, die Partitionierung vor der Installation durchzuführen.
 
 </para><para>
 
-In all other cases, you'll need to partition your hard disk before
-starting the installation to create partition-able space for
-Debian. If some of the partitions will be owned by other operating
-systems, you should create those partitions using native operating
-system partitioning programs. We recommend that you do
-<emphasis>not</emphasis> attempt to create Debian Linux partitions
-using another operating system's tools. Instead, you should just
-create the native operating system's partitions you will want to
-retain.
+In allen anderen Fällen müssen Sie Ihre Festplatte vor der Installation
+neu partitionieren, um partitionierbaren Platz für Debian zu schaffen.
+Wenn einige der Partitionen zu anderen Betriebssystemen gehören, sollten
+Sie diese unter Verwendung der Partitionsprogramme dieser Betriebssysteme
+anlegen. Wir empfehlen, dass Sie <emphasis>nicht</emphasis> versuchen,
+Debian Linux Partitionen unter Verwendung von Systemprogrammen anderer
+Betriebssysteme zu erstellen. Statt dessen sollten Sie nur die nativen
+Partitionen dieses Betriebssystems erstellen, die Sie behalten wollen.
 
 </para><para>
 
-If you are going to install more than one operating system on the same
-machine, you should install all other system(s) before proceeding with
-Linux installation. Windows and other OS installations may destroy
-your ability to start Linux, or encourage you to reformat non-native
-partitions.
+Wenn Sie mehr als ein Betriebssystem auf dem gleichen Gerät installieren,
+sollten Sie alle anderen Betriebssysteme installieren, bevor Sie mit
+der Linux Installation fortfahren. Windows und andere Betriebssystem
+Installationen können die Möglichkeit zum Starten von Linux zerstören,
+oder Ihnen empfehlen, nicht-eigene Partitionen neu zu formatieren.
 
 </para><para>
 
-You can recover from these actions or avoid them, but installing
-the native system first saves you trouble.
+Sie können Beschädigungen durch diese Aktionen reparieren oder vermeiden,
+aber das vorherige Installieren dieser Systeme erspart Probleme.
 
 </para><para arch="powerpc">
 
-In order for OpenFirmware to automatically boot &debian; the Linux
-partitions should appear before all other partitions on the disk,
-especially MacOS boot partitions. This should be kept in mind when
-pre-partitioning; you should create a Linux placeholder partition to
-come <emphasis>before</emphasis> the other bootable partitions on the
-disk. (The small partitions dedicated to Apple disk drivers are not
-bootable.) You can delete the placeholder with the Linux partition
-tools later during the actual install, and replace it with Linux
-partitions.
+Damit OpenFirmware &debian; automatisch hochstartet, sollten sich die
+Linux Partitionen vor allen anderen Partitionen auf der Platte befinden,
+speziell vor Mac-OS Boot Partitionen. Daran sollte beim Vor-partitionieren
+denken; Sie sollten eine Linux Platzhalter Partition <emphasis>vor</emphasis>
+den anderen hochstartbaren Partitionen auf der Platte anlegen. (Die kleinen
+Partitionen, die Apple Disk Treibern gewidmet sind, sind nicht hochstartbar.)
+Sie können den Platzhalter mit den Linux Partitionsprogrammen später während
+der eigentlichen Installation löschen und durch Linux Partitionen ersetzen.
 
 </para><para>
 
-If you currently have one hard disk with one partition (a common setup
-for desktop computers), and you want to multi-boot the native
-operating system and Debian, you will need to:
+Wenn Sie momentan eine Festplatte mit einer Partition haben (eine gängige
+Einstellung für Desktop-Computer), und Sie wollen das aktuelle Betriebssystem
+und Debian per Multi-Boot hochstarten, so müssen Sie:
 
   <orderedlist>
 <listitem><para>
 
-Back up everything on the computer.
+Alles auf dem Computer heruntersichern.
 
 </para></listitem>
 <listitem><para>
 
-Boot from the native operating system installer media such as CD-ROM
-or tapes.
+Mit dem originalen Betriebssystem Installationsmedium wie der CD-ROM oder
+den Tapes hochstarten.
 
-<phrase arch="powerpc">When booting from a MacOS CD, hold the
-<keycap>c</keycap> key while 
-booting to force the CD to become the active MacOS system.</phrase>
-
-</para></listitem>
-<listitem><para>
-
-Use the native partitioning tools to create native system
-partition(s). Leave either a place holder partition or free space for
-&debian;.
+<phrase arch="powerpc">Wenn Sie von einer Mac-OS CD hochstarten, halten Sie
+die <keycap>c</keycap> Taste während des Hochstartens gedrückt,
+um den Start des Mac-OS Systems von der CD zu erzwingen.</phrase>
 
 </para></listitem>
 <listitem><para>
 
-Install the native operating system on its new partition.
+Verwenden Sie das native Partitionierungsprogramm zum Erstellen der
+nativen Systempartition(en). Erzeugen Sie entweder eine Platzhalter
+Partition oder lassen Sie freien Speicherplatz für &debian;.
 
 </para></listitem>
 <listitem><para>
 
-Boot back into the native system to verify everything's OK,
-    and to download the Debian installer boot files.
+Installieren Sie das native Betriebssystem in seiner neuen Partition.
 
 </para></listitem>
 <listitem><para>
 
-Boot the Debian installer to continue installing Debian.
+Starten Sie das native Betriebssystem hoch, um sicherzustellen, dass alles
+funktioniert, und um die Debian Installer Boot-Dateien herunterzuladen.
+
+</para></listitem>
+<listitem><para>
+
+Starten Sie den Debian Installer, um mit der Debian Installation
+fortzufahren.
 
 </para></listitem>
 </orderedlist>

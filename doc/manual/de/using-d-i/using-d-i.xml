@@ -1,82 +1,85 @@
-<!-- retain these comments for translator revision tracking -->
-<!-- $Id: using-d-i.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
+<!-- original version: 14559 -->
 
 
- <chapter id="d-i-intro"><title>Using the Debian Installer</title>
+ <chapter id="d-i-intro"><title>Den Debian Installer verwenden</title>
 
- <sect1><title>How the Installer Works</title>
+ <sect1><title>Wie der Installer funktioniert</title>
 <para>
 
-The Debian Installer consists of a number of special-purpose
-components to perform each installation task. Each component performs
-its task, asking the user questions as necessary to do its job. If
-there is no problem, the next component in the sequence takes over
-without any user interaction (other than various progress messages).
-When there is a problem, the user will see an error screen, and the
-installer menu may be shown in order to select some alternative
-action. If there are no problems, the user will never see the
-installer menu, but will simply answer questions for each component
-in turn. 
+Der Debian Installer besteht aus einer Reihe von Komponenten für spezielle
+Zwecke, die die einzelnen Installationsaufgaben übernehmen. Jede Komponente
+führt seine Aufgabe aus, und fragt vom Benutzer die dazu nötigen Informationen
+ab. Wenn kein Problem aufgetreten ist, wird die nächste Komponente im
+Ablauf aufgerufen, ohne dass der Benutzer eingreifen muss (other than
+various progress messages). Wenn ein Problem auftritt, wird eine Fehlermeldung
+angezeigt, und das Installer Menü kann aufgerufen werden, um alternative
+Aktionen auszuwählen. Wenn keine Probleme auftreten, wird der Benutzer
+das Installer Menü nicht zu sehen bekommen, sondern einfach die
+Fragen für jede Komponente der Reihe nach beantworten.
 
 </para><para>
 
-The questions themselves are given priorities, and the priority
-of questions to be asked can be set. Thus if the installer knows
-what to do, and the user need not be aware of other choices which
-are available, then the installer will make the choice and not
-display the question. Serious error notifications are set to 
-priority 'critical' so the user will always be notified.
+Den Fragen selbst werden Prioritäten zugeteilt, und die Prioritätsstufe der
+Fragen, die gestellt werden, kann eingestellt werden. Wenn der Installer
+weiß, was zu tun ist, und der Benutzer nicht über die anderen
+Auswahlmöglichkeiten informiert werden muss, trifft der Installer die
+Auswahl und zeigt die Frage nicht an. Gravierende Fehlermitteilungen
+sind auf die Prioritätsstufe 'critical' gesetzt, so dass der Benutzer
+diese immer angezeigt bekommt.
 
 </para><para>
 
-Power users may be more comfortable with a menu-driven interface,
-where each step is controlled by the user rather than the installer
-performing each step automatically in sequence. To use the installer
-in a manual, menu-driven way, add the boot argument
-<userinput>DEBCONF_PRIORITY=medium</userinput>.
+Fortgeschrittene Benutzer werden mit einer Menü-basierten Oberfläche
+leichter zurecht kommen, wo jeder Schritt vielmehr vom Benutzer kontrolliert
+wird als dass der Installer diese Schritte automatisch der Reihe nach
+ausführt. Um den Installer auf die händische, Menü-basierte Art zu verwenden,
+fügen Sie den Boot-Parameter <userinput>DEBCONF_PRIORITY=medium</userinput>
+hinzu.
 
 </para><para>
 
-The normal installer display is character-based (as opposed to the now
-more familiar graphical interface). The mouse is not operational in
-this environment. Here are the keys you can use to navigate within the
-various dialogs.  The <keycap>right</keycap> arrow or
-<keycap>Tab</keycap> key move `forward', and <keycap>left</keycap>
-arrow or <keycombo> <keycap>Shift</keycap> <keycap>Tab</keycap>
-</keycombo> move `backward' between displayed buttons and selections.
-The <keycap>up</keycap> and <keycap>down</keycap> arrow select
-different items within a scrollable list, and also scroll the list
-itself. In addition, in long lists, you can type a letter to cause the
-list to scroll directly to the section with items starting with the
-letter you typed and use <keycap>Pg-Up</keycap> and
-<keycap>Pg-Down</keycap> to scroll the list in sections.  The
-<keycap>space bar</keycap> selects an item such as a checkbox.  Use
-&enterkey; to activate choices.
+Die normale Installer-Anzeige ist Zeichen-basiert (im Gegensatz zu den
+heutzutage verbreiteteren grafischen Oberflächen). Die Maus funktioniert
+in dieser Umgebung nicht. Die folgenden Tasten können zum Navigieren durch
+die verschiedenen Dialoge benutzt werden. Der Pfeil nach
+<keycap>rechts</keycap> oder die <keycap>Tab</keycap> Taste springen
+`vorwärts', und der Pfeil nach <keycap>links</keycap> oder
+<keycombo> <keycap>Shift</keycap> <keycap>Tab</keycap> </keycombo> springen
+`rückwärts' zwischen den angezeigten Schaltflächen und Auswahlfeldern.
+Die Pfeile nach <keycap>oben</keycap> und <keycap>unten</keycap> wählen
+verschiedene Elemente in scrollbaren Listen aus, und scrollen auch die Liste
+selbst. Zusätzlich können Sie einen Buchstaben tippen, um direkt zu dem
+Bereich mit Elementen zu springen, die mit diesem Buchstaben beginnen, oder
+<keycap>Page-Up</keycap> und <keycap>Page-Down</keycap> zum Scrollen der
+Liste in Abschnitten verwenden. Die <keycap>Leertaste</keycap> aktiviert
+Elemente Checkboxen. Verwenden Sie &enterkey; zum Aktivieren von Auswahlen.
+
 
 </para><para arch="s390">
 
-S/390 does not support virtual consoles. You may open a second and third
-telnet session to view the logs described below.
+S/390 unterstützt keine virtuellen Konsolen. Sie können eine zweite und
+dritte Telnet Sitzung starten, um die Logs wie weiter unten beschrieben
+anzusehen.
 
 </para><para>
 
-Error messages are redirected to the third console (known as
-<userinput>tty3</userinput>).  You can access this console by
-pressing <keycombo><keycap>Left Alt</keycap><keycap>F3</keycap></keycombo>
-(hold the <keycap>Alt</keycap> key while pressing the
-<keycap>F3</keycap> function key); get back to
-the main installer process with 
-<keycombo><keycap>Left Alt</keycap><keycap>F1</keycap></keycombo>.
+Fehlermeldungen werden auf die dritte Konsole umgeleitet (auch als
+<userinput>tty3</userinput> bekannt). Sie können auf diese Konsole durch
+Drücken von
+<keycombo><keycap>Linke Alt-Taste</keycap><keycap>F3</keycap></keycombo>
+wechseln (halten Sie die <keycap>Alt-Taste</keycap> gedrückt, während Sie die
+<keycap>F3</keycap> Funktionstaste drücken); zum Installer können Sie mit
+<keycombo><keycap>Linke Alt-Taste</keycap><keycap>F1</keycap> wechseln.
 
 </para><para>
 
-These messages can also be found in
-<filename>/var/log/messages</filename>.  After installation, this log
-is copied to <filename>/var/log/installer.log</filename> on your new
-system. Other installation messages may be found in
-<filename>/target/var/log/debian-installer/</filename> during the
-installation, and <filename>/var/log/debian-installer/</filename>
-after the computer has been booted into the installed system.
+Diese Meldungen können auch unter
+<filename>/var/log/messages</filename> gefunden werden. Nach der Installation
+wird diese Datei nach <filename>/var/log/installer.log</filename> auf dem
+neuen System kopiert. Andere Installationsmeldungen können während der
+Installation unter <filename>/target/var/log/debian-installer/</filename>
+und nach dem Start in das neu installierte System unter
+<filename>/var/log/debian-installer/</filename> gefunden werden.
 
 </para>
  </sect1>
@@ -85,24 +88,27 @@ after the computer has been booted into the installed system.
   <sect1 id="modules-list"><title>Components Introduction</title>
 <para>
 
-Here is a list of installer components with a brief description
-of each component's purpose. Details you might need to know about
-using a particular component are in <xref linkend="module-details"/>.
+Hier ist eine Liste der Installer-Komponenten mit einer kurzen
+Beschreibung der Aufgabe jeder Komponente. Details, die Sie über die
+Verwendung einer speziellen Komponente wissen wollen, finden Sie in
+<xref linked="module-details"/>.
 
 </para>
 
 <variablelist>
 <varlistentry>
 
-<term>main-menu</term><listitem><para>
+<term>Hauptmenü</term><listitem><para>
 
-Shows the list of components to the user during installer operation,
-and starts a selected component when it is selected. Main-menu's
-questions are set to priority MEDIUM, so if your priority is set to
-HIGH or CRITICAL (HIGH is the default), you will not see the menu. On
-the other hand, if there is an error which requires your intervention,
-the question priority may be downgraded temporarily to allow you
-to resolve the problem, and in that case the menu may appear.
+Zeigt die Liste der Komponenten während des Installationsvorgangs an,
+und startet eine ausgewählte Komponente, wenn diese aktiviert wird.
+Die Fragen des Hauptmenüs sind auf die Prioritätsstufe MEDIUM gesetzt,
+so dass Sie dieses Menü nicht sehen, wenn die Prioritätsstufe auf
+HIGH oder CRITICAL (HIGH ist der Standard) gesetzt ist. Andernseits
+kann die Prioritätsstufe vorübergehend heruntergesetzt werden,
+wenn ein Fehler vorkommt, der einen Eingriff verlangt, um Ihnen
+zu ermöglichen, das Problem zu lösen, und in diesem Fall kann das
+Menü erscheinen.
 
 </para></listitem>
 </varlistentry>
@@ -110,10 +116,10 @@ to resolve the problem, and in that case the menu may appear.
 
 <term>languagechooser</term><listitem><para>
 
-Shows a list of languages and language variants. The installer will
-display messages in the chosen language, unless the translation for
-that language is not complete. When a translation is not complete,
-English messages are shown.
+Zeigt eine Liste der Sprachen und Sprachvarianten. Der Installer zeigt
+die Meldungen in der ausgewählten Sprache an, es sei denn die Übersetzung
+für diese Sprache ist nicht komplett. Ist dies der Fall, so werden die
+Meldungen auf Englisch angezeigt.
 
 </para></listitem>
 </varlistentry>
@@ -121,8 +127,8 @@ English messages are shown.
 
 <term>countrychooser</term><listitem><para>
 
-Shows a list of countries. The user may choose the country he lives
-in.
+Zeigt eine Liste der Länder. Der Benutzer kann hier das Land auswählen, in
+dem er lebt.
 
 </para></listitem>
 </varlistentry>
@@ -130,7 +136,8 @@ in.
 
 <term>ddetect</term><listitem><para>
 
-Detects hard disks, either installed or attached to the computer.
+Erkennt Festplatten, die entweder im Computer eingebaut oder am Computer
+angeschlossen sind.
 
 </para></listitem>
 </varlistentry>
@@ -138,8 +145,8 @@ Detects hard disks, either installed or attached to the computer.
 
 <term>pcmcia</term><listitem><para>
 
-Allows the user to configure PCMCIA cards used in laptops for 
-networking.
+Ermöglicht dem Benutzer, in Laptops für das Netzwerk verwendete PCMCIA-Karten
+zu konfigurieren. 
 
 </para></listitem>
 </varlistentry>
@@ -147,8 +154,7 @@ networking.
 
 <term>kbd-chooser</term><listitem><para>
 
-Shows a list of keyboards, from which the user chooses the model which
-matches his own.
+Zeigt eine Liste der Keyboards, aus der der Benutzer sein Modell auswählt.
 
 </para></listitem>
 </varlistentry>
@@ -156,8 +162,8 @@ matches his own.
 
 <term>netcfg</term><listitem><para>
 
-Configures the computer's network connections so it can communicate
-over the internet.
+Konfiguriert die Netzwerkverbindungen des Computers, damit er über das
+Internet kommunizieren kann.
 
 </para></listitem>
 </varlistentry>
@@ -165,8 +171,8 @@ over the internet.
 
 <term>iso-scan</term><listitem><para>
 
-Looks for ISO file systems, which may be on a CD-ROM or on the 
-hard drive.
+Sucht nach ISO-Datei-Systemen, die sich auf einer CD-ROM oder auf der Festplatte
+befinden können.
 
 </para></listitem>
 </varlistentry>
@@ -174,9 +180,9 @@ hard drive.
 
 <term>choose-mirror</term><listitem><para>
 
-Presents a list of Debian archive mirrors. The user may choose
-the source of his installation packages. Commonly, a CD-ROM or 
-network mirror are chosen.
+Präsentiert eine Liste von Debian-Archiv-Mirrors. Der Benutzer kann
+die Installationsquelle für seine Installationspakete auswählen. Üblicherweise
+wird hier eine CD-ROM oder ein Netzwerk-Mirror ausgewählt.
 
 </para></listitem>
 </varlistentry>
@@ -184,7 +190,8 @@ network mirror are chosen.
 
 <term>cdrom-detect</term><listitem><para>
 
-Detects CD-ROM drives, either installed or attached to the computer.
+Erkennt CD-ROM Laufwerke, die im Computer eingebaut oder an den Computer
+angeschlossen sind.
 
 </para></listitem>
 </varlistentry>
@@ -192,8 +199,8 @@ Detects CD-ROM drives, either installed or attached to the computer.
 
 <term>anna</term><listitem><para>
 
-Anna's Not Nearly APT. Installs packages which have been retrieved
-from the chosen mirror.
+Anna's Not Nearly APT. Installiert Pakete, die von dem ausgewählten Mirror
+geholt worden sind.
 
 </para></listitem>
 </varlistentry>
@@ -201,11 +208,11 @@ from the chosen mirror.
 
 <term>partman</term><listitem><para>
 
-Allows the user to partition disks attached to the system, create file
-systems on the selected partitions, and attach them to the
-mountpoins. Included are also interesting features like a fully
-automatic mode or LVM support. This is the preferred partitioning tool
-in Debian.
+Ermöglicht dem Benutzer, die am System angeschlossenen Festplatten zu
+partitionieren, Dateisysteme darauf zu erstellen und sie in die Mount-Points
+einzuhängen. Interessante Features wie ein komplett automatischer Modus
+oder LVM Unterstützung sind inkludiert. Dies ist das bevorzuge
+Partitionierungsprogramm unter Debian.
 
 </para></listitem>
 </varlistentry>
@@ -213,8 +220,7 @@ in Debian.
 
 <term>autopartkit</term><listitem><para>
 
-Automatically partitions an entire disk according to preset 
-user preferences.
+Partitioniert eine komplette Platte nach vorgegebenen Benutzer-Einstellungen.
 
 </para></listitem>
 </varlistentry>
@@ -222,9 +228,9 @@ user preferences.
 
 <term>partitioner</term><listitem><para>
 
-Allows the user to partition disks attached to the system. A 
-partitioning program appropriate to your computer's architecture
-is chosen.
+Ermöglicht dem Benutzer, die an das System angeschlossenen Platten zu
+partitionieren. Ein von der Architektur Ihres Computers abhängiges
+Partitionierungsprogramm wird verwendet.
 
 </para></listitem>
 </varlistentry>
@@ -232,8 +238,8 @@ is chosen.
 
 <term>partconf</term><listitem><para>
 
-Displays a list of partitions, and creates file systems on 
-the selected partitions according to user instructions.
+Zeigt eine Liste von Partitionen an, und erzeugt Dateisysteme auf den
+ausgewählten Partitionen entsprechend den Benutzereingaben.
 
 </para></listitem>
 </varlistentry>
@@ -241,8 +247,8 @@ the selected partitions according to user instructions.
 
 <term>base-installer</term><listitem><para>
 
-Installs the most basic set of packages which would allow
-the computer to operate under Linux when rebooted. 
+Installiert die wichtigste Reihe von Paketen, die dem Computer nach dem
+Neustart den Betrieb unter Linux ermöglichen.
 
 </para></listitem>
 </varlistentry>
@@ -250,8 +256,8 @@ the computer to operate under Linux when rebooted.
 
 <term>kernel-chooser</term><listitem><para>
 
-Allows the user to choose an operating system kernel version,
-if there is more than one version available.
+Ermöglicht dem Benutzer die Auswahl einer Betriebssystem-Kernel-Version,
+wenn mehr als eine einzige verfügbar sind.
 
 </para></listitem>
 </varlistentry>
@@ -259,10 +265,10 @@ if there is more than one version available.
 
 <term>bootloader-installer</term><listitem><para>
 
-Installs a boot loader program on the hard disk, which is necessary
-for the computer to start up using Linux without using a floppy or
-CD-ROM.  Many boot loaders allow the user to choose an alternate
-operating system each time the computer boots.
+Installiert ein Boot-Loader-Programm auf der Festplatte, welches zum
+Hochstarten des Computers ohne Verwendung einer Diskette oder CD-ROM
+notwendig ist. Viele Boot-Loader erlauben dem Benutzer die Auswahl eines
+alternativen Betriebssystems bei jedem Hochstart des Computers.
 
 </para></listitem>
 </varlistentry>
@@ -270,9 +276,10 @@ operating system each time the computer boots.
 
 <term>baseconfig</term><listitem><para>
 
-Provides dialogs for setting up the base system packages according
-to user preferences. This is normally done after rebooting the 
-computer; it is the 'first run' of the new Debian system. 
+Bietet Dialoge zum Einstellen der Basis-System-Pakete entsprechend
+den Benutzer-Einstellungen. Das wird normalerweise nach dem Neustart
+des Computers durchgeführt; es wird beim ersten Hochstarten des neuen
+Debian Systems ausgeführt.
 
 </para></listitem>
 </varlistentry>
@@ -280,8 +287,8 @@ computer; it is the 'first run' of the new Debian system.
 
 <term>shell</term><listitem><para>
 
-Allows the user to execute a shell from the menu, or in the second
-console.
+Erlaubt dem Benutzer das Ausführen einer Shell aus dem Menü, oder auf der
+zweiten Konsole.
 
 </para></listitem>
 </varlistentry>
@@ -289,9 +296,10 @@ console.
 
 <term>bugreporter</term><listitem><para>
 
-Provides a way for the user to record information on a floppy disk
-when trouble is encountered, in order to accurately report installer
-software problems to Debian developers later.
+Bietet dem Benutzer die Möglichkeit, beim Auftauchen von Problemen
+Informationen auf einer Diskette abzuspeichern, um von Probleme
+mit der Installer Software den Debian-Entwicklern später präzise
+zu berichten.
 
 </para></listitem>
 </varlistentry>
@@ -300,7 +308,7 @@ software problems to Debian developers later.
 
  </sect1>
 
- <sect1 id="module-details"><title>Using Individual Components</title>
+ <sect1 id="module-details"><title>Verwenden der einzelnen Komponenten</title>
 
 &module-languagechooser.xml;
 &module-countrychooser.xml;
