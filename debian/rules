@@ -9,7 +9,8 @@ DISTRIBUTION=unstable
 endif
 
 ARCHIVEDIR=installer-$(ARCH)
-IMAGEDIR=$(ARCHIVEDIR)/$(DATE)/images
+DESTDIR=$(ARCHIVEDIR)/$(DATE)
+IMAGEDIR=$(DESTDIR)/images
 TARNAME=debian-installer-images_$(VERSION)_$(ARCH).tar.gz
 
 # Work out the name(s) of the kernel that the demo deb should depend on.
@@ -43,9 +44,9 @@ install: build
 	dh_testroot
 	dh_clean -k
 	dh_install
-	install -d debian/tmp/$(IMAGEDIR)/doc
+	install -d debian/tmp/$(DESTDIR)/doc
+	cp debian/*.html debian/INSTALLATION-HOWTO debian/tmp/$(DESTDIR)/doc
 	cp -p dest/* debian/tmp/$(IMAGEDIR)
-	cp debian/*.html debian/INSTALLATION-HOWTO debian/tmp/$(IMAGEDIR)/doc
 	cd debian/tmp/$(IMAGEDIR) && md5sum `find . -type f` > MD5SUMS
 	ln -s $(DATE) debian/tmp/$(ARCHIVEDIR)/current
 
