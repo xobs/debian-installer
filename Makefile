@@ -703,7 +703,7 @@ _stats:
 	@(set -e; $(submake) _build >$(BASE_TMP)log 2>&1 || \
 	  (echo "build failure!"; cat $(BASE_TMP)log; false))
 	@rm -f $(BASE_TMP)log
-	@$(submake) general-stats
+	@[ ! -f $(TEMP)/diskusage.txt ] || $(submake) general-stats
 
 TOTAL_SZ = $(shell du -hs $(TREE) | cut -f 1)
 LIBS_SZ = $(shell [ -d $(TREE)/lib ] && du -hs --exclude=modules $(TREE)/lib |cut -f 1)
