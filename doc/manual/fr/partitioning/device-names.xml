@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 12766 -->
+<!-- original version: 18767 -->
 
 
  <sect1 id="device-names">
  <title>Noms des périphériques sous Linux</title>
 <para>
 
-Le nom des disques et des partitions sous Linux est différent des autres
+Le nom des disques et des partitions sous Linux peut être différent des autres
 systèmes d'exploitation. Vous devez connaître les noms utilisés lors
 de la création et du montage de partitions. Voici les principales
 conventions de nommage&nbsp;:
@@ -90,16 +90,13 @@ le deuxième, <filename>/dev/adb</filename>.
 <itemizedlist arch="s390">
 <listitem><para>
 
-Les services DASD sont appelés 
-<filename>/dev/dasd/<replaceable>xxxx</replaceable>/device</filename> où 
-<replaceable>xxxx</replaceable> est le numéro de périphérique en notation 
-hexadécimale. Le noyau fourni avec &debian; utilise 
-<filename>devfs</filename>, de sorte que les noeuds du périphérique soient 
-créés et supprimés automatiquement quand les DASD sont attachés ou détachés. 
-Veuillez lire le chapitre 3 de
-<ulink url="http://oss.software.ibm.com/developerworks/opensource/linux390/docu\/l390dd08.pdf">
-Pilotes de périphériques et commandes d'installation</ulink> pour de plus 
-amples informations.
+Le premier périphérique DASD est appelé
+<filename>/dev/dasda</filename>.
+
+</para></listitem>
+<listitem><para>
+Le second périphérique DASD est appelé
+<filename>/dev/dasdb</filename>, etc.
 
 </para></listitem>
 </itemizedlist>
@@ -119,11 +116,11 @@ l'adresse 2) est nommé <filename>sda</filename>, et le second
 <filename>sdb</filename>. Si le disque <filename>sda</filename> a 
 trois partitions, elles s'appelleront <filename>sda1</filename>, 
 <filename>sda2</filename> et<filename>sda3</filename>. La même convention 
-s'applique au disque <filename>sdb</filename> et ses partitions.
+s'applique au disque <filename>sdb</filename> et à ses partitions.
 
 </para><para arch="not-s390">
 
-Notez que si vous avez deux adaptateurs SCSI (c.-à-d. des contrôleurs),
+Notez que si vous avez deux adaptateurs SCSI (c.-à-d. des contrôleurs SCSI),
 l'ordre de nommage des disques peut-être embrouillé. La meilleure
 solution est de regarder les messages au démarrage, en supposant que
 vous connaissiez les modèles ou les tailles des disques.
@@ -135,7 +132,7 @@ des nombres 1 à 4. Par exemple la première partition sur le premier
 disque IDE est <filename>/dev/hda1</filename>. Les partitions logiques sont
 numérotées à partir de 5. Donc, la première partition logique sur ce
 même disque est <filename>/dev/hda5</filename>. Rappelez-vous que la partition
-étendue, c'est à dire la partition primaire contenant les partitions
+étendue, c'est-à-dire la partition primaire contenant les partitions
 logiques, n'est pas utilisable en elle-même.
 Cela s'applique aussi bien aux disques IDE qu'aux disques SCSI.
 
@@ -152,15 +149,14 @@ Les partitions des disques Sun autorisent 8 partitions différentes (ou
 tranches, <emphasis>slices</emphasis>). La troisième partition est 
 habituellement (et de préférence) la partition  «&nbsp;Disque Entier&nbsp;».
 Cette partition référence tous les secteurs du disque, et est utilisée
-par le chargeur (soit SILO, soit celui de Sun).
+par le programme d'amorçage (soit SILO, soit celui de Sun).
 
 </para><para arch="s390">
 
-Les partitions de disques &arch-title; autorisent 3 partitions différentes.
-Elles sont appelées
-<filename>/dev/dasd/<replaceable>xxxx</replaceable>/part1</filename>,
-<filename>/dev/dasd/<replaceable>xxxx</replaceable>/part2</filename> et
-<filename>/dev/dasd/<replaceable>xxxx</replaceable>/part3</filename>.
+Les partitions sur chaque disque sont représentées en ajoutant un
+numéro au nom du disque&nbsp;: <filename>dasda1</filename> et 
+<filename>dasda2</filename> représentent la première et la seconde partition du 
+premier périphérique DASD du système.
 
 </para>
  </sect1>
