@@ -24,6 +24,9 @@ UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE) )
 
 build: tree reduce
 
+demo:
+	chroot $(TREE) bin/sh
+
 clean:
 	rm -rf $(TREE) $(APTDIR) $(UDEBDIR)
 
@@ -63,9 +66,11 @@ tree: get_udebs
 	# To save a little room, the status file could be reduced
 	# to only contain those fields that udpkg knows about.
 
+	# This is temporary; I have filed a bug asking ash-udeb to include
+	# the link.
+	ln -s ash builddir/bin/sh
+
 # Library reduction.
 reduce: tree
 	mkdir -p $(TREE)/lib
 	mklibs.sh -d $(TREE)/lib `find $(TREE) -type f -perm +0111`
-
-.PHONY: tree reduce installer
