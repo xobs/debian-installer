@@ -226,6 +226,15 @@ endif
 	# Library reduction.
 	mkdir -p $(TREE)/lib
 	mklibs.sh -v -d $(TREE)/lib `find $(TREE) -type f -perm +0111 -o -name '*.so'`
+
+	# Remove any libraries that are present in both usr/lib and lib,
+	# from lib. These were unnecessarily copied in by mklibs, and
+	# we want to use the ones in usr/lib instead since they came 
+	# from udebs. Only libdebconf has this problem so far.
+	for lib in `find $(TREE)/usr/lib/lib* -type f -printf "%f\n" | cut -d . -f 1 | sort | uniq`; do \
+		rm $(TREE)/lib/$$lib.*; \
+	done
+	
 	# Now we have reduced libraries installed .. but they are
 	# not listed in the status file. This nasty thing puts them in,
 	# and alters their names to end in -reduced to indicate that
