@@ -64,6 +64,21 @@ FLOPPY_SIZE=1440
 # The floppy image to create.
 FLOPPY_IMAGE=$(DEST)/$(TYPE)-$(FLOPPY_SIZE).img
 
+# Creating floppy images requires mounting the image to copy files to it.
+# This generally needs root permissions. To let a user mount the floppy
+# image, add something like this to /etc/fstab:
+#   /dir/debian-installer/build/dest/tmp-mnt.img /dir/debian-installer/build/mnt vfat noauto,user,loop 0 0
+# Changing "/dir" to the full path to wherever debian-installer will be
+# built. Then if you uncomment this next line, the Makefile will use
+# commands that work with the above fstab line. Be careful: This lets any
+# user mount the image file you list in fstab, and the user who can create
+# that file could perhaps provide a maliciously constructed file that might
+# crash the kernel or worse.. Note that this line points to the temporary
+# image file to create, and MUST be an absolute path. Finally, when calling
+# the floppy_image target, you must *not* use fakeroot, or syslinux will
+# fail.
+#USER_MOUNT_HACK=$(shell pwd)/$(DEST)/tmp-mnt.img
+
 # What device to write floppies on
 FLOPPYDEV=/dev/fd0
 
@@ -319,7 +334,6 @@ tarball: tree
 
 # Make sure that the temporary mountpoint exists and is not occupied.
 tmp_mount:
-	dh_testroot
 	if mount | grep -q $(TMP_MNT) && ! umount $(TMP_MNT) ; then \
 		echo "Error unmounting $(TMP_MNT)" 2>&1 ; \
 		exit 1; \
@@ -344,21 +358,34 @@ $(INITRD):
 # 3. install syslinux
 floppy_image: Makefile initrd tmp_mount $(FLOPPY_IMAGE)
 $(FLOPPY_IMAGE):
-	dh_testroot
 	install -d $(DEST)
 
-	dd if=/dev/zero of=$(FLOPPY_IMAGE) bs=1k count=$(FLOPPY_SIZE)
-	mkfs.msdos -i deb00001 -n 'Debian Installer' -C $(FLOPPY_IMAGE)	$(FLOPPY_SIZE)
-	mount -t vfat -o loop $(FLOPPY_IMAGE) $(TMP_MNT)
+	dd if=/dev/zero of=$(FLOPPY_IMAGE).new bs=1k count=$(FLOPPY_SIZE)
+	mkfs.msdos -i deb00001 -n 'Debian Installer' -C $(FLOPPY_IMAGE).new $(FLOPPY_SIZE)
+
+ifdef USER_MOUNT_HACK
+	ln -sf `pwd`/$(FLOPPY_IMAGE).new $(USER_MOUNT_HACK)
+	mount $(TMP_MNT)
+else
+	mount -t vfat -o loop $(FLOPPY_IMAGE).new $(TMP_MNT)
+endif
 
 	cp $(KERNEL) $(TMP_MNT)/linux
 	cp $(INITRD) $(TMP_MNT)/initrd.gz
 
+	# Make the floppy bootable.
 	cp syslinux.cfg $(TMP_MNT)/
 	todos $(TMP_MNT)/syslinux.cfg
 	umount $(TMP_MNT)
-	# Make the floppy bootable. This command must run as root
-	syslinux $(SYSLINUX_OPTS) $(FLOPPY_IMAGE)
+	
+ifdef USER_MOUNT_HACK
+	syslinux $(SYSLINUX_OPTS) $(USER_MOUNT_HACK)
+else
+	syslinux $(SYSLINUX_OPTS) $(FLOPPY_IMAGE).new
+endif
+
+	# Finalize the image.
+	mv $(FLOPPY_IMAGE).new $(FLOPPY_IMAGE)
 
 # Copy files somewhere the CD build scripts can find them
 cd_content: floppy_image
