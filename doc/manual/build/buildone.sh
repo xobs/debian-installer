@@ -71,7 +71,7 @@ case $arch in
 	;;
     i386)
         archspec="i386;not-s390;not-m68k;not-powerpc;not-alpha"
-	kernelversion="2.4.26"
+	kernelversion="2.4.27"
 	
         fdisk="fdisk.txt;cfdisk.txt"
         network="supports-tftp;supports-dhcp;supports-bootp;supports-nfsroot"
