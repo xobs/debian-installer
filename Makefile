@@ -435,6 +435,11 @@ unifont-reduced-$(TYPE).bdf: all-$(TYPE).utf
 	# reduce-font is part of package libbogl-dev
 	# unifont.bdf is part of package bf-utf-source
 	# The locale must be generated after installing the package locales
+	CHARMAP=`LC_ALL=en_IN.UTF-8 locale charmap`; \
+            if [ UTF-8 != "$$CHARMAP" ]; then \
+	        echo "error: required locale en_IN.UTF-8 is missing!"; \
+	        exit 1; \
+	    fi
 	LC_ALL=en_IN.UTF-8 reduce-font /usr/src/unifont.bdf < all-$(TYPE).utf > $@.tmp
 	mv $@.tmp $@
 
