@@ -435,6 +435,25 @@ endif
 
 	touch $(TYPE)-tree-stamp
 
+# Collect the used UTF-8 strings, to know which glyphs to include in
+# the font.  Using strigs is not the best way, but no better suggestion
+# has been made yet.
+all.utf: $(TYPE)-tree-stamp
+	cp graphic.utf all.utf
+	cat $(TREE)/var/lib/dpkg/info/*.templates >> all.utf
+	find $(TREE) -type f | xargs strings >> all.utf
+
+unifont-reduced.bdf: all.utf
+	# Need to use an UTF-8 based locale to get reduce-font working.
+	# Any will do.  en_IN seem fine and was used by boot-floppies
+	# reduce-font is part of package libbogl-dev
+	# unifont.bdf is part of package bf-utf-source
+	LC_ALL=en_IN.UTF-8 reduce-font /usr/src/unifont.bdf < all.utf > $@
+
+$(TREE)/unifont-reduced.bgf: unifont-reduced.bdf
+	# bdftobogl is part of package libbogl-dev
+	bdftobogl -b unifont-reduced.bdf > $@
+
 tarball: tree
 	tar czf $(DEST)/$(TYPE)-debian-installer.tar.gz $(TREE)
 
