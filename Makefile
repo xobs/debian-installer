@@ -107,8 +107,13 @@ clean: demo_clean tmp_mount debian/control
 	rm -rf $(UDEBDIR) $(EXTRAUDEBDIR) $(TMP_MNT) debian/build
 	rm -rf $(DEST)/$(TYPE)-* $(EXTRA_IMAGES) || sudo rm -rf $(DEST)/$(TYPE)-* $(EXTRA_IMAGES)
 	rm -f unifont-reduced-$(TYPE).bdf
+ifdef DEST_KERNEL
+	$(foreach NAME,$(KERNELNAME), \
+		rm -f $(DEST)/$(NAME); )
+else
 	$(foreach NAME,$(KERNELNAME), \
 		rm -f $(TEMP)/$(NAME); )
+endif
 
 reallyclean: clean
 	rm -rf $(APTDIR) $(DEST) $(BASE_TMP) $(SOURCEDIR) $(DEBUGUDEBDIR)
