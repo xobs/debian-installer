@@ -125,7 +125,7 @@ endef
 #
 # Globally useful variables.
 #
-targetstring = $(patsubst _%,%,$(if $(filter-out default,$(SUBARCH)),_$(SUBARCH),)$(if $(filter-out default,$(MEDIUM)),_$(MEDIUM),)$(if $(filter-out default,$(FLAVOUR)),_$(FLAVOUR),))
+targetstring = $(patsubst _%,%,$(if $(SUBARCH),_$(SUBARCH),)$(if $(MEDIUM),_$(MEDIUM),)$(if $(FLAVOUR),_$(FLAVOUR),))
 targetdirs = $(subst _,/,$(targetstring))
 
 
@@ -158,7 +158,6 @@ validate_%:
 	@set -e; \
 	SUBARCH= var='$(subst _, ,$(subst validate_,,$@))'; \
 	tmp=$$(echo $$var |sed 's/[ ].*$$//'); \
-	[ -z '$(SUBARCH_SUPPORTED)' ] || [ -n "$$tmp" ] || [ -z "$$(echo $(SUBARCH_SUPPORTED) |grep -w default)" ] || SUBARCH=default; \
 	[ -z '$(SUBARCH_SUPPORTED)' ] || [ -z "$$tmp" ] || [ -z "$$(echo $(SUBARCH_SUPPORTED) |grep -w $$tmp)" ] || SUBARCH=$$tmp; \
 	$(submake) medium_validate SUBARCH=$$SUBARCH var="$$var"
 
@@ -167,7 +166,6 @@ medium_validate:
 	@set -e; \
 	MEDIUM= var="$(strip $(patsubst $(SUBARCH)%,%,$(var)))"; \
 	tmp=$$(echo $$var |sed 's/[ ].*$$//'); \
-	[ -z '$(MEDIUM_SUPPORTED)' ] || [ -n "$$tmp" ] || [ -z "$$(echo $(MEDIUM_SUPPORTED) |grep -w default)" ] || MEDIUM=default; \
 	[ -z '$(MEDIUM_SUPPORTED)' ] || [ -z "$$tmp" ] || [ -z "$$(echo $(MEDIUM_SUPPORTED) |grep -w $$tmp)" ] || MEDIUM=$$tmp; \
 	$(submake) flavour_validate MEDIUM=$$MEDIUM var="$$var"
 
@@ -176,7 +174,6 @@ flavour_validate:
 	@set -e; \
 	FLAVOUR= var="$(strip $(patsubst $(MEDIUM)%,%,$(var)))"; \
 	tmp=$$(echo $$var |sed 's/[ ].*$$//'); \
-	[ -z '$(FLAVOUR_SUPPORTED)' ] || [ -n "$$tmp" ] || [ -z "$$(echo $(FLAVOUR_SUPPORTED) |grep -w default)" ] || FLAVOUR=default; \
 	[ -z '$(FLAVOUR_SUPPORTED)' ] || [ -z "$$tmp" ] || [ -z "$$(echo $(FLAVOUR_SUPPORTED) |grep -w $$tmp)" ] || FLAVOUR=$$tmp; \
 	$(submake) finish_validate FLAVOUR=$$FLAVOUR var="$$var"
 
@@ -219,7 +216,7 @@ clean_%:
 # The general clean rule.
 .PHONY: _clean
 _clean: tree_umount
-	@[ -n "$(filter-out default,$(SUBARCH) $(MEDIUM) $(FLAVOUR))" ] || { echo "invalid target"; false; }
+	@[ -n "$(SUBARCH) $(MEDIUM) $(FLAVOUR)" ] || { echo "invalid target"; false; }
 	-rm -f $(STAMPS)tree-$(targetstring)-stamp $(STAMPS)extra-$(targetstring)-stamp $(STAMPS)get_udebs-$(targetstring)-stamp
 	rm -f $(TEMP)/diskusage.txt
 	rm -f $(TEMP)/all.utf
@@ -240,7 +237,7 @@ build_%:
 # The general build rule.
 .PHONY: _build
 _build:
-	@[ -n "$(filter-out default,$(SUBARCH) $(MEDIUM) $(FLAVOUR))" ] || { echo "invalid target"; false; }
+	@[ -n "$(SUBARCH) $(MEDIUM) $(FLAVOUR)" ] || { echo "invalid target"; false; }
 	@$(submake) tree_umount $(EXTRATARGETS) $(TARGET)
 
 
