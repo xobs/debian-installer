@@ -1,28 +1,10 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 17789 -->
+<!-- original version: 18767 -->
 
   <sect2 arch="i386"><title>CD-ROM からの起動</title>
 
 &boot-installer-intro-cd.xml;
-
-<para>
-
-<!--
-You may need to configure your hardware as indicated in 
-<xref linkend="boot-dev-select"/>. Then put the CD-ROM into the drive,
-and reboot.  The system should boot up, and you should be presented
-with the <prompt>boot:</prompt> prompt.  Here you can enter your
-boot arguments, or just hit &enterkey;.
--->
-ここで <xref linkend="boot-dev-select"/> の説明に従って
-ハードウェアの設定をする必要があるかもしれません。
-設定が OK でしたら CD-ROM をドライブに入れ、再起動してください。
-システムは起動し、<prompt>boot:</prompt> というプロンプトが表示されるはずです。
-ここで起動引数を入力できます。
-もしくは単に &enterkey; を押してください。
-
-</para><para>
 
 <!-- We'll comment the following section until we know exact layout -->
 <!-- nabetaro レイアウト用に残っているだけなので訳を省略します -->
@@ -89,39 +71,10 @@ Boots the `bf2.4' flavor.
 
 -->
 
-<!--
-If your system can't boot directly from CD-ROM, or you simply can't
-seem to get it to work, don't despair; you can simply run
-<command>E:\install\boot.bat</command> under DOS (replace
-<userinput>E:</userinput> with whatever drive letter DOS assigns to
-your CD-ROM drive) to start the installation process. Then, skip down
-to <xref linkend="init-config"/>.
--->
-インストール対象のシステムが CD-ROM から直接には起動できない場合や、
-うまくいきそうに無い場合でも、嘆く必要はありません。
-DOS から <command>E:\install\boot.bat</command> を実行すれば
-(<userinput>E:</userinput> は DOS が CD-ROM ドライブに割り当てている
-ドライブレターに置き換えてください)、
-インストールプロセスが開始されます。
-開始できたら <xref linkend="init-config"/> に進んでください。
-
-</para><para>
-
-<!--
-Also, if you're going to be installing from a FAT (DOS) partition, you
-have the option of booting the installer from the hard disk. See 
-<xref linkend="install-from-dos"/> for more information on 
-installing via this method.
--->
-あるいは、FAT (DOS) パーティションからインストールを行おうとしているのでしたら、
-インストーラをハードディスクから起動することもできます。
-この方法でインストールを行う場合は、
-<xref linkend="install-from-dos"/> に詳しい情報があります。
-
-</para>
   </sect2>
 
-
+<!-- FIXME the documented procedure does not exactly work, commented out
+     until fixes
 
   <sect2 arch="i386" id="install-from-dos">
   <title>DOS パーティションからの起動</title>
@@ -130,12 +83,12 @@ installing via this method.
 
 <para>
 
-<!--
+
 Boot into DOS (not Windows) without any drivers being loaded.  To do
 this, you have to press <keycap>F8</keycap> at exactly the right
 moment (and optionally select the `safe mode command prompt only'
 option).  Enter the subdirectory for the flavor you chose, e.g.,
--->
+
 ドライバをロードせずに、(Windows ではなく) DOS を起動してください。
 こうするには、ちょうど良いタイミングで <keycap>F8</keycap> キーを押します
 (場合によっては `safe mode command prompt only' を選ぶ必要があります)。
@@ -143,26 +96,26 @@ option).  Enter the subdirectory for the flavor you chose, e.g.,
 
 <informalexample><screen>
 
-cd c:\current\compact
+cd c:\install
 
 </screen></informalexample>
 に移動します。
 
-<!--
+
 Next, execute <command>install.bat</command>.
 The kernel will load and launch the installer system. 
--->
+
 続いて <command>install.bat</command> を実行してください。
 カーネルがロードされ、インストーラシステムが起動します。
 
 </para><para>
 
-<!--
+
 Please note, there is currently a loadlin problem (#142421) which
 precludes <filename>install.bat</filename> from being used with the
 bf2.4 flavor. The symptom of the problem is an
 <computeroutput>invalid compressed format</computeroutput> error.
--->
+
 注意してほしいのですが、現在 loadlin には問題があって (bug 番号 142421)、
 <filename>install.bat</filename> では bf2.4 フレーバーが使えなくなっています。
 問題の症状は、
@@ -172,14 +125,64 @@ bf2.4 flavor. The symptom of the problem is an
 </para>
   </sect2>
 
+END FIXME -->
 
   <sect2 arch="i386" id="boot-initrd">
   <title><command>LILO</command> や <command>GRUB</command> を用いた linux からの起動</title>
+
+<para>
+<!--
+To boot the installer from hard disk, you must first download
+and place the needed files as described in <xref linkend="boot-drive-files"/>.
+-->
+ハードディスクからインストーラを起動するには、
+<xref linkend="boot-drive-files"/> に記述している必要なファイルを、
+まずダウンロードして配置しなければなりません。
+</para>
+ 
+<para>
+<!--
+If you intend to use the hard drive only for booting and then
+download everything over the network, you should download the
+<filename>netboot/initrd.gz</filename> file and its corresponding kernel.
+This will allow you
+to repartition the hard disk from which you boot the installer, although
+you should do so with care.
+-->
+起動のためだけにハードディスクを使用する予定で、
+ネットワークからすべてダウンロードするのなら、
+<filename>netboot/initrd.gz</filename> ファイルとそれに対応するカーネルを
+ダウンロードするといいでしょう。
+これはインストーラを起動するハードディスクのパーティションを、
+切り直すことができます。(注意して行ってください)
+
+</para>
+
+<para>
+<!-- 
+Alternatively, if you intend to keep an existing partition on the hard
+drive unchanged during the install, you can download the
+<filename>hd-media/initrd.gz</filename>
+file and its kernel, as well as copy a CD iso to the drive (make sure the
+file is named ending in ".iso". The installer can then boot from the drive
+and install from the CD image, without needing the network.
+-->
+他の手段としては、
+インストール中に既存のパーティションを変更しない予定であれば、
+<filename>hd-media/initrd.gz</filename> ファイルとそのカーネルを
+ダウンロードできます。
+同様に、ドライブに CD の iso 
+(ファイル名が ".iso" で終わっていることを確認すること) をコピーしてください。
+インストーラをドライブから起動でき、
+ネットワークを使用せずに CD イメージからインストールできます。
+
+</para>
+
 <para>
 
 <!--
 For <command>LILO</command>, you will need to configure two
-essentials things in <filename>/etc/lilo.conf</filename>:
+essential things in <filename>/etc/lilo.conf</filename>:
 -->
 <command>LILO</command> では、<filename>/etc/lilo.conf</filename> の
 非常に重要な次の 2 点を設定します。
@@ -217,7 +220,7 @@ image=/boot/newinstall/vmlinuz
        label=newinstall
        initrd=/boot/newinstall/initrd.gz
        root=/dev/ram
-       append="devfs=mount,dall"
+       append="devfs=mount,dall ramdisk_size=17000
 
 </screen></informalexample>
 
@@ -252,157 +255,22 @@ add the following lines:
 <informalexample><screen>
 
 title  New Install
-kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram devfs=mount,dall
+kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram devfs=mount,dall ramdisk_size=17000
 initrd (hd0,0)/boot/newinstall/initrd.gz
 
 </screen></informalexample>
 
 <!--
-and reboot. Please note that you may need an additional parameter
-<userinput>ramdisk_size=<replaceable>size in KB</replaceable></userinput>,
-depending on the image you are booting. From now on, there should be
-no difference between <command>GRUB</command> or <command>LILO</command>.
+and reboot. Note that the value of the <userinput>ramdisksize</userinput>
+may need to be adjusted for the size of the initrd image. 
+From now on, there should be no difference between <command>GRUB</command>
+or <command>LILO</command>.
 -->
-その後再起動してください。起動するイメージにより、
-<userinput>ramdisk_size=<replaceable>サイズ (KB)</replaceable></userinput>
-といった追加パラメータが必要かもしれないことに注意してください。
+その後再起動してください。
+initrd イメージのサイズのために <userinput>ramdisksize</userinput> の値を
+調節することが必要かもしれないことに注意してください。
 これより後は、<command>GRUB</command> と <command>LILO</command> 
 に違いはありません。
-
-</para><para>
-
-<!--
-You can trace the <filename>initrd</filename> magic at work several
-times during the boot.
--->
-起動中の <filename>initrd</filename> のマジックが何度か動くことを、
-トレースできます．
-
-<itemizedlist>
-<listitem><para>
-
-<!--
-before the kernel has even been loaded, <command>LILO</command>
-displays a much longer <computeroutput>Loading
-<replaceable>imagelabel</replaceable>......</computeroutput> line with
-more dots than usual, showing the progression of the RAM disk image
-loading.
--->
-カーネルがにロードされる前に、LILO は通常より点が多い <computeroutput>Loading
-<replaceable>imagelabel</replaceable>......</computeroutput> の行を表示します。
-これにより RAM ディスクイメージの読込の進捗を表示します。
-
-</para></listitem>
-<listitem><para>
-
-<!--
-You should see the <computeroutput>RAM disk driver
-initialized</computeroutput>
-notice, near the real time clock initialization, proving that your
-kernel supports the RAM disk feature.
--->
-リアルタイムクロック初期化付近で <computeroutput>RAM disk driver
-initialized</computeroutput> という表示に注意してください。
-これにより、カーネルが RAM ディスク機能をサポートしていることが判ります。
-
-
-</para></listitem>
-<listitem><para>
-
-<!--
-Finally, if you don't see <computeroutput>RAMDISK: ext2 filesystem
-found at block 0</computeroutput> immediately after the partition
-checks, it's probably because
-your kernel miss the <filename>initrd</filename> feature.
--->
-最後に、パーティションチェックの直後に <computeroutput>RAMDISK: ext2 filesystem
-found at block 0</computeroutput> という表示がなければ、
-おそらくカーネルが <filename>initrd</filename> 
-機能を見つけられなかったと言うことです。
-
-</para></listitem>
-</itemizedlist>
-
-</para><para condition="FIXME">
-
-<!--
-You should now see the debian installer running. If you do not use any
-removable medium, you want to check very early that your network
-connection is working and <emphasis>before</emphasis> irreversibly
-partitioning your hard disk. So you maybe need to
-<userinput>insmod</userinput> some additional kernel modules for this,
-for instance for your network interface. It's time
-<emphasis>not</emphasis> to follow the order of steps suggested by
-<command>debian-installer</command>. Leap directly to <userinput>Mount a
-Previously-Initialized Partition</userinput>, and mount the partition
-where you stored the modules that you extracted from
-<filename>drivers.tgz</filename> (<xref linkend="files-lilo"></xref>).
--->
-今 debian インストーラの動作を見るべきです。
-リムーバブルメディアを使用しないのならば、
-(不可逆の) ハードディスクのパーティション分割より<emphasis>前に</emphasis>、
-ネットワーク接続のチェックを非常に初期の段階で行いたいでしょう。
-したがって、追加カーネルモジュール (例えばネットワークインタフェース) 用に、
-<userinput>insmod</userinput> が必要になるでしょう。
-ここは <command>debian-installer</command> 
-で示された手順から<emphasis>はずれる</emphasis>状況です。
-<userinput>Mount a Previously-Initialized Partition</userinput> に直接飛んで、
-<filename>drivers.tgz</filename> 
-から抽出したモジュールを格納したパーティションをマウントしてください。
-(<xref linkend="files-lilo"></xref>)
-
-</para>
-
-<!-- Ideally, configure Device Driver Modules should support the
-following (insmod-ing from the hard-disk) and not only from a floppy.
-That would avoid the need to open a shell -->
-
-<para>
-
-<!--
-Then switch to an other virtual terminal and use a shell (see 
-<xref linkend="shell"/>) to find drivers
-in the just mounted <filename>/target</filename>
-directory. <userinput>insmod</userinput> the ones you need.
--->
-その後、他の仮想端末に切り替え、シェルを使って (<xref linkend="shell"/> 参照)
-今マウントした <filename>/target</filename> ディレクトリから、
-ドライバを探してください。
-<userinput>insmod</userinput> が必要です。
-
-</para><para>
-
-<!--
-Go to <xref linkend="netcfg"/> in the
-<command>debian-installer</command> installer menus, and
-<userinput>ping</userinput> your favorite debian mirror at last.
-Congratulations!
--->
-最後に <command>debian-installer</command> のインストーラメニューから
-<xref linkend="netcfg"/> へ行き、お好みの Debian ミラーサイトへ
-<userinput>ping</userinput> を打ってください。
-おめでとうございます!
-
-</para><para>
-
-<!--
-Use <userinput>Unmount a Partition</userinput> if you have mounted one
-in the previous
-paragraph, safely go back to the partitioning steps at the start of
-<command>debian-installer</command> and follow the regular procedure,
-with the network as a bonus. At this stage, it is even possible
-(only a bit risky) to completely wipe out all the previous partitions
-on your hard drive for a very clean installation. The only risk is that
-your hard drive will be un-bootable for a short period of time.
--->
-前の段落でマウントしていたなら、
-<userinput>Unmount a Partition</userinput> を使ってください。
-その後、<command>debian-installer</command> 
-の始めから安全にパーティション分割まで戻って、通常の手順に戻ってください。
-ネットワークが使えるようになっています。
-この段階では、クリーンインストール用にハードディスク上のパーティションを、
-完全に消すことができます。(少しだけ危険) 
-唯一の危険は、ハードディスクが短期間でも起動できなくなってしまうことです。
 
 </para>
   </sect2>
@@ -453,14 +321,14 @@ root フロッピーについて訊かれたら、単に &enterkey; を押してください。
 <!--
 You will have already downloaded the floppy images you needed and
 created floppies from the images in <xref linkend="create-floppy"/>.
-If you need to, you can also modify the boot floppy; see 
-<xref linkend="rescue-replace-kernel"/>.
 -->
+<!-- missing-doc FIXME If you need to, you can also modify the boot floppy; see 
+<xref linkend="rescue-replace-kernel"/>. -->
 おそらく <xref linkend="create-floppy"/> において
 必要なフロッピーイメージは既にダウンロードし、
 それらのイメージからフロッピーは作成済みかと思います。
-必要なら、ブートフロッピーを修正することもできます。
-<xref linkend="rescue-replace-kernel"/> を参照してください。
+<!-- missing-doc FIXME 必要なら、ブートフロッピーを修正することもできます。
+<xref linkend="rescue-replace-kernel"/> を参照してください。 -->
 
 </para><para>
 
@@ -525,41 +393,6 @@ prompt.
 フロッピーディスクがアクセスされ、
 ブートフロッピーの紹介画面が表示され、
 最後に <prompt>boot:</prompt> というプロンプトが表示されます。
-
-</para><para>
-
-<!--
-You can do two things at the <prompt>boot:</prompt> prompt. You can
-press the function keys <keycap>F1</keycap> through
-<keycap>F10</keycap> to view a few pages of helpful information, or
-you can boot the system.
--->
-<prompt>boot:</prompt> プロンプトでは 2 つのことができます。
-ファンクションキーの <keycap>F1</keycap> から <keycap>F10</keycap> を押すと、
-有益な情報を提供するページを見たり、
-システムを起動したりすることができます。
-
-</para><para>
-
-<!--
-Information on boot parameters which might be useful can be found by
-pressing <keycap>F4</keycap> through <keycap>F7</keycap>.  If you add any
-parameters to
-the boot command line, be sure to type the boot method (the default is
-<userinput>linux</userinput>) and a space before the first parameter (e.g.,
-<userinput>linux floppy=thinkpad</userinput>). If you simply press &enterkey;,
-that's the same as typing <userinput>linux</userinput> without any special
-parameters.
--->
-<keycap>F4</keycap> から <keycap>F7</keycap> キーを押すと、
-ブート引数について便利な情報が見られます。
-ブートコマンドラインに何かパラメータを付け加える場合は、
-最初のパラメータの前に、必ず起動方法
-(デフォルトは <userinput>linux</userinput>)
-と空白を 1 つ入力してください
-(例えば <userinput>linux floppy=thinkpad</userinput> などとします)。
-単に &enterkey; を押すと、特別なパラメータなしで 
-<userinput>linux</userinput> と入力するのと同じになります。
 
 </para><para>
 
@@ -652,47 +485,15 @@ Please refer to this document.
 It could be that your Network Interface Card or Motherboard provides
 PXE boot functionality.
 Which is a <trademark class="trade">Intel</trademark> re-implemention
-of TFTP boot.
+of TFTP boot. If so you may be able to configure your BIOS to boot from the
+network.
 -->
 ネットワークインタフェースカードやマザーボードが、
 PXE ブート機能を提供しているかもしれません。
 これは <trademark class="trade">Intel</trademark> による、
 TFTP ブートの再実装です。
+そうであれば、ネットワークから起動できるように BIOS を設定することができます。
 
-</para><para condition="FIXME">
-
-<!--
-Let us (<email>&email-debian-boot-list;</email>) know how did you manage it.
-Please refer to this document.
--->
-どのように行ったか私たち (<email>&email-debian-boot-list;</email>) 
-に教えてください。この文書に参加をお願いします。
-
-<!-- from #debian-boot 2004-03-13
-06:37 -!- SuperQ [ben@trogdor.likes.to.burninate.net] has joined #debian-boot
-06:38 < SuperQ> anyone done much with d-i on pxe boot?
-06:39 < SuperQ> I got it all setup, daily build from sjogren's files
-06:39 < joshk> yes, it works
-06:39 < SuperQ> "Warning: unable to open an initial console."
-06:39 < SuperQ> Kernel panic: Attempted to kill init!
-06:39 < joshk> pass devfs=mount to the kernel
-06:40 < joshk> in pxelinux.cfg/whatever
-06:40 < SuperQ> oh.. that's changed since the bug tracking post
-06:40 < SuperQ> http://lists.debian.org/debian-testing/2003/debian-testing-200311/msg00098.html
-06:40 < SuperQ> that says to devfs=nomount
-06:41 < SuperQ> should probably copy the bulk of that message into
-debian/dists/sarge/main/installer-i386/current/doc/INSTALLATION-HOWTO
-06:41 < SuperQ> :) )
-06:41 < joshk> that's from months ago
-06:41 < joshk> :P
-06:41 < SuperQ> I know
-06:42 < SuperQ> but it's still referanced in the howto
-06:42 < SuperQ> yay! it works now
-06:42  * SuperQ gives his new ThinkPad X31 some sarge love
-06:42 < SuperQ> I'll have to write up a page on Sarge/D-I and things for
-                linux-laptops.net
-06:45 < SuperQ> thanks joshk
--->
 </para>
    </sect3>
   </sect2>
@@ -701,22 +502,38 @@ debian/dists/sarge/main/installer-i386/current/doc/INSTALLATION-HOWTO
 <para>
 
 <!--
-If you are booting from the boot floppy or from CD-ROM you will be
-presented with the boot prompt, <prompt>boot:</prompt>.  Details
-about how to use boot parameters with the boot floppy can be found
-in <xref linkend="floppy-boot"/>.  If you are booting from an
-existing operating system, you'll have to use other means to set boot
-parameters.  For instance, if you are installing from DOS, you can
-edit the <filename>install.bat</filename> file with any text editor.
+When the installer boots, you will be presented with the boot prompt,
+<prompt>boot:</prompt>. You can do two things at the <prompt>boot:</prompt>
+prompt. You can press the function keys <keycap>F1</keycap> through
+<keycap>F10</keycap> to view a few pages of helpful information, or
+you can press <keycap>Enter</keycap> to boot the system.
 -->
-ブートフロッピーから、または CD-ROM から起動していれば、
+インストーラを起動するときに、
 ブートプロンプト <prompt>boot:</prompt> が表示されます。
-ブートフロッピーでのブートパラメータの使用法に関する詳細は、
-<xref linkend="floppy-boot"/> にあります。
-既存の OS から起動する場合、
-ブートパラメータを設定するには他の手段を使わなければなりません。
-例えば、DOS からインストールする場合、任意のテキストエディタで 
-<filename>install.bat</filename> ファイルを編集できます。
+<prompt>boot:</prompt> プロンプトでは、2 つのことができます。
+<keycap>F1</keycap> から <keycap>F10</keycap> のファンクションキーで、
+ヘルプ情報を見ることができます。
+もしくは、<keycap>Enter</keycap> を押してシステムを起動できます。
+
+</para><para>
+<!--
+Information on boot parameters which might be useful can be found by
+pressing <keycap>F3</keycap> through <keycap>F7</keycap>.  If you add any
+parameters to
+the boot command line, be sure to type the boot method (the default is
+<userinput>linux</userinput>) and a space before the first parameter (e.g.,
+<userinput>linux floppy=thinkpad</userinput>). If you simply press &enterkey;,
+that's the same as typing <userinput>linux</userinput> without any special
+parameters.
+-->
+便利な起動パラメータの情報を、
+<keycap>F3</keycap> から <keycap>F7</keycap> を押すと表示します。
+パラメータを起動コマンドラインに追加する場合には、
+起動方法 (デフォルトは <userinput>linux</userinput>) をタイプし、
+最初のパラメータの前にスペースを空けてください 
+(例: <userinput>linux floppy=thinkpad</userinput>)。
+単に &enterkey; を押すと、
+特にパラメータを渡さず <userinput>linux</userinput> を入力したことになります。
 
 </para><para>
 
@@ -773,7 +590,7 @@ contain a problematic video card which does not switch to the
 framebuffer mode properly.  Then you can use the boot parameter
 <userinput>debian-installer/framebuffer=false</userinput> or
 <userinput>video=vga16:off</userinput> to disable the framebuffer
-console. The language chooser will not appear; only the english
+console. Only the english
 language will be available during the installation due to limited
 console features. See <xref linkend="boot-parms"/> for details.
 -->
@@ -784,7 +601,6 @@ console features. See <xref linkend="boot-parms"/> for details.
 ブートパラメータに <userinput>debian-installer/framebuffer=false</userinput> 
 か <userinput>video=vga16:off</userinput> を使用できます。
 コンソールの機能が制限されているため、インストール中には英語しか使えません。
-そのため、language chooser は現れません。
 詳細は <xref linkend="boot-parms"/> をご覧ください。
 
 </para>
