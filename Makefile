@@ -12,12 +12,12 @@
 # override this on the command line.
 TYPE=net
 
-# List here any extra udebs that are not in the list file that
+# List here any extra udebs that are not in the list file but that
 # should still be included on the system.
 EXTRAS=""
 
-# Build tree location. This can be overridden too.
-TREE=builddir
+# Build tree location.
+DEST=debian-installer
 
 # Directory apt uses for stuff.
 APTDIR=apt
@@ -38,7 +38,7 @@ else
 SOURCES_LIST=sources.list
 endif
 
-# All these options makes apt read ./sources.list, and
+# All these options makes apt read the right sources list, and
 # use APTDIR for everything so it need not run as root.
 APT_GET=apt-get --assume-yes \
 	-o Dir::Etc::sourcelist=./$(SOURCES_LIST) \
@@ -46,17 +46,18 @@ APT_GET=apt-get --assume-yes \
 	-o Debug::NoLocking=true \
 	-o Dir::Cache=$(APTDIR)/cache
 
+# Comments are allowed in the lists.
 UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE)) $(EXTRAS)
 
 build: tree reduce stats
 
 demo:
-	chroot $(TREE) bin/sh
+	chroot $(DEST) bin/sh
 
 clean:
-	rm -rf $(TREE) $(APTDIR) $(UDEBDIR)
+	rm -rf $(DEST) $(APTDIR) $(UDEBDIR)
 
-# Download all required udebs to UDEBDIR
+# Get all required udebs and put in UDEBDIR.
 get_udebs:
 	mkdir -p $(APTDIR)/state/lists/partial
 	mkdir -p $(APTDIR)/cache/archives/partial
@@ -88,12 +89,12 @@ get_udebs:
 	done
 
 # Build the installer tree.
-DPKGDIR=$(TREE)/var/lib/dpkg
+DPKGDIR=$(DEST)/var/lib/dpkg
 tree: get_udebs
 	dh_testroot
 
 	# This build cannot be restarted, because dpkg gets confused.
-	rm -rf $(TREE)
+	rm -rf $(DEST)
 	# Set up the basic files [u]dpkg needs.
 	mkdir -p $(DPKGDIR)/info
 	touch $(DPKGDIR)/status
@@ -103,29 +104,26 @@ tree: get_udebs
 	# Unpack the udebs with dpkg, ignoring dependancies.
 	# (So you'd better get the deps right in your .list files!)
 	# This command must run as root or fakeroot.
-	dpkg --force-depends --root=$(TREE) --unpack $(UDEBDIR)/*.udeb
+	dpkg --force-depends --root=$(DEST) --unpack $(UDEBDIR)/*.udeb
 	# Clean up after dpkg.
 	rm -rf $(DPKGDIR)/updates
-	rm -f $(DPKGDIR)/available $(DPKGDIR)/available-old \
-		$(DPKGDIR)/status-old $(DPKGDIR)/lock
+	rm -f $(DPKGDIR)/available $(DPKGDIR)/*-old $(DPKGDIR)/lock
 	# TODO: configure some of the packages?
-	# To save a little room, the status file could be reduced
-	# to only contain those fields that udpkg knows about.
 
 	# This is temporary; I have filed a bug asking ash-udeb to include
 	# the link.
-	ln -s ash builddir/bin/sh
+	ln -s ash $(DEST)/bin/sh
 
 # Library reduction.
 reduce: tree
-	mkdir -p $(TREE)/lib
-	mklibs.sh -d $(TREE)/lib `find $(TREE) -type f -perm +0111`
+	mkdir -p $(DEST)/lib
+	mklibs.sh -d $(DEST)/lib `find $(DEST) -type f -perm +0111`
 
 stats:
 	@echo
 	@echo System stats
 	@echo ------------
 	@echo Installed udebs: $(UDEBS)
-	@echo Total system size: $(shell du -h -s $(TREE) | cut -f 1)
+	@echo Total system size: $(shell du -h -s $(DEST) | cut -f 1)
 # Add your interesting stats here.
-	
+
