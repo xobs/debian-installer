@@ -209,10 +209,10 @@ $(TYPE)-tree-stamp: $(TYPE)-get_udebs-stamp debian/control
 	$(foreach VERSION,$(KERNELVERSION), \
 		mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
 		if [ -e $(TREE)/boot/System.map ]; then \
-			depmod -F $(TREE)/boot/System.map -q -a -b $(TREE)/ $(VERSION); \
+			depmod.modutils -F $(TREE)/boot/System.map -q -a -b $(TREE)/ $(VERSION); \
 			rm -f $(TREE)/boot/System.map; \
 		else \
-			depmod -q -a -b $(TREE)/ $(VERSION); \
+			depmod.modutils -q -a -b $(TREE)/ $(VERSION); \
 		fi ; )
 	# These files depmod makes are used by hotplug, and we shouldn't
 	# need them, yet anyway.
