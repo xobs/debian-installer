@@ -1,0 +1,19 @@
+# SPARC Image creation
+
+arch-image: $(IMAGE)
+
+$(IMAGE): $(INITRD)
+	tilo -o $@ $(foreach NAME,$(KERNELNAME),$(TEMP)/$(NAME)) $(INITRD)
+
+
+# Copy files somewhere the CD build scripts can find them
+cd_content:
+	for img in $(KERNELNAME); do \
+		type=`echo $$img | sed 's/vmlinux-.*-\(sparc.*\)/\1/'`; \
+		cp -f $(TEMP)/$$img $(DEST)/$(TYPE)-linux-$$type; \
+	done
+
+cd_image: cd_content
+	mkisofs -r -J -b `basename $(FLOPPY_IMAGE)` -o $(TYPE).iso $(DEST)
+	mv $(TYPE).iso $(DEST)
+
