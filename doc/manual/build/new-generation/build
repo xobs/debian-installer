@@ -64,23 +64,61 @@ create_profiled () {
 
 create_html () {
 
+    create_profiled
     $xsltprocessor \
         --xinclude \
-        --stringparam base.dir ./${language}.${arch}.html/ \
+        --stringparam base.dir ./results/${language}.${arch}/html/ \
         $stylesheet_html \
         $tempdir/install.${language}.profiled.xml
     checkresult $?
 
 }
 
-#### MAINLINE ####
+create_dvi ()  {
+    
+    create_profiled
+	# And use openjade to convert generate a .tex file
+	export SP_ENCODING="utf-8"
+	openjade -t tex \
+		-b utf-8 \
+		-o $tempdir/install.${language}.tex \
+		-d $stylesheet_dsssl \
+		$tempdir/install.${language}.profiled.xml
 
-## First we define some paths to various xsl stylesheets
+	# Next we use jadetext to generate a .dvi file
+	# This needs three passes to properly generate the index (pagenumbering)
+	
+	cd $tempdir
+	jadetex install.${language}.tex >/dev/null
+	jadetex install.${language}.tex >/dev/null
+	jadetex install.${language}.tex >/dev/null
+	cd ..
+}
+
+create_pdf() {
+    
+    create_profiled
+    create_dvi
+    mkdir -p results/${language}.${arch}/pdf
+    dvipdf $tempdir/install.${language}.dvi
+    mv install.${language}.pdf results/${language}.${arch}/pdf
+}
+
+create_ps() {
+    
+    create_profiled
+    create_dvi
+    mkdir -p results/${language}.${arch}/ps
+    dvips $tempdir/install.${language}.dvi
+    mv install.${language}.ps results/${language}.${arch}/ps
+}
 
 stylesheet_dir="stylesheets"
 stylesheet_profile="$stylesheet_dir/style-profile.xsl"
 stylesheet_html="$stylesheet_dir/style-html.xsl"
 stylesheet_fo="$stylesheet_dir/style-fo.xsl"
+stylesheet_dsssl="$stylesheet_dir/style-print.dsl"
+xml_decl="/usr/share/sgml/declaration/xml.dcl"
 
 xsltprocessor=/usr/bin/xsltproc
 
@@ -88,12 +126,13 @@ tempdir=${language}.temp
 mkdir -p $tempdir
 
 ## Create the profiled XML file...
-create_profiled
 
 ## Create the requested format...
 case ${format} in
 
     html) create_html;;
+    ps)   create_ps;;
+    pdf)  create_pdf;;
     *) echo "Format unknown or not supported yet!";;
 
 esac
