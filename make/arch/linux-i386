@@ -19,7 +19,7 @@ endif
 	if $(foreach NAME,$(KERNELNAME), \
              cp -f $(TEMP)/$(NAME) $(TMP_MNT)/linux) \
 	   && cp $(INITRD) $(TMP_MNT)/initrd.gz \
-	   && cp syslinux.cfg $(TMP_MNT)/ \
+	   && cp boot/i386/syslinux.cfg $(TMP_MNT)/ \
 	   && todos $(TMP_MNT)/syslinux.cfg ; \
 	then \
 		umount $(TMP_MNT) ; \
@@ -44,7 +44,7 @@ endif
 cd_content: $(IMAGE)
 	$(foreach NAME,$(KERNELNAME), \
 		cp -f $(TEMP)/$(NAME) $(DEST)/$(TYPE)-linux; )
-	cp syslinux.cfg $(DEST)/$(TYPE)-syslinux.cfg
+	cp  boot/i386/syslinux.cfg $(DEST)/$(TYPE)-syslinux.cfg
 
 cd_image: cd_content
 	mkisofs -r -J -b `basename $(IMAGE)` -o $(TYPE).iso $(DEST)
