@@ -44,7 +44,7 @@ for file in "$kernel" "$rootimage"; do
 done
 
 case "$arch" in
-    sparc | arm | i386 | mips | mipsel)
+    arm | i386 | mips | mipsel)
 	cp $kernel $tftpimage.tmp
 	;;
     *)
