@@ -577,27 +577,29 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 	fi;
 	gzip -v9f $(TEMP)/initrd
 
-$(TEMP_BOOT): $(TEMP_INITRD) arch_boot
-
-$(TEMP_BOOT_SCREENS): arch_boot_screens
-
 # raw kernel images
-$(KERNEL): $(STAMPS)tree-$(targetstring)-stamp
+$(KERNEL): $(TEMP_KERNEL)
 	install -m 644 -D $(TEMP)/$(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,') $@
 	./update-manifest $@ $(MANIFEST-KERNEL)
+
+$(TEMP_KERNEL): $(STAMPS)tree-$(targetstring)-stamp
 
 # bootable images
 $(BOOT): $(TEMP_BOOT)
 	install -m 644 -D $(TEMP_BOOT)$(GZIPPED) $@
 	./update-manifest $@ $(MANIFEST-BOOT)
 
+$(TEMP_BOOT): $(TEMP_INITRD) $(TEMP_KERNEL) arch_boot
+
 # non-bootable root images
-$(ROOT): $(TEMP_INITRD) arch_root
+$(ROOT): $(TEMP_ROOT)
 	install -m 644 -D $(TEMP_ROOT)$(GZIPPED) $@
 	./update-manifest $@ $(MANIFEST-ROOT)
 
+$(TEMP_ROOT): $(TEMP_INITRD) arch_root
+
 # miniature ISOs with only a boot image
-$(MINIISO): $(TEMP_INITRD) arch_miniiso
+$(MINIISO): $(TEMP_INITRD) $(TEMP_KERNEL) arch_miniiso
 	install -m 644 -D $(TEMP_MINIISO) $@
 	./update-manifest $@ $(MANIFEST-MINIISO)
 
@@ -605,6 +607,8 @@ $(MINIISO): $(TEMP_INITRD) arch_miniiso
 $(DEBIAN_CD_INFO): $(TEMP_BOOT_SCREENS)
 	(cd $(TEMP_BOOT_SCREENS); tar cz .) > $@
 	./update-manifest $@ $(MANIFEST-DEBIAN_CD_INFO)
+
+$(TEMP_BOOT_SCREENS): arch_boot_screens
 
 # Other images, e.g. driver floppies. Those are simply handled as flavours
 $(EXTRA): $(TEMP_EXTRA)
