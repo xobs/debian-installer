@@ -399,9 +399,6 @@ endif
 	# Tree target ends here. Whew!
 	touch $(TYPE)-tree-stamp
 
-	# remove /linuxrc from busybox-*-udeb (workaround till its fixed)
-	-rm $(TREE)/linuxrc
-
 unifont-reduced-$(TYPE).bdf: all-$(TYPE).utf
 	# Use the UTF-8 locale in rootskel-locale. This target shouldn't
 	# be called when it is not present anyway.
