@@ -2,6 +2,7 @@
 <!-- original version: 25171 -->
 <!-- revisado jfs, 4 noviembre 2004 -->
 <!-- revisado Francisco García <franciscomanuel.garcia@hispalinux.es>, 27 enero 2005 -->
+<!-- revisado Rudy Godoy, 22 feb. 2005 -->
 
  <sect1 id="boot-parms"><title>Parámetros de arranque</title>
 <para>
@@ -9,7 +10,7 @@
 Se llaman «parámetros de arranque» a los parámetros del núcleo
 de Linux que generalmente se utilizan para asegurarse de la
 correcta gestión de los periféricos.
-En la mayoría de los casos el núcleo puede auto-detectar información sobre
+En la mayoría de los casos el núcleo puede auto detectar información sobre
 sus periféricos pero, en algunos casos, deberá ayudar un poco a su núcleo.
 
 </para><para>
@@ -24,7 +25,7 @@ hardware del que dispone.
 </para><para>
 
 Puede encontrar información sobre muchos parámetros de arranque en el
-<ulink url="http://www.tldp.org/HOWTO/BootPrompt-HOWTO.html">COMO
+<ulink url="http://www.tldp.org/HOWTO/BootPrompt-HOWTO.html">CÓMO
 de BootPrompt</ulink>, incluyendo consejos útiles para hardware poco común.
 Esta sección solamente contiene un resumen de los parámetros más
 importantes. Podrá consultar también algunas precauciones comunes
@@ -51,7 +52,7 @@ tanto <userinput>mem=65536k</userinput> como
 
 </para><para condition="supports-serial-console">
 
-Si arranca desde una consola serie el núcleo habitualmente lo detectará
+Si arranca desde una consola serie el núcleo habitualmente la detectará
 automáticamente<phrase arch="mipsel"> (aunque no en DECstations)</phrase>.
 Si desea arrancar por consola serie un ordenador que ya tiene instalados 
 una tarjeta de vídeo (framebuffer) y un teclado deberá indicárselo al 
@@ -64,7 +65,7 @@ generalmente algo parecido a <filename>ttyS0</filename>.
 
 Los dispositivos serie de &arch-title; son <filename>ttya</filename> o
 <filename>ttyb</filename>.
-También puede definir en OpenPROM las variables 
+También puede definir en «OpenPROM» las variables 
 <envar>input-device</envar> y
 <envar>output-device</envar> a <filename>ttya</filename>.
 
@@ -78,7 +79,7 @@ El sistema de instalación reconoce algunos parámetros adicionales que <footnote>
 
 <para>
 Tenga en cuenta que el núcleo acepta un máximo de ocho opciones de
-línea de órdenes y ocho opciones del entorno, incluyendo cualquier
+línea de órdenes y ocho de entorno, incluyendo cualquier
 opción que el instalador añada por omisión. Si excede este número, los
 núcleos de versión 2.4 descartarán las opciones que lo sobrepasen y
 los núcleos 2.6 se bloquearán.
@@ -117,7 +118,7 @@ mensajes (esto es equivalente al método de arranque
 <emphasis>experto</emphasis>). Si utiliza
 <userinput>debconf/priority=critical</userinput>, el sistema de
 instalación mostrará solamente los mensajes críticos e intentará hacer
-lo correcto sin hace muchas preguntas.
+lo correcto sin formular muchas preguntas.
 
 </para></listitem>
 </varlistentry>
@@ -153,9 +154,9 @@ valores que puede tomar este parámetro:
 
 La interfaz predeterminada es
 <userinput>DEBIAN_FRONTEND=newt</userinput>.  Si va a realizar una
-instalación a través de una consola serie puede ser mejor utilizar
-<userinput>DEBIAN_FRONTEND=text</userinput>.  Esta opción no es ahora
-mismo muy útil ya que, por regla general, sólo dispondrá de la
+instalación a través de una consola serie puede que sea mejor utilizar
+<userinput>DEBIAN_FRONTEND=text</userinput>.  Esta opción ahora
+mismo no es muy útil ya que, por regla general, sólo dispondrá de la
 interfaz <userinput>newt</userinput> en el medio de instalación
 predeterminado.
 
@@ -212,10 +213,10 @@ el instalador. Por ejemplo,
 
 </para><para>
 
-El disquete de arranque normalmente analiza todos las unidades
+El disquete de arranque, el cual normalmente analiza todos las unidades
 de disquete y dispositivos de almacenamiento USB en busca del
-disquete raíz. Si utiliza este parámetro puede modificar su comportamiento
-para que solamente busque en un dispositivo concreto.
+disquete raíz, puede modificar su comportamiento
+para que solamente busque en un dispositivo específico al usar este parámetro.
 
 </para></listitem>
 </varlistentry>
@@ -227,10 +228,10 @@ para que solamente busque en un dispositivo concreto.
 En algunas arquitecturas se utiliza el framebuffer del núcleo para
 dar la opción a realizar la instalación en un número diverso de idiomas. 
 Si el uso de éste origina problemas en su
-su sistema puede deshabilitar esta característica con
+sistema puede deshabilitar esta característica con
 el parámetro
 <userinput>debian-installer/framebuffer=false</userinput>. 
-Algunos síntomas de problemas son mensajes de que tratan sobre bterm o bogl,
+Algunos síntomas de problemas son mensajes que tratan sobre bterm o bogl,
 la aparición de una pantalla en blanco o que el sistema se quede congelado
 algunos minutos después de que inicie la instalación.
 
@@ -267,7 +268,7 @@ que esta comprobación de lugar a problemas.
 <listitem><para>
 
 Por omisión, el &d-i; solicita automáticamente la conexión de red a través de
-DHCP. No podrá revisar ni cambiar los valores obtenidos de esta forma
+DHCP. No podrá revisar ni cambiar los valores obtenidos de esta forma,
 si la prueba tiene éxito. Sin embargo, podrá realizar la configuración
 de forma manual en el caso de que falle la solicitud DHCP.
 
@@ -275,8 +276,8 @@ de forma manual en el caso de que falle la solicitud DHCP.
 
 Puede usar el parámetro
 <userinput>netcfg/disable_dhcp=true</userinput> para que no se lleve a
-cabo la configuración de red con DHCP, tendrá entonces que introducir
-la información manualmente. Esto puede ser útil si vd. tiene un
+cabo la configuración de red usando DHCP, entonces tendrá que introducir
+la información manualmente. Esto puede ser útil si tiene un
 servidor DHCP en su red local pero no quiere utilizarlo porque, por
 ejemplo, no proporciona valores correctos.
 
@@ -300,7 +301,7 @@ ser recomendable deshabilitarlo.
 <term>preseed/url</term>
 <listitem><para>
 
-Este valor especifica la url de un fichero de pre-configuración que
+Este valor especifica la url de un fichero de preconfiguración que
 se descargará y utilizará para automatizar la instalación.
 Vea <xref linkend="automatic-install"/>.
 
@@ -311,7 +312,7 @@ Vea <xref linkend="automatic-install"/>.
 <term>preseed/file</term>
 <listitem><para>
 
-Este valor especifica la url de un fichero de pre-configuración que
+Este valor especifica la url de un fichero de preconfiguración que
 se cargará en la instalación automática. 
 Consulte <xref linkend="automatic-install"/>.
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- original version: 25496 -->
 <!-- revisado por nahoo, 7 noviembre 2004 -->
+<!-- revisado por Rudy Godoy, 22 feb. 2005 -->
 
  <sect1 condition="bootable-usb" id="boot-usb-files">
  <title>Preparación de ficheros para el arranque desde un dispositivo de memoria USB</title>
@@ -17,7 +18,7 @@ probablemente deberá desactivar la protección de escritura.
 
 </para><para>
 
-Note, que el dispositivo USB, deberá tener por lo menos una capacidad de 128 MB
+Note que el dispositivo USB, deberá tener por lo menos una capacidad de 128 MB
 (se pueden realizar configuraciones con menos capacidad, tal como se indica en
 <xref linkend="usb-copy-flexible"/>).
 
@@ -27,7 +28,7 @@ Note, que el dispositivo USB, deberá tener por lo menos una capacidad de 128 MB
   <title>Copiado de los ficheros &mdash; la forma fácil</title>
 <para arch="i386">
 
-Existe un fichero todo-en-uno <filename>hd-media/boot.img.gz</filename>
+Existe un fichero «todo en uno» <filename>hd-media/boot.img.gz</filename>
 que contiene todos los ficheros del instalador (incluyendo el núcleo)
 así como <command>SYSLINUX</command> y su fichero de configuración.
 Sólo debe extraerlo directamente en el dispositivo USB:
@@ -36,25 +37,25 @@ Sólo debe extraerlo directamente en el dispositivo USB:
 # gzip -dc boot.img.gz &gt;/dev/<replaceable>sda</replaceable>
 </screen></informalexample>
 
-Obviamente destruirá todo lo que haya en el dispositivo, así
+Obviamente esto destruirá todo lo que haya en el dispositivo, así
 que tenga cuidado y use el nombre de dispositivo correcto para
 su dispositivo USB.
 
 </para><para arch="powerpc">
 
-Existe un fichero todo-en-uno <filename>hd-media/boot.img.gz</filename>
+Existe un fichero «todo en uno» <filename>hd-media/boot.img.gz</filename>
 que contiene todos los ficheros del instalador (incluyendo el núcleo)
 así como <command>yaboot</command> y su fichero de configuración.
 Cree una partición del tipo «Apple_Bootstrap» en su dispositivo
-USB utilizando la orden
-<command>mac-fdisk</command>'s <userinput>C</userinput> y extraiga
+USB utilizando la orden <userinput>C</userinput> de 
+<command>mac-fdisk</command> y extraiga
 la imagen directamente a éste:
 
 <informalexample><screen>
 # zcat boot.img.gz &gt;/dev/<replaceable>sda2</replaceable>
 </screen></informalexample>
 
-Obviamente destruirá todo lo que haya en el dispositivo, así
+Obviamente esto destruirá todo lo que haya en el dispositivo, así
 que tenga cuidado y use el nombre de dispositivo correcto para
 su dispositivo USB.
 
@@ -89,7 +90,7 @@ dispositivo USB.
 &usb-setup-powerpc.xml;
 
    <sect3>
-   <title>Añadir una image ISO</title>
+   <title>Añadir una imagen ISO</title>
 <para>
 
 Ahora deberá poner cualquier imagen ISO de Debian («businesscard», «netinst» o
@@ -119,7 +120,7 @@ Cuando finalice, desmonte el dispositivo USB (<userinput>umount
 
 <warning><para>
 
-Si su sistema rechaza arrancar desde el dispositivo USB, éste podría
+Si su sistema rehúsa arrancar desde el dispositivo USB, éste podría
 contener un registro de arranque maestro (MBR) inválido. Para
 corregirlo, use la orden <command>install-mbr</command> del
 paquete <classname>mbr</classname>:
