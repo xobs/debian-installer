@@ -49,6 +49,9 @@ FLOPPY_SIZE=1440
 # The floppy image to create.
 FLOPPY_IMAGE=$(DEST)/$(TYPE)-$(FLOPPY_SIZE).img
 
+# What device to write floppies on
+FLOPPYDEV=/dev/fd0
+
 # May be needed in rare cases.
 #SYSLINUX_OPTS=-s
 
@@ -94,7 +97,7 @@ APT_GET=apt-get --assume-yes \
 	-o Dir::Etc::sourcelist=$(CWD)$(SOURCES_LIST) \
 	-o Dir::State=$(CWD)$(APTDIR)/state \
 	-o Debug::NoLocking=true \
-	-o Dir::Cache=$(CWD)$(APTDIR)/cache \
+	-o Dir::Cache=$(CWD)$(APTDIR)/cache
 
 # Get the list of udebs to install. Comments are allowed in the lists.
 UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE)) $(EXTRAS)
@@ -200,8 +203,10 @@ tree-stamp:
 	# Clean up after dpkg.
 	rm -rf $(DPKGDIR)/updates
 	rm -f $(DPKGDIR)/available $(DPKGDIR)/*-old $(DPKGDIR)/lock
+	# Set up modules.dep
 	mkdir -p $(TREE)/lib/modules/$(KVERS)/
 	depmod -q -a -b $(TREE)/ $(KVERS)
+	# Set up /dev.
 	mkdir -p $(TREE)/dev/
 	$(foreach DEV, $(DEVS), \
 	(cp -dpR /dev/$(DEV) $(TREE)/dev/ ) ; )
@@ -312,12 +317,13 @@ $(FLOPPY_IMAGE):
 # Write image to floppy
 boot_floppy: floppy_image
 	install -d $(DEST)
-	dd if=$(FLOPPY_IMAGE) of=/dev/fd0
+	dd if=$(FLOPPY_IMAGE) of=$(FLOPPYDEV)
 
-# If you're paranoid, you can check the floppy to make sure it wrote
-# properly.
+# If you're paranoid (or things are mysteriously breaking..),
+# you can check the floppy to make sure it wrote properly.
+# This target will fail if the floppy doesn't match the floppy image.
 boot_floppy_check: floppy_image
-	cmp /dev/fd0 $(FLOPPY_IMAGE)
+	cmp $(FLOPPYDEV) $(FLOPPY_IMAGE)
 
 COMPRESSED_SZ=$(shell expr $(shell tar cz $(TREE) | wc -c) / 1024)
 stats: tree
