@@ -1,1 +1,1 @@
-/home/nikolai/Arbeit/Debian/debian-installer/installer/doc/manual/build/new-generation/build_all
+build_all
