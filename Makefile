@@ -185,6 +185,9 @@ demo_clean:
 	-@sudo chroot $(TREE) bin/sh -c "bin/umount /dev ; bin/umount /proc" &> /dev/null
 
 clean: demo_clean tmp_mount
+	if mount | grep -q $(USER_MOUNT_HACK); then \
+	    umount $(USER_MOUNT_HACK);\
+	fi
 	rm -rf $(TREE) 2>/dev/null || sudo rm -rf $(TREE)
 	dh_clean
 	rm -f *-stamp
@@ -370,6 +373,7 @@ tmp_mount:
 		echo "Error unmounting $(TMP_MNT)" 2>&1 ; \
 		exit 1; \
 	fi
+
 	mkdir -p $(TMP_MNT)
 
 # Create a compressed image of the root filesystem by way of genext2fs.
