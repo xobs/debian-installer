@@ -93,7 +93,7 @@ case $arch in
 	;;
     mips)
         archspec="mips;not-i386;not-s390;not-m68k;not-powerpc;not-alpha"
-	kernelversion="2.4.25"
+	kernelversion="2.4.26"
 	
         fdisk="fdisk.txt;cfdisk.txt"
         network="supports-tftp;supports-nfsroot"
@@ -104,7 +104,7 @@ case $arch in
 	;;
     mipsel)
         archspec="mipsel;not-i386;not-s390;not-m68k;not-powerpc;not-alpha"
-	kernelversion="2.4.25"
+	kernelversion="2.4.26"
 	
         fdisk="fdisk.txt;cfdisk.txt"
         network="supports-tftp;supports-dhcp;supports-bootp;supports-nfsroot"
