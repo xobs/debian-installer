@@ -1,4 +1,5 @@
-<!-- original version: 22935 -->
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 23682 -->
 
    <sect3 id="partman">
    <title>Partitionieren Ihrer Festplatten</title>
@@ -13,20 +14,20 @@ wollen, lesen Sie <xref linkend="partitioning"/>.
 
 Zuerst wird Ihnen die Auswahl geboten, automatisch entweder eine gesamte Platte
 zu partitionieren oder nur den freien Speicherplatz auf einer Platte.
-Dies wird auch <quote>geführte</quote> Partitionierung 
+Dies wird auch <quote>geführte</quote> Partitionierung
 genannt. Wenn Sie keine automatische Partitionierung wollen, wählen Sie
-<guimenuitem>Partitionstabelle von Hand ändern</guimenuitem>. 
+<guimenuitem>Partitionstabelle von Hand ändern</guimenuitem>.
 
 </para><para>
 
-Wenn Sie »geführte Partitionierung« wählen, können Sie unter den Schemata
+Wenn Sie die automatische Partitionierung wählen, können Sie unter den Schemata
 in der unten stehenden Tabelle wählen. Alle Schemata haben ihre Vor- und
-Nachteile, von denen einige unter <xref linkend="partitioning"/> erörtert 
+Nachteile, von denen einige unter <xref linkend="partitioning"/> erörtert
 sind. Wenn Sie sich nicht sicher sind, wählen Sie die erste Möglichkeit.
-Beachten Sie, dass die geführte Partitionierung ein gewisses Minimum  
-an freiem Speicher benötigt. Wenn Sie nicht mindestens 1GB Platz 
-(abhängig vom gewählten Schema) zur Verfügung stellen, 
-wird die geführte Partitionierung fehlschlagen.
+Beachten Sie, dass die automatische Partitionierung ein gewisses Minimum
+an freiem Speicher benötigt. Wenn Sie nicht mindestens 1GB Platz
+(abhängig vom gewählten Schema) zur Verfügung stellen,
+wird die automatische Partitionierung fehlschlagen.
 
 </para>
 
@@ -67,18 +68,24 @@ wird die geführte Partitionierung fehlschlagen.
 
 Wenn Sie automatische Partitionierung für Ihr IA64-System wählen, wird eine
 weitere Partition, formatiert als bootfähiges FAT16-Dateisystem, für
-den EFI-Bootloader erstellt. Es gibt ebenfalls einen zusätzlichen Menüpunkt 
+den EFI-Bootloader erstellt. Es gibt ebenfalls einen zusätzlichen Menüpunkt
 im Format-Menü, um eine Partition manuell als EFI-Boot-Partition einzurichten.
+
+</para><para arch="alpha">
+
+Wenn Sie automatische Partitionierung für Ihr Alpha-System wählen, wird am
+Anfang der Festplatte eine zusätzliche, unformatierte Partition erstellt,
+um Platz für den aboot-Bootloader zu reservieren.
 
 </para><para>
 
-Nachdem Sie ein Schema ausgewählt haben, erscheint im nächsten Bild Ihre 
-neue Partitionstabelle mit Informationen darüber, ob und wie die Partitionen 
+Nachdem Sie ein Schema ausgewählt haben, erscheint im nächsten Bild Ihre
+neue Partitionstabelle mit Informationen darüber, ob und wie die Partitionen
 formatiert werden und wo sie ins Dateisystem eingehangen werden.
 
 </para><para>
 
-Die Liste der Partitionen sieht strukturell ähnlich aus wie diese:
+Die Liste der Partitionen sieht in ihrer Struktur ähnlich aus wie diese:
 
 <!-- TODO: show some flags here (lightning, skull, smiley) -->
 <informalexample><screen>
@@ -101,36 +108,36 @@ Die Liste der Partitionen sieht strukturell ähnlich aus wie diese:
 
 Dieses Beispiel zeigt, wie zwei IDE-Festplatten in mehrere Partitionen aufgeteilt
 wurden; die erste Platte enthält noch etwas freien Speicher. Jede dieser Zeilen
-mit jeweils einer Partition besteht aus der Partitionsnummer, dem Typ, der Größe, 
-optionalen Markierungen, dem Dateisystemtyp und dem Einhängepunkt im Dateisystem 
-(falls vorhanden).
+mit jeweils einer Partition besteht aus der Partitionsnummer,
+dem Typ (primär, erweitert, logisch), der Größe, optionalen Markierungen,
+dem Dateisystemtyp und dem Einhängepunkt im Dateisystem (falls vorhanden).
 
 </para><para>
 
-Hiermit ist die geführte Partitionierung beendet. Wenn Sie mit der
-erstellten Partitionstabelle zufrieden sind, wählen Sie <guimenuitem>Partitionierung 
+Hiermit ist die Vorauswahl der automatische Partitionierung beendet. Wenn Sie mit der
+erstellten Partitionstabelle zufrieden sind, wählen Sie <guimenuitem>Partitionierung
 beenden und Änderungen auf die Festplatte schreiben</guimenuitem>, um die neue
 Partitionstabelle zu aktivieren (wie am Ende dieses Kapitels beschrieben).
 Sind Sie nicht zufrieden, können Sie <guimenuitem>Änderungen an den Partitionen
-rückgängig machen</guimenuitem> wählen, um die geführte Partitionierung erneut
-zu starten oder führen Sie die vorgeschlagenen Änderungen manuell durch, wie weiter 
+rückgängig machen</guimenuitem> wählen, um die automatische Partitionierung erneut
+zu starten oder führen Sie die vorgeschlagenen Änderungen manuell durch, wie weiter
 unten unter »Manuelles Partitionieren« erläutert.
 
 </para><para>
 
 Ein ähnliches Bild wie oben wird Ihnen angezeigt, wenn Sie »Manuelle
-Partitionierung« wählen, mit dem Unterschied, dass Ihre derzeit existierende 
-Partitionstabelle angezeigt wird, aber ohne die Einhängepunkte. 
-Wie Sie die Partitionstabelle manuell einrichten sowie einiges über die Nutzung 
-der Partitionen durch Ihr neues Debian-System, wird im Rest dieses Kapitels 
+Partitionierung« wählen, mit dem Unterschied, dass Ihre derzeit existierende
+Partitionstabelle angezeigt wird, aber ohne die Einhängepunkte.
+Wie Sie die Partitionstabelle manuell einrichten (sowie einiges über die Nutzung
+der Partitionen durch Ihr neues Debian-System) wird im Rest dieses Kapitels
 beschrieben.
 
 </para><para>
 
 Wenn Sie eine neue, unberührte Platte auswählen, die weder Partitionen noch
-freien Speicher enthält, wird angeboten, eine neue Partitionstabelle zu 
+freien Speicher enthält, wird angeboten, eine neue Partitionstabelle zu
 erstellen (dies ist nötig, um neue Partitionen anlegen zu können).
-Danach sollte eine neue Zeile <quote>FREE SPACE</quote> (freier Speicher) 
+Danach sollte eine neue Zeile <quote>FREE SPACE</quote> (freier Speicher)
 für die ausgewählte Festplatte erscheinen.
 
 </para><para>
@@ -138,41 +145,41 @@ für die ausgewählte Festplatte erscheinen.
 Wenn Sie eine Zeile mit freiem Speicher auswählen, wird angeboten, eine neue
 Partition zu erstellen. Sie müssen eine Reihe von Fragen über ihre Größe, den
 Typ (primär oder logisch) und die Lage auf der Platte (am Anfang oder am Ende
-des freien Speicherbereichs) beantworten. Danach wird eine detailierte Übersicht 
-der neuen Partition angezeigt mit Einträgen für: den Einhängepunkt im zukünftigen 
+des freien Speicherbereichs) beantworten. Danach wird eine detailierte Übersicht
+der neuen Partition angezeigt mit Einträgen für: den Einhängepunkt im zukünftigen
 Dateisystem, Optionen zum Einhängen, die »bootfähig«-Markierung sowie die Art der Nutzung.
 Falls Ihnen die gewählten Standardwerte nicht zusagen, scheuen Sie sich nicht, sie
 entsprechend Ihrer Bedürfnisse zu ändern. Z.B. können Sie mittels der
-<guimenuitem>Benutzen als:</guimenuitem>-Option unterschiedliche Dateisysteme einstellen 
+<guimenuitem>Benutzen als:</guimenuitem>-Option unterschiedliche Dateisysteme einstellen
 sowie haben die Möglichkeit, die Partition als Swap (um Arbeitsspeicher auf die Platte
 auszulagern), Software-RAID, LVM oder überhaupt nicht zu nutzen.
 Eine andere, tolle Funktion ist, Daten von einer bestehenden Partition auf die neue
 zu kopieren. Wenn Sie mit den neu erstellten Partitionen zufrieden sind, wählen Sie
-<guimenuitem>Partition fertig</guimenuitem>, um zurück zum 
+<guimenuitem>Partition fertig</guimenuitem>, um zurück zum
 <command>partman</command>-Hauptbildschirm zu gelangen.
 
 </para><para>
 
-Wenn Sie meinen, etwas an Ihren Partitionen ändern zu müssen, wählen Sie einfach 
-eine aus und Sie kommen zum Partitions-Konfigurationsmenü. Dies ist das gleiche Bild 
+Wenn Sie meinen, etwas an Ihren Partitionen ändern zu müssen, wählen Sie einfach
+eine aus und Sie kommen zum Partitions-Konfigurationsmenü. Dies ist das gleiche Bild
 wie beim Erstellen von Partitionen; deshalb stehen auch die gleichen Optionen zur
-Auswahl. Eine Sache, die vielleicht auf den ersten Blick nicht ganz einleuchtend 
+Auswahl. Eine Sache, die vielleicht auf den ersten Blick nicht ganz einleuchtend
 sein könnte, ist die Möglichkeit, eine Partition in der Größe zu verändern, indem
-Sie das Element auswählen, das die Größe anzeigt. Dateisysteme, bei denen das 
+Sie das Element auswählen, das die Größe anzeigt. Dateisysteme, bei denen das
 bekanntermaßen funktioniert, sind FAT16, FAT32, EXT2, EXT3 und Swap.
 In diesem Menü ist es ebenfalls möglich, eine Partition zu löschen.
 
 </para><para>
 
-Sie müssen mindestens zwei Partitionen erzeugen: eine für das 
+Sie müssen mindestens zwei Partitionen erzeugen: eine für das
 <emphasis>root</emphasis>-Dateisystem (das als <filename>/</filename> eingehangen
 werden muss) und eine für <emphasis>Swap</emphasis>. Falls Sie vergessen, die
-root-Partition einzuhängen, gestattet <command>partman</command> es nicht, weiterzumachen, 
+root-Partition einzuhängen, gestattet <command>partman</command> es nicht, weiterzumachen,
 bis diese Angelegenheit behoben ist.
 
 </para><para arch="ia64">
 
-Falls Sie keine EFI-Boot-Partition erstellt und formatiert haben, wird 
+Falls Sie keine EFI-Boot-Partition erstellt und formatiert haben, wird
 <command>partman</command> dies erkennen und Sie können nicht fortfahren, ehe Sie
 eine zugewiesen haben.
 
