@@ -1,6 +1,13 @@
-#!/bin/sh
+#!/usr/bin/perl
 # Usage: bootscreen-subst "${MEDIA_TYPE}" "${DEBIAN_VERSION}" "${BUILD_DATE}"
 #                          < file > outfile
-sed -e "s/\${MEDIA_TYPE}/$1/" \
-    -e "s/\${DEBIAN_VERSION}/$2/" \
-    -e "s/\${BUILD_DATE}/$3/"
+my $type=shift;
+my $version=shift;
+my $date=shift;
+while (<>) {
+	s/\${MEDIA_TYPE}/$type/;
+	s/\${DEBIAN_VERSION}/$version/;
+	s/\${BUILD_DATE}/$date/;
+	s/\${BOOTPROMPT}\n?$//;
+	print;
+}
