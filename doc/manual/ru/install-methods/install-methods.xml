@@ -1,6 +1,1582 @@
-<!-- retain these comments for translator revision tracking -->
+<!-- Start of file install-methods/install-methods.xml -->
 <!-- $Id: install-methods.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
 
 <chapter id="install-methods">
- <title>Получение носителя с дистрибутивом</title>
-&official-cdrom.xml; &downloading-files.xml; &ipl-tape.xml; &create-floppy.xml; &boot-usb-files.xml; &boot-drive-files.xml; &install-tftp.xml; &automatic-install.xml; </chapter>
+ <title
+>Получение носителя с дистрибутивом</title>
+
+
+<!-- Start of file install-methods/official-cdrom.xml -->
+<!-- $Id: official-cdrom.xml 22664 2004-10-06 15:49:49Z fjpop-guest $ -->
+
+ <sect1 id="official-cdrom">
+ <title
+>Официальный набор компакт-дисков &debian;</title>
+<para
+>Самым лёгким путём установки &debian; является установка с официального набора компакт-дисков Debian(смотрите <ulink url="&url-debian-cd-vendors;"
+>страницу продавцов CD</ulink
+>). Также, вы можете загрузить образы компакт-дисков с сервера-зеркала Debian и сделать из них набор самостоятельно, если у вас есть высокоскоростное подключение к сети и есть устройство записи компакт-дисков(смотрите на странице <ulink url="&url-debian-cd;"
+>Debian на компакт-дисках</ulink
+> подробные инструкции). Если вас есть официальный набор компакт-дисков Debian и машина способна загружаться с привода CDROM, то вы можете сразу перейти к <xref linkend="boot-installer"/>; много усилий было потрачено, чтобы добиться что файлы стали полезными большинству людей на этих дисках. Хотя полный набор готовых пакетов умещается на нескольких дисках, вряд ли вам понадобятся пакеты, расположенные на третьем и последующих диска. Также вы можете подумать над использованием DVD версии, которая сохранит много места на вашей полке и вы избежите частой смены компакт-дисков. </para
+><para
+>Если машина не поддерживает загрузку с компакт-диска, а вы имеете набор CD, то для загрузки программы установки вы можете использовать альтернативную стратегию, например загрузить ядро с <phrase condition="supports-floppy-boot"
+>дискеты,</phrase
+> <phrase arch="s390"
+>ленты, псевдо ленты,</phrase
+> <phrase condition="bootable-disk"
+>жёсткого диска,</phrase
+> <phrase condition="bootable-usb"
+>usb устройства,</phrase
+> <phrase condition="supports-tftp"
+>по сети,</phrase
+> или вручную с CD. Для этого на CD есть все файлы; структура сетевого архива Debian и каталогов CD идентичны. Поэтому, когда ниже встречаются пути к файлам в архиве, которые требуются для определённого вида загрузки, поищите эти файлы в тех же каталогах и подкаталогах на ваших CD. </para
+><para
+>После загрузки программы установки, можно будет загружать все остальные файлы с компакт-дисков. </para
+><para
+>Если у вас нет набора CD, то вам потребуется загрузка системных файлов программы установки и сохранение их на <phrase arch="s390"
+>установочную ленту</phrase
+> <phrase condition="supports-floppy-boot"
+>дискету или</phrase
+> <phrase condition="bootable-disk"
+>жёсткий диск или</phrase
+> <phrase condition="bootable-usb"
+>usb устройство или</phrase
+> <phrase condition="supports-tftp"
+>на подключённый компьютер</phrase
+>, так чтобы их можно было использовать для загрузки программы установки. </para>
+
+ </sect1>
+<!--   End of file install-methods/official-cdrom.xml -->
+
+<!-- Start of file install-methods/downloading-files.xml -->
+<!-- $Id: downloading-files.xml 18670 2004-07-28 17:43:40Z joeyh $ -->
+
+ <sect1 id="downloading-files">
+ <title
+>Загрузка файлов с серверов-зеркал Debian</title>
+
+<para
+>Чтобы найти ближайший (и, поэтому, вероятно самый быстрый) сервер-зеркало, смотрите <ulink url="&url-debian-mirrors;"
+>список серверов-зеркал Debian</ulink
+>. </para
+><para
+>При загрузке файлов с сервера-зеркала Debian mirror, проверьте, что загружаете файлы в <emphasis
+>бинарном</emphasis
+>, а не текстовом или автоматическом режиме. </para>
+
+  <sect2 id="where-files">
+  <title
+>Где искать установочные образы</title>
+
+<para
+>Установочные образы на сервере-зеркале Debian находятся в каталоге<ulink url="&url-debian-installer;/images"
+>debian/dists/&releasename;/main/installer-&architecture;/current/images/</ulink
+> -- в файле <ulink url="&url-debian-installer;/images/MANIFEST"
+>MANIFEST</ulink
+> описано для чего предназначен каждый образ. </para>
+
+
+<!-- Start of file install-methods/download/alpha.xml -->
+<!-- $Id: alpha.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
+
+
+   <sect3 arch="alpha"
+><title
+>Файлы установки на Alpha</title>
+<para
+>Если вы выбралииз консоли микропрограммы ARC загрузку с помощью <command
+>MILO</command
+>, то вам также потребуется подготовить диск, содержащий <command
+>MILO</command
+> и <command
+>LINLOAD.EXE</command
+>, которые можно найти на дисковых образах. Подробную информацию о микропрограмме на Alpha и системных загрузчиках смотрите в<xref linkend="alpha-firmware"/>. Образы дискет можно найти в каталоге <filename
+>MILO</filename
+> с именами <filename
+>milo_<replaceable
+>субархитектура</replaceable
+>.bin</filename
+>. </para
+><para
+>К сожалению, эти образы <command
+>MILO</command
+> не удалось протестировать и они могут не работать на всех субархитектурах. Если вы это обнаружите, попытайтесь скопировать соответствующий двоичный файл <command
+>MILO</command
+> на дискету (<ulink url="&disturlftp;main/disks-alpha/current/MILO/"
+></ulink
+>). Заметим, что эти <command
+>MILO</command
+> не поддерживают ext2 ``sparse superblocks'', поэтому вы не сможете использовать их для загрузки ядер с только что созданной файловой системы ext2. В качестве обходного решения, вы можете положить ядро на FAT раздел после <command
+>MILO</command
+>. </para
+><para
+>Двоичные файлы <command
+>MILO</command
+> зависят от платформы. Смотрите <xref linkend="alpha-cpus"/>, чтобы определить нужный образ <command
+>MILO</command
+> подходящий под вашу Alpha платформу. </para>
+   </sect3>
+<!--   End of file install-methods/download/alpha.xml -->
+
+<!-- Start of file install-methods/download/arm.xml -->
+<!-- $Id: arm.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
+
+
+   <sect3 arch="arm" id="riscpc-install-files">
+   <title
+>Файлы установки на RiscPC</title>
+<para
+>Программа установки на RiscPC запускается прямо из RISC OS. Все необходимые файлы содержатся в одном Zip архиве, &rpc-install-kit;. Загрузите этот файл на машину с RISC OS, скопируйте компоненты <filename
+>linloader.!Boot</filename
+> туда же, и запустите <filename
+>!dInstall</filename
+>. </para>
+   </sect3>
+
+   <sect3 arch="arm" id="netwinder-install-files">
+   <title
+>NetWinder Installation Files</title>
+<para
+>The easiest way to boot a NetWinder is over the network, using the supplied TFTP image &netwinder-boot-img;. </para
+> 
+   </sect3>
+
+   <sect3 arch="arm" id="cats-install-files">
+   <title
+>CATS Installation Files</title>
+<para
+>The only supported boot method for CATS is to use the combined image &cats-boot-img;. This can be loaded from any device accessible to the Cyclone bootloader. </para>
+   </sect3>
+<!--   End of file install-methods/download/arm.xml -->
+
+<!-- Start of file install-methods/download/powerpc.xml -->
+<!-- $Id: powerpc.xml 20632 2004-09-02 19:20:53Z joeyh $ -->
+
+<!-- commented out as it seems out of date and the links are broken
+
+   <sect3 arch="powerpc" id="newworld-install-files">
+   <title
+>NewWorld MacOS Installation Files </title>
+<para>
+
+For floppy-less installation on NewWorld Macs, it may be most
+convenient to obtain all the necessary files packaged into one Stuffit
+archive from 
+<ulink url="&url-powerpc-of;"
+></ulink
+> (separate instructions are
+included in the archive). Otherwise, obtain the normal installation
+files listed above. Retrieve the files to an HFS (not HFS+) partition
+on your system.  You will also need the <filename
+>yaboot</filename
+> and
+<filename
+>yaboot.conf</filename
+> files from the 
+<ulink url="&downloadable-file;new-powermac/"
+>new-powermac</ulink
+> or 
+<ulink url="&downloadable-file;powermac/"
+>powermac</ulink
+> archive folder.
+However, the newest G4 PowerMacs, and those that work without MacOS 9,
+need the newest version of <command
+>yaboot</command
+>; the one in the
+archive will not work. Obtain the newest version from 
+<ulink url="http://penguinppc.org/projects/yaboot/"
+></ulink
+>.
+
+</para>
+   </sect3>
+
+-->
+<!--   End of file install-methods/download/powerpc.xml -->
+
+<!-- Start of file install-methods/download/m68k.xml -->
+<!-- $Id: m68k.xml 18722 2004-07-29 19:21:55Z smarenka $ -->
+
+
+   <sect3 arch="m68k" id="kernel-22">
+   <title
+>Выбор ядра</title>
+
+<para
+>Для некоторых суб-архитектур m68k есть выбор версии ядра для установки. В общих чертах, мы рекомендуем сначала попробовать самую новую версию. Если для вашей суб-архитектуры или машины требуется ядро 2.2.x, убедитесь, что вы выбрали один из образов, который поддерживает ядра 2.2.x (смотрите файл <ulink url="&disturl;/main/installer-&architecture;/current/images/MANIFEST"
+>MANIFEST</ulink
+>). </para>
+<para
+>Все образы ядра версий 2.2.x для m68k требуют параметр ядра &ramdisksize;. </para>
+   </sect3>
+<!--   End of file install-methods/download/m68k.xml -->
+
+  </sect2>
+
+ </sect1>
+<!--   End of file install-methods/downloading-files.xml -->
+
+<!-- Start of file install-methods/ipl-tape.xml -->
+<!-- $Id: ipl-tape.xml 18767 2004-07-31 14:14:52Z mck-guest $ -->
+
+ <sect1 arch="s390" id="ipl-tape">
+ <title
+>Создание ленты IPL</title>
+
+<para
+>Если вы не смогли загрузить (IPL) с CD-ROM и не используете VM, то вам нужно создатьленту IPL. Это описано в разделе 3.4.3 в Redbook <ulink url="http://www.redbooks.ibm.com/pubs/pdfs/redbooks/sg246264.pdf"
+> Linux for IBM eServer zSeries and S/390: Distributions</ulink
+>. Файлы, которые требуется записать на ленту (в нужном порядке): <filename
+>kernel.debian</filename
+>, <filename
+>parmfile.debian</filename
+> и <filename
+>initrd.debian</filename
+>. Файлы можно найти в каталоге <filename
+>tape</filename
+>, смотрите <xref linkend="where-files"/>, </para>
+ </sect1>
+
+<!--   End of file install-methods/ipl-tape.xml -->
+
+<!-- Start of file install-methods/create-floppy.xml -->
+<!-- $Id: create-floppy.xml 18623 2004-07-27 19:08:34Z joeyh $ -->
+
+ <sect1 condition="supports-floppy-boot" id="create-floppy">
+ <title
+>Создание дискет из образов</title>
+<para
+>Загрузочные дискеты обычно используются как последний носитель с которого можно загрузить программу установки на железе, которое не умеет загружаться с CD или каким-то другим способом. </para
+><para arch="powerpc"
+>Загрузка с дискет не работает в дисководах Mac USB. </para
+><para arch="m68k"
+>Загрузка с дискет не поддерживается на Amiga или 68k Mac. </para
+><para
+>Образы дисков это файлы, содержащие полный слепок дискеты в<emphasis
+>сыром</emphasis
+> виде. Образы дисков, такие как <filename
+>boot.img</filename
+>, нельзя просто скопировать на дискету. Для этого нужно пользоваться специальной программой, которая пишет образы файлов на дискету в <emphasis
+>сыром</emphasis
+> режиме. Это обязательное условие, так как образы представляют собой сырое представление диска; требуется выполнение <emphasis
+>посекторного копирования</emphasis
+> данных из файла на дискету. </para
+><para
+>Есть несколько техник по созданию дискет из образов файлов, которые зависят от платформы. Этот раздел опишет, как создать дискеты из образов дисков на различных платформах. </para
+><para
+>Неважно каким методом вы создадите дискеты, вы только должны помнить о переключении защиты от записи на дискетах после их создания, чтобы непреднамеренно не повредить их. </para>
+
+  <sect2
+><title
+>Запись образов дисков из систем Linux или Unix</title>
+<para
+>Для записи дисковых образов файлов на дискеты, вам вероятно понадобятся права суперпользователя. Вставьте хорошую, чистую дискету в дисковод. Затем, используйте команду <informalexample
+><screen>
+dd if=<replaceable
+>файл</replaceable
+> of=/dev/fd0 bs=1024 conv=sync ; sync
+</screen
+></informalexample
+> где <replaceable
+>файл</replaceable
+> это один файловых образов дискет (смотрите в <xref linkend="downloading-files"/> какой<replaceable
+>файл</replaceable
+> должен быть). <filename
+>/dev/fd0</filename
+> это распространённое имя дисковода, оно может быть отличаться от используемого на вашей машине <phrase arch="sparc"
+>(в Solaris это<filename
+>/dev/fd/0</filename
+>)</phrase
+>. Команда может завершиться раньше, чемUnix завершит запись на дискету, поэтому следите за лампой дисковода и перед вытаскиванием дискеты убедитесь, что она погасла и диск перестал вращаться. На некоторых систмах, нужно выдать команду вытаскивания дискеты из дисковода<phrase arch="sparc"
+>(в Solaris используется <command
+>eject</command
+>, смотрите страницу руководства)</phrase
+>. </para
+><para
+>Некоторые системы пытаются автоматически монтировать дискету после появления её в дисководе. Вам может потребоваться выключить это свойство, иначе рабочая станция не позволит вам запись на дискету в <emphasis
+>сыром режиме</emphasis
+>. К сожалению, как этого достичь зависит от операционной системы. <phrase arch="sparc"
+> В Solaris лдя получения сырого доступа к дискете вы можете воспользоваться управлением тома. Во-первых, убедитесь, что дискета смонтирована автоматически (с помощью команды <command
+>volcheck</command
+> и её эквивалентом из менеджера файлов). Затем, воспользуйтесь командой <command
+>dd</command
+> как было показано выше, просто заменив <filename
+>/dev/fd0</filename
+> на <filename
+>/vol/rdsk/<replaceable
+>floppy_name</replaceable
+></filename
+>, где<replaceable
+>floppy_name</replaceable
+> это имя дисковода, которое было задано при форматировании (безимянные дискеты имеют имя по умолчанию<filename
+>unnamed_floppy</filename
+>).По другим системам, спросите вашего системного администратора. </phrase
+> </para
+><para arch="powerpc"
+>Если запись производится на powerpc Linux, то вам нужно извлечь её. Программа<command
+>eject</command
+> отлично справляется этим; вам может потребоваться её установка. </para>
+
+  </sect2>
+
+
+<!-- Start of file install-methods/floppy/i386.xml -->
+<!-- $Id: i386.xml 18624 2004-07-27 19:08:59Z joeyh $ -->
+
+
+<!--  This is not set off for i386 only, because many people will have -->
+<!--  access to a PC in order to make a floppy for other arches. --> 
+
+  <sect2
+><title
+>Запись образов дискет из DOS, Windows или OS/2</title>
+
+<para
+>Если у вас есть доступ к машине i386, вы можете использовать одну из следующих программ для копирования образов на дискеты. </para
+><para
+>Программы <command
+>rawrite1</command
+> и <command
+>rawrite2</command
+> можно использовать под MS-DOS. Для этого сперва убедитесь, что вы загрузились в DOS. Попытка использовать эти программы в DOS-окне под Windows или через двойной щелчок мышью из Проводника Windows, скорее всего <emphasis
+>не</emphasis
+> сработает. </para
+><para
+>Программа <command
+>rwwrtwin</command
+> работает под Windows 95, NT, 98, 2000, ME, XP и, вероятно, под более поздними версиями. Для ее использования вам надо распаковать diskio.dll в ту же самую директорию. </para
+><para
+>Эти утилиты можно найти на Официальных компакт-дисках Debian CD-ROMs в директории <filename
+>/tools</filename
+>. </para>
+  </sect2>
+<!--   End of file install-methods/floppy/i386.xml -->
+
+<!-- Start of file install-methods/floppy/m68k.xml -->
+<!-- $Id: m68k.xml 18672 2004-07-28 19:38:06Z smarenka $ -->
+
+
+  <sect2 arch="m68k"
+><title
+>Создание образов дисков на машинах Atari</title>
+<para
+>В том же каталоге что и образы дискет вы найдёте программу &rawwrite.ttp;. Запустите программу двойным щелчком по иконке программы, и наберите имя файла образа, который хотите записать на дискету в командной строке диалогового окна программы TOS. </para>
+
+  </sect2>
+
+  <sect2 arch="m68k"
+><title
+>Writing Disk Images on Macintosh Systems</title>
+<para
+>There is no MacOS application to write images to floppy disks (and there would be no point in doing this as you can't use these floppies to boot the installation system or install kernel and modules from on Macintosh). However, these files are needed for the installation of the operating system and modules, later in the process. </para>
+
+  </sect2>
+<!--   End of file install-methods/floppy/m68k.xml -->
+
+<!-- Start of file install-methods/floppy/powerpc.xml -->
+<!-- $Id: powerpc.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
+
+
+  <sect2 arch="powerpc"
+><title
+>Запись образов дисков из MacOS</title>
+<para
+>Для создания дискет из файлов образов дисков есть AppleScript, <application
+>Make Debian Floppy</application
+>. Его можно загрузить с<ulink url="ftp://ftp2.sourceforge.net/pub/sourceforge/debian-imac/MakeDebianFloppy.sit"
+></ulink
+>. Для его использования, просто поместите его на рабочий стол, а затем перетащите на него любой файл образа дискеты. У вас должен быть установлен и включён в менеджере расширений Applescript. Disk Copy попросит вас подтвердить, что вы хотите стереть дискету и записать на неё образ файла. </para
+><para
+>Также, вы сразу можете использовать утилиту MacOS <command
+>Disk Copy</command
+> или свободную утилиту <command
+>suntar</command
+>. Файл <filename
+>root.bin</filename
+> это пример образа дискеты. Используйте один из следующих методов для создания дискеты из образа. </para>
+
+   <sect3>
+   <title
+>Запись образов дисков с помощью <command
+>Disk Copy</command
+></title>
+<para
+>Если вы создаёте дискету из образа файла, который взят с официального&debian; CD, то Тип и Создатель ужё установлены правильно. Следующие шаги <command
+>Creator-Changer</command
+> необходимы только если вы загрузили файлы образов с сервера-зеркала Debian. </para>
+<orderedlist>
+<listitem
+><para
+>Получите <ulink url="&url-powerpc-creator-changer;"
+>Creator-Changer</ulink
+> и используйте его для открытия файла <filename
+>root.bin</filename
+>. </para
+></listitem>
+<listitem
+><para
+>Измените Создатель на <userinput
+>ddsk</userinput
+> (Disk Copy), а Тип на<userinput
+>DDim</userinput
+> (двоичный образ дискеты). Регистр вводимых данных важен. </para
+></listitem>
+<listitem
+><para
+><emphasis
+>Важно:</emphasis
+> В Finder, воспользуйтесь <userinput
+>Get Info</userinput
+> что посмотреть Finder информацию об образе дискеты, а в поле <userinput
+>File Locked</userinput
+> должен стоять `X', чтобы MacOS не смог удалить загрузочные блоки, если образ будет случайно смонтирован. </para
+></listitem>
+    <listitem
+><para
+>Получите <command
+>Disk Copy</command
+>; если у вас система MacOS и есть CD, то скорее всего она уже есть, иначе попробуйте <ulink url="&url-powerpc-diskcopy;"
+></ulink
+>. </para
+></listitem>
+<listitem
+><para
+>Запустите <command
+>Disk Copy</command
+>, и выберите `Make a Floppy' из меню<userinput
+>Utilities</userinput
+>, затем выберите <emphasis
+>locked</emphasis
+> файл образа в появившемся диалоговом окне. Вас попросят вставить дискету, затем спросят хотите ли вы стереть её содержимое. Когда всё закончится, дискета вылезет из дисковода. </para
+></listitem>
+</orderedlist>
+
+   </sect3>
+
+   <sect3>
+   <title
+>Запись образов дисков с помощью <command
+>suntar</command
+></title>
+<para>
+
+<orderedlist>
+<listitem
+><para
+>Получите <command
+>suntar</command
+>из <ulink url="&url-powerpc-suntar;"
+> </ulink
+>. Запустите программу <command
+>suntar</command
+> и выберите `Overwrite Sectors...' из меню <userinput
+>Special</userinput
+>. </para
+></listitem>
+<listitem
+><para
+>Вставьте дискету, нажмите &enterkey; (начало с сектора 0). </para
+></listitem>
+<listitem
+><para
+>Выберите файл <filename
+>root.bin</filename
+> в появившемся диалоговом окне. </para
+></listitem>
+<listitem
+><para
+>После успешного создания дискеты, выдерите `Eject' из меню<userinput
+>File</userinput
+>. Если были какие-то ошибки при записи дискеты, просто выньте эту и вставьте другую дискету. </para
+></listitem>
+</orderedlist>
+Перед использованием созданной дискеты, <emphasis
+>установите защёлку защиты от записи</emphasis
+>! Иначе, если вы нечаянно смонтируете её в MacOS, MacOS просто испортит её. </para>
+   </sect3>
+  </sect2>
+<!--   End of file install-methods/floppy/powerpc.xml -->
+
+ </sect1>
+
+<!--   End of file install-methods/create-floppy.xml -->
+
+<!-- Start of file install-methods/boot-usb-files.xml -->
+<!-- $Id: boot-usb-files.xml 22935 2004-10-09 18:36:20Z fjpop-guest $ -->
+
+ <sect1 condition="bootable-usb" id="boot-usb-files">
+ <title
+>Подготовка файлов для загрузки со сменного USB устройства</title>
+
+<para
+>Для подготовки USB устройства вам нужна система с запущенной GNU/Linux и на которой поддерживается USB. Убедитесь, что загружен модуль ядра usb-storage (<userinput
+>modprobe usb-storage</userinput
+>) и попытайтесь выяснить на какое устройство SCSI отображено USB устройство (в примере используется <filename
+>/dev/sda</filename
+>). Чтобы производить запись на устройство, вам также нужно выключить защиту от записи. </para
+><para
+>Заметим, что USB устройство должно быть как минимум 128МБ (установка на меньший размервозможно после прочтения <xref linkend="usb-copy-flexible"/>). </para>
+
+  <sect2 id="usb-copy-easy">
+  <title
+>Копирование файлов - лёгкий путь</title>
+<para
+>Существует файл "всё-в-одном" <filename
+>hd-media/boot.img.gz</filename
+>, который содержит все файлы установки (включая ядро), а также<command
+>SYSLINUX</command
+> и его файл конфигурации. Вам нужно только распаковать его прямо на USB устройство: <informalexample
+><screen>
+
+gzip -dc boot.img.gz 
+>/dev/<replaceable
+>sda</replaceable>
+
+</screen
+></informalexample
+> Естественно, это уничтожит все данные на устройстве, поэтому не промахнитесь с именем USB устройства. </para
+><para
+>После этого, смонтируйте USB устройство (<userinput
+>mount /dev/sda /mnt</userinput
+>), которое теперь содержит файловую систему FAT, и скопируйте на него ISO образ Debian netinst или businesscard. Имя файла должно заканчиваться обязательно на<filename
+>.iso</filename
+>. Размонтируйте устройство (<userinput
+>umount /mnt</userinput
+>) и всё готово. </para>
+  </sect2>
+
+  <sect2 id="usb-copy-flexible">
+  <title
+>Копирование файлов - гибкий путь</title>
+<para
+>Если вам хочется больше гибкости или вы просто хотите знать, что на самом деле происходит, то можете воспользоваться следующим методом подготовки файлов. Мы покажем, как использовать на устройстве памяти только первый раздел, а не весь диск. </para
+><note
+><para
+>Так как большинство USB устройств продаются только с одним разделом FAT16, вам, вероятно, не хочется переразмечать или форматировать устройство. Если вас всё равно, то воспользуйтесь<command
+>cfdisk</command
+> или любой другой утилитой разметки для созданияраздела FAT16, а затем выполните <informalexample
+><screen>
+
+mkdosfs /dev/<replaceable
+>sda1</replaceable>
+
+</screen
+></informalexample
+> Обязательно вводите правильное имя устройства USB. Команда <command
+>mkdosfs</command
+> содержится в пакете Debian <classname
+>dosfstools</classname
+>. </para
+></note
+><para
+>Чтобы запустить ядро после загрузки с USB устройства, мы поместим на устройство системный загрузчик. Хотя должен работать любой системный загрузчик (например <command
+>LILO</command
+>), удобнее использовать <command
+>SYSLINUX</command
+>, так как он использует раздел FAT16 и настраивается простым редактированием текстового файла. Для изменения конфигурации системного загрузчика можно использовать любую операционную систему, которая поддерживает файловую систему FAT. </para
+><para
+>Чтобы положить <command
+>SYSLINUX</command
+> на раздел FAT16 устройства USB, установите пакеты <classname
+>syslinux</classname
+> и <classname
+>mtools</classname
+> в систему, и введите <informalexample
+><screen>
+
+syslinux /dev/<replaceable
+>sda1</replaceable>
+
+</screen
+></informalexample
+> Ещё раз отметим: не ошибитесь в имени устройства. Раздел не должен быть смонтирован при запуске <command
+>SYSLINUX</command
+>. Эта процедура переписывает загрузочный сектор раздела и создаёт файл<filename
+>ldlinux.sys</filename
+>, который содержит код системного загрузчика. </para
+><para
+>Смонтируйте раздел (<userinput
+>mount /dev/sda1 /mnt</userinput
+>) скопируйте следующие файлы из архива Debian на устройство: <itemizedlist
+> <listitem
+><para
+> <filename
+>vmlinuz</filename
+> (kernel binary) </para
+></listitem
+> <listitem
+><para
+> <filename
+>initrd.gz</filename
+> (образ ramdisk) </para
+></listitem
+> <listitem
+><para
+> <filename
+>syslinux.cfg</filename
+> (файл настройки SYSLINUX) </para
+></listitem
+> <listitem
+><para
+> Необязательные модули ядра</para
+></listitem
+> </itemizedlist
+> Если вы хотите переименовать файлы, учтите, что<command
+>SYSLINUX</command
+> работает только с файловыми именами DOS (8.3). </para
+><para
+>Файл настройки <filename
+>syslinux.cfg</filename
+> должен содержать две строки: <informalexample
+><screen>
+
+default vmlinuz
+append initrd=initrd.gz ramdisk_size=10000 root=/dev/rd/0 init=/linuxrc devfs=mount,dall rw
+
+</screen
+></informalexample
+> Учтите, что может потребоваться увеличить параметр <userinput
+>ramdisk_size</userinput
+>, в зависимости от загружаемого образа. </para
+><para
+>Теперь вы должны положить какой-нибудь ISO образ Debian (businesscard, netinst или вообще один большой) на устройство (если он влезет). Имя файла образа обязательно должно заканчиваться на <filename
+>.iso</filename
+>. </para
+><para
+>Если вы хотите сделать установку через сеть, без использования ISO образа, вам естественно нужно пропустить предыдущий шаг. Кроме того, вам нужно использовать ramdisk из каталога <filename
+>netboot</filename
+>, а не из <filename
+>hd-media</filename
+>, так как <filename
+>hd-media/initrd.gz</filename
+> не содержит сетевой поддержки. </para
+><para
+>По завершению, размонтируйте съёмное USB устройство (<userinput
+>umount /mnt</userinput
+>) и включите защиту от записи. </para
+><warning
+><para
+>Если машина не хочет грузиться с USB устройства, носитель может содержать неправильную главную загрузочную запись (MBR). Чтобы исправить её, используйте команду <command
+>install-mbr</command
+> из пакета <classname
+>mbr</classname
+>: <informalexample
+><screen
+>install-mbr /dev/<replaceable>sda</replaceable>
+
+</screen
+></informalexample>
+
+</para
+></warning>
+  </sect2>
+ </sect1>
+<!--   End of file install-methods/boot-usb-files.xml -->
+
+<!-- Start of file install-methods/boot-drive-files.xml -->
+<!-- $Id: boot-drive-files.xml 23151 2004-10-16 15:37:49Z cjwatson $ -->
+
+ <sect1 condition="bootable-disk" id="boot-drive-files">
+ <title
+>Подготовка файлов для загрузки с жёсткого диска</title>
+<para
+>Программа установки может быть загружена из загрузочных файлов, размещённых на существующем разделе жёсткого диска, или запущена из другой операционной системы или вызвана системным загрузчиков прямо из BIOS. </para
+><para
+>Полной, "чисто сетевой" установки можно достичь с помощью этой техники. Она позволяет избежать всех неприятностей со сменными носителями, например поиск и прожиг CD образов или борьбы с кучей на ещё и нечитаемых дискет. </para
+><para arch="i386"
+>Программа установки не может загрузиться из файлов, расположенных на файловой системе NTFS. </para
+><para arch="powerpc"
+>Программа установки не может загрузиться из файлов, расположенных на файловой системе HFS+. Система MacOS 8.1 и выше может использовать файловую систему HFS+; все NewWorld PowerMac используют HFS+. Чтобы определить, что используемая файловая системаHFS+, выберите <userinput
+>Get Info</userinput
+> для тома в вопросе. Файловые системы HFS называются <userinput
+>Mac OS Standard</userinput
+>, а файловые системы HFS+ <userinput
+>Mac OS Extended</userinput
+>. Вы должны иметь HFS раздел для обмена файлами между MacOS и Linux, в особенности, для загрузки файлов установки. </para
+><para arch="powerpc"
+>Для загрузки системы установки с жёсткого диска использую различные программы, в зависимости от модели: ``NewWorld'' или ``OldWorld''. </para>
+
+  <sect2 arch="i386" id="files-lilo">
+  <title
+>Загрузка программы установки с жёсткого диска с помощью <command
+>LILO</command
+> или <command
+>GRUB</command
+></title>
+<para
+>Этот раздел описывает как добавить или даже заменить существующую установку linux с помощью <command
+>LILO</command
+> или <command
+>GRUB</command
+>. </para
+><para
+>Во время загрузки, оба системных загрузчика поддерживают загрузку в память не только ядра, но и образа диска. Этот RAM может использоваться ядром в качестве корневой файловой системы. </para
+><para
+>Скопируйте следующие файлы из архивов Debian в удобное место на жёстком диске, например в <filename
+>/boot/newinstall/</filename
+>. <itemizedlist>
+<listitem
+><para
+><filename
+>vmlinuz</filename
+> (бинарный файл ядра) </para
+></listitem>
+<listitem
+><para
+><filename
+>initrd.gz</filename
+> (образ ramdisk) </para
+></listitem>
+</itemizedlist>
+
+</para
+><para
+>Настройте системный загрузчик, следуя <xref linkend="boot-initrd"/>. </para>
+  </sect2>
+
+
+  <sect2 arch="powerpc" id="files-oldworld">
+  <title
+>Загрузка программы установки с жёсткого диска для OldWorld Mac</title>
+<para
+>Дискета <filename
+>boot-floppy-hfs</filename
+> использует <application
+>miBoot</application
+> для запуска установки Linux, но <application
+>miBoot</application
+> не может быть легко использована для загрузки с жёсткого диска. <application
+>BootX</application
+>, запущенная из MacOS, поддерживает загрузку из файлов, расположенных на жёстком диске. <application
+>BootX</application
+> может также использоваться в качестве двойной загрузки MacOS и Linux после завершения установки Debian. На Performa 6360, кажется, <command
+>quik</command
+> не может выполнять загрузку с жёсткого диска. Поэтому для этой модели нужно использовать <application
+>BootX</application
+>. </para
+><para
+>Загрузите и распакуйте дистрибутив <application
+>BootX</application
+>, доступный из<ulink url="&url-powerpc-bootx;"
+></ulink
+>, или в каталоге<filename
+>dists/woody/main/disks-powerpc/current/powermac</filename
+> на серверах-зеркалах Debian http/ftp и официальных Debian CD. Воспользуйтесь<application
+>Stuffit Expander</application
+> чтобы распаковать его из архива. В месте пакета появится пустой каталог с именем <filename
+>Linux Kernels</filename
+>. Загрузите<filename
+>linux.bin</filename
+> и <filename
+>ramdisk.image.gz</filename
+> из каталога <filename
+>disks-powerpc/current/powermac</filename
+>, и поместите их в каталог <filename
+>Linux Kernels</filename
+>. Затем переместите каталог <filename
+>Linux Kernels</filename
+> в активный System Folder. </para>
+  </sect2>
+
+  <sect2 arch="powerpc" id="files-newworld">
+  <title
+>Загрузка программы установки с жёсткого диска для NewWorld Mac</title>
+<para
+>NewWorld PowerMac поддерживают загрузку по сети или с ISO9660 CD-ROM, а также позволяют загружать бинарные ELF файлы непосредственно с жёсткого диска. Эти машинызагружают Linux прямо из <command
+>yaboot</command
+>, который поддерживает загрузку ядра и RAM диска прямо из раздела ext2, а также двойную загрузку с MacOS. Загрузка программы установки с жёсткого диска в первую очередь предназначена для новых машин без дисководов гибких дисков. <command
+>BootX</command
+> не поддерживается и не должен использоваться на NewWorld PowerMac. </para
+><para
+><emphasis
+>Скопируйте</emphasis
+> (не перемещайте) следующие четыре файла, которые вы загрузили ранее из архивов Debian, в корневой каталог жёсткого диска(это может быть выполнено с помощью <keycap
+>option</keycap
+>-перетаскиваниякаждого файла на иконку жёсткого диска). <itemizedlist>
+<listitem
+><para>
+
+<filename
+>vmlinux</filename>
+
+</para
+></listitem>
+<listitem
+><para>
+
+<filename
+>initrd.gz</filename>
+
+</para
+></listitem>
+<listitem
+><para>
+
+<filename
+>yaboot</filename>
+
+</para
+></listitem>
+<listitem
+><para>
+
+<filename
+>yaboot.conf</filename>
+
+</para
+></listitem>
+</itemizedlist>
+
+</para
+><para
+>Запомните номер раздела MacOS, куда вы поместили эти файлы. Если у вас есть MacOS программа <command
+>pdisk</command
+>, то вы можете воспользоваться командойL, чтобы узнать номер раздела. Вам потребуется этот номер раздела для ввода в команду приглашения Open Firmware, когда вы будете загружать программу установки. </para
+><para
+>Продолжение загрузки программу установки читайте в <xref linkend="boot-newworld"/>. </para>
+  </sect2>
+ </sect1>
+<!--   End of file install-methods/boot-drive-files.xml -->
+
+<!-- Start of file install-methods/install-tftp.xml -->
+<!-- $Id: install-tftp.xml 23213 2004-10-18 21:04:56Z fjpop-guest $ -->
+
+ <sect1 condition="supports-tftp" id="install-tftp">
+ <title
+>Подготовка файлов для загрузки по TFTP</title>
+<para
+>Если ваша машина подключена к локальной сети, то вы можете загружать её по сети с другой машины через TFTP. Если вы намерены загрузить систему установки с другой машины, то на эту машину в определённое место вам нужно поместить загрузочные файлы, и настроить поддержку загрузки вашей машины. </para
+><para
+>Вам нужно настроить TFTP, а если машин много, то и BOOTP сервер<phrase condition="supports-rarp"
+>, или RARP сервер</phrase
+> <phrase condition="supports-dhcp"
+>, или DHCP сервер</phrase
+>. </para
+><para
+><phrase condition="supports-rarp"
+>Reverse Address Resolution Protocol (RARP) это один из путей сказать клиенту какой адрес IP для него предназначен. Другой способ это использовать BOOTP протокол. </phrase
+> <phrase condition="supports-bootp"
+>BOOTP это IP протокол, который информирует компьютер о его IP адресе и где в сети получитьзагрузочный образ. </phrase
+> <phrase arch="m68k"
+> Другая альтернатива есть на системах VMEbus: IP адресможно вручную настроить в boot ROM. </phrase
+> <phrase condition="supports-dhcp"
+>DHCP (Dynamic Host Configuration Protocol) более гибок, обратно совместимое расширение BOOTP. Некоторые системы могут быть настроены только через DHCP.</phrase
+> </para
+><para arch="powerpc"
+>Для PowerPC, если вы имеете машину NewWorld Power Macintosh, лучше использоватьDHCP вместо BOOTP. Некоторые из последних машин невозможно загрузить с помощью BOOTP. </para
+><para arch="alpha"
+>В отличие от Open Firmware в машинах Sparc и PowerPC, SRM консоль<emphasis
+>не</emphasis
+> будет использовать RARP для получения IP адреса, и поэтомувы должны использовать BOOTP для загрузки по сети вашей Alpha. Также вы можете ввести IP настройку для сетевых интерфейсов в SRM консоли. <footnote
+> <para
+>Системы Alpha также могут быть загружены по сети с помощью DECNet MOP (Maintenance Operations Protocol), но это здесь не описано. По-видимому, вам локальный операторOpenVMS будет счастлив рассказать, что нужно для MOP, чтобы загрузить Linux на Alpha. </para>
+</footnote
+></para
+><para arch="hppa"
+>Некоторые старые HPPA машины (например 715/75) используют RBOOTD, а не BOOTP. ПакетRBOOTD доступен на веб сайте parisc-linux. </para
+><para
+>Trivial File Transfer Protocol (TFTP) используется для загрузки загрузочного образа на клиент. Теоретически, можно использовать любой сервер, на любой платформе, которая реализует эти протоколы. В примерах этого раздела, мы используем команды из SunOS 4.x, SunOS 5.x (так называемый Solaris) и GNU/Linux. </para>
+
+
+<!-- Start of file install-methods/tftp/rarp.xml -->
+<!-- $Id: rarp.xml 15652 2004-05-19 00:37:43Z kraai $ -->
+
+
+  <sect2 condition="supports-rarp" id="tftp-rarp">
+   <title
+>Настройка RARP сервера</title>
+<para
+>Для настройки RARP, вам нужно знать Ethernet адрес (так называемый MAC адрес) клиентского компьютера, на который будет выполняться установка. Если вы не знаете эту информацию, то можете <phrase arch="sparc"
+> получить её из сообщений начальной загрузкиOpenPROM, воспользоваться командой OpenBoot <userinput
+>.enet-addr</userinput
+>, или </phrase
+> загрузиться в ``Rescue'' режиме (например, со спасательной дискеты) и выполнить команду <userinput
+>/sbin/ifconfig eth0</userinput
+>. </para
+><para
+>Если система с RARP сервером использует ядро Linux 2.2.x, то вам необходимо заполнитьRARP таблицу ядра. Чтобы сделать это, выполните следующие команды: <informalexample>
+<para>
+
+<userinput
+>/sbin/rarp -s <replaceable
+>client-hostname</replaceable
+> <replaceable
+>client-enet-addr</replaceable
+> </userinput>
+
+</para
+><para>
+
+<userinput
+>/usr/sbin/arp -s <replaceable
+>client-ip</replaceable
+> <replaceable
+>client-enet-addr</replaceable
+> </userinput>
+
+</para
+></informalexample>
+
+</para
+><para
+>Если вы получили <informalexample
+><screen>
+SIOCSRARP: Invalid argument
+</screen
+></informalexample
+>, то вероятно, вам нужно загрузить модуль ядра RARP или пересобрать ядро с поддержкой RARP. Попробуйте выполнить <userinput
+>modprobe rarp</userinput
+> и затем ввести команду <command
+>rarp</command
+> ещё раз. </para
+><para
+>В системе с RARP сервером использующей ядро Linux 2.4.x, нет RARP модуля, а вместо него вы должны использовать программу <command
+>rarpd</command
+>. Процедура очень похожа на ту, которая используется в SunOS из следующего параграфа. </para
+><para
+>В SunOS, вам нужно проверить, что аппаратный адрес Ethernet клиента содержится вбазе данных ``ethers'' (или в файле <filename
+>/etc/ethers</filename
+>, или через NIS/NIS+) и базе данных ``hosts''. Затем, вам нужно запустить демона RARP. В SunOS 4, выполните команду (от суперпользователя): <userinput
+>/usr/etc/rarpd -a</userinput
+>; в SunOS 5 используйте <userinput
+>/usr/sbin/rarpd -a</userinput
+>. </para>
+  </sect2>
+<!--   End of file install-methods/tftp/rarp.xml -->
+
+<!-- Start of file install-methods/tftp/bootp.xml -->
+<!-- $Id: bootp.xml 16879 2004-06-16 21:47:55Z fjpop-guest $ -->
+
+
+  <sect2 condition="supports-bootp" id="tftp-bootp">
+  <title
+>Настройка BOOTP сервера</title>
+<para
+>В GNU/Linux есть два BOOTP сервера, CMU <command
+>bootpd</command
+> и ещё один, на самом деле DHCP сервер, ISC <command
+>dhcpd</command
+>, которые находятся в пакетах &debian; <classname
+>bootp</classname
+> и<classname
+>dhcp</classname
+>. </para
+><para
+>Для использования CMU <command
+>bootpd</command
+>, сначала вы должны раскомментировать (или добавить) соответствующую строку в<filename
+>/etc/inetd.conf</filename
+>. Для этого в &debian; вы можете запустить<userinput
+>update-inetd --enable bootps</userinput
+>, затем <userinput
+>/etc/init.d/inetd reload</userinput
+>. Иначе, добавляемая строка должна выглядеть так: <informalexample
+><screen
+>bootps  dgram  udp  wait  root  /usr/sbin/bootpd  bootpd -i -t 120
+
+</screen
+></informalexample>
+
+</para
+><para
+>Теперь, вы должны создать файл <filename
+>/etc/bootptab</filename
+>. Внутри он напоминает хорошо знакомый и загадочный формат старых добрых BSD файлов<filename
+>printcap</filename
+>, <filename
+>termcap</filename
+> и<filename
+>disktab</filename
+>. Подробности смотрите на странице руководства <filename
+>bootptab</filename
+>. Для CMU <command
+>bootpd</command
+>, вам нужно знать аппаратный адрес (MAC) клиента. Вот пример <filename
+>/etc/bootptab</filename
+>: <informalexample
+><screen>
+
+client:\
+  hd=/tftpboot:\
+  bf=tftpboot.img:\
+  ip=192.168.1.90:\
+  sm=255.255.255.0:\
+  sa=192.168.1.1:\
+  ha=0123456789AB:
+
+</screen
+></informalexample
+> Вам нужно изменить по крайней мере параметр "ha", который содержит аппаратный адрес клиента. Параметр "bf" содержит файл, который клиент должен получить по TFTP; подробности смотрите в <xref linkend="tftp-images"/>. <phrase arch="mips"
+> На SGI Indy, вы можете просто войти в командный монитор и набрать <userinput
+>printenv</userinput
+>. Значение переменной <userinput
+>eaddr</userinput
+> содержитMAC адрес машины.</phrase
+> </para
+><para
+>В противоположность, настройка BOOTP от ISC <command
+>dhcpd</command
+> очень проста, так как он трактует BOOTP клиентов, как частный случай DHCP клиентов.Некоторые архитектуры требуют сложной конфигурации для загрузки клиентов поBOOTP. Если у вас один из таких случаев, прочитайте раздел <xref linkend="dhcpd"/>. Иначе, вероятно, вам будет достаточно просто добавить директиву <userinput
+>allow bootp</userinput
+> в конфигурационный блок подсети, содержащейклиента, и перезапустить <command
+>dhcpd</command
+> командой <userinput
+>/etc/init.d/dhcpd restart</userinput
+>. </para>
+  </sect2>
+<!--   End of file install-methods/tftp/bootp.xml -->
+
+<!-- Start of file install-methods//tftp/dhcp.xml -->
+<!-- $Id: dhcp.xml 22664 2004-10-06 15:49:49Z fjpop-guest $ -->
+
+
+  <sect2 condition="supports-dhcp" id="dhcpd">
+   <title
+>Настройка DHCP сервера</title>
+<para
+>Есть один свободный DHCP сервер: это ISC <command
+>dhcpd</command
+>. В &debian;, он доступен из пакета <classname
+>dhcp</classname
+>. Вот пример его конфигурационного файла (обычно <filename
+>/etc/dhcpd.conf</filename
+>): <informalexample
+><screen>
+
+option domain-name "example.com";
+option domain-name-servers ns1.example.com;
+option subnet-mask 255.255.255.0;
+default-lease-time 600;
+max-lease-time 7200;
+server-name "servername";
+
+subnet 192.168.1.0 netmask 255.255.255.0 {
+  range 192.168.1.200 192.168.1.253;
+  option routers 192.168.1.1;
+}
+
+host clientname {
+  filename "/tftpboot/tftpboot.img";
+  server-name "servername";
+  next-server servername;
+  hardware ethernet 01:23:45:67:89:AB; 
+  fixed-address 192.168.1.90;
+}
+
+</screen
+></informalexample
+> Примечание: новый (и предпочтительный) пакет <classname
+>dhcp3</classname
+> использует <filename
+>/etc/dhcp3/dhcpd.conf</filename
+>. </para
+><para
+>В этом примере определён единственный сервер <replaceable
+>"servername"</replaceable
+>, который выполняет всю работу DHCP, TFTP серверов и шлюза сети. Вам почти наверняка нужно изменить опцию domain-name, а также server-name и аппаратный адрес клиента. Опция <replaceable
+>"filename"</replaceable
+> должна содержать имя файла, который нужно получить по TFTP. </para
+><para
+>После редактирования конфигурационного файла <command
+>dhcpd</command
+>, перезагрузите его командой <userinput
+>/etc/init.d/dhcpd restart</userinput
+>. </para>
+
+   <sect3 arch="i386">
+   <title
+>Включение загрузки PXE в конфигурацию DHCP</title>
+<para
+>Вот другой пример <filename
+>dhcp.conf</filename
+>, в котором используется метод предстартового выполнения среды (PXE) по TFTP. <informalexample
+><screen>
+
+option domain-name "example.com";
+
+default-lease-time 6048;
+max-lease-time 604800;
+
+allow booting;
+allow bootp;
+
+# The next paragraph needs to be modified to fit your case
+subnet 192.168.1.0 netmask 255.255.255.0 {
+  range 192.168.1.200 192.168.1.253;
+  option subnet-mask 255.255.255.0;
+  option broadcast-address 192.168.1.255;
+# the gateway address which can be different 
+# (access to the internet for instance)
+  option routers 192.168.1.1;
+# indicate the dns you want to use
+  option domain-name-servers 192.168.1.3;
+}
+
+host tftpserver {
+# tftp server ip address
+  fixed-address 192.168.1.90;
+# tftp server hardware address
+  hardware ethernet 01:23:45:67:89:AB;
+}
+
+group {
+ next-server 192.168.1.3;
+ host tftpclient {
+# tftp client hardware address
+  hardware ethernet  00:10:DC:27:6C:15;
+  filename "/tftpboot/pxelinux.0";
+ }
+}
+
+</screen
+></informalexample
+> Заметим, что для PXE загрузки, в filename клиента<filename
+>pxelinux.0</filename
+> записано имя системного загрузчика, а не образа ядра (смотрите ниже <xref linkend="tftp-images"/>). </para>
+   </sect3>
+  </sect2>
+<!--   End of file install-methods//tftp/dhcp.xml -->
+
+  <sect2 id="tftpd">
+  <title
+>Включение TFTP сервера</title>
+<para
+>Для запуска TFTP сервера, во-первых вы должны убедиться, что<command
+>tftpd</command
+> разрешён. Обычно, это делается добавлениемв <filename
+>/etc/inetd.conf</filename
+> строки вида: <informalexample
+><screen>
+
+tftp dgram udp wait nobody /usr/sbin/tcpd in.tftpd /tftpboot
+
+</screen
+></informalexample
+> Пакеты Debian сами создают такую строку при установке. </para
+><para
+>Загляните в этот файл и запомните каталог, который используется в качестве аргумента<command
+>in.tftpd</command
+>; он вам потребуется в дальнейшем. Аргумент <userinput
+>-l</userinput
+> в некоторых версиях <command
+>in.tftpd</command
+> включает запись протокола всех обращений в системные журналы; это полезно для диагностики ошибок.Если вы изменили <filename
+>/etc/inetd.conf</filename
+>, вам нужно об этом сказать запущенному процессу <command
+>inetd</command
+>. На машине Debian, выполните <userinput
+>/etc/init.d/inetd reload</userinput
+>; на других машинах, определите ID процесса <command
+>inetd</command
+>, и запустите <userinput
+>kill -HUP <replaceable
+>inetd-pid</replaceable
+></userinput
+>. </para
+><note arch="i386"
+><para
+>Для использования загрузки по TFTP в методе Pre-boot Execution Environment (PXE) , вам нужен TFTP сервер с поддержкой <userinput
+>tsize</userinput
+>. В сервере&debian;, этому условию удовлетворяют пакеты <classname
+>atftpd</classname
+> и <classname
+>tftpd-hpa</classname
+>; мы рекомендуем <classname
+>tftpd-hpa</classname
+>. </para
+></note
+><para arch="mips"
+>Если вы хотите установить Debian на машину SGI, а ваш TFTP сервер работает на GNU/Linux с ядром Linux 2.4, то вам нужно выполнить следующее: <informalexample
+><screen>
+
+echo 1 
+> /proc/sys/net/ipv4/ip_no_pmtu_disc
+
+</screen
+></informalexample
+> чтобы отключить обнаружение Path MTU, иначеIndy PROM не сможет загрузить ядро. Кроме того, убедитесь, что TFTP пакеты посылаютсяс портом источника не более 32767, или загрузка остановится после первого пакета. Ещё раз, это ошибка Linux 2.4.X при работе с PROM, и вы можете избежать этого, выполнив настройку<informalexample
+><screen>
+
+echo "2048 32767" 
+> /proc/sys/net/ipv4/ip_local_port_range
+
+</screen
+></informalexample
+>, которая регулирует диапазон портов источника используемого Linux сервере TFTP. </para>
+  </sect2>
+
+  <sect2 id="tftp-images">
+  <title
+>Копирование TFTP образов в нужное место</title>
+<para
+>Далее, поместите нужный загрузочный образ TFTP, из <xref linkend="where-files"/>, в каталог загрузочных образов <command
+>tftpd</command
+>. Как правило, этот каталог называется <filename
+>/tftpboot</filename
+>. Вы можете сделать ссылку на этот файл для файла, который будет загружать <command
+>tftpd</command
+> для загрузки определённому клиенту. К сожалению, имя файла, определяется TFTP клиентом, и никак не стандартизовано. </para
+><para arch="powerpc"
+>На машинах NewWorld Power Macintosh, вам нужно настроить системный загрузчик<command
+>yaboot</command
+> на загрузочный образ TFTP. <command
+>Yaboot</command
+> затем получит образы ядра и RAMdisk через TFTP сам. Для сетевой загрузки, используйте <filename
+>yaboot-netboot.conf</filename
+>. Просто переименуйте его в <filename
+>yaboot.conf</filename
+> в каталоге TFTP. </para
+><para arch="i386"
+>Для загрузки через PXE, всё что нужно лежит в файле<filename
+>netboot/netboot.tar.gz</filename
+>. Просто распакуйте этот файлв каталог загрузочных образов <command
+>tftpd</command
+>. Убедитесь, чтоdhcp сервер передаёт <filename
+>/pxelinux.0</filename
+> <command
+>tftpd</command
+> в качестве имени файла для загрузки. </para
+><para arch="ia64"
+>Для загрузки через PXE, всё что нужно лежит в файле<filename
+>netboot/netboot.tar.gz</filename
+>. Просто распакуйте этот файлв каталог загрузочных образов <command
+>tftpd</command
+>. Убедитесь, чтоdhcp сервер передаёт <filename
+>/debian-installer/ia64/elilo.efi</filename
+> <command
+>tftpd</command
+> в качестве имени файла для загрузки. </para>
+
+   <sect3 arch="mipsel">
+   <title
+>TFTP образы для DECstation</title>
+<para
+>Для DECstation, для каждой субархитектуры существует свой файл tftpimage, которыйсодержит ядро и программу установки. Правило именования:<replaceable
+>субархитектура</replaceable
+>/netboot-boot.img. Скопируйте файлаtftpimage, который нужно использовать в <userinput
+>/tftpboot/tftpboot.img</userinput
+>, если вы работаете с настройками BOOTP/DHCP, как примере, приведённом выше. </para
+><para
+>Микропрограмма DECstation производит загрузку по TFTP по команде <userinput
+>boot <replaceable
+>#</replaceable
+>/tftp</userinput
+>, где <replaceable
+>#</replaceable
+> это номер устройства TurboChannel с которого нужно загрузиться. На большинстве DECstation это номер "3". Если сервер BOOTP/DHCP не передаёт имя файла или вам нужно передать дополнительные параметры, они могут быть добавлены с помощью в следующем виде: </para
+><para>
+
+<userinput
+>boot #/tftp/filename param1=value1 param2=value2 ...</userinput>
+
+</para
+><para
+>У некоторых версий микропрограмм DECstation обнаружились проблемы в отношении загрузке по сети: передача начинается, но через некоторое время останавливается с ошибкой<computeroutput
+>a.out err</computeroutput
+>. Это может происходить по следующим причинам: <orderedlist
+> <listitem
+><para
+> Микропрограмма не отвечает на ARP запрос во времяTFTP передачи. Это приводит ожиданию ARP и остановки передачи. Решением будет добавить MAC адрес Ethernet карты DECstation статически в ARP таблицу TFTP сервера. Это достигается командой<userinput
+>arp -s <replaceable
+>IP-адрес</replaceable
+> <replaceable
+>MAC-адрес</replaceable
+></userinput
+> от суперпользователя на машине, служащей TFTP сервером. MAC-адрес DECstation можно прочитать введя в приглашении микропрограммы DECstation <command
+>cnfg</command
+>. </para
+></listitem
+> <listitem
+><para
+> Микропрограмма имеет ограничение на размер файлов, которые можно загрузить черезy TFTP. </para
+></listitem
+> </orderedlist
+>Также, есть версии микропрограмм, которые совсем не могут производить загрузку поa TFTl.Описание различий версий микропрограмм можно найти на веб страницахe NetBSs: <ulink url="http://www.netbsd.org/Ports/pmax/board-list.html#proms"
+></ulink
+>. </para>
+   </sect3>
+
+   <sect3 arch="alpha">
+   <title
+>Загрузка Alpha по TFTP</title>
+<para
+>На Alpha, вы должны указать имя файла (относительно каталога загрузочных образов) с помощью аргумента <userinput
+>-file</userinput
+> команды SRM <userinput
+>boot</userinput
+>, или установив переменную среды <userinput
+>BOOT_FILE</userinput
+>. Или же, имя файла можно получить по BOOTP (в ISC <command
+>dhcpd</command
+>, используйте директиву <userinput
+>filename</userinput
+>). В отличие от Open Firmware, <emphasis
+>имя файла по умолчанию не заданоfilename</emphasis
+> в SRM, поэтому вы <emphasis
+>должны</emphasis
+> указать имя файлаодним из этих методов. </para>
+   </sect3>
+
+   <sect3 arch="sparc">
+   <title
+>Загрузка SPARC по TFTP</title>
+<para
+>В SPARC архитектурах используются имена субархитектур, например``SUN4M'' или ``SUN4C''; в некоторых случаях, имя архитектуры оставляют пустым, аимя файла клиент ищет просто как <filename
+>ip-клиента-в-шестнадцатеричной-форме</filename
+>. То есть, если система с субархитектурой SUN4C, и IP адресом 192.168.1.3, то имя файлабудет <filename
+>C0A80103.SUN4C</filename
+>. Простой способ его определения это ввести следующую команду в оболочке (предполагаем, что машине назначен IP адрес равный 10.0.0.4). </para>
+
+<informalexample
+><screen
+>printf '%.2x%.2x%.2x%.2x\n' 10 0 0 4
+</screen
+></informalexample>
+
+<para
+>Она выводит каждый октет IP в шестнадцатеричной форме; чтобы получить правильное имя файла, вам нужно изменить все буквы на заглавные и если нужно, добавить название субархитектуры. </para
+><para
+>Также вы можете заставить некоторые sparc системы брать имя файла из последнего параметра команды загрузки OpenPROM, например <userinput
+>boot net my-sparc.image</userinput
+>. Он всё ещё должен располагаться в каталоге, в котором его будет искать TFTP сервер. </para>
+   </sect3>
+
+   <sect3 arch="m68k">
+   <title
+>Загрузка BVM/Motorola по TFTP</title>
+<para
+>Для систем BVM и Motorola VMEbus скопируйте файлы &bvme6000-tftp-files; в каталог<filename
+>/tftpboot/</filename
+>. </para
+><para
+>Затем, настройте загрузку в ROM или в BOOTP на начальную загрузку файлов<filename
+>tftplilo.bvme</filename
+> или <filename
+>tftplilo.mvme</filename
+> с TFTP сервера. Обратитесь к файлу <filename
+>tftplilo.txt</filename
+> для вашей субархитектуры за дополнительной специфичной конфигурационной информацией. </para>
+   </sect3>
+
+   <sect3 arch="mips">
+   <title
+>Загрузка SGI Indy по TFTP</title>
+<para
+>На SGI Indy вы можете положиться на <command
+>bootpd</command
+> передав имяTFTP файла. Оно задаётся или как <userinput
+>bf=</userinput
+> в <filename
+>/etc/bootptab</filename
+> или как параметр <userinput
+>filename=</userinput
+> в <filename
+>/etc/dhcpd.conf</filename
+>. </para>
+   </sect3>
+
+   <sect3 arch="mips">
+   <title
+>Загрузка Broadcom BCM91250A по TFTP</title>
+<para
+>Не требуется как-то особенно настраивать DHCP, кроме как передать CFE полный путь к файлу для загрузки. </para>
+   </sect3>
+
+  </sect2>
+
+<!-- FIXME: commented out since it seems too old to be usable and a current
+            way is not known
+  
+  <sect2 id="tftp-low-memory">
+  <title
+>TFTP Installation for Low-Memory Systems</title>
+<para>
+
+On some systems, the standard installation RAMdisk, combined with the
+memory requirements of the TFTP boot image, cannot fit in memory.  In
+this case, you can still install using TFTP, you'll just have to go
+through the additional step of NFS mounting your root directory over
+the network as well.  This type of setup is also appropriate for
+diskless or dataless clients.
+
+</para
+><para>
+
+First, follow all the steps above in <xref linkend="install-tftp"/>.
+
+<orderedlist>
+<listitem
+><para>
+
+Copy the Linux kernel image on your TFTP server using the
+<userinput
+>a.out</userinput
+> image for the architecture you are
+booting.
+
+</para
+></listitem>
+<listitem
+><para>
+
+Untar the root archive on your NFS server (can be the same system as
+your TFTP server): 
+
+<informalexample
+><screen
+>
+
+# cd /tftpboot
+# tar xvzf root.tar.gz
+
+</screen
+></informalexample>
+
+Be sure to use the GNU <command
+>tar</command
+> (other tar programs, like the
+SunOS one, badly handle devices as plain files).
+
+</para
+></listitem>
+<listitem
+><para>
+
+Export your <filename
+>/tftpboot/debian-sparc-root</filename
+> directory
+with root access to your client.  E.g., add the following line to
+<filename
+>/etc/exports</filename
+> (GNU/Linux syntax, should be similar
+for SunOS):
+
+<informalexample
+><screen
+>
+
+/tftpboot/debian-sparc-root client(rw,no_root_squash)
+
+</screen
+></informalexample>
+
+NOTE: "client" is the host name or IP address recognized by the server for
+the system you are booting.
+
+</para
+></listitem>
+<listitem
+><para>
+
+Create a symbolic link from your client IP address in dotted notation
+to <filename
+>debian-sparc-root</filename
+> in the
+<filename
+>/tftpboot</filename
+> directory.  For example, if the client
+IP address is 192.168.1.3, do
+
+<informalexample
+><screen
+>
+
+# ln -s debian-sparc-root 192.168.1.3
+
+</screen
+></informalexample>
+
+</para
+></listitem>
+</orderedlist>
+
+</para>
+
+  </sect2>
+
+  <sect2 condition="supports-nfsroot">
+  <title
+>Installing with TFTP and NFS Root</title>
+<para>
+
+Installing with TFTP and NFS Root is similar to 
+<xref linkend="tftp-low-memory"/> because you don't want to 
+load the RAMdisk anymore but boot from the newly created NFS-root file
+system.  You then need to replace the symlink to the tftpboot image by
+a symlink to the kernel image (for example,
+<filename
+>linux-a.out</filename
+>).
+
+</para
+><para>
+
+RARP/TFTP requires all daemons to be running on the same server (the
+workstation is sending a TFTP request back to the server that replied
+to its previous RARP request).
+
+</para>
+
+
+  </sect2>
+END FIXME -->
+ </sect1>
+<!--   End of file install-methods/install-tftp.xml -->
+
+<!-- Start of file install-methods/automatic-install.xml -->
+<!-- $Id: automatic-install.xml 22935 2004-10-09 18:36:20Z fjpop-guest $ -->
+
+ <sect1 id="automatic-install">
+ <title
+>Автоматическая установка</title>
+<para
+>Если установка делается на несколько компьютеров, можно воспользоваться автоматической установкой. Требуемые пакеты Debian: <classname
+>fai</classname
+> (используется сервером установки), <classname
+>replicator</classname
+>, <classname
+>systemimager</classname
+>, <classname
+>autoinstall</classname
+> и сама программа установки Debian. </para>
+
+<sect2>
+<title
+>Автоматическая установка с помощью программы установки Debian</title>
+
+<para
+>Программа установки Debian поддерживает автоматическую установку через файлы автоматической установки. Файл автоматической установки может быть загружен по сети или со сменного носителя, и используется для ответов на вопросы, задаваемые во время процесса установки. </para
+><para
+>Файл автоматической установки содержит команды, используемые в debconf-set-selections. Хорошо документированный и рабочий пример, который вы можете отредактировать находится здесь <xref linkend="example-preseed"/>. </para
+><para
+>Файл автоматической установки содержит команды, используемые в debconf-set-selections, и единственный путь его создания это выполнить одну установку вручную, а затем использовать<filename
+>debconf-get-selections</filename
+> из пакета <classname
+>debconf-utils</classname
+>, чтобы совместить базы данных debconf и cdebconf из /var/log/debian-installer/cdebconf в один файл: <informalexample
+><screen
+>debconf-get-selections --installer 
+> файл
+debconf-get-selections 
+>
+> файл
+</screen
+></informalexample>
+
+</para
+><para
+>Однако, файл, созданный таким образом будет содержать элементы, которые невозможно обработать, и для большинства пользователей лучше начать с файла <xref linkend="example-preseed"/>. </para
+><para
+>Как только у вас появился файл автоматической установки, вы можете отредактировать его по смоему усмотрению, и поместить его на веб сервер, или скопировать его на загрузочный носитель с программой установки. После размещения файла, вам нужно передать его как параметр программе установки во время загрузки. </para
+><para
+>Чтобы программа установки использовала файл автоматической установки, загруженный из сети, добавьте preseed/url=http://url/to/preseed.cfg в качестве параметров загрузки ядра. Естественно, автоматическая настройка не начнётся пока программа установки не настроит сеть чтобы загрузить этот файл, поэтому более оплезно, если программа установки настроит сеть по DHCP без задавания любых вопросов. Вы можете захотеть установить приоритет установки в критический чтобы избежать лишних вопросов, пока сеть не будет настроена. Смотрите <xref linkend="installer-args"/>. </para
+><para
+>Чтобы добавить файл автоматической установки на CD, вам потребуется изменить ISO образ. Подробности смотрите на странице руководства mkisofs. Или же, запишите файл автоматической установки на дискету, и используйте preseed/file=/floppy/preseed.cfg </para
+><para arch="i386"
+>Если вы можете загрузиться с съёмного USB устройства, то просто скопируйте файл автоматической установки в файловую систему съёмного устройства, и отредактируйтефайл syslinux.cfg добавив preseed/file=/hd-media/preseed.cfg в загрузочные параметра ядра. </para>
+</sect2>
+ </sect1>
+<!--   End of file install-methods/automatic-install.xml -->
+
+</chapter>
+<!--   End of file install-methods/install-methods.xml -->
