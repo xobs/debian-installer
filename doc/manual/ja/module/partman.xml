@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 19059 -->
+<!-- original version: 21579 -->
 
-   <sect3 id="partman"><title>ディスクのパーティション分割</title>
+   <sect3 id="partman">
+   <title>ディスクのパーティション分割</title>
+
 <para>
 
 <!--
@@ -21,27 +23,26 @@ First you will be given the opportunity to automatically partition
 either an entire drive, or free space on a drive. This is also called
 <quote>guided</quote> partitioning. If you do not want to
 autopartition, choose <guimenuitem>Manually edit partition
-table</guimenuitem> from the menu and skip to the next
-paragraph. Otherwise you will be asked if you want <guimenuitem>All
-files in one partition</guimenuitem>, <guimenuitem>Separate partition
-for home directories</guimenuitem>, or if you rather plan to have
-a <guimenuitem>Multi-user system</guimenuitem>. All schemes have their
-pros and cons, some of which are discussed in <xref
-linkend="partitioning"/>. If you are unsure, choose the first
-one. Bear in mind, that guided partitioning needs certain minimal
-amount of free space to operate with. If you don't give it at least
-about 1GB of space (depends on chosen scheme), guided partitioning
-will fail.
+table</guimenuitem> from the menu.
 -->
 最初に、ドライブのすべてか、またはドライブの空き領域を、
 自動的にパーティション分割するか選択する機会が与えられます。
 これを<quote>ガイド</quote>パーティション分割とも呼びます。
 自動分割を望まなければ、
-<guimenuitem>Manually edit partition table</guimenuitem> を選び、
-次の段落にスキップしてください。
-そうでなければ、<guimenuitem>All files in one partition</guimenuitem> や、
-<guimenuitem>Separate partition for the home directories</guimenuitem>、
-<guimenuitem>Multi-user system</guimenuitem> と尋ねられるでしょう。
+<guimenuitem>Manually edit partition table</guimenuitem> を選んでください。
+
+</para><para>
+
+<!--
+If you choose guided partitioning, you will be able to choose from the
+schemes listed in the table below. All schemes have their pros and cons,
+some of which are discussed in <xref linkend="partitioning"/>. If you are
+unsure, choose the first one. Bear in mind, that guided partitioning
+needs certain minimal amount of free space to operate with. If you don't
+give it at least about 1GB of space (depends on chosen scheme), guided
+partitioning will fail.
+-->
+ガイドパーティション分割を選択した場合、以下の表から分割案を選択できます。
 どの案でも賛否両論あり、<xref linkend="partitioning"/> で議論されています。
 よくわからなければ、最初の項目を選択してください。
 ガイドパーティション分割は、最低限動作する空き領域が必要なことを、
@@ -67,13 +68,13 @@ will fail.
   <entry>600MB</entry>
   <entry><filename>/</filename>, swap</entry>
 </row><row>
-  <entry>Separate partition for home directories</entry>
+  <entry>Desktop machine</entry>
   <entry>500MB</entry>
   <entry>
     <filename>/</filename>, <filename>/home</filename>, swap
   </entry>
 </row><row>
-  <entry>Multi-user system</entry>
+  <entry>Multi-user workstation</entry>
   <entry>1GB</entry>
   <entry>
     <filename>/</filename>, <filename>/home</filename>,
@@ -84,21 +85,7 @@ will fail.
 
 </tbody></tgroup></informaltable>
 
-<para>
-
-<!--
-On the next screen you will see your partition table, how the
-partitions will be formatted, and where they will be mounted.
-If you did automatic partitioning, you should just be able to choose
-<guimenuitem>Finished partitioning</guimenuitem> from the menu to use
-what it set up.
--->
-次の画面でパーティションテーブル (パーティションをどうフォーマットするか、
-それをどこにマウントするか) を見ることになります。
-もし自動パーティション分割を行っていれば、設定したものを使用するメニューから、
-<guimenuitem>Finished partitioning</guimenuitem> で決定できます。
-
-</para><para arch="ia64">
+<para arch="ia64">
 
 <!--
 If you chose an automatic partitioning for your IA64 system, there
@@ -116,6 +103,17 @@ EFI ブートローダ用に、 FAT16 の起動可能ファイルシステムでフォーマットされた
 </para><para>
 
 <!--
+After selecting a scheme, the next screen will show your new partition
+table, including information on whether and how partitions will be
+formatted and where they will be mounted.
+-->
+分割案を選択後、新しいパーティションテーブルが次の画面に表示されます。
+ここでは、パーティションがどのようにフォーマットされるか、
+どこにマウントされるかといった情報が含まれています。
+
+</para><para>
+
+<!--
 The list of partitions might look like this:
 -->
 パーティション一覧は以下のようになります。
@@ -123,31 +121,69 @@ The list of partitions might look like this:
 <!-- TODO: show some flags here (lightning, skull, smiley) -->
 <informalexample><screen>
   IDE1 master (hda) - 6.4 GB WDC AC36400L
-        #1 primary   16.4 MB    ext2   /boot
-        #2 primary  551.0 MB    swap   swap
-        #3 primary    5.8 GB    ntfs
-           pri/log    8.2 MB    FREE SPACE
+        #1 primary   16.4 MB     ext2       /boot
+        #2 primary  551.0 MB     swap       swap
+        #3 primary    5.8 GB     ntfs
+           pri/log    8.2 MB     FREE SPACE
 
   IDE1 slave (hdb) - 80.0 GB ST380021A
-        #1 primary   15.9 MB    ext3
-        #2 primary  996.0 MB    fat16
-        #3 primary    3.9 GB    xfs    /home
-        #5 logical    6.0 GB    ext3   /
-        #6 logical    1.0 GB    ext3   /var
-        #7 logical  498.8 GB    ext3
-        #8 logical  551.5 GB    swap   swap
-        #9 logical   65.8 GB    ext2
+        #1 primary   15.9 MB     ext3
+        #2 primary  996.0 MB     fat16
+        #3 primary    3.9 GB     xfs        /home
+        #5 logical    6.0 GB     ext3       /
+        #6 logical    1.0 GB     ext3       /var
+        #7 logical  498.8 GB     ext3
+        #8 logical  551.5 GB     swap       swap
+        #9 logical   65.8 GB     ext2
 </screen></informalexample>
 
 <!--
-As you can see, there are two IDE harddrives divided to several
-partitions. Each partition line consists of the partition number, its
-type, size, optional flags, file system, and mountpoint (if any).
+This example shows two IDE harddrives divided into several partitions;
+the first disk has some free space. Each partition line consists of the
+partition number, its type, size, optional flags, file system, and
+mountpoint (if any).
 -->
-見ての通り、2 つの IDE ハードディスクを、
+この例では、2 つの IDE ハードディスクを、
 いくつかのパーティションに分割しています。
+第 1 ディスクには空き領域がいくらかあります。
 パーティション行ごとに、パーティション番号、パーティションタイプ、サイズ、
 追加フラグ、ファイルシステム、マウントポイントを表示しています。
+
+</para><para>
+
+<!--
+This concludes the guided partitioning. If you are satisfied with the
+generated partition table, you can choose <guimenuitem>Finish
+partitioning and write changes to disk</guimenuitem> from the menu to
+implement the new partition table (as described at the end of this
+section). If you are not happy, you can choose to <guimenuitem>Undo
+changes to partitions</guimenuitem>, to run guided partitioning again
+or modify the proposed changes as described below for manual partitioning.
+-->
+これでガイドパーティション分割を終えます。
+生成されたパーティションテーブルでよければ、
+(本節の最後に書かれているように) 新しいパーティションテーブルを反映するよう、
+<guimenuitem>Finish partitioning and write changes to disk</guimenuitem> 
+をメニューから選べます。
+幸せでなければ、もう一度ガイドパーティション分割をしたり、
+以下に述べる手動パーティション分割で提案する変更を修正をするのに 
+<guimenuitem>Undo changes to partitions</guimenuitem> を選べます。
+
+</para><para>
+
+<!--
+A similar screen to the one shown just above will be displayed if you
+choose manual partioning except that your existing partition table will
+be shown and without the mount points. How to manually setup your partition
+table and the usage of partitions by your new Debian system will be covered
+in the remainder of this section.
+-->
+手動パーティション分割を選択すると、
+既存のパーティションテーブルがマウントポイントなしで表示されるのを除き、
+前述と同様の画面が表示されます。
+パーティションテーブルの手動セットアップの方法と、
+新しい Debian システムでのパーティションの使用法については、
+本節の残りで扱います。
 
 </para><para>
 
@@ -209,22 +245,35 @@ a new partition, you can change the same set of options. One thing
 which might not be very obvious at a first glance is that you can
 resize the partition by selecting the item displaying the size of the
 partition. Filesystems known to work are at least fat16, fat32, ext2,
-d as <filename>/</filename>). If you forget to mount the root
-filesystem, <command>partman</command> won't let you continue until
-you correct this issue. However, this situation should not happen,
-because <command>partman</command> by default offers reasonable
-defaults.
+ext3 and swap. This menu also allows you to delete a partition.
 -->
-あえて行うなら、ドライブやドライブ上の空き領域を自動的に分割する選択肢が、
-パーティション分割メニューの一番上にあります。
+パーティションに対して変更を加えたい場合は、
+単にそのパーティションを選択して下さい。
+パーティションの設定メニューに入れます。
+新しいパーティションを作成するのと同じ画面ですので、
+同様の選択肢を変更するだけで行えます。
+一見してよくわからないかもしれないのは、
+表示されているパーティションのサイズを選択して、サイズ変更ができることです。
+動作することがわかっているファイルシステムは、
+少なくとも fat16, fat32, ext2, ext3, swap です。
+このメニューではパーティションを削除することもできます。
+
+
+</para><para>
+
+<!--
+Be sure to create at least two partitions: one for the
+<emphasis>root</emphasis> filesystem (which must be mounted as
+<filename>/</filename>) and one for <emphasis>swap</emphasis>. If you
+forget to mount the root filesystem, <command>partman</command> won't
+let you continue until you correct this issue.
+-->
 少なくとも 2 つのパーティションを必ず作成してください。
 1 つは <emphasis>swap</emphasis> で、
 もう 1 つは (<filename>/</filename> にマウントする) 
 <emphasis>ルート</emphasis>ファイルシステムです。
 ルートファイルシステムをマウントし忘れると、
 この問題を修正するまで <command>partman</command> は先に進みません。
-しかし、<command>partman</command> のデフォルトでは、
-妥当なものを採用していますので、そのような状況にはならないでしょう。
 
 </para><para arch="ia64">
 
@@ -239,14 +288,14 @@ EFI ブートパーティションをフォーマットし忘れた場合は、
 </para><para>
 
 <!--
-Capabilities of <command>partman</command> can be extended with
-installer modules, so if you can't see all promised goodies, check if
-you have loaded all required modules
-(e.g. <filename>partman-ext3</filename>,
-<filename>partman-xfs</filename>, or
-<filename>partman-lvm</filename>).
+Capabilities of <command>partman</command> can be extended with installer
+modules, but are dependent on your system's architecture. So if you can't
+see all promised goodies, check if you have loaded all required modules
+(e.g. <filename>partman-ext3</filename>, <filename>partman-xfs</filename>,
+or <filename>partman-lvm</filename>).
 -->
-<command>partman</command> の機能は、インストーラモジュールで拡張できます。
+<command>partman</command> の機能は、インストーラモジュールで拡張できますが、
+システムのアーキテクチャに依存します。
 あるはずの機能を確認できなければ、すべての必要なモジュールが読み込まれているか
 確認してください。
 (例: <filename>partman-ext3</filename>,
@@ -256,17 +305,16 @@ you have loaded all required modules
 </para><para>
 
 <!--
-After you are satisfied with partitioning, select <guimenuitem>Finished
-partitioning</guimenuitem> from the partitioning menu. You will be
-presented with a summary of changes made to the disks and asked to
-confirm that the filesystems should be created as requested.
+After you are satisfied with partitioning, select <guimenuitem>Finish
+partitioning and write changes to disk</guimenuitem> from the partitioning
+menu. You will be presented with a summary of changes made to the disks
+and asked to confirm that the filesystems should be created as requested.
 -->
 パーティション分割に満足したら、パーティション分割メニューから 
-<guimenuitem>Finished partitioning</guimenuitem> を選択してください。
+<guimenuitem>Finish partitioning and write changes to disk</guimenuitem> 
+を選択してください。
 ディスクに行われる変更内容が表示され、
 その通りファイルシステムを作成するかどうか確認することになります。
-
-
 
 </para>
    </sect3>
