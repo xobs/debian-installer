@@ -438,8 +438,8 @@ $(EXTRA_TARGETS) : %-stamp : $(TYPE)-get_udebs-stamp
 		`if [ -f pkg-lists/$*/$(DEB_HOST_ARCH) ]; then echo pkg-lists/$*/$(DEB_HOST_ARCH); fi` \
 	  	| sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2\n)/g' ) ; do \
 			cp $(EXTRAUDEBDIR)/$$file* ${TEMP}/$*  ; \
-			echo $$file >> ${TEMP}/$*/udeb_include; \
 	done
+	./pkg-list $* $(KERNEL_FLAVOUR) $(KERNELIMAGEVERSION) > ${TEMP}/$*/udeb_include
 	touch $@
 
 $(EXTRA_IMAGES) : $(DEST)/%-image.img :  $(EXTRA_TARGETS)
