@@ -30,6 +30,12 @@ KERNELVERSION=2.4.19
 KERNELNAME=vmlinux
 KERNELNAME_SECOND=vmlinux-tape
 endif
+ifeq "$(architecture)" "m68k"
+# change the following line for other subarchs
+KERNELIMAGEVERSION=2.2.20-mac
+KERNELVERSION=2.2.20
+KERNELNAME=vmlinuz
+endif
 
 ifndef KERNELIMAGEVERSION
 KERNELIMAGEVERSION=${KERNELVERSION}
