@@ -4,9 +4,6 @@
 <chapter id="boot-new">
  <title>Booting Into Your New Debian System</title>
 
-&bootloader-m68k.xml;
-&bootloader-powerpc.xml;
-
  <sect1 id="base-boot"><title>The Moment of Truth</title>
 <para>
 
@@ -109,7 +106,91 @@ when you first booted the installation system, followed by some new
 messages. 
 
 </para>
+   </sect2>
 
+
+  <sect2 arch="powerpc"><title>OldWorld PowerMacs</title>
+<para>
+
+If the machine fails to boot after completing the installation, and
+stops with a <prompt>boot:</prompt> prompt, try typing
+<userinput>Linux</userinput> followed by &enterkey;. (The default boot
+configuration in <filename>quik.conf</filename> is labeled Linux). The
+labels defined in <filename>quik.conf</filename> will be displayed if
+you press the <keycap>Tab</keycap> key at the <prompt>boot:</prompt>
+prompt. You can also try booting back into the installer, and editing
+the <filename>/target/etc/quik.conf</filename> placed there by the
+<guimenuitem>Install <command>Quik</command> on a Hard
+Disk</guimenuitem> step. Clues for dealing with
+<command>quik</command> are available at <ulink
+url="&url-powerpc-quik-faq;"></ulink>.
+
+</para><para>
+
+To boot back into MacOS without resetting the nvram, type
+<userinput>bye</userinput> at the Open Firmware prompt (assuming MacOS
+has not been removed from the machine). To obtain an OpenFirmware
+prompt, hold down the <keycombo> <keycap>command</keycap>
+<keycap>option</keycap> <keycap>o</keycap> <keycap>f</keycap>
+</keycombo> keys while cold booting the machine. If you need to reset
+the OpenFirmware nvram changes to the MacOS default in order to boot
+back to MacOS, hold down the <keycombo> <keycap>command</keycap>
+<keycap>option</keycap> <keycap>p</keycap> <keycap>r</keycap>
+</keycombo> keys while cold booting the machine.
+
+</para><para>
+
+If you use <command>BootX</command> to boot into the installed system,
+just select your desired kernel in the <filename>Linux
+Kernels</filename> folder, un-choose the ramdisk option, and add
+a root device corresponding to your installation;
+e.g. <userinput>/dev/hda8</userinput>.
+
+</para>
+   </sect2>
+
+
+  <sect2 arch="powerpc"><title>NewWorld PowerMacs</title>
+<para>
+
+On G4 machines and iBooks, you can hold down the
+<keycap>option</keycap> key and get a graphical screen with a button
+for each bootable OS, &debian; will be a button with a small penguin
+icon.
+
+</para><para>
+
+If you kept MacOS and at some point it changes the OpenFirmware
+<envar>boot-device</envar> variable you should reset OpenFirmware to
+its default configuration.  To do this hold down the <keycombo>
+<keycap>command</keycap> <keycap>option</keycap> <keycap>p</keycap>
+<keycap>r</keycap> </keycombo> keys while cold booting the machine.
+
+</para><para>
+
+The labels defined in <filename>yaboot.conf</filename> will be
+displayed if you press the <keycap>Tab</keycap> key at the
+<prompt>boot:</prompt> prompt.
+
+</para><para>
+
+Resetting OpenFirmware on G3 or G4 hardware will cause it to boot
+&debian; by default (if you correctly partitioned and placed the
+Apple_Bootstrap partition first).  If you have &debian; on a SCSI disk
+and MacOS on an IDE disk this may not work and you will have to enter
+OpenFirmware and set the <envar>boot-device</envar> variable,
+<command>ybin</command> normally does this automatically.
+
+</para><para>
+
+After you boot &debian; for the first time you can add any additional
+options you desire (such as dual boot options) to
+<filename>/etc/yaboot.conf</filename> and run <command>ybin</command>
+to update your boot partition with the changed configuration.  Please
+read the <ulink url="&url-powerpc-yaboot-faq;">yaboot HOWTO</ulink>
+for more information.
+
+</para>
    </sect2>
  </sect1>
 
