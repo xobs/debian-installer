@@ -266,9 +266,8 @@ rebuild_%:
 # The general tree target.
 # FIXME: This is way too convoluted.
 #
-$(STAMPS)tree-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
+$(STAMPS)tree-unpack-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
 	dh_testroot
-	cd .. && dpkg-checkbuilddeps
 	@rm -f $@
 
 	# This build cannot be restarted, because dpkg gets confused.
@@ -342,6 +341,14 @@ endif
 		-not -name modules.dep -not -type d | xargs rm -f
 endif
 
+ifdef KERNELNAME
+	# Move the kernel image out of the way.
+	$(foreach name,$(KERNELNAME), \
+		mv -f $(TREE)/boot/$(name) $(TEMP)/$(name);)
+	rmdir $(TREE)/boot/
+endif
+
+$(STAMPS)tree-$(targetstring)-stamp: $(STAMPS)tree-unpack-$(targetstring)-stamp
 	# Create a dev tree.
 	mkdir -p $(TREE)/dev
 	# Always needed, in case devfs is not mounted on boot.
@@ -367,13 +374,6 @@ ifdef USERDEVFS
 	mknod $(TREE)/dev/loop/1 b 7 1
 	mknod $(TREE)/dev/loop/2 b 7 2 
 	mknod $(TREE)/dev/loop/3 b 7 3 
-endif
-
-ifdef KERNELNAME
-	# Move the kernel image out of the way.
-	$(foreach name,$(KERNELNAME), \
-		mv -f $(TREE)/boot/$(name) $(TEMP)/$(name);)
-	rmdir $(TREE)/boot/
 endif
 
 ifdef EXTRAFILES
@@ -587,10 +587,10 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 
 # raw kernel images
 $(KERNEL): $(TEMP_KERNEL)
-	install -m 644 -D $(TEMP)/$(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,') $@
+	install -m 644 -D $^ $@
 	./update-manifest $@ $(MANIFEST-KERNEL)
 
-$(TEMP_KERNEL): $(STAMPS)tree-$(targetstring)-stamp
+$(TEMP_KERNEL): $(STAMPS)tree-unpack-$(targetstring)-stamp
 
 # bootable images
 $(BOOT): $(TEMP_BOOT)
