@@ -1,18 +1,133 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 11648 -->
+<!-- original version: 20629 -->
+
+<sect2 arch="m68k"><title>Choisir une méthode d'installation</title>
+ 
+<para>
+Certaines sous-architectures de &arch-title; peuvent choisir d'amorcer avec
+un noyau linux de la série 2.2.x ou un noyau de la série 2.4.x. Quand ce choix
+existe, essayez la série 2.4.x. L'installateur demandera moins de mémoire avec
+un noyau de la série 2.4.x et il utilise tmpfs. Un noyau de la série 2.2.x
+demande un disque virtuel de taille fixe.
+</para>
+<para>
+Assurez-vous que vous avez bien passé le paramètre 
+<userinput>root=/dev/ram</userinput> au noyau.
+</para>
+<para>
+En cas de problèmes, consultez
+<ulink url="&url-m68k-cts-faq;">cts's &arch-title; debian-installer FAQ</ulink>.
+</para>
+
+<itemizedlist>
+        <listitem><xref linkend="m68k-boot-amiga"/></listitem>
+        <listitem><xref linkend="m68k-boot-amiga"/></listitem>
+        <listitem><xref linkend="m68k-boot-atari"/></listitem>
+        <listitem><xref linkend="m68k-boot-bvme6000"/></listitem>
+        <listitem><xref linkend="m68k-boot-mac"/></listitem>
+        <listitem><xref linkend="m68k-boot-mvme"/></listitem>
+        <listitem><xref linkend="m68k-boot-q40"/></listitem>
+</itemizedlist>
+
+<sect3 arch="m68k" id="m68k-boot-amiga"><title>Amiga</title>
+<para>
+
+La seule méthode possible pour amorcer un Amiga est d'utiliser un disque
+dur (voyez <xref linkend="m68k-boot-hd"/>).
+<emphasis>Autrement dit, le cédérom n'est pas amorçable.</emphasis>
+</para>
+<para>
+Amiga ne fonctionne pas avec bogl, et si vous voyez des erreurs venant de
+bogl, vous devez passer le paramètre suivant au noyau,
+<userinput>debian-installer/framebuffer=false</userinput>.
+</para>
+</sect3>
+
+<sect3 arch="m68k" id="m68k-boot-atari"><title>Atari</title>
+<para>
+Avec Atari, vous pouvez lancer l'installateur soit à partir d'un disque dur
+(voyez <xref linkend="m68k-boot-hd"/>) soit à partir de disquettes (voyez
+<xref linkend="boot-from-floppies"/>).
+<emphasis>Autrement dit, le cédérom n'est pas amorçable.</emphasis>
+</para>
+<para>
+Atari ne fonctionne pas avec bogl, et si vous voyez des erreurs venant de
+bogl, vous devez passer le paramètre suivant au noyau,
+<userinput>debian-installer/framebuffer=false</userinput>.
+</para>
+</sect3>
+
+<sect3 arch="m68k" id="m68k-boot-bvme6000"><title>BVME6000</title>
+<para>
+
+L'installateur pour BVME6000 peut être lancé à partir d'un cédérom
+(voyez <xref linkend="m68k-boot-cdrom"/>), de disquettes (voyez
+<xref linkend="boot-from-floppies"/>) ou partir du réseau (voyez
+<xref linkend="boot-tftp"/>).
+</para>
+</sect3>
+
+<sect3 arch="m68k" id="m68k-boot-mac"><title>Macintosh</title>
+<para>
+
+Le seule méthode d'installation possible pour un mac est d'utiliser un
+disque dur (voyez<xref linkend="m68k-boot-hd"/>).
+<emphasis>Autrement dit, le cédérom n'est pas amorçable.</emphasis>
+Il n'y a pas de noyau 2.4.x pour les Macs.
+</para>
+</sect3>
+
+<sect3 arch="m68k" id="m68k-boot-mvme"><title>MVME147 et MVME16x</title>
+<para>
+
+L'installateur pour MVEM147 et MVEM16x peut être lancé à partir de disquettes 
+(voyez <xref linkend="boot-from-floppies"/>) ou partir du réseau (voyez
+<xref linkend="boot-tftp"/>).
+<emphasis>Autrement dit, le cédérom n'est pas amorçable.</emphasis>
+</para>
+</sect3>
+
+<sect3 arch="m68k" id="m68k-boot-q40"><title>Q40/Q60</title>
+<para>
+
+Le seule méthode d'installation possible pour un Q40/Q60 est d'utiliser un
+disque dur (voyez<xref linkend="m68k-boot-hd"/>).
+<emphasis>Autrement dit, le cédérom n'est pas amorçable.</emphasis>
+</para>
+</sect3>
 
 
-  <sect2 arch="m68k"><title>Amorcer depuis un disque dur</title>
+ <sect2 arch="m68k"><title>Amorcer depuis un disque dur</title>
 
 &boot-installer-intro-hd.xml;
 
-  </sect2>
+<para>
+On peut utiliser au moins six disques virtuels différents pour amorcer depuis
+un disque dur&nbsp;: trois types, chacun avec ou sans le noyau de la série 
+2.2.x
+(voyez <ulink url="&disturl;/main/installer-&architecture;/cur\rent/images/MANIFEST">MANIFEST</ulink> pour des précisions).
+</para>
+<para>
+Les trois types de disques virtuels sont <filename>cdrom</filename>,
+<filename>hd-media</filename> et <filename>nativehd</filename>. Ces disques
+diffèrent seulement par la source où ils prennent les paquets de 
+l'installation. Le disque <filename>cdrom</filename>  utilise un cédérom pour
+obtenir les paquets de l'installateur. Le disque <filename>hd-media</filename>
+utilise une image iso de cédérom qui se trouve sur le disque dur. Et le disque
+<filename>nativehd</filename> utilise le réseau pour installer les paquets.
+</para>
+<itemizedlist>
+        <listitem><xref linkend="m68k-boothd-amiga"/></listitem>
+        <listitem><xref linkend="m68k-boothd-atari"/></listitem>
+        <listitem><xref linkend="m68k-boothd-mac"/></listitem>
+        <listitem><xref linkend="m68k-boothd-q40"/></listitem>
+</itemizedlist>
 
-  <sect2 arch="m68k"><title>Amorcer sur AmigaOS</title>
+<sect3 arch="m68k" id="m68k-boothd-amiga"><title>Amorcer sur AmigaOS</title>
 <para>
 
 Dans le <command>Workbench</command>, lancez le processus
-          d'installation de Linux en double-cliquant sur l'icône
+          d'installation de Linux en cliquant deux fois sur l'icône
 <guiicon>StartInstall</guiicon> dans le répertoire
           <filename>debian</filename>.
 
@@ -31,10 +146,10 @@ Vous devrez sans doute enfoncer deux fois la touche &enterkey;
           vous pourrez continuer plus bas, à <xref linkend="init-config"/>.
 
 </para>
-  </sect2>
+ </sect3>
 
 
-  <sect2 arch="m68k"><title>Amorcer sur Atari TOS</title>
+  <sect3 arch="m68k" id="m68k-boothd-atari"><title>Amorcer sur Atari TOS</title>
 <para>
 
 Sur le bureau GEM, lancez le processus d'installation en
@@ -54,33 +169,50 @@ Vous devrez sans doute enfoncer la touche &enterkey;
           pour pouvoir être lus, mais ce n'est pas
           grave. Après quelques secondes, le programme d'installation
           devrait démarrer automatiquement et vous pourrez continuer
-          plus bas, à <xref linkend="init-config"/>.
+          plus bas, à <xref linkend="d-i-intro"/>.
 
 </para>
-  </sect2>
+</sect3>
 
 
-  <sect2 arch="m68k"><title>Amorcer sur  MacOS 68k</title>
+  <sect3 arch="m68k" id="m68k-boothd-mac"><title>Amorcer sur MacOS 68k</title>
 <para>
-
+Vous devez garder le système original Mac et amorcer avec lui. Il est
+<emphasis>essentiel</emphasis>, lorsque vous lancez MacOS pour amorcer le
+programme Penguin linux, que vous teniez la touche <keycap>shift</keycap>
+enfoncée pour empêcher le chargement d'extensions. Si vous n'utilisez MacOS
+que pour charger linux, vous pouvez arriver au même résultat en supprimant
+toutes les extensions et les panneaux de contrôle dans le dossier System de
+Mac. Sinon des extensions peuvent s'exécuter et empécher le bon fonctionnement du noyau linux.
+</para>
+<para>
+Les Mac demandent le programme d'amorçage <command>Penguin</command>. Si vous 
+n'avez les outils pour gérer une archive <command>Stuffit</command>, 
+&penguin19.hfs; est une image disque hfs qui contient un 
+<command>Penguin</command> décompressé. La section <xref linkend="create-floppy"/> explique comment copier cette image sur une disquette.
+</para>
+<para>
 Sur le bureau MacOS, lancez le processus d'installation de
-Linux en double-cliquant sur l'icône  <guiicon>Penguin Prefs</guiicon>
-dans le dossier <filename>debian</filename>. L'outil de
-          d'amorçage de Linux va s'exécuter. Allez dans
+Linux en cliquant deux foix sur l'icône <guiicon>Penguin Prefs</guiicon>
+dans le dossier <filename>Penguin</filename>. Le programme
+<command>Penguin</command> va s'exécuter. Allez dans
 <guimenuitem>Settings</guimenuitem>, dans le menu
-<guimenu>File</guimenu> et sélectionnez le noyau 
-(<filename>linux.bin</filename>)
-et les images de disque virtuel (<filename>root.bin</filename>) 
-sous l'onglet <guilabel>Kernel</guilabel>
-          dans le dossier <filename>debian</filename> en cliquant sur les
-          boutons correspondant dans le coin supérieur droit et en se
+<guimenu>File</guimenu>, cliquez sur <guilabel>Kernel</guilabel>.
+Sélectionnez le noyau (<filename>vmlinuz</filename>) et le disque virtuel
+(<filename>initrd.gz</filename>) dans le répertoire
+<filename>install</filename> en cliquant sur les boutons correspondant dans 
+le coin supérieur droit et en se
           déplaçant dans les dialogues de choix de fichier afin de
-          localiser les fichiers. Fermez la boîte de dialogue
-<guilabel>Settings</guilabel>, sauvegardez les réglages et
-          démarrez le programme d'installation en utilisant
-<guimenuitem>Boot Now</guimenuitem> dans le menu <guimenu>File</guimenu>.
-
-</para><para>
+          localiser les fichiers. 
+</para>
+<para>
+Pour indiquer les paramètres dans Penguin, choisissez 
+<guimenu>File</guimenu> -&gt; <guimenuitem>Settings...</guimenuitem>, et
+passez sur <guilabel>Options</guilabel>. On peut saisir les paramètres
+dans la zone de texte. Si vous voules conserver ces paramètres, choisissez
+<guimenu>File</guimenu> -&gt; <guimenuitem>Save Settings as Default</guimenuitem>.
+</para>
+<para>
 
 Le programme <command>Penguin</command> affichera
           quelques infos de débogage dans une fenêtre. Après cela,
@@ -91,30 +223,37 @@ Le programme <command>Penguin</command> affichera
           pour que vous ayez le temps de les lire. Ce n'est pas grave.
           Après quelques secondes, le programme d'installation devrait
           démarrer automatiquement, et vous pouvez continuer à 
-<xref linkend="init-config"/>.
+<xref linkend="d-i-intro"/>.
 
 </para>
-  </sect2>
 
+</sect3>
 
-  <sect2 arch="m68k"><title>Amorcer depuis un cédérom</title>
+<sect3 arch="m68k" id="m68k-boothd-q40"><title>Amorcer avec Q40/Q60</title>
 
-&boot-installer-intro-cd.xml;
 
 <para>
-
-Currently, the only &arch-title; subarchitecture that
-supports CD-ROM booting is the BVME6000.
-La manière la plus facile pour la plupart des gens est d'utiliser
-<ulink url="&url-debian-cd-vendors;">le jeu de cédéroms Debian"</ulink>. 
-insérez simplement votre cédérom, réamorcez et sautez au chapitre
-      suivant.
-
+FIXME
 </para>
-  </sect2>
+<para>
+Le programme d'installation devrait se lancer automatiquement. Vous pouvez
+continuer avec <xref linkend="d-i-intro"/>.
+</para>
+</sect3>
+</sect2>
 
 
-  <sect2 arch="m68k"><title>Amorcer depuis TFTP</title>
+  <sect2 arch="m68k" id="m68k-boot-cdrom"><title>Amorcer depuis un cédérom</title>
+<para>
+La seule sous architecture de &arch-title; qui peut s'amorcer à partir d'in
+cédérom est BVME6000.
+</para>
+
+&boot-installer-intro-cd.xml;
+</sect2>
+
+
+<sect2 arch="m68k" id="boot-tftp"><title>Amorcer avec TFTP</title>
 
 &boot-installer-intro-net.xml;
 
@@ -160,7 +299,7 @@ Vous pouvez aussi ajouter la chaîne <screen>TERM=vt100</screen>
   <title>Amorcer depuis des disquettes</title>
 <para>
 
-La méthode recommandée pour la plupart des architectures 68k
+La méthode recommandée pour la plupart des architectures &arch-title;
         est d'amorcer depuis un système de fichiers local.
 
 </para><para>
@@ -172,37 +311,3 @@ Amorcer depuis la disquette de secours n'est supporté que par
 </para>
  </sect2>
 
-
-  <sect2 arch="m68k"><title>Macintosh Limitations</title>
-<para>
-
-Dans le cas des Macintosh, vous devez garder le système Mac
-d'origine et amorcer à partir de lui. Il est <emphasis>primordial</emphasis>
-      que lorsque vous amorcez MacOS lors de la préparation de l'amorce
-      du gestionnaire de démarrage Penguin Linux, vous devez maintenir
-      la touche majuscule (<keycap>shift</keycap>) enfoncée pour éviter le
-      chargement des extensions (si vous n'utilisez MacOS que pour
-      démarrer Linux, vous pouvez obtenir le même résultat en enlevant
-      toutes les extensions et les panneaux de contrôle depuis le
-      dossier Système de Mac). Si vous ne faites pas ceci, les
-      extensions peuvent faire planter l'exécution et être à l'origine
-      de divers problèmes sur le noyau Linux en fonctionnement.
-
-</para>
-  </sect2>
-
-
-  <sect2 arch="m68k"><title>Penguin Boot Parameters</title>
-<para>
-
-Dans le programme de démarrage Penguin, choisissez
-<guimenu>File</guimenu> -&gt; <guimenuitem>Settings...</guimenuitem>, 
-puis placez-vous sur l'onglet <guilabel>Options</guilabel>. Les paramètres 
-de démarrage peuvent être saisis
-      depuis la zone textuelle. Si vous souhaitez conserver ces
-      paramètres, sélectionnez 
-<guimenu>File</guimenu> -&gt; <guimenuitem>Save Settings as
-Default</guimenuitem>.
-
-</para>
-  </sect2>
