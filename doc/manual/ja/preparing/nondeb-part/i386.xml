@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 22664 -->
+<!-- original version: 24663 -->
 
 
   <sect2 arch="i386"><title>DOS や Windows からのパーティション分割</title>
@@ -57,22 +57,22 @@ One of the most common installations is onto a system that already
 contains DOS (including Windows 3.1), Win32 (such as Windows 95, 98, Me,
 NT, 2000, XP), or OS/2, and it is desired to put Debian onto the same disk
 without destroying the previous system. Note that the installer supports
-resizing of FAT and NTFS filesystems as used by DOS and Windows,
-and in most cases you should not need to use the method described below,
-unless you need to move the start of the FAT filesystem. 
+resizing of FAT and NTFS filesystems as used by DOS and Windows. Simply
+start the installer, select the partition to resize, and specify a new size.
+So in most cases you should not need to use the method described below.
 -->
 よくあるインストールのかたちとして、
-すでに DOS (Windows3.1 も含む)、
-Win32 (Windows 95, 98, Me, NT, 2000, XP)、
-OS/2 などが入っているシステムに、
-新たに Debian をインストールするような場合があり、
+すでに DOS (Windows3.1 も含む),
+Win32 (Windows 95, 98, Me, NT, 2000, XP),
+OS/2 などが入っているシステムに新たに Debian をインストールする場合、
 既存のシステムを壊すことなく、
-同じディスクに Debian を入れるという要望があります。
+同じディスクに Debian を入れるという需要があります。
 DOS や Windows で使用された、
 FAT ファイルシステム・NTFS ファイルシステムのリサイズを
-インストーラがサポートしており、
-ほとんどの場合、ファイルシステムの開始位置を移動させる必要がなければ、
-以下に記述された方法を使用する必要がないことに注意してください。
+インストーラはサポートしています。
+単にインストーラを起動し、リサイズするパーティションを選択し、
+新しいサイズを指定してください。
+ほとんどの場合、以下の方法を使う必要がないことに注意してください。
 
 </para><para>
 
@@ -216,10 +216,9 @@ DOS で使用するパーティションを作成したりその容量を変更したりする場合は、
 その最初のいくつかのセクタを 0 で埋めておくのが良いようです。
 DOS の <command>format</command> コマンドを実行する前に、
 Linux から次のコマンドを実行してください。
+
 <informalexample><screen>
-
-dd if=/dev/zero of=/dev/hdXX bs=512 count=4
-
+# dd if=/dev/zero of=/dev/hdXX bs=512 count=4
 </screen></informalexample>
 
 </para>
