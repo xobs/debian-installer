@@ -167,6 +167,14 @@ tree: get_udebs
 	depmod -q -a -b $(DEST)/ $(KVER) 
 	# TODO: configure some of the packages?
 
+UPX=true
+#UPX=~davidw/bin/upx
+# the beta version of upx can be used to make the kernel a lot smaller
+# it shaved 75k off our kernel. That allows us to put a lot more on
+# a single floppy. binaries are at:
+#http://wildsau.idv.uni-linz.ac.at/mfx/download/upx/unstable/upx-1.11-linux.tar.gz
+# or source at:
+# http://sourceforge.net/projects/upx/
 
 KVER=2.4.0-di
 # FIXME, KERNEL_DEB, need to handle the version number intelligently
@@ -176,7 +184,7 @@ KTREE=kernel_tree
 kernel:
 	mkdir -p $(KTREE)
 	dpkg-deb -X $(KDEB) $(KTREE) 
-
+	$(UPX) $(KTREE)/boot/vmlinux-$(KVER)
 
 # Create a compressed image of the root filesystem.
 # 1. make a temporary file large enough to fit the filesystem.
