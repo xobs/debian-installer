@@ -128,7 +128,7 @@ sources.list.udeb:
 	if [ "$(MIRROR)x" != "x" ]; then \
 		echo "deb $(MIRROR) $(SUITE) main/debian-installer"; \
 	else \
-	cat $(SYSTEM_SOURCES_LIST) | grep ^deb\  | grep -v debian-non-US | grep ' main' | grep -v 'security.debian.org' | \
+	cat $(SYSTEM_SOURCES_LIST) | grep ^deb\  | grep -v debian-non-US | grep -v non-us.debian.org | grep ' main' | grep -v 'security.debian.org' | \
 		awk '{print $$1 " " $$2}' | sed "s,/* *$$, $(SUITE) main/debian-installer," | sed "s,^deb file,deb copy," | uniq; \
 	fi; \
 	) > sources.list.udeb
