@@ -13,7 +13,7 @@ architecture    := $(shell dpkg-architecture -qDEB_HOST_ARCH)
 # The version of the kernel to use.
 
 ifeq "$(architecture)" "i386"
-KVERS=2.4.6
+KVERS=2.4.7
 FLAVOUR=386
 endif
 
@@ -122,7 +122,7 @@ build: demo_clean tree stats
 
 demo: tree
 	sudo chroot $(TREE) bin/sh -c "if ! mount | grep ^proc ; then bin/mount proc -t proc /proc; fi"
-	-sudo chroot $(TREE) bin/sh -c "export DEBCONF_FRONTEND=text DEBCONF_DEBUG=5; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; /usr/share/debconf/frontend /usr/bin/main-menu"
+	-sudo chroot $(TREE) bin/sh -c "export DEBCONF_FRONTEND=slang DEBCONF_DEBUG=5; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; /usr/share/debconf/frontend /usr/bin/main-menu"
 	$(MAKE) demo_clean
 
 shell: tree
@@ -210,16 +210,33 @@ tree-stamp:
 	# Set up modules.dep
 	mkdir -p $(TREE)/lib/modules/$(KVERS)-$(FLAVOUR)/
 	depmod -q -a -b $(TREE)/ $(KVERS)-$(FLAVOUR)
-
+	# Make sure the /dev/console link is ok
+	if [ ! -c $(TREE)/dev/console ]; then \
+	    rm -f $(TREE)/dev/console $(TREE)/dev/tty1; \
+	    $(SUDO) mknod $(TREE)/dev/console c 5 1; \
+	    $(SUDO) mknod $(TREE)/dev/tty1 c 4 1; \
+	fi
+	if [ ! -c $(TREE)/dev/console ]; then \
+	    echo "WARNING: $(TREE)/dev/console isn't a character device as it should."; \
+	    exit 1; \
+	fi
+	
 	# Move the kernel image out of the way, into a temp directory
 	# for use later. We don't need it bloating our image!
 	mv -f $(TREE)/boot/vmlinuz $(KERNEL)
 	-rmdir $(TREE)/boot/
 
+	# Copy terminfo files for slang frontend
+	for file in /etc/terminfo/a/ansi /etc/terminfo/l/linux \
+		    /etc/terminfo/v/vt102; do \
+		mkdir -p $(TREE)/`dirname $$file`; \
+		cp -a $$file $(TREE)/$$file; \
+	done
+
 ifdef EXTRAFILES
 	# Copy in any extra files
 	for file in $(EXTRAFILES); do \
-		mkdir -p $(TREE)/`basename $$file`; \
+		mkdir -p $(TREE)/`dirname $$file`; \
 		cp -a $$file $(TREE)/$$file; \
 	done
 endif
@@ -254,8 +271,20 @@ endif
 
 	# Reduce status file to contain only the elements we care about.
 	egrep -i '^((Status|Provides|Depends|Package|Description|installer-menu-item):|$$)' \
-		$(DPKGDIR)/status > $(DPKGDIR)/status.new
-	mv -f $(DPKGDIR)/status.new $(DPKGDIR)/status
+		$(DPKGDIR)/status > $(DPKGDIR)/status.udeb
+	rm -f $(DPKGDIR)/status
+	ln -sf status.udeb $(DPKGDIR)/status
+	
+	# Strip all kernel modules, just in case they haven't already been
+	for module in `find $(TREE)/lib/modules/ -name '*.o'`; do \
+	    strip -R .comment -R .note -g -x $$module; \
+	done
+	
+	# Remove some unnecessary files
+	for file in `find $(TREE)/var/lib/dpkg/info -name '*.md5sums' -o \
+	    -name '*.postrm' -o -name '*.prerm' -o -name '*.preinst'`; do \
+	    rm $$file; \
+	done
 	
 	touch tree-stamp
 
@@ -303,10 +332,10 @@ $(FLOPPY_IMAGE):
 	install -d $(DEST)
 	
 	dd if=/dev/zero of=$(FLOPPY_IMAGE) bs=1k count=$(FLOPPY_SIZE)
-	mkfs.msdos -i deb00001 -n 'Debian Installer' $(FLOPPY_IMAGE)
-	mount -t msdos -o loop $(FLOPPY_IMAGE) $(TMP_MNT)
+	mkfs.msdos -i deb00001 -n 'Debian Installer' -C $(FLOPPY_IMAGE)	$(FLOPPY_SIZE)
+	mount -t vfat -o loop $(FLOPPY_IMAGE) $(TMP_MNT)
 	
-	cp $(KERNEL) $(TMP_MNT)/LINUX
+	cp $(KERNEL) $(TMP_MNT)/linux
 	cp $(INITRD) $(TMP_MNT)/initrd.gz
 	
 	cp syslinux.cfg $(TMP_MNT)/
