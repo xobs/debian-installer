@@ -38,6 +38,9 @@ else
 SOURCES_LIST=sources.list
 endif
 
+# Add to PATH so dpkg will always work
+PATH:=$(PATH):/usr/sbin:/sbin:.
+
 # All these options makes apt read the right sources list, and
 # use APTDIR for everything so it need not run as root.
 APT_GET=apt-get --assume-yes \
@@ -163,8 +166,7 @@ stats:
 # this:
 UPLOAD_DIR=klecker.debian.org:~/public_html/debian-installer/daily/
 daily_build:
-	fakeroot $(MAKE) PATH=$$PATH:. build > log 2>&1
-	$(MAKE) image
+	fakeroot $(MAKE) image > log 2>&1
 	scp -q -B log $(UPLOAD_DIR)
 	scp -q -B ../debian-installer.tar.gz \
 		$(UPLOAD_DIR)/debian-installer-$(shell date +%Y%m%d).tar.gz
