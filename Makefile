@@ -443,7 +443,7 @@ daily_build:
 	for type in $(ALL_TYPES); do \
 		$(MAKE) sub_daily_build TYPE=$$type USER_MOUNT_HACK=$(shell pwd)/$(DEST)/tmp-mnt.img; \
 	done
-	scp -q -B $(TMP)/vmlinuz $(UPLOAD_DIR)/images/
+	scp -q -B $(KERNEL) $(UPLOAD_DIR)/images/
 	mail $(shell whoami) -s "today's build info" < $(DEST)/info
 
 sub_daily_build:
