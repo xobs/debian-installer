@@ -1,0 +1,31 @@
+# All output files will go here.
+DEST=dest
+
+# Filename of initrd to create.
+INITRD=$(DEST)/$(TYPE)-initrd.gz
+
+# Directory apt uses for stuff.
+APTDIR=apt
+
+# Directory udebs are placed in.
+UDEBDIR=udebs
+
+# Local directory that is searched for udebs, to avoid downloading.
+# (Or for udebs that are not yet available for download.)
+LOCALUDEBDIR=localudebs
+
+# Directory where debug versions of udebs will be built.
+DEBUGUDEBDIR=debugudebs
+
+# Directory where sources for all udebs may be kept
+SOURCEDIR=sourceudebs
+
+# Figure out which sources.list to use. The .local one is preferred,
+# so you can set up a locally preferred one (and not accidentially cvs
+# commit it).
+ifeq ($(wildcard sources.list.local),sources.list.local)
+SOURCES_LIST=sources.list.local
+else
+SOURCES_LIST=sources.list
+endif
+

@@ -8,54 +8,26 @@
 # a collection of udebs which it downloads from a Debian archive. See
 # README for details.
 
-architecture    = $(shell dpkg-architecture -qDEB_HOST_ARCH)
+DEB_HOST_ARCH = $(shell dpkg-architecture -qDEB_HOST_ARCH)
+DEB_HOST_GNU_CPU = $(shell dpkg-architecture -qDEB_HOST_GNU_CPU)
+DEB_HOST_GNU_SYSTEM = $(shell dpkg-architecture -qDEB_HOST_GNU_SYSTEM)
 
-# The version of the kernel to use.
+# Include main config
+include config/main
 
-ifeq "$(architecture)" "alpha"
-KERNELVERSION=2.4.20-generic
-KERNELNAME=vmlinuz
-endif
-ifeq "$(architecture)" "hppa"
-KERNELIMAGEVERSION=2.4.19-32
-KERNELVERSION=${KERNELIMAGEVERSION}-udeb
-KERNELNAME=vmlinux-${KERNELVERSION}
-KERNELIMAGEVERSION_SECOND=2.4.19-64
-KERNELVERSION_SECOND=${KERNELIMAGEVERSION_SECOND}-udeb
-KERNELNAME_SECOND=vmlinux-${KERNELVERSION_SECOND}
-endif
-ifeq "$(architecture)" "sparc"
-KERNELIMAGEVERSION=2.2.20-sun4cdm
-KERNELVERSION=${KERNELIMAGEVERSION}-udeb
-KERNELNAME=vmlinuz-${KERNELVERSION}
-KERNELIMAGEVERSION_SECOND=2.4.20-sun4u
-KERNELVERSION_SECOND=${KERNELIMAGEVERSION_SECOND}-udeb
-KERNELNAME_SECOND=vmlinuz-${KERNELVERSION_SECOND}
-endif
-ifeq "$(architecture)" "i386"
-KERNELVERSION=2.4.20-1-386
-KERNELNAME=vmlinuz
-endif
-ifeq "$(architecture)" "ia64"
-KERNELVERSION=2.4.19-ia64
-KERNELNAME=vmlinuz
-endif
-ifeq "$(architecture)" "powerpc"
-KERNELVERSION=2.4.19-powerpc
-KERNELNAME=vmlinux
-endif
-ifeq "$(architecture)" "s390"
-KERNELIMAGEVERSION=2.4.19-s390
-KERNELVERSION=2.4.19
-KERNELNAME=vmlinux
-KERNELNAME_SECOND=vmlinux-tape
-endif
-ifeq "$(architecture)" "m68k"
-# change the following line for other subarchs
-KERNELIMAGEVERSION=2.2.20-mac
-KERNELVERSION=2.2.20
-KERNELNAME=vmlinuz
-USERDEVFS=t
+# Include arch configs
+include config/arch/$(DEB_HOST_GNU_SYSTEM)
+include config/arch/$(DEB_HOST_GNU_SYSTEM)-$(DEB_HOST_GNU_CPU)
+
+# Include type configs
+-include config/type/$(TYPE)
+-include config/type/$(TYPE)-$(DEB_HOST_GNU_SYSTEM)
+
+# Include directory config
+include config/dir
+
+ifeq (,$(filter $(TYPE),type $(TYPES_SUPPORTED)))
+ERROR_TYPE = 1
 endif
 
 ifndef KERNELIMAGEVERSION
@@ -63,111 +35,6 @@ KERNELIMAGEVERSION=${KERNELVERSION}
 endif
 ifndef KERNELIMAGEVERSION_SECOND
 KERNELIMAGEVERSION_SECOND=${KERNELVERSION_SECOND}
-endif
-
-# The type of system to build. Determines what udebs are unpacked into
-# the system. See the .list files for various types. You may want to
-# override this on the command line.
-#TYPE=net
-TYPE=net
-
-# The library reducer to use. Can be mklibs.sh or mklibs.py.
-MKLIBS=mklibs
-
-# List here any libraries that need to be put on the system. Generally
-# this is not needed except for libnss_* libraries, which will not be
-# automatically pulled in by the library reduction code. Wildcards are
-# allowed.
-# TODO: this really needs to be determined on a per TYPE basis.
-#       libnss_dns is needed for many, but not all, install scenarios
-EXTRALIBS=/lib/libnss_dns* /lib/libresolv*
-
-# List here any extra udebs that are not in the list file but that
-# should still be included on the system.
-
-# This variable can be used to copy in additional files from the system
-# that is doing the build. Useful if you need to include strace, or gdb,
-# or just something extra on a floppy.
-#EXTRAFILES=/usr/bin/strace
-
-# set DEBUG to y if you want to get the source for and compile 
-# debug versions of the needed udebs
-DEBUG=n
-
-# All output files will go here.
-DEST=dest
-
-# Filename of initrd to create.
-INITRD=$(DEST)/$(TYPE)-initrd.gz
-
-# Filesystem type for the initrd, valid values are romfs and ext2.
-# NOTE: Your kernel must support this filesystem, not just a module. 
-# INITRD_FS=ext2
-INITRD_FS=ext2
-
-# How big a floppy image should I make? (in kilobytes)
-ifeq (cdrom,$(TYPE))  
-FLOPPY_SIZE=2880
-else
-FLOPPY_SIZE=1440
-endif
-
-# The floppy image to create.
-FLOPPY_IMAGE=$(DEST)/$(TYPE)-$(FLOPPY_SIZE).img
-
-# Creating floppy images requires mounting the image to copy files to it.
-# This generally needs root permissions. To let a user mount the floppy
-# image, add something like this to /etc/fstab:
-#   /dir/debian-installer/build/dest/tmp-mnt.img /dir/debian-installer/build/mnt vfat noauto,user,loop 0 0
-# Changing "/dir" to the full path to wherever debian-installer will be
-# built. Then if you uncomment this next line, the Makefile will use
-# commands that work with the above fstab line. Be careful: This lets any
-# user mount the image file you list in fstab, and the user who can create
-# that file could perhaps provide a maliciously constructed file that might
-# crash the kernel or worse.. Note that this line points to the temporary
-# image file to create, and MUST be an absolute path. Finally, when calling
-# the floppy_image target, you must *not* use fakeroot, or syslinux will
-# fail.
-#USER_MOUNT_HACK=$(shell pwd)/$(DEST)/tmp-mnt.img
-
-# What device to write floppies on
-FLOPPYDEV=/dev/fd0
-
-# May be needed in rare cases.
-#SYSLINUX_OPTS=-s
-
-# Directory apt uses for stuff.
-APTDIR=apt
-
-# Directory udebs are placed in.
-UDEBDIR=udebs
-
-# Local directory that is searched for udebs, to avoid downloading.
-# (Or for udebs that are not yet available for download.)
-LOCALUDEBDIR=localudebs
-
-# Directory where debug versions of udebs will be built.
-DEBUGUDEBDIR=debugudebs
-
-# Directory where sources for all udebs may be kept
-SOURCEDIR=sourceudebs
-
-# The beta version of upx can be used to make the kernel a lot smaller
-# it shaved 75k off our kernel. That allows us to put a lot more on
-# a single floppy. binaries are at:
-# http://wildsau.idv.uni-linz.ac.at/mfx/download/upx/unstable/upx-1.11-linux.tar.gz
-# or source at:
-# http://sourceforge.net/projects/upx/
-#UPX=~davidw/bin/upx
-UPX=
-
-# Figure out which sources.list to use. The .local one is preferred,
-# so you can set up a locally preferred one (and not accidentially cvs
-# commit it).
-ifeq ($(wildcard sources.list.local),sources.list.local)
-SOURCES_LIST=sources.list.local
-else
-SOURCES_LIST=sources.list
 endif
 
 # Add to PATH so dpkg will always work, and so local programs will
@@ -186,9 +53,6 @@ APT_GET=apt-get --assume-yes \
 # Get the list of udebs to install. Comments are allowed in the lists.
 UDEBS=$(shell grep --no-filename -v ^\# pkg-lists/base pkg-lists/$(TYPE)/common `if [ -f pkg-lists/$(TYPE)/$(architecture) ]; then echo pkg-lists/$(TYPE)/$(architecture); fi` | sed -e 's/$${kernel:Version}/$(KERNELIMAGEVERSION)/g' -e 's/$${kernel_second:Version}/$(KERNELIMAGEVERSION_SECOND)/g') $(EXTRAS)
 
-# udebs for the first driver1 floppy. Mostly Essential driver modules that don't fit on the first floppy
-# DRIVER1_UDEBS=$(shell grep --no-filename -v ^\# pkg-lists/driver1/common `if [ -f pkg-lists/$(TYPE)/$(architecture) ]; then echo pkg-lists/driver1/$(architecture); fi` | sed -e 's/$${kernel:Version}/$(KERNELIMAGEVERSION)/g' -e 's/$${kernel_second:Version}/$(KERNELIMAGEVERSION_SECOND)/g') 
-
 # Scratch directory.
 BASE_TMP=./tmp/
 # Per-type scratch directory.
@@ -204,26 +68,39 @@ TMP_MNT:=$(shell pwd)/mnt/
 KERNEL=$(TEMP)/$(KERNELNAME)
 KERNEL_SECOND=$(TEMP)/$(KERNELNAME_SECOND)
 
-build: demo_clean tree stats
+ifdef ERROR_TYPE
+all:
+	@echo "unsupported type"
+	@echo "type: $(TYPE)"
+	@echo "supported types: $(TYPES_SUPPORTED)"
+	@exit 1
+else
+build: tree_umount tree stats
+endif
+
+tree_mount: tree
+	-@sudo /bin/mount -t devfs dev $(TREE)/dev
+	-@sudo /bin/mount -t proc proc $(TREE)/proc
+
+tree_umount:
+	-@if [ -d $(TREE)/dev ] ; then sudo /bin/umount $(TREE)/dev 2>/dev/null ; fi
+	-@if [ -d $(TREE)/proc ] ; then sudo /bin/umount $(TREE)/proc 2>/dev/null ; fi
 
 demo: tree
-	-@sudo chroot $(TREE) bin/sh -c "bin/umount /dev; bin/mount -t devfs dev /dev" &> /dev/null
-	-@sudo chroot $(TREE) bin/sh -c "bin/umount /proc; bin/mount -t proc proc /proc" &> /dev/null
+	$(MAKE) tree_mount
 	-@[ -f questions.dat ] && cp -f questions.dat $(TREE)/var/lib/cdebconf/
 	-@sudo chroot $(TREE) bin/sh -c "export DEBCONF_DEBUG=5; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; exec /usr/share/debconf/frontend /usr/bin/main-menu"
-	$(MAKE) demo_clean
+	$(MAKE) tree_umount
 
 shell: tree
-	-@sudo chroot $(TREE) bin/sh -c "bin/umount /dev; bin/mount -t devfs dev /dev" &> /dev/null
-	-@sudo chroot $(TREE) bin/sh -c "bin/umount /proc; bin/mount -t proc proc /proc" &> /dev/null
+	$(MAKE) tree_mount
 	-@sudo chroot $(TREE) bin/sh
-	$(MAKE) demo_clean
+	$(MAKE) tree_umount
 
 uml: initrd
 	-linux initrd=$(INITRD) root=/dev/rd/0 ramdisk_size=8192 con=fd:0,fd:1 devfs=mount
 
-demo_clean:
-	-@sudo chroot $(TREE) bin/sh -c "bin/umount /dev ; bin/umount /proc" &> /dev/null
+demo_clean: tree_umount
 
 clean: demo_clean tmp_mount debian/control
 	if [ "$(USER_MOUNT_HACK)" ] ; then \
