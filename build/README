@@ -32,11 +32,15 @@ A more detailed overview of how the installer is built:
   committing.
 * 'pkg-lists' has subdirectories for the different image types that list
   udebs that are put on each image. The pkg-lists/*/common files list
-  udebs common to all architectures, and the files named by architecture list
-  udebs specific to an architecture. These files can have #include lines to
-  include files from pkg-lists. Also, ${kernel:Version} in these files is
-  replaced with the kernel version, as set in the KERNELIMAGEVERSION variable
-  (plus the KERNEL_FLAVOUR variable).
+  udebs common to all architectures, and the files named by architecture
+  (<arch>.cfg) list udebs specific to an architecture. It is also possible
+  to include udebs only on a specific subarchitecture by creating a
+  directory for the architecture and putting config files for the
+  subarchitecture there (<arch>/<subarch>.cfg).  All of these files can
+  have #include lines to include files from pkg-lists. Also,
+  ${kernel:Version} in these files is replaced with the kernel version,
+  as set in the KERNELIMAGEVERSION variable (plus the KERNEL_FLAVOUR
+  variable).
 * Anything listed in pkg-lists/local and pkg-lists/*/local is included in
   the image that is built. This is to provide an easy way to add extra
   udebs to a test image.
