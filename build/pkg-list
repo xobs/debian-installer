@@ -86,6 +86,15 @@ while (@lists) {
 
 foreach my $p (sort keys %collect) {
 	print "$p\n" unless $exclude{$p};
+
+	# Warn about missing deps. This is not perfect, in since pkgdeps
+	# ignores dependencies on virtual packages and does not support
+	# alternates. Still, it will catch most common mistakes.
+	foreach my $dep (pkgdeps($p)) {
+		if (! $collect{$dep} && ! $exclude{$dep}) {
+			print STDERR "** warning: in $type, $p has unsatisfied dependency on $dep\n";
+		}
+	}
 }
 
 # Add a package, possibly expanding dependencies.
@@ -111,10 +120,21 @@ sub collectpackage {
 sub collectdeps {
 	my $package=shift;
 	my %seendeps;
-	if (@_) {
-		%seendeps=%{shift()}
-	}
+	%seendeps=%{shift()} if @_;
 	return if $seendeps{$package};
+	foreach my $dep (pkgdeps($package)) {
+		chomp $dep;
+		$dep=~s/^\s*Depends:\s*//;
+		$collect{$dep}=1;
+		$seendeps{$dep}=1;
+		collectdeps($dep, \%seendeps);
+	}
+}
+
+# Get the dependencies of a package;
+sub pkgdeps {
+	my $package=shift;
+	my @ret;
 	my @deps=`apt-cache \\
 		-o Dir::Etc::sourcelist=./sources.list.udeb \\
 		-o Dir::State=./apt.udeb/state \\
@@ -122,9 +142,13 @@ sub collectdeps {
 	shift @deps; # package name;
 	foreach my $dep (@deps) {
 		chomp $dep;
-		$dep=~s/^\s*Depends:\s*//;
-		$collect{$dep}=1;
-		$seendeps{$dep}=1;
-		collectdeps($dep, \%seendeps);
+		# Note that this intentionally skips alternate
+		# dependencies, taking only the first.
+		if ($dep=~/^\s*Depends:\s/) {
+			$dep=~s/^\s*Depends:\s*//;
+			next if $dep=~/\<.*\>/; # skip virtual packages
+			push @ret, $dep;
+		}
 	}
+	return @ret;
 }
