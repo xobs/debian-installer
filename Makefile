@@ -109,9 +109,9 @@ endif
 
 tree_umount:
 ifndef USERDEVFS
-	-@if [ -d $(TREE)/dev ] ; then sudo /bin/umount $(TREE)/dev 2>/dev/null ; fi
+	-@if [ -L $(TREE)/dev/fd ] ; then sudo /bin/umount $(TREE)/dev 2>/dev/null ; fi
 endif
-	-@if [ -d $(TREE)/proc ] ; then sudo /bin/umount $(TREE)/proc 2>/dev/null ; fi
+	-@if [ -L $(TREE)/proc/self ] ; then sudo /bin/umount $(TREE)/proc 2>/dev/null ; fi
 
 demo: tree
 	$(MAKE) tree_mount
@@ -135,7 +135,7 @@ clean: demo_clean tmp_mount debian/control
 	        umount "$(USER_MOUNT_HACK)";\
 	    fi ; \
 	fi
-	rm -rf $(TREE) 2>/dev/null $(TEMP)/modules $(NETDRIVERS) || sudo rm -rf $(TREE) $(TEMP)/modules $(NETDRIVERS)
+	rm -rf $(TREE) $(TEMP)/modules $(NETDRIVERS) || sudo rm -rf $(TREE)
 	dh_clean
 	rm -f *-stamp
 	rm -rf $(UDEBDIR) $(EXTRAUDEBDIR) $(TMP_MNT) debian/build
