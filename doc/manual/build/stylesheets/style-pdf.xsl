@@ -22,11 +22,14 @@
 	<xsl:param name="latex.math.support">0</xsl:param>
 	<xsl:param name="latex.use.ltxtable">1</xsl:param>
 <!--	<xsl:param name="latex.use.longtable">1</xsl:param> -->
+	<xsl:param name="latex.book.preamble.post.l10n"/>
 	<xsl:param name="latex.book.preamble.post">
 
 \usepackage[sf,bf,compact,medium]{titlesec}
 %\renewcommand{\thechapter}{\Roman{chapter}}
-\titleformat{\chapter}[display]{\sffamily\bfseries\Huge}{\filleft{\chaptertitlename} {\thechapter}}{4ex}{\titlerule\vspace{2ex}\filright}[\vspace{2ex}\titlerule]
+\titleformat{\chapter}[display]{\sffamily\bfseries\Large}{\filleft{\chaptertitlename} {\thechapter}}{4ex}{\titlerule\vspace{2ex}\filright}[\vspace{2ex}\titlerule]
+
+\usepackage{lmodern}
 
 	    <xsl:value-of select="$latex.book.preamble.post.l10n" />
    

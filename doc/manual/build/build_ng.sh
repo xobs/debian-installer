@@ -5,13 +5,13 @@ if [ -z "$languages" ]; then
 	# languages="en cs es fr ja nl pt_BR" # ca da de el eu it ru
 
 	# Buildlist of languages to be included on RC2 CD's
-	languages="ja it en cs es fr nl pt_BR ru de"
+	languages="ca cs da de en es eu fi fr it ja nl pt_BR ru tl"
 #	languages="ja"
 fi
 
 if [ -z "$architectures" ]; then
-#	architectures="alpha arm hppa i386 ia64 m68k mips mipsel powerpc s390 sparc"
-	architectures="i386"
+	architectures="alpha arm hppa i386 ia64 m68k mips mipsel powerpc s390 sparc"
+#	architectures="i386"
 fi
 
 if [ -z "$destination" ]; then
@@ -30,7 +30,7 @@ if [ "$official_build" ]; then
 	export official_build
 fi
 
-noarchdir="yes"
+#noarchdir="yes"
 
 for lang in $languages; do
     echo "Language: $lang";
@@ -39,7 +39,7 @@ for lang in $languages; do
 	if [ -n "$noarchdir" ]; then
 		destsuffix="$lang"
 	else
-		destsuffix="${lang}.${arch}"
+		destsuffix="${lang}/${arch}"
 	fi
 	./buildone_ng.sh "$arch" "$lang" "$formats"
 	mkdir -p "$destination/$destsuffix"	
