@@ -315,13 +315,16 @@ $(TYPE)-tree-stamp:
 	# Unpack the udebs with dpkg. This command must run as root
 	# or fakeroot.
 	echo -n > diskusage-$(TYPE).txt
-	oldsize=0; for udeb in $(UDEBDIR)/*.udeb ; do \
+	oldsize=0; oldcount=0; for udeb in $(UDEBDIR)/*.udeb ; do \
 		pkg=`basename $$udeb` ; \
 		dpkg --force-overwrite --root=$(TREE) --unpack $$udeb ; \
 		newsize=`du -s $(TREE) | awk '{print $$1}'` ; \
+		newcount=`find $(TREE) -type f | wc -l | awk '{print $$1}'` ; \
 		usedsize=`echo $$newsize - $$oldsize | bc`; \
-		echo $$usedsize KiB used by pkg $$pkg >>diskusage-$(TYPE).txt;\
+		usedcount=`echo $$newcount - $$oldcount | bc`; \
+		echo $$usedsize KiB and $$usedcount files used by pkg $$pkg >>diskusage-$(TYPE).txt;\
 		oldsize=$$newsize ; \
+		oldcount=$$newcount ; \
 	done
 	sort -n < diskusage-$(TYPE).txt > diskusage-$(TYPE).txt.new && \
 	mv diskusage-$(TYPE).txt.new diskusage-$(TYPE).txt
