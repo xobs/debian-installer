@@ -417,6 +417,15 @@ endif
 	    strip -R .comment -R .note -g $$module; \
 	done
 
+	# If the image has pcmcia, reduce the config file to list only
+	# entries that there are modules for on the image. This saves ~30k.
+	if [ -e $(TREE)/etc/pcmcia/config ]; then \
+		./pcmcia-config-reduce.pl $(TREE)/etc/pcmcia/config \
+			`find $(TREE)/lib/modules/ -name \*.o` > \
+			$(TREE)/etc/pcmcia/config.reduced; \
+		mv -f $(TREE)/etc/pcmcia/config.reduced $(TREE)/etc/pcmcia/config; \
+	fi
+
 	# Remove some unnecessary dpkg files.
 	for file in `find $(TREE)/var/lib/dpkg/info -name '*.md5sums' -o \
 	    -name '*.postrm' -o -name '*.prerm' -o -name '*.preinst' -o \
