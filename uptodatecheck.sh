@@ -30,7 +30,7 @@ echo $tmp
 
 printf "%-25s %-15s %-15s %s\n" udeb "version in cvs" "version in sid" "needs upload"
 
-for dir in $dirs; do
+(for dir in $dirs; do
     (
     	needsupload=no
         cd $top/$dir
@@ -46,6 +46,6 @@ for dir in $dirs; do
 	fi
         printf "%-25s %-15s %-15s %s\n" $pkg $ver $archver $needsupload
     )
-done
+done) | sort
 
 rm -f $tmp
