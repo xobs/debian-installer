@@ -43,6 +43,13 @@ sub collectpackage {
 	my $line=shift;
 	my $collect=shift;
 	my $exclude=shift;
+
+	if ($line=~s/^(.*) \[([0-9. ]+)\]$/$1/) {
+		my %kernels=();
+		$kernels{$_} = 1 foreach split ' ', $2;
+		return unless $kernels{$kernel_major};
+	}
+
 	if ($line=~/^(.*) \*$/) {
 		# Asterisk at end means include all dependencies of this
 		# package.
