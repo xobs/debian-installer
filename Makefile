@@ -49,7 +49,7 @@ UDEBS = \
 			pkg-lists/base \
 			pkg-lists/$(TYPE)/common \
 			`if [ -f pkg-lists/$(TYPE)/$(DEB_HOST_ARCH) ]; then echo pkg-lists/$(TYPE)/$(DEB_HOST_ARCH); fi` \
-		| sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2)/g' \
+		| sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2 )/g' \
 	) $(EXTRAS)
 
 # Scratch directory.
