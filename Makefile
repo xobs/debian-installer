@@ -310,7 +310,9 @@ ifeq ($(TYPE),floppy)
 	mkdir -p $(DRIVEREXTRASDPKGDIR)/info $(DRIVEREXTRASDPKGDIR)/updates
 	touch $(DRIVEREXTRASDPKGDIR)/status $(DRIVEREXTRASDPKGDIR)/available
 	for udeb in $(EXTRAUDEBDIR)/*.udeb ; do \
-		dpkg $(DPKG_UNPACK_OPTIONS) --root=$(DRIVEREXTRASDIR) --unpack $$udeb; \
+		if [ -f "$$udeb" ]; then \
+			dpkg $(DPKG_UNPACK_OPTIONS) --root=$(DRIVEREXTRASDIR) --unpack $$udeb; \
+		fi; \
 	done
 endif
 
