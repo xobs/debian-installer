@@ -64,14 +64,20 @@ DPKGDIR=$(TREE)/var/lib/dpkg
 TMP_MNT:=$(shell pwd)/mnt
 
 ifdef ERROR_TYPE
-all:
+%:
 	@echo "unsupported type"
 	@echo "type: $(TYPE)"
 	@echo "supported types: $(TYPES_SUPPORTED)"
 	@exit 1
-else
-build: tree_umount tree stats
 endif
+
+build: tree_umount tree stats
+
+image: arch-image
+
+# Include arch targets
+-include make/arch/$(DEB_HOST_GNU_SYSTEM)
+include make/arch/$(DEB_HOST_GNU_SYSTEM)-$(DEB_HOST_GNU_CPU)
 
 tree_mount: tree
 	-@sudo /bin/mount -t proc proc $(TREE)/proc
@@ -98,7 +104,7 @@ shell: tree
 	-@sudo chroot $(TREE) bin/sh
 	$(MAKE) tree_umount
 
-uml: initrd
+uml: $(INITRD)
 	-linux initrd=$(INITRD) root=/dev/rd/0 ramdisk_size=8192 con=fd:0,fd:1 devfs=mount
 
 demo_clean: tree_umount
@@ -218,8 +224,8 @@ $(TYPE)-get_udebs-stamp:
 
 
 # Build the installer tree.
-tree: get_udebs $(TYPE)-tree-stamp
-$(TYPE)-tree-stamp: debian/control
+tree: $(TYPE)-tree-stamp
+$(TYPE)-tree-stamp: $(TYPE)-get_udebs-stamp debian/control
 	dh_testroot
 
 	dpkg-checkbuilddeps
@@ -394,9 +400,9 @@ tmp_mount:
 	mkdir -p $(TMP_MNT)
 
 # Create a compressed image of the root filesystem by way of genext2fs.
-initrd: Makefile tmp_mount tree $(INITRD)
+initrd: $(INITRD)
 $(INITRD): TMP_FILE=$(TEMP)/image.tmp
-$(INITRD):
+$(INITRD): $(TYPE)-tree-stamp
 	rm -f $(TMP_FILE)
 	install -d $(TEMP)
 	install -d $(DEST)
@@ -409,59 +415,6 @@ $(INITRD):
 		exit 1; \
 	fi;
 	gzip -vc9 $(TMP_FILE) > $(INITRD)
-
-# hppa boots a lifimage, which can contain an initrd and two kernels (one 32 and one 64 bit)
-lifimage: Makefile initrd $(DEST)/$(TYPE)-lifimage
-$(DEST)/$(TYPE)-lifimage:
-	palo -f /dev/null $(foreach NAME,$(KERNELNAME),-k $(TEMP)/$(NAME)) -r $(INITRD) -s $(DEST)/$(TYPE)-lifimage \
-		-c "0/linux HOME=/ ramdisk_size=8192 initrd=0/ramdisk rw"
-
-# The floppy image to create.  i386-specific [pere 2003-04-18]
-ifneq (,$(FLOPPY_SIZE))
-FLOPPY_IMAGE=$(DEST)/$(TYPE)-$(FLOPPY_SIZE).img
-endif
-
-# Create a bootable floppy image. i386 specific. FIXME
-# 1. make a dos filesystem image
-# 2. copy over kernel, initrd
-# 3. install syslinux
-floppy_image: Makefile initrd tmp_mount $(FLOPPY_IMAGE)
-$(FLOPPY_IMAGE):
-	install -d $(DEST)
-
-	dd if=/dev/zero of=$(FLOPPY_IMAGE).new bs=1k count=$(FLOPPY_SIZE)
-	mkfs.msdos -i deb00001 -n 'Debian Installer' -C $(FLOPPY_IMAGE).new $(FLOPPY_SIZE)
-
-ifdef USER_MOUNT_HACK
-	ln -sf `pwd`/$(FLOPPY_IMAGE).new $(USER_MOUNT_HACK)
-	mount $(TMP_MNT)
-else
-	mount -t vfat -o loop $(FLOPPY_IMAGE).new $(TMP_MNT)
-endif
-
-	# syslinux is used to make the floppy bootable.
-	if $(foreach NAME,$(KERNELNAME), \
-             cp -f $(TEMP)/$(NAME) $(TMP_MNT)/linux) \
-	   && cp $(INITRD) $(TMP_MNT)/initrd.gz \
-	   && cp syslinux.cfg $(TMP_MNT)/ \
-	   && todos $(TMP_MNT)/syslinux.cfg ; \
-	then \
-		umount $(TMP_MNT) ; \
-		true ; \
-	else \
-		umount $(TMP_MNT) ; \
-		false ; \
-	fi
-
-ifdef USER_MOUNT_HACK
-	syslinux $(SYSLINUX_OPTS) $(USER_MOUNT_HACK)
-	rm -f $(USER_MOUNT_HACK)
-else
-	syslinux $(SYSLINUX_OPTS) $(FLOPPY_IMAGE).new
-endif
-
-	# Finalize the image.
-	mv $(FLOPPY_IMAGE).new $(FLOPPY_IMAGE)
 
 # Copy files somewhere the CD build scripts can find them
 # XXX Will only use the last kernel if there are several
@@ -545,4 +498,3 @@ sub_daily_build:
 	rm -rf $(TYPE)-oldtree
 	-mv $(TREE) $(TYPE)-oldtree && rm -f $(TYPE)-tree-stamp
 
-.PHONY: tree
