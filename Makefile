@@ -125,7 +125,6 @@ shell: tree
 demo_clean:
 	-if [ -e $(TREE)/proc/self ]; then \
 		sudo chroot $(TREE) bin/sh -c "if mount | grep ^proc ; then bin/umount /proc ; fi" &> /dev/null; \
-		sudo chroot $(TREE) bin/sh -c "rm -rf /etc /var"; \
 	fi
 
 clean: demo_clean
