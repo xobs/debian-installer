@@ -47,7 +47,7 @@ APT_GET=apt-get --assume-yes \
 # Get the list of udebs to install. Comments are allowed in the lists.
 UDEBS = \
 	$(shell grep --no-filename -v ^\# \
-			pkg-lists/base \
+			`if [ ! "${NO_BASE}" ]; then echo pkg-lists/base; fi` \
 			pkg-lists/$(TYPE)/common \
 			`if [ -f pkg-lists/$(TYPE)/$(DEB_HOST_ARCH) ]; then echo pkg-lists/$(TYPE)/$(DEB_HOST_ARCH); fi` \
 		| sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2\n)/g' \
@@ -435,7 +435,9 @@ endif
 ifeq ($(TYPE),floppy)
 	cat $(DRIVEREXTRASDPKGDIR)/info/*.templates >> all-$(TYPE).utf
 endif
-	cat $(DPKGDIR)/info/*.templates >> all-$(TYPE).utf
+	if [ -n "`find $(DPKGDIR)/info/ -name \\*.templates`" ]; then \
+		cat $(DPKGDIR)/info/*.templates >> all-$(TYPE).utf; \
+	fi
 	find $(TREE) -type f | xargs strings >> all-$(TYPE).utf
 
 ifeq ($(TYPE),floppy)
