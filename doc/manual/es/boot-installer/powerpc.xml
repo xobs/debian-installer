@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 23151 -->
+<!-- original version: 24663 -->
 <!-- actualizado y revisado rudy, 5 diciembre 2004 -->
 
   <sect2 arch="powerpc" id="boot-cd"><title>Arrancar desde un CD-ROM</title>
@@ -50,7 +50,7 @@ en el CD en el cursor de OpenFirmware, similar a
 
 <para>
 
-  <emphasis>Todavía se ha escrito.</emphasis>
+  <emphasis>Todavía no se ha escrito.</emphasis>
 
 </para>
    </sect3>
@@ -114,7 +114,69 @@ funciona. Se iniciará entonces el programa de instalación de Debian.
    </sect3>
   </sect2>
 
+  <sect2 arch="powerpc" id="usb-boot">
+  <title>Arranque desde un dispositivo de memoria USB</title>
+<para>
 
+En la actualidad, los sistemas PowerMac NewWorld soportan el arranque desde USB.
+
+</para>
+
+<para>
+
+Asegúrese de haber preparado todo lo mencionado <xref
+linkend="boot-usb-files"/>. Para arrancar un sistema Macintosh desde un
+dispositivo USB,  necesitará usar el cursor de Open Firmware, ya que Open
+Firmware no busca los dispositivos de almacenamiento USB de forma predeterminada.
+<!-- TODO: although it could be made to; watch this space -->
+Para obtener el cursor, pulse al mismo tiempo las teclas
+<keycombo><keycap>Command</keycap> <keycap>Option</keycap>
+<keycap>o</keycap> <keycap>f</keycap></keycombo> mientras arranca (vea <xref
+linkend="invoking-openfirmware"/>).
+
+</para><para>
+
+Necesitará adivinar en que parte del árbol de dispositivos aparece el
+dispositivo de almacenamiento USB, dado que por el momento
+<command>ofpath</command> no lo puede hacer automáticamente. Escriba
+<userinput>dev / ls</userinput> y <userinput>devalias</userinput> en el cursor
+de Open Firmware para obtener una lista de todos los dispositivos conocidos y
+sus alias correspondientes. En el sistema del autor con varios dispositivos de
+memoria USB, funcionan rutas como
+<filename>usb0/disk</filename>, <filename>usb0/hub/disk</filename>,
+<filename>/pci@f2000000/usb@1b,1/disk@1</filename>, y
+<filename>/pci@f2000000/usb@1b,1/hub@1/disk@1</filename>.
+
+</para><para>
+
+Una vez sepa la ruta del dispositivo, use una orden como la que sigue para
+iniciar el instalador:
+
+<informalexample><screen>
+boot <replaceable>usb0/disk</replaceable>:<replaceable>2</replaceable>,\\:tbxi
+</screen></informalexample>
+
+El <replaceable>2</replaceable> corresponde a la partición Apple_HFS o
+Apple_Bootstrap en la que copió previamente la imagen, y la parte
+<userinput>,\\:tbxi</userinput> indica a Open Firmware que arranque desde el
+fichero que tenga "tbxi" como tipo HFS (p. ej. <command>yaboot</command>) en el
+directorio previamente marcado con <command>hattrib -b</command>.
+
+</para><para>
+
+Ahora el sistema debería arrancar, y debería estar ante el cursor
+<prompt>boot:</prompt>. En este momento puede introducir parámetros adicionales
+o sólo pulsar &enterkey;.
+
+</para><warning><para>
+
+Este método de arranque es nuevo, y es posible que resulte difícil hacerlo
+funcionar en algunos sistemas NewWorld nuevos. Si tiene problemas, por favor,
+rellene un informe de instalación, tal y como se explica en <xref
+linkend="submit-bug"/>.
+
+</para></warning>
+  </sect2>
 
   <sect2 arch="powerpc" id="boot-tftp"><title>Arranque con TFTP</title>
 
