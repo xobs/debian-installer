@@ -1,0 +1,106 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 14602 untranslated -->
+
+   <sect3 id="partman"><title>Partitioning Your Disks</title>
+<para>
+
+Now it is time to partition your disks. If you are uncomfortable with
+partitioning, or just want to know more details, see <xref
+linkend="partitioning"/>.
+
+</para><para>
+
+First you will be given the opportunity to automatically partition
+either an entire drive, or free space on a drive. This is also called
+<quote>guided</quote> partitioning. If you do not want to
+autopartition, choose <guimenuitem>Manually edit partition
+table</guimenuitem> from the menu and skip to the next
+paragraph. Otherwise you will be asked if you want <guimenuitem>All
+files in one partition</guimenuitem>, <guimenuitem>Separate partition
+for home directories</guimenuitem>, or if you rather plan to have
+a <guimenuitem>Multi-user system</guimenuitem>. All schemes have their
+pros and cons, some of which are discussed in <xref
+linkend="partitioning"/>. If you are unsure, choose the first
+one. Bear in mind, that guided partitioning needs certain minimal
+amount of free space to operate with. If you don't give it at least
+about 1GB of space (depends on chosen scheme), guided partitioning
+will fail.
+
+</para>
+
+<informaltable>
+<tgroup cols="3">
+<thead>
+<row>
+  <entry>Partitioning scheme</entry>
+  <entry>Minimum space</entry>
+  <entry>Created partitions</entry>
+</row>
+</thead>
+
+<tbody>
+<row>
+  <entry>All files in one partition</entry>
+  <entry>600MB</entry>
+  <entry><filename>/</filename>, swap</entry>
+</row><row>
+  <entry>Separate partition for home directories</entry>
+  <entry>500MB</entry>
+  <entry>
+    <filename>/</filename>, <filename>/home</filename>, swap
+  </entry>
+</row><row>
+  <entry>Multi-user system</entry>
+  <entry>1GB</entry>
+  <entry>
+    <filename>/</filename>, <filename>/home</filename>,
+    <filename>/usr</filename>, <filename>/var</filename>,
+    <filename>/tmp</filename>, swap
+  </entry>
+</row>
+
+</tbody></tgroup></informaltable>
+
+<para>
+
+On the next screen you will see your partition table, how the
+partitions will be formatted, and where they will be mounted.
+If you did automatic partitioning, you should just be able to choose
+<guimenuitem>Finished partitioning</guimenuitem> from the menu to use
+what it set up.
+
+</para><para>
+
+Select partititons from the list to modify or delete them. If you have
+free space it will also show up under a drive, and you can select it
+to create new partitions. When modifying a partition you will have the
+opportunity to choose how to use the partition, the file system to
+use, and where to mount it. The partitioning menu also has a choice at
+the bottom that can be used to automatically partition a drive or
+existing free space on a drive, if you'd rather go that route. Be sure
+to create at least two partitions, one for <emphasis>swap</emphasis>
+and one for the <emphasis>root</emphasis> filesystem (which must be
+mounted as <filename>/</filename>). If you forget to mount the root
+filesystem, <command>partman</command> won't let you continue until
+you correct this issue. However, this situation should not happen,
+because <command>partman</command> by default offers reasonable
+defaults.
+
+</para><para>
+
+Capabilities of <command>partman</command> can be extended with
+installer modules, so if you can't see all promised goodies, check if
+you have loaded all required modules
+(e.g. <filename>partman-ext3</filename>,
+<filename>partman-xfs</filename>, or
+<filename>partman-lvm</filename>).
+
+</para><para>
+
+After you are satisfied with partitioning, select <guimenuitem>Finished
+partitioning</guimenuitem> from the partitioning menu. You will be
+presented with a summary of changes made to the disks and asked to
+confirm that the filesystems should be created as requested.
+
+</para>
+   </sect3>

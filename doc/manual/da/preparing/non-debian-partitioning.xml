@@ -1,0 +1,198 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 12756 untranslated -->
+
+ <sect1 id="non-debian-partitioning">
+ <title>Pre-Partitioning for Multi-Boot Systems</title>
+<para>
+
+Partitioning your disk simply refers to the act of breaking up your
+disk into sections. Each section is then independent of the others.
+It's roughly equivalent to putting up walls inside a house; if you add
+furniture to one room it doesn't affect any other room.
+
+</para><para arch="s390">
+
+Whenever this section talks about ``disks'' you should translate this
+into a DASD or VM minidisk in the &arch-title; world. Also a machine means
+an LPAR or VM guest in this case.
+
+</para><para>
+
+If you already have an operating system on your system
+
+<phrase arch="i386">
+(Windows 9x, Windows NT/2000/XP, OS/2, MacOS, Solaris, FreeBSD, &hellip;)
+</phrase>
+
+<phrase arch="alpha">
+(Tru64 (Digital UNIX), OpenVMS, Windows NT, FreeBSD, &hellip;)
+</phrase>
+
+<phrase arch="s390">
+(VM, z/OS, OS/390, &hellip;)
+</phrase>
+
+and want to stick Linux on the same disk, you will need to repartition
+the disk. Debian requires its own hard disk partitions. It cannot be
+installed on Windows or MacOS partitions. It may be able to share some
+partitions with other Linux systems, but that's not covered here. At
+the very least you will need a dedicated partition for the Debian
+root.
+
+</para><para>
+
+You can find information about your current partition setup by using
+a partitioning tool for your current operating system
+
+<phrase arch="i386">, such as fdisk or PartitionMagic</phrase>
+
+<phrase arch="powerpc">, such as Drive Setup, HD Toolkit, or MacTools</phrase>
+
+<phrase arch="m68k">, such as HD SC Setup, HDToolBox, or SCSITool</phrase>
+
+<phrase arch="s390">, such as the VM diskmap</phrase>
+
+. Partitioning tools always provide a way to show existing partitions
+without making changes.
+
+</para><para>
+
+In general, changing a partition with a file system already on
+it will destroy any information there. Thus you should always make
+backups before doing any repartitioning.  Using the analogy of the
+house, you would probably want to move all the furniture out of the
+way before moving a wall or you risk destroying it.
+
+<phrase arch="i386"> Luckily, there is an alternative for some users; see 
+<xref linkend="lossless"/>. </phrase>
+</para>
+
+<para arch="hppa" condition="FIXME">
+
+<emphasis>FIXME: write about HP-UX disks?</emphasis>
+
+</para><para>
+
+If your computer has more than one hard disk, you may want to dedicate
+one of the hard disks completely to Debian. If so, you don't need to
+partition that disk before booting the installation system; the
+installer's included partitioning program can handle the job nicely.
+
+</para><para>
+
+If your machine has only one hard disk, and you would like to
+completely replace the current operating system with &debian;,
+you also can wait to partition as part of the installation process
+(<xref linkend="partman"/>), after you have booted the
+installation system.  However this only works if you plan to boot the
+installer system from tapes, CD-ROM or files on a connected machine.
+Consider: if you boot from files placed on the hard disk, and then
+partition that same hard disk within the installation system, thus
+erasing the boot files, you'd better hope the installation is
+successful the first time around.  At the least in this case, you
+should have some alternate means of reviving your machine like the
+original system's installation tapes or CDs.
+
+</para><para>
+
+If your machine already has multiple partitions, and enough space can
+be provided by deleting and replacing one or more of them, then you
+too can wait and use the Debian installer's partitioning program. You
+should still read through the material below, because there may be
+special circumstances like the order of the existing partitions within
+the partition map, that force you to partition before installing
+anyway.
+
+</para><para>
+
+In all other cases, you'll need to partition your hard disk before
+starting the installation to create partition-able space for
+Debian. If some of the partitions will be owned by other operating
+systems, you should create those partitions using native operating
+system partitioning programs. We recommend that you do
+<emphasis>not</emphasis> attempt to create Debian Linux partitions
+using another operating system's tools. Instead, you should just
+create the native operating system's partitions you will want to
+retain.
+
+</para><para>
+
+If you are going to install more than one operating system on the same
+machine, you should install all other system(s) before proceeding with
+Linux installation. Windows and other OS installations may destroy
+your ability to start Linux, or encourage you to reformat non-native
+partitions.
+
+</para><para>
+
+You can recover from these actions or avoid them, but installing
+the native system first saves you trouble.
+
+</para><para arch="powerpc">
+
+In order for OpenFirmware to automatically boot &debian; the Linux
+partitions should appear before all other partitions on the disk,
+especially MacOS boot partitions. This should be kept in mind when
+pre-partitioning; you should create a Linux placeholder partition to
+come <emphasis>before</emphasis> the other bootable partitions on the
+disk. (The small partitions dedicated to Apple disk drivers are not
+bootable.) You can delete the placeholder with the Linux partition
+tools later during the actual install, and replace it with Linux
+partitions.
+
+</para><para>
+
+If you currently have one hard disk with one partition (a common setup
+for desktop computers), and you want to multi-boot the native
+operating system and Debian, you will need to:
+
+  <orderedlist>
+<listitem><para>
+
+Back up everything on the computer.
+
+</para></listitem>
+<listitem><para>
+
+Boot from the native operating system installer media such as CD-ROM
+or tapes.
+
+<phrase arch="powerpc">When booting from a MacOS CD, hold the
+<keycap>c</keycap> key while 
+booting to force the CD to become the active MacOS system.</phrase>
+
+</para></listitem>
+<listitem><para>
+
+Use the native partitioning tools to create native system
+partition(s). Leave either a place holder partition or free space for
+&debian;.
+
+</para></listitem>
+<listitem><para>
+
+Install the native operating system on its new partition.
+
+</para></listitem>
+<listitem><para>
+
+Boot back into the native system to verify everything's OK,
+    and to download the Debian installer boot files.
+
+</para></listitem>
+<listitem><para>
+
+Boot the Debian installer to continue installing Debian.
+
+</para></listitem>
+</orderedlist>
+
+</para>
+
+&nondeb-part-alpha.xml; 
+&nondeb-part-i386.xml; 
+&nondeb-part-m68k.xml; 
+&nondeb-part-sparc.xml; 
+&nondeb-part-powerpc.xml;
+
+ </sect1>

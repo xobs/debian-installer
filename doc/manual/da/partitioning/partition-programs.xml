@@ -1,0 +1,182 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 11648 untranslated -->
+
+ <sect1 id="partition-programs">
+ <title>Debian Partitioning Programs</title>
+<para>
+
+Several varieties of partitioning programs have been adapted by Debian
+developers to work on various types of hard disks and computer
+architectures. Following is a list of the program(s) applicable for
+your architecture.
+
+</para>
+
+<variablelist>
+
+<varlistentry>
+<term><command>partman</command></term>
+<listitem><para>
+
+Recommended partitioning tool in Debian. This swiss army knife can
+also create filesystems <phrase arch="i386"> (<quote>format</quote> in
+Windows speak) </phrase> and assign them to the mountpoints.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry condition="fdisk.txt">
+<term><command>fdisk</command></term>
+<listitem><para>
+
+ The original Linux disk partitioner, good for gurus; read the 
+<ulink url="fdisk.txt">fdisk manual page</ulink> .
+
+</para><para>
+
+Be careful if you have existing FreeBSD partitions on your machine.
+The installation kernels include support for these partitions, but the
+way that <command>fdisk</command> represents them (or not) can make the
+device names differ.  See the 
+<ulink url="&url-linux-freebsd;">Linux+FreeBSD HOWTO</ulink>
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry condition="cfdisk.txt">
+<term><command>cfdisk</command></term>
+<listitem><para>
+
+A simple-to-use, full-screen disk partitioner for the rest of us; read
+the <ulink url="cfdisk.txt">cfdisk manual page</ulink>.
+
+</para><para>
+
+Note that <command>cfdisk</command> doesn't understand FreeBSD
+partitions at all, and, again, device names may differ as a result.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry condition="atari-fdisk.txt">
+<term><command>atari-fdisk</command></term>
+<listitem><para>
+
+Atari-aware version of <command>fdisk</command>; read the 
+<ulink url="atari-fdisk.txt">atari-fdisk manual page</ulink>.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry condition="amiga-fdisk.txt">
+<term><command>amiga-fdisk</command></term>
+<listitem><para>
+
+Amiga-aware version of <command>fdisk</command>; read the 
+<ulink url="amiga-fdisk.txt">amiga-fdisk manual page</ulink>.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry condition="mac-fdisk.txt">
+<term><command>mac-fdisk</command></term>
+<listitem><para>
+
+Mac-aware version of <command>fdisk</command>; read the 
+<ulink url="mac-fdisk.txt">mac-fdisk manual page</ulink>.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry condition="pmac-fdisk.txt">
+<term><command>pmac-fdisk</command></term>
+<listitem><para>
+
+PowerMac-aware version of <command>fdisk</command>, also used by BVM
+and Motorola VMEbus systems; read the 
+<ulink url="pmac-fdisk.txt">pmac-fdisk manual page</ulink>.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry condition="fdasd.txt">
+<term><command>fdasd</command></term>
+<listitem><para>
+
+&arch-title; version of <command>fdisk</command>; Please read the
+<ulink url="fdasd.txt">fdasd manual page</ulink> or chapter 13 in
+<ulink url="http://oss.software.ibm.com/developerworks/opensource/linux390/docu/l390dd08.pdf">
+Device Drivers and Installation Commands</ulink> for details. 
+
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+<para>
+
+One of these programs will be run by default when you select
+<guimenuitem>Partition a Hard Disk</guimenuitem>.  If the one which is run by default isn't
+the one you want, quit the partitioner, go to the shell
+(<userinput>tty2</userinput>) by pressing <keycap>Alt</keycap>
+and <keycap>F2</keycap> keys together, and manually type in the
+name of the program you want to use (and arguments, if any).  Then
+skip the <guimenuitem>Partition a Hard Disk</guimenuitem> step in
+<command>debian-installer</command> and continue to the next step.
+
+</para><para>
+
+If you will be working with more than 20 partitions on your ide disk,
+you will need to create devices for partitions 21 and beyond. The next
+step of initializing the partition will fail unless a proper device is
+present. As an example, here are commands you can use in
+<userinput>tty2</userinput> or under Execute A Shell to add a device
+so the 21st partition can be initialized:
+
+<informalexample><screen>
+cd /dev
+mknod hda21 b 3 21 
+chgrp disk hda21
+chmod 660 hda21
+</screen></informalexample>
+
+Booting into the new system will fail unless proper devices are present
+on the target system. After installing the kernel and modules, execute:
+
+<informalexample><screen>
+cd /target/dev
+mknod hda21 b 3 21 
+chgrp disk hda21
+chmod 660 hda21
+</screen></informalexample>
+
+</para><para arch="i386">
+
+Remember to mark your boot partition as ``Bootable''. 
+
+</para><para condition="mac-fdisk.txt">
+
+See the 
+<ulink url="mac-fdisk.txt">mac-fdisk manual page</ulink> for
+information on how to create partitions.  One key point, is that the
+swap partition is identified on Mac type disks by its name; it must be
+named `swap'. All Mac linux partitions are the same partition type, 
+Apple_UNIX_SRV2. Please read the fine manual. We also suggest reading the 
+<ulink url="&url-mac-fdisk-tutorial;">mac-fdisk Tutorial</ulink>, which
+includes steps you should take if you are sharing your disk with
+MacOS.  
+
+</para>
+
+&partition-alpha.xml;
+&partition-hppa.xml;
+&partition-i386.xml;
+&partition-ia64.xml;
+&partition-mips.xml;
+&partition-powerpc.xml;
+&partition-sparc.xml;
+
+ </sect1>
+
+
+
+
