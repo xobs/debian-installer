@@ -11,8 +11,10 @@ dir=`date +%Y-%m-%d`
 
 unset LANG LC_ALL LANGUAGE
 cvs up
-make reallyclean
 
+for t in netboot cdrom bootfloppy floppy; do
+    make TYPE="$t" reallyclean
+done
 for t in netboot cdrom bootfloppy floppy; do
     echo
     echo BUILDING INITRD FOR $t
