@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="EUC-JP"?>
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: powerpc.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
+<!-- original version: 14350 -->
+
+  <sect2 arch="ia64"><title>CD-ROM からの起動</title>
+
+&boot-installer-intro-cd.xml;
+
+<!--
+  <emphasis condition="FIXME">Not yet written.</emphasis>
+-->
+  <emphasis condition="FIXME">まだ書いてません。</emphasis>
+
+  </sect2>
+
+  <sect2 arch="ia64" id="boot-tftp"><title>TFTP での起動</title>
+
+&boot-installer-intro-net.xml;
+
+<para>
+
+<!--
+Network booting an ia64 system requires two architecture-specific actions.
+On the boot server, DHCP and TFTP must be configured to deliver  
+<command>elilo</command>.
+On the client a new boot option must be defined in the EFI boot manager
+to enable loading over a network.
+-->
+ia64 システムでのネットワークブートは、
+2 つのアーキテクチャ特有のアクションが必要です。
+ブートサーバでは、elilo に伝えるために DHCP と TFTPを設定しなければなりません。
+クライアントでは、新しいブートオプションを、
+ネットワーク越しのロードができるよう EFI ブートマネージャに定義しなければなりません。
+
+</para>
+  <sect3 arch="ia64" id="boot-tftp-server">
+  <title>サーバの設定</title>
+<para>
+
+<!--
+A suitable TFTP entry for network booting an ia64 system looks something
+like this:
+-->
+ia64 システムのネットワークブート用の適切な TFTP エントリは、
+以下のようになります:
+
+<informalexample><screen>
+
+host mcmuffin {
+        hardware ethernet 00:30:6e:1e:0e:83;
+        fixed-address 10.0.0.21;
+        filename "elilo.efi";
+}
+
+</screen></informalexample>
+
+<!--
+Note that the goal is to get <command>elilo.efi</command> running on
+the client.
+-->
+<command>elilo.efi</command> をクライアントで実行することが目的なのに、
+注意してください。
+
+</para><para>
+
+<!--
+Create an <filename>ia64/</filename> subdirectory in your tftpboot
+directory, and populate it with the <filename>vmlinuz</filename> and
+<filename>initrd.gz</filename> files from the Debian installer netboot
+directory.
+-->
+tftpboot ディレクトリに <filename>ia64/</filename> サブディレクトリを作成し、
+Debian インストーラ の netboot ディレクトリから、
+<filename>vmlinuz</filename> ファイルと 
+<filename>initrd.gz</filename> ファイルを移してください。
+
+
+</para><para>
+
+<!--
+Copy <filename>elilo.efi</filename> to your tftpboot directory and
+make it world readable.  This file can usually be found in the elilo
+package in IA64 distributions, or in
+<filename>/usr/lib/elilo</filename> or in a subdirectory of
+<filename>/boot/efi</filename>.  A suitable copy is provided in the
+Debian installer netboot directory.
+-->
+<filename>elilo.efi</filename> を tftpboot ディレクトリにコピーし、
+誰でも読めるようにしてください。
+たいていこのファイルは、IA64 版の elilo パッケージの中か、
+<filename>/usr/lib/elilo</filename> ないし <filename>/boot/efi</filename> 
+のサブディレクトリにあります。
+適切なコピーは Debian インストーラの netboot ディレクトリの中にあります。
+
+</para><para>
+
+<!--
+Create an <filename>elilo.conf</filename> file in your tftpboot
+directory.  This will
+be loaded by <command>elilo.efi</command> once it is running on the
+client, and controls what
+happens next, including the choice of kernel, initrd image, etc.  An
+example file is provided in the Debian installer netboot directory, review
+the contents and update as needed for your choice of paths, etc.
+-->
+tftpboot ディレクトリに <filename>elilo.conf</filename> ファイルを作成してください。
+これは、クライアントで起動するときに <command>elilo.efi</command> に一度読み込まれ、
+次になにが起きるか (カーネル・ initrd イメージの選択など) を制御するものです。
+シリアルコンソールで起動する手頃な例として、以下のようにするといいでしょう。
+
+<!--
+It is possible to have different config files for different clients by naming
+them using the client's IP address in hex with the suffix
+<filename>.conf</filename> instead of <filename>elilo.conf</filename>.
+See documentation provided in the <classname>elilo</classname> package
+for details.
+-->
+<filename>elilo.conf</filename> の代わりに、
+名前にクライアントのIPアドレス (16 進) を使用して、
+拡張子 <filename>.conf</filename> を持つ、
+別のクライアント用の config ファイルを持つことができます。
+詳細は、<classname>elilo</classname> パッケージで提供されるドキュメントを、
+参照してください。
+
+</para>
+  </sect3>
+  <sect3 arch="ia64" id="boot-tftp-client">
+  <title>クライアントの設定</title>
+<para>
+
+<!--
+To configure the client to support TFTP booting, start by booting to
+EFI and entering the <guimenu>Boot Option Maintenance Menu</guimenu>.
+-->
+TFTP ブートをサポートするクライアントを設定するのは、
+EFI を起動し、<guimenu>Boot Option Maintenance Menu</guimenu> 
+へ入ることで始めてください。
+
+<itemizedlist>
+<listitem><para>
+
+<!--
+Add a boot option.
+-->
+起動オプションを加えてください。
+</para><para>
+
+</para></listitem>
+<listitem><para>
+
+<!--
+Select the line saying <guimenuitem>Load File
+[Acpi()/.../Mac()]</guimenuitem> and press &enterkey;.
+-->
+<guimenuitem>Load File [Acpi()/.../Mac()]</guimenuitem> という行を選択し、
+&enterkey; を押してください。
+
+</para></listitem>
+<listitem><para>
+
+<!--
+Name the entry <userinput>Netboot</userinput> or something similar,
+save, and exit back to the boot options menu.  
+-->
+このエントリに <userinput>Netboot</userinput> や似た名前を指定して、
+保存後、ブートオプションメニューへ抜けてください。
+
+</para></listitem>
+</itemizedlist>
+
+<!--
+You should see the new boot option you just created, and selecting it
+should initiate a DHCP query, leading to a TFTP load of
+<filename>elilo.efi</filename> from the server.
+-->
+今作成した新しいブートオプションが、
+サーバから <filename>elilo.efi</filename> を読み込むような TFTP を導く、
+DHCP クエリを始めるようになっているか、確認した方がいいでしょう。
+
+</para>
+
+  </sect3>
+  </sect2>

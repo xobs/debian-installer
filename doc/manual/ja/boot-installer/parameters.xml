@@ -1,32 +1,56 @@
+<?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: parameters.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+<!-- $Id$ -->
+<!-- original version: 14359 -->
 
- <sect1 id="boot-parms"><title>Boot Parameters</title>
+ <sect1 id="boot-parms"><title>ブートパラメータ</title>
 <para>
 
+<!--
 Boot parameters are Linux kernel parameters which are generally used
 to make sure that peripherals are dealt with properly.  For the most
 part, the kernel can auto-detect information about your peripherals.
 However, in some cases you'll have to help the kernel a bit.
+-->
+ブートパラメータとは  Linux カーネルのパラメータのことで、
+一般には周辺機器を適切に扱うために用います。
+ほとんどの場合、カーネルは周辺機器の情報を自動的に検出します。
+しかし、場合によっては少々カーネルを助けてあげないといけないこともあるのです。
 
 </para><para>
 
+<!--
 If this is the first time you're booting the system, try the default
 boot parameters (i.e., don't try setting arguments) and see if it works
 correctly. It probably will.  If not, you can reboot later and look for
 any special parameters that inform the system about your hardware.
+-->
+システムを初めて起動する場合は、デフォルトのブートパラメータを試して
+(つまりなにもパラメータを設定せずに)、正確に動作するか観察してください。
+たいていはうまくいくと思います。
+なにか問題が起こったら、
+そのハードウェアに関する情報をシステムに伝えるためのパラメータを調べ、
+あとで再起動します。
 
 </para><para>
 
+<!--
 Information on many boot parameters can be found in the 
 <ulink url="http://www.tldp.org/HOWTO/BootPrompt-HOWTO.html"> Linux
 BootPrompt HOWTO</ulink>, including tips for obscure hardware.  This
 section contains only a sketch of the most salient parameters.  Some
 common gotchas are included below in 
 <xref linkend="boot-troubleshooting"/>.
+-->
+多くのブートパラメータの情報は (曖昧なハードウェア用の tips 込みで)、
+<ulink url="http://www.tldp.org/HOWTO/BootPrompt-HOWTO.html"> Linux
+BootPrompt HOWTO</ulink> で見つけられます。
+本節は、最も顕著なパラメータの概要だけを含んでいます。
+いくつか共通のものは <xref linkend="boot-troubleshooting"/> 以下に含まれています。
 
 </para><para>
 
+<!--
 When the kernel boots, a message 
 
 <informalexample><screen>
@@ -44,15 +68,38 @@ where <replaceable>ram</replaceable> is set to the amount of memory,
 suffixed with ``k'' for kilobytes, or ``m'' for megabytes.  For
 example, both <userinput>mem=65536k</userinput> and
 <userinput>mem=64m</userinput> mean 64MB of RAM.
+-->
+カーネルが起動するときには、プロセスの最初のほうで
+
+<informalexample><screen>
+
+Memory:<replaceable>avail</replaceable>k/<replaceable>total</replaceable>k available 
+
+</screen></informalexample>
+
+というメッセージが表示されます。
+<replaceable>total</replaceable> は利用可能な RAM の総量をキロバイト単位で表しています。
+この値が実際に搭載している RAM の量と一致しないときには、
+<userinput>mem=<replaceable>ram</replaceable></userinput> というパラメータが必要になります。
+<replaceable>ram</replaceable> のところには、実際に搭載しているメモリ量を、
+キロバイト単位なら ``k''、
+メガバイト単位なら ``m'' を後ろにつけて記入します。例えば、
+<userinput>mem=65536k</userinput> も <userinput>mem=64m</userinput> も 64MB の RAM を意味します。
 
 </para><para>
 
+<!--
 If your monitor is only capable of black-and-white, use the
 <userinput>mono</userinput> boot argument.  Otherwise, your
 installation will use color, which is the default.
+-->
+お使いのモニタが白黒表示しかできないものでしたら、
+ブートパラメータ <userinput>mono</userinput> を使ってください。
+こうしないと、インストールでは標準でカラー表示になります。
 
 </para><para condition="supports-serial-console">
 
+<!--
 If you are booting with a serial console, generally the kernel will
 autodetect this 
 <phrase arch="mipsel">(although not on DECstations)</phrase>
@@ -63,23 +110,41 @@ to pass the
 argument to the kernel, where <replaceable>device</replaceable> is
 your serial device, which is usually something like
 <filename>ttyS0</filename>.
+-->
+起動の際にシリアルコンソールを使うと、通常カーネルはこちらを自動検出します
+<phrase arch="mipsel">(ただし DECstation を除く)</phrase>。
+ただし、シリアルコンソールから起動させたいコンピュータに
+ビデオカード (フレームバッファ) とキーボードもついている場合には、カーネルに 
+<userinput>console=<replaceable>device</replaceable></userinput> 
+というパラメータを渡す必要があるでしょう。
+<replaceable>device</replaceable> は利用するシリアルデバイスです。
+これは普通 <filename>ttyS0</filename> のようになるでしょう。
 
 </para><para arch="sparc">
 
+<!--
 For &arch-title; the serial devices are <filename>ttya</filename> or
 <filename>ttyb</filename>.
 Alternatively, set the <envar>input-device</envar> and
 <envar>output-device</envar> OpenPROM variables to
 <filename>ttya</filename>.
+-->
+&arch-title; のシリアルデバイスは、
+<filename>ttya</filename> や <filename>ttyb</filename> になります。
+あるいは、OpenPROM 変数の <envar>input-device</envar> と
+<envar>output-device</envar> に <filename>ttya</filename> を設定しても結構です。
 
 </para>
 
 
-  <sect2 id="installer-args"><title>Debian Installer Arguments</title>
+  <sect2 id="installer-args"><title>Debian Installer 引数</title>
 <para>
 
+<!--
 The installation system recognizes a few boot arguments which may be
 useful. 
+-->
+インストールシステムは おそらく便利な引数を、いくつか認識します。
 
 </para>
 
@@ -88,23 +153,44 @@ useful.
 <term>DEBCONF_PRIORITY</term>
 <listitem><para>
 
-These parameter settings will similarly set the highest priority of
-messages to be displayed. 
+<!--
+This parameter settings will set the highest priority of messages
+to be displayed. 
+-->
+このパラメータ設定では、表示するメッセージの最優先項目を設定します。
 
 </para><para>
 
-With <userinput>DEBCONF_PRIORITY=critical</userinput>, the
-installation system will display only critical messages and try to do
-the right thing without fuss.  If problems are encountered, the
-installer adjusts the priority as needed.
+<!--
+The default installation uses <userinput>DEBCONF_PRIORITY=high</userinput>.
+This means that both high and critical priority messages are shown, but medium
+and low priority messages are skipped. 
+If problems are encountered, the installer adjusts the priority as needed.
+-->
+デフォルトのインストールでは、
+<userinput>DEBCONF_PRIORITY=high</userinput>  を使用します。
+優先度が「高」のものと、「重要」のもののメッセージを表示し、
+「標準」や、「低」のメッセージはスキップします。
+問題にぶつかった場合、インストーラは必要な優先度に調整します。
 
 </para><para>
 
-If <userinput>DEBCONF_PRIORITY=high</userinput> (the default setting),
-both high and critical priority messages are shown, but medium and low
-priority messages are skipped. When
-<userinput>DEBCONF_PRIORITY=low</userinput> is used, all messages are
-shown.
+<!--
+If you add <userinput>DEBCONF_PRIORITY=medium</userinput> as boot parameter, you
+will be shown the installation menu and gain more control over the installation.
+When <userinput>DEBCONF_PRIORITY=low</userinput> is used, all messages are shown
+(this is equivalent to the <emphasis>expert</emphasis> boot method).
+With <userinput>DEBCONF_PRIORITY=critical</userinput>, the installation system
+will display only critical messages and try to do the right thing without fuss.
+-->
+ブートパラメータに <userinput>DEBCONF_PRIORITY=medium</userinput> 
+を追加すると、インストールメニューが表示され、
+インストールについて、さらに多くの制御を行うことができます。
+<userinput>DEBCONF_PRIORITY=low</userinput> を使った場合は、
+すべてのメッセージを表示します (<emphasis>expert</emphasis> 起動法と等価)。
+<userinput>DEBCONF_PRIORITY=critical</userinput> の場合は、
+インストールシステムは重要なメッセージだけを表示し、
+大騒ぎせずに正しい設定をしようとします。
 
 </para></listitem>
 </varlistentry>
@@ -114,8 +200,12 @@ shown.
 <term>DEBCONF_FRONTEND</term>
 <listitem><para>
 
+<!--
 This boot parameter controls the type of user interface used for the
 installer. The current possible parameter settings are:
+-->
+このブートパラメータはインストーラで使うユーザインタフェースを
+制御します。現在有効な設定は以下の通りです。
 
 <itemizedlist>
 <listitem>
@@ -137,9 +227,20 @@ installer. The current possible parameter settings are:
 </listitem>
 </itemizedlist>
 
+<!--
 The default front end is <userinput>DEBCONF_FRONTEND=newt</userinput>.
-<userinput>DEBCONF_FRONTEND=text</userinput>
-may be preferable for serial console installs.
+<userinput>DEBCONF_FRONTEND=text</userinput> may be preferable for
+serial console installs. Other frontends but
+<userinput>newt</userinput> are not available on default install
+media, so this is not very useful right now.
+-->
+デフォルトのフロントエンドは <userinput>DEBCONF_FRONTEND=newt</userinput> です。
+シリアルコンソールでインストールするには、
+<userinput>DEBCONF_FRONTEND=text</userinput> とするべきかもしれません。
+<userinput>DEBCONF_FRONTEND=text</userinput> 以外のフロントエンドは、
+デフォルトのインストールメディアでは利用できません。
+そのため、今現在あまり有用ではありません。
+
 
 </para></listitem>
 </varlistentry>
@@ -149,31 +250,47 @@ may be preferable for serial console installs.
 <term>BOOT_DEBUG</term>
 <listitem><para>
 
+<!--
 Passing this boot parameter will cause the boot to be more verbosely 
 logged.
+-->
+このブートパラメータを渡すと、起動時により詳細なログを出力します。
 
 <variablelist>
 <varlistentry>
 <term><userinput>BOOT_DEBUG=0</userinput></term>
+<!--
 <listitem><para>This is the default.</para></listitem>
+-->
+<listitem><para>デフォルトです。</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>BOOT_DEBUG=1</userinput></term>
+<!--
 <listitem><para>More verbose than usual.</para></listitem>
+-->
+<listitem><para>通常よりも詳細です。</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>BOOT_DEBUG=2</userinput></term>
+<!--
 <listitem><para>Lots of debugging information.</para></listitem>
+-->
+<listitem><para>デバッグ情報を大量に表示します。</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>BOOT_DEBUG=3</userinput></term>
 <listitem><para>
 
+<!--
 Shells are run at various points in the boot process to allow detailed
 debugging. Exit the shell to continue the boot.
+-->
+詳細なデバッグを行うよう、ブートプロセスの様々な箇所でシェルが実行されます。
+起動を続けるにはシェルから抜けてください。
 
 </para></listitem>
 </varlistentry>
@@ -187,15 +304,24 @@ debugging. Exit the shell to continue the boot.
 <term>INSTALL_MEDIA_DEV</term>
 <listitem><para>
 
+<!--
 The value of the parameter is the path to the device to load the
 Debian installer from. For example,
 <userinput>INSTALL_MEDIA_DEV=/dev/floppy/0</userinput>
+-->
+このパラメータの値には、Debian インストーラを読み込むデバイスのパスを指定します。
+例えば、<userinput>INSTALL_MEDIA_DEV=/dev/floppy/0</userinput> となります。
 
 </para><para>
 
+<!--
 The boot floppy, which normally scans all floppys and USB storage
 devices it can to find the root floppy, can be overridden by this
 parameter to only look at the one device.
+-->
+ブートフロッピー は root フロッピーを探すのに、
+通常全フロッピーとUSB ストレージを検索しますが、
+このパラメータで 1 つのデバイスを探すように上書きできます。
 
 </para></listitem>
 </varlistentry>
@@ -203,31 +329,110 @@ parameter to only look at the one device.
 <varlistentry>
 <term>debian-installer/framebuffer</term>
 <listitem><para>
-
+<!--
 Some architectures use the kernel framebuffer to offer installation in
 a number of languages. If framebuffer causes a problem on your system
 you can disable the feature by the parameter
 <userinput>debian-installer/framebuffer=false</userinput>. Problem
 symptoms are error messages about bterm or bogl, a blank screen, or
 a freeze within a few minutes after starting the install.
+-->
+いくつかのアーキテクチャでは、多くの言語でインストールを行うために、
+カーネルフレームバッファを使用します。
+フレームバッファが問題となるシステムの場合、
+<userinput>debian-installer/framebuffer=false</userinput> 
+パラメータによってこの機能を無効にできます。
+bterm や bogl に関するエラーメッセージや、真っ暗な画面、
+インストールが始まった後での数分のフリーズがおきたら問題の兆候です。
 
 </para><para arch="i386">
 
+<!--
 The <userinput>video=vga16:off</userinput> argument may also be used
 to disable the framebuffer. Such problems have been reported on a Dell
 Inspiron with Mobile Radeon card.
+-->
+<userinput>video=vga16:off</userinput> 引数はフレームバッファを無効にする効果もあります。
+そのような問題が、Mobile Radeon を搭載した Dell Inspiron について報告されています。
 
 </para><para arch="m68k">
 
+<!--
 Such problems have been reported on the Amiga 1200 and SE/30.
+-->
+そのような問題が、Amiga 1200 や SE/30 について報告されています。
 
 </para><para arch="hppa">
 
+<!--
 Such problems have been reported on hppa.
+-->
+そのような問題が、hppa について報告されています。
 
 </para></listitem>
 </varlistentry>
 
+<varlistentry>
+<term>debian-installer/probe/usb</term>
+<listitem><para>
+
+<!--
+Set to <userinput>false</userinput> to prevent probing for USB on
+boot, if that causes problems.
+-->
+起動時の USB の検出で問題が起きる場合は、
+これに <userinput>false</userinput> を設定してください。
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>netcfg/use_dhcp</term>
+<listitem><para>
+
+<!--
+By default, the &d-i; automatically probes for network configuration
+via DHCP. If the probe succeeds, you won't have a chance to review and
+chage the obtained settings. You can get to the manual network setup
+only in case the DHCP probe fails.
+-->
+デフォルトでは、&d-i; は DHCP によりネットワークの設定を自動検出します。
+検出がが成功すると、確認する機会がなく検出値を変更できないでしょう。
+DHCP の検出が失敗する場合のみ、手動ネットワーク設定を行えます。
+
+</para><para>
+
+<!--
+If you have a DHCP server on your local network, but want to avoid it
+because e.g. it gives wrong answers, you can use the parameter
+<userinput>netcfg/use_dhcp=false</userinput> to prevent configuring
+the network with DHCP and to enter the information manually.
+-->
+ローカルネットワークに DHCP サーバがあるのに、それを回避したい場合 
+(例: 誤った値を返す等)、
+DHCP でのネットワーク設定をせず手動で情報を入力するのに、
+<userinput>netcfg/use_dhcp=false</userinput> パラメータを使用できます。
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>hw-detect/start_pcmcia</term>
+<listitem><para>
+
+<!--
+Set to <userinput>false</userinput> to prevent starting PCMCIA
+services, if that causes problems. Some laptops are well known for
+this misbehaviour.
+-->
+PCMCIA サービスが原因で問題が発生する場合、
+<userinput>false</userinput> を設定することで、
+起動しないようにすることができます。
+いくつかのラップトップコンピュータには、
+そういう行儀悪さがあることが知られています。
+
+</para></listitem>
+</varlistentry>
 </variablelist>
   </sect2>
  </sect1>

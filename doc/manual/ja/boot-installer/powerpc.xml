@@ -1,27 +1,46 @@
+<?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: powerpc.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+<!-- $Id$ -->
+<!-- original version: 11648 -->
 
-  <sect2 arch="powerpc"><title>Booting from a CD-ROM</title>
+  <sect2 arch="powerpc"><title>CD-ROM からの起動</title>
 
 &boot-installer-intro-cd.xml;
 
 <para>
 
+<!--
 Currently, the only &arch-title; subarchitectures that support CD-ROM
 booting are PReP and New World PowerMacs. On PowerMacs, hold the
 <keycap>c</keycap> key, or else the combination of
 <keycap>Command</keycap>, <keycap>Option</keycap>,
 <keycap>Shift</keycap>, and <keycap>Delete</keycap>
 keys together while booting to boot from the CD-ROM.
+-->
+今のところ、CD-ROM からの起動をサポートしている
+&arch-title; のサブアーキテクチャは
+PReP と New World PowerMac だけです。
+PowerMac では、<keycap>c</keycap> キーを押しっぱなしにするか、
+または <keycap>Command</keycap>, <keycap>Option</keycap>,
+<keycap>Shift</keycap>, <keycap>Delete</keycap> キーを起動時に同時に押せば、
+CD-ROM から起動できます。
 
 </para><para>
 
+<!--
 OldWorld Powermacs will not boot a Debian CD, because OldWorld
 computers relied on a MacOSROM CD boot driver to be present on the CD,
 and a free-software version of this driver is not available. All
 OldWorld systems have floppy drives, so use the floppy drive to launch
 the installer, and then point the installer to the CD for the needed
 files.
+-->
+OldWorld Powermac では、Debian CD が起動しないでしょう。なぜなら OldWorld
+コンピュータは、CD を利用するのに MacOSROM CD ブートドライバに依存し、
+このドライバにはフリーソフトウェア版が存在しないからです。すべての
+OldWorld システムには、フロッピードライブがあるので、インストーラを
+開始するためにフロッピードライブを使い、必要とされたファイルのために CD を
+指定してください。
 
 </para><para>
 
@@ -32,31 +51,43 @@ instructions in <xref linkend="boot-newworld"/> for booting from
 the hard disk, except use the path to <command>yaboot</command> on the
 CD at the OF prompt, such as
 
+CD-ROM からの直接起動をサポートしていないシステムでも、
+インストールに CD-ROM を用いることは可能です。
+NewWorld では、OpenFirmware のコマンドを用いて、
+手動で CD-ROM から起動させることもできます。
+ハードディスクから起動させる場合は
+<xref linkend="boot-newworld"/> の指示に従ってください。
+ただし OF プロンプトで与える CD の <command>yaboot</command> へのパスとしては、
+
 <informalexample><screen>
 
 0 > boot cd:,\install\powermac\yaboot
 
 </screen></informalexample>
+のようなものを用いてください。
 </para>
   </sect2>
 
   <sect2 arch="powerpc" id="install-drive">
-  <title>Booting from Hard Disk</title>
+  <title>ハードディスクからの起動</title>
 
 &boot-installer-intro-hd.xml;
 
-  <sect3><title>Booting CHRP from OpenFirmware</title>
+  <sect3><title>OpenFirmware からの CHRP の起動</title>
 
 <para>
 
+<!--
   <emphasis>Not yet written.</emphasis>
-
+-->
+  <emphasis>まだ書いていません。</emphasis>
 </para>
    </sect3>
 
-   <sect3><title>Booting OldWorld PowerMacs from MacOS</title>
+   <sect3><title>MacOS からの OldWorld PowerMac の起動</title>
 <para>
 
+<!--
 If you set up BootX in <xref linkend="files-oldworld"/>, you can
 use it to boot into the installation system. Double click the
 <guiicon>BootX</guiicon> application icon. Click on the
@@ -67,15 +98,27 @@ may need to select the <guilabel>No Video Driver</guilabel> checkbox,
 depending on your hardware. Then click the
 <guibutton>Linux</guibutton> button to shut down MacOS and launch the
 installer.
+-->
+<xref linkend="files-oldworld"/> で BootX を設定済みなら、
+それを使ってインストールシステムを起動できます。
+<guiicon>BootX</guiicon> のアプリケーションアイコンをダブルクリックしてください。
+<guibutton>Options</guibutton> ボタンをクリックし、
+<guilabel>Use Specified RAM Disk</guilabel> を選んでください。
+すると <filename>ramdisk.image.gz</filename> ファイルを選択できるようになります。
+ハードウェアによっては、
+<guilabel>No Video Driver</guilabel> チェックボックスを選ばなければならないかもしれません。
+最後に <guibutton>Linux</guibutton> ボタンをクリックすると、MacOS がシャットダウンして、
+インストーラが起動します。
 
 </para>
    </sect3>
 
 
   <sect3 id="boot-newworld">
-  <title>Booting NewWorld Macs from OpenFirmware</title>
+  <title>OpenFirmware からの NewWorld Mac の起動</title>
 <para>
 
+<!--
 You will have already placed the <filename>linux.bin, yaboot,
 yaboot.conf</filename>, and <filename>root.bin</filename> files at the
 root level of your HFS partition in <xref linkend="files-newworld"/>. 
@@ -84,6 +127,16 @@ Restart the computer, and immediately (during the chime) hold down the
 <keycap>o</keycap>, and <keycap>f</keycap> keys all together. After 
 a few seconds you will be presented with the Open Firmware prompt.
 At the prompt, type
+-->
+既に <xref linkend="files-newworld"/> において、
+<filename>linux.bin, yaboot, yaboot.conf, root.bin</filename> 
+といったファイルを、
+HFS パーティションの root レベルに配置したことと思います。
+コンピュータを再起動し、ただちに (チャイムが鳴っている最中に)
+<keycap>Option</keycap>, <keycap>Command (クローバー/Apple)</keycap>,
+<keycap>o</keycap>, <keycap>f</keycap> の各キーを同時に押します。
+数秒間たつと、OpenFirmware のプロンプトが表示されます。
+プロンプトから次のように入力します。
 
 <informalexample><screen>
 
@@ -91,12 +144,21 @@ At the prompt, type
 
 </screen></informalexample>
 
+<!--
 replacing <replaceable>x</replaceable> with the partition number of
 the HFS partition where the
 kernel and yaboot files were placed, followed by a &enterkey;. On some
 machines, you may need to use <userinput>ide0:</userinput> instead of
 <userinput>hd:</userinput>. In a few more seconds you will see a
 yaboot prompt
+-->
+<replaceable>x</replaceable> はカーネルと yaboot ファイルを置いた
+HFS パーティションの番号に置き換えてください。
+入力したら &enterkey; を押します。
+いくつかのマシンでは、
+<userinput>hd:</userinput> の代わりに <userinput>ide0:</userinput>
+を指定する必要があるかもしれません。さらに何秒か待つと、
+yaboot のプロンプトが表示されます。
 
 <informalexample><screen>
 
@@ -104,85 +166,142 @@ boot:
 
 </screen></informalexample>
 
+<!--
 At yaboot's <prompt>boot:</prompt> prompt, type either
 <userinput>install</userinput> or <userinput>install-safe</userinput>
 followed by a &enterkey;.  The `safe' option uses the
 <userinput>video=ofonly</userinput> argument for maximum
 compatibility; you can try it if <userinput>install</userinput>
 doesn't work. The Debian installation program should start.
+-->
+Yaboot の <prompt>boot:</prompt> プロンプトで、
+<userinput>install</userinput> か <userinput>install-safe</userinput> と入力し、&enterkey; を押します。
+`safe' の方は互換性が高くなるように
+<userinput>video=ofonly</userinput> 引数を使います。
+<userinput>install</userinput> の方がうまくいかないときは試してみてください。
+これで Debian のインストールプログラムが開始されるはずです。
 
 </para>
    </sect3>
   </sect2>
 
-  <sect2 arch="powerpc" id="boot-tftp"><title>Booting with TFTP</title>
+  <sect2 arch="powerpc" id="boot-tftp"><title>TFTP での起動</title>
 
 &boot-installer-intro-net.xml;
 
 <para>
 
+<!--
 Currently, PReP and New World PowerMac systems support netbooting. 
+-->
+現在、PReP と New World PowerMac システムではネットブートをサポートしています。
 
 </para><para>
 
+<!--
 On machines with Open Firmware, such as NewWorld Power Macs, enter the
 boot monitor (see <xref linkend="invoking-openfirmware"/>) and
 use the command <command>boot enet:0</command>.  PReP and CHRP boxes
 may have different ways of addressing the network.  On a PReP machine,
 you should try 
 <userinput>boot <replaceable>server_ipaddr</replaceable>,<replaceable>file</replaceable>,<replaceable>client_ipaddr</replaceable></userinput>.
+-->
+NewWorld Power Mac のような OpenFirmware のマシンでは、
+ブートモニタに入り
+(<xref linkend="invoking-openfirmware"/> を参照)、
+<command>boot enet:0</command> というコマンドを使います。
+PReP や CHRP のマシンでは、ネットワークの指定が異なるかもしれません。
+PReP マシンでは、
+<userinput>boot <replaceable>server_ipaddr</replaceable>,<replaceable>file</replaceable>,<replaceable>client_ipaddr</replaceable></userinput>
+を試してみてください。
 
 </para>
   </sect2>
 
 
   <sect2 arch="powerpc">
-  <title>Booting from Floppies</title>
+  <title>フロッピーからの起動</title>
 <para>
 
+<!--
 Booting from floppies is supported for &arch-title;, although it is
 generally only applicable for OldWorld systems. NewWorld systems are
 not equipped with floppy drives, and attached USB floppy drives are 
 not supported for booting.
+-->
+&arch-title; はフロッピーからの起動をサポートしていますが、
+用いることができるのは通常 OldWorld システムだけです。
+NewWorld システムは、普通出荷時にはフロッピードライブがついていません。
 
 </para><para>
 
+<!--
 You will have already downloaded the floppy images you needed and
 created floppies from the images in <xref linkend="create-floppy"/>.
+-->
+おそらく <xref linkend="create-floppy"/> で
+必要なフロッピーイメージは既にダウンロードし、
+それらのイメージからフロッピーは作成済みかと思います。
 
 </para><para>
 
+<!--
 To boot from the <filename>boot-floppy-hfs.img</filename> floppy,
 place it in floppy drive after shutting the system down, and before
 pressing the power-on button.
+-->
+<filename>boot-floppy-hfs.img</filename> フロッピーから起動するには、
+システムをシャットダウンしたあとにフロッピーをドライブに入れ、
+パワーオンボタンを押してください。
 
 </para><note><para>
+<!--
 For those not familiar with Macintosh
 floppy operations: a floppy placed in the machine prior to boot will
 be the first priority for the system to boot from. A floppy without a
 valid boot system will be ejected, and the machine will then check for
 bootable hard disk partitions.
+-->
+Macintosh のフロッピー操作に慣れていない方へ: 
+フロッピーがシステムの起動順で最優されるには、
+起動する前にフロッピーを挿入してください。
+有効なブートシステムのないフロッピーは排出されてしまい、
+ブート可能なハードディスクのパーティションをチェックします。
 
 </para></note><para>
 
+<!--
 After booting, the <filename>root.bin</filename> floppy is
 requested. Insert the root floppy and press &enterkey;. The installer
 program is automatically launched after the root system has been
 loaded into memory.
+-->
+起動すると、<filename>root.bin</filename> フロッピーが要求されます。
+root フロッピーを入れて &enterkey; を押してください。
+root システムがメモリにロードされると、
+インストーラプログラムが自動的に起動します。
 
 </para>
   </sect2>
 
 
-  <sect2 arch="powerpc"><title>PowerPC Boot Parameters</title>
+  <sect2 arch="powerpc"><title>PowerPC ブートパラメータ</title>
 <para>
 
+<!--
 Many older Apple monitors used a 640x480 67Hz mode. If your video
 appears skewed on an older Apple monitor, try appending the boot
 argument <userinput>video=atyfb:vmode:6</userinput> , which will
 select that mode for most Mach64 and Rage video hardware. For Rage 128
 hardware, this changes to
 <userinput>video=aty128fb:vmode:6</userinput> .
+-->
+多くの古い Apple モニタは、640x480 67Hz モードを使用します。
+古い Apple モニタで画面がゆがむ場合、
+多くの Mach64・Rage ビデオハードウェアでモードを選択するには、
+ブート引数に <userinput>video=atyfb:vmode:6</userinput> を試してみてください。
+Rage 128 ハードウェアならこれを <userinput>video=aty128fb:vmode:6</userinput> 
+に変えてください。
 
 </para>
   </sect2>

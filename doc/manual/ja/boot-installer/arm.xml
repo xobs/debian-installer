@@ -1,24 +1,38 @@
+<?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: arm.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+<!-- $Id$ -->
+<!-- original version: 11648 -->
 
-  <sect2 arch="arm" id="boot-tftp"><title>Booting from TFTP</title>
+  <sect2 arch="arm" id="boot-tftp"><title>TFTP からの起動</title>
 
 &boot-installer-intro-net.xml;
 
-  <sect3 arch="arm"><title>Booting from TFTP on NetWinder</title>
+  <sect3 arch="arm"><title>NetWinder での TFTP からの起動</title>
 
 <para>
 
+<!--
 NetWinders have two network interfaces: The 10Mbps NE2000-compatible
 card is <filename>eth0</filename> and the 100Mbps Tulip card is
 <filename>eth1</filename>.
+-->
+NetWinder には 2 つのネットワークインターフェースがあります。
+10Mbps の NE2000 互換なカードが <filename>eth0</filename> で、
+100Mbps の Tulip のカードが <filename>eth1</filename> です。
 
 </para><note><para>
 
+<!--
 You need NeTTrom 2.2.1 or later to boot the
 installation system. NeTTrom 2.3.3 is recommended: get these files
 from 
 <ulink url="ftp://ftp.netwinder.org/pub/netwinder/firmware/"></ulink>:
+-->
+インストールシステムを起動するには NeTTrom 2.2.1 以降が必要です。
+NeTTrom 2.3.3 をお勧めします。以下に示すファイルを
+<ulink url="ftp://ftp.netwinder.org/pub/netwinder/firmware/"></ulink>
+から入手してください。
+
 <itemizedlist>
 <listitem><para>
 
@@ -39,14 +53,22 @@ from
 
 </para></note><para>
 
+<!--
 After rebooting and interrupting the boot process during the countdown, you 
 must first configure the network either with a static address:
+-->
+再起動したらブートプロセスをカウントダウンの途中で中断させます。
+まずネットワークの設定が必要です。スタティックなアドレスの場合は
 <informalexample><screen>
 
     NeTTrom command-> setenv eth0_ip 192.168.0.10/24
 
 </screen></informalexample>
+<!--
 where 24 is the number of set bits in the netmask, or a dynamic address:
+-->
+とします。24 はネットマスクで立っているビットの数です。
+ダイナミックなアドレスの場合は
 <informalexample><screen>
 
     NeTTrom command-> boot diskless
@@ -55,10 +77,15 @@ where 24 is the number of set bits in the netmask, or a dynamic address:
 
 </para><para>
 
+<!--
 You may also need to configure the <userinput>route1</userinput>
 settings if the TFTP
 server is not on the local subnet.  The rest of the config is pretty 
 standard (the save-all step is optional):
+-->
+とします。TFTP サーバがローカルなサブネットにない場合は、
+<userinput>route1</userinput> の設定も必要です。残りの設定はほぼ通常通りです
+(save-all の段階は省略しても構いません)。
 <informalexample><screen>
 
     NeTTrom command-> setenv kerntftpserver 192.168.0.1
@@ -71,6 +98,7 @@ standard (the save-all step is optional):
 
 </para><para>
 
+<!--
 Only the last two of these interfere with normal disk booting, so it is 
 safe to <command>save-all</command> right before it, which will
 store the network settings in case you need to boot from the network
@@ -79,16 +107,31 @@ environment settings. Finally, if your <envar>cmdappend</envar>
 NeTTrom variable has the <option>noinitrd</option> option (which is  
 necessary to boot 2.4 kernels), you must remove it so the downloaded 
 kernel can boot with its attached ramdisk.
+-->
+通常のディスクからの起動と衝突するのは最後の 2 つだけなので、
+その直前で <command>save-all</command> しておくと安全です。
+こうするとネットワークの設定が保存され、
+再びネットワークから起動するときに設定を再利用できます。
+行った設定を見直すには、<command>printenv</command> コマンドを使います。
+最後に、NeTTrom 変数 <envar>cmdappend</envar> に <option>noinitrd</option> 
+オプションが設定されていたら (これは 2.4 カーネルの起動に必要です)、
+これを削除しなければなりません。
+そうしないとダウンロードしたカーネルから、同じくダウンロードした
+ram ディスクを用いて起動することができません。
 
 </para>
   </sect3>
 
-  <sect3 arch="arm"><title>Booting from TFTP on CATS</title>
+  <sect3 arch="arm"><title>CATS での TFTP からの起動</title>
 
 <para>
 
+<!--
 On CATS machines, use <command>boot de0:</command> or similar at the
 Cyclone prompt.
+-->
+CATS マシンでは、Cyclone プロンプトで 
+<command>boot de0:</command> のように入力してください。
 
 </para>
    </sect3>
@@ -96,14 +139,18 @@ Cyclone prompt.
 
 
 
-  <sect2 arch="arm"><title>Booting from CD-ROM</title>
+  <sect2 arch="arm"><title>CD-ROM からの起動</title>
 
 &boot-installer-intro-cd.xml;
 
 <para>
 
+<!--
 To boot a CD-ROM from the Cyclone console prompt, use the command
 <command>boot cd0:cats.bin</command>
+-->
+Cyclone コンソールプロンプトから CD-ROM を起動するには、
+<command>boot cd0:cats.bin</command> というコマンドを使ってください。
 
 </para>
   </sect2>

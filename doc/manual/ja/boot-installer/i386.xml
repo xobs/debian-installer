@@ -1,21 +1,32 @@
+<?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: i386.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+<!-- $Id$ -->
+<!-- original version: 14362 -->
 
-  <sect2 arch="i386"><title>Booting from a CD-ROM</title>
+  <sect2 arch="i386"><title>CD-ROM からの起動</title>
 
 &boot-installer-intro-cd.xml;
 
 <para>
 
+<!--
 You may need to configure your hardware as indicated in 
 <xref linkend="boot-dev-select"/>. Then put the CD-ROM into the drive,
 and reboot.  The system should boot up, and you should be presented
 with the <prompt>boot:</prompt> prompt.  Here you can enter your
 boot arguments, or just hit &enterkey;.
+-->
+ここで <xref linkend="boot-dev-select"/> の説明に従って
+ハードウェアの設定をする必要があるかもしれません。
+設定が OK でしたら CD-ROM をドライブに入れ、再起動してください。
+システムは起動し、<prompt>boot:</prompt> というプロンプトが表示されるはずです。
+ここで起動引数を入力できます。
+もしくは単に &enterkey; を押してください。
 
 </para><para>
 
 <!-- We'll comment the following section until we know exact layout -->
+<!-- nabetaro レイアウト用に残っているだけなので訳を省略します -->
 <!-- 
 CD #1 of official Debian CD-ROM sets for &arch-title; will present a
 <prompt>boot:</prompt> prompt on most hardware. Press
@@ -79,19 +90,34 @@ Boots the `bf2.4' flavor.
 
 -->
 
+<!--
 If your system can't boot directly from CD-ROM, or you simply can't
 seem to get it to work, don't despair; you can simply run
 <command>E:\install\boot.bat</command> under DOS (replace
 <userinput>E:</userinput> with whatever drive letter DOS assigns to
 your CD-ROM drive) to start the installation process. Then, skip down
 to <xref linkend="init-config"/>.
+-->
+インストール対象のシステムが CD-ROM から直接には起動できない場合や、
+うまくいきそうに無い場合でも、嘆く必要はありません。
+DOS から <command>E:\install\boot.bat</command> を実行すれば
+(<userinput>E:</userinput> は DOS が CD-ROM ドライブに割り当てている
+ドライブレターに置き換えてください)、
+インストールプロセスが開始されます。
+開始できたら <xref linkend="init-config"/> に進んでください。
 
 </para><para>
 
+<!--
 Also, if you're going to be installing from a FAT (DOS) partition, you
 have the option of booting the installer from the hard disk. See 
 <xref linkend="install-from-dos"/> for more information on 
 installing via this method.
+-->
+あるいは、FAT (DOS) パーティションからインストールを行おうとしているのでしたら、
+インストーラをハードディスクから起動することもできます。
+この方法でインストールを行う場合は、
+<xref linkend="install-from-dos"/> に詳しい情報があります。
 
 </para>
   </sect2>
@@ -99,61 +125,94 @@ installing via this method.
 
 
   <sect2 arch="i386" id="install-from-dos">
-  <title>Booting from a DOS partition</title>
+  <title>DOS パーティションからの起動</title>
 
 &boot-installer-intro-hd.xml;
 
 <para>
 
+<!--
 Boot into DOS (not Windows) without any drivers being loaded.  To do
 this, you have to press <keycap>F8</keycap> at exactly the right
 moment (and optionally select the `safe mode command prompt only'
 option).  Enter the subdirectory for the flavor you chose, e.g.,
+-->
+ドライバをロードせずに、(Windows ではなく) DOS を起動してください。
+こうするには、ちょうど良いタイミングで <keycap>F8</keycap> キーを押します
+(場合によっては `safe mode command prompt only' を選ぶ必要があります)。
+あなたが使うフレーバーのサブディレクトリ、例えば
 
 <informalexample><screen>
 
 cd c:\current\compact
 
-</screen></informalexample>.  
+</screen></informalexample>
+に移動します。
 
+<!--
 Next, execute <command>install.bat</command>.
 The kernel will load and launch the installer system. 
+-->
+続いて <command>install.bat</command> を実行してください。
+カーネルがロードされ、インストーラシステムが起動します。
 
 </para><para>
 
+<!--
 Please note, there is currently a loadlin problem (#142421) which
 precludes <filename>install.bat</filename> from being used with the
 bf2.4 flavor. The symptom of the problem is an
 <computeroutput>invalid compressed format</computeroutput> error.
+-->
+注意してほしいのですが、現在 loadlin には問題があって (bug 番号 142421)、
+<filename>install.bat</filename> では bf2.4 フレーバーが使えなくなっています。
+問題の症状は、
+<computeroutput>invalid compressed format</computeroutput> 
+というエラーが出ることです。
 
 </para>
   </sect2>
 
 
   <sect2 arch="i386" id="boot-initrd">
-  <title>Booting from linux using <command>LILO</command> or
-  <command>GRUB</command></title>
+  <title><command>LILO</command> や <command>GRUB</command> を用いた linux からの起動</title>
 <para>
 
+<!--
 One <emphasis>initrd=</emphasis> line in
 <filename>/etc/lilo.conf</filename> is enough to configure two
 essentials things:
+-->
+<filename>/etc/lilo.conf</filename> 中の <emphasis>initrd=</emphasis> 
+という行は、次の非常に重要な 2 つことを設定します。
+
 <itemizedlist>
 <listitem><para>
 
+<!--
 tell <command>LILO</command> to load the <filename>initrd.gz</filename>
 installer as a RAM disk at boot time;
+-->
+起動時に、<filename>initrd.gz</filename> インストーラを 
+RAM ディスクとしてロードするよう <command>LILO</command> に指示する。
 
 </para></listitem>
 <listitem><para>
 
+<!--
 tell the <filename>vmlinuz</filename> kernel to use this RAM disk as
 its root partition.
+-->
+この RAM ディスクをルートパーティションとして使うよう、
+<filename>vmlinuz</filename> カーネルに指示する。
 
 </para></listitem>
 </itemizedlist>
 
+<!--
 Here is a <filename>/etc/lilo.conf</filename> example:
+-->
+<filename>/etc/lilo.conf</filename> の例を示します。
 
 </para><para>
 
@@ -162,9 +221,11 @@ Here is a <filename>/etc/lilo.conf</filename> example:
 image=/boot/newinstall/vmlinuz
        label=newinstall
        initrd=/boot/newinstall/initrd.gz
+       append="devfs=mount,dall"
 
 </screen></informalexample>
 
+<!--
 <emphasis>root=/dev/hdXYZ</emphasis> options in
 <filename>lilo.conf</filename> will be ignored in this case.
 For more details, refer to the
@@ -173,60 +234,106 @@ For more details, refer to the
 <citerefentry><refentrytitle>lilo.conf</refentrytitle>
 <manvolnum>5</manvolnum></citerefentry> man pages. Now run
 <userinput>lilo</userinput> and reboot.
+-->
+この例では、<filename>lilo.conf</filename> 中の 
+<emphasis>root=/dev/hdXYZ</emphasis> オプションは無視されます。
+詳細は <citerefentry><refentrytitle>initrd</refentrytitle>
+<manvolnum>4</manvolnum></citerefentry> や
+<citerefentry><refentrytitle>lilo.conf</refentrytitle>
+<manvolnum>5</manvolnum></citerefentry> 
+といったマニュアルページをご覧ください。
+そうしたら <userinput>lilo</userinput> を実行し再起動してください。
 
 </para><para>
 
+<!--
 Procedure for <command>GRUB</command> is quite similar. Locate your
 <filename>menu.lst</filename> in the <filename>/boot/grub/</filename>
 directory (sometimes in the <filename>/boot/boot/grub/</filename>),
 add the following lines:
+-->
+<command>GRUB</command> での手順もよく似ています。
+<filename>/boot/grub/</filename> ディレクトリ
+ (時々 <filename>/boot/boot/grub/</filename> ディレクトリ) に、
+<filename>menu.lst</filename> を配置して、以下の行を追加してください。
 
 <informalexample><screen>
 
 title  New Install
-kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram ramdisk_size=8192 devfs=mount,dall
+kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram ramdisk_size=10000 devfs=mount,dall
 initrd (hd0,0)/boot/newinstall/initrd.gz
 
 </screen></informalexample>
 
-and reboot. From now on, there should be no difference between
+<!--
+and reboot. Please note, that the <userinput>ramdisk_size</userinput>
+parameter may need to be increased, depending on the image you are
+booting. From now on, there should be no difference between
 <command>GRUB</command> or <command>LILO</command>.
+-->
+その後再起動してください。
+起動するイメージにより、<userinput>ramdisk_size</userinput> パラメータを、
+増やす必要があるかもしれないことに注意してください。
+これより後は、<command>GRUB</command> と <command>LILO</command> 
+に違いはありません。
 
 </para><para>
 
+<!--
 You can trace the <filename>initrd</filename> magic at work several
 times during the boot.
+-->
+起動中に <filename>initrd</filename> のマジックが何度か動いて、
+トレースすることができます
 
 <itemizedlist>
 <listitem><para>
 
+<!--
 before the kernel has even been loaded, <command>LILO</command>
 displays a much longer <computeroutput>Loading
 <replaceable>imagelabel</replaceable>......</computeroutput> line with
 more dots than usual, showing the progression of the RAM disk image
 loading.
+-->
+カーネルがにロードされる前に、LILO は通常より点が多い <computeroutput>Loading
+<replaceable>imagelabel</replaceable>......</computeroutput> の行を表示します。
+これにより RAM ディスクイメージの読込の進捗を表示します。
 
 </para></listitem>
 <listitem><para>
 
+<!--
 You should see the <computeroutput>RAM disk driver
 initialized</computeroutput>
 notice, near the real time clock initialization, proving that your
 kernel supports the RAM disk feature.
+-->
+リアルタイムクロック初期化付近で <computeroutput>RAM disk driver
+initialized</computeroutput> という表示に注意してください。
+これにより カーネルが RAM ディスク機能をサポートしていることが判ります。
+
 
 </para></listitem>
 <listitem><para>
 
+<!--
 Finally, if you don't see <computeroutput>RAMDISK: ext2 filesystem
 found at block 0</computeroutput> immediately after the partition
 checks, it's probably because
 your kernel miss the <filename>initrd</filename> feature.
+-->
+最後に、パーティションチェックの直後に <computeroutput>RAMDISK: ext2 filesystem
+found at block 0</computeroutput> という表示がなければ、
+おそらくカーネルが <filename>initrd</filename> 
+機能を見つけられなかったと言うことです。
 
 </para></listitem>
 </itemizedlist>
 
 </para><para condition="FIXME">
 
+<!--
 You should now see the debian installer running. If you do not use any
 removable medium, you want to check very early that your network
 connection is working and <emphasis>before</emphasis> irreversibly
@@ -238,6 +345,19 @@ for instance for your network interface. It's time
 Previously-Initialized Partition</userinput>, and mount the partition
 where you stored the modules that you extracted from
 <filename>drivers.tgz</filename> (<xref linkend="files-lilo"></xref>).
+-->
+今 debian インストーラの動作を見るべきです。
+リムーバブルメディアを使用しないのならば、
+取り消せないハードディスクのパーティション分割の <emphasis>前に</emphasis>、
+ネットワーク接続のチェックを、非常に早く行いたいでしょう。
+したがって、追加カーネルモジュール (例えばネットワークインタフェース) 用に、
+<userinput>insmod</userinput> が必要になるでしょう。
+ここは <command>debian-installer</command> 
+で示された手順から<emphasis>はずれる</emphasis>状況です。
+<userinput>Mount a Previously-Initialized Partition</userinput> に直接飛んで、
+<filename>drivers.tgz</filename> 
+から抽出したモジュールを格納したパーティションをマウントしてください。
+(<xref linkend="files-lilo"></xref>)
 
 </para>
 
@@ -247,20 +367,33 @@ That would avoid the need to open a shell -->
 
 <para>
 
+<!--
 Then switch to an other virtual terminal and use a shell (see 
 <xref linkend="shell"/>) to find drivers
 in the just mounted <filename>/target</filename>
 directory. <userinput>insmod</userinput> the ones you need.
+-->
+その後、他の仮想端末に切り替え、シェルを使って (<xref linkend="shell"/> 参照)
+今マウントした <filename>/target</filename> ディレクトリから、
+ドライバを探してください。
+<userinput>insmod</userinput> が必要です。
 
 </para><para>
 
+<!--
 Go to <xref linkend="netcfg"/> in the
 <command>debian-installer</command> installer menus, and
 <userinput>ping</userinput> your favorite debian mirror at last.
 Congratulations!
+-->
+最後に <command>debian-installer</command> のインストーラメニューから
+<xref linkend="netcfg"/> へ行き、お好みの Debian ミラーサイトへ
+<userinput>ping</userinput> を打ってください。
+おめでとうございます!
 
 </para><para>
 
+<!--
 Use <userinput>Unmount a Partition</userinput> if you have mounted one
 in the previous
 paragraph, safely go back to the partitioning steps at the start of
@@ -269,156 +402,279 @@ with the network as a bonus. At this stage, it is even possible
 (only a bit risky) to completely wipe out all the previous partitions
 on your hard drive for a very clean installation. The only risk is that
 your hard drive will be un-bootable for a short period of time.
+-->
+前の段落でマウントしていたなら、
+<userinput>Unmount a Partition</userinput> を使ってください。
+その後、<command>debian-installer</command> 
+の始めから安全にパーティション分割まで戻って、通常の手順に戻ってください。
+ネットワークが使えるようになっています。
+この段階では、クリーンインストール用にハードディスク上のパーティションを、
+完全に消すことができます。(少しだけ危険) 
+唯一の危険は、ハードディスクが短期間でも起動できなくなってしまうことです。
 
 </para>
   </sect2>
 
   <sect2 arch="i386" id="usb-boot">
-  <title>Booting from USB memory stick</title>
+  <title>USB メモリスティックからの起動</title>
 <para>
 
+<!--
 Lets assume you have prepared everything from <xref
 linkend="boot-dev-select"/> and <xref linkend="boot-usb-files"/>.  Now
 just plug your USB stick into some free USB connector and reboot the
 computer.  The system should boot up, and you should be presented with
 the <prompt>boot:</prompt> prompt.  Here you can enter optional boot
 arguments, or just hit &enterkey;.
+-->
+<xref linkend="boot-dev-select"/> と <xref linkend="boot-usb-files"/> より
+すべて準備したと仮定しましょう。
+さて、どれでも USB コネクタに USB スティックを差し込んで、
+コンピュータを再起動してください。
+システムが起動したら <prompt>boot:</prompt> プロンプトが表示されるはずです。
+ここで、オプションのブート引数入力するか、単に &enterkey; を打てます。
 
 </para><para>
 
+<!--
 In case your computer doesn't support booting from USB memory devices,
 you can still use a single floppy to do the initial boot and then
 switch to USB. Advance according to <xref linkend="floppy-boot"/>; the
 kernel on boot floppy should detect your USB stick automatically. When
 it asks for the root floppy, simply press &enterkey;. You should see
 &d-i; starting.
+-->
+コンピュータが USB メモリデバイスからの起動をサポートしていない場合、
+最初の起動にはフロッピーを用い、その後 USB に切り替えることができます。
+<xref linkend="floppy-boot"/> にそって進めてください。
+ブートフロッピーのカーネルは、USB スティックを自動検出するでしょう。
+root フロッピーについて訊かれたら、単に &enterkey; を押してください。
+&d-i; を開始します。
 
 </para>
   </sect2>
 
   <sect2 arch="i386" id="floppy-boot">
-  <title>Booting from Floppies</title>
+  <title>フロッピーからの起動</title>
 <para>
 
+<!--
 You will have already downloaded the floppy images you needed and
 created floppies from the images in <xref linkend="create-floppy"/>.
 If you need to, you can also modify the boot floppy; see 
 <xref linkend="rescue-replace-kernel"/>.
+-->
+おそらく <xref linkend="create-floppy"/> において
+必要なフロッピーイメージは既にダウンロードし、
+それらのイメージからフロッピーは作成済みかと思います。
+必要なら、ブートフロッピーを修正することもできます。
+<xref linkend="rescue-replace-kernel"/> を参照してください。
 
 </para><para>
 
+<!--
 To boot from the installer boot floppy, place it in the primary floppy
 drive, shut down the system as you normally would, then turn it back
 on.
+-->
+ブートフロッピーからインストーラを起動するには、
+第 1 フロッピードライブにブートフロッピーを挿入し、
+通常行うようにシステムをシャットダウンし、
+再び電源を入れてください。
 
 </para><para>
 
+<!--
 For installing from a LS-120 drive (ATAPI version) with a set of
 floppies, you need to specify the virtual location for the floppy
 device.  This is done with the <emphasis>root=</emphasis> boot
 argument, giving the device that the ide-floppy driver maps the device
-to. For example, if your is connected as first IDE device on second
-cable, you enter <userinput>linux.bin root=/dev/hdc</userinput> on the
-boot prompt. Installation from LS120 is only supported by 2.4 and
-later kernels.
+to. For example, if your LS-120 drive is connected as the first IDE
+device (master) on the second cable, you enter
+<userinput>linux root=/dev/hdc</userinput> at the boot prompt.
+Installation from LS-120 is only supported by 2.4 and later kernels.
+-->
+フロッピーのセットで LS-120 ドライブ (ATAPI 版) からインストールするには、
+フロッピーデバイスの仮想位置を指定する必要があります。
+これは <emphasis>root=</emphasis> ブート引数に、
+ide-floppy ドライバが割り当てたデバイスを指定する事で行います。
+例えば LS-120 ドライブ を 2 番目のケーブルに、
+最初の IDE デバイス (マスター) として接続していれば、
+ブートプロンプトに <userinput>linux.bin root=/dev/hdc</userinput> と入力します。
+LS120 からのインストールは 2.4 以降のカーネルでのみサポートされています。
+
 
 </para><para>
 
+<!--
 Note that on some machines, <keycombo><keycap>Control</keycap>
 <keycap>Alt</keycap> <keycap>Delete</keycap></keycombo> does not
 properly reset the machine, so a ``hard'' reboot is recommended.  If
 you are installing from an existing operating system (e.g., from a DOS
 box) you don't have a choice. Otherwise, please do a hard reboot when
 booting.
+-->
+なお <keycombo><keycap>Control</keycap>
+<keycap>Alt</keycap> <keycap>Delete</keycap></keycombo> では
+正しくリセットができないマシンがあります。
+このため「ハード」リブートをお勧めします。
+もし既にある OS (例えば DOS) からインストールする場合は
+この選択肢はありえませんが、
+それ以外の方法でインストールを行うときは、
+ハードリブートを用いてください。
 
 </para><para>
 
+<!--
 The floppy disk will be accessed, and you should then see a screen
 that introduces the boot floppy and ends with the <prompt>boot:</prompt>
 prompt.
+-->
+フロッピーディスクがアクセスされ、
+ブートフロッピーの紹介画面が表示され、
+最後に <prompt>boot:</prompt> というプロンプトが表示されます。
 
 </para><para>
 
+<!--
 You can do two things at the <prompt>boot:</prompt> prompt. You can
 press the function keys <keycap>F1</keycap> through
 <keycap>F10</keycap> to view a few pages of helpful information, or
 you can boot the system.
+-->
+<prompt>boot:</prompt> プロンプトでは 2 つのことができます。
+ファンクションキーの <keycap>F1</keycap> から <keycap>F10</keycap> を押すと、
+有益な情報を提供するページを見たり、
+システムを起動したりすることができます。
 
 </para><para>
 
+<!--
 Information on boot parameters which might be useful can be found by
-pressing <keycap>F4</keycap> and <keycap>F5</keycap>.  If you add any
+pressing <keycap>F4</keycap> through <keycap>F7</keycap>.  If you add any
 parameters to
 the boot command line, be sure to type the boot method (the default is
 <userinput>linux</userinput>) and a space before the first parameter (e.g.,
 <userinput>linux floppy=thinkpad</userinput>). If you simply press &enterkey;,
 that's the same as typing <userinput>linux</userinput> without any special
 parameters.
+-->
+<keycap>F4</keycap> から <keycap>F7</keycap> キーを押すと、
+ブート引数について便利な情報が見られます。
+ブートコマンドラインに何かパラメータを付け加える場合は、
+最初のパラメータの前に、必ず起動方法
+(デフォルトは <userinput>linux</userinput>)
+と空白を 1 つ入力してください
+(例えば <userinput>linux floppy=thinkpad</userinput> などとします)。
+単に &enterkey; を押すと、特別なパラメータなしで 
+<userinput>linux</userinput> と入力するのと同じになります。
 
 </para><para>
 
+<!--
 Once you press &enterkey;, you should see the message
 <computeroutput>Loading...</computeroutput>, followed by
 <computeroutput>Uncompressing Linux...</computeroutput>, and
 then a screenful or so of information about the hardware in your
 system.  More information on this phase of the boot process can be
 found below in <xref linkend="kernel-msgs"/>.
+-->
+&enterkey; を押すと、
+順に <computeroutput>Loading...</computeroutput> および
+<computeroutput>Uncompressing Linux...</computeroutput> 
+というメッセージが表示され、
+続いてシステムのハードウェアに関する情報が、
+ひと画面かそこら表示されます。
+このブートプロセスの段階に関する、より詳しい情報は
+<xref linkend="kernel-msgs"/> で説明します。
 
 </para><para>
 
+<!--
 After booting from the boot floppy, the root floppy is
 requested. Insert the root floppy and press &enterkey;, and the
 contents are loaded into memory. The installer program
 <command>debian-installer</command> is automatically launched.
+-->
+ブートフロッピーから起動すると、root フロッピーを要求されます。
+root フロッピーを挿入して &enterkey; を押すと、
+フロッピーの内容をメモリにロードします。
+そしてインストーラプログラムの
+<command>debian-installer</command> が自動的に起動します。
 
 </para>
   </sect2>
   
-  <sect2 arch="i386" id="boot-tftp"><title>Booting with TFTP</title>
+  <sect2 arch="i386" id="boot-tftp"><title>TFTP での起動</title>
  
 &boot-installer-intro-net.xml;
  
 <para>
 
+<!--
 There are various ways to do a TFTP boot on i386.
+-->
+i386 での TFTP ブートはいろいろな方法があります。
 
 </para>
 
    <sect3><title>Etherboot</title>
 <para>
 
+<!--
 The <ulink url="http://www.etherboot.org">etherboot project</ulink>
 provides bootdiskettes and even bootroms that do a TFTPboot.
+-->
+<ulink url="http://www.etherboot.org">etherboot project</ulink> では、
+TFTP ブートを行うブートディスケットとブート ROM を提供しています。
 
 </para>
    </sect3>
 
-   <sect3><title>NIC with network bootROM</title>
+   <sect3><title>ネットワークブート ROM 付き NIC</title>
 <para>
 
+<!--
 It could be that your Network Interface Card provides
 TFTP boot functionality.
+-->
+ネットワークインタフェースカードが、
+TFTP ブート機能を提供しているかもしれません。
 
 </para><para condition="FIXME">
 
+<!--
 Let us (<email>&email-debian-boot-list;</email>) know how did you manage it.
 Please refer to this document.
+-->
+どのように行ったか私たち (<email>&email-debian-boot-list;</email>) 
+に教えてください。この文書に参加をお願いします。
 
 </para>
    </sect3>
 
-   <sect3><title>NIC or Motherboard that support PXE</title>
+   <sect3><title>PXE をサポートする NIC やマザーボード</title>
 <para>
 
+<!--
 It could be that your Network Interface Card or Motherboard provides
 PXE boot functionality.
 Which is a <trademark class="trade">Intel</trademark> re-implemention
 of TFTP boot.
+-->
+ネットワークインタフェースカードやマザーボードが、
+PXE ブート機能を提供しているかもしれません。
+これは <trademark class="trade">Intel</trademark> による、
+TFTP ブートの再実装です。
 
 </para><para condition="FIXME">
 
+<!--
 Let us (<email>&email-debian-boot-list;</email>) know how did you manage it.
 Please refer to this document.
+-->
+どのように行ったか私たち (<email>&email-debian-boot-list;</email>) 
+に教えてください。この文書に参加をお願いします。
 
 <!-- from #debian-boot 2004-03-13
 06:37 -!- SuperQ [ben@trogdor.likes.to.burninate.net] has joined #debian-boot
@@ -449,9 +705,10 @@ debian/dists/sarge/main/installer-i386/current/doc/INSTALLATION-HOWTO
    </sect3>
   </sect2>
 
-  <sect2 arch="i386"><title>i386 Boot Parameters</title>
+  <sect2 arch="i386"><title>i386 ブートパラメータ</title>
 <para>
 
+<!--
 If you are booting from the boot floppy or from CD-ROM you will be
 presented with the boot prompt, <prompt>boot:</prompt>.  Details
 about how to use boot parameters with the boot floppy can be found
@@ -459,92 +716,220 @@ in <xref linkend="floppy-boot"/>.  If you are booting from an
 existing operating system, you'll have to use other means to set boot
 parameters.  For instance, if you are installing from DOS, you can
 edit the <filename>install.bat</filename> file with any text editor.
+-->
+ブートフロッピーから、または CD-ROM から起動していれば、
+ブートプロンプト <prompt>boot:</prompt> が表示されます。
+ブートフロッピーでのブートパラメータの使用法に関する詳細は、
+<xref linkend="floppy-boot"/> にあります。
+既存の OS から起動する場合、
+ブートパラメータを設定するには他の手段を使わなければなりません。
+例えば、DOS からインストールする場合、任意のテキストエディタで 
+<filename>install.bat</filename> ファイルを編集できます。
 
 </para><para>
 
+<!--
 Some systems have floppies with ``inverted DCLs''. If you receive
 errors reading from the floppy, even when you know the floppy is good,
 try the parameter <userinput>floppy=thinkpad</userinput>.
+-->
+システムによっては ``inverted DCLs'' 
+つきのフロッピードライブを装備したものがあります。
+フロッピーディスク自体には問題がないはずなのに、
+読み込み中にエラーが出た場合には、
+<userinput>floppy=thinkpad</userinput> というパラメータを試してください。
 
 </para><para>
 
+<!--
 On some systems, such as the IBM PS/1 or ValuePoint (which have ST-506
 disk drivers), the IDE drive may not be properly recognized.  Again,
 try it first without the parameters and see if the IDE drive is
 recognized properly.  If not, determine your drive geometry
 (cylinders, heads, and sectors), and use the parameter
 <userinput>hd=<replaceable>cylinders</replaceable>,<replaceable>heads</replaceable>,<replaceable>sectors</replaceable></userinput>.
+-->
+IBM PS/1 や (ST-506 ディスクドライバを装備した) ValuePoint
+などのシステムでは、IDE ドライブが正しく認識されないことがあります。
+繰り返しになりますが、まずパラメータなしでカーネルを起動し、
+IDE ドライブが正しく認識されるかどうかを見てください。
+もし認識できなかったら、
+ドライブのジオメトリ (シリンダ・ヘッダ・セクタ) を調べて、
+<userinput>hd=<replaceable>cylinders</replaceable>,<replaceable>heads</replaceable>,<replaceable>sectors</replaceable></userinput>
+というパラメータを使ってください。
 
 </para><para>
 
+<!--
 If you have a very old machine, and the kernel hangs after saying
 <computeroutput>Checking 'hlt' instruction...</computeroutput>, then
 you should try the <userinput>no-hlt</userinput> boot argument, which
 disables this test.
+-->
+非常に古いマシンにおいて、
+<computeroutput>Checking 'hlt' instruction...</computeroutput>
+と表示されたあとにカーネルがハングしてしまう場合は、
+ブート引数 <userinput>no-hlt</userinput> を使って、
+このチェックを無効にしてみるとよいでしょう。
 
 </para><para>
 
+<!--
 If your screen begins to show a weird picture while the kernel boots,
 eg. pure white, pure black or colored pixel garbage, your system may
 contain a problematic video card which does not switch to the
 framebuffer mode properly.  Then you can use the boot parameter
+<userinput>debian-installer/framebuffer=false</userinput> or
 <userinput>video=vga16:off</userinput> to disable the framebuffer
 console. The language chooser will not appear; only the english
 language will be available during the installation due to limited
 console features. See <xref linkend="boot-parms"/> for details.
+-->
+カーネルの起動時に画面が不思議な絵 (例: 真っ白、真っ黒、色付きピクセル屑) 
+を表示し始める場合、あなたのシステムは、
+フレームバッファモードに適切に変わらない問題のあるビデオカードがついているかもしれません。
+その場合、フレームバッファコンソールを無効にするため、
+ブートパラメータに <userinput>debian-installer/framebuffer=false</userinput> 
+か <userinput>video=vga16:off</userinput> を使用できます。
+コンソールの機能が制限されているため、インストール中には英語しか使えません。
+そのため、language chooser は現れません。
+詳細は <xref linkend="boot-parms"/> をご覧ください。
 
 </para>
   </sect2>
 
 
   <sect2 arch="i386">
-  <title>System freeze during the PCMCIA configuration phase</title>
+  <title>PCMCIA 設定中のシステムフリーズ</title>
 
 <para>
 
-Some laptop models produced by DELL are known to crash when PCMCIA device
-detection tries to access some hardware addresses. If you experience a such problem, try the following workaround:
+<!--
+Some laptop models produced by Dell are known to crash when PCMCIA device
+detection tries to access some hardware addresses. Other laptops may display
+similar problems. If you experience such a problem and you don't need PCMCIA
+support during the installation, you can disable PCMCIA using the
+<userinput>hw-detect/start_pcmcia=false</userinput> boot parameter. You can
+then configure PCMCIA after the installation is completed and exclude the
+resource range causing the problems.
+-->
+DELL のラップトップモデルのいくつかは、
+PCMCIA デバイス検出でいくつかハードウェアアドレスをアクセスしようとすると、
+クラッシュすることが知られています。
+他のラップトップコンピュータでも、同様の問題が起きるかもしれません。
+そのような問題に遭遇しても、PCMCIA サポートが必要でなければ、
+<userinput>hw-detect/start_pcmcia=false</userinput> というブートパラメータで、
+PCMCIA を無効にできます。
+インストールが完了した後、PCMCIA を設定し、
+問題が起きるリソース範囲を除外することができます。
+
+</para><para>
+
+<!--
+Alternatively you can try the following workaround:
+-->
+その他、以下の方法をかわりに試すことができます。。
+
 <itemizedlist>
 <listitem><para>
 
-prepare the root filesystem and install kernel and modules, but do not
-start PCMCIA configuration immediately
+<!--
+boot the installation system in expert mode, choose your language and country,
+but stop before hardware detection
+-->
+インストールシステムをエキスパートモードで起動し、
+言語と国を選択したら、ハードウェア検出の前で止めてください。
 
 </para></listitem>
 <listitem><para>
 
-enter the system shell (see <xref linkend="shell"/> for
-details)
+<!--
+enter the system shell (see <xref linkend="shell"/> for details)
+-->
+システムシェルに入ってください。
+(詳細は <xref linkend="shell"/> をご覧ください)
 
 </para></listitem>
 <listitem><para>
 
-execute this command: 
-<userinput>echo exclude port 0x810-0x81f >>
-/target/etc/pcmcia/config.opts</userinput>
+<!--
+execute this command:
+<userinput>echo exclude port <replaceable>0x810-0x81f</replaceable> >>
+/etc/pcmcia/config.opts</userinput><footnote>
+<para>
+ 
+The address range in this example is for the Dell problem cited above; you may
+have to exclude other address range(s) in your situation.
+See section <quote>System resource settings</quote> in the
+<ulink url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO.html">PCMCIA
+HOWTO</ulink> for other examples.
+
+</para>
+</footnote>
+
+-->
+このコマンドを実行してください:
+<userinput>echo exclude port <replaceable>0x810-0x81f</replaceable> >>
+/etc/pcmcia/config.opts</userinput><footnote>
+<para>
+ 
+この例のアドレス範囲は、Dell の問題用です。
+あなたの状況に応じて、他のアドレス範囲を除外しなければならないでしょう。
+その他の例は、
+<ulink url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO.html">PCMCIA
+HOWTO</ulink> の <quote>System resource settings</quote> 節を参照してください。
+
+</para>
+</footnote>
 
 </para></listitem>
 <listitem><para>
 
-now return to the main menu and run the PCMCIA configuration part
+<!--
+now return to the main menu and continue with the installation process
+-->
+メインメニューに戻って、インストールプロセスを続けてください。
 
 </para></listitem>
 </itemizedlist>
 
+<!--
+You will also have to exclude the same address range(s) in
+<userinput>/target/etc/pcmcia/config.opts</userinput> before you reboot the
+computer to avoid running into the same problem when you boot into your new
+Debian system.
+-->
+新しい Debian システムを起動したときに同じ問題に遭遇しないために、
+コンピュータを再起動する前に、
+<userinput>/target/etc/pcmcia/config.opts</userinput> 
+に同じアドレス範囲を除外するよう、設定する必要があります。
+
 </para>
   </sect2>
 
   <sect2 arch="i386">
-  <title>System freeze while loading the USB modules</title>
+  <title>USB モジュールロード中のシステムフリーズ</title>
 <para>
 
-The kernel normaly tries to install the USB and USB keyboard driver in
-order to allow the installation for users of some non-standard USB keyboards.
-However, there are few broken USB systems where the driver hangs on loading. A
-possible workaround may be disabling of the USB controller in your mainboard
-BIOS setup. Another way is passing the <userinput>nousb</userinput>
-argument on the boot prompt, which will prevent the modules from
-beeing loaded even if USB hardware has been detected.
+<!--
+The kernel normally tries to install USB modules and the USB keyboard driver
+in order to support some non-standard USB keyboards. However, there are some
+broken USB systems where the driver hangs on loading. A possible workaround
+may be disabling the USB controller in your mainboard BIOS setup. Another option
+is passing the <userinput>debian-installer/probe/usb=false</userinput> parameter
+at the boot prompt, which will prevent the modules from being loaded.
+-->
+カーネルは、非標準 USB キーボードをサポートするように、
+通常 USB モジュールと USB キーボードドライバをインストールしようとします。
+しかし、ドライバがロード中に止まるような、
+イカレた USB システムがまれにあります。
+これはマザーボードの BIOS セットアップで、
+USB コントローラを無効にできるかもしれません。
+別の方法は、
+ブートプロンプトに <userinput>debian-installer/probe/usb=false</userinput> 
+パラメータを渡すことです。
+これにより USB ハードウェアが検知されても、
+モジュールがロードされるのを防ぐことができます。
 
 </para>
   </sect2>

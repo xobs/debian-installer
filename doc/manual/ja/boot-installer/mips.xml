@@ -1,43 +1,67 @@
+<?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: mips.xml 11568 2004-03-21 12:12:18Z waldi $ -->
+<!-- $Id$ -->
+<!-- original version: 11648 -->
 
 
-  <sect2 arch="mips" id="boot-tftp"><title>Booting with TFTP</title>
+  <sect2 arch="mips" id="boot-tftp"><title>TFTP での起動</title>
 <para>
 
+<!--
 After entering the command monitor use
+-->SGI Indy では、コマンドモニタに入ったところで
 <informalexample><screen>
 
 bootp(): root=/dev/ram0
 
 </screen></informalexample>
+<!--
 on SGI Indys to boot linux and to begin installation of the Debian
 Software.  In order to make this
 work you may have to unset the <envar>netaddr</envar> environment
 variable. Type 
+-->
+と入力すれば、linux が起動して
+Debian ソフトウェアのインストールが始まります。
+インストーラを正しく動作させるには、
+環境変数 <envar>netaddr</envar> の設定を解除しなければならないこともあります。
+これにはコマンドモニタから
 <informalexample><screen>
 
 unsetenv netaddr
 
 </screen></informalexample>
+<!--
 in the command monitor to do this. 
+-->
+とします。
 
 </para>
   </sect2>
 
 
-  <sect2 arch="mips"><title>Boot Parameters</title>
+  <sect2 arch="mips"><title>ブートパラメータ</title>
 <para>
 
+<!--
 On SGI Indys you can append boot parameters to the
 <command>bootp():</command> command in the command monitor.
+-->
+SGI Indy では、コマンドモニタの
+<command>bootp():</command> コマンドにブートパラメータを追加します。
 
 </para><para>
 
+<!--
 Following the <command>bootp():</command> command you can give the
 path and name of the file to boot if you did not give an explicit name
 via your bootp/dhcp server - Example:
 <command>bootp():/boot/tftpboot.img</command>
+-->
+bootp/dhcp サーバの方から名前を与えていない場合は、
+<command>bootp():</command> の後に
+起動させるファイルのパスと名前を与えることが可能です。
+(例: <command>bootp():/boot/tftpboot.img</command>)
 
 </para>
   </sect2>
