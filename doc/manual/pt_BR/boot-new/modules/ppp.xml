@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 18642 -->
+
+ <sect2 arch="not-s390" id="PPP">
+ <title>Configurando o PPP</title>
+
+<para>
+
+Caso seu computador não esteja conectado a uma rede, você será perguntado se deseja
+instalar o resto do seu sistema usando o PPP.
+
+</para><para>
+
+Caso selecionar configurar o PPP neste ponto, um programa chamado
+<command>pppconfig</command> será executado. Este programa lhe ajudará
+a configurar sua conexão PPP. <emphasis>Tenha certeza, quando 
+ele perguntar pelo nome de sua conexão dial-up, que o nome é
+<userinput>provider</userinput>.</emphasis>
+
+</para><para>
+
+Feliamente, o programa <command>pppconfig</command> lhe dirigirá através 
+de uma configuração de conexão PPP livre de falhas. No entanto, caso não
+funcionar para você, veja as instruções abaixo.
+
+</para><para>
+
+Para configurar uma conexão PPP, você precisará conhecer os conceitos
+básicos de edição e visualização de arquivos no GNU/Linux. Para ver 
+arquivos, você deverá usar o comando 
+<command>more</command> e <command>zmore</command> para arquivos compactados
+usando a extensão <userinput>.gz</userinput>. Por exemplo, para visualizar o 
+arquivo <filename>README.debian.gz</filename>, digite <userinput>zmore
+README.debian.gz</userinput>. O sistema básico vem com um editor chamado
+<command>nano</command> que é muito simples de se usar, mas não tem muitos 
+recursos. Você provavelmente desejará instalar editores e visualizadores de 
+texto com mais recursos mais tarde, tal como o 
+<command>jed</command>, <command>nvi</command>,
+<command>less</command> e o <command>emacs</command>.
+
+</para><para>
+
+Edite o arquivo <filename>/etc/ppp/peers/provider</filename> e substitua
+<userinput>/dev/modem</userinput> com
+<userinput>/dev/ttyS<replaceable>&num;</replaceable></userinput> onde
+<replaceable>&num;</replaceable> é o número de sua porta serial. No Linux, 
+as portas seriais são contadas a partir de 0; sua primeira porta serial 
+<phrase arch="i386">(i.e., <userinput>COM1</userinput>)</phrase>
+é <filename>/dev/ttyS0</filename> sob o Linux.
+
+<phrase arch="powerpc;m68k">Em máquinas Macintosh com portas seriais, a prota de 
+modem é <filename>/dev/ttyS0</filename> e a porta de impressora é
+<filename>/dev/ttyS1</filename>.</phrase>
+
+O próximo passo é editar o arquivo
+<filename>/etc/chatscripts/provider</filename> e inserir o número de telefone
+do seu provedor, seu nome de usuário e sua senha. Por favor, não apague o
+<quote>\q</quote> que antecedo a senha. Ele evita que a senha seja mostrada em 
+seus arquivos de log.
+
+</para><para>
+
+Muitos provedores usam o PAP ou CHAP como sequência de login ao invés de 
+autenticação usando o modo texto. Outros usam ambas. Se o seu provedor 
+requerer PAP ou CHAP, você precisará seguir um procedimento diferente. 
+Descomente tudo abaixo da string de discagem (a que inicia com 
+<quote>ATDT</quote>) no arquivo
+<filename>/etc/chatscripts/provider</filename>, modifique
+<filename>/etc/ppp/peers/provider</filename> como descrito acima e adicione
+<userinput>user <replaceable>nome</replaceable></userinput> onde
+<replaceable>nome</replaceable> é o seu nome de usuário do provedor que está 
+tentando se conectar. Após isto, edite o arquivo
+<filename>/etc/ppp/pap-secrets</filename> ou
+<filename>/etc/ppp/chap-secrets</filename> e entre com sua senha lá.
+
+</para><para>
+
+Você também precisará editar o arquivo <filename>/etc/resolv.conf</filename> e
+adicionar os endereços IP dos nomes de servidores (DNS). As linhas no
+<filename>/etc/resolv.conf</filename> seguem o seguinte formato:
+<userinput>nameserver
+<replaceable>xxx.xxx.xxx.xxx</replaceable></userinput> onde 
+<replaceable>x</replaceable>s é o número do seu endereço IP. 
+Opcionalmente, você deverá adicionar a opção 
+<userinput>usepeerdns</userinput> ao arquivo
+<filename>/etc/ppp/peers/provider</filename>, que ativará automáticamente 
+a seleção automática do servidor de DNS apropriado, usando as configurações
+que o servidor remoto normalmente fornece.
+
+</para><para>
+
+A não ser que seu provedor tenha uma sequência de login diferente da 
+maioria dos provedores, a configuração está terminada! Inicie a conexão
+PPP digitando <command>pon</command> como usuário root e monitor o processo
+usando o comando <command>plog</command>. Para se desconectar, use o comando
+<command>poff</command> (novamente como usuário root).
+
+</para><para>
+
+Leia o arquivo <filename>/usr/share/doc/ppp/README.Debian.gz</filename> para
+obter mais informações sobre o uso do PPP na Debian.
+
+</para><para>
+
+Para conexões SLIP estáticas, você precisará adicionar o comando
+<userinput>slattach</userinput> (que vem no pacote
+<classname>net-tools</classname> package) no arquivo
+<filename>/etc/init.d/network</filename>. O SLIP dinâmico requer o 
+pacote <classname>gnudip</classname>.
+
+</para>
+ </sect2>
