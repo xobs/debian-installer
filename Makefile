@@ -312,7 +312,7 @@ endif
 
 	# Library reduction.
 	mkdir -p $(TREE)/lib
-	$(MKLIBS) -v -d $(TREE)/lib `find $(TREE) -type f -perm +0111 -o -name '*.so'`
+	$(MKLIBS) -v -d $(TREE)/lib --root=$(TREE) `find $(TREE) -type f -perm +0111 -o -name '*.so'`
 
 	# Add missing symlinks for libraries
 	# (Needed for mklibs.py)
