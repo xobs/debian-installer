@@ -121,7 +121,7 @@ endif
 
 reallyclean: all_clean
 	rm -rf $(APTDIR) $(APTDIR).udeb $(APTDIR).deb $(DEST) $(BASE_TMP) $(SOURCEDIR) $(DEBUGUDEBDIR)
-	rm -f diskusage*.txt all-*.utf *.bdf po.utf
+	rm -f diskusage*.txt all-*.utf *.bdf
 	rm -f sources.list sources.list.udeb sources.list.deb
 
 # Auto-generate a sources.list.type
@@ -160,7 +160,7 @@ $(TYPE)-get_udebs-stamp: sources.list.udeb
 
 # Build the installer tree.
 tree: $(TYPE)-tree-stamp
-$(TYPE)-tree-stamp: $(TYPE)-get_udebs-stamp debian/control po.utf
+$(TYPE)-tree-stamp: $(TYPE)-get_udebs-stamp debian/control
 	dh_testroot
 
 	dpkg-checkbuilddeps
@@ -354,7 +354,7 @@ endif
 	# Collect the used UTF-8 strings, to know which glyphs to include in
 	# the font.  Using strings is not the best way, but no better
 	# suggestion has been made yet.
-	cat graphic.utf po.utf > all-$(TYPE).utf
+	cp graphic.utf all-$(TYPE).utf
 ifeq ($(TYPE),floppy)
 	if [ -n "`find $(DRIVEREXTRASDPKGDIR)/info/ -name \\*.templates`" ]; then \
 		cat $(DRIVEREXTRASDPKGDIR)/info/*.templates >> all-$(TYPE).utf; \
@@ -373,9 +373,6 @@ endif
 
 	# Tree target ends here. Whew!
 	touch $@
-
-po.utf:
-	./getallpo.sh .. | sort | uniq > $@
 
 unifont-reduced-$(TYPE).bdf: all-$(TYPE).utf
 	# Use the UTF-8 locale in rootskel-locale. This target shouldn't
