@@ -13,7 +13,7 @@ architecture    := $(shell dpkg-architecture -qDEB_HOST_ARCH)
 # The version of the kernel to use.
 
 ifeq "$(architecture)" "i386"
-KVERS=2.4.7
+KVERS=2.4.9
 FLAVOUR=386
 endif
 
@@ -162,7 +162,10 @@ get_udebs-stamp:
 		$(APT_GET) source --build --yes $$needed; \
 		cd ..; \
 	else \
+		echo Need to download : $$needed; \
+		if [ -n "$$needed" ]; then \
 		$(APT_GET) -dy install $$needed; \
+		fi; \
 	fi; \
 
 	# Now the udebs are in APTDIR/cache/archives/ and maybe LOCALUDEBDIR,
@@ -199,6 +202,8 @@ tree-stamp:
 	# Set up the basic files [u]dpkg needs.
 	mkdir -p $(DPKGDIR)/info
 	touch $(DPKGDIR)/status
+	# Create a tmp tree
+	mkdir -p $(TREE)/tmp
 	# Only dpkg needs this stuff, so it can be removed later.
 	mkdir -p $(DPKGDIR)/updates/
 	touch $(DPKGDIR)/available
@@ -210,15 +215,14 @@ tree-stamp:
 	# Set up modules.dep
 	mkdir -p $(TREE)/lib/modules/$(KVERS)-$(FLAVOUR)/
 	depmod -q -a -b $(TREE)/ $(KVERS)-$(FLAVOUR)
-	# Make sure the /dev/console link is ok
-	if [ ! -c $(TREE)/dev/console ]; then \
-	    rm -f $(TREE)/dev/console $(TREE)/dev/tty1; \
-	    $(SUDO) mknod $(TREE)/dev/console c 5 1; \
-	    $(SUDO) mknod $(TREE)/dev/tty1 c 4 1; \
-	fi
+	# Install /dev devices (but not too much)
+	mkdir -p $(TREE)/dev
+	cd $(TREE)/dev && /sbin/MAKEDEV std console
+	rm $(TREE)/dev/vcs*
+	rm $(TREE)/dev/tty[1-9][0-9]
 	if [ ! -c $(TREE)/dev/console ]; then \
 	    echo "WARNING: $(TREE)/dev/console isn't a character device as it should."; \
-	    exit 1; \
+	    echo "This does probably mean that you should start again with root rights."; \
 	fi
 	
 	# Move the kernel image out of the way, into a temp directory
