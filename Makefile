@@ -494,7 +494,6 @@ boot_floppy_check: floppy_image
 
 COMPRESSED_SZ=$(shell expr $(shell tar czf - $(TREE) | wc -c) / 1024)
 KERNEL_SZ=$(shell expr \( $(foreach NAME,$(KERNELNAME),$(shell du -b $(TEMP)/$(NAME) | cut -f 1) +) 0 \) / 1024)
-DRIVER1_SZ=$(shell du -sk $(TEMP)/driver1 )
 stats: tree $(EXTRA_TARGETS)
 	@echo
 	@echo "System stats for $(TYPE)"
@@ -513,9 +512,13 @@ endif
 # Add your interesting stats here.
 	@$(MAKE) stats-$(EXTRA_TARGETS)
 
+DRIVER1_SZ=$(shell expr $(shell du -b $(DRIVER1) | cut -f 1) / 1024)
 stats-driver1:
 	@echo
-	@echo "Driver1 size: $(shell du -s -h  $(DRIVER1) | cut -f 1 ) "
+	@echo "Driver1 size: $(DRIVER1_SZ)k"
+ifneq (,$(FLOPPY_SIZE))
+	@echo "Free space: $(shell expr $(FLOPPY_SIZE) - $(DRIVER1_SZ))k"
+endif
 	@echo "Disk usage per package on driver1:"
 	@ls -l $(EXTRAUDEBDIR)/*.udeb
 	@echo
