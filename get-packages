@@ -3,6 +3,7 @@
 # get-packages <type> <package> ...
 #
 # Download deb or udeb package with the help of apt-get
+# type : deb | udeb
 #
 # Files:
 #   sources.list.udeb / sources.list.udeb.local
@@ -67,13 +68,16 @@ mkdir -p $APTDIR/state/lists/partial
 mkdir -p $APTDIR/cache/archives/partial
 # Prime status file with system libraries - 
 echo -n > $APTDIR/state/status
-# SOme archs have libc6 others have libc6.1
-dpkg -s libc6 >> $APTDIR/state/status || dpkg -s libc6.1 >> $APTDIR/state/status
-# libparted1.6-0 not needed anymore?
-for i in libnewt0.51 libdebconfclient0 libdebian-installer4 \
-	 libdb1-compat libpopt0 slang1a-utf8 libuuid1; do
-	dpkg -s $i >> $APTDIR/state/status
-done
+if [ "$TYPE" = "udeb" ]; then
+	# Some archs have libc6 others have libc6.1
+	dpkg -s libc6 >> $APTDIR/state/status || dpkg -s libc6.1 >> $APTDIR/state/status
+	for i in libnewt0.51 libdebconfclient0 libdebian-installer4 \
+		libdb1-compat slang1a-utf8; do
+		dpkg -s $i >> $APTDIR/state/status
+	done
+fi
+
+# Update package lists and autoclean cache
 if [ "$ONLINE" = "y" ]; then
 	$APT_GET update || {
 		echo "Failed to update the Packages file. This usually means of of two things:"
