@@ -1,5 +1,6 @@
 arch-image: $(IMAGE)
 
+ifdef FLOPPY_SIZE
 # Create a bootable floppy image.
 # 1. make a dos filesystem image
 # 2. copy over kernel, initrd
@@ -12,7 +13,8 @@ ifdef KERNELNAME
 	fi
 endif
 
-	mkfs.msdos -i $(DOS_VOLUME_ID) -n $(DOS_VOLUME_LABEL) -C $@.new $(FLOPPY_SIZE)
+	mkfs.msdos -i $(DOS_VOLUME_ID) -n $(DOS_VOLUME_LABEL) \
+		-C $@.new $(FLOPPY_SIZE)
 	# mkfs.msdos gets the mode wrong (bug filed)
 	chmod 644 $@.new
 
@@ -30,6 +32,7 @@ endif
 
 	# Finalize the image.
 	mv $@.new $@
+endif # FLOPPY_SIZE
 
 # Copy files somewhere the CD build scripts can find them
 # XXX Will only use the last kernel if there are several
