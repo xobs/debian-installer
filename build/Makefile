@@ -348,6 +348,8 @@ ifdef KERNELNAME
 	rmdir $(TREE)/boot/
 endif
 
+	@touch $@
+
 $(STAMPS)tree-$(targetstring)-stamp: $(STAMPS)tree-unpack-$(targetstring)-stamp
 	# Create a dev tree.
 	mkdir -p $(TREE)/dev
