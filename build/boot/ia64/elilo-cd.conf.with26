@@ -1,0 +1,38 @@
+# Load up initrd on boot.
+chooser=textmenu
+default=Linux
+delay=20
+prompt
+#append="devfs=mount,dmknod,dreg,dchange"
+
+message=/efi/boot/elilo_menu.msg
+f1=/efi/boot/general.msg
+f2=/efi/boot/params.msg
+
+image=/linux
+  label=Linux
+  description="Install with Linux 2.4"
+  initrd=/initrd.gz
+  append="devfs=mount ramdisk_size=${RAMDISK_SIZE}"
+  root=/dev/ram
+
+image=/linux
+  label=Expert
+  description="Install in Expert mode with Linux 2.4"
+  initrd=/initrd.gz
+  append="devfs=mount ramdisk_size=${RAMDISK_SIZE} DEBCONF_PRIORITY=low"
+  root=/dev/ram
+
+image=/linux26
+  label=Linux26
+  description="Install with Linux 2.6"
+  initrd=/initrd26.gz
+  append="devfs=mount ramdisk_size=${RAMDISK_SIZE_26}"
+  root=/dev/ram
+
+image=/linux26
+  label=Expert26
+  description="Install in Expert mode with Linux 2.6"
+  initrd=/initrd26.gz
+  append="devfs=mount ramdisk_size=${RAMDISK_SIZE_26} DEBCONF_PRIORITY=low"
+  root=/dev/ram
