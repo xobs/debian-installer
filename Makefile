@@ -92,12 +92,12 @@ KERNEL=$(TEMP)/vmlinuz
 
 build: demo_clean reduced_tree stats
 
-demo:
+demo: reduced_tree
 	sudo chroot $(TREE) bin/sh -c "if ! mount | grep ^proc ; then bin/mount proc -t proc /proc; fi"
 	sudo chroot $(TREE) bin/sh -c "export DEBCONF_FRONTEND=text DEBCONF_DEBUG=5; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; /usr/share/debconf/frontend /usr/bin/main-menu"
 	$(MAKE) demo_clean
 
-shell:
+shell: reduced_tree
 	mkdir -p $(TREE)/proc 
 	sudo chroot $(TREE) bin/sh -c "if ! mount | grep ^proc ; then bin/mount proc -t proc /proc; fi"
 	sudo chroot $(TREE) bin/sh
@@ -267,7 +267,7 @@ status_reduce:
 	mv -f $(DPKGDIR)/status.new $(DPKGDIR)/status
 
 COMPRESSED_SZ=$(shell expr $(shell tar cz $(TREE) | wc -c) / 1024)
-stats: tree
+stats: reduced_tree
 	@echo
 	@echo System stats
 	@echo ------------
