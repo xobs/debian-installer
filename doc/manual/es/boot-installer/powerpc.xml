@@ -1,36 +1,37 @@
-<!-- retain these comments for translator revision tracking -->
-<!-- original version: 15220 untranslated -->
+<!-- original version: 18674 -->
 
-  <sect2 arch="powerpc"><title>Booting from a CD-ROM</title>
+  <sect2 arch="powerpc" id="boot-cd"><title>Arrancar desde un CD-ROM</title>
 
 &boot-installer-intro-cd.xml;
 
 <para>
 
-Currently, the only &arch-title; subarchitectures that support CD-ROM
-booting are PReP and New World PowerMacs. On PowerMacs, hold the
-<keycap>c</keycap> key, or else the combination of
-<keycap>Command</keycap>, <keycap>Option</keycap>,
-<keycap>Shift</keycap>, and <keycap>Delete</keycap>
-keys together while booting to boot from the CD-ROM.
+Actualmente la única sub-arquitectura &arch-title; que soporta 
+arranque desde CD-ROM son PReP y PowerMacs New World. En las
+PowerMac, mantenga presionada la tecla <keycap>c</keycap>, o en
+su lugar la combinación de teclas <keycap>Option</keycap>, 
+<keycap>Shift</keycap> y <keycap>Delete</keycap> juntas para 
+arrancar desde CD-ROM.
 
 </para><para>
 
-OldWorld Powermacs will not boot a Debian CD, because OldWorld
-computers relied on a MacOSROM CD boot driver to be present on the CD,
-and a free-software version of this driver is not available. All
-OldWorld systems have floppy drives, so use the floppy drive to launch
-the installer, and then point the installer to the CD for the needed
-files.
+Las PowerMac OldWorld no arrancan un CD Debian, debido a que los
+ordenadores OldWorld dependen de que el controlador de arranque 
+de CD MacOSROM este presente en el CD, y no existe una versión
+de software libre para este controlador. Todos los sistemas
+OldWorld tienen unidades de disquete de modo que puede usar
+disquetes para cargar el instalador y luego indicar al 
+instalador que busque los ficheros necesarios en el CD.
 
 </para><para>
 
-If your system doesn't boot directly from CD-ROM, you can still use
-the CD-ROM to install the system. On NewWorlds, you can also use an
-OpenFirmware command to boot from the CD-ROM manually. Follow the
-instructions in <xref linkend="boot-newworld"/> for booting from
-the hard disk, except use the path to <command>yaboot</command> on the
-CD at the OF prompt, such as
+Si su sistema no arranca directamente desde CD-ROM, todavía
+puede usar el CD-ROM para instalar el sistema. En NewWorlds,
+también puede usar una orden de OpenFirmware para arrancar
+manualmente desde el CD-ROM. Siga las instrucciones descritas
+en <xref linkend="boot-newworld"/> para arrancar desde el
+disco duro, exceptuando el usar la ruta a <command>yaboot</command>
+en el CD en el cursor de OpenFirmware, similar a
 
 <informalexample><screen>
 
@@ -41,49 +42,51 @@ CD at the OF prompt, such as
   </sect2>
 
   <sect2 arch="powerpc" id="install-drive">
-  <title>Booting from Hard Disk</title>
+  <title>Arrancar desde disco duro</title>
 
 &boot-installer-intro-hd.xml;
 
-  <sect3><title>Booting CHRP from OpenFirmware</title>
+  <sect3><title>Arrancar CHRP desde OpenFirmware</title>
 
 <para>
 
-  <emphasis>Not yet written.</emphasis>
+  <emphasis>Todavía no ha sido escrito.</emphasis>
 
 </para>
    </sect3>
 
-   <sect3><title>Booting OldWorld PowerMacs from MacOS</title>
+   <sect3><title>Arrancar PowerMacs OldWorld desde MacOS</title>
 <para>
 
-If you set up BootX in <xref linkend="files-oldworld"/>, you can
-use it to boot into the installation system. Double click the
-<guiicon>BootX</guiicon> application icon. Click on the
-<guibutton>Options</guibutton> button and select <guilabel>Use
-Specified RAM Disk</guilabel>. This will give you the 
-chance to select the <filename>ramdisk.image.gz</filename> file. You
-may need to select the <guilabel>No Video Driver</guilabel> checkbox,
-depending on your hardware. Then click the
-<guibutton>Linux</guibutton> button to shut down MacOS and launch the
-installer.
+Si configura BootX en <xref linkend="files-oldworld"/>, puede
+usarlo para arrancar el sistema de instalación. Haga doble
+click en el icono de aplicación de <guiicon>BootX</guiicon>.
+Haga click en el botón <guibutton>Options</guibutton> y elija
+<guilabel>Use Specified RAM Disk</guilabel>. Esto le dará la
+oportunidad de elegir el fichero <filename>ramdisk.image.gz</filename>.
+Podría necesitar seleccionar la opción <guilabel>No Video Driver</guilabel>,
+dependiendo de su hardware. Luego haga click en el botón
+<guibutton>Linux</guibutton> para apagar MacOS y cargar el
+instalador.
 
 </para>
    </sect3>
 
 
   <sect3 id="boot-newworld">
-  <title>Booting NewWorld Macs from OpenFirmware</title>
+  <title>Arrancar Macs NewWorld desde OpenFirmware</title>
 <para>
 
-You will have already placed the <filename>linux.bin, yaboot,
-yaboot.conf</filename>, and <filename>root.bin</filename> files at the
-root level of your HFS partition in <xref linkend="files-newworld"/>. 
-Restart the computer, and immediately (during the chime) hold down the
+Deberá haber ubicado los ficheros 
+<filename>linux.bin, yaboot, yaboot.conf</filename> y 
+<filename>root.bin</filename> en el nivel superior de su
+partición HFS en <xref linkend="files-newworld"/>. 
+Reinicie el ordenador e inmediatamente (durante la campanada)
+mantenga presionadas en simultáneo las teclas 
 <keycap>Option</keycap>, <keycap>Command (cloverleaf/Apple)</keycap>,
-<keycap>o</keycap>, and <keycap>f</keycap> keys all together. After 
-a few seconds you will be presented with the Open Firmware prompt.
-At the prompt, type
+<keycap>o</keycap> y <keycap>f</keycap>. Después de algunos
+segundos se le presentará un cursor de Open Firmware. En el
+cursor escriba
 
 <informalexample><screen>
 
@@ -91,12 +94,12 @@ At the prompt, type
 
 </screen></informalexample>
 
-replacing <replaceable>x</replaceable> with the partition number of
-the HFS partition where the
-kernel and yaboot files were placed, followed by a &enterkey;. On some
-machines, you may need to use <userinput>ide0:</userinput> instead of
-<userinput>hd:</userinput>. In a few more seconds you will see a
-yaboot prompt
+reemplace <replaceable>x</replaceable> con el número de partición
+de la partición HFS donde se ubican los ficheros del núcleo e 
+yaboot, seguido por un &enterkey;. En algunas máquinas, podría
+necesitar usar <userinput>ide0:</userinput> en lugar de 
+<userinput>hd:</userinput>. Luego de algunos segundos verá 
+el cursor de yaboot.
 
 <informalexample><screen>
 
@@ -104,84 +107,87 @@ boot:
 
 </screen></informalexample>
 
-At yaboot's <prompt>boot:</prompt> prompt, type either
-<userinput>install</userinput> or <userinput>install-safe</userinput>
-followed by a &enterkey;.  The `safe' option uses the
-<userinput>video=ofonly</userinput> argument for maximum
-compatibility; you can try it if <userinput>install</userinput>
-doesn't work. The Debian installation program should start.
+En el cursor de yaboot <prompt>boot:</prompt>, escriba ya sea
+<userinput>install</userinput> o <userinput>install video=ofonly</userinput>
+seguido por un &enterkey;. El argumento
+<userinput>video=ofonly</userinput> es para máxima compatibilidad;
+puede probarlo si <userinput>install</userinput> no funciona.
+Se deberá iniciar el programa de instalación de Debian.
 
 </para>
    </sect3>
   </sect2>
 
-  <sect2 arch="powerpc" id="boot-tftp"><title>Booting with TFTP</title>
+  <sect2 arch="powerpc" id="boot-tftp"><title>Arranque con TFTP</title>
 
 &boot-installer-intro-net.xml;
 
 <para>
 
-Currently, PReP and New World PowerMac systems support netbooting. 
+Actualmente, PReP y los sistemas PowerMac New World soportan arranque
+desde la red.
 
 </para><para>
 
-On machines with Open Firmware, such as NewWorld Power Macs, enter the
-boot monitor (see <xref linkend="invoking-openfirmware"/>) and
-use the command <command>boot enet:0</command>.  PReP and CHRP boxes
-may have different ways of addressing the network.  On a PReP machine,
-you should try 
-<userinput>boot <replaceable>server_ipaddr</replaceable>,<replaceable>file</replaceable>,<replaceable>client_ipaddr</replaceable></userinput>.
+En máquinas con Open Firmware, como las PowerMacs NewWorld, ingrese
+al monitor de arranque (vea <xref linkend="invoking-openfirmware"/>) y
+use la orden <command>boot enet:0</command>. Las máquinas PReP y CHRP
+podrían tener diferentes modos de señalar la red. En una máquina
+PReP, deberá usar
+<userinput>boot <replaceable>direcc_ip_servidor</replaceable>,<replaceable>fichero</replaceable>,<replaceable>direcc_ip_cliente</replaceable></userinput>.
 
 </para>
   </sect2>
 
 
   <sect2 arch="powerpc">
-  <title>Booting from Floppies</title>
+  <title>Arrancar desde disquetes</title>
 <para>
 
-Booting from floppies is supported for &arch-title;, although it is
-generally only applicable for OldWorld systems. NewWorld systems are
-not equipped with floppy drives, and attached USB floppy drives are 
-not supported for booting.
+El arranque desde disquetes esta soportado por &arch-title;, aunque
+generalmente solo es aplicable para sistemas OldWorld. Los sistemas
+NewWorld no están equipados con unidades de disquete y las unidades
+de disquete conectadas a través de USB no están soportadas para
+arranque.
 
 </para><para>
 
-You will have already downloaded the floppy images you needed and
-created floppies from the images in <xref linkend="create-floppy"/>.
+Deberá haber descargado las imágenes de disquete que necesite y
+creado los disquete desde éstas como se describe en
+<xref linkend="create-floppy"/>.
 
 </para><para>
 
-To boot from the <filename>boot-floppy-hfs.img</filename> floppy,
-place it in floppy drive after shutting the system down, and before
-pressing the power-on button.
+Para arrancar desde el disquete <filename>boot-floppy-hfs.img</filename>,
+ubique-lo en la unidad de disquete después de apagar la máquina y
+antes de presionar el botón de encendido.
 
 </para><note><para>
-For those not familiar with Macintosh
-floppy operations: a floppy placed in the machine prior to boot will
-be the first priority for the system to boot from. A floppy without a
-valid boot system will be ejected, and the machine will then check for
-bootable hard disk partitions.
+Para los que no están familiarizados el manejo de disquetes en Macintosh:
+un disquete ubicado en la máquina antes del arranque, tendrá la 
+prioridad de arrancar el sistema desde éste. Un disquete sin un
+sistema de arranque válido, será expulsado y la máquina buscará
+particiones arrancables en el disco duro.
 
 </para></note><para>
 
-After booting, the <filename>root.bin</filename> floppy is
-requested. Insert the root floppy and press &enterkey;. The installer
-program is automatically launched after the root system has been
-loaded into memory.
+Después del arranque, el disquete <filename>root.bin</filename> es
+solicitado. Inserte el disquete root y presione &enterkey;. El
+programa instalador es cargado automáticamente después de que el
+sistema raíz ha sido cargado en memoria.
 
 </para>
   </sect2>
 
 
-  <sect2 arch="powerpc"><title>PowerPC Boot Parameters</title>
+  <sect2 arch="powerpc"><title>Parámetros de arranque de PowerPC</title>
 <para>
 
-Many older Apple monitors used a 640x480 67Hz mode. If your video
-appears skewed on an older Apple monitor, try appending the boot
-argument <userinput>video=atyfb:vmode:6</userinput> , which will
-select that mode for most Mach64 and Rage video hardware. For Rage 128
-hardware, this changes to
+Muchos monitores Apple usan el modo 640x480 67Hz. Si su vídeo
+aparece distorsionado en un monitor Apple antiguo, intente
+añadir el argumento de arranque <userinput>video=atyfb:vmode:6</userinput> ,
+el cual elije este modo para la mayoría de hardware de vídeo
+Mach64 y Rage. Para hardware Rage 128, use
 <userinput>video=aty128fb:vmode:6</userinput> .
 
 </para>
