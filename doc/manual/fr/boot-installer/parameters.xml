@@ -1,31 +1,28 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 11648 -->
+<!-- original version: 14359 -->
 
- <sect1 id="boot-parms"><title>Boot Parameters</title>
+ <sect1 id="boot-parms"><title>Paramètres de démarrage</title>
 <para>
 
-Boot parameters are Linux kernel parameters which are generally used
-to make sure that peripherals are dealt with properly.  For the most
-part, the kernel can auto-detect information about your peripherals.
-However, in some cases you'll have to help the kernel a bit.
+Les paramètres de démarrage sont des paramètres passés au noyau Linux pour
+s'assurer que les périphériques seront correctement pris en compte. Dans la
+plupart des cas le noyau détecte les périphériques, mais parfois vous devez
+l'aider un peu.
 
 </para><para>
 
-If this is the first time you're booting the system, try the default
-boot parameters (i.e., don't try setting arguments) and see if it works
-correctly. It probably will.  If not, you can reboot later and look for
-any special parameters that inform the system about your hardware.
+Si c'est la première fois que vous démarrez le système, essayez les paramètres
+par défaut, c'est-à-dire, ne donnez pas de paramètre et vérifiez que cela
+fonctionne correctement. Ce devrait être le cas. Sinon, vous pouvez redémarrer
+et donner les paramètres particuliers concernant votre matériel.
 
 </para><para>
 
 Toutes les informations nécessaires sur les paramètres
-      d'amorçage sont disponibles dans le 
+d'amorçage sont disponibles dans le 
 <ulink url="http://www.tldp.org/HOWTO/BootPrompt-HOWTO.html">HOWTO Linux BootPrompt</ulink>&nbsp;;
-      la présente section contient seulement un résumé des paramètres les
-      plus utilisés.
-
-section contains only a sketch of the most salient parameters.  Some
-common gotchas are included below in 
+la présente section contient seulement un résumé des paramètres les
+plus utilisés. Certains <quote>trucs</quote> sont donnés dans
 <xref linkend="boot-troubleshooting"/>.
 
 </para><para>
@@ -38,19 +35,16 @@ Memory:<replaceable>avail</replaceable>k/<replaceable>total</replaceable>k avail
 
 </screen></informalexample>
 
-doit être
-affiché assez tôt durant le processus. <replaceable>total</replaceable> doit
-      correspondre à la quantité de mémoire vive (exprimée en
-      kilo-octets) que contient votre machine. Si la quantité de
-      mémoire vive détectée ne correspond pas à la quantité de mémoire
-      contenue dans votre machine, vous devrez utiliser le paramètre
+doit être affiché assez tôt durant le processus. 
+<replaceable>Total</replaceable> doit correspondre à la quantité de mémoire 
+vive (exprimée en kilo-octets) que contient votre machine. Si la quantité de
+mémoire vive détectée ne correspond pas à la quantité de mémoire de votre 
+machine, vous devrez utiliser le paramètre
 <userinput>mem=<replaceable>ram</replaceable></userinput>, où 
-<replaceable>ram</replaceable> est la taille
-      mémoire de votre machine, suivie par «&nbsp;k&nbsp;» pour
-      kilo-octets ou «&nbsp;m&nbsp;» pour méga-octets. Par exemple,
-<userinput>mem=65536k</userinput> et <userinput>mem=64m</userinput> sont 
-équivalents pour
-      forcer l'utilisation de 64&nbsp;Mo de mémoire vive.
+<replaceable>ram</replaceable> est la taille mémoire de votre machine, suivie 
+par «&nbsp;k&nbsp;» pour kilo-octets ou «&nbsp;m&nbsp;» pour méga-octets. Par 
+exemple, <userinput>mem=65536k</userinput> et <userinput>mem=64m</userinput> 
+sont équivalents pour forcer l'utilisation de 64&nbsp;Mo de mémoire vive.
 
 </para><para>
 
@@ -69,7 +63,8 @@ détecte automatiquement <phrase arch="mipsel">(sauf pour les
 <userinput>console=<replaceable>device</replaceable></userinput> au noyau, où
 <replaceable>device</replaceable> est votre interface série, c'est-à-dire 
 quelque chose comme <filename>ttyS0</filename>.
-  </para><para arch="sparc">
+  </para>
+<para arch="sparc">
 Pour &arch-title;, les interfaces série sont <filename>ttya</filename> ou
 <filename>ttyb</filename>. Alternativement, mettez les
       variables OpenPROM <envar>input-device</envar> et
@@ -77,11 +72,11 @@ Pour &arch-title;, les interfaces série sont <filename>ttya</filename> ou
 </para>
 
 
-  <sect2 id="installer-args"><title>Debian Installer Arguments</title>
+ <sect2 id="installer-args"><title>Arguments pour l'installateur Debian</title>
 <para>
 
-Le système d'installation reconnaît quelques arguments qui
-      peuvent s'avérer utiles. 
+Le système d'installation reconnaît quelques arguments qui peuvent s'avérer 
+utiles. 
 
 </para>
 
@@ -90,23 +85,27 @@ Le système d'installation reconnaît quelques arguments qui
 <term>DEBCONF_PRIORITY</term>
 <listitem><para>
 
-These parameter settings will similarly set the highest priority of
-messages to be displayed. 
+Ce paramètre sert à déclarer la priorité des messages à afficher. 
 
 </para><para>
 
-With <userinput>DEBCONF_PRIORITY=critical</userinput>, the
-installation system will display only critical messages and try to do
-the right thing without fuss.  If problems are encountered, the
-installer adjusts the priority as needed.
+Dans l'installation par défaut, ce paramètre est égal à
+<userinput>DEBCONF_PRIORITY=high</userinput>. Cela signifie que les messages
+avec des priorités <quote>high</quote> et <quote>critical</quote> seront
+affichés, mais non les messages avec des priorités <quote>medium</quote> et
+<quote>low</quote>. Si des problèmes apparaissent, l'installateur fixe la
+priorité comme il est nécessaire.
 
 </para><para>
 
-If <userinput>DEBCONF_PRIORITY=high</userinput> (the default setting),
-both high and critical priority messages are shown, but medium and low
-priority messages are skipped. When
-<userinput>DEBCONF_PRIORITY=low</userinput> is used, all messages are
-shown.
+Si vous ajoutez le paramètre <userinput>DEBCONF_PRIORITY=medium</userinput>
+au démarrage, vous obtiendrez le menu d'installation et un contrôle plus fin 
+du processus d'installation. Si vous ajoutez 
+<userinput>DEBCONF_PRIORITY=low</userinput>, tous les messages seront affichés,
+c'est l'équivalent de la méthode de démarrage <emphasis>expert</emphasis>.
+Si vous utilisez <userinput>DEBCONF_PRIORITY=critical</userinput>, seuls les
+messages critiques seront affichés et l'installateur fera ce qu'il faut pour
+tout faire correctement.
 
 </para></listitem>
 </varlistentry>
@@ -116,8 +115,8 @@ shown.
 <term>DEBCONF_FRONTEND</term>
 <listitem><para>
 
-This boot parameter controls the type of user interface used for the
-installer. The current possible parameter settings are:
+Ce paramètre contrôle le type d'interface qu'utilisera l'installateur.
+Voici les valeurs possibles actuellement&nbsp;:
 
 <itemizedlist>
 <listitem>
@@ -139,9 +138,10 @@ installer. The current possible parameter settings are:
 </listitem>
 </itemizedlist>
 
-The default front end is <userinput>DEBCONF_FRONTEND=newt</userinput>.
-<userinput>DEBCONF_FRONTEND=text</userinput>
-may be preferable for serial console installs.
+L'interface par défaut est <userinput>DEBCONF_FRONTEND=newt</userinput>.
+<userinput>DEBCONF_FRONTEND=text</userinput> est peut-être préférable pour les 
+installations avec une console série. Les autres interfaces ne sont pas 
+disponibles sur les supports d'installation, et donc 
 
 </para></listitem>
 </varlistentry>
@@ -151,31 +151,31 @@ may be preferable for serial console installs.
 <term>BOOT_DEBUG</term>
 <listitem><para>
 
-Passing this boot parameter will cause the boot to be more verbosely 
-logged.
+Passer ce paramètre augmentera la verbosité des journaux du démarrage.
 
 <variablelist>
 <varlistentry>
 <term><userinput>BOOT_DEBUG=0</userinput></term>
-<listitem><para>This is the default.</para></listitem>
+<listitem><para>valeur par défaut.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>BOOT_DEBUG=1</userinput></term>
-<listitem><para>More verbose than usual.</para></listitem>
+<listitem><para>Un peu plus bavard qu'habituellemnt.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>BOOT_DEBUG=2</userinput></term>
-<listitem><para>Lots of debugging information.</para></listitem>
+<listitem><para>Beaucoup d'informations.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><userinput>BOOT_DEBUG=3</userinput></term>
 <listitem><para>
 
-Shells are run at various points in the boot process to allow detailed
-debugging. Exit the shell to continue the boot.
+À certains moments du processus de démarrage, un shell est exécuté pour
+permettre un débogage approfondi. Quittez le shell pour revenir au processus
+de démarrage.
 
 </para></listitem>
 </varlistentry>
@@ -189,15 +189,17 @@ debugging. Exit the shell to continue the boot.
 <term>INSTALL_MEDIA_DEV</term>
 <listitem><para>
 
-The value of the parameter is the path to the device to load the
-Debian installer from. For example,
+La valeur de ce paramètre donne l'adresse du périphérique sur lequel se
+trouve l'installateur Debian.
+Par exemple,
 <userinput>INSTALL_MEDIA_DEV=/dev/floppy/0</userinput>
 
 </para><para>
 
-The boot floppy, which normally scans all floppys and USB storage
-devices it can to find the root floppy, can be overridden by this
-parameter to only look at the one device.
+
+La disquette de démarrage recherche la disquette racine sur toutes les 
+disquettes et sur toutes les clés USB. Gràce à ce paramètre, on peut limiter
+cette recherche à un seul périphérique.
 
 </para></listitem>
 </varlistentry>
@@ -206,34 +208,67 @@ parameter to only look at the one device.
 <term>debian-installer/framebuffer</term>
 <listitem><para>
 
-Certaines architectures utilisent le <emphasis>framebuffer</emphasis>
-             du noyau afin d'offrir l'installation en un certain nombre
-             de langues. Si le <emphasis>framebuffer</emphasis> provoque des
-             problèmes sur votre système, vous pouvez utiliser le
-             paramètre <userinput>debian-installer/framebuffer=false</userinput>
-             pour le désactiver. Les symptômes de ce problème
-             sont des messages d'erreur au sujet de bterm ou bogl, un
-             écran noir, ou un blocage quelques minutes après le début de
-             l'installation.
+Certaines architectures utilisent le tampon vidéo du noyau afin d'offrir 
+l'installation en plusieurs langues. Si le tampon vidéo provoque des 
+problèmes sur votre système, vous pouvez utiliser le paramètre 
+<userinput>debian-installer/framebuffer=false</userinput> pour le désactiver. 
+Les symptômes de ce problème sont des messages d'erreur au sujet de bterm ou 
+bogl, un écran noir, ou un blocage quelques minutes après le début de
+l'installation.
 
 </para><para arch="i386">
 
-l'argument <userinput>video=vga16:off</userinput> peut être utilisé pour
-           désactiver le <emphasis>framebuffer</emphasis>. De tels problèmes 
-ont
-           été rencontrés sur un Dell Inspiron avec la carte graphique
-           Radeon Mobile.
+L'argument <userinput>video=vga16:off</userinput> peut être utilisé pour
+désactiver le tampon video. De tels problèmes ont
+été rencontrés sur un Dell Inspiron avec la carte graphique Radeon Mobile.
 
 </para><para arch="m68k">
 
-De tels problèmes ont été rencontrés sur l'Amiga
-           1200 et SE/30.
+De tels problèmes ont été rencontrés sur les Amiga 1200 et SE/30.
 
 </para><para arch="hppa">
 
 De tels problèmes ont été rencontrés sur les hppa.
 
 </para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>debian-installer/probe/usb</term>
+<listitem><para>
+
+On peut empêcher la recherche de périphériques USB avec le paramètre
+<userinput>debian-installer/probe/usb=false</userinput>.
+
+	  </para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>netcfg/use_dhcp</term>
+<listitem><para>
+
+L'&d-i; recherche automatiquement la configuration du réseau avec DHCP. Si la
+recherche réussit, vous n'aurez plus la possibilité de vérifier et de modifier
+les valeurs obtenues. Vous pouvez obtenir la configuration manuelle du réseau
+que si la recherche avec DHCP a échoué.
+	  </para>
+<para>
+
+S'il y a un serveur DHCP sur votre réseau local et si vous voulez l'ignorer
+parcequ'il donne, par exemple, des valeurs fausses, vous pouvez utiliser le
+paramètre <userinput>netcfg/use_dhcp=false</userinput> pour le désactiver et
+indiquer vous-même les valeurs.
+	  </para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>hw-detect/start_pcmcia</term>
+<listitem><para>
+
+Fixez ce paramètre à <userinput>false</userinput> pour empêcher de commencer
+les services PCMCIA. Certains portables connaissent des problèmes avec les
+PCMCIA.
+	  </para></listitem>
 </varlistentry>
 
 </variablelist>

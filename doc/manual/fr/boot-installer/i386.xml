@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 12087 -->
+<!-- original version: 14362 -->
 
 
   <sect2 arch="i386"><title>Amorcer depuis un cédérom</title>
@@ -195,12 +195,15 @@ Cherchez le fichier <filename>menu.lst</filename> dans le répertoire
 <informalexample><screen>
 
 title  New Install
-kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram ramdisk_size=8192 devfs=mount,dall
+kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram ramdisk_size=10000 devfs=mount,dall
 initrd (hd0,0)/boot/newinstall/initrd.gz
 
 </screen></informalexample>
 
-et redémarrez. À partir de là, il ne devrait plus y avoir de différences
+et redémarrez. Veuillez noter qu'il sera peut-être nécessaire d'augmenter 
+le paramètre <userinput>ramdisk_size</userinput>, selon l'image que vous
+démarrez.
+À partir de maintenant, il ne devrait plus y avoir de différences
 entre <command>GRUB</command> et <command>LILO</command>.
 
 </para><para>
@@ -335,8 +338,8 @@ lecteur de disquette. On utilise le paramètre de démarrage
 pilote ide-floppy aura simulé. Par exemple si votre lecteur est connecté sur 
 la première interface IDE en seconde position sur le cable, entrez
 <userinput>linux.bin root=/dev/hdc</userinput> lors de l'invite de démarrage.
-L'installation depuis un lecteur LS120 est uniquement possible avec la saveur 
-«&nbsp;bf2.4&nbsp;» et les noyaux récents.
+L'installation depuis un lecteur LS-120 n'est possible qu'à partir des noyaux 
+2.4.
 
 </para><para>
 
@@ -363,7 +366,8 @@ d'information ou vous pouvez amorcer le système.
 </para><para>
 
 Des informations utiles sur les paramètres d'amorçage peuvent être consultées 
-en pressant les touches <keycap>F4</keycap> et <keycap>F5</keycap>. Si vous 
+en pressant les touches <keycap>F4</keycap> et jusqu'à <keycap>F7</keycap>. 
+Si vous 
 ajoutez des paramètres à la ligne de commande d'amorçage, assurez-vous 
 d'indiquer la méthode d'amorçage (la valeur par défaut est 
 <userinput>linux</userinput>) et un espace avant le premier paramètre 
@@ -511,7 +515,9 @@ noyau, par exemple, un écran entièrement blanc, noir ou un écran contenant un
 mélange de couleurs, alors votre système a très certainement une carte video 
 problématique qui ne parvient pas à passer en mode 
 <emphasis>framebuffer</emphasis> correctement. Dans ce cas, essayez de passer 
-le paramètre de démarrage <userinput>video=vga16:off</userinput>, 
+le paramètre de démarrage 
+<userinput>debian-installer/framebuffer=false</userinput> ou
+<userinput>video=vga16:off</userinput>, 
 pour désactiver la console <emphasis>framebuffer</emphasis>. Le menu de 
 sélection de la langue n'apparaîtra pas, et l'anglais sera la seule langue 
 utilisable pour l'installation&nbsp;; c'est dû aux caractéristiques limitées 
@@ -525,15 +531,21 @@ précisions.
   <sect2 arch="i386">
   <title>Le système bloque lors de la configuration du PCMCIA</title>
 <para>
-Quelques ordinateurs portables produits par DELL plantent fréquemment
+Quelques ordinateurs portables produits par Dell plantent fréquemment
 lorsque la détection des périphériques essaie d'accéder à certaines
-adresses matérielles. Si vous rencontrez un tel problème, essayez
-la procédure suivante&nbsp;:
+adresses matérielles. D'autres portables ont aussi des problèmes semblables.
+Si vous rencontrez un tel problème et si vous n'avez pas besoin de PCMCIA 
+pendant l'installation, vous pouvez désactiver cette option avec le paramètre 
+<userinput>hw-detect/start_pcmcia=false</userinput>. Vous pourrez configurer
+PCMCIA après l'installation et éviter le problème des adresses des ressources.
+  </para>
+<para>
+Vous pouvez aussi essayez la procédure suivante&nbsp;:
 
      <itemizedlist>
      <listitem><para>
-Préparez le système de fichier principal et installez le noyau et les 
-modules, mais ne lancez pas immédiatement la configuration du PCMCIA&nbsp;;
+Démarrez le système d'installation en mode expert, choisissez la langue et le
+pays, et arrêtez le processus avant la détection du matériel&nbsp;;
 	</para></listitem>
      
 <listitem><para>
@@ -543,14 +555,25 @@ détails)&nbsp;;
 
      <listitem><para>
 Exécutez la commande suivante&nbsp;:
-<userinput>echo exclude port 0x810-0x81f >> /target/etc/pcmcia/config.opts</userinput>&nbsp;;
+<userinput>echo exclude port <replaceable>0x810-0x81f</replaceable> >> /etc/pcmcia/config.opts</userinput> <footnote>
+<para>
+L'intervalle d'adresses donné dans l'exemple vaut pour Dell. Mettez 
+l'intervalle qui va bien avec votre situation. Pour d'autres exemples, voyez
+le 
+<ulink url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO.html">PCMCIA
+HOWTO</ulink></para></footnote>&nbsp;;
 	</para></listitem>
 
      <listitem><para>
-Retournez maintenant au menu principal et lancez l'outil de  configuration du 
-PCMCIA.
+Retournez maintenant au menu principal et poursuivez le processus 
+d'installation.
 	</para></listitem>
 </itemizedlist>
+
+Vous devrez exclure le même intervalle dans
+<userinput>/target/etc/pcmcia/config.opts</userinput> avant de redémarrer
+l'ordinateur, pour éviter le même problème quand vous lancerez le système
+Debian nouvellemnt installé.
 
 </para>
   </sect2>
@@ -559,15 +582,16 @@ PCMCIA.
   <title>Le système se bloque lors du chargement des modules USB</title>
 <para>
 
-Le noyau essaye normalement d'installer le pilote USB et les pilotes de 
-claviers USB afin de 
-permettre l'installation de quelques claviers USB non standard. Cependant, 
-sur certains systèmes USB, le pilote provoque un blocage lors du démarrage. 
+Le noyau essaye normalement d'installer les modules USB et les pilotes de 
+claviers USB afin de permettre l'installation de quelques claviers USB non 
+standard. Cependant, sur certains systèmes USB, le pilote provoque un blocage 
+lors du démarrage. 
 Il est possible d'éviter ces problèmes en désactivant le contrôleur USB dans 
 la configuration BIOS de votre carte mère. Il est également possible 
-d'utiliser le paramètre <userinput>nousb</userinput> à l'invite de démarrage, 
-ce qui empêchera le chargement de ces modules même si un matériel USB est 
-détecté.
+d'utiliser le paramètre 
+<userinput>debian-installer/probe/usb=false</userinput> à l'invite de 
+démarrage, 
+ce qui empêchera le chargement de ces modules.
 
 </para>
   </sect2>
