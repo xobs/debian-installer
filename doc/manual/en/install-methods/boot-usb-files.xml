@@ -23,30 +23,28 @@ setups are possible if you follow <xref linkend="usb-copy-flexible"/>).
 
   <sect2 id="usb-copy-easy">
   <title>Copying the files - the easy way</title>
-<para>
+<para arch="i386">
 
 There is an all-in-one file <filename>hd-media/boot.img.gz</filename>
 which contains all the installer files (including the kernel) as well
-as
-
-<command arch="i386">SYSLINUX</command>
-
-<command arch="powerpc">yaboot</command>
-
-and its configuration file.
-
-<phrase arch="i386">
-You only have to extract it directly to your USB stick:
+as <command>SYSLINUX</command> and its configuration file. You only
+have to extract it directly to your USB stick:
 
 <informalexample><screen>
 
 gzip -dc boot.img.gz >/dev/<replaceable>sda</replaceable>
 
 </screen></informalexample>
-</phrase>
 
-<phrase arch="powerpc">
-Create a partition of type "Apple_Bootstrap" on your USB stick using
+Of course this will destroy anything already on the device, so take
+care that you use the correct device name for your USB stick.
+
+</para><para arch="powerpc">
+
+There is an all-in-one file <filename>hd-media/boot.img.gz</filename>
+which contains all the installer files (including the kernel) as well
+as <command>yaboot</command> and its configuration file. Create a
+partition of type "Apple_Bootstrap" on your USB stick using
 <command>mac-fdisk</command>'s <userinput>C</userinput> command and
 extract the image directly to that:
 
@@ -55,7 +53,6 @@ extract the image directly to that:
 gzip -dc boot.img.gz >/dev/<replaceable>sda2</replaceable>
 
 </screen></informalexample>
-</phrase>
 
 Of course this will destroy anything already on the device, so take
 care that you use the correct device name for your USB stick.
@@ -63,8 +60,8 @@ care that you use the correct device name for your USB stick.
 </para><para>
 
 After that, mount the USB memory stick (<userinput>mount
-<phrase arch="i386">/dev/sda</phrase>
-<phrase arch="powerpc">/dev/sda2</phrase>
+<replaceable arch="i386">/dev/sda</replaceable>
+<replaceable arch="powerpc">/dev/sda2</replaceable>
 /mnt</userinput>), which will now have
 <phrase arch="i386">a FAT filesystem</phrase>
 <phrase arch="powerpc">an HFS filesystem</phrase>
