@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- original version: 23058 -->
 <!-- actualizado por rudy, 5 diciembre 2004 -->
+<!-- revisado jfs, 6 diciembre 2004 -->
 
    <sect3 id="iso-scan">
-   <title>En busca de la imagen ISO del Instalador de Debian</title>
+   <title>Búsqueda de la imagen ISO del instalador de Debian</title>
 <para>
 
 Al instalar usando el método <emphasis>hd-media</emphasis>, habrá un 
@@ -13,34 +14,35 @@ El componente <command>iso-scan</command> hace exactamente esto.
 
 </para><para>
 
-Al principio, <command>iso-scan</command> monta automáticamente todos los
-dispositivos de tipo bloque (ejm. particiones) que tengan algún sistema de
+En primer lugar, <command>iso-scan</command> monta automáticamente todos los
+dispositivos de tipo bloque (p.e. particiones) que tengan algún sistema de
 ficheros conocido y busca secuencialmente ficheros que terminen en
 <filename>.iso</filename> (o <filename>.ISO</filename>). Tenga en cuenta 
-que en el primer intento sólo busca ficheros en el directorio raíz y en el 
-primer nivel de subdirectorios (es decir; éste puede localizar
+que en el primer intento sólo se buscan ficheros en el directorio raíz y en el 
+primer nivel de subdirectorios (esto es, puede localizar
 <filename>/<replaceable>loquesea</replaceable>.iso</filename>,
 <filename>/data/<replaceable>loquesea</replaceable>.iso</filename>, pero no
 <filename>/data/tmp/<replaceable>loquesea</replaceable>.iso</filename>).
 Después de localizar una imagen ISO, <command>iso-scan</command> comprobará
 su contenido para determinar si la imagen es o no una imagen ISO de Debian
-válida. En caso fuese así se finaliza la búsqueda, en caso contrario
+válida. Si es una imagen válida se finaliza la búsqueda, en caso contrario
 <command>iso-scan</command> busca otra imagen.
 
 </para><para>
 
 En caso de que falle el intento anterior de encontrar la imagen ISO del
 instalador, <command>iso-scan</command> le preguntará si quiere realizar
-una búsqueda más exhaustiva. Este paso buscará en todo el sistema de ficheros.
+una búsqueda más exhaustiva. Este paso no sólo buscará en los directorios
+de primer nivel sino en todo el sistema de ficheros.
 
 </para><para>
 
-Si <command>iso-scan</command> no localiza la imagen ISO del instalador,
-reinicie para arrancar su sistema operativo original y compruebe que la imagen
-tiene ha sido nombrada adecuadamente (veriifique que termine en 
+En el caso de que <command>iso-scan</command> no sea capaz de encontrar la imagen ISO del instalador,
+deberá reiniciar, arrancar su sistema operativo original y comprobar que el nombre de la imagen
+es correcto (veriifique que termine en 
 <filename>.iso</filename>), se encuentra en un lugar reconocible por &d-i;, 
-y no sea defectuosa (verifique la suma de control). Los usuarios de Unix más 
-expertos pueden hacer esto sin reiniciar, desde la segunda consola.
+y no es una imagen defectuosa (verifique la suma de control). Los usuarios de Unix más 
+expertos pueden hacer esto sin reiniciar, utilizando para ello la segunda consola.
 
 </para>
    </sect3>
