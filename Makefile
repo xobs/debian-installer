@@ -158,68 +158,68 @@ tree: get_udebs
 	# Clean up after dpkg.
 	rm -rf $(DPKGDIR)/updates
 	rm -f $(DPKGDIR)/available $(DPKGDIR)/*-old $(DPKGDIR)/lock
-	mkdir $(DEST)/dev $(DEST)/proc $(DEST)/mnt $(DEST)/var/log
-	cp -dpR $(PROTOTYPE_ROOTFS)/* $(DEST)
+	mkdir -p $(DEST)/dev $(DEST)/proc $(DEST)/mnt $(DEST)/var/log
+	cp -dpR $(PROTOTYPE_ROOTFS)/* $(DEST)/
 	find $(DEST) -depth -type d -path "*CVS*" -exec rm -rf {} \;
 	$(foreach DEV, $(DEVS), \
 	(cp -dpR /dev/$(DEV) $(DEST)/dev/ ) ; )
+	depmod -n -F ksyms -a -b $(DEST)/ $(KVER) > $(DEST)/lib/modules/$(KVER)/modules.dep
 	# TODO: configure some of the packages?
 
-# Much of this information was taken from
-# http://www.linuxdoc.org/HOWTO/Bootdisk-HOWTO/
 
-ROOT_FS_SIZE=`du -s $(DEST) | cut -f 1`
+KVER=2.4.0-di
+# FIXME, KERNEL_DEB, need to handle the version number intelligently
+KDEB=../kernel-image-$(KVER)_0.001_i386.deb
+KTREE=kernel_tree
+# Take a kernel-image-*.deb and extract needed information
+kernel:
+	mkdir -p $(KTREE)
+	dpkg-deb -X $(KDEB) $(KTREE) 
 
-# this is the temp file we are going to mount via the loop back device 
-TMP_IMAGE=$(TMPDIR)/$(DEST)
 
-# this is where we'll mount the rootfs
-ROOT_IMAGE=./mnt/$(DEST)
+# Create a compressed image of the root filesystem.
+# 1. make a temporary file large enough to fit the filesystem.
+# 2. mount that file via the loop device, create a filesystem on it
+# 3. copy over the root filesystem
+# 4. unmount the file, compress it
 
-rootfs.gz:
+INITRD=initrd.gz
+TMP_FILE=$(TMPDIR)/$(DEST)
+TMP_MNT=./mnt/$(DEST)
+
+initrd:
 	dh_testroot
-	rm -f $(TMP_IMAGE)
-	if mount | grep $(ROOT_IMAGE) ; then \
-		if ! umount $(ROOT_IMAGE) ; then \
-			echo "Error unmounting $(ROOT_IMAGE)" ; \
+	rm -f $(TMP_FILE)
+	if mount | grep $(TMP_MNT) ; then \
+		if ! umount $(TMP_MNT) ; then \
+			echo "Error unmounting $(TMP_MNT)" ; \
 	        exit 1; \
 		fi; \
 	fi; \
 
-	mkdir -p $(ROOT_IMAGE)
-
-	# make a temporary file, all zeros, big enough to fit root filsystem
+	mkdir -p $(TMP_MNT)
 	install -d $(TMPDIR)
-	dd if=/dev/zero of=$(TMP_IMAGE) bs=1k count=$(ROOT_FS_SIZE)
-
-	# make filesystem, don't reserve any space, 2000 bytes/inode
-	mke2fs -F -q -m 0 -i 2000 $(TMP_IMAGE)
-	mount -t ext2 -o loop $(TMP_IMAGE) $(ROOT_IMAGE)
-	# copy the filesystem we created onto the disk image
-	cp -a $(DEST)/* $(ROOT_IMAGE)/
-	# give runtime linker clues
-	ldconfig -r $(ROOT_IMAGE)
-	umount $(ROOT_IMAGE)
-	dd if=$(TMP_IMAGE)  bs=1k | gzip -v9 > rootfs.gz
+	dd if=/dev/zero of=$(TMP_FILE) bs=1k count=`du -s $(DEST) | cut -f 1`
+	# FIXME: 2000 bytes/inode (choose that better?)
+	mke2fs -F -m 0 -i 2000 $(TMP_FILE)
+	mount -t ext2 -o loop $(TMP_FILE) $(TMP_MNT)
+	cp -a $(DEST)/* $(TMP_MNT)/
+	umount $(TMP_MNT)
+	dd if=$(TMP_FILE)  bs=1k | gzip -v9 > $(INITRD)
 
 
-# This is the kernel you want on the bootdisk.
-KERNEL=vmlinuz
+# This is the kernel which will be used on the boot disk.
+KERNEL=$(KTREE)/boot/vmlinuz-$(KVER)
 
-# kernel blocks is size of kernel + 50, this could be optimized 
-KERNEL_BLOCKS=$(shell SIZE=`ls -s $(KERNEL) | cut -f 2 -d " "`; \
-	let SIZE=$$SIZE+50 ; echo $$SIZE)
-# where we are making the boot disk
 FD_DEV=/dev/fd0
-
-# where we should mount it
 FD_MNT=/floppy
 
-# use to tell the kernel where the ramdisk will be
-RAMDISK_WORD=$(shell let SIZE=$(KERNEL_BLOCKS)+16384 ; echo $$SIZE)
+# Create a bootable floppy
+# 1. mount the floppy, make filesystem
+# 2. copy over kernel, initrd, etc.
+# 3. run lilo
 
-
-boot_floppy: rootfs.gz $(KERNEL)
+di_floppy: initrd $(KERNEL)
 	dh_testroot
 	if mount | grep $(FD_MNT) ; then \
 		if ! umount $(FD_MNT) ; then \
@@ -229,19 +229,18 @@ boot_floppy: rootfs.gz $(KERNEL)
 	fi; \
 
 	mkdir -p $(FD_MNT)
-	mke2fs -i 8192 -m 0 $(FD_DEV) $(KERNEL_BLOCKS)
+	mke2fs $(FD_DEV) 
 	mount $(FD_DEV) $(FD_MNT)
 	rm -rf $(FD_MNT)/lost+found
+	# FIXME : do we need these dirs?
 	mkdir $(FD_MNT)/{boot,dev}
 	cp -R /dev/{null,fd0} $(FD_MNT)/dev
 	cp /boot/boot.b $(FD_MNT)/boot
-	cp bdlilo.conf $(KERNEL) $(FD_MNT)
-	lilo -v -C bdlilo.conf -r $(FD_MNT) 
-	# tell the kernel where the ramdisk is
-	rdev -r $(FD_MNT)/$(KERNEL)  $(RAMDISK_WORD)
+	cp $(KERNEL) $(FD_MNT)/vmlinuz-di
+	cp lilo.conf $(FD_MNT)/lilo.conf
+	cp initrd.gz $(FD_MNT)/
+	lilo -v -C lilo.conf -r $(FD_MNT)
 	umount $(FD_MNT)
-	# copy over the ramdisk onto the floppy
-	dd if=rootfs.gz of=$(FD_DEV) bs=1k seek=$(KERNEL_BLOCKS)
 
 
 # Library reduction.
