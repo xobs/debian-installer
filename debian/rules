@@ -25,8 +25,8 @@ clean:
 
 build: build-stamp
 build-stamp:
-	touch build-stamp
 	fakeroot $(MAKE) all_images all_stats SUITE=$(DISTRIBUTION)
+	touch build-stamp
 
 install: build
 	dh_testdir
@@ -38,6 +38,7 @@ install: build
 	# so remove it, do not put in tarball.
 	rm dest/*demo*
 	cp -p dest/* debian/tmp/$(IMAGEDIR)
+	cd debian/tmp/$(IMAGEDIR) && md5sum * > md5sums
 	ln -s $(VERSION) debian/tmp/$(ARCHIVEDIR)/current
 
 binary-arch: install  
