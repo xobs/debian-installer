@@ -6,17 +6,17 @@
 
 <para>
 
-Um den USB-Stick vorzubereiten, benötigen Sie ein System, auf dem 
+Um den USB-Stick vorzubereiten, benötigen Sie ein System, auf dem
 GNU/Linux bereits läuft und das USB unterstützt. Stellen Sie sicher,
-dass das usb-storage-Kernelmodul geladen ist 
-(<userinput>modprobe usb-storage</userinput>) und versuchen Sie herauszufinden, 
+dass das usb-storage-Kernelmodul geladen ist
+(<userinput>modprobe usb-storage</userinput>) und versuchen Sie herauszufinden,
 welches SCSI-Gerät dem USB-Stick zugewiesen wurde (in diesem Beispiel
 benutzen wir <filename>/dev/sda</filename>). Um den Stick zu beschreiben,
 müssen Sie möglicherweise noch den Schreibschutz-Schalter ausschalten.
 
 </para><para>
 
-Beachten Sie, dass der USB-Stick mindestens 128 MB groß sein sollte 
+Beachten Sie, dass der USB-Stick mindestens 128 MB groß sein sollte
 (kleinere Setups sind möglich, wenn Sie <xref linkend="usb-copy-flexible"/>
 einhalten).
 
@@ -38,18 +38,18 @@ gzip -dc boot.img.gz >/dev/<replaceable>sda</replaceable>
 
 </screen></informalexample>
 
-Hierdurch wird natürlich alles auf dem benutzten Gerät gelöscht, 
+Hierdurch wird natürlich alles auf dem benutzten Gerät gelöscht,
 also sorgen Sie dafür, dass Sie die richtige Gerätebezeichnung verwenden.
 
 </para><para>
 
-Hängen Sie danach den USB-Memory-Stick, der jetzt ein 
+Hängen Sie danach den USB-Memory-Stick, der jetzt ein
 FAT-Dateisystem enthält, ins Dateisystem ein
-(<userinput>mount /dev/sda /mnt</userinput>); 
-kopieren Sie ein Debian-»netinst«- oder 
+(<userinput>mount /dev/sda /mnt</userinput>);
+kopieren Sie ein Debian-»netinst«- oder
 »businesscard«-ISO-Image auf den Stick. Beachten Sie, dass der
-Dateiname auf <filename>.iso</filename> enden muss. Hängen Sie den 
-Stick wieder aus dem Dateisystem aus 
+Dateiname auf <filename>.iso</filename> enden muss. Hängen Sie den
+Stick wieder aus dem Dateisystem aus
 (<userinput>umount /mnt</userinput>) - das war's.
 
 </para>
@@ -61,16 +61,16 @@ Stick wieder aus dem Dateisystem aus
 
 Wenn Sie flexibler sein wollen oder einfach nur wissen möchten, was passiert,
 sollten Sie die folgende Methode nutzen, um die Dateien auf den Stick zu
-befördern. Wir zeigen, wie Sie den Memory-Stick einrichten, sodass dabei 
+befördern. Wir zeigen, wie Sie den Memory-Stick einrichten, so dass dabei
 die erste Partition benutzt wird statt des kompletten Speichers.
 
 </para><note><para>
 
 Da die meisten USB-Sticks mit einer einfachen FAT16-Partition vorkonfiguriert
-sind, müssen Sie ihren möglicherweise nicht neu partitionieren oder 
-formatieren. Wenn es aber doch nötig ist, nutzen Sie 
+sind, müssen Sie ihren möglicherweise nicht neu partitionieren oder
+formatieren. Wenn es aber doch nötig ist, nutzen Sie
 <command>cfdisk</command> oder ein anderes Partitionierungsprogramm, um
-eine FAT16-Partition zu erstellen; geben Sie danach ein: 
+eine FAT16-Partition zu erstellen; geben Sie danach ein:
 
 <informalexample><screen>
 
@@ -79,18 +79,18 @@ mkdosfs /dev/<replaceable>sda1</replaceable>
 </screen></informalexample>
 
 Achten Sie darauf, die richtige Gerätebezeichnung für den USB-Stick zu
-verwenden. Der <command>mkdosfs</command>-Befehl ist im 
+verwenden. Der <command>mkdosfs</command>-Befehl ist im
 Debian-Paket <classname>dosfstools</classname> enthalten.
 
 </para></note><para>
 
-Um zu erreichen, dass der Kernel gestartet wird, wenn wir vom USB-Stick 
-booten, werden wir einen Bootloader auf dem Stick ablegen. Obwohl 
-jeder Bootloader (wie z.B. <command>LILO</command>) hier funktionieren 
-sollte, wäre es passend, den Bootloader <command>SYSLINUX</command> 
-zu verwenden, da er eine FAT16-Partition benutzt und einfach über 
+Um zu erreichen, dass der Kernel gestartet wird, wenn wir vom USB-Stick
+booten, werden wir einen Bootloader auf dem Stick ablegen. Obwohl
+jeder Bootloader (wie z.B. <command>LILO</command>) hier funktionieren
+sollte, wäre es passend, den Bootloader <command>SYSLINUX</command>
+zu verwenden, da er eine FAT16-Partition benutzt und einfach über
 eine Textdatei neu konfiguriert werden kann. Jedes Betriebssystem, das
-FAT-Dateisysteme unterstützt, kann benutzt werden, um die Konfiguration 
+FAT-Dateisysteme unterstützt, kann benutzt werden, um die Konfiguration
 des Bootloaders zu verändern.
 
 </para><para>
@@ -115,7 +115,7 @@ erstellt, die den Bootloader-Code enthält.
 </para><para>
 
 Hängen Sie die Partition (<userinput>mount /dev/sda1 /mnt</userinput>)
-ins Dateisystem ein und kopieren Sie die folgenden Dateien aus den 
+ins Dateisystem ein und kopieren Sie die folgenden Dateien aus den
 Debian-Archiven auf den Stick:
 
 <itemizedlist>
@@ -141,13 +141,13 @@ Evtl. zusätzliche Kernel-Module.
 </para></listitem>
 </itemizedlist>
 
-Wenn Sie Dateien umbenennen wollen, bedenken Sie, dass 
-<command>SYSLINUX</command> nur Dateien im DOS-(8.3-)Dateiformat 
+Wenn Sie Dateien umbenennen wollen, bedenken Sie, dass
+<command>SYSLINUX</command> nur Dateien im DOS-(8.3-)Dateiformat
 verarbeiten kann.
 
 </para><para>
 
-Die Datei <filename>syslinux.cfg</filename> sollte die folgenden zwei 
+Die Datei <filename>syslinux.cfg</filename> sollte die folgenden zwei
 Zeilen enthalten:
 
 <informalexample><screen>
@@ -158,37 +158,37 @@ append initrd=initrd.gz ramdisk_size=10000 root=/dev/rd/0 init=/linuxrc devfs=mo
 </screen></informalexample>
 
 Beachten Sie bitte, dass der Wert für den Parameter <userinput>ramdisk_size</userinput>
-möglicherweise erhöht werden muss, abhängig von dem Image, das Sie 
+möglicherweise erhöht werden muss, abhängig von dem Image, das Sie
 booten.
 
 </para><para>
 
-Jetzt sollten Sie ein Debian-ISO-Image (»businesscard«, »netinst« oder 
-sogar ein komplettes Image) auf den Stick laden (wählen Sie eines, dass 
-auch auf den Stick passt). Der Dateiname des Images muss auf 
-<filename>.iso</filename> enden. 
+Jetzt sollten Sie ein Debian-ISO-Image (»businesscard«, »netinst« oder
+sogar ein komplettes Image) auf den Stick laden (wählen Sie eines, das
+auch auf den Stick passt). Der Dateiname des Images muss auf
+<filename>.iso</filename> enden.
 
 </para><para>
 
 Wenn Sie per Netzwerk booten möchten, ohne ein ISO-Image zu nutzen,
 können Sie natürlich den vorigen Schritt überspringen. Sie müssen
-dabei außerdem die Initial Ramdisk aus dem Verzeichnis 
-<filename>netboot</filename> verwenden statt aus 
+dabei außerdem die Initial Ramdisk aus dem Verzeichnis
+<filename>netboot</filename> verwenden statt aus
 <filename>hd-media</filename>, da <filename>hd-media/initrd.gz</filename>
 keine Netzwerkunterstützung hat.
 
 </para><para>
 
 Wenn Sie dies erledigt haben, hängen Sie den USB-Memory-Stick aus dem
-Dateisystem aus (<userinput>umount /mnt</userinput>) und aktivieren 
+Dateisystem aus (<userinput>umount /mnt</userinput>) und aktivieren
 den Schreibschutz.
 
 </para><warning><para>
 
-Wenn Ihr System es ablehnt, von dem Memory-Stick zu booten, könnte 
+Wenn Ihr System es ablehnt, von dem Memory-Stick zu booten, könnte
 es sein, dass der Stick einen defekten Master-Boot-Record (MBR)
-enthält. Um dies zu beheben, nutzen Sie den 
-<command>install-mbr</command>-Befehl aus dem Paket 
+enthält. Um dies zu beheben, nutzen Sie den
+<command>install-mbr</command>-Befehl aus dem Paket
 <classname>mbr</classname>:
 
 <informalexample><screen>

@@ -274,7 +274,7 @@ for format in $formats ; do
 done
 
 # Clean up
-rm -r $tempdir
+###rm -r $tempdir
 
 # Evaluate the overall results
 [ -n "$BUILD_SKIP" ] && echo "Info: The following formats were skipped:$BUILD_SKIP"
