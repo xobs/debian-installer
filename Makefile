@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 #
 # Debian Installer system makefile.
-# Copyright 2001 by Joey Hess <joeyh@debian.org>.
+# Copyright 2001, 2002 by Joey Hess <joeyh@debian.org>.
 # Licensed under the terms of the GPL.
 #
 # This makefile builds a debian-installer system and bootable images from 
@@ -59,7 +59,11 @@ DEST=dest
 INITRD=$(DEST)/$(TYPE)-initrd.gz
 
 # How big a floppy image should I make? (in kilobytes)
+ifeq (cdrom,$(TYPE))
+FLOPPY_SIZE=2880
+else
 FLOPPY_SIZE=1440
+endif
 
 # The floppy image to create.
 FLOPPY_IMAGE=$(DEST)/$(TYPE)-$(FLOPPY_SIZE).img
@@ -380,6 +384,7 @@ endif
 	
 ifdef USER_MOUNT_HACK
 	syslinux $(SYSLINUX_OPTS) $(USER_MOUNT_HACK)
+	rm -f $(USER_MOUNT_HACK)
 else
 	syslinux $(SYSLINUX_OPTS) $(FLOPPY_IMAGE).new
 endif
@@ -419,9 +424,9 @@ stats: tree
 # Add your interesting stats here.
 
 
-# Upload a daily build to peope.debian.org. If you're not Joey Hess, you probably
-# don't want to use this grungy code, at least not without overrideing
-# this:
+# Upload a daily build to peope.debian.org. If you're not Joey Hess,
+# you probably don't want to use this grungy code, at least not without
+# overriding this:
 UPLOAD_DIR=people.debian.org:~/public_html/debian-installer/daily/
 daily_build:
 	-cvs update
