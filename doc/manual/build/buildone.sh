@@ -176,7 +176,7 @@ case $arch in
 esac
 
 ## Join all gathered info into one big variable
-cond="$fdisk;$network;$boot;$smp;$other;$goodies;$unofficial_build"
+cond="$fdisk;$network;$boot;$smp;$other;$goodies;$unofficial_build;$status"
 
 ## Write dynamic non-profilable entities into the file
 echo "<!-- arch- and lang-specific non-profilable entities -->" > $dynamic
