@@ -168,7 +168,7 @@ get_udebs-stamp:
 	touch get_udebs-stamp
 
 # This is a list of the devices we want to create
-DEVS=log console kmem mem null ram0 ram tty0 tty1 tty2 tty3 tty4 hda hdb hdc hdd fd0
+DEVS=console kmem mem null ram0 ram tty0 tty1 tty2 tty3 tty4 hda hdb hdc hdd fd0
 
 # Build the installer tree.
 tree: get_udebs tree-stamp
