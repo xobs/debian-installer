@@ -87,6 +87,10 @@ DEST=dest
 # Filename of initrd to create.
 INITRD=$(DEST)/$(TYPE)-initrd.gz
 
+# Filesystem type for the initrd, valid values are romfs and ext2.
+# NOTE: Your kernel must support this filesystem, not just a module. 
+INITRD_FS=ext2
+
 # How big a floppy image should I make? (in kilobytes)
 ifeq (cdrom,$(TYPE))
 FLOPPY_SIZE=2880
@@ -406,8 +410,15 @@ $(INITRD):
 	rm -f $(TMP_FILE)
 	install -d $(TEMP)
 	install -d $(DEST)
-	genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` $(TMP_FILE)
-	dd if=$(TMP_FILE) bs=1k | gzip -v9 > $(INITRD)
+	if [ $(INITRD_FS) = ext2 ]; then \
+		genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` $(TMP_FILE); \
+	elif [ $(INITRD_FS) = romfs ]; then \
+		genromfs -d $(TREE) -f $(TMP_FILE); \
+	else \
+		echo "Unsupported filesystem type"; \
+		exit 1; \
+	fi;
+	gzip -vc9 $(TMP_FILE) > $(INITRD)
 
 # hppa boots a lifimage, which can contain an initrd and two kernels (one 32 and one 64 bit)
 lifimage: Makefile initrd $(DEST)/$(TYPE)-lifimage $(KERNEL) $(KERNEL_SECOND)
