@@ -305,8 +305,6 @@ $(FLOPPY_IMAGE):
 	
 	cp syslinux.cfg $(TMP_MNT)/
 	todos $(TMP_MNT)/syslinux.cfg
-# This number is used later for stats. There's gotta be a better way.
-	df -h $(TMP_MNT) | tail -1 | sed 's/[^ ]* //' | awk 'END { print $$3 }' > $(TEMP)/.floppy_free_stat
 	umount $(TMP_MNT)
 	syslinux $(SYSLINUX_OPTS) $(FLOPPY_IMAGE)
 
@@ -322,20 +320,18 @@ boot_floppy_check: floppy_image
 	cmp $(FLOPPYDEV) $(FLOPPY_IMAGE)
 
 COMPRESSED_SZ=$(shell expr $(shell tar cz $(TREE) | wc -c) / 1024)
+KERNEL_SZ=$(shell expr $(shell du -b $(KERNEL) | cut -f 1) / 1024)
 stats: tree
 	@echo
 	@echo "System stats"
 	@echo "------------"
 	@echo "Installed udebs: $(UDEBS)"
-	@echo "Total system size: $(shell du -h -s $(TREE) | cut -f 1)"
-	@echo "             libs: $(shell du -h --exclude=modules -s $(TREE)/lib | cut -f 1)"
-	@echo "   kernel modules: $(shell du -h -s $(TREE)/lib/modules | cut -f 1)"
-	@echo "Compresses to: $(COMPRESSED_SZ)k"
-	@echo -n "Single Floppy kernel must be less than: ~$(shell expr $(FLOPPY_SIZE) - $(COMPRESSED_SZ) )k "
-	@echo "(currently, it is: $(shell du -h $(KERNEL) | cut -f 1))"
-	@if [ -e $(TEMP)/.floppy_free_stat ]; then \
-		echo "Single net floppy currently has `cat $(TEMP)/.floppy_free_stat` free!"; \
-	fi
+	@echo -n "Total system size: $(shell du -h -s $(TREE) | cut -f 1)"
+	@echo -n " ($(shell du -h --exclude=modules -s $(TREE)/lib | cut -f 1) libs, "
+	@echo "$(shell du -h -s $(TREE)/lib/modules | cut -f 1) kernel modules)"
+	@echo "Initrd size: $(COMPRESSED_SZ)k"
+	@echo "Kernel size: $(KERNEL_SZ)k"
+	@echo "Free space: $(shell expr $(FLOPPY_SIZE) - $(KERNEL_SZ) - $(COMPRESSED_SZ))k"
 # Add your interesting stats here.
 
 
