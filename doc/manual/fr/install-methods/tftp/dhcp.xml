@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 11648 -->
+<!-- original version: 18626 -->
 
 
   <sect2 condition="supports-dhcp" id="dhcpd">
    <title>Configurer un serveur DHCP</title>
 <para>
 
-À l'heure où ces lignes sont écrites, il n'existe qu'un seul
-serveur DHCP libre appelé <command>dhcpd</command> ISC. Dans
-        &debian;, il est disponible dans le paquet
-<classname>dhcp</classname>. Voici un extrait du fichier de
-        configuration (habituellement
+Il existe un seul serveur DHCP libre, <command>dhcpd</command> ISC. Dans
+&debian;, il est disponible dans le paquet <classname>dhcp</classname>. 
+Voici un possible fichier de configuration (habituellement
 <filename>/etc/dhcpd.conf</filename>)&nbsp;:
 
 <informalexample><screen>
@@ -37,31 +35,32 @@ host clientname {
 
 </screen></informalexample>
 
+Note&nbsp;: dans le nouveau paquet <classname>dhcp3</classname>, ce fichier
+s'appelle <filename>/etc/dhcp3/dhcpd.conf</filename>. 
+
 </para><para>
 
-Dans cet exemple, il y a un serveur  <replaceable>"servername"</replaceable> 
-qui joue le rôle de serveur DHCP, serveur TFTP et
-        passerelle réseau. Vous devrez certainement changer les
-        options de domain-name ainsi que le nom du serveur et les
-        adresses matérielles du client. L'option
+Dans cet exemple, il y a un serveur <replaceable>"servername"</replaceable> 
+qui joue le rôle de serveur DHCP, serveur TFTP et passerelle réseau. Vous 
+devrez certainement changer les options de domain-name ainsi que le nom du 
+serveur et les adresses matérielles du client. L'option
 <replaceable>"filename"</replaceable> devrait être le nom du fichier extrait
-        via TFTP.
+via TFTP.
 
 </para><para>
 
 Après avoir modifié le fichier de configuration de <command>dhcpd</command>,
-        relancez <command>dhcpd</command> par 
+relancez <command>dhcpd</command> par 
 <userinput>/etc/init.d/dhcpd restart</userinput>.
 
 </para>
 
    <sect3 arch="i386">
-   <title>PXE Booting</title>
+   <title>Amorçage PXE</title>
 <para>
 Voici un autre exemple de fichier <filename>dhcp.conf</filename> utilisant
-        la méthode de chargement du système d'exploitation par le
-        réseau gérée par le matériel
-        («&nbsp;Pre-boot Execution Environment&nbsp;») (PXE) de TFTP.
+la méthode de chargement du système d'exploitation par le réseau gérée par le 
+matériel («&nbsp;Pre-boot Execution Environment&nbsp;») (PXE) de TFTP.
 
 <informalexample><screen>
 
@@ -103,10 +102,9 @@ group {
 
 </screen></informalexample>
 
-Veuillez noter que pour un démarrage PXE, le nom de fichier
-du client <filename>pxelinux.0</filename> est un gestionnaire de
-        démarrage et non une image de noyau (voir 
-<xref linkend="tftp-images"/> ci-dessous).
+Veuillez noter que pour un démarrage PXE, le fichier du client 
+<filename>pxelinux.0</filename> est un programme d'amorçage et non une image 
+du noyau (voir <xref linkend="tftp-images"/> ci-dessous).
 
 </para>
    </sect3>
