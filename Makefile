@@ -138,8 +138,8 @@ get_udebs:
 	done
 
 # This is a list of the devices we want to create
-DEVS=console kmem mem null ram0 ramdisk ram tty1 hda hdb hdc hdd fd0
-PROTO_TYPE_ROOTFS=rootfs
+DEVS=console kmem mem null ram0 ram tty1 tty2 tty3 tty4 hda hdb hdc hdd fd0
+PROTOTYPE_ROOTFS=rootfs
 
 # Build the installer tree.
 tree: get_udebs
@@ -159,12 +159,11 @@ tree: get_udebs
 	rm -rf $(DPKGDIR)/updates
 	rm -f $(DPKGDIR)/available $(DPKGDIR)/*-old $(DPKGDIR)/lock
 	mkdir $(DEST)/dev $(DEST)/proc $(DEST)/mnt $(DEST)/var/log
-	cp -a $(PROTO_TYPE_ROOTFS)/* $(DEST)
+	cp -dpR $(PROTOTYPE_ROOTFS)/* $(DEST)
+	find $(DEST) -depth -type d -path "*CVS*" -exec rm -rf {} \;
 	$(foreach DEV, $(DEVS), \
 	(cp -dpR /dev/$(DEV) $(DEST)/dev/ ) ; )
 	# TODO: configure some of the packages?
-
-
 
 # Much of this information was taken from
 # http://www.linuxdoc.org/HOWTO/Bootdisk-HOWTO/
@@ -268,13 +267,16 @@ status_reduce:
 		$(DPKGDIR)/status > $(DPKGDIR)/status.new
 	mv -f $(DPKGDIR)/status.new $(DPKGDIR)/status
 
+
+COMPRESSED_SZ=$(shell expr $(shell tar cz $(DEST) | wc -c) / 1024)
 stats:
 	@echo
 	@echo System stats
 	@echo ------------
 	@echo Installed udebs: $(UDEBS)
 	@echo Total system size: $(shell du -h -s $(DEST) | cut -f 1)
-	@echo Compresses to: $(shell expr $(shell tar cz $(DEST) | wc -c) / 1024)k
+	@echo Compresses to: $(COMPRESSED_SZ)k
+	@echo Single Floppy kernel must be less than: ~$(shell expr 1400 - $(COMPRESSED_SZ) )k
 # Add your interesting stats here.
 
 # Upload a daily build to klecker. If you're not Joey Hess, you probably
