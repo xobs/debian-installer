@@ -138,8 +138,10 @@ installer. The current possible parameter settings are:
 </itemizedlist>
 
 The default front end is <userinput>DEBCONF_FRONTEND=newt</userinput>.
-<userinput>DEBCONF_FRONTEND=text</userinput>
-may be preferable for serial console installs.
+<userinput>DEBCONF_FRONTEND=text</userinput> may be preferable for
+serial console installs. Other frontends but
+<userinput>newt</userinput> are not available on default install
+media, so this is not very useful right now.
 
 </para></listitem>
 </varlistentry>
@@ -224,6 +226,46 @@ Such problems have been reported on the Amiga 1200 and SE/30.
 </para><para arch="hppa">
 
 Such problems have been reported on hppa.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>debian-installer/probe/usb</term>
+<listitem><para>
+
+Set to <userinput>false</userinput> to prevent probing for USB on
+boot, if that causes problems.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>netcfg/use_dhcp</term>
+<listitem><para>
+
+By default, the &d-i; automatically probes for network configuration
+via DHCP. If the probe succeeds, you won't have a chance to review and
+chage the obtained settings. You can get to the manual network setup
+only in case the DHCP probe fails.
+
+</para><para>
+
+If you have a DHCP server on your local network, but want to avoid it
+because e.g. it gives wrong answers, you can use the parameter
+<userinput>netcfg/use_dhcp=false</userinput> to prevent configuring
+the network with DHCP and to enter the information manually.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>hw-detect/start_pcmcia</term>
+<listitem><para>
+
+Set to <userinput>false</userinput> to prevent starting PCMCIA
+services, if that causes problems. Some laptops are well known for
+this misbehaviour.
 
 </para></listitem>
 </varlistentry>

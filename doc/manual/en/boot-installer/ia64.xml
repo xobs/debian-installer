@@ -1,11 +1,11 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: powerpc.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
+<!-- $Id$ -->
 
   <sect2 arch="ia64"><title>Booting from a CD-ROM</title>
 
 &boot-installer-intro-cd.xml;
 
-  <emphasis>Not yet written.</emphasis>
+  <emphasis condition="FIXME">Not yet written.</emphasis>
 
   </sect2>
 
@@ -16,12 +16,15 @@
 <para>
 
 Network booting an ia64 system requires two architecture-specific actions.
-On the boot server, DHCP and TFTP must be configured to deliver elilo.  
+On the boot server, DHCP and TFTP must be configured to deliver
+<command>elilo</command>.
 On the client a new boot option must be defined in the EFI boot manager
 to enable loading over a network.
 
 </para>
-  <sect3 arch="ia64" id="boot-tftp-server"><title>Configuring the Server</title>
+
+  <sect3 arch="ia64" id="boot-tftp-server">
+  <title>Configuring the Server</title>
 <para>
 
 A suitable TFTP entry for network booting an ia64 system looks something
@@ -37,49 +40,74 @@ host mcmuffin {
 
 </screen></informalexample>
 
-Note that the goal is to get elilo.efi running on the client.
+Note that the goal is to get <command>elilo.efi</command> running on
+the client.
 
 </para><para>
 
-Create an ia64/ subdirectory in your tftpboot directory, and populate it with
-the vmlinuz and initrd.gz files from the Debian installer netboot directory.
+Create an <filename>ia64/</filename> subdirectory in your tftpboot
+directory, and populate it with the <filename>vmlinuz</filename> and
+<filename>initrd.gz</filename> files from the Debian installer netboot
+directory.
 
 </para><para>
 
-Copy elilo.efi to your tftpboot directory and make it world readable.  
-This file can usually be found in the elilo package in IA64 distributions,
-or in /usr/lib/elilo or in a subdirectory of /boot/efi.  A suitable copy is
-provided in the Debian installer netboot directory.
+Copy <filename>elilo.efi</filename> to your tftpboot directory and
+make it world readable.  This file can usually be found in the elilo
+package in IA64 distributions, or in
+<filename>/usr/lib/elilo</filename> or in a subdirectory of
+<filename>/boot/efi</filename>.  A suitable copy is provided in the
+Debian installer netboot directory.
 
 </para><para>
 
-Create an elilo.conf file in your tftpboot directory.  This will
-be loaded by elilo.efi once it is running on the client, and controls what
+Create an <filename>elilo.conf</filename> file in your tftpboot
+directory.  This will
+be loaded by <command>elilo.efi</command> once it is running on the
+client, and controls what
 happens next, including the choice of kernel, initrd image, etc.  An
 example file is provided in the Debian installer netboot directory, review
 the contents and update as needed for your choice of paths, etc.
 
 It is possible to have different config files for different clients by naming
-them using the client's IP address in hex with the suffix .conf instead of
-elilo.conf.  See documentation provided in the elilo package for details.
+them using the client's IP address in hex with the suffix
+<filename>.conf</filename> instead of <filename>elilo.conf</filename>.
+See documentation provided in the <classname>elilo</classname> package
+for details.
 
 </para>
   </sect3>
-  <sect3 arch="ia64" id="boot-tftp-client"><title>Configuring the Client</title>
+
+  <sect3 arch="ia64" id="boot-tftp-client">
+  <title>Configuring the Client</title>
 <para>
-To configure the client to support TFTP booting, start by booting to EFI and
-entering the "Boot Option Maintenance Menu".  
-</para><para>
+
+To configure the client to support TFTP booting, start by booting to
+EFI and entering the <guimenu>Boot Option Maintenance Menu</guimenu>.
+
+<itemizedlist>
+<listitem><para>
+
 Add a boot option.
-</para><para>
-Select the line saying "Load File [Acpi()/.../Mac()] and press enter.
-</para><para>
-Name the entry "Netboot" or something similar, save, and exit back to the
-boot options menu.  
-</para><para>
-You should see the new boot option you just created, and
-selecting it should initiate a DHCP query, leading to a TFTP load of elilo.efi
-from the server.  
+
+</para></listitem>
+<listitem><para>
+
+Select the line saying <guimenuitem>Load File
+[Acpi()/.../Mac()]</guimenuitem> and press &enterkey;.
+
+</para></listitem>
+<listitem><para>
+
+Name the entry <userinput>Netboot</userinput> or something similar,
+save, and exit back to the boot options menu.  
+
+</para></listitem>
+</itemizedlist>
+
+You should see the new boot option you just created, and selecting it
+should initiate a DHCP query, leading to a TFTP load of
+<filename>elilo.efi</filename> from the server.
 
 </para>
 
