@@ -7,8 +7,9 @@ if [ "$#" -ne 1 ]; then
     exit 1
 fi
 
-doctype=${1-pdf}
-language=${2-en}
+#doctype=${1-pdf}
+#language=${2-en}
+language=${1-en}
 
 #case $doctype in
 #    pdf|ps|txt)
