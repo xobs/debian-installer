@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- original version: 25834 -->
 <!-- revisado por nahoo, 1 noviembre 2004 -->
+<!-- revisado rudy, 24 feb. 2005 -->
 
  <sect1 condition="supports-tftp" id="install-tftp">
  <title>Preparación de los ficheros para el arranque a través de red usando TFTP</title>
@@ -16,8 +17,8 @@ en esa máquina, y debe configurarla para soportar el arranque desde ella.
 
 Necesita configurar un servidor TFTP, y en caso de que tenga varias máquinas, un
 servidor BOOTP
-<phrase condition="supports-rarp">, o un servidor RARP</phrase>
-<phrase condition="supports-dhcp">, o un servidor DHCP</phrase>.
+<phrase condition="supports-rarp">, ó un servidor RARP</phrase>
+<phrase condition="supports-dhcp">, ó un servidor DHCP</phrase>.
 
 </para><para>
 
@@ -34,21 +35,21 @@ La dirección IP puede ser configurada manualmente en la ROM de arranque.
 </phrase>
 
 <phrase condition="supports-dhcp">El DHCP (Protocolo de configuración dinámica
-de sistema) es una extensión de BOOTP compatible con este, pero más flexible.
-Algunos sistemas solamente puede configurarse a través de DHCP. </phrase>
+de sistema) es una extensión de BOOTP compatible con éste, pero más flexible.
+Algunos sistemas solamente pueden configurarse a través de DHCP. </phrase>
 
 </para><para arch="powerpc">
 
 Para PowerPC, si tiene una máquina Power Macintosh NewWorld, es una
-buena idea utilizar DHCP en lugar de BOOTP. Algunas de los modelos más
+buena idea utilizar DHCP en lugar de BOOTP. Algunos de los modelos más
 recientes solamente pueden arrancar usando BOOTP.
 
 </para><para arch="alpha"> 
 
-A diferencia del Open Firmware encontrado en máquinas Sparc y PowerPC,
+A diferencia del «Open Firmware» encontrado en máquinas Sparc y PowerPC,
 la consola SRM <emphasis>no</emphasis> usará RARP para obtener su
 dirección IP, y por consiguiente deberá usar BOOTP para el arranque
-a través de red en su Alpha. También puede ingresar directamente la
+a través de red en su sistema Alpha. También puede ingresar directamente la
 configuración IP de las interfaces de red en la consola de SRM.
 
 <footnote>
@@ -57,7 +58,7 @@ configuración IP de las interfaces de red en la consola de SRM.
 Los sistemas Alpha también pueden arrancarse usando DECNet MOP 
 (Protocolo de operaciones de mantenimiento), pero esto no se detalla
 aquí. Presumiblemente, su operador de OpenVMS local estará gustoso de
-asistirlo, deberá tener alguna razón de peso si usa MOP para
+asistirlo, deberá tener alguna razón de peso si quiere usar MOP para
 arrancar Linux en su Alpha.
 
 </para>
@@ -118,15 +119,15 @@ versiones de <command>in.tftpd</command> registren todas las peticiones en los
 registros del sistema; es útil para diagnosticar fallos de arranque. Si
 ha tenido que cambiar <filename>/etc/inetd.conf</filename>, deberá
 notificar al proceso <command>inetd</command> en ejecución que el
-fichero ha cambiado. En una máquina Debian, ejecute
-<userinput>/etc/init.d/inetd reload</userinput>; en otras máquinas,
+fichero ha cambiado. En una sistema Debian, ejecute
+<userinput>/etc/init.d/inetd reload</userinput>; en otras sistemas,
 busque el ID del proceso <command>inetd</command>, y ejecute
 <userinput>kill -HUP <replaceable>id-de-inetd</replaceable></userinput>.
 
 </para><para arch="mips">
 
 Si pretende instalar Debian en una máquina SGI y su servidor TFTP es una máquina
-GNU/Linux ejecutando Linux 2.4 necesitará configurar lo siguiente en su servidor:
+GNU/Linux ejecutando Linux 2.4 necesitará configurar lo siguiente en su servidor
 
 <informalexample><screen>
 # echo 1 > /proc/sys/net/ipv4/ip_no_pmtu_disc
@@ -220,7 +221,7 @@ pueden añadirse opcionalmente con la siguiente sintaxis:
 
 Varias revisiones del firmware de DECstations muestran un problema
 respecto al arranque a través de red: la transferencia se inicia, pero después
-de algún tiempo para con un <computeroutput>a.out err</computeroutput>. 
+de algún tiempo para con un mensaje <computeroutput>a.out err</computeroutput>. 
 Puede haber diferentes razones:
 
 <orderedlist>
@@ -264,8 +265,8 @@ al directorio de imagen de arranque) usando el argumento
 o definiendo la variable de entorno <userinput>BOOT_FILE</userinput>.
 Alternativamente, el nombre del fichero puede darse a través de BOOTP
 (en <command>dhcpd</command> de ISC,
-use la directiva <userinput>filename</userinput>). A diferencia de en
-Open Firmware, en SRM <emphasis>no existe ningún nombre de fichero
+use la directiva <userinput>filename</userinput>). A diferencia de 
+«Open Firmware», en SRM <emphasis>no existe ningún nombre de fichero
 predeterminado</emphasis>, de modo que <emphasis>debe</emphasis> especificar
 un nombre de fichero por cualquiera de estos métodos.
 
@@ -282,7 +283,7 @@ blanco, de modo que el fichero que el cliente busca es simplemente
 <filename>ip-del-cliente-en-hex</filename>. Esto es, si la subarquitectura
 de su sistema es «SUN4C» y su IP es 192.168.1.3, el nombre del fichero
 será <filename>C0A80103.SUN4C</filename>. Una forma sencilla de determinarlo es
-usar la siguiente orden en una shell (asumiendo que la IP sea 10.0.0.4).
+usar la siguiente orden en un línea de órdenes (asumiendo que la IP sea 10.0.0.4).
 
 <informalexample><screen>
 $ printf '%.2x%.2x%.2x%.2x\n' 10 0 0 4
@@ -296,7 +297,7 @@ subarquitectura.
 
 También puede forzar algunos sistemas sparc para buscar un fichero
 específico añadiéndolo al final de la orden boot de OpenPROM, como
-<userinput>boot net mi-imagen.sparc</userinput>. Esta deberá
+<userinput>boot net mi-imagen.sparc</userinput>. Ésta deberá
 encontrarse en el directorio en el que busca el servidor TFTP.
 
 </para>
@@ -325,7 +326,7 @@ configuraciones específicas de su subarquitectura.
 <para>
 
 En Indys SGI puede confiar en la orden <command>bootpd</command> para proveer
-el nombre del fichero TFTP. Éste se señala ya sea como
+el nombre del fichero TFTP. Éste se señala o bien como
 <userinput>bf=</userinput> en <filename>/etc/bootptab</filename> o como
 la opción <userinput>filename=</userinput> en
 <filename>/etc/dhcpd.conf</filename>.
@@ -354,7 +355,7 @@ que pasará la ruta completa del fichero a cargar en el «CFE».
 
 En algunos sistemas, la instalación estándar de disco RAM, combinada
 con los requisitos de memoria de la imagen de arranque TFTP, no
-cabe en memoria. En este caso, todavía puede instalar usando TFTP, 
+caben en memoria. En este caso, todavía puede instalar usando TFTP, 
 simplemente tendrá que realizar pasos adicionales para montar mediante NFS su
 directorio raíz a través de la red. Este tipo de configuración
 también es apropiada para clientes sin disco o sin datos.
@@ -374,7 +375,7 @@ esté arrancando.
 </para></listitem>
 <listitem><para>
 
-Desempaquete el archivo raíz en su servidor NFS (puede ser el mismo
+Desempaquete el fichero raíz en su servidor NFS (puede ser el mismo
 sistema en el que reside su servidor TFTP):
 
 <informalexample><screen>
@@ -383,13 +384,13 @@ sistema en el que reside su servidor TFTP):
 </screen></informalexample>
 
 Asegúrese de usar GNU <command>tar</command> (otros programas, como el de
-SunOS, tratan erróneamente a los dispositivos como ficheros normales).
+SunOS, tratan, erróneamente, a los dispositivos como ficheros normales).
 
 </para></listitem>
 <listitem><para>
 
 Exporte su directorio <filename>/tftpboot/debian-sparc-root</filename>
-con acceso de superusuario a su cliente. P. ej. añada la siguiente
+con acceso de superusuario a su cliente. p. ej. añada la siguiente
 línea a <filename>/etc/exports</filename> (sintaxis de GNU/Linux, 
 debería ser similar para SunOS):
 
