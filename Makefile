@@ -745,7 +745,7 @@ endif
 .PHONY: tree_umount
 tree_umount:
 ifndef USERDEVFS
-	-@[ ! -c $(TREE)/dev/console ] || sudo /bin/umount $(TREE)/dev
+	-@[ ! -c $(TREE)/dev/tty ] || sudo /bin/umount $(TREE)/dev
 endif
 	-@[ ! -L $(TREE)/proc/self ] || sudo /bin/umount $(TREE)/proc
 
