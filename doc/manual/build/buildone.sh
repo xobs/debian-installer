@@ -27,7 +27,7 @@ fixme="FIXME"
 case $arch in
     alpha)
         archspec="alpha;not-i386;not-s390;not-m68k;not-powerpc"
-	kernelversion="2.4.24"
+	kernelversion="2.4.25"
 	
         fdisk="fdisk.txt;cfdisk.txt"
         network="supports-tftp;supports-nfsroot"
@@ -38,7 +38,7 @@ case $arch in
 	;;
     arm)
         archspec="arm;not-i386;not-s390;not-m68k;not-powerpc;not-alpha"
-	kernelversion="2.2.19"
+	kernelversion="2.4.25"
 		
         fdisk="fdisk.txt;cfdisk.txt"
         network="supports-tftp;supports-rarp;supports-dhcp;supports-bootp;supports-nfsroot"
@@ -49,7 +49,7 @@ case $arch in
 	;;
     hppa)
         archspec="hppa;not-i386;not-s390;not-m68k;not-powerpc;not-alpha"
-	kernelversion="2.4.19"
+	kernelversion="2.4.25"
 	
         fdisk="cfdisk.txt"
         network="supports-tftp;supports-rarp;supports-dhcp;supports-bootp;supports-nfsroot"
@@ -71,7 +71,7 @@ case $arch in
 	;;
     ia64)
         archspec="ia64;not-i386;not-s390;not-m68k;not-powerpc;not-alpha"
-	kernelversion="2.4.22"
+	kernelversion="2.4.25"
 	
         fdisk="parted.txt;cfdisk.txt"
         network="supports-tftp;supports-rarp;supports-dhcp;supports-bootp;supports-nfsroot"
@@ -93,7 +93,7 @@ case $arch in
 	;;
     mips)
         archspec="mips;not-i386;not-s390;not-m68k;not-powerpc;not-alpha"
-	kernelversion="2.4.22"
+	kernelversion="2.4.25"
 	
         fdisk="fdisk.txt;cfdisk.txt"
         network="supports-tftp;supports-nfsroot"
@@ -104,7 +104,7 @@ case $arch in
 	;;
     mipsel)
         archspec="mipsel;not-i386;not-s390;not-m68k;not-powerpc;not-alpha"
-	kernelversion="2.4.19"
+	kernelversion="2.4.25"
 	
         fdisk="fdisk.txt;cfdisk.txt"
         network="supports-tftp;supports-dhcp;supports-bootp;supports-nfsroot"
@@ -126,7 +126,7 @@ case $arch in
 	;;
     s390)
         archspec="s390;not-powerpc;not-m68k;not-i386;not-alpha"
-	kernelversion="2.4.21"
+	kernelversion="2.4.25"
 	
         fdisk="fdasd.txt;dasdfmt.txt"
         network="supports-nfsroot"
