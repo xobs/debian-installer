@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 24663 untranslated -->
+<!-- original version: 26371 untranslated -->
 
   <sect2 arch="arm" id="boot-tftp"><title>Booting from TFTP</title>
 
@@ -59,20 +59,30 @@ standard (the save-all step is optional):
 
 <informalexample><screen>
     NeTTrom command-&gt; setenv kerntftpserver 192.168.0.1
-    NeTTrom command-&gt; setenv kerntftpfile tftpboot.img
+    NeTTrom command-&gt; setenv kerntftpfile boot.img
     NeTTrom command-&gt; save-all
     NeTTrom command-&gt; setenv netconfig_eth0 flash
     NeTTrom command-&gt; setenv kernconfig tftp
+    NeTTrom command-&gt; setenv rootdev /dev/ram
+    NeTTrom command-&gt; setenv cmdappend root=/dev/ram
 </screen></informalexample>
 
-Only the last two of these interfere with normal disk booting, so it is 
-safe to <command>save-all</command> right before it, which will
+Only the last four of these interfere with normal disk booting, so it is
+safe to issue <command>save-all</command> right before them, which will
 store the network settings in case you need to boot from the network
-again. Use the <command>printenv</command> command to review your
+again.
+
+If you want to use the serial console to install your NetWinder, you also
+need the following setting:
+
+<informalexample><screen>
+    NeTTrom command-&gt; setenv cmdappend root=/dev/ram console=ttyS0,115200
+</screen></informalexample>
+
+Use the <command>printenv</command> command to review your
 environment settings. Finally, if your <envar>cmdappend</envar>
-NeTTrom variable has the <option>noinitrd</option> option (which is  
-necessary to boot 2.4 kernels), you must remove it so the downloaded 
-kernel can boot with its attached ramdisk.
+NeTTrom variable has the <option>noinitrd</option> option, you must
+remove it so the downloaded kernel can boot with its attached ramdisk.
 
 </para>
   </sect3>
