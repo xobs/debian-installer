@@ -370,8 +370,10 @@ endif
 	for file in `find $(TREE)/var/lib/dpkg/info -name '*.md5sums' -o \
 	    -name '*.postrm' -o -name '*.prerm' -o -name '*.preinst' -o \
 	    -name '*.list'`; do \
-	    echo "** Removing unnecessary control file $$file"; \
-	    rm $$file; \
+		if echo $$file | grep -qv '\.list'; then \
+			echo "** Removing unnecessary control file $$file"; \
+		fi; \
+		rm $$file; \
 	done
 
 	# Collect the used UTF-8 strings, to know which glyphs to include in
@@ -394,11 +396,11 @@ ifeq ($(TYPE),floppy)
 	rm -rf $(DRIVEREXTRASDIR)
 endif
 
-	# remove /linuxrc from busybox-*-udeb (workaround till its fixed)
-	-rm $(TREE)/linuxrc
-
 	# Tree target ends here. Whew!
 	touch $(TYPE)-tree-stamp
+
+	# remove /linuxrc from busybox-*-udeb (workaround till its fixed)
+	-rm $(TREE)/linuxrc
 
 unifont-reduced-$(TYPE).bdf: all-$(TYPE).utf
 	# Use the UTF-8 locale in rootskel-locale. This target shouldn't
