@@ -275,9 +275,10 @@ initrd: Makefile tmp_mount tree $(INITRD)
 $(INITRD): TMP_FILE=$(TEMP)/image.tmp
 $(INITRD):
 	dh_testroot
+	umount $(TMP_MNT) || true
 	rm -f $(TMP_FILE)
 	install -d $(TEMP)
-	dd if=/dev/zero of=$(TMP_FILE) bs=1k count=`expr $$(du -s $(TREE) | cut -f 1) + 1700`
+	dd if=/dev/zero of=$(TMP_FILE) bs=1k count=`expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)`
 	# FIXME: 2000 bytes/inode (choose that better?)
 	mke2fs -F -m 0 -i 2000 -O sparse_super $(TMP_FILE)
 	mount -t ext2 -o loop $(TMP_FILE) $(TMP_MNT)
