@@ -366,13 +366,17 @@ fi
 # CONFIGURATION #
 #################
 
+basedir="$(cd "$(dirname $0)"; pwd)"
+manual_path="$(echo $basedir | sed "s:/build$::")"
+build_path="$manual_path/build"
+
 # Define all possible languages, formats and archs.
 
 # Warning: it is necessary to keep spaces around each arch, language and
 # format to make sure we don't get an arch 'ps' just because it's a
 # substring of 'mipsel'
 
-LANGUAGES=`find .. -type d -maxdepth 1 -printf " %f \n" | grep -v "^\." | grep -v "historic" | grep -v "build"  | grep -v "scripts" | tr -d "\n" `
+LANGUAGES=`find $basedir/.. -type d -maxdepth 1 -printf " %f \n" | grep -v "^\ \." | grep -v "historic" | grep -v "build"  | grep -v "scripts" | grep -v "po" | sort | tr -d "\n"`
 ARCHS=`find arch-options -type f -maxdepth 1 -printf " %f "`
 FORMATS=" html text pdf ps newpdf newps  htmlone latex "
 
@@ -388,9 +392,6 @@ debug=""
 
 # Paths
 
-basedir="$(cd "$(dirname $0)"; pwd)"
-manual_path="$(echo $basedir | sed "s:/build$::")"
-build_path="$manual_path/build"
 tempdir="build.tmp"
 dynamic="${tempdir}/dynamic.ent"
 
@@ -430,7 +431,7 @@ while [ "$1" != "" ]; do
 	*);;
 	esac
 	
-	if [ "$comp" == " --help " ]; then
+	if [ "$comp" == " --help " -o "$comp" == " help " ]; then
 		usage
 		found="y"
 	fi
