@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-15"?>
-<!-- original version: 18383 -->
+<!-- original version: 22841 -->
 
    <sect3 id="mdcfg">
    <title>Configuración de dispositivos multidisco (RAID)</title>
@@ -49,12 +49,15 @@ Es típico el uso de RAID 0 en una partición para edición de vídeo.
 
 <term>RAID 1</term><listitem><para>
 
-Es adecuado para los casos en los que la seguridad sea lo primero. Consiste en
-varias (normalmente dos) particiones del mismo tamaño donde cada partición
-contiene exactamente los mismos datos. Esto significa dos cosas. Primero, si un
-disco falla, todavía tiene una copia de los datos en los discos restantes.
-Segundo, sólo puede usar una fracción de la capacidad disponible (exactamente el
-tamaño de la partición más pequeña del sistema RAID).
+Es adecuado para los casos en los que la seguridad sea el primer
+interés. Consiste en varias (normalmente dos) particiones del mismo tamaño donde
+cada partición contiene exactamente los mismos datos. Esto significa tres
+cosas. Primero, si un disco falla, todavía tiene una copia de los datos en los
+discos restantes. Segundo, sólo puede usar una fracción de la capacidad
+disponible (con más precisión, el tamaño de la partición más pequeña del sistema
+RAID). Tercero, la carga producida por la lectura de ficheros se reparte entre
+los discos, lo que puede ampliar el rendimiento de algunos servidores, como los
+servidores de ficheros, que tienden a tener más carga de lecturas que escrituras.
 
 </para><para>
 
@@ -85,7 +88,7 @@ Resumiendo:
   <entry>2</entry>
   <entry>no</entry>
   <entry>no</entry>
-  <entry>Tamaño del menor dispositivo multiplicado por el número de dispositivos
+  <entry>Tamaño de la menor partición multiplicado por el número de dispositivos
   en el sistema RAID</entry>
 </row>
 
@@ -94,7 +97,7 @@ Resumiendo:
   <entry>2</entry>
   <entry>opcional</entry>
   <entry>sí</entry>
-  <entry>Tamaño del menor dispositivo en el sistema RAID</entry>
+  <entry>Tamaño de la menor partición en el sistema RAID</entry>
 </row>
 
 </tbody></tgroup></informaltable>
@@ -114,17 +117,22 @@ como un dispositivo RAID</guimenuitem> </menuchoice>).
 
 </para><warning><para>
 
-Actualmente no puede usar un metadispositivo para la partición raíz
-(<filename>/</filename>).
+El soporte para MD es una característica del instalador relativamente
+nueva. Puede que experimente algún problema para algunos niveles RAID en
+combinación con algunos gestores de arranque si intenta usar MD para el sistema
+de ficheros raíz (<filename>/</filename>). Es posible que los usuarios
+experimentados puedan solucionar estos problemas ejecutando algún paso de
+configuración o instalación desde una shell.
 
 </para></warning><para>
+
+A continuación, debe elegir <guimenuitem>Configurar RAID software</guimenuitem>
+desde el menú principal de <command>partman</command>.
 
 En la primera pantalla de <command>mdcfg</command> simplemente seleccione
 <guimenu>Crear un dispositivo MD</guimenu>. Se le presentará una lista de tipos
 de MD soportados, de los que debe elegir uno (p.ej. RAID 1). Los siguientes
-pasos dependen del tipo de MD seleccionado. En términos generales, tendrá que
-proporcionar algunos parámetros y elegir las particiones que formarán parte del
-sistema MD.
+pasos dependen del tipo de MD seleccionado.
 
 </para>
 
@@ -156,7 +164,7 @@ tiene tres discos duros de 200 GB dedicados para el MD, cada uno con dos
 particiones de 100 GB, puede combinar la primera partición de los tres discos en
 un RAID 0 (una partición rápida de 300 GB para edición de vídeo) y usar las
 otras tres (2 activas, 1 de reserva) en un RAID 1 (una partición bastante segura
-de 100 GB para /home).
+de 100 GB para <filename>/home</filename>).
 
 </para><para>
 

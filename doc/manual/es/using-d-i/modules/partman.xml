@@ -1,6 +1,7 @@
-<!-- original version: 19059 -->
+<!-- original version: 21579 -->
 
-   <sect3 id="partman"><title>Particionando sus discos</title>
+   <sect3 id="partman">
+   <title>Particionando sus discos</title>
 <para>
 
 Es hora de particionar sus discos. Si no se siente a gusto particionando, o
@@ -11,15 +12,16 @@ simplemente quiere conocer más detalles, lea <xref linkend="partitioning"/>.
 Primero se le dará la oportunidad de particionar automáticamente un disco
 entero. A esto también se le llama particionado <quote>guiado</quote>. Si no
 quiere autoparticionar, elija <guimenuitem>Editar manualmente la tabla de
-particiones</guimenuitem> en el menú y vaya al siguiente párrafo. En otro caso,
-se le preguntará si quiere <guimenuitem>Todos los ficheros en una
-partición</guimenuitem>, <guimenuitem>Partición separada para los directorios
-personales</guimenuitem>, o, si planea tener un <guimenuitem>Sistema
-multiusuario</guimenuitem>. Todos los esquemas tienen sus pros y sus contras,
-algunos se discuten en <xref linkend="partitioning"/>. Si no está seguro, 
-escoja el primero. Tenga en cuenta, que el particionado guiado requiere 
-una cantidad mínima de espacio libre para pode operar. Si no tiene al menos 
-un 1GB de espacio (depende del esquema seleccionado), el particionado guiado
+particiones</guimenuitem> en el menú.
+
+</para><para>
+
+Si elije el particionado guiado, podrá elegir entre los distintos esquemas
+que se muestran en la tabla de debajo. Todos los esquemas tienen sus pros y sus
+contras, algunos se discuten en <xref linkend="partitioning"/>. Si no está
+seguro, escoja el primero. Tenga en mente, que el particionado guiado
+necesita un cierto espacio libre mínimo para operar. Si no le da al menos un 1GB
+de espacio (depende del esquema seleccionado), el particionado guiado
 fallará.
 
 </para>
@@ -40,13 +42,13 @@ fallará.
   <entry>600MB</entry>
   <entry><filename>/</filename>, swap</entry>
 </row><row>
-  <entry>Partición separada para los directorios personales</entry>
+  <entry>Ordenador de escritorio</entry>
   <entry>500MB</entry>
   <entry>
     <filename>/</filename>, <filename>/home</filename>, swap
   </entry>
 </row><row>
-  <entry>Sistema multiusuario</entry>
+  <entry>Estación de trabajo multiusuario</entry>
   <entry>1GB</entry>
   <entry>
     <filename>/</filename>, <filename>/home</filename>,
@@ -57,20 +59,19 @@ fallará.
 
 </tbody></tgroup></informaltable>
 
-<para>
-
-En la siguiente pantalla verá la tabla de particiones, el modo en que se les
-dará formato, y donde se montarán. Si realiza el particionado automático
-debería poder elegir en el menú <guimenuitem>Particionado
-finalizado</guimenuitem> para usar lo que ya está definido.
-
-</para><para arch="ia64">
+<para arch="ia64">
 
 Si escoge el particionado automático para su sistema IA64, habrá una
-partición adicional, con un sistema de ficheros FAT16 y arrancable, para el
+partición adicional, con un sistema de ficheros FAT16 arrancable, para el
 gestor de arranque EFI. Además hay una opción adicional en el menú que permite
 dar formato a los discos para establecer manualmente una partición como una
 partición de arranque EFI.
+
+</para><para>
+
+Después de seleccionar un esquema, la siguiente pantalla le mostrará la nueva
+tabla de particiones, incluyendo a qué particiones se dará formato y cómo, y
+dónde se montarán.
 
 </para><para>
 
@@ -79,26 +80,43 @@ La lista de particiones podría ser como la siguiente:
 <!-- TODO: show some flags here (lightning, skull, smiley) -->
 <informalexample><screen>
   IDE1 master (hda) - 6.4 GB WDC AC36400L
-        #1 primary   16.4 MB    ext2   /boot
-        #2 primary  551.0 MB    swap   swap
-        #3 primary    5.8 GB    ntfs
-           pri/log    8.2 MB    FREE SPACE
+        #1 primary   16.4 MB     ext2       /boot
+        #2 primary  551.0 MB     swap       swap
+        #3 primary    5.8 GB     ntfs
+           pri/log    8.2 MB     FREE SPACE
 
   IDE1 slave (hdb) - 80.0 GB ST380021A
-        #1 primary   15.9 MB    ext3
-        #2 primary  996.0 MB    fat16
-        #3 primary    3.9 GB    xfs    /home
-        #5 logical    6.0 GB    ext3   /
-        #6 logical    1.0 GB    ext3   /var
-        #7 logical  498.8 GB    ext3
-        #8 logical  551.5 GB    swap   swap
-        #9 logical   65.8 GB    ext2
+        #1 primary   15.9 MB     ext3
+        #2 primary  996.0 MB     fat16
+        #3 primary    3.9 GB     xfs        /home
+        #5 logical    6.0 GB     ext3       /
+        #6 logical    1.0 GB     ext3       /var
+        #7 logical  498.8 GB     ext3
+        #8 logical  551.5 GB     swap       swap
+        #9 logical   65.8 GB     ext2
 </screen></informalexample>
 
-Como puede ver, exiten dos discos duros IDE dividos en diversas 
-particiones. Cada línea de partición consiste de el número de
-partición, su tipo, tamaño, banderas opcionales, sistema de ficheros
-y punto de montaje (si fuese el caso).
+Este ejemplo muestra dos discos duros IDE dividos en diversas particiones, el
+primer disco tiene algo de espacio libre. Cada línea de partición consiste de el
+número de partición, su tipo, tamaño, banderas opcionales, sistema de ficheros y
+punto de montaje (si fuese el caso).
+
+</para><para>
+
+Esto termina el particionado guiado. Si está satisfecho con la tabla de
+particiones generada, puede elegir <guimenuitem>Finalizar el particionado y
+escribir los cambios en el disco</guimenuitem> desde el menú para implementar la
+nueva tabla de particiones (como se describe al final de esta sección). Si no le
+gusta, puede elegir <guimenuitem>Deshacer los cambios realizados a las
+particiones</guimenuitem>, para ejecutar el particionamiento guiado de nuevo o
+modificar los cambios propuestos de forma manual tal y como se describe debajo.
+
+</para><para>
+
+Una pantalla similar a la mostrada justo arriba se mostrará si elige particionar
+manualmente excepto que se mostrará su partición actual sin los puntos de
+montaje. Cómo configurar manualmente sus particiones y el uso de estas en su
+sistema Debian nuevo se explica al final de esta sección.
 
 </para><para>
 
@@ -134,22 +152,17 @@ partición. Debido a que es la misma pantalla que cuando crea la
 partición, puede cambiar el mismo conjunto de opciones. Una cosa
 que podría no ser muy obvia a primera impresión es que puede
 redimensionar el tamaño de la partición seleccionando el elemento
-que muestra el tamaño de ésta. Los sistemas de ficheros los cuales
+que muestra el tamaño de ésta. Los sistemas de ficheros que
 se conoce que funcionan con esta opción son por lo menos fat16, fat32,
-ext2, ext3 y swap. Si no le gusta la partición puede eliminarla
-desde su menú.
+ext2, ext3 y swap. Este menú también le permite eliminar una partición.
 
 </para><para>
 
-El menú de particiones también tiene una opción en la parte superior que 
-puede usarse para particionar automáticamente un disco o el espacio libre 
-restante de éste, si es que quiere usar esta facilidad. Asegúrese de crear al 
-menos dos particiones, una para el <emphasis>espacio de intercambio</emphasis> 
-(swap) y otra para el sistema de ficheros <emphasis>raíz</emphasis> (que debe 
-montarse como <filename>/</filename>). Si olvida montar el sistema de 
-ficheros raíz, <command>partman</command> no le dejará continuar hasta que 
-corrija el problema. Sin embargo, esta situación no debería darse, porque
-<command>partman</command> ofrece configuraciones predeterminadas razonables.
+Asegúrese de crear al menos dos particiones: una para el sistema de ficheros
+<emphasis>raíz</emphasis> (que debe montarse en <filename>/</filename>) y otra
+para el <emphasis>espacio de intercambio</emphasis> (swap). Si
+olvida montar el sistema de ficheros raíz, <command>partman</command> no le
+dejará continuar hasta que corrija el problema.
 
 </para><para arch="ia64">
 
@@ -160,15 +173,15 @@ habilite una.
 </para><para>
 
 Las capacidades de <command>partman</command> se pueden extender con módulos
-para el instalador, así que si no están disponibles todas las funcionalidades
-que esperaba, compruebe que ha cargado todos los módulos necesarios
-(ejm. <filename>partman-ext3</filename>, <filename>partman-xfs</filename>, o
-<filename>partman-lvm</filename>).
+para el instalador, pero dependen de la arquitectura de su sistema. Así que si
+no están disponibles todas las funcionalidades que esperaba, compruebe que ha
+cargado todos los módulos necesarios (ejm. <filename>partman-ext3</filename>,
+<filename>partman-xfs</filename>, o <filename>partman-lvm</filename>).
 
 </para><para>
 
-Cuando esté satisfecho con el particionado, seleccione
-<guimenuitem>Particionado terminado</guimenuitem> del menú de
+Cuando esté satisfecho con el particionado, seleccione <guimenuitem>Finalizar el
+particionado y escribir los cambios en el disco</guimenuitem> del menú de
 particionado. Se le presentará un resumen de los cambios realizados en los
 discos y se le pedirá confirmación para crear los sistemas de ficheros pedidos.
 
