@@ -1,54 +1,147 @@
-<!-- original version: 19278 -->
+<!-- original version: 20629 -->
+
+  <sect2 arch="m68k"><title>Elegir un método de instalación</title>
+
+<para>
+
+Algunas subarquitecturas de &arch-title; tienen opción de arrancar
+tanto un núcleo 2.4.x como 2.2.x. Cuando tenga esta opción, intente
+con el núcleo Linux 2.4.x. El instalador también requerirá menos
+memoria cuando use un núcleo 2.4.x puesto que el soporte de 2.2.x 
+requiere un disco ram de tamaño fijo y 2.4.x usa tmpfs.
+
+</para><para>
+
+Si esta usando un núcleo linux 2.2.x, entonces asegúrese que esta usando
+un disco ram construido para éste. Vea <ulink url="&disturl;/main/installer-&architecture;/current/images/MANIFEST">MANIFEST</ulink>.
+También necesitará usar el parámetro de núcleo: &ramdisksize;.
+
+</para><para>
+
+Asegúrese que <userinput>root=/dev/ram</userinput> sea uno de sus 
+parámetros de núcleo.
+
+</para><para>
+
+Si tiene problemas, verifique el 
+<ulink url="&url-m68k-cts-faq;">FAQ &arch-title; de cts del instalador de Debian</ulink>.
+
+</para>
+
+<itemizedlist>
+        <listitem><xref linkend="m68k-boot-amiga"/></listitem>
+        <listitem><xref linkend="m68k-boot-atari"/></listitem>
+        <listitem><xref linkend="m68k-boot-bvme6000"/></listitem>
+        <listitem><xref linkend="m68k-boot-mac"/></listitem>
+        <listitem><xref linkend="m68k-boot-mvme"/></listitem>
+        <listitem><xref linkend="m68k-boot-q40"/></listitem>
+</itemizedlist>
+
+    <sect3 arch="m68k" id="m68k-boot-amiga"><title>Amiga</title>
+<para>
+
+El único método de instalación disponible para Amiga, es desde el disco
+duro. (vea <xref linkend="m68k-boot-hd"/>).
+<emphasis>En otras palabras, el CD-ROM no es arrancable.</emphasis>
+
+</para><para>
+
+Actualmente Amiga no funciona con bogl, de modo que si observa
+mensajes de fallo sobre bogl, necesitará añadir el parámetro de
+núcleo <userinput>debian-installer/framebuffer=false</userinput>.
+
+</para>
+    </sect3>
+
+    <sect3 arch="m68k" id="m68k-boot-atari"><title>Atari</title>
+<para>
+
+El instalador para Atari se puede iniciar tanto desde el disco
+duro (vea <xref linkend="m68k-boot-hd"/>) o desde disquetes
+(vea <xref linkend="boot-from-floppies"/>).
+<emphasis>En otras palabras el CD-ROM no es arrancable.</emphasis>
+
+</para><para>
+
+Actualmente Atari no funciona con bogl, de modo que si observa
+mensajes de fallo sobre bogl, necesitará añadir el parámetro de
+núcleo <userinput>debian-installer/framebuffer=false</userinput>.
+
+</para>
+    </sect3>
+
+    <sect3 arch="m68k" id="m68k-boot-bvme6000"><title>BVME6000</title>
+<para>
+
+El instalador para BVME6000 puede ser iniciado desde un CD-ROM
+(vea <xref linkend="m68k-boot-cdrom"/>), disquetes
+(vea <xref linkend="boot-from-floppies"/>), o la red
+(vea <xref linkend="boot-tftp"/>).
+
+</para>
+    <sect3 arch="m68k" id="m68k-boot-mac"><title>Macintosh</title>
+<para>
+
+El único método de instalación disponible para Mac es desde el 
+disco duro (vea <xref linkend="m68k-boot-hd"/>).
+<emphasis>En otras palabras el CD-ROM no es arrancable.</emphasis>
+No existe una versión 2.4.x del núcleo 2.4.x que funcione para las Mac.
+
+</para>
+    </sect3>
+
+    <sect3 arch="m68k" id="m68k-boot-mvme"><title>MVME147 y MVME16x</title>
+<para>
+
+El instalador para MVEM147 y MVEM16x puede ser iniciado tanto 
+desde disquetes (vea <xref linkend="boot-from-floppies"/>)
+o la red (vea <xref linkend="boot-tftp"/>).
+<emphasis>En otras palabras el CD-ROM no es arrancable.</emphasis>
+
+</para>
+    </sect3>
+
+    <sect3 arch="m68k" id="m68k-boot-q40"><title>Q40/Q60</title>
+<para>
+
+El único método de instalación disponible para Q40/Q60 es desde
+el disco duro (vea <xref linkend="m68k-boot-hd"/>).
+<emphasis>En otras palabras el CD-ROM no es arrancable.</emphasis>
+
+</para>
+    </sect3>
 
 
-  <sect2 arch="m68k"><title>Arrancar desde disco duro</title>
+  <sect2 arch="m68k" id="m68k-boot-hd"><title>Arrancar desde disco duro</title>
 
 &boot-installer-intro-hd.xml;
 
 <para>
 
-El único método de instalación para &arch-title; amiga y mac es
-desde el disco duro. También es una opción para &arch-title; atari.
-<emphasis>En otras palabras el CD-ROM no es arrancable.</emphasis> 
-Estas subarquitecturas podrían tener la posibilidad de elección de
-tres diferentes discos ram: <filename>cdrom</filename> 
-(<filename>root.bin</command> en un cdrom), <filename>hd-media</filename>,
-y <filename>nativehd</filename>. Estos discos ram solamente difieren en
-su fuente de instalación de paquetes. El disco ram <filename>cdrom</filename>
-usa un CD-ROM para obtener paquetes del instalador de Debian. El disco ram
-<filename>hd-media</filename> usa un fichero de image iso de un cdrom
-desde un disco duro. Finalmente, el disco ram <filename>nativehd</filename>
-usa la red para instalar paquetes.
+Por lo menos seis discos ram distintos pueden ser usados para arrancar
+desde el disco duro, tres discos ram distintos cada uno con y sin soporte
+para el núcleo Linux 2.2.x (vea <ulink url="&disturl;/main/installer-&architecture;/current/images/MANIFEST">MANIFEST</ulink> para más detalle).
 
 </para><para>
 
-Algunas subarquitecturas de &arch-title; tienen la opción de arrancar
-tanto desde núcleos Linux 2.4.x o 2.2.x y sus discos ram asociados. 
-Cuando tenga esta opción, primero intente con el núcleo linux 2.4.x y su
-disco ram asociado. Para las Macs M68K no existe un núcleo 2.4.x que funcione.
-
-</para><para>
-
-Asegúrese que <userinput>root=/dev/ram</userinput> sea uno de sus 
-parámetros de núcleo. Amiga y Atari actualmente no funcionan con bogl,
-de modo que si observa errores de bogl, necesitará incluir el parámetro
-de núcleo: <userinput>debian-installer/framebuffer=false</userinput>.
-</para><para>
-
-Si esta usando un núcleo linux 2.2.x, entonces asegúrese que esta usando
-un disco ram construido para éste. Vea <ulink url="&disturl;/main/\
-installer-&architecture;/current/images/MANIFEST">MANIFEST</ulink>.
-También necesitará usar el parámetro de núcleo: &ramdisksize;.
-
-</para><para>
-
-Si tiene problemas, verifique el 
-<ulink url="&url-m68k-cts-faq;">FAQ cts's &arch-title; del instalador de Debian</ulink>.
+Los tres diferentes tipos de discos ram son <filename>cdrom</filename>,
+<filename>hd-media</filename> y <filename>nativehd</filename>. Estos 
+discos ram solamente difieren en la fuente de instalación de paquetes. 
+El disco ram <filename>cdrom</filename> usa un CD-ROM para obtener paquetes
+del instalador de Debian. El disco ram <filename>hd-media</filename> usa un 
+fichero de imagen iso de un cdrom ubicado en el disco duro. Finalmente, el
+disco ram <filename>nativehd</filename> usa la red para instalar paquetes.
 
 </para>
-  </sect2>
 
-  <sect2 arch="m68k"><title>Arrancar desde AmigaOS</title>
+<itemizedlist>
+        <listitem><xref linkend="m68k-boothd-amiga"/></listitem>
+        <listitem><xref linkend="m68k-boothd-atari"/></listitem>
+        <listitem><xref linkend="m68k-boothd-mac"/></listitem>
+        <listitem><xref linkend="m68k-boothd-q40"/></listitem>
+</itemizedlist>
+
+  <sect3 arch="m68k" id="m68k-boothd-amiga"><title>Arrancar desde AmigaOS</title>
 <para>
 
 En <command>Workbench</command>, inicie el proceso de instalación
@@ -59,7 +152,7 @@ en el directorio <filename>debian</filename>.
 
 Debe presionar la tecla &enterkey; dos veces después de que el programa
 instalador de Amiga ha mostrado alguna información en una ventana.
-Depués de esto, la pantalla se volverá gris, esto tomará algunos segundos.
+Después de esto, la pantalla se volverá gris, esto tomará algunos segundos.
 Seguidamente, deberá aparecer una pantalla negra con texto blanco,
 mostrando todo tipo de información sobre la depuración del núcleo.
 Estos mensajes podrían pasar muy rápidamente para que usted los pueda
@@ -68,10 +161,10 @@ iniciar automáticamente el programa de instalación, de modo que puede
 continuar en <xref linkend="d-i-intro"/>.
 
 </para>
-  </sect2>
+  </sect3>
 
 
-  <sect2 arch="m68k"><title>Arrancar desde TOS de Atari</title>
+  <sect3 arch="m68k" id="m68k-boothd-atari"><title>Arrancar desde TOS de Atari</title>
 <para>
 
 En el entorno de escritorio «GEM», inicie el proceso de instalación de Linux
@@ -93,16 +186,27 @@ se deberá iniciar automáticamente el programa de instalación, por
 lo que puede continuar en <xref linkend="d-i-intro"/>.
 
 </para>
-  </sect2>
+  </sect3>
 
 
-  <sect2 arch="m68k"><title>Arrancar desde MacOS 68k</title>
+  <sect3 arch="m68k" id="m68k-boothd-mac"><title>Arrancar desde MacOS</title>
 <para>
 
+Debe mantener el sistema Mac original y arrancar desde éste. Es 
+<emphasis>esencial</emphasis> que, cuando arranque MacOS como
+preparación para el gestor de arranque «Penguin», mantenga presionada
+la tecla <keycap>shift</keycap> para evitar que se carguen las
+extensiones. Si no usa MacOS excepto para cargar Linux, puede hacer
+lo mismo al eliminar todas las extensiones y paneles de control desde
+la carpeta de sistema de Mac. De otro modo las extensiones podrían
+ejecutarse y causar diversos problemas con el núcleo Linux en ejecución.
+
+</para><para>
+
 Las Mac requieren el gestor de arranque <command>Penguin</command>.
-Si no puede tratar un archivo <command>Stuffit</command>, use
-&penguin19.hfs; que es una imagen de disco hfs con <command>Penguin</command>
-desempaquetado.
+Si no tiene las herramientas para tratar un archivo 
+<command>Stuffit</command>, use &penguin19.hfs; que es una imagen de
+disco hfs con <command>Penguin</command> desempaquetado.
 <xref linkend="create-floppy"/> describe como copiar esta imagen
 a un disquete.
 
@@ -124,9 +228,24 @@ la configuración e inicie el arranque usando la opción
 
 </para><para>
 
+Para definir los parámetros de arranque en «Penguin», elija
+ <guimenu>File</guimenu> -&gt; <guimenuitem>Settings...</guimenuitem>, 
+luego cambie a la pestaña <guilabel>Options</guilabel>. Los parámetros de 
+arranque se pueden escribir en el área de introducción de texto. Si desea 
+usar estos valores en cada ocasión, elija <guimenu>File</guimenu> -&gt; 
+<guimenuitem>Save Settings as Default</guimenuitem>.
+
+</para><para>
+
+Cierre el diálogo <guilabel>Settings</guilabel>, guarde las configuraciones
+e inicie el arranque usa el elemento <guimenuitem>Boot Now</guimenuitem> en
+el menú <guimenu>File</guimenu>.
+
+</para><para>
+
 El gestor de arranque <command>Penguin</command> mostrará información de
-depuración en la ventana. Después de esto, la pantalla se volverá gris
-y tendra que esperar algunos segundos. Seguidamente, aparecerá una 
+depuración en una ventana. Después de esto, la pantalla se volverá gris
+y tendrá que esperar algunos segundos. Seguidamente, aparecerá una
 pantalla negra con texto blanco mostrando diversa información sobre
 depuración del núcleo. Estos mensajes podrían aparecer muy rápido para
 que los pueda leer, pero no se preocupe esto es normal. Después de algunos
@@ -134,42 +253,31 @@ segundos se iniciará automáticamente el programa de instalación, por
 lo que puede continuar en <xref linkend="d-i-intro"/>.
 
 </para>
-  </sect2>
 
-  <sect2 arch="m68k"><title>Parámetros de arranque de Penguin</title>
+  </sect3>
+
+    <sect3 arch="m68k" id="m68k-boothd-q40"><title>Arrancar desde Q40/Q60</title>
+
 <para>
 
-En el programa de arranque «Penguin», elija <guimenu>File</guimenu> -&gt;
-<guimenuitem>Settings...</guimenuitem>, luego cambie a la pestaña
-<guilabel>Options</guilabel>. Los parámetros de arranque se pueden
-escribir en el área de introducción de texto. Si desea usar estos valores
-en cada ocasión, elija <guimenu>File</guimenu> -&gt; 
-<guimenuitem>Save Settings as Default</guimenuitem>.
+FIXME
+
+</para><para>
+
+El programa de instalación deberá iniciarse automáticamente, de modo que
+puede continuar en <xref linkend="d-i-intro"/>.
 
 </para>
+
+    </sect3>
   </sect2>
 
-  <sect2 arch="m68k"><title>Limitaciones de Macintosh</title>
-<para>
 
-En el caso de Macintosh, debe mantener el sistema Mac original y
-arrancar desde él. Es <emphasis>esencial</emphasis> que, cuando se
-arranque MacOS en preparación para el arranque del gestor de arranque
-«Penguin», mantenga presionada la tecla <keycap>shift</keycap> para
-evitar que se carguen las extensiones. Si no usa MacOS excepto para
-cargar Linux, puede obtener el mismo resultado al quitar las extensiones 
-y paneles de control desde la carpeta de sistema Mac. De otro modo las 
-extensiones ser podrían ejecutar y causar diversos problemas con el 
-núcleo Linux en ejecución.
-
-</para>
-  </sect2>
-
-  <sect2 arch="m68k"><title>Arrancar desde un CD-ROM</title>
+  <sect2 arch="m68k" id="m68k-boot-cdrom"><title>Arrancar desde un CD-ROM</title>
 <para>
 
 Actualmente, la única subarquitectura &arch-title; que soporta
-arranque desde CD-ROM es «BVME6000».
+arranque desde CD-ROM es BVME6000.
 
 </para>
 
@@ -178,7 +286,7 @@ arranque desde CD-ROM es «BVME6000».
   </sect2>
 
 
-  <sect2 arch="m68k" id="boot-tftp"><title>Arranque con TFTP</title>
+  <sect2 arch="m68k" id="boot-tftp"><title>Arrancar con TFTP</title>
 
 &boot-installer-intro-net.xml;
 
