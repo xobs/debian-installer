@@ -33,32 +33,39 @@ How to get files to be translated
 - Go to the first reference page:  
   http://people.debian.org/~seppy/d-i/translation-status.html
 
-- After reading informations there, start by 1st stage translations by
-  using 1st stage resources and more particularly 
+- After reading informations there, start by the 1st stage translations by
+  using the 1st stage resources and more particularly 
   http://people.debian.org/~barbier/d-i/l10n/xx 
   where xx is your language ISO code (or xx_YY for languages which have 
-  flavours such as pt_BR or zh_*).
+  flavours, such as pt_BR or zh_*).
 
   If the 1st stage pages are not shown for your language, this means that 
-  no translation has been done yet for it. Ask for triggering it
+  no translation has been done yet for it. Ask for it to be activated
   on debian-boot@lists.debian.org.
 
 - Look at the STATUS.utf8.txt file
 
-- For files reported as missing, go pick up the POT file at
+- For files reported as missing, go and pick up the POT file at
   http://people.debian.org/~barbier/d-i/l10n/POT/
  
   Example: 
   "Missing file: debian-installer/packages/countrychooser/debian/po/ar.po"
  --> pick up http://people.debian.org/~barbier/d-i/l10n/POT/countrychooser.pot
 
- Rename this file to xx.po and start working on it
+  Rename this file to xx.po and start working on it
+
+  Don't forget to add the po metadata (Language-Team, Last-Translator, etc.)
+  so it can be used to keep track of who is in charge of the translations.
 
 - For files reported as incomplete, get the file in
   http://people.debian.org/~barbier/d-i/l10n/xx and complete it. Don't
-  forget to contact the original translator (see PO file header)
+  forget to first contact the original translator (see the PO file header
+  metadata, specifically 'Last-Translator'). You should refrain from
+  translating/revising a file until you have talked with the original
+  translator (he might be already working on it, or will do it soon). This
+  avoids duplicate work being done.
 
- Rename this file to xx.po and start working on it
+  Rename this file to xx.po and start working on it
 
 - Getting 2nd stage files
  * base-config: hosted on alioth. Uses CVS
@@ -74,7 +81,7 @@ This document is not intended to be a tutorial for gettext-related
 stuff. Please look for documentation of PO editing software such as
 KBabel, gtranslator, PoEdit, EMacs PO-mode, etc.
 
-Please use a dedicated PO-editing tool unless you become very familiar
+Please use a dedicated PO-editing tool until you become very familiar
 with translation work.
 
 Don't forget to properly fill up the PO files header, especially the
@@ -85,10 +92,14 @@ in translation maintenance.
 
 ALWAYS update the PO-Revision-Date field : it is now used for detecting
 changed translations and triggering new packages releases.
+(Many gettext editors do this automatically)
 
 If a translation team exists for your language, WORK WITH THEM. First
 check the debian-l10n-xxxxx mailing list where xxxxx is your language
 name in english (e.g. debian-l10n-polish, debian-l10n-portuguese...).
+The list of all available translation teams is available at
+http://lists.debian.org/i18n.html
+If in doubt, contact debian-i18n@lists.debian.org for assistance.
 
 For general translation issues or for finding other translators for
 your language, you may also use the debian-i18n mailing list (don't
@@ -98,12 +109,12 @@ How to remain consistent among packages
 ---------------------------------------
 
 Some strings are identical in two or more packages. Please try to
-consistently translate them.
+translate them consistently.
 
 The ranking page (http://people.debian.org/~barbier/d-i/l10n/rank.txt) will
 show you the merged file status when your translation reaches 100%.
 
-If you reach 100% and nothing show up there, then you're fine : all
+If you reach 100% and nothing show up there, then you're fine: all
 identical strings have been translated.
 
 If you see something like: (Merged PO file: 800t16f), then you got
@@ -191,6 +202,11 @@ will considerably help the commiters work.
 
 PACKAGES LIST
 -------------
+
+ The following list is provided specially for new translation teams
+ that have not started translating d-i yet. The udeb packages are shown
+ by priority order. You should start first by translating those packages
+ on the top of the list and then proceed downwards.
 
  Language choice 
  ---------------
@@ -362,6 +378,10 @@ countrychooser/iso-codes.updates and commit it. However, when
 the upstream iso-codes package includes your translation, please
 REMOVE the interim file from debian-installer CVS.
 
+Note: You can also retrieve a full copy from the iso-codes CVS using Alioth,
+for more information see http://alioth.debian.org/scm/?group_id=1438
+
+
  kbd-chooser/console-data
  ------------------------
 
@@ -387,6 +407,11 @@ you discover such packages, and fix it if you find errors.
 
 --------------------------------------------------------------------------
 Changelog:
+
+2004/03/24 Javier Fernandez-Sanguino
+  - Minor changes: typo fixes and some more verbosity in some places.
+  - Point people to the debian-i18n mailing list.
+  - Added pointer to iso-codes CVS access (took me a bit to find it)
 
 2004/03/24 Christian Perrier
  - Major update:
@@ -417,7 +442,7 @@ Changelog:
  - new title
 
 2004/01/20 Javier Fernandez-Sanguino
- - added more packages and mentioned the 'by priority' and 'popular' criteria)
+ - added more packages and mentioned the 'by priority' and 'popular' criteria
 
 2003/12/20 Christian Perrier
  - updated packages list and more information
