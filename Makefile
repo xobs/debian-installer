@@ -364,6 +364,7 @@ $(FLOPPY_IMAGE):
 	cp syslinux.cfg $(TMP_MNT)/
 	todos $(TMP_MNT)/syslinux.cfg
 	umount $(TMP_MNT)
+	# Make the floppy bootable. This command must run as root
 	syslinux $(SYSLINUX_OPTS) $(FLOPPY_IMAGE)
 
 # Write image to floppy
