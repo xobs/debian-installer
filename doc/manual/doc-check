@@ -23,7 +23,7 @@ sub checkdiff
 	$plrev and $enrev or return;
 	if ( "$plrev" ne "$enrev" ) {
 		if ($opt_d) {
-			my $s = "cvs diff -b -u -r $plrev -r $enrev $enfname";
+			my $s = "svn diff -r $plrev:$enrev $enfname";
 			warn "running $s:\n" if ($opt_V);
 			system($s);
 		} else {
@@ -76,7 +76,7 @@ sub process
 	checkdiff($plfname, $enfname);
 }
 File::Find::find({ wanted => \&process, no_chdir => 1 }, 'en');
-checkdiff("install.$lang.xml", "install.en.xml");
+checkdiff("build/install.$lang.xml", "build/install.en.xml");
 #checkdiff("release-notes.$lang.sgml","release-notes.sgml");
 #checkdiff("index.$lang.html.m4","index.en.html.m4");
 #checkdiff("dselect-beginner.$lang.sgml","dselect-beginner.sgml");
