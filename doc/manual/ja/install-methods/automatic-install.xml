@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 21673 -->
+<!-- original version: 22580 -->
 
  <sect1 id="automatic-install">
  <title>自動インストール</title>
@@ -12,8 +12,8 @@ automatic installations. Debian packages intended for this include
 <classname>fai</classname> (which uses an install server),
 <classname>replicator</classname>,
 <classname>systemimager</classname>,
-<classname>autoinstall</classname>, and
-<classname>the Debian Installer</classname>.
+<classname>autoinstall</classname>, and 
+the Debian Installer itself.
 -->
 複数のコンピュータにインストールするため、完全自動インストールが可能です。
 このための Debian パッケージは、
@@ -21,7 +21,7 @@ automatic installations. Debian packages intended for this include
 <classname>replicator</classname>,
 <classname>systemimager</classname>,
 <classname>autoinstall</classname>, 
-<classname>Debian インストーラ</classname> です。
+それに Debian インストーラそのものです。
 
 </para>
 
@@ -43,16 +43,28 @@ preconfiguration ファイルは、ネットワークやリムーバブルメディアから読み込み、
 
 <!--
 The preconfiguration file is in the format used by the
-debconf-set-selections command. The easiest way to generate a
-preconfiguration file is to do a manual install, and then use
-<filename>debconf-get-selections</filename>,
+debconf-set-selections command. A well documented and working example that
+you can edit is in <xref linkend="example-preseed"/>.
+-->
+preconfiguration ファイルは、
+debconf-set-selections コマンドで使用される形式のファイルです。
+編集できるよく説明されていて動作するサンプルは、
+<xref linkend="example-preseed"/> にあります。
+
+</para><para>
+
+<!--
+The preconfiguration file is in the format used by the
+debconf-set-selections command, and one way to get a complete file listing
+all the values that can be preseeded is to do a manual install,
+and then use <filename>debconf-get-selections</filename>,
 from the <classname>debconf-utils</classname> package,
 to dump both the debconf database and the cdebconf
 database in /var/log/debian-installer/cdebconf to a single file:
 -->
 preconfiguration ファイルは、
 debconf-set-selections コマンドで使用される形式のファイルです。
-preconfiguration ファイルを作る簡単な方法は、
+あらかじめ設定するすべての値を記述した完全なファイルを得る方法は、
 マニュアルインストールを行ったあとに、
 <filename>debconf-get-selections</filename> 
 (<classname>debconf-utils</classname> パッケージ) 
@@ -64,6 +76,18 @@ preconfiguration ファイルを作る簡単な方法は、
 debconf-get-selections --installer > file
 debconf-get-selections >> file
 </screen></informalexample>
+
+</para><para>
+
+<!--
+However, a file generated in this manner will have some items that should
+not be preseeded, and the file in <xref linkend="example-preseed"/> is a
+better starting place for most users.
+-->
+しかしこの方法で生成したファイルでは、
+いくつかの項目が設定されない可能性があります。
+そのためほとんどのユーザにとっては、取っかかりとして、
+<xref linkend="example-preseed"/> にあるファイルの方がよいでしょう。
 
 </para><para>
 
@@ -81,18 +105,18 @@ web サーバに配置したり、インストーラの起動メディアにコピーできます。
 </para><para>
 
 <!--
-To make the installer use a preconfiguration file download from the
-network, add preseed/url=http://url/to/config to the kernel boot parameters.
-Of course the preconfiguration will not take effect until the installer
-manages to set up the network to download the file, so this is most useful
-if the installer can set up the network via DHCP without asking any
-questions. You may want to set the installation priority to critical to
-avoid any questions while the network is being configured.
-See <xref linkend="installer-args"/>.
+To make the installer use a preconfiguration file downloaded from the
+network, add preseed/url=http://url/to/preseed.cfg to the kernel boot
+parameters. Of course the preconfiguration will not take effect until the
+installer manages to set up the network to download the file, so this is
+most useful if the installer can set up the network via DHCP without asking
+any questions. You may want to set the installation priority to critical to
+avoid any questions while the network is being configured. See 
+<xref linkend="installer-args"/>.
 -->
 ネットワークからダウンロードした preconfiguration ファイルを、
 インストーラに使うようにさせるには、
-カーネルの起動パラメータに preseed/url=http://url/to/config と追加します。
+カーネルの起動パラメータに preseed/url=http://url/to/preseed.cfg と追加します。
 もちろん、ファイルをダウンロードるように、
 インストーラがネットワークをセットアップするまで、
 preconfiguration は効果を現しません。
@@ -107,24 +131,26 @@ DHCP でネットワークをセットアップできるときに最も有用になります。
 <!--
 To place a preconfiguration file on a CD, you would need to remaster the
 ISO image to include your preconfiguraton file. See the manual page for
-mkisofs for details.
+mkisofs for details. Alternatively, put the preseed file on a floppy, and
+use preseed/file=/floppy/preseed.cfg
 -->
 CD に preconfiguration ファイルを置くために、
 preconfiguratonファイルを含む ISO イメージのマスターを、
 新たに作る必要があるでしょう。
 詳細は mkisofs のマニュアルを参照してください。
-
+また、フロッピーに preseed ファイルを置いて、
+preseed/file=/floppy/preseed.cfg とすることもできます。
 </para><para arch="i386">
 
 <!--
 If you'll be booting from a USB memory stick, then you can simply copy your
 preconfiguration file onto the memory stick's filesystem, and edit the
-syslinux.cfg file to add preseed/file=/hd-media/config to the kernel boot
+syslinux.cfg file to add preseed/file=/hd-media/preseed.cfg to the kernel boot
 parameters.
 -->
 USB メモリスティックから起動するのであれば、
 単にメモリスティックのファイルシステムに preconfiguration ファイルをコピーし、
-カーネル起動パラメータに preseed/file=/hd-media/config を加えるよう、
+カーネル起動パラメータに preseed/file=/hd-media/preseed.cfg を加えるよう、
 syslinux.cfg ファイルを編集できます。
 
 </para>

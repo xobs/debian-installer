@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 20465 -->
+<!-- original version: 22232 -->
 
  <sect1 condition="supports-tftp" id="install-tftp">
  <title>TFTP ネットブート用ファイルの準備</title>
@@ -216,11 +216,13 @@ TFTP ブートで Pre-boot Execution Environment (PXE) 法を使用するには、
 </para></note><para arch="mips">
 
 <!--
-If your TFTP server is a GNU/Linux box running Linux 2.4.X you'll need
-to set the following on your server:
+If you intend to install Debian on an SGI machine and your TFTP server is a
+GNU/Linux box running Linux 2.4, you'll need to set the following on your
+server:
 -->
-TFTP サーバが Linux 2.4.X で動作している GNU/Linux マシンの場合は、
-次の設定を行って Path MTU discovery を無効にしなければなりません。
+SGI マシンに Debian をインストールする際、
+TFTP サーバが Linux 2.4 で動作している GNU/Linux の場合は、
+次の設定を行う必要があります。
 
 <informalexample><screen>
 
@@ -572,6 +574,21 @@ SGI Indy では、TFTP ファイルの名前の指定を
 
 </para>
    </sect3>
+
+   <sect3 arch="mips">
+   <title>Broadcom BCM91250A TFTP ブート</title>
+<para>
+
+<!--
+You don't have to configure DHCP in a special way because you'll pass the
+full path of the file to the loaded to CFE.
+-->
+CFE にロードするファイルのフルパスを渡しているため、
+特殊な DHCP の設定をする必要はありません。
+
+</para>
+   </sect3>
+
   </sect2>
 
 <!-- FIXME: commented out since it seems too old to be usable and a current
