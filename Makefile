@@ -443,6 +443,7 @@ daily_build:
 	for type in $(ALL_TYPES); do \
 		$(MAKE) sub_daily_build TYPE=$$type USER_MOUNT_HACK=$(shell pwd)/$(DEST)/tmp-mnt.img; \
 	done
+	scp -q -B $(TMP)/vmlinuz $(UPLOAD_DIR)/images/
 	mail $(shell whoami) -s "today's build info" < $(DEST)/info
 
 sub_daily_build:
@@ -457,7 +458,7 @@ sub_daily_build:
 	scp -q -B $(DEST)/$(TYPE).log $(UPLOAD_DIR)
 	scp -q -B $(DEST)/$(TYPE)-debian-installer.tar.gz \
 		$(UPLOAD_DIR)/$(TYPE)-debian-installer-$(shell date +%Y%m%d).tar.gz
-	scp -q -B $(FLOPPY_IMAGE) $(UPLOAD_DIR)/images/
+	scp -q -B $(FLOPPY_IMAGE) $(INITRD) $(UPLOAD_DIR)/images/
 	scp -q -B $(DEST)/$(TYPE).info \
 		$(UPLOAD_DIR)/$(TYPE).info-$(shell date +%Y%m%d)
 	echo "Type: $(TYPE)" >> $(DEST)/info
