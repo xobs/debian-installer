@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23678 -->
+<!-- original version: 25152 -->
 
  <sect1 id="kernel-baking"><title>新しいカーネルのコンパイル</title>
 <para>
@@ -37,17 +37,6 @@ APM や SMP など、
 既存のカーネルがサポートしていないハードウェアや機能を利用するため
 
 </para></listitem>
-
-<listitem arch="i386"><para>
- 
-<!--
-The compact and idepci flavors don't come with sound. Although
-the vanilla kernel does, it might not work for other reasons.  
--->
-compact 版や idepci 版ではサウンドに対応していません。
-vanilla kernel では対応していますが、別の理由で動作しないかもしれません。
-
-</para></listitem>
 <listitem><para>
 
 <!--
@@ -62,9 +51,9 @@ time
 
 <!--
 use options of the kernel which are not supported by the default
-kernel (such as network firewalling)
+kernel (such as high memory support)
 -->
-(ネットワークでのファイアウォール機能など)
+(ハイメモリサポートなど)
 デフォルトのカーネルでサポートされていない機能を利用するため
 
 </para></listitem>
@@ -88,6 +77,9 @@ impress your friends, try new things
 
 </para>
 
+<!--
+  <sect2><title>Kernel Image Management</title>
+-->
   <sect2><title>カーネルイメージの管理</title>
 <para>
 
@@ -134,8 +126,8 @@ log of the active config file for the build.
 
 <!--
 Note that you don't <emphasis>have</emphasis> to compile your kernel
-the ``Debian way''; but we find that using the packaging system to
-manage your kernel is actually safer and easier.  In fact, you can get
+the <quote>Debian way</quote>; but we find that using the packaging system
+to manage your kernel is actually safer and easier.  In fact, you can get
 your kernel sources right from Linus instead of
 <classname>kernel-source-&kernelversion;</classname>, yet still use the
 <classname>kernel-package</classname> compilation method.
@@ -163,57 +155,65 @@ contains a brief tutorial.
 </para><para>
 
 <!--
-Hereafter, we'll assume your kernel source will be located in
-<filename>/usr/local/src</filename> and that your kernel version is
-&kernelversion;.  As root, create a directory under
-<filename>/usr/local/src</filename> and change the owner of that
-directory to your normal non-root account.  As your normal non-root
-account, change your directory to where you want to unpack the kernel
-sources (<userinput>cd /usr/local/src</userinput>), extract the kernel
-sources (<userinput>tar xjf
-/usr/src/kernel-source-&kernelversion;.tar.bz2</userinput>), change your
-directory to it (<userinput>cd
-kernel-source-&kernelversion;/</userinput>). 
+Hereafter, we'll assume you have free rein over your machine and will
+extract your kernel source to somewhere in your home directory<footnote>
 -->
-ここでは、バージョン &kernelversion; のカーネルソースが
-<filename>/usr/local/src</filename> にあると仮定します。
-まずは root アカウントで <filename>/usr/local/src</filename>
-ディレクトリを作成し、そのディレクトリの所有者を、通常使う root ではない
-アカウントに変更してください。続いて通常のアカウントで、
-カーネルソースを展開するディレクトリに
-移動 (<userinput>cd /usr/local/src</userinput>) し、カーネルソースを
-展開 (<userinput>tar xjf
-/usr/src/kernel-source-&kernelversion;.tar.bz2</userinput>) してから、
-そのディレクトリに移動 (<userinput>cd
-kernel-source-&kernelversion;/</userinput>) します。
+以降では、あなたがマシン上で行動する自由があって、ホームディレクトリの
+どこかにカーネルソースを展開すると仮定します。<footnote>
+
+<para>
+
+<!--
+There are other locations where you can extract kernel sources and build
+your custom kernel, but this is easiest as it does not require special
+permissions.
+-->
+他にも、カーネルソースを展開してカスタムカーネルをビルドできる場所は
+ありますが、特別なパーミッションを必要としないここが最も簡単です。
+
+</para>
+
+<!--
+</footnote>. We'll also assume that your kernel version is
+&kernelversion;. Make sure you are in the directory to where you want to
+unpack the kernel sources, extract them using <userinput>tar xjf
+/usr/src/kernel-source-&kernelversion;.tar.bz2</userinput> and change
+to the directory <filename>kernel-source-&kernelversion;</filename>
+that will have been created.
+-->
+</footnote>。また、カーネルバージョンが &kernelversion; だと仮定します。
+カーネルソースを取り出したいディレクトリにいることを確認してから、
+<userinput>tar xjf /usr/src/kernel-source-&kernelversion;.tar.bz2</userinput>
+としてソースを展開し、作成された <filename>kernel-source-&kernelversion;</filename> 
+ディレクトリに移動してください。
 
 </para><para>
 
 <!--
 Now, you can configure your kernel.  Run <userinput>make
-xconfig</userinput> if X11 is installed, configured and being run,
+xconfig</userinput> if X11 is installed, configured and being run; run
 <userinput>make menuconfig</userinput> otherwise (you'll need
-<classname>ncurses-dev</classname> installed). Take the time to read
+<classname>libncurses5-dev</classname> installed). Take the time to read
 the online help and choose carefully. When in doubt, it is typically
 better to include the device driver (the software which manages
 hardware peripherals, such as Ethernet cards, SCSI controllers, and so
 on) you are unsure about.  Be careful: other options, not related to a
 specific hardware, should be left at the default value if you do not
-understand them.  Do not forget to select ``Kernel module loader'' in
-``Loadable module support'' (it is not selected by default).  If not
-included, your Debian installation will experience problems.
+understand them.  Do not forget to select <quote>Kernel module loader</quote>
+in <quote>Loadable module support</quote> (it is not selected by default).
+If not included, your Debian installation will experience problems.
 -->
 次にカーネルコンパイルの設定を行います。X11 のインストールおよび設定が
 済んでいて、X11 を実行中の場合は <userinput>make xconfig</userinput> を、
 そうでない場合は <userinput>make menuconfig</userinput> を実行します (後者では
-<classname>ncurses-dev</classname> がインストールされている必要があります)。
+<classname>libncurses5-dev</classname> がインストールされている必要があります)。
 オンラインヘルプを時間をかけて読み、注意深く選択してください。
 一般的に、迷った場合はそのデバイスドライバ (イーサネットカードや、
 SCSI コントローラなどの周辺機器を制御するソフトウェア) を入れた方が
 よいでしょう。なお注意していただきたいのですが、
 特定のハードウェアに関係のないその他のオプションで、
 よく理解できないものはデフォルトの値のままにしておいてください。
-また、"Loadable module support" にある "Kernel module loader"
+また、<quote>Loadable module support</quote> にある <quote>Kernel module loader</quote>
 (デフォルトでは選択されていません) は忘れずに選択してください。
 さもないと、Debian のインストールに問題が生じることもあります。
 
@@ -231,18 +231,18 @@ parameters.  To do that, do <userinput>make-kpkg clean</userinput>.
 <!--
 Now, compile the kernel: 
 <userinput>fakeroot make-kpkg -\-revision=custom.1.0 kernel_image</userinput>. 
-The version number of ``1.0'' can be changed at will; this is just a
-version number that you will use to track your kernel builds.
-Likewise, you can put any word you like in place of ``custom'' (e.g.,
-a host name).  Kernel compilation may take quite a while, depending on
+The version number of <quote>1.0</quote> can be changed at will; this is just
+a version number that you will use to track your kernel builds.
+Likewise, you can put any word you like in place of <quote>custom</quote>
+(e.g., a host name).  Kernel compilation may take quite a while, depending on
 the power of your machine.
 -->
 さあ、カーネルをコンパイルしましょう。
 <userinput>fakeroot make-kpkg --revision=custom.1.0 kernel_image</userinput>
-を実行してください。バージョン番号 ``1.0'' は自由に変えられます。この番号は、
-構築したカーネルを後から確認できるようにするためのものだからです。
-同様に、``custom'' の箇所にもお好みのキーワード (例えばホスト名など) を
-使うことができます。マシンのパワーにもよりますが、カーネルのコンパイルには
+を実行してください。バージョン番号 <quote>1.0</quote> は自由に変えられます。
+この番号は、構築したカーネルを後から確認できるようにするためのものだからです。
+同様に、<quote>custom</quote> の箇所にもお好みのキーワード (例えばホスト名など)
+を使うことができます。マシンのパワーにもよりますが、カーネルのコンパイルには
 かなり時間がかかります。
 
 </para><para condition="supports-pcmcia">
@@ -270,7 +270,7 @@ like any package.  As root, do <userinput>dpkg -i
 ../kernel-image-&kernelversion;-<replaceable>subarchitecture</replaceable>_custom.1.0_&architecture;.deb</userinput>.
 The <replaceable>subarchitecture</replaceable> part is an optional
 sub-architecture,
-<phrase arch="i386"> such as ``i586'', </phrase>
+<phrase arch="i386"> such as <quote>i586</quote>, </phrase>
 depending on what kernel options you set.
 <userinput>dpkg -i kernel-image...</userinput> will install the
 kernel, along with some other nice supporting files.  For instance,
@@ -289,7 +289,7 @@ PCMCIA, you'll need to install that package as well.
 ../kernel-image-&kernelversion;-<replaceable>subarchitecture</replaceable>_custom.1.0_&architecture;.deb</userinput>
 を実行してください。<replaceable>subarchitecture</replaceable> は、
 カーネルのオプションで設定された
-<phrase arch="i386"> ``i586'' のような </phrase>
+<phrase arch="i386"> <quote>i586</quote> のような</phrase>
 任意のサブアーキテクチャを表しています。
 また <userinput>dpkg -i kernel-image...</userinput> とすると、カーネルと一緒に
 役に立つ補助的なファイルもいくつかインストールされます。例えば
