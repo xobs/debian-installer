@@ -387,6 +387,7 @@ $(STAMPS)tree-$(targetstring)-stamp: $(STAMPS)tree-unpack-$(targetstring)-stamp
 	# userdevfs uses userdevfs-dev.txt w/genext2fs
 ifndef USERDEVFS
 	mknod $(TREE)/dev/console c 5 1
+	mknod $(TREE)/dev/null c 1 3
 endif
 
 ifdef EXTRADRIVERS
