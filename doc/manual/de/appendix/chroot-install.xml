@@ -1,46 +1,49 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23059 untranslated -->
+<!-- original version: 23059 -->
 
  <sect1 id="linux-upgrade">
- <title>Installing &debian; from a Unix/Linux System</title>
+ <title>&debian; von einem anderen Unix/Linux-System aus installieren</title>
 
 <para>
 
-This section explains how to install &debian; from an existing
-Unix or Linux system, without using the ncurses-based, menu-driven
-installer as explained in the rest of the manual. This "cross-install"
-HOWTO has been requested by users switching to &debian; from
-Redhat, Mandrake, and SUSE. In this section some familiarity with
-entering *nix commands and navigating the file system is assumed. In
-this section, <prompt>$</prompt> symbolizes a command to be entered in
-the user's current system, while <prompt>#</prompt> refers to a
-command entered in the Debian chroot.
+Dieses Kapitel beschreibt, wie man &debian; von einem vorhandenen
+Unix- oder Linux-System aus installiert, ohne den ncurses-basierten,
+menü-geführten Installer zu verwenden, der im Rest dieses Handbuchs
+beschrieben wird. Dieses »Einmal-quer-durch-die-Installation«-HOWTO
+wurde erbeten von Leuten, die von Redhat, Mandrake oder SUSE zu
+&debian; wechseln. In diesem Kapitel gehen wir davon aus, dass Sie
+ein wenig Erfahrung mit *nix-Befehlen haben sowie mit der Navigation
+durch das Dateisystem. Ein <prompt>$</prompt> in diesem Abschnitt
+symbolisiert einen Befehl, der im Homeverzeichnis des Benutzers
+ausgeführt wird, während <prompt>#</prompt> bedeutet, dass das
+Kommando im Debian-chroot ausgeführt wird.
 
 </para><para>
 
-Once you've got the new Debian system configured to your preference,
-you can migrate your existing user data (if any) to it, and keep on
-rolling. This is therefore a "zero downtime" &debian;
-install. It's also a clever way for dealing with hardware that
-otherwise doesn't play friendly with various boot or installation
-media.
+Sobald Sie das neue Debian-System nach Ihren Wünschen konfiguriert haben,
+können Sie Ihre vorhandenen eigenen Dateien hinüber verschieben und loslegen.
+Deswegen wird dies auch die »zero-downtime«-&debian;-Installation (Installation
+ohne eine Zeitspanne, während das System nicht verfügbar ist) genannt. Es ist
+ebenso ein geschickter Weg, mit Hardwarekomponenten zurechtzukommen, die sich
+sonst nicht gut mit verschiedenen Boot- oder Installationsmedien vertragen.
 
 </para>
 
   <sect2>
-  <title>Getting Started</title>
+  <title>Es geht los!</title>
 <para>
 
-With your current *nix partitioning tools, repartition the hard
-drive as needed, creating at least one filesystem plus swap. You
-need at least 150MB of space available for a console only install,
-or at least 300MB if you plan to install X.
+Benutzen Sie die *nix-Partitionierungsprogramme des vorhandenen
+Systems, um Ihre Festplatte nach Bedarf neu zu partitionieren;
+erstellen Sie zumindest ein neues Dateisystem plus Swap. Sie benötigen
+mindestens 150MB Speicher für eine Nur-Konsolen-Installation oder
+ein Minimum von 300MB, wenn Sie vorhaben, X zu installieren.
 
 </para><para>
 
-To create file systems on your partitions. For example, to create an 
-ext3 file system on partition <filename>/dev/hda6</filename> (that's  
-our example root partition):
+Um ein Dateisystem auf einer Partition zu erstellen, zum Beispiel ein
+ext3-Dateisystem auf <filename>/dev/hda6</filename> (dies soll in diesem
+Beispiel unsere root-Partition sein):
 
 <informalexample><screen>
 
@@ -48,12 +51,13 @@ our example root partition):
 
 </screen></informalexample>
 
-To create an ext2 file system instead, omit <userinput>-j</userinput>.
+Um stattdessen ein ext2-Dateisystem zu erzeugen, lassen Sie das
+<userinput>-j</userinput> weg.
 
 </para><para>
 
-Initialize and activate swap (substitute the partition number for 
-your intended Debian swap partition):
+Initialisieren und aktivieren Sie den Swap (passen Sie die Partitionsnummer
+für Ihre geplante Debian-Swap-Partition an):
 
 <informalexample><screen>
 
@@ -65,10 +69,11 @@ your intended Debian swap partition):
 
 </para><para>
 
-Mount one partition as <filename>/mnt/debinst</filename> (the
-installation point, to be the root (<filename>/</filename>) filesystem
-on your new system). The mount point name is strictly arbitrary, it is
-referenced later below.
+Hängen Sie eine Partition als <filename>/mnt/debinst</filename> ins
+Dateisystem ein (das Installationsverzeichnis; es wird das
+root-(<filename>/</filename>)-Dateisystem des neuen Debian). Der
+Einhängepunkt (<filename>/mnt/debinst</filename>) ist rein willkürlich
+gewählt, es wird später nach darauf verwiesen.
 
 <informalexample><screen>
 
@@ -81,26 +86,29 @@ referenced later below.
   </sect2>
 
   <sect2>
-  <title>Install <command>debootstrap</command></title>
+  <title><command>debootstrap</command> installieren</title>
 <para>
 
-The tool that the Debian installer uses, which is recognized as the
-official way to install a Debian base system, is
-<command>debootstrap</command>. It uses <command>wget</command>, but
-otherwise depends only on <classname>/bin/sh</classname>. Install
-<command>wget</command> if it isn't already on your current system,
-then download and install <command>debootstrap</command>.
+Das Programm, das der Debian Installer benutzt und das als offizielle
+Methode angesehen wird, ein Debian-Basissystem zu installieren, ist
+<command>debootstrap</command>. Es nutzt <command>wget</command>, aber
+ansonsten hängt es nur von <classname>/bin/sh</classname> ab. Installieren
+Sie <command>wget</command>, falls es noch nicht auf Ihrem laufenden System
+vorhanden ist; dann laden Sie <command>debootstrap</command> herunter und
+installieren es.
 
 </para><para>
 
-If you have an rpm-based system, you can use alien to convert the 
-.deb into .rpm, or download an rpm-ized version at 
+Wenn Sie ein rpm-basiertes System haben, können Sie alien verwenden,
+um das .deb in ein .rpm-Paket umzuwandeln oder Sie laden sich eine
+rpm-Version von
 <ulink url="http://people.debian.org/~blade/install/debootstrap"></ulink>
+herunter.
 
 </para><para>
 
-Or, you can use the following procedure to install it
-manually. Make a work folder for extracting the .deb into:
+Oder Sie nutzen die folgende Prozedur, um es manuell zu installieren.
+Erstellen Sie ein Arbeitsverzeichnis, in das Sie die .deb-Pakete entpacken.
 
 <informalexample><screen>
 
@@ -110,13 +118,13 @@ manually. Make a work folder for extracting the .deb into:
 </screen></informalexample>
 </para><para>
 
-The <command>debootstrap</command> binary is located in the Debian
-archive (be sure to select the proper file for your
-architecture). Download the <command>debootstrap</command> .deb from
-the <ulink url="http://ftp.debian.org/debian/pool/main/d/debootstrap/">
-pool</ulink>, copy the package to the work folder, and extract the
-binary files from it. You will need to have root privileges to install
-the binaries.
+Das <command>debootstrap</command>-Binary finden Sie im Debian-Archiv
+(achten Sie darauf, die richtige Datei für Ihre Architektur zu verwenden).
+Laden Sie das <command>debootstrap</command>-deb aus dem
+<ulink url="http://ftp.debian.org/debian/pool/main/d/debootstrap/">
+Pool</ulink> herunter, kopieren Sie es in das Arbeitsverzeichnis work und
+extrahieren Sie daraus die Binär-Dateien. Sie benötigen root-Rechte, um die
+Binär-Dateien zu installieren.
 
 <informalexample><screen>
 
@@ -130,26 +138,26 @@ the binaries.
   </sect2>
 
   <sect2>
-  <title>Run <command>debootstrap</command></title>
+  <title>Starten Sie <command>debootstrap</command></title>
 <para>
 
-<command>debootstrap</command> can download the needed files directly
-from the archive when you run it. You can substitute any Debian
-archive mirror for <userinput>http.us.debian.org/debian</userinput> in
-the command example below, preferably a mirror close to you
-network-wise. Mirrors are listed at 
-<ulink url="http://www.debian.org/misc/README.mirrors"></ulink>.
+<command>debootstrap</command> kann die benötigten Dateien direkt vom
+Archiv herunterladen, wenn Sie es starten. Sie können in dem folgenden Befehl jeden
+Debian-Archiv-Mirror-Server für <userinput>http.us.debian.org/debian</userinput>
+einsetzen, vorzugsweise einen Mirror in Ihrer Nähe. Eine Liste aller Mirror-Server
+finden Sie auf <ulink url="http://www.debian.org/misc/README.mirrors"></ulink>.
 
 </para><para>
 
-If you have a &releasename; &debian; CD mounted at
-<filename>/cdrom</filename>, you could substitute a file URL instead
-of the http URL: <userinput>file:/cdrom/debian/</userinput>
+Wenn Sie eine &debian;-&releasename;-CD in <filename>/cdrom</filename>
+eingehängt haben, können Sie statt der http-URL auch eine file-URL angeben:
+<userinput>file:/cdrom/debian/</userinput>.
 
 </para><para>
 
-Substitute one of the following for <replaceable>ARCH</replaceable> 
-in the <command>debootstrap</command> command: 
+Setzen Sie in dem <command>debootstrap</command>-Befehl für
+<replaceable>ARCH</replaceable> eine der folgenden Architekturbezeichnungen
+ein:
 
 <userinput>alpha</userinput>, 
 <userinput>arm</userinput>,
@@ -160,7 +168,7 @@ in the <command>debootstrap</command> command:
 <userinput>mips</userinput>, 
 <userinput>mipsel</userinput>, 
 <userinput>powerpc</userinput>, 
-<userinput>s390</userinput>, or
+<userinput>s390</userinput> oder
 <userinput>sparc</userinput>.
 
 <informalexample><screen>
@@ -175,12 +183,12 @@ in the <command>debootstrap</command> command:
   </sect2>
 
   <sect2>
-  <title>Configure The Base System</title>
+  <title>Das Basissystem konfigurieren</title>
 
 <para>
 
-Now you've got a real Debian system, though rather lean, on disk.
-<command>Chroot</command> into it:
+Sie haben jetzt ein echtes, aber noch etwas mageres Debian-System auf
+der Festplatte. Wechseln Sie mit <command>Chroot</command> hinein:
 
 <informalexample><screen>
 
@@ -190,10 +198,10 @@ Now you've got a real Debian system, though rather lean, on disk.
 </para>
 
    <sect3>
-   <title>Mount Partitions</title>
+   <title>Partitionen einhängen</title>
 <para>
 
-You need to create <filename>/etc/fstab</filename>.
+Sie müssen die Datei <filename>/etc/fstab</filename> erzeugen.
 
 <informalexample><screen>
 
@@ -203,7 +211,7 @@ You need to create <filename>/etc/fstab</filename>.
 
 </para><para>
 
-Here is a sample you can modify to suit:
+Hier ein Beispiel, dass Sie anpassen können:
 
 <informalexample><screen>
 
@@ -228,22 +236,22 @@ proc             /proc         proc    defaults                 0    0
 
 </para><para>
 
-Use <userinput>mount -a</userinput> to mount all the file systems you
-have specified in your <filename>/etc/fstab</filename>, or to mount
-file systems individually use:
+Nutzen Sie den Befehl <userinput>mount -a</userinput>, um alle Dateisysteme,
+die Sie in <filename>/etc/fstab</filename> angegeben haben, einzuhängen; um
+die Dateisysteme einzeln einzuhängen benutzen Sie:
 
 <informalexample><screen>
 
- # mount /path  # e.g.:  mount /usr
+ # mount /path  # z.B.:  mount /usr
 
 </screen></informalexample>
 
 </para><para>
 
-You can mount the proc file system multiple times and to arbitrary
-locations, though /proc is customary. If you didn't use
-<userinput>mount -a</userinput>, be sure to mount proc before
-continuing:
+Sie können das proc-Dateisystem mehrfach einhängen und in frei wählbare
+Verzeichnisse, obwohl /proc dafür üblich ist. Wenn Sie nicht
+<userinput>mount -a</userinput> verwendet haben, Seien Sie sicher, dass
+Sie proc eingehängt haben, bevor Sie weitermachen:
 
 <informalexample><screen>
 
@@ -256,11 +264,11 @@ continuing:
    </sect3>
 
    <sect3>
-   <title>Configure Keyboard</title>
+   <title>Die Tastatur konfigurieren</title>
 
 <para>
 
-To configure your keyboard:
+Um Ihre Tastatur zu konfigurieren, verwenden Sie:
 
 <informalexample><screen>
 
@@ -272,13 +280,13 @@ To configure your keyboard:
    </sect3>
 
    <sect3>
-   <title>Configure Networking</title>
+   <title>Das Netzwerk konfigurieren</title>
 <para>
 
-To configure networking, edit
+Um Ihr Netzwerk einzurichten, müssen Sie die Dateien
 <filename>/etc/network/interfaces</filename>,
-<filename>/etc/resolv.conf</filename>, and
-<filename>/etc/hostname</filename>.
+<filename>/etc/resolv.conf</filename> und
+<filename>/etc/hostname</filename> anpassen.
 
 <informalexample><screen>
 
@@ -288,7 +296,7 @@ To configure networking, edit
 
 </para><para>
 
-Here are some simple examples from
+Hier sind ein paar einfache Beispiele aus
 <filename>/usr/share/doc/ifupdown/examples</filename>:
 
 <informalexample><screen>
@@ -298,18 +306,19 @@ Here are some simple examples from
 # available.
 ######################################################################
 
-# We always want the loopback interface.
-#
+# We always want the loopback interface (die Loopback-Schnittstelle wird
+# immer benötigt).
 auto lo
 iface lo inet loopback
 
-# To use dhcp:
+# To use dhcp (wenn Sie DHCP benutzen möchten):
 #
 # auto eth0
 # iface eth0 inet dhcp
 
 # An example static IP setup: (broadcast and gateway are optional)
-#
+# (ein Beispiel für eine statische IP-Einstellung/ broadcast und gateway
+# sind hierbei optional):
 # auto eth0
 # iface eth0 inet static
 #     address 192.168.0.42
@@ -321,8 +330,8 @@ iface lo inet loopback
 
 </para><para>
 
-Enter your nameserver(s) and search directives in
-<filename>/etc/resolv.conf</filename>:
+Tragen Sie die Adresse Ihres/Ihrer Nameserver(s) sowie
+Such-Regeln in <filename>/etc/resolv.conf</filename> ein:
 
 <informalexample><screen>
 
@@ -332,7 +341,7 @@ Enter your nameserver(s) and search directives in
 
 </para><para>
 
-A simple <filename>/etc/resolv.conf</filename>:
+Eine einfache <filename>/etc/resolv.conf</filename>:
 
 <informalexample><screen>
 
@@ -344,7 +353,7 @@ A simple <filename>/etc/resolv.conf</filename>:
 
 </para><para>
 
-Enter your system's host name (2 to 63 characters):
+Geben Sie den Hostnamen Ihres Systems ein (2 bis 63 Stellen lang):
 
 <informalexample><screen>
 
@@ -354,21 +363,21 @@ Enter your system's host name (2 to 63 characters):
 
 </para><para>
 
-If you have multiple network cards, you should arrange the names of
-driver modules in the <filename>/etc/modules</filename> file into the
-desired order. Then during boot, each card will be associated with the
-interface name (eth0, eth1, etc.) that you expect.
+Wenn Sie mehrere Netzwerkkarten haben, sollten Sie die Namen der
+Treibermodule in <filename>/etc/modules</filename> in die richtige
+Reihenfolge bringen. Während des Bootens wird dann jede Karte die
+Schnittstellenbezeichnung (eth0, eth1, etc.) bekommen, die Sie erwarten.
 
 </para>
    </sect3>
 
    <sect3>
-   <title>Configure Timezone, Users, and APT</title>
+   <title>Die Zeitzone, Benutzer und APT einrichten</title>
 
 <para>
 
-Set your timezone, add a normal user, and choose your <command>apt</command>
-sources by running
+Setzen Sie die Zeitzone, fügen Sie einen normalen Benutzer hinzu und wählen
+Sie die Paketquellen für <command>apt</command>, indem Sie folgendes ausführen:
 
 <informalexample><screen>
 
@@ -379,11 +388,12 @@ sources by running
    </sect3>
 
    <sect3>
-   <title>Configure Locales</title>
+   <title>Die lokalen Einstellungen konfigurieren</title>
 <para>
 
-To configure your locale settings to use a language other than
-English, install the locales support package and configure it:
+Um Ihre lokalen Einstellungen anzupassen, wenn Sie nicht Englisch
+verwenden möchten, installieren Sie das Paket locales und konfigurieren
+es:
 
 <informalexample><screen>
 
@@ -392,21 +402,22 @@ English, install the locales support package and configure it:
 
 </screen></informalexample>
 
-NOTE: Apt must be configured before, ie. during the base-config phase.
-Before using locales with character sets other than ASCII or latin1,
-please consult the appropriate localization HOWTO.
+BEACHTEN SIE: APT muss vor diesem Schritt eingerichtet werden, z.B. während
+der base-config-Phase. Bevor Sie locales mit anderen Zeichensätzen als ASCII oder
+latin1 verwenden, lesen Sie das dazugehörige »localization«-HOWTO.
 
 </para>
    </sect3>
   </sect2>
 
   <sect2>
-  <title>Install a Kernel</title>
+  <title>Einen Kernel installieren</title>
 
 <para>
 
-If you intend to boot this system, you probably want a Linux kernel
-and a boot loader. Identify available pre-packaged kernels with
+Wenn Sie vorhaben, dieses System zu booten, benötigen sie wahrscheinlich
+einen Linux-Kernel und einen Bootloader. Sie finden verfügbare, bereits
+fertig gepackte Kernel mit dem Befehl
 
 <informalexample><screen>
 
@@ -416,7 +427,7 @@ and a boot loader. Identify available pre-packaged kernels with
 
 </para><para>
 
-Then install your choice using its package name.
+Um einen Kernel Ihrer Wahl zu installieren, benutzen Sie seinen Paketnamen.
 
 <informalexample><screen>
 
@@ -428,28 +439,30 @@ Then install your choice using its package name.
   </sect2>
 
   <sect2>
-<title>Set up the Boot Loader</title>
+<title>Den Bootloader einrichten</title>
 <para>
 
-To make your &debian; system bootable, set up your boot loader to load
-the installed kernel with your new root partition. Note that debootstrap
-does not install a boot loader, though you can use apt-get inside your
-Debian chroot to do so.
+Um Ihr &debian;-System bootfähig zu machen, richten Sie Ihren Bootloader ein,
+sodass er den installierten Kernel mit Ihrer neuen root-Partition startet.
+Bedenken Sie, dass debootstrap keinen Bootloader installiert, allerdings
+können Sie apt-get in Ihrer Debian-chroot-Umgebung benutzen, um dies zu
+erledigen.
 
 </para><para arch="i386">
 
-Check <userinput>info grub</userinput> or <userinput>man
-lilo.conf</userinput> for instructions on setting up the
-bootloader.  If you are keeping the system you used to install Debian, just
-add an entry for the Debian install to your existing grub
-<filename>menu.lst</filename> or <filename>lilo.conf</filename>.  For
-<filename>lilo.conf</filename>, you could also copy it to the new system and
-edit it there. After you are done editing, call lilo (remember it will use
-<filename>lilo.conf</filename> relative to the system you call it from).
+Lesen Sie <userinput>info grub</userinput> or <userinput>man
+lilo.conf</userinput>, um Informationen über die Einrichtung des Bootloaders
+zu bekommen. Wenn Sie das System, das Sie zur Installation von Debian benutzt
+haben, behalten möchten, müssen Sie lediglich einen Eintrag zur vorhandenen
+grub-<filename>menu.lst</filename> oder zu <filename>lilo.conf</filename>
+hinzufügen. Die Datei <filename>lilo.conf</filename> können Sie auch auf Ihr
+neues Debian-System kopieren und dort bearbeiten. Danach rufen Sie lilo auf
+(bedenken Sie, lilo nutzt die <filename>lilo.conf</filename> relativ zum
+System, von dem aus Sie es aufrufen).
 
 </para><para arch="i386">
 
-Here is a basic <filename>/etc/lilo.conf</filename> as an example:
+Hier ein grundsätzliches Beispiel einer <filename>/etc/lilo.conf</filename>:
 
 <informalexample><screen>
 
@@ -465,17 +478,19 @@ label=Debian
 
 </para><para arch="powerpc">
 
-Check <userinput>man yaboot.conf</userinput> for instructions on
-setting up the bootloader.  If you are keeping the system you used to
-install Debian, just add an entry for the Debian install to your
-existing <filename>yaboot.conf</filename>.  You could also copy it to
-the new system and
-edit it there. After you are done editing, call ybin (remember it will
-use <filename>yaboot.conf</filename> relative to the system you call it from).
+Lesen Sie <userinput>man yaboot.conf</userinput>, um Informationen über
+die Einrichtung des Bootloaders zu bekommen. Wenn Sie das System, das Sie
+zur Installation von Debian benutzt haben, behalten möchten, müssen Sie
+lediglich einen Eintrag für das Debian-System zur vorhandenen
+<filename>yaboot.conf</filename> hinzufügen.
+Sie können auch die Datei <filename>yaboot.conf</filename> auf Ihr
+neues Debian-System kopieren und dort bearbeiten. Danach rufen Sie ybin auf
+(bedenken Sie, ybin nutzt die <filename>yaboot.conf</filename> relativ zum
+System, von dem aus Sie es aufrufen).
 
 </para><para arch="powerpc">
 
-Here is a basic <filename>/etc/yaboot.conf</filename> as an example:
+Hier ein grundsätzliches Beispiel einer <filename>/etc/yaboot.conf</filename>:
 
 <informalexample><screen>
 
@@ -490,8 +505,8 @@ label=Debian
 
 </screen></informalexample>
 
-On some machines, you may need to use <userinput>ide0:</userinput> 
-instead of <userinput>hd:</userinput>. 
+Auf einigen Maschinen müssen Sie unter Umständen <userinput>ide0:</userinput>
+benutzen statt <userinput>hd:</userinput>.
 
 </para>
   </sect2>
