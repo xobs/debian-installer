@@ -289,6 +289,11 @@ endif
 		mv -f $(TREE)/boot/$(NAME) $(TEMP); )
 	-rmdir $(TREE)/boot/
 
+	if [ "$(UPX)" ] ; then \
+		$(foreach NAME,$(KERNELNAME), \
+			$(UPX) -9 $(TEMP)/$(NAME); ) \
+	fi
+
 	# Copy terminfo files for slang frontend
 	# TODO: terminfo.udeb?
 	for file in /etc/terminfo/a/ansi /etc/terminfo/l/linux \
