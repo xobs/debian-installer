@@ -113,11 +113,6 @@ uml: $(INITRD)
 demo_clean: tree_umount
 
 clean: demo_clean tmp_mount debian/control
-	if [ "$(USER_MOUNT_HACK)" ] ; then \
-	    if mount | grep -q "$(USER_MOUNT_HACK)"; then \
-	        umount "$(USER_MOUNT_HACK)";\
-	    fi ; \
-	fi
 	rm -rf $(TREE) 2>/dev/null || sudo rm -rf $(TREE)
 	dh_clean
 	rm -f *-stamp
@@ -461,7 +456,7 @@ daily_build:
 	touch $(DEST)/info
 	set -e; \
 	for type in $(ALL_TYPES); do \
-		$(MAKE) sub_daily_build TYPE=$$type USER_MOUNT_HACK=$(shell pwd)/$(DEST)/tmp-mnt.img; \
+		$(MAKE) sub_daily_build TYPE=$$type; \
 	done
 	scp -q -B $(KERNEL) $(UPLOAD_DIR)/images/
 	mail $(shell whoami) -s "today's build info" < $(DEST)/info

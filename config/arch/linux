@@ -3,21 +3,6 @@
 # INITRD_FS=ext2
 INITRD_FS=ext2
 
-# Creating floppy images requires mounting the image to copy files to it.
-# This generally needs root permissions. To let a user mount the floppy
-# image, add something like this to /etc/fstab:
-#   /dir/debian-installer/build/dest/tmp-mnt.img /dir/debian-installer/build/mnt vfat noauto,user,loop 0 0
-# Changing "/dir" to the full path to wherever debian-installer will be
-# built. Then if you uncomment this next line, the Makefile will use
-# commands that work with the above fstab line. Be careful: This lets any
-# user mount the image file you list in fstab, and the user who can create
-# that file could perhaps provide a maliciously constructed file that might
-# crash the kernel or worse.. Note that this line points to the temporary
-# image file to create, and MUST be an absolute path. Finally, when calling
-# the image target, you must *not* use fakeroot, or syslinux will
-# fail.
-#USER_MOUNT_HACK=$(shell pwd)/$(DEST)/tmp-mnt.img
-
 # What device to write floppies on
 FLOPPYDEV=/dev/fd0
 
