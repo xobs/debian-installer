@@ -127,21 +127,15 @@ fi
 # Now the (u)debs are in APTDIR/cache/archives/ and maybe LOCALUDEBDIR
 # or DEBUGUDEBDIR, but there may be other (u)debs there too besides
 # those we asked for. So link those we asked for to UDEBDIR, renaming
-# them to more useful names. Watch out for duplicates and missing
-# files while doing that.
+# them to more useful names.
 rm -rf $UDEBDIR
 mkdir -p $UDEBDIR
 
 lnpkg() {
-	local pkg=$1; local dir=$2 debdir=$3;
-	local L1="`echo $dir/$pkg\_*`"
-	local L2="`echo $L1 | sed -e 's, ,,g'`"
-	if [ "$L1" != "$L2" ]; then
-		echo "Duplicate package $pkg in $dir/";
-		exit 1
-	fi
-	if [ -e $L1 ]; then
-		ln -f $dir/${pkg}_* $debdir/$pkg.$TYPE
+	local pkg=$1; local dir=$2 debdir=$3
+	local L="`find $dir -name "${pkg}_*" 2>/dev/null | sort | tail -n 1`"
+	if [ -e "$L" ]; then
+		ln -f $L $debdir/$pkg.$TYPE
 	fi
 }
 
