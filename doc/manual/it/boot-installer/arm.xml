@@ -1,23 +1,33 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 11648 untranslated -->
+<!-- original version: 11648 -->
 
-  <sect2 arch="arm" id="boot-tftp"><title>Booting from TFTP</title>
+  <!-- <sect2 arch="arm" id="boot-tftp"><title>Booting from TFTP</title> -->
+  <sect2 arch="arm" id="boot-tftp"><title>Avvio da TFTP</title>
 
 &boot-installer-intro-net.xml;
 
-  <sect3 arch="arm"><title>Booting from TFTP on NetWinder</title>
+  <!-- <sect3 arch="arm"><title>Booting from TFTP on NetWinder</title> -->
+  <sect3 arch="arm"><title>Avvio di NetWinder da TFTP</title>
 
 <para>
 
-NetWinders have two network interfaces: The 10Mbps NE2000-compatible
+<!--NetWinders have two network interfaces: The 10Mbps NE2000-compatible
 card is <filename>eth0</filename> and the 100Mbps Tulip card is
-<filename>eth1</filename>.
+<filename>eth1</filename>.-->
+
+Le macchine NetWinder possiedono due interfacce di rete: quella da 10Mbps
+compatibile con NE2000 è <filename>eth0</filename> mentre
+quella Tulip da 100Mbps è <filename>eth1</filename>.
 
 </para><note><para>
 
-You need NeTTrom 2.2.1 or later to boot the
+<!-- You need NeTTrom 2.2.1 or later to boot the
 installation system. NeTTrom 2.3.3 is recommended: get these files
-from 
+from -->
+
+Per avviare la macchina è necessario avere NeTTrom 2.2.1 o
+una versione più recente. La versione raccomandata è la 2.3.3:
+scaricare questi file da
 <ulink url="ftp://ftp.netwinder.org/pub/netwinder/firmware/"></ulink>:
 <itemizedlist>
 <listitem><para>
@@ -39,14 +49,24 @@ from
 
 </para></note><para>
 
-After rebooting and interrupting the boot process during the countdown, you 
-must first configure the network either with a static address:
+<!--After rebooting and interrupting the boot process during the countdown, you 
+must first configure the network either with a static address:-->
+
+Dopo aver riavviato la macchina e interrotto il processo di avvio durante
+il conto alla rovescia, sarà possibile configurare la rete sia con
+un indirizzo IP statico:
+
 <informalexample><screen>
 
     NeTTrom command-> setenv eth0_ip 192.168.0.10/24
 
 </screen></informalexample>
-where 24 is the number of set bits in the netmask, or a dynamic address:
+
+<!--where 24 is the number of set bits in the netmask, or a dynamic address:-->
+
+dove 24 è il numero di bit impostati a 1 della netmask; sia con un
+indirizzo dinamico:
+
 <informalexample><screen>
 
     NeTTrom command-> boot diskless
@@ -55,10 +75,16 @@ where 24 is the number of set bits in the netmask, or a dynamic address:
 
 </para><para>
 
-You may also need to configure the <userinput>route1</userinput>
+<!-- You may also need to configure the <userinput>route1</userinput>
 settings if the TFTP
 server is not on the local subnet.  The rest of the config is pretty 
-standard (the save-all step is optional):
+standard (the save-all step is optional): -->
+
+È anche possibile configurare la <userinput>route1</userinput>
+se il server TFTP non è nella sottorete locale. Il resto della
+configurazione è molto semplice (il passo save-all è
+opzionale):
+
 <informalexample><screen>
 
     NeTTrom command-> setenv kerntftpserver 192.168.0.1
@@ -71,24 +97,38 @@ standard (the save-all step is optional):
 
 </para><para>
 
-Only the last two of these interfere with normal disk booting, so it is 
+<!-- Only the last two of these interfere with normal disk booting, so it is 
 safe to <command>save-all</command> right before it, which will
 store the network settings in case you need to boot from the network
 again. Use the <command>printenv</command> command to review your
 environment settings. Finally, if your <envar>cmdappend</envar>
 NeTTrom variable has the <option>noinitrd</option> option (which is  
 necessary to boot 2.4 kernels), you must remove it so the downloaded 
-kernel can boot with its attached ramdisk.
+kernel can boot with its attached ramdisk. -->
+
+Solo gli ultimi due interferiscono con il normale avvio da disco fisso
+e quindi è possibile eseguire <command>save-all</command> subito
+prima e memorizzare le impostazioni della rete nel caso ce ne sia un
+successivo bisogno. Usare il comando <command>printenv</command>
+per controllare le proprie variabili d'ambiente. Alla fine, se la
+variabile NeTTrom <envar>cmdappend</envar> contiene l'opzione
+<option>noinitrd</option> (che è necessaria per avviare
+i kernel 2.4), si deve eliminarla in modo che il kernel scaricato
+possa utilizzare il proprio ramdisk.
 
 </para>
   </sect3>
 
-  <sect3 arch="arm"><title>Booting from TFTP on CATS</title>
+  <!--<sect3 arch="arm"><title>Booting from TFTP on CATS</title> -->
+  <sect3 arch="arm"><title>Avviare CATS da TFTP</title>
 
 <para>
 
-On CATS machines, use <command>boot de0:</command> or similar at the
-Cyclone prompt.
+<!--On CATS machines, use <command>boot de0:</command> or similar at the
+Cyclone prompt.-->
+
+Sulla macchina CATS utilizzare un comando come <command>boot de0:</command>
+al prompt di Cyclone.
 
 </para>
    </sect3>
@@ -96,13 +136,16 @@ Cyclone prompt.
 
 
 
-  <sect2 arch="arm"><title>Booting from CD-ROM</title>
+  <!--<sect2 arch="arm"><title>Booting from CD-ROM</title> -->
+  <sect2 arch="arm"><title>Avviare da CD-ROM</title>
 
 &boot-installer-intro-cd.xml;
 
 <para>
 
-To boot a CD-ROM from the Cyclone console prompt, use the command
+<!--To boot a CD-ROM from the Cyclone console prompt, use the command-->
+
+Per avviare da CD-ROM a partire dal prompt della console Cyclone, usare il comando
 <command>boot cd0:cats.bin</command>
 
 </para>
