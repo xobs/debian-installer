@@ -320,10 +320,10 @@ For installing from a LS-120 drive (ATAPI version) with a set of
 floppies, you need to specify the virtual location for the floppy
 device.  This is done with the <emphasis>root=</emphasis> boot
 argument, giving the device that the ide-floppy driver maps the device
-to. For example, if your is connected as first IDE device on second
-cable, you enter <userinput>linux.bin root=/dev/hdc</userinput> on the
-boot prompt. Installation from LS120 is only supported by 2.4 and
-later kernels.
+to. For example, if your LS-120 drive is connected as the first IDE
+device (master) on the second cable, you enter
+<userinput>linux root=/dev/hdc</userinput> at the boot prompt.
+Installation from LS-120 is only supported by 2.4 and later kernels.
 
 </para><para>
 
@@ -350,7 +350,7 @@ you can boot the system.
 </para><para>
 
 Information on boot parameters which might be useful can be found by
-pressing <keycap>F4</keycap> and <keycap>F5</keycap>.  If you add any
+pressing <keycap>F4</keycap> through <keycap>F7</keycap>.  If you add any
 parameters to
 the boot command line, be sure to type the boot method (the default is
 <userinput>linux</userinput>) and a space before the first parameter (e.g.,
@@ -491,6 +491,7 @@ If your screen begins to show a weird picture while the kernel boots,
 eg. pure white, pure black or colored pixel garbage, your system may
 contain a problematic video card which does not switch to the
 framebuffer mode properly.  Then you can use the boot parameter
+<userinput>debian-installer/framebuffer=false</userinput> or
 <userinput>video=vga16:off</userinput> to disable the framebuffer
 console. The language chooser will not appear; only the english
 language will be available during the installation due to limited
@@ -505,34 +506,55 @@ console features. See <xref linkend="boot-parms"/> for details.
 
 <para>
 
-Some laptop models produced by DELL are known to crash when PCMCIA device
-detection tries to access some hardware addresses. If you experience a such problem, try the following workaround:
+Some laptop models produced by Dell are known to crash when PCMCIA device
+detection tries to access some hardware addresses. Other laptops may display
+similar problems. If you experience such a problem and you don't need PCMCIA
+support during the installation, you can disable PCMCIA using the
+<userinput>hw-detect/start_pcmcia=false</userinput> boot parameter. You can
+then configure PCMCIA after the installation is completed and exclude the
+resource range causing the problems.
+
+</para><para>
+
+Alternatively you can try the following workaround:
+
 <itemizedlist>
 <listitem><para>
 
-prepare the root filesystem and install kernel and modules, but do not
-start PCMCIA configuration immediately
+boot the installation system in expert mode, choose your language and country,
+but stop before hardware detection
 
 </para></listitem>
 <listitem><para>
 
-enter the system shell (see <xref linkend="shell"/> for
-details)
+enter the system shell (see <xref linkend="shell"/> for details)
 
 </para></listitem>
 <listitem><para>
 
-execute this command: 
-<userinput>echo exclude port 0x810-0x81f >>
-/target/etc/pcmcia/config.opts</userinput>
+execute this command:
+<userinput>echo exclude port <replaceable>0x810-0x81f</replaceable> >>
+/etc/pcmcia/config.opts</userinput><footnote>
+<para>
+
+The address range in this example is for the Dell problem cited above; you may
+have to exclude other address range(s) in your situation.
+
+</para>
+</footnote>
 
 </para></listitem>
 <listitem><para>
 
-now return to the main menu and run the PCMCIA configuration part
+now return to the main menu and continue with the installation process
 
 </para></listitem>
 </itemizedlist>
+
+You will also have to exclude the same address range(s) in
+<userinput>/target/etc/pcmcia/config.opts</userinput> before you reboot the
+computer to avoid running into the same problem when you boot into your new
+Debian system.
 
 </para>
   </sect2>
@@ -541,18 +563,12 @@ now return to the main menu and run the PCMCIA configuration part
   <title>System freeze while loading the USB modules</title>
 <para>
 
-The kernel normaly tries to install the USB and USB keyboard driver in
-order to allow the installation for users of some non-standard USB keyboards.
-However, there are few broken USB systems where the driver hangs on loading. A
-possible workaround may be disabling of the USB controller in your mainboard
-BIOS setup. Another way is passing the <userinput>nousb</userinput>
-argument on the boot prompt, which will prevent the modules from
-beeing loaded even if USB hardware has been detected.
+The kernel normally tries to install USB modules and the USB keyboard driver
+in order to support some non-standard USB keyboards. However, there are some
+broken USB systems where the driver hangs on loading. A possible workaround
+may be disabling the USB controller in your mainboard BIOS setup. Another option
+is passing the <userinput>debian-installer/probe/usb=false</userinput> parameter
+at the boot prompt, which will prevent the modules from being loaded.
 
 </para>
   </sect2>
-
-
-
-
-
