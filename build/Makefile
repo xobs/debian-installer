@@ -126,6 +126,10 @@ define genext2fs
 	genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` -r 0
 endef
 
+define e2fsck
+	e2fsck -fy
+endef
+
 define mkcramfs
 	mkcramfs $(TREE)
 endef
@@ -580,7 +584,8 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 			$(genext2fs-userdevfs) $(TEMP)/initrd; \
 		else \
 			$(genext2fs) $(TEMP)/initrd; \
-		fi ;; \
+		fi; \
+		$(e2fsck) $(TEMP)/initrd || true;; \
 	cramfs) \
 		$(mkcramfs) $(TEMP)/initrd ;; \
 	*) \
