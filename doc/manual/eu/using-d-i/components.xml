@@ -1,80 +1,61 @@
-<!-- retain these comments for translator revision tracking -->
-<!-- original version: 16990 untranslated -->
-
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 22935 -->
  <sect1 id="module-details">
- <title>Using Individual Components</title>
+ <title>Osagaiak Banaka Erabiltzen</title>
 <para>
-
-In this section we will describe each installer component in
-detail. The components have been grouped into stages that should
-be recognisable for users. They are presented in the order they
-appear during the install. Note that not all modules will be used
-for every installation; which modules are actually used depends on
-the installation method you use and on your hardware.
-
+Atal honetan instalatzailearen osagai bakoitza xehetasunekin
+deskribatuko dugu. Osagaiak erabiltzaileek ezagutu beharko
+lituzketen pausuetan sailkatu ditugu. Instalaketan agertzen
+diren ordena berean aurkezten dizkizugu. Ohar zaitez instalaketa
+guztietan ez direla modulu guztiak erabiliko; zehazki zeintzuk
+erabiltzen diren darabilzun instalaketa metodoaren eta zure
+hardwarearen arabera aldatzen da.
 </para>
-
-  <sect2>
-  <title>Setting up Debian Installer and Hardware Configuration</title>
+  <sect2 id="di-setup">
+  <title>Debianen Instalatzailea Eta Hardwarea Konfiguratzen</title>
 <para>
-
-Let's assume the Debian Installer has booted and you are facing its
-first screen.  At this time, the capabilities of &d-i; are still quite
-limited. It doesn't know much about your hardware, preferred language,
-or even the task it should fulfill. Don't worry. Because &d-i; is quite
-clever, it can automatically probe your hardware, locate the rest
-of its components and upgrade itself to a modern, well-built program.
-
-However, you still need to help &d-i; with some information it can't
-determine automatically (like selecting your preferred language, keyboard
-layout or desired network mirror).
-
+Demagun Debianen instalatzailea abiarazi dela eta zu lehenengo pantailari
+begira zaudela. Une honetan, &d-i;(r)en gaitasunak nahiko mugaturik
+daude. Ez daki ezer askorik zure hardwareaz, gogoko hizkuntzaz edo
+egin beharko lukeen lanaz. Ez zaitez arduratu. Izan ere, &d-i;
+behar bezain argia da, bere kasa azter dezake zure hardwarea,
+bere gainontzeko osagaiak aurkitu eta instalaketa sistema
+erabilgarri eta gaurkotasunezko batera bihur daiteke. Dena dela,
+&d-i; lagundu beharra duzu bere kasa jakin ezin duen informazioa
+emanez (hala nola, zure gogoko hizkuntza, teklatuaren mapa edo 
+sareko ispilu-zerbitzaria).
 </para><para>
-
-You will notice that &d-i; performs <firstterm>hardware detection</firstterm>
-several times during this stage. The first time is targeted specifically
-at the hardware needed to load installer components (e.g. your CD-ROM or
-network card). As not all drivers may be available during this first run,
-hardware detection needs to be repeated later in the process.
-
+Ohartuko zara pausu honen baitan &d-i;(e)k <firstterm>hardware detekzioa</firstterm>
+egiten duenaz hainbat alditan. Lehen aldian zehazki instalagailuaren
+osagaiak kargatzeko beharrezko hardwarean (adb. zure CD-ROMa edo sareko txartela)
+jartzen du arreta. Lehen aldi honetan driver guztiak ez direnez gertu
+egongo, hardware detekzioa errepikatu beharra du prozesuan zehar, geroago.
 </para>
-
 &module-lowmem.xml;
 &module-languagechooser.xml;
 &module-countrychooser.xml;
 &module-kbd-chooser.xml;
 &module-s390-netdevice.xml;
 &module-s390-dasd.xml;
-&module-pcmcia.xml;
-&module-cdrom-detect.xml;
 &module-ddetect.xml;
+&module-cdrom-detect.xml;
 &module-iso-scan.xml;
-<!--
-&module-load-components;
-Insert Load installer components here; mention that it is executed later
-(after netcfg and choose mirror) if netboot installation.
--->
+&module-anna.xml;
 &module-netcfg.xml;
 &module-choose-mirror.xml;
-&module-anna.xml; <!-- should probably not be included -->
-
   </sect2>
-
-  <sect2>
-  <title>Partitioning and Mount Point Selection</title>
+  <sect2 id="di-partition">
+  <title>Partizioen Sorkuntza Eta Muntaia Puntuaren Hautaketa</title>
 <para>
-
-At this time, after hardware detection has been executed a final time,
-&d-i; should be at its full strength, customized for the user's needs
-and ready to do some real work.
-
-As the title of this chapter indicates, the main task of the next few
-components lies in partitioning your disks, creating filesystems,
-assigning mountpoints and optionally configuring closely related issues
-like LVM or RAID devices.
-
+Une honetan, hardware detekzioa azken aldiz abiarazi izan ondoren,
+&d-i; bere sasoi onenean egon beharko litzateke, erabiltzailearen
+beharretara egokituta eta benetako lana egiteko gertu.
+Atal honen izenburuak adierazten duen bezala, ondorengo osagaien
+zeregin garrantzitsuena zure diskak partizionatzea, fitxategi
+sistemak sortzea, muntaia puntuak esleitzea eta (aukeran) LVM
+edo RAID gailuak bezalakoak (gaiarekin gogorki loturik daudenak)
+konfiguratzea da.
 </para>
-
 &module-partman.xml;
 &module-autopartkit.xml;
 &module-partitioner.xml;
@@ -82,42 +63,32 @@ like LVM or RAID devices.
 &module-lvmcfg.xml;
 &module-mdcfg.xml;
   </sect2>
-
-  <sect2>
-  <title>Installing the Base System</title>
+  <sect2 id="di-install-base">
+  <title>Oinarri Sistema Instalatzen</title>
 <para>
-
-Although this stage is the least problematic, it consumes most time of
-the install because it downloads, verifies and unpacks the whole base
-system. If you have a slow computer or network connection, this could
-take some time.
-
+Pausu hau izan arren arazo gutxien sor ditzakeena, instalaketaren
+denbora tarte handiena hartzen du, sistema guztia deskargatu, aztertu
+eta paketeetatik ateratzen baitu. Konputagailu edo sare koneksio
+motela badituzu, pausu honek luzerako jo dezake.
 </para>
-
 &module-base-installer.xml;
-&module-kernel-chooser.xml;
   </sect2>
-
-  <sect2>
-  <title>Making Your System Bootable</title>
-<para>
-
-Note that multiple operating systems booting on a single machine is
-still something of a black art.  This document does not even attempt
-to document the various boot managers, which vary by architecture and
-even by subarchitecture.  You should see your boot manager's
-documentation for more information.
-
-</para><para condition="supports-nfsroot">
-
-If you are installing a diskless workstation, obviously, booting off
-the local disk isn't a meaningful option, and this step will be
-skipped. <phrase arch="sparc">You may wish to set the OpenBoot to boot
-from the network by default; see <xref
+  <sect2 id="di-make-bootable">
+  <title>Sistema Abiarazgarri Bihurtzen</title>
+<para condition="supports-nfsroot">
+Diska gabeko lan eremu (workstation) bat instalatzen bazabiltza,
+diska gogorretik abiaraztea ez da aukera zail bat, noski. Beraz,
+ez dugu hemen azalduko. <phrase arch="sparc"> Agian OpenBoot
+konfiguratu nahiko duzu saretik abiarazi ohi dadin; ikus <xref
 linkend="boot-dev-select-sun"/>.</phrase>
-
+</para><para>
+Ohar zaitez makina berean sistema eragile ugari abiarazteaz oraindik
+zulo beltzez bezain gutxi dakigula. Dokumentu hau ez da abiarazte
+kudeatzaile ezberdinak zerrendatzen saiatu ere egiten, arkitektura
+eta azpiarkitektura guztiz ezberdinekoak ere daudenez. Zure abiarazte
+kudeatzailearen laguntza gaiak irakurri beharko dituzu hartaz
+gehiago jakiteko.
 </para>
-
 &module-os-prober.xml;
 &module-alpha-aboot-installer.xml;
 &module-hppa-palo-installer.xml;
@@ -133,32 +104,25 @@ linkend="boot-dev-select-sun"/>.</phrase>
 &module-sparc-silo-installer.xml;
 &module-nobootloader.xml;
   </sect2>
-
-  <sect2>
-  <title>Finishing the First Stage</title>
+  <sect2 id="di-finish">
+  <title>Lehen Pausua Amaitzen</title>
 <para>
-
-These are the last bits to do before rebooting to your new Debian. It
-mostly consists of tidying up after the &d-i;.
-
+Hauek dira zure Debian berria berrabiarazi aurretik egin beharreko
+azken ekintzak. Batipat &d-i;(r)en ondoren ordenatzea da egin beharrekoa.
 </para>
-
 &module-prebaseconfig.xml;
   </sect2>
-
-  <sect2>
-  <title>Miscellaneous</title>
+  <sect2 id="di-miscellaneous">
+  <title>Denetarik</title>
 <para>
-
-The components listed in this section are usually not involved in the
-installation process, but are waiting in the background to help the
-user in case something goes wrong.
-
+Atal honetan zerrendaturiko osagaiak ez dira istalaketa prozesuan
+barneraturik egon ohi, baina atzekaldean itxaroten egoten dira
+erabiltzailea laguntzeko zerbait gaizki joanez gero.
 </para>
-
-&module-baseconfig.xml;
 &module-bugreporter.xml;
 &module-cdrom-checker.xml;
 &module-shell.xml;
+&module-baseconfig.xml;
   </sect2>
  </sect1>
+
