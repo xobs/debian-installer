@@ -601,18 +601,16 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 	gzip -v9f $(TEMP)/initrd
 
 # raw kernel images
-$(KERNEL): TEMP_REAL_KERNEL = $(TEMP)/$(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,')
-$(KERNEL):
-	@$(MAKE) $(STAMPS)tree-unpack-$(targetstring)-stamp $(TEMP_REAL_KERNEL)
-	install -m 644 -D $(TEMP_REAL_KERNEL) $@
+$(KERNEL): $(TEMP_KERNEL)
+	install -m 644 -D $(TEMP)/$(patsubst $(SOME_DEST)/$(EXTRANAME)%,%,./$@) $@
 	./update-manifest $@ $(MANIFEST-KERNEL)
+
+$(TEMP_KERNEL): $(STAMPS)tree-unpack-$(targetstring)-stamp
 
 # bootable images
 $(BOOT): $(TEMP_BOOT)
 	install -m 644 -D $(TEMP_BOOT)$(GZIPPED) $@
 	./update-manifest $@ $(MANIFEST-BOOT)
-
-$(TEMP_KERNEL): $(STAMPS)tree-unpack-$(targetstring)-stamp
 
 $(TEMP_BOOT): $(TEMP_INITRD) $(TEMP_KERNEL) $(TEMP_BOOT_SCREENS) arch_boot
 
@@ -630,19 +628,20 @@ $(MINIISO): $(TEMP_MINIISO)
 
 $(TEMP_MINIISO): $(TEMP_BOOT_SCREENS) arch_miniiso
 
+# various files you want to see in dest/
+$(MISC): $(TEMP_MISC)
+	install -m 644 -D $(TEMP)/misc/$(patsubst $(SOME_DEST)/$(EXTRANAME)%,%,./$@) $@
+	./update-manifest $@ $(MANIFEST-MISC)
+
+$(TEMP_MISC):
+	install -D $(filter %$(shell basename $@),$(MISCNAME)) $@
+
 # various kinds of information, for use on debian-cd isos.
 $(DEBIAN_CD_INFO): $(TEMP_BOOT_SCREENS)
 	(cd $(TEMP_BOOT_SCREENS); tar czf - .) > $@
 	./update-manifest $@ $(MANIFEST-DEBIAN_CD_INFO)
 
 $(TEMP_BOOT_SCREENS): arch_boot_screens
-
-$(MISC): TEMP_REAL_MISC = $(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,')
-$(MISC): 
-	install -m 644 $(TEMP_REAL_MISC) $(SOME_DEST)/$(EXTRANAME)
-	./update-manifest \
-		$(SOME_DEST)/$(EXTRANAME)$(shell basename $(TEMP_REAL_MISC)) \
-		$(MANIFEST-MISC)
 
 # Other images, e.g. driver floppies. Those are simply handled as flavours
 $(EXTRA): $(TEMP_EXTRA)
