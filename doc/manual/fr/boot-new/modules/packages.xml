@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 11648 -->
+
+ <sect2 id="install-packages">
+ <title>Installation des paquets: simple ou avancée</title>
+
+<para>
+
+On vous demandera ensuite si vous voulez ou non installer les paquets par une 
+méthode simple ou par une méthode avancée, plus fine. Nous vous recommandons 
+de commencer par la méthode simple, dans la mesure où vous pourrez toujours 
+recourir à la méthode avancée ultérieurement.
+
+</para><para>
+
+Sachez que pour une installation simple, <command>base-config</command> 
+utilise simplement le programme <command>tasksel</command>. Pour une 
+installation de paquets avancée, l'un des programmes 
+<command>dselect</command> ou <command>aptitude</command> est exécuté.
+Chacun de ces programmes peut être utilisé, à tout moment une fois 
+l'installation terminée, pour installer d'autres paquets. Une fois que 
+l'installation est finie, si vous voulez un paquet particulier, lancez 
+simplement
+<userinput>apt-get install <replaceable>paquet</replaceable></userinput>, 
+où <replaceable>paquet</replaceable> est le nom du paquet voulu.
+
+</para>
+
+  <sect3 id="tasksel">
+  <title>Sélection simple des paquets avec <command>tasksel</command></title>
+
+<para>
+
+Si vous choisissez une installation <quote>simple</quote>, vous serez dirigé 
+sur l'installateur de tâche <command>tasksel</command>. À travers cette 
+technique, Debian propose un ensemble de configurations logicielles prêtes à 
+l'emploi. En outre, vous pouvez toujours choisir de procéder à une 
+installation de paquet au cas par cas. C'est le rôle du programme 
+<command>dselect</command>, décrit plus bas. Mais, avec près de 
+&num-of-distrib-pkgs; paquets disponibles, cela peut être long&nbsp;!
+
+</para><para>
+
+C'est pour cette raison que vous pouvez d'abord choisir des 
+<emphasis>tâches</emphasis>, et, par la suite ajouter des paquets au cas par 
+cas. Ces tâches représentent, approximativement, les divers travaux qu'on 
+peut faire avec un ordinateur, par exemple, la <quote>bureautique</quote>,
+le <quote>développement en C</quote> ou le rôle de 
+<quote>serveur de fichiers</quote>.
+
+</para><para>
+
+Chaque tâche peut être mise en surbrillance et grâce à
+<guibutton>Task Info</guibutton> vous pouvez obtenir d'autres informations.
+Une description détaillée ainsi que les listes de paquets qui seront 
+installés sont affichées. Un tableau répertoriant la taille approximative de 
+l'ensemble des tâches proposées se trouve dans&nbsp;:
+<xref linkend="tasksel-size-list"/>.
+
+</para><para>
+
+Une fois que vous avez choisi les tâches, sélectionnez
+<guibutton>Finish</guibutton>. À ce moment là, <command>apt-get</command> 
+installera les paquets que vous avez sélectionnés. Notez que si vous n'avez 
+sélectionné aucune tâche, tous les paquets de priorité standard, important ou 
+nécessaire qui ne sont pas encore installés seront installés. Cette 
+fonctionnalité est la même que celle qui est réalisée par la commande 
+tasksel -s en ligne de commande, et qui représente pour le moment 37&nbsp;Mo 
+d'archives. On vous montrera le nombre de paquets qui seront installés, ainsi 
+que, si besoin est, la quantité de données en kilo-octets, qui devra être 
+téléchargée.
+
+</para><para>
+
+Des &num-of-distrib-pkgs; paquets disponibles dans Debian, seule une petite 
+partie est traitée par les tâches proposées dans l'installateur de tâches. 
+Pour obtenir des informations sur d'autres paquets, utilisez soit 
+<userinput>apt-cache search <replaceable>chaîne-à-recherche</replaceable></userinput>
+pour une chaîne de caractères donnée (regardez le page de manuel d'
+<citerefentry><refentrytitle>apt-cache</refentrytitle><manvolnum>8</manvolnum></citerefentry>)
+ou bien les programmes <command>dselect</command> ou 
+<command>aptitude</command> décrits ci-dessous.
+
+</para>
+  </sect3>
+
+  <sect3 id="dselect">
+ <title>Sélection «&nbsp;avancée&nbsp;» avec <command>dselect</command></title>
+
+<para>
+
+Si vous avez choisi la sélection avancée des paquets, vous allez être dirigé 
+sur le programme <command>dselect</command>. Il est nécessaire d'avoir lu 
+le <ulink url="&url-dselect-beginner;">guide de dselect</ulink> avant de 
+lancer <command>dselect</command>. Ce programme permet de choisir les 
+<emphasis>packages</emphasis> à installer sur votre système. Vous devez être 
+le super-utilisateur (root) pour l'exécuter.
+
+</para>
+ </sect3>
+
+ <sect3 id="aptitude">
+<title>Sélection «&nbsp;avancée&nbsp;» avec <command>aptitude</command></title>
+
+<para>
+
+<command>Aptitude</command> est un nouveau programme de gestion des paquets.
+Ses commandes, raccourcis clavier ou boutons graphiques, ressemblent à celles
+du fameux <command>dselect</command>, mais il possède assez de clinquant pour
+ne pas effaroucher les nouveaux utilisateurs, essayez par exemple le
+démineur intégré&nbsp;! <command>Aptitude</command> permet de choisir les
+paquets un par un, de choisir un ensemble de paquets correspondant à un
+critère donné ou de choisir une ou plusieurs tâches.
+
+</para><para>
+
+Les principaux raccourcis clavier sont les suivants&nbsp;:
+
+<informaltable>
+<tgroup cols="2">
+<thead>
+<row>
+  <entry>Touche</entry><entry>Action</entry>
+</row>
+</thead>
+
+<tbody>
+<row>
+  <entry><keycap>Up</keycap>, <keycap>Down</keycap></entry>
+  <entry>se déplacer vers le haut ou vers le bas.</entry>
+</row><row>
+  <entry>&enterkey;</entry>
+  <entry>Ouvrir/fermer/activer un élément.</entry>
+</row><row>
+  <entry><keycap>+</keycap></entry>
+  <entry>choisir d'installer un paquet.</entry>
+</row><row>
+  <entry><keycap>-</keycap></entry>
+  <entry>Choisir de supprimer un paquet.</entry>
+</row><row>
+  <entry><keycap>d</keycap></entry>
+  <entry>afficher les dépendances d'un paquet.</entry>
+</row><row>
+  <entry><keycap>g</keycap></entry>
+  <entry>télechargement/installation/suppression des paquets.</entry>
+</row><row>
+  <entry><keycap>q</keycap></entry>
+  <entry>Quitter l'écran courant.</entry>
+</row><row>
+  <entry><keycap>F10</keycap></entry>
+  <entry>Activer le menu.</entry>
+</row>
+</tbody></tgroup></informaltable>
+
+D'autres commandes sont décrites dans l'aide en ligne avec la touche 
+<keycap>?</keycap>.
+
+</para><para>
+
+<command>Aptitude</command> se veut agréable aux utilisateurs de 
+<command>dselect</command>, mais il offre d'autres possibilités et peut
+être paramétré à volonté. On peut définir les raccourcis clavier, les
+couleurs et l'affichage. Après son installation, vous pouvez explorer
+ces possibilités en lisant
+<filename>/usr/share/doc/aptitude/README</filename>.
+
+</para>
+  </sect3>
+ </sect2>

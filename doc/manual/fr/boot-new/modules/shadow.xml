@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 11648 -->
+
+ <sect2 id="base-config-users">
+ <title>Utilisateurs et mots de passe</title>
+
+  <sect3 id="base-config-shadow">
+  <title>Mots de passe «&nbsp;Shadow&nbsp;</title>
+
+<para>
+
+Selon la priorité en cours, le système peut vous demander si vous souhaitez 
+activer les mots de passe «&nbsp;shadow&nbsp;». C'est un système qui rend votre
+système GNU/Linux plus sûr. Dans un système dépourvu de ces mots de passe, 
+les mots de passe sont stockés (chiffrés) dans un fichier lisible par tous les
+utilisateurs&nbsp;:<filename>/etc/passwd</filename>. Ce fichier doit être 
+lisible par toutes les personnes qui se connectent sur le système, car il 
+contient des informations vitales pour ces utilisateurs, par exemple, comment 
+associer des identifiants numériques d'utilisateurs et des noms d'utilisateurs.
+Partant de là, quelqu'un pourrait raisonnablement récupérer votre fichier 
+<filename>/etc/passwd</filename> et lancer une attaque brutale (c'est-à-dire 
+tester systématiquement toutes les combinaisons possibles de mots de passe 
+pour essayer de les retrouver).
+
+</para><para>
+
+Si vous avez activé les mots de passe «&nbsp;shadow&nbsp;», les mots
+de passe seront stockés dans <filename>/etc/shadow</filename>, qui ne peut 
+être lu et modifié que par l'utilisateur root, et n'est lisible que par
+le groupe <filename>shadow</filename>. Par conséquent, nous vous
+recommandons d'activer les mots de passe «&nbsp;shadow&nbsp;».
+
+</para><para>
+
+Une reconfiguration des mots de passe «&nbsp;shadow&nbsp;» peut être 
+effectuée à tout moment à l'aide du programme 
+<command>shadowconfig</command>. Après l'installation, lisez le fichier
+<filename>/usr/share/doc/passwd/README.debian.gz</filename> pour de plus 
+amples informations.
+
+</para>
+  </sect3>
+
+  <sect3 id="base-config-root">
+  <title>Définir le mot de passe de Root</title>
+
+<para>
+
+Le compte <emphasis>root</emphasis> est aussi appelé le compte du 
+<emphasis>super-utilisateur</emphasis> &nbsp;; c'est un compte qui contourne 
+toutes les protections de sécurité présentes sur votre système. Le compte 
+<emphasis>root</emphasis> doit être uniquement utilisé pour administrer le 
+système, et pour une durée aussi courte que possible.
+
+</para><para>
+
+Chaque mot de passe que vous créez devrait contenir de 6 à 8 caractères et 
+devrait aussi combiner des lettres majuscules et des lettres minuscules ainsi 
+que des caractères de ponctuation. Portez une extrême attention au choix de 
+votre mot de passe <em>root</em>, étant donné qu'il s'agit d'un compte 
+puissant. Évitez les mots du dictionnaire ou des informations personnelles 
+qui pourraient être facilement devinées.
+
+</para><para>
+
+Si quelqu'un vous dit qu'il a besoin du mot de passe <em>root</em>, soyez
+extrêmement prudent. Vous ne devriez normalement jamais donner votre mot de 
+passe à quiconque, à moins que vous n'administriez une machine qui a plus 
+d'un administrateur système.
+
+</para>
+  </sect3>
+
+  <sect3 id="make-normal-user">
+  <title>Créer un utilisateur ordinaire</title>
+
+<para>
+
+Le système vous demandera si vous souhaitez aussi créer un utilisateur
+ordinaire. Ce compte devrait être votre principal accès personnel.
+Vous ne devriez pas utiliser le compte <emphasis>root</emphasis> pour une
+utilisation quotidienne ou comme compte personnel.
+
+</para><para>
+
+Pourquoi&nbsp;? Et bien, une des raisons pour éviter d'utiliser
+les privilèges de <emphasis>root</emphasis> est qu'il est très facile de 
+causer des dommages irréparables. Une autre raison est que vous pourriez
+lancer, sans le savoir, un programme 
+<emphasis>cheval de Troie</emphasis>&mdash; programme qui tire profit des 
+avantages du super-utilisateur pour compromettre à votre insu la sécurité du 
+système. N'importe quel livre sur l'administration système UNIX traite de ce 
+sujet de manière plus détaillée&mdash; si ce sujet est inconnu pour vous, 
+envisagez d'en lire un.
+
+</para><para>
+
+Nommez le compte utilisateur comme vous voulez. Par exemple, si votre
+nom est Jean Dupont, vous pouvez utiliser <userinput>dupont</userinput>,
+<userinput>jdupont</userinput> ou <userinput>jojo</userinput>.
+On vous demandera aussi le nom de l'utilisateur, et, comme précédemment, un 
+mot de passe.
+
+</para><para>
+
+Si, après l'installation, vous souhaitez créer un nouveau compte utilisateur, 
+utilisez la commande <command>adduser</command>.
+
+</para><para arch="s390">
+
+Vous devez créer un compte utilisateur sur les S/390 si vous souhaitez vous 
+connecter par le réseau en utilisant telnet. Le serveur telnet, avec sa 
+configuration par défaut dans Debian, n'autorise pas les connexions en tant 
+que super-utilisateur. Cependant, vous pouvez utiliser ssh (interpréteur
+de commandes sécurisé) pour vous connecter à distance en tant que
+super-utilisateurt&nbsp;; mais c'est déconseillé.
+
+</para>
+  </sect3>
+ </sect2>
