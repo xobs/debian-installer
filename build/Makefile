@@ -311,33 +311,24 @@ $(STAMPS)tree-unpack-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-s
 	rm -f $(DPKGDIR)/available $(DPKGDIR)/*-old $(DPKGDIR)/lock
 
 ifdef KERNELVERSION
-ifdef VERSIONED_SYSTEM_MAP
 	# Set up modules.dep, ensure there is at least one standard dir (kernel
 	# in this case), so depmod will use its prune list for archs with no
 	# modules.
 	#
 	set -e; \
+	if [ -n "$(VERSIONED_SYSTEM_MAP)" ]; then \
+		[ ! -e $(TREE)/boot/System.map-$(VERSION) ] || sysmap_name="$(TREE)/boot/System.map-$(VERSION)"; \
+	else \
+		[ ! -e $(TREE)/boot/System.map ] || sysmap_name="$(TREE)/boot/System.map"; \
+	fi; \
+	[ -n "$$sysmap_name" ] || sysmap_opt="-F $$sysmap_name"; \
 	$(foreach VERSION,$(KERNELVERSION), \
 		if [ -d $(TREE)/lib/modules/$(VERSION) ]; then \
-		mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
-		if [ -e $(TREE)/boot/System.map-$(VERSION) ]; then \
-			$(shell ./choose-subarch-env $(VERSION)) depmod -F $(TREE)/boot/System.map-$(VERSION) -q -a -b $(TREE)/ $(VERSION); \
-			mv $(TREE)/boot/System.map-$(VERSION) $(TEMP); \
-		else \
-			$(shell ./choose-subarch-env $(VERSION)) depmod -q -a -b $(TREE)/ $(VERSION); \
-		fi;fi;)
-else
-	set -e; \
-	$(foreach VERSION,$(KERNELVERSION), \
-		if [ -d $(TREE)/lib/modules/$(VERSION) ]; then \
-		mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
-		if [ -e $(TREE)/boot/System.map ]; then \
-			$(shell ./choose-subarch-env $(VERSION)) depmod -F $(TREE)/boot/System.map -q -a -b $(TREE)/ $(VERSION); \
-			mv $(TREE)/boot/System.map $(TEMP); \
-		else \
-			$(shell ./choose-subarch-env $(VERSION)) depmod -q -a -b $(TREE)/ $(VERSION); \
-		fi;fi;)
-endif
+			mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
+			$(shell ./choose-subarch-env $(VERSION)) depmod $$sysmap_opt -q -a -b $(TREE)/ $(VERSION); \
+		fi; \
+		[ -n "$$sysmap_name" ] || mv $(TREE)/boot/System.map-$(VERSION) $(TEMP))
+
 	# These files depmod makes are used by hotplug, and we shouldn't
 	# need them, yet anyway.
 	find $(TREE)/lib/modules/ -name 'modules*' \
