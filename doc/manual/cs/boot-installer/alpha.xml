@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 19466 -->
+<!-- original version: 23576 -->
 
  <sect2 arch="alpha" id="alpha-firmware">
  <title>Firmware Alpha konzoly</title>
@@ -255,7 +255,7 @@ V SRM konzoli jsou názvy Ethernet rozhraní pojmenovány s předponou
 
 <informalexample><screen>
 
->>> show dev
+&gt;&gt;&gt; show dev
 ewa0.0.0.9.0               EWA0              08-00-2B-86-98-65
 ewb0.0.0.11.0              EWB0              08-00-2B-86-98-54
 ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
@@ -266,7 +266,7 @@ Nejprve musíte nastavit zaváděcí protokol:
 
 <informalexample><screen>
 
->>> set ewa0_protocol bootp
+&gt;&gt;&gt; set ewa0_protocol bootp
 
 </screen></informalexample>
 
@@ -274,12 +274,12 @@ Pak zkontrolujte typ média:
 
 <informalexample><screen>
 
->>> set ewa0_mode <replaceable>mode</replaceable>
+&gt;&gt;&gt; set ewa0_mode <replaceable>mode</replaceable>
 
 </screen></informalexample>
 
 Seznam platných módů získáte příkazem
-<userinput>>>>set ewa0_mode</userinput>.
+<userinput>&gt;&gt;&gt; set ewa0_mode</userinput>.
 
 </para><para>
 
@@ -287,7 +287,7 @@ Pro zavedení z prvního ethernetového rozhraní byste napsali:
 
 <informalexample><screen>
 
->>> boot ewa0 -flags ""
+&gt;&gt;&gt; boot ewa0 -flags ""
 
 </screen></informalexample>
 
@@ -301,12 +301,14 @@ parametr <userinput>console=</userinput>, což můžete udělat ze SRM
 konzoly přes parametr <userinput>-flags</userinput> příkazu
 <userinput>boot</userinput>. Sériové porty mají stejná jména, jako
 jejich odpovídající soubory v adresáři <filename>/dev</filename>.
+Při zadávání dodatečných parametrů nesmíte zapomenout na nezbytné
+parametry, bez kterých by &d-i; nenastartoval.
 Například pro zavedení z <userinput>ewa0</userinput> a použití konzoly
 na prvním sériovém portu byste napsali:
 
 <informalexample><screen>
 
->>> boot ewa0 -flags console=ttyS0
+&gt;&gt;&gt; boot ewa0 -flags "root=/dev/ram ramdisk_size=16384 console=ttyS0"
 
 </screen></informalexample>
 
