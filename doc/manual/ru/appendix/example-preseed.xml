@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: example-preseed.xml 23055 2004-10-12 20:53:22Z joeyh $ -->
+<!-- $Id: example-preseed.xml 23389 2004-10-23 08:00:57Z joeyh $ -->
 
 <sect1 id="example-preseed">
 <title>Пример файла автоматической установки</title>
@@ -34,6 +34,14 @@
 #    languagechooser/language-name=English
 #    countrychooser/shortlist=US
 #    console-keymaps-at/keymap=us
+#
+# Note that the kernel accepts a maximum of 8 command line options and
+# 8 environment options (including any options added by default for the
+# installer). If these numbers are exceeded, 2.4 kernels will drop any
+# excess options and 2.6 kernels will panic.
+# Some of the default options, like 'vga=normal' and 'devfs=mount' may be
+# safely removed for most installations, which may allow you to add more
+# options for preseeding.
 
 #### Shell commands.
 
@@ -211,11 +219,9 @@ base-config        tzconfig/choose_country_zone_single boolean true
 
 # If you want to skip creation of a normal user account.
 #passwd                passwd/make-user                boolean false
-# Alternatively, you can preseed the user's name. Note that the username
-# will be derived from this; it cannot be overridden currently. The
-# username will be the (lowercase) first name of the full name.
+# Alternatively, you can preseed the user's name and login.
 #passwd                passwd/user-fullname                string Debian User
-#passwd                passwd/username                        string 
+#passwd                passwd/username                        string debian
 # And their password, but use caution!
 #passwd                passwd/user-password                password insecure
 #passwd                passwd/user-password-again        password insecure

@@ -2,15 +2,15 @@
 <!-- $Id: ia64.xml 18660 2004-07-28 04:49:59Z dannf $ -->
 
 
-  <sect2 arch="ia64"><title>Partitioning for &arch-title;</title>
+  <sect2 arch="ia64"><title>Разметка для &arch-title;</title>
 
-<para>The <command>partman</command> disk partitioner is the default partitioning tool for the installer. It manages the set of partitions and their mount points to ensure that the disks and filesystems is properly configured for a successful installation. It actually uses the <command>parted</command> to do the on-disk partitioning. </para>
+<para>Программа для дисковой разметки <command>partman</command> является инструментом разметки по умолчанию для программы установки. Она управляет имеющимися разделами и их точками монтирования, чтобы проверить, что диски и файловые системы настроены правильно для успешной установки. На самом деле для разметки используется программа <command>parted</command>. </para>
 
    <note>
-   <title>EFI Recognized Formats</title>
-<para>The IA64 EFI firmware supports two partition table (or disk label) formats, GPT and MS-DOS. MS-DOS, the format typically used on i386 PCs, is no longer recommended for IA64 systems. Although the installer also provides the <command>cfdisk</command>, you should only use the <ulink url="parted.txt"> <command>parted</command></ulink> because only it can manage both GPT and MS-DOS tables correctly. </para></note>
+   <title>Распознаваемые EFI форматы</title>
+<para>Микропрограмма EIF на IA64 поддерживает два формата таблицы разделов (или метки диска), GPT и MS-DOS. MS-DOS обычно используется на i386 PC, не рекомендуется для систем IA64. Хотя в программу установки включён<command>cfdisk</command>, вы должны использовать только <ulink url="parted.txt"> <command>parted</command></ulink>, так как только она может работать корректно и с таблицами GPT и с MS-DOS. </para></note>
 
-<para>The automatic partitioning recipes for <command>partman</command> allocate an EFI partition as the first partition on the disk. You can also set up the partition under the <guimenuitem>Guided partitioning</guimenuitem> from the main menu in a manner similar to setting up a <emphasis>swap</emphasis> partition. </para><para>The <command>partman</command> partitioner will handle most disk layouts. For those rare cases where it is necessary to manually set up a disk, you can use the shell as described above and run the <command>parted</command> utility directly using its command line interface. Assuming that you want to erase your whole disk and create a GPT table and some partitions, then something similar to the following command sequence could be used: </para><para>
+<para>При автоматическом способе разметки <command>partman</command> создаётEFI раздел первым на диске. Также вы можете создать раздел с помощью<guimenuitem>Направляющая разметка</guimenuitem> из главного меню тем же способом, каким вы создавали раздел <emphasis>swap</emphasis>. </para><para>Программа разметки <command>partman</command> справится с большинством вариантов разметки. В тех редких случаев, когда необходимо вручную разметить диск, вы можете использоватьоболочку как описано выше и запустить утилиту <command>parted</command> прямо из командной строки. Если предположить, что вы хотите стереть весь диск и создатьGPT таблицу с несколькими разделами, то для этого нужно использовать примерно такую последовательность команд: </para><para>
 <informalexample><screen>mklabel gpt
       mkpartfs primary fat 0 50
       mkpartfs primary linux-swap 51 1000
@@ -20,7 +20,7 @@
       quit
 
 </screen></informalexample>
-</para><para>This creates a new partition table, and three partitions to be used as an EFI boot partition, swap space, and a root file system. Finally it sets the boot flag on the EFI partition. Partitions are specified in Megabytes, with start and end offsets from the beginning of the disk. So, for example, above we created a 1999MB ext2 file system starting at offset 1001MB from the start of the disk. Note that formatting swap space with <command>parted</command> can take a few minutes to complete, as it scans the partition for bad blocks. </para>
+</para><para>Таким образом создастся таблица разделов и три раздела будут использоваться в качествезагрузочного раздела EFI, раздела swap и корневой файловой системы. Наконец, установится флаг загрузкуи на раздел EFI. Разделы заданы в мегабайтах, в виде смещения начала и конца от начала диска. В примере мы создали файловую систему ext2 размером 1999МБ, начиная со смещения 1001МБ от начала диска. Заметим, что форматирование swap раздела с помощью <command>parted</command> может занять несколько минут, так как происходит сканирование плохих блоков. </para>
   </sect2>
 
   <sect2 arch="ia64"><title>Boot Loader Partition Requirements</title>
