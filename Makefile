@@ -3,6 +3,10 @@
 # override this on the command line.
 TYPE=net
 
+# List here any extra udebs that are not in the list file that
+# should still be included on the system.
+EXTRAS=""
+
 # Build tree location. This can be overridden too.
 TREE=builddir
 
@@ -24,7 +28,7 @@ APT_GET=apt-get --assume-yes \
 	-o Debug::NoLocking=true \
 	-o Dir::Cache=$(APTDIR)/cache
 
-UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE))
+UDEBS=$(shell grep --no-filename -v ^\# lists/base lists/$(TYPE)) $(EXTRAS)
 
 build: tree reduce stats
 
@@ -42,7 +46,7 @@ get_udebs:
 	# If there are local udebs, remove them from the list of things to
 	# get. Then get all the udebs that are left to get.
 	needed="$(UDEBS)"; \
-	for file in `find $(LOCALUDEBDIR) -type f -printf %f 2>/dev/null`; do \
+	for file in `find $(LOCALUDEBDIR) -type f -printf "%f\n" 2>/dev/null`; do \
 		package=`echo $$file | cut -d _ -f 1`; \
 		needed=`echo $$needed | sed "s/$$package *//"`; \
 	done; \
