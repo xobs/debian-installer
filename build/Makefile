@@ -432,7 +432,7 @@ endif
 	echo "Status: install ok intalled" >> $(DPKGDIR)/status
 	echo "Version: $(subst _,-,$(targetstring))-$(BUILD_DATE)" >> $(DPKGDIR)/status
 	echo "Description: debian installation image" >> $(DPKGDIR)/status
-	echo " " >> $(DPKGDIR)/status
+	echo >> $(DPKGDIR)/status
 
 ifdef DROP_LANG
 	# Remove languages from the templates.
