@@ -1,0 +1,22 @@
+
+# cd content for powerpc, includes yaboot for booting 
+# apple powerpc (newworld) computers
+cd_content: initrd
+	mkdir -p $(CD_IMAGE_TREE)
+	mkdir -p $(CD_IMAGE_TREE)/boot
+
+	$(foreach NAME,$(KERNELNAME), \
+		cp -f $(TEMP)/$(NAME) $(CD_IMAGE_TREE)/boot/$(TYPE)-linux; )
+
+	cp -f $(INITRD) $(CD_IMAGE_TREE)/boot/
+
+	#New-world bootability
+	cp -f boot/powerpc/ofboot.b $(CD_IMAGE_TREE)/boot/
+	cp -f /usr/lib/yaboot/yaboot $(CD_IMAGE_TREE)/boot/
+	cp -f boot/powerpc/boot.msg $(CD_IMAGE_TREE)/boot/
+	cp -f boot/powerpc/$(TYPE)-yaboot.conf $(CD_IMAGE_TREE)/boot/yaboot.conf
+
+
+# creates a bootable cd image for powerpc
+cd_image: cd_content
+	mkisofs -r -T --netatalk -hfs -probe -map boot/powerpc/hfs.map -part -no-desktop -hfs-bless $(CD_IMAGE_TREE)/boot -hfs-volid Debian-Installer/PPC -o $(DEST)/$(TYPE).iso $(CD_IMAGE_TREE)
