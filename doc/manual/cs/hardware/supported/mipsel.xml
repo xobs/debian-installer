@@ -1,14 +1,39 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 11648 -->
+<!-- original version: 22234 -->
 
   <sect2 arch="mipsel">
   <title>Procesory, základní desky a grafické karty</title>
 <para>
 
+Debian na &arch-title; momentálně podporuje tři podarchitektury:
+
+<itemizedlist>
+<listitem><para>
+
+DECstation: podporovány jsou různé modely DECstation.
+
+</para></listitem>
+<listitem><para>
+
+Cobalt Microserver: podporovány jsou počítače Cobalt založené na MIPS.
+To zahrnuje Cobalt Qube, RaQ, Qube2, RaQ2 a Gateway Microserver.
+
+</para></listitem>
+<listitem><para>
+
+Broadcom BCM1250 (SWARM): jedná se o desku formátu ATX od firmy
+Broadcom založenou na jejich rodině procesorů SiByte.
+
+</para></listitem>
+</itemizedlist>
+
 Kompletní informace o podporovaných počítačích mips/mipsel najdete
-v <ulink url="&url-mips-howto;">Linux MIPS HOWTO</ulink>.
-V této  sekci popíšeme systémy podporované instalačním systémem.
+v <ulink url="&url-mips-howto;">Linux MIPS HOWTO</ulink>.  V této
+sekci popíšeme pouze systémy podporované instalačním systémem.
+Hledáte-li podporu pro ostatní podarchitektury, kontaktujte prosím
+diskusní list <ulink
+url="&url-list-subscribe;">debian-&architecture;</ulink>.
 
 </para>
 
@@ -16,9 +41,9 @@ V této  sekci popíšeme systémy podporované instalačním systémem.
 
 <para>
 
-Na MIPS s adresováním ,,little endian'' podporuje instalační systém
-Debianu pouze počítače DECstation s procesory R3000 a R4000/R4400,
-viz následující tabulka.
+Na MIPS s adresováním <quote>little endian</quote> podporuje
+instalační systém Debianu pouze počítače DECstation s procesory R3000
+a R4000/R4400, viz následující tabulka.
 
 </para><para>
 
@@ -42,6 +67,11 @@ viz následující tabulka.
   <entry>R4000</entry>
   <entry>3MIN</entry>
   <entry>r4k-kn04</entry>
+</row><row>
+  <entry>DECstation 5000/200</entry>
+  <entry>R3000</entry>
+  <entry>3MAX</entry>
+  <entry>r3k-kn02</entry>
 </row><row>
   <entry>DECstation 5000/240</entry>
   <entry>R3000</entry>
@@ -67,8 +97,13 @@ viz následující tabulka.
 
 </para><para>
 
-Linux/MIPS také funguje na DECstation 5000/200, ale tento model
-zatím není podporován instalačním systémem.
+Podporovány jsou všechny počítače Cobalt se sériovou konzolí, protože
+ta je pro instalaci vyžadována.
+
+</para><para>
+
+Broadcom BCM1250 obsahuje čip SB1250 se dvěma jádry, pro která má
+instalační program dokonce podporu SMP režimu.
 
 </para>
    </sect3>
@@ -86,12 +121,6 @@ konzola dostupná přes grafické volby PMAG-BA a PMAGB-B.
 
 </para><para>
 
-Jestliže chcete mít podporu pro další podarchitektury, kontaktujte,
-prosím, diskuzní list
-<ulink url="&url-list-subscribe;">debian-mips mailing list</ulink>.
-
-</para><para>
-
 Pokud máte linuxový systém a chcete jej použít jako sériový terminál,
 můžete zkusit příkaz cu (součást balíku <classname>uucp</classname>).
 Příklad:
@@ -104,12 +133,14 @@ cu -l /dev/ttyS1 -s 9600
 
 </para><para>
 
-kde parametrem ,,-l'' vyberete požadovaný sériový port a parametrem
-,,-s'' nastavíte rychlost spojení (9600 bitů za sekundu).
+kde parametrem <userinput>-l</userinput> vyberete požadovaný sériový
+port a parametrem <userinput>-s</userinput> nastavíte rychlost spojení
+(9600 bitů za sekundu).
+
+</para><para>
+
+Cobalt i Broadcom BCM1250 používají 115200 bps.
 
 </para>
    </sect3>
   </sect2>
-
-
-
