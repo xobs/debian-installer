@@ -370,6 +370,7 @@ endif
 	for file in `find $(TREE)/var/lib/dpkg/info -name '*.md5sums' -o \
 	    -name '*.postrm' -o -name '*.prerm' -o -name '*.preinst' -o \
 	    -name '*.list'`; do \
+	    echo "** Removing unnecessary control file $$file"; \
 	    rm $$file; \
 	done
 
