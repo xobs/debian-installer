@@ -238,15 +238,8 @@ tree-stamp:
 	# need them, yet anyway.
 	find $(TREE)/lib/modules/$(KVERS)-$(FLAVOUR)/ -name 'modules*' \
 		-not -name modules.dep | xargs rm -f
-	# Install /dev devices (but not too much)
+	# Create a dev tree
 	mkdir -p $(TREE)/dev
-	cd $(TREE)/dev && /sbin/MAKEDEV std console
-	rm $(TREE)/dev/vcs*
-	rm $(TREE)/dev/tty[1-9][0-9]
-	if [ ! -c $(TREE)/dev/console ]; then \
-	    echo "WARNING: $(TREE)/dev/console isn't a character device as it should."; \
-	    echo "This does probably mean that you should start again with root rights."; \
-	fi
 
 	# Move the kernel image out of the way, into a temp directory
 	# for use later. We don't need it bloating our image!
