@@ -589,8 +589,8 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 	gzip -v9f $(TEMP)/initrd
 
 # raw kernel images
-$(KERNEL): $(TEMP_KERNEL)
-	install -m 644 -D $^ $@
+$(KERNEL): $(TEMP)/$$(@F)
+	install -m 644 -D $< $@
 	./update-manifest $@ $(MANIFEST-KERNEL)
 
 $(TEMP_KERNEL): $(STAMPS)tree-unpack-$(targetstring)-stamp
