@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23061 -->
+<!-- original version: 24663 -->
 
   <sect2 arch="i386"><title>CD-ROM からの起動</title>
 
@@ -95,10 +95,9 @@ option).  Enter the subdirectory for the flavor you chose, e.g.,
 あなたが使うフレーバーのサブディレクトリ、例えば
 
 <informalexample><screen>
-
 cd c:\install
-
 </screen></informalexample>
+
 に移動します。
 
 
@@ -214,13 +213,11 @@ Here is a <filename>/etc/lilo.conf</filename> example:
 </para><para>
 
 <informalexample><screen>
-
 image=/boot/newinstall/vmlinuz
        label=newinstall
        initrd=/boot/newinstall/initrd.gz
        root=/dev/ram0
-       append="devfs=mount,dall ramdisk_size=17000"
-
+       append="devfs=mount,dall ramdisk_size=12000"
 </screen></informalexample>
 
 <!--
@@ -252,23 +249,31 @@ add the following lines:
 <filename>menu.lst</filename> を配置して、以下の行を追加してください。
 
 <informalexample><screen>
-
 title  New Install
-kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram0 devfs=mount,dall ramdisk_size=17000
+kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram0 ramdisk_size=12000
 initrd (hd0,0)/boot/newinstall/initrd.gz
-
 </screen></informalexample>
 
 <!--
-and reboot. Note that the value of the <userinput>ramdisksize</userinput>
-may need to be adjusted for the size of the initrd image. 
-From now on, there should be no difference between <command>GRUB</command>
-or <command>LILO</command>.
+and reboot. If the boot fails, you can try adding
+<userinput>devfs=mount,dall</userinput> to the <quote>kernel</quote> line.
 -->
 その後再起動してください。
-initrd イメージのサイズのために <userinput>ramdisksize</userinput> の値を
-調節することが必要かもしれないことに注意してください。
-これより後は、<command>GRUB</command> と <command>LILO</command> 
+起動に失敗する場合は、
+<quote>kernel</quote> 行に <userinput>devfs=mount,dall</userinput> 
+を追加してみてください。
+
+</para><para>
+
+<!--
+Note that the value of the <userinput>ramdisk_size</userinput> may need to be
+adjusted for the size of the initrd image.
+From here on, there should be no difference between <command>GRUB</command>
+or <command>LILO</command>.
+-->
+initrd イメージのサイズ用に <userinput>ramdisk_size</userinput> の、
+値の調節が必要かもしれないことに注意してください。
+その後は、<command>GRUB</command> と <command>LILO</command> 
 に違いはありません。
 
 </para>
@@ -279,19 +284,19 @@ initrd イメージのサイズのために <userinput>ramdisksize</userinput> の値を
 <para>
 
 <!--
-Lets assume you have prepared everything from <xref
+Let's assume you have prepared everything from <xref
 linkend="boot-dev-select"/> and <xref linkend="boot-usb-files"/>.  Now
 just plug your USB stick into some free USB connector and reboot the
 computer.  The system should boot up, and you should be presented with
 the <prompt>boot:</prompt> prompt.  Here you can enter optional boot
 arguments, or just hit &enterkey;.
 -->
-<xref linkend="boot-dev-select"/> と <xref linkend="boot-usb-files"/> より
-すべて準備したと仮定しましょう。
-さて、どれでも USB コネクタに USB スティックを差し込んで、
+さて、<xref linkend="boot-dev-select"/> と <xref linkend="boot-usb-files"/> 
+の内容すべてを準備しました。
+それでは USB コネクタに USB スティックを差し込んで、
 コンピュータを再起動してください。
 システムが起動したら <prompt>boot:</prompt> プロンプトが表示されるはずです。
-ここで、オプションのブート引数を入力するか、単に &enterkey; を打てます。
+ここで、オプションのブート引数を入力するか、ただ &enterkey; を打ちます。
 
 </para><para>
 
@@ -639,7 +644,7 @@ needs. For example, if you have one of the Dell laptops mentioned
 above, you should enter <userinput>exclude port
 0x800-0x8ff</userinput> here. There is also a list of some common
 resource range options in the <ulink
-url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-2.html#ss2.5">System
+url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-1.html#ss1.12">System
 resource settings section of the PCMCIA HOWTO</ulink>. Note that you
 have to omit the commas, if any, when you enter this value in the
 installer.
@@ -650,8 +655,8 @@ installer.
 例えば、上記の Dell のラップトップコンピュータを持っていれば、
 ここで <userinput>exclude port 0x800-0x8ff</userinput> と入力するといいです。
 さらにいくつかの共通のリソース範囲オプションのリストが<ulink
-url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-2.html#ss2.5">PCMCIA
-HOWTO のシステムリソースの設定</ulink> にあります。
+url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-1.html#ss1.12">
+PCMCIA HOWTO のシステムリソースの設定</ulink> にあります。
 インストーラにこの値を入力する場合、
 もしあればカンマを省略しなければならないことに注意してください。
 </para>

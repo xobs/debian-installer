@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23664 -->
+<!-- original version: 24665 -->
 
  <sect2 arch="alpha" id="alpha-firmware">
  <title>Alpha コンソールファームウェア</title>
@@ -336,14 +336,10 @@ available:
 一般に以下の 3 つの方法があります。
 
 <informalexample><screen>
-
-SRM -> aboot
-SRM -> MILO
-ARC -> MILO
-
+SRM -&gt; aboot
+SRM -&gt; MILO
+ARC -&gt; MILO
 </screen></informalexample>
-
-</para><para condition="FIXME">
 
 <!--
 Because <command>MILO</command> is not available for any of the Alpha
@@ -426,12 +422,10 @@ SRM では、イーサネットインターフェースには
 (多少、編集しています):
 
 <informalexample><screen>
-
->>> show dev
+&gt;&gt;&gt; show dev
 ewa0.0.0.9.0               EWA0              08-00-2B-86-98-65
 ewb0.0.0.11.0              EWB0              08-00-2B-86-98-54
 ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
-
 </screen></informalexample>
 
 <!--
@@ -440,9 +434,7 @@ You first need to set the boot protocol:
 まず、ブートプロトコルを設定します。
 
 <informalexample><screen>
-
->>> set ewa0_protocol bootp
-
+&gt;&gt;&gt; set ewa0_protocol bootp
 </screen></informalexample>
 
 <!--
@@ -451,15 +443,14 @@ Then check the medium type is correct:
 次にメディアのタイプが正しいかどうか確認します。
 
 <informalexample><screen>
-
->>> set ewa0_mode <replaceable>mode</replaceable>
-
+&gt;&gt;&gt; set ewa0_mode <replaceable>mode</replaceable>
 </screen></informalexample>
 
 <!--
-You can get a listing of valid modes with <userinput>>>>set ewa0_mode</userinput>.
+You can get a listing of valid modes with <userinput>&gt;&gt;&gt;set ewa0_mode</userinput>.
 -->
-使えるモードの一覧は <userinput>>>>set ewa0_mode</userinput> で取得できます。
+妥当なモードの一覧は <userinput>&gt;&gt;&gt;set ewa0_mode</userinput> 
+で取得できます。
 
 </para><para>
 
@@ -470,12 +461,8 @@ Then, to boot from the first Ethernet interface, you would type:
 イーサネットインターフェースから起動できます。
 
 <informalexample><screen>
-
->>> boot ewa0 -flags ""
-
+&gt;&gt;&gt; boot ewa0 -flags ""
 </screen></informalexample>
-
-</para><para>
 
 <!--
 This will boot using the default kernel parameters as included in the
@@ -510,9 +497,7 @@ and use a console on the first serial port, you would type:
 以下のように入力します。
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot ewa0 -flags &quot;root=/dev/ram ramdisk_size=16384 console=ttyS0&quot;
-
 </screen></informalexample>
 
 </para>
@@ -524,9 +509,7 @@ and use a console on the first serial port, you would type:
 Type
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot xxxx -flags 0
-
 </screen></informalexample>
 
 where <replaceable>xxxx</replaceable> is your CD-ROM drive in SRM notation.
@@ -576,9 +559,7 @@ SRM プロンプト (<prompt>&gt;&gt;&gt;</prompt>) で、
 以下のコマンドを実行してください。
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot dva0 -flags 0
-        
 </screen></informalexample>
 
 <!--
@@ -590,9 +571,7 @@ name.  Usually, <filename>dva0</filename> is the floppy; type
 通常 <filename>dva0</filename> がフロッピーです。
 
 <informalexample><screen>
-
 &gt;&gt;&gt; show dev
-        
 </screen></informalexample>
 
 <!--
@@ -617,11 +596,11 @@ If you want to specify kernel parameters when booting via
 <command>aboot</command> から起動する場合に、
 カーネルパラメータを指定したければ、
 以下のコマンドを用いてください (1 行で入力してください)。
-<informalexample><screen>
 
+<informalexample><screen>
 &gt;&gt;&gt; boot dva0 -file linux.bin.gz -flags "root=/dev/fd0 load_ramdisk=1 arguments"
-        
 </screen></informalexample>
+
 <!--
 (typed on one line), substituting, if necessary, the actual SRM boot
 device name for <filename>dva0</filename>, the Linux boot device name for
@@ -690,12 +669,8 @@ additional parameters), you can use a command like this:
 次のようなコマンドが使えます。
 
 <informalexample><screen>
-
-MILO&gt; boot fd0:linux.bin.gz root=/dev/fd0 load_ramdisk=1 <!-- arguments -->
-        
+MILO> boot fd0:linux.bin.gz root=/dev/fd0 load_ramdisk=1 <!-- arguments -->
 </screen></informalexample>
-
-</para><para>
 
 <!--
 If you are booting from something other than a floppy, substitute
@@ -711,4 +686,3 @@ MILO の簡単なコマンドリファレンスを参照できます。
 
 </para>
  </sect2>
-

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 23151 -->
+<!-- original version: 24663 -->
 
   <sect2 arch="powerpc" id="boot-cd"><title>CD-ROM からの起動</title>
 
@@ -60,10 +60,9 @@ NewWorld では、OpenFirmware のコマンドを用いて、
 ただし OF プロンプトで与える CD の <command>yaboot</command> へのパスとしては、
 
 <informalexample><screen>
-
-0 > boot cd:,\install\yaboot
-
+0 &gt; boot cd:,\install\yaboot
 </screen></informalexample>
+
 のようなものを用いてください。
 </para>
   </sect2>
@@ -163,9 +162,7 @@ HFS パーティションの番号に置き換えてください。
 yaboot のプロンプトが表示されます。
 
 <informalexample><screen>
-
 boot:
-
 </screen></informalexample>
 
 <!--
@@ -186,6 +183,120 @@ Yaboot の <prompt>boot:</prompt> プロンプトで、
 
 </para>
    </sect3>
+  </sect2>
+
+  <sect2 arch="powerpc" id="usb-boot">
+  <title>USB メモリスティックからの起動</title>
+<para>
+
+<!--
+Currently, NewWorld PowerMac systems are known to support USB booting.
+-->
+現在、NewWorld PowerMac は USB からの起動をサポートしています。
+
+</para>
+
+<para>
+
+<!--
+Make sure you have prepared everything from <xref
+linkend="boot-usb-files"/>. To boot a Macintosh system from a USB stick,
+you will need to use the Open Firmware prompt, since Open Firmware does
+not search USB storage devices by default.-->
+<!-- TODO: although it could be made to; watch this space -->
+<!--
+To get to the prompt, hold down
+<keycombo><keycap>Command</keycap> <keycap>Option</keycap>
+<keycap>o</keycap> <keycap>f</keycap></keycombo> all together while
+booting (see <xref linkend="invoking-openfirmware"/>).
+-->
+すでに <xref linkend="boot-usb-files"/> にあるすべての準備が、
+終わっていることと思います。
+USB スティックから Macintosh システムを起動するには、
+Open Firmware は標準で USB ストレージデバイスを検索しませんので、
+Open Firmware プロンプトを使う必要があります。
+<!-- TODO: 書きましたが、確認してください (訳注 必要ないかな) -->
+プロンプトを表示するには、
+<keycombo><keycap>Command</keycap> <keycap>Option</keycap>
+<keycap>o</keycap> <keycap>f</keycap></keycombo> を
+起動中ずっと押したままにしておきます。
+(<xref linkend="invoking-openfirmware"/> を参照)
+
+</para><para>
+
+<!--
+You will need to work out where the USB storage device appears in the
+device tree, since at the moment <command>ofpath</command> cannot work
+that out automatically. Type <userinput>dev / ls</userinput> and
+<userinput>devalias</userinput> at the Open Firmware prompt to get a
+list of all known devices and device aliases. On the author's system
+with various types of USB stick, paths such as
+<filename>usb0/disk</filename>, <filename>usb0/hub/disk</filename>,
+<filename>/pci@f2000000/usb@1b,1/disk@1</filename>, and
+<filename>/pci@f2000000/usb@1b,1/hub@1/disk@1</filename> work.
+-->
+今のところ <command>ofpath</command> は自動でやってはくれませんので、
+自分で USB ストレージをデバイスツリーに出す必要があります。 
+Open Firmware プロンプトで、
+<userinput>dev / ls</userinput> や <userinput>devalias</userinput> と入力し、
+認識しているすべてのデバイスとデバイスエイリアスを取得してください。
+筆者のシステムでは、いろいろな USB スティックが
+<filename>usb0/disk</filename>, <filename>usb0/hub/disk</filename>,
+<filename>/pci@f2000000/usb@1b,1/disk@1</filename>,
+<filename>/pci@f2000000/usb@1b,1/hub@1/disk@1</filename>
+として見えています。
+
+</para><para>
+
+<!--
+Having worked out the device path, use a command like this to boot the
+installer:
+-->
+デバイスパスを取得できたら、
+以下のようなコマンドでインストーラを起動してください。
+
+<informalexample><screen>
+boot <replaceable>usb0/disk</replaceable>:<replaceable>2</replaceable>,\\:tbxi
+</screen></informalexample>
+
+<!--
+The <replaceable>2</replaceable> matches the Apple_HFS or
+Apple_Bootstrap partition onto which you copied the boot image earlier,
+and the <userinput>,\\:tbxi</userinput> part instructs Open Firmware to
+boot from the file with an HFS file type of "tbxi" (i.e.
+<command>yaboot</command>) in the directory previously blessed with
+<command>hattrib -b</command>.
+-->
+<replaceable>2</replaceable> には、はじめに起動イメージをコピーした 
+Apple_HFS・Apple_Bootstrap パーティションが該当します。
+<userinput>,\\:tbxi</userinput> の部分は、
+事前に <command>hattrib -b</command> をしておいたディレクトリにある、
+"tbxi" という HFS ファイルタイプのファイル (例: <command>yaboot</command>) 
+から起動するということを Open Firmware に指示しています。
+
+</para><para>
+
+<!--
+The system should now boot up, and you should be presented with the
+<prompt>boot:</prompt> prompt. Here you can enter optional boot
+arguments, or just hit &enterkey;.
+-->
+システムが起動し、<prompt>boot:</prompt> が表示されることと思います。
+ここで追加の起動引数を入力するか、単に &enterkey; を押してください。
+
+</para><warning><para>
+
+<!--
+This boot method is new, and may be difficult to get to work on some
+NewWorld systems. If you have problems, please file an installation
+report, as explained in <xref linkend="submit-bug"/>.
+-->
+この起動法は新しく、
+いくつかの NewWorld システムでは動作させるのが難しいかもしれません。
+問題が発生したら、<xref linkend="submit-bug"/> にあるように、
+インストールレポートを出してください。
+
+</para></warning>
   </sect2>
 
   <sect2 arch="powerpc" id="boot-tftp"><title>TFTP での起動</title>
