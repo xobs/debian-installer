@@ -454,7 +454,7 @@ $(TREE)/unifont.bgf: unifont-reduced-$(TYPE).bdf
 	mv $@.tmp $@
 
 # Build the driver floppy image
-$(EXTRA_TARGETS) : %-stamp : floppy-get_udebs-stamp
+$(EXTRA_TARGETS) : %-stamp : $(TYPE)-get_udebs-stamp
 	mkdir -p  ${TEMP}/$*
 	for file in $(shell grep --no-filename -v ^\#  pkg-lists/$*/common \
 		`if [ -f pkg-lists/$*/$(DEB_HOST_ARCH) ]; then echo pkg-lists/$*/$(DEB_HOST_ARCH); fi` \
