@@ -188,7 +188,11 @@ clean: demo_clean tmp_mount
 	rm -rf $(TREE) 2>/dev/null || sudo rm -rf $(TREE)
 	dh_clean
 	rm -f *-stamp
-	rm -rf $(APTDIR) $(UDEBDIR) $(BASE_TEMP) $(DEST) $(TMP_MNT)
+	rm -rf $(UDEBDIR) $(TMP_MNT)
+	rm -rf $(DEST)/$(TYPE)-* || sudo rm -rf $(DEST)/$(TYPE)-*
+
+reallyclean: clean
+	rm -rf $(APTDIR) $(DEST) $(BASE_TMP)
 
 # Get all required udebs and put in UDEBDIR.
 get_udebs: $(TYPE)-get_udebs-stamp
