@@ -1,51 +1,51 @@
-<!-- retain these comments for translator revision tracking -->
-<!-- original version: 18383 untranslated -->
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- original version: 21918 -->
 
    <sect3 id="mdcfg">
-   <title>Configuring Multidisk Device (Software RAID)</title>
+   <title>Meervoudige schijfapparaten configureren (Software-RAID)</title>
 <para>
 
-If you have more than one harddrive<footnote><para>
+Als u in uw computer meer dan één harde schijf<footnote><para>
 
-To be honest, you can construct MD device even from partitions
-residing on single physical drive, but that won't bring you anything
-useful.
+U zou zelfs een Software-RAID kunnen samenstellen uit verschillende
+partities op één fysieke harde schijf, maar daarmee bereikt u niets
+zinvols.
 
-</para></footnote> in your computer, you can use
-<command>mdcfg</command> to setup your drives for increased
-performance and/or better reliability of your data. The result is
-called <firstterm>Multidisk Device</firstterm> (or after its most
-famous variant <firstterm>software RAID</firstterm>).
-
-</para><para>
-
-MD is basically a bunch of partitions located on different disks and
-combined together to form a <emphasis>logical</emphasis> device. This
-device can then be used like an ordinary partition (i.e. in
-<command>partman</command> you can format it, assign a mountpoint,
-etc.).
+</para></footnote> heeft, kunt u <command>mdcfg</command> gebruiken
+om uw schijfeenheden te configureren voor betere prestaties en/of
+grotere betrouwbaarheid van uw gegevens. Het resultaat wordt een
+<firstterm>Multidisk Device</firstterm> (MD) of, naar zijn meest
+bekende variant, <firstterm>Software-RAID</firstterm>).
 
 </para><para>
 
-The benefit you gain depends on a type of a MD device you are
-creating. Currently supported are:
+MD is in feite niets meer dan een verzameling partities op verschillende
+harde schijven die worden gecombineerd om gezamelijk één
+<emphasis>logisch</emphasis> apparaat te vormen. Dit apparaat kan vervolgens
+worden gebruikt als een gewone partitie (dat wil zeggen dat u het in
+<command>partman</command> kunt formatteren en een aanhechtpunt kunt toewijzen.
+
+</para><para>
+
+Het voordeel dat u behaalt is afhankelijk van het soort MD-apparaat dat u
+creëert. Op dit moment worden ondersteund:
 
 <variablelist>
 <varlistentry>
 
 <term>RAID0</term><listitem><para>
 
-Is mainly aimed at performance.  RAID0 splits all incomming data into
-<firstterm>stripes</firstterm> and distributes them equally over each
-disk in the array. This can increase the speed of read/write
-operations, but when one of the disks fails, you will loose
-<emphasis>everything</emphasis> (part of the information is still on
-the healthy disk(s), the other part <emphasis>was</emphasis> on the
-failed disk).
+Levert hoofdzakelijk prestatieverbetering. RAID0 splitst alle binnenkomende
+gegevens op in zogenaamde <firstterm>stripes</firstterm> en verdeelt deze
+gelijkmatig over elke schijf in de reeks. Dit kan de snelheid van lees- en
+schrijfoperaties verhogen, maar als één van de schijven defect raakt,
+verliest u <emphasis>alle</emphasis> gegevens (een deel van de informatie
+staat nog wel op de 'gezonde' schijf/schijven, maar een ander deel
+<emphasis>stond</emphasis> op de defecte schijf).
 
 </para><para>
 
-The typical use for RAID0 is a partition for video editing.
+RAID0 wordt bijvoorbeeld veel toegepast voor video editing.
 
 </para></listitem>
 </varlistentry>
@@ -53,34 +53,34 @@ The typical use for RAID0 is a partition for video editing.
 
 <term>RAID1</term><listitem><para>
 
-Is suitable for setups where reliability is on the first place.  It
-consists of several (usualy two) equaly sized partitions where every
-partition contains exactly the same data. This essentialy means two
-things.  First, if one of your disks fails, you still have the data
-mirrored on the remaining disks. Second, you can use only a fraction
-of the available capacity. (Exactly it is the size of the smallest
-partition in the RAID).
+Is geschikt voor situaties waar betrouwbaarheid de belangrijkste
+overweging is. Het bestaat uit verschillende (gewoonlijk twee) partities
+van gelijke grootte; beide partities bevatten exact dezelfde gegevens.
+In essentie betekent dit twee dingen. Ten eerste heeft u, als één van de
+schijven defect raakt, nog altijd de gegevens op de tweede schijf. Ten
+tweede kunt u effectief slechts een deel van de beschikbare capaciteit
+gebruiken. (Meer exact: de grootte van de kleinste partitie in de RAID.)
 
 </para><para>
 
-Optionally you can have a spare disk in the array which will take the
-place of the failed disk in the case of failure.
+Desgewenst kunt u een reserve harde schijf in de reeks opnemen die bij
+een storing de plaats zal innemen van een defecte schijf.
 
 </para></listitem>
 </varlistentry>
 </variablelist>
 
-To sum it up:
+Samenvattend:
 
 <informaltable>
 <tgroup cols="5">
 <thead>
 <row>
   <entry>Type</entry>
-  <entry>Minimum Devices</entry>
-  <entry>Spare Device</entry>
-  <entry>Survives disk failure?</entry>
-  <entry>Available Space</entry>
+  <entry>Minimum apparaten</entry>
+  <entry>Reserve schijf</entry>
+  <entry>Overleeft een storing?</entry>
+  <entry>Beschikbare ruimte</entry>
 </row>
 </thead>
 
@@ -88,88 +88,90 @@ To sum it up:
 <row>
   <entry>RAID0</entry>
   <entry>2</entry>
-  <entry>no</entry>
-  <entry>no</entry>
-  <entry>Size of the smallest device multiplied by number of devices in RAID</entry>
+  <entry>nee</entry>
+  <entry>nee</entry>
+  <entry>Grootte van de kleinste partitie vermenigvuldigd met het aantal apparaten</entry>
 </row>
 
 <row>
   <entry>RAID1</entry>
   <entry>2</entry>
-  <entry>optional</entry>
-  <entry>yes</entry>
-  <entry>Size of the smallest device in RAID</entry>
+  <entry>optioneel</entry>
+  <entry>ja</entry>
+  <entry>Grootte van de kleinste partitie in de RAID</entry>
 </row>
 
 </tbody></tgroup></informaltable>
 
 </para><para>
 
-If you want to know the whole truth about Software RAID, have a look
-at <ulink url="&url-software-raid-howto;">Software RAID HOWTO</ulink>.
+Als u geïnteresseerd bent in de meer intieme details over Software-RAID,
+raadpleeg dan de <ulink url="&url-software-raid-howto;">Software RAID HOWTO</ulink>.
 
 </para><para>
 
-To create a MD device, you need to have the desired partitions it
-should consist of marked for use in a RAID.  (This is done in
-<command>partman</command> in the <guimenu>Partition
-settings</guimenu> menu where you should select <menuchoice>
-<guimenu>Use as:</guimenu> <guimenuitem>Use the partition as a RAID
-device</guimenuitem> </menuchoice>.)
+Om een MD-apparaat aan te maken, dient u de partities die u ervan onderdeel
+wilt laten uitmaken, te markeren voor gebruik in een RAID.
+U doet dit in <command>partman</command> in het menu met <guimenu>partitie
+instellingen</guimenu>. Daar selecteert u <menuchoice><guimenu>Gebruiken
+als:</guimenu> <guimenuitem>fysiek volume voor RAID</guimenuitem></menuchoice>.
 
 </para><warning><para>
 
-Currently you can't use MD for root (<filename>/</filename>)
-partition.
+Op dit moment is het niet mogelijk om MD te gebruiken voor de
+root-partitie (<filename>/</filename>).
 
 </para></warning><para>
 
-On the first screen of <command>mdcfg</command> simply select
-<guimenu>Create MD device</guimenu>. You will be presented a list of
-supported types of MD devices, from which you should choose one
-(e.g. RAID1). What will follow depends on a type of selected MD.
-Generally speaking, you will have to provide some parameters and
-choose the partitions from which the MD shoud consist.
+Vervolgens dient u in het hoofdmenu van <command>partman</command>
+te kiezen voor <guimenuitem>Software-RAID instellen</guimenuitem>.
+Kies dan op het eerste scherm van <command>mdcfg</command> voor
+<guimenuitem>MD-apparaat aanmaken</guimenuitem>. Er zal een lijst
+met ondersteunde typen MD-apparaten worden getoond, waaruit u er één
+kunt kiezen (bijvoorbeeld RAID1). Het vervolg is afhankelijk van het
+geselecteerde type MD. 
 
 </para>
 
 <itemizedlist>
 <listitem><para>
 
-RAID0 is simple &mdash; you will be issued with the list of available
-RAID partitions and your only task is to select the partitions which
-will form the MD.
+RAID0 is eenvoudig &mdash; er zal een overzicht met beschikbare
+RAID-partities worden getoond en uw enige taak is het selecteren van de
+partities die u voor het MD-apparaat wilt gebruiken.
 
 </para></listitem>
 <listitem><para>
 
-RAID1 is a bit more tricky. First, you will be asked to enter the
-number of active devices and the number of spare devices which will
-form the MD. Next, you need to select from the list of available RAID
-partitions those that will be active and then those that will be
-spare. The count of selected partitions must be equal to the number
-provided few seconds ago. Don't worry. If you make a mistake and
-select different number of partitions, the &d-i; won't let you
-continue until you correct the issue.
+RAID1 is iets lastiger. Allereerst zal u worden gevraagd om het aantal
+actieve en het aantal reserve eenheden voor het MD-apparaat in te
+geven. Vervolgens dient u uit de lijst met beschikbare RAID-partities
+eerst de partities te kiezen die actief moeten zijn en vervolgens de
+reserve partities. Het aantal partities dat u selecteert moet gelijk zijn
+aan het aantal dat u zojuist heeft opgegeven. Maak u geen zorgen; als u
+een fout maakt en een afwijkend aantal partities selecteert, zal &d-i;
+u beletten verder te gaan totdat dit gecorrigeerd is.
 
 </para></listitem>
 </itemizedlist>
 
 <para>
 
-It is perfectly possible to have several types of MD at once. For
-example if you have three 200 GB hard drives dedicated to MD, each
-containing two 100 GB partitions, you can combine first partitions on
-all three disk into the RAID0 (fast 300 GB video editing partition)
-and use the other three partitions (2 active and 1 spare) for RAID1
-(quite reliable 100 GB partition for /home).
+Het is zonder meer mogelijk om verschillende typen MD-apparaten naast
+elkaar te hebben. Als u bijvoorbeeld drie 200GB harde schijven heeft
+ten behoeve van MD, elk met twee 100 GB partities, kunt u de eerste
+partities op alle drie de schijven samenvoegen tot één RAID0 (snelle
+partitie van 300GB voor video editing) en de andere drie partities
+(2 actief en 1 reserve) gebruiken voor RAID1 (als zeer betrouwbare
+100GB partitie voor <filename>/home</filename>).
 
 </para><para>
 
-After you setup MD devices to your liking, you can
-<guimenuitem>Finish</guimenuitem> <command>mdcfg</command> to return
-back to the <command>partman</command> to create filesystems on your
-new MD devices and assign them the usual attributes like mountpoints.
+Nadat u de MD-apparaten naar uw tevredenheid heeft ingesteld, kunt u
+<command>mdcfg</command> afsluiten om terug te keren naar
+<command>partman</command> om op uw nieuwe MD-apparaten bestandssystemen
+aan te maken en daaraan de gebruikelijke kenmerken, zoals aanhechtpunten,
+toe te kennen.
 
 </para>
    </sect3>
