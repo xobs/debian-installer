@@ -132,8 +132,15 @@ endif
 
 demo: tree
 	$(MAKE) tree_mount
+	# Restart syslogd, watching the log fd inside the chroot too.
+	/etc/init.d/sysklogd stop
+	# -a must have the full path
+	start-stop-daemon --start --quiet --exec /sbin/syslogd -- -a `pwd`/$(TREE)/dev/log
+	SYSLOGD="-a $(TREE)/dev/log" /etc/init.d/sysklogd start
 	-@[ -f questions.dat ] && cp -f questions.dat $(TREE)/var/lib/cdebconf/
 	-@sudo chroot $(TREE) bin/sh -c "export TERM=linux; export DEBCONF_DEBUG=5; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; exec /usr/share/debconf/frontend /usr/bin/main-menu"
+	/etc/init.d/sysklogd stop
+	/etc/init.d/sysklogd start
 	$(MAKE) tree_umount
 
 shell: tree
