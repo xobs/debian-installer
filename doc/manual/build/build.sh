@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 [ -r ./po_functions ] || exit 1
 . ./po_functions
 
@@ -42,7 +44,6 @@ for lang in $languages; do
     check_po
     if [ -n "$USES_PO" ] ; then
         generate_xml
-        RET=$?; [ $RET -ne 0 ] && continue
     fi
     
     for arch in $architectures; do
@@ -58,7 +59,8 @@ for lang in $languages; do
 	    if [ "$format" = html ]; then
 		mv ./build.out/html/*.html "$destination/$destsuffix"
 	    else
-		mv ./build.out/install.$lang.$format "$destination/$destsuffix"
+	        # Do not fail because of missing PDF support for Japanese
+		mv ./build.out/install.$lang.$format "$destination/$destsuffix" || true
 	    fi
 	done
 
@@ -66,7 +68,7 @@ for lang in $languages; do
     done
 
     # Delete generated XML files
-    [ -n "$USES_PO" ] && rm -r ../$lang
+    [ -n "$USES_PO" ] && rm -r ../$lang || true
 done
 
 PRESEED="../en/appendix/example-preseed.xml"
