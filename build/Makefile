@@ -210,6 +210,7 @@ _list:
 	echo rebuild_$(targetstring); \
 	echo demo_$(targetstring); \
 	echo shell_$(targetstring); \
+	echo uml_$(targetstring); \
 	echo
 
 
@@ -764,7 +765,7 @@ demo_%:
 	$(submake) demo1
 
 .PHONY: demo1
-demo1: $(STAMPS)tree-demo-stamp
+demo1:
 	@$(submake) tree_mount; \
 	[ -f questions.dat ] && cp -f questions.dat $(TREE)/var/lib/cdebconf/ ; \
 	sudo chroot $(TREE) bin/sh -c "export DEBCONF_DEBUG=5 ; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; exec /usr/share/debconf/frontend /usr/bin/main-menu" ; \
@@ -783,12 +784,14 @@ shell1:
 	sudo chroot $(TREE) bin/sh; \
 	$(submake) tree_umount
 
-# This is broken due to lacking SUBARCH/MEDIUM/FLAVOUR definitions.
-#.PHONY: uml
-#uml: $(INITRD)
-#	-linux initrd=$(INITRD) root=/dev/rd/0 ramdisk_size=8192 con=fd:0,fd:1 devfs=mount
+.PHONY: uml_%
+uml_%:
+	@set -e; \
+	export SUBARCH=; \
+	export FLAVOUR=; \
+	export MEDIUM=$(subst uml_,,$@); \
+	$(submake) uml1
 
-# This is broken due to lacking SUBARCH/MEDIUM/FLAVOUR definitions.
-#.PHONY: tarball
-#tarball: $(STAMPS)tree-$(targetstring)-stamp
-#	tar czf $(BASE_DEST)/$(targetstring)-debian-installer.tar.gz $(TREE)
+.PHONY: uml1
+uml1:
+	-linux initrd=$(INITRD) root=/dev/rd/0 ramdisk_size=8192 con=fd:0,fd:1 devfs=mount
