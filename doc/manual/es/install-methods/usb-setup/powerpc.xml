@@ -1,41 +1,47 @@
-<!-- retain these comments for translator revision tracking -->
 <!-- $Id: powerpc.xml 24663 2004-12-31 18:38:22Z fjpop-guest $ -->
+<!-- original version: 24663 -->
+<!-- traducido por jfs, 20 febrero 2005 -->
+
+<!-- Nota del traductor : USB stick = lápiz USB -->
 
    <sect3 arch="powerpc">
-   <title>USB stick partitioning on &arch-title;</title>
+   <title>Particionado de lápiz USB en &arch-title;</title>
 <para>
 
-Most USB sticks do not come pre-configured in such a way that Open
-Firmware can boot from them, so you will need to repartition the stick.
-On Mac systems, run <userinput>mac-fdisk /dev/sda</userinput>,
-initialise a new partition map using the <userinput>i</userinput>
-command, and create a new partition of type Apple_Bootstrap using the
-<userinput>C</userinput> command. (Note that the first "partition" will
-always be the partition map itself.) Then type
+La mayor parte de los lápices USB no vienen pre-configurados de
+forma que «Open Firmware» pueda arrancar de éstos así que tendrá que
+reparticionarlo. En los sistemas Mac ejecute
+<userinput>mac-fdisk /dev/sda</userinput>, inicialice una nueva
+tabla de particiones con la orden <userinput>i</userinput>
+y cree una nueva partición del tipo «Apple_Bootstrap» con la orden
+<userinput>C</userinput>. Tenga en cuenta que la primera «partición»
+sera la propia tabla de particiones. Una vez hecho esto escriba:
 
 <informalexample><screen>
 $ hformat /dev/<replaceable>sda2</replaceable>
 </screen></informalexample>
 
-Take care that you use the correct device name for your USB stick. The
-<command>hformat</command> command is contained in the
-<classname>hfsutils</classname> Debian package.
+Asegúrese de usar el nombre de dispositivo correspondiente a su
+lápiz USB. Puede encontrar la orden <command>hformat</command>
+en el paquete Debian <classname>hfsutils</classname>.
 
 </para><para>
 
-In order to start the kernel after booting from the USB stick, we will
-put a boot loader on the stick. The <command>yaboot</command> boot
-loader can be installed on an HFS filesystem and can be reconfigured by
-just editing a text file. Any operating system which supports the HFS
-file system can be used to make changes to the configuration of the boot
-loader.
+Para poder arrancar el núcleo una vez haya arrancado del lápiz USB
+tendrá que poner un cargador de arranque en el mismo. El cargador
+de arranque <command>yaboot</command> puede instalarse en cualquier
+sistema de ficheros HFS y puede reconfigurarse simplemente editando
+un fichero de texo. Puede utilizar cualquier sistema operativo que
+tenga soporte del sistema de ficheros HFS para hacer cambios a la 
+configuración del cargador de arranque.
 
 </para><para>
 
-The normal <command>ybin</command> tool that comes with
-<command>yaboot</command> does not yet understand USB storage devices,
-so you will have to install <command>yaboot</command> by hand using the
-<classname>hfsutils</classname> tools. Type
+La herramienta <command>ybin</command> normal que viene incluida con
+<command>yaboot</command> no reconoce aún dispositivos de almacenamiento
+por USB, así que debería instalar <command>yaboot</command> manualmente
+utilizando para ello las herramientas <classname>hfsutils</classname>. 
+Escriba:
 
 <informalexample><screen>
 $ hmount /dev/sda2
@@ -45,50 +51,51 @@ $ hattrib -b :
 $ humount
 </screen></informalexample>
 
-Again, take care that you use the correct device name. The partition
-must not be otherwise mounted during this procedure. This procedure
-writes the boot loader to the partition, and uses the HFS utilities to
-mark it in such a way that Open Firmware will boot it. Having done this,
-the rest of the USB stick may be prepared using the normal Unix
-utilities.
+De nuevo, asegúrese de usar el nombre de dispositivo correcto.
+La partición no puede estar montada durante este proceimidnto.
+El procedimiento descrito guarda el cargador de arranque en la
+partición y utiliza las herramientas de HFS para marcarlo de forma
+que «Open Firmware» pueda cargarlo. Una vez hecho ésto debe preparar
+su lápiz USB con las herramientas habituales de Unix.
 
 </para><para>
 
-Mount the partition (<userinput>mount /dev/sda2 /mnt</userinput>) and
-copy the following files from the Debian archives to the stick:
+Monte las particiones (<userinput>mount /dev/sda2 /mnt</userinput>) y
+copie los archivos mostrados a continuación del archivo de Debian
+al lápiz:
 
 <itemizedlist>
 <listitem><para>
 
-<filename>vmlinux</filename> (kernel binary)
+<filename>vmlinux</filename> (núcleo binario)
 
 </para></listitem>
 <listitem><para>
 
-<filename>initrd.gz</filename> (initial ramdisk image)
+<filename>initrd.gz</filename> (imagen inicial de memoria ram)
 
 </para></listitem>
 <listitem><para>
 
-<filename>yaboot.conf</filename> (yaboot configuration file)
+<filename>yaboot.conf</filename> (fichero de configuración de yaboot)
 
 </para></listitem>
 <listitem><para>
 
-<filename>boot.msg</filename> (optional boot message)
+<filename>boot.msg</filename> (mensaje de arranque opcional)
 
 </para></listitem>
 <listitem><para>
 
-Optional kernel modules
+Módulos del núcleo opcionales
 
 </para></listitem>
 </itemizedlist>
 
 </para><para>
 
-The <filename>yaboot.conf</filename> configuration file should
-contain the following lines:
+El fichero de configuración <filename>yaboot.conf</filename> debería
+tener las siguientes líneas:
 
 <informalexample><screen>
 default=install
@@ -104,8 +111,9 @@ image=/vmlinux
         read-only
 </screen></informalexample>
 
-Please note that the <userinput>initrd-size</userinput> parameter
-may need to be increased, depending on the image you are booting.
+Tenga en cuenta que puede tener que incrementar el parámetro 
+<userinput>initrd-size</userinput> en base a la imagen que vaya
+a arrancar.
 
 </para>
    </sect3>
