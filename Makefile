@@ -71,7 +71,6 @@ image: build
 	tar czf ../debian-installer.tar.gz $(DEST)
 
 demo:
-	mkdir -p $(DEST)/proc 
 	sudo chroot $(DEST) bin/sh -c "if ! mount | grep ^proc ; then bin/mount proc -t proc /proc; fi"
 	sudo chroot $(DEST) bin/sh -c "export DEBCONF_FRONTEND=text DEBCONF_DEBUG=5; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; /usr/share/debconf/frontend /usr/bin/main-menu"
 	$(MAKE) demo_clean
@@ -137,6 +136,10 @@ get_udebs:
 		fi; \
 	done
 
+# This is a list of the devices we want to create
+DEVS=console kmem mem null ram0 ramdisk ram tty1 hda hdb hdc hdd fd0
+PROTO_TYPE_ROOTFS=rootfs
+
 # Build the installer tree.
 tree: get_udebs
 	dh_testroot
@@ -154,7 +157,89 @@ tree: get_udebs
 	# Clean up after dpkg.
 	rm -rf $(DPKGDIR)/updates
 	rm -f $(DPKGDIR)/available $(DPKGDIR)/*-old $(DPKGDIR)/lock
+	mkdir $(DEST)/dev $(DEST)/proc $(DEST)/mnt $(DEST)/var/log
+	cp -a $(PROTO_TYPE_ROOTFS)/* $(DEST)
+	$(foreach DEV, $(DEVS), \
+	(cp -dpR /dev/$(DEV) $(DEST)/dev/ ) ; )
 	# TODO: configure some of the packages?
+
+
+
+# Much of this information was taken from
+# http://www.linuxdoc.org/HOWTO/Bootdisk-HOWTO/
+
+ROOT_FS_SIZE=`du -s $(DEST) | cut -f 1`
+
+# this is the temp file we are going to mount via the loop back device 
+TMP_IMAGE=/tmp/$(DEST)
+
+# this is where we'll mount the rootfs
+ROOT_IMAGE=/mnt/$(DEST)
+
+rootfs.gz:
+	rm -f $(TMP_IMAGE)
+	if mount | grep $(ROOT_IMAGE) ; then \
+		if ! umount $(ROOT_IMAGE) ; then \
+			echo "Error unmounting $(ROOT_IMAGE)" ; \
+	        exit 1; \
+		fi; \
+	fi; \
+
+	mkdir -p $(ROOT_IMAGE)
+
+	# make a temporary file, all zeros, big enough to fit root filsystem
+	dd if=/dev/zero of=$(TMP_IMAGE) bs=1k count=$(ROOT_FS_SIZE)
+
+	# make filesystem, don't reserve any space, 2000 bytes/inode
+	mke2fs -F -q -m 0 -i 2000 $(TMP_IMAGE)
+	mount -t ext2 -o loop $(TMP_IMAGE) $(ROOT_IMAGE)
+	# copy the filesystem we created onto the disk image
+	cp -a $(DEST)/* $(ROOT_IMAGE)/
+	# give runtime linker clues
+	ldconfig -r $(ROOT_IMAGE)
+	umount $(ROOT_IMAGE)
+	dd if=$(TMP_IMAGE)  bs=1k | gzip -v9 > rootfs.gz
+
+
+# This is the kernel you want on the bootdisk.
+KERNEL=vmlinuz
+
+# kernel blocks is size of kernel + 50, this could be optimized 
+KERNEL_BLOCKS=$(shell SIZE=`ls -s $(KERNEL) | cut -f 2 -d " "`; \
+	let SIZE=$$SIZE+50 ; echo $$SIZE)
+# where we are making the boto disk
+FD_DEV=/dev/fd0
+
+# where we should mount it
+FD_MNT=/floppy
+
+# use to tell the kernel where the ramdisk will be
+RAMDISK_WORD=$(shell let SIZE=$(KERNEL_BLOCKS)+16384 ; echo $$SIZE)
+
+
+boot_floppy: rootfs.gz $(KERNEL)
+	if mount | grep $(FD_MNT) ; then \
+		if ! umount $(FD_MNT) ; then \
+			echo "Error unmounting $(FD_MNT)" ; \
+	        exit 1; \
+		fi; \
+	fi; \
+
+	mkdir -p $(FD_MNT)
+	mke2fs -i 8192 -m 0 $(FD_DEV) $(KERNEL_BLOCKS)
+	mount $(FD_DEV) $(FD_MNT)
+	rm -rf $(FD_MNT)/lost+found
+	mkdir $(FD_MNT)/{boot,dev}
+	cp -R /dev/{null,fd0} $(FD_MNT)/dev
+	cp /boot/boot.b $(FD_MNT)/boot
+	cp bdlilo.conf $(KERNEL) $(FD_MNT)
+	lilo -v -C bdlilo.conf -r $(FD_MNT) 
+	# tell the kernel where the ramdisk is
+	rdev -r $(FD_MNT)/$(KERNEL)  $(RAMDISK_WORD)
+	umount $(FD_MNT)
+	# copy over the ramdisk onto the floppy
+	dd if=rootfs.gz of=$(FD_DEV) bs=1k seek=$(KERNEL_BLOCKS)
+
 
 # Library reduction.
 lib_reduce:
@@ -198,3 +283,4 @@ daily_build:
 	scp -q -B ../debian-installer.tar.gz \
 		$(UPLOAD_DIR)/debian-installer-$(shell date +%Y%m%d).tar.gz
 	rm -f log
+
