@@ -298,7 +298,7 @@ $(STAMPS)tree-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
 	rm -rf $(DPKGDIR)/updates
 	rm -f $(DPKGDIR)/available $(DPKGDIR)/*-old $(DPKGDIR)/lock
 
-ifdef KERNELVERSION
+ifdef VERSIONED_SYSTEM_MAP
 	# Set up modules.dep, ensure there is at least one standard dir (kernel
 	# in this case), so depmod will use its prune list for archs with no
 	# modules.
@@ -306,15 +306,17 @@ ifdef KERNELVERSION
 	# FIXME:
 	# linux-kernel-di does not yet generate uniquely named System.map files.
 	#
-	#set -e; \
-	#$(foreach VERSION,$(KERNELVERSION), \
-	#	mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
-	#	if [ -e $(TREE)/boot/System.map-$(VERSION) ]; then \
-	#		depmod -F $(TREE)/boot/System.map-$(VERSION) -q -a -b $(TREE)/ $(VERSION); \
-	#		rm -f $(TREE)/boot/System.map-$(VERSION); \
-	#	else \
-	#		depmod -q -a -b $(TREE)/ $(VERSION); \
-	#	fi;)
+	set -e; \
+	$(foreach VERSION,$(KERNELVERSION), \
+		mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
+		if [ -e $(TREE)/boot/System.map-$(VERSION) ]; then \
+			depmod -F $(TREE)/boot/System.map-$(VERSION) -q -a -b $(TREE)/ $(VERSION); \
+			rm -f $(TREE)/boot/System.map-$(VERSION); \
+		else \
+			depmod -q -a -b $(TREE)/ $(VERSION); \
+		fi;)
+endif
+ifdef KERNELVERSION
 	set -e; \
 	$(foreach VERSION,$(KERNELVERSION), \
 		mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
