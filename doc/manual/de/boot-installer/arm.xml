@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 24663 -->
+<!-- original version: 26264 -->
 
   <sect2 arch="arm" id="boot-tftp"><title>Booten per TFTP</title>
 
@@ -60,22 +60,32 @@ Der Rest der Konfiguration ist im Prinzip Standard (der "save-all"-Schritt ist
 optional):
 <informalexample><screen>
     NeTTrom command-&gt; setenv kerntftpserver 192.168.0.1
-    NeTTrom command-&gt; setenv kerntftpfile tftpboot.img
+    NeTTrom command-&gt; setenv kerntftpfile boot.img
     NeTTrom command-&gt; save-all
     NeTTrom command-&gt; setenv netconfig_eth0 flash
     NeTTrom command-&gt; setenv kernconfig tftp
+    NeTTrom command-&gt; setenv rootdev /dev/ram
+    NeTTrom command-&gt; setenv cmdappend root=/dev/ram
 </screen></informalexample>
 
 Die letzten beiden Schritte könnten sich störend auf einen normalen
 Bootvorgang von Festplatte auswirken; deshalb ist es besser, vorher den
 <command>save-all</command>-Befehl auszuführen. Die Netzwerkeinstellungen
 werden hierdurch gespeichert für den Fall, dass Sie noch einmal per Netzwerk
-booten müssen. Mit dem <command>printenv</command>-Kommando können Sie Ihre
+booten müssen. 
+
+Wenn Sie die serielle Konsole benutzen möchten, um Debian auf Ihrer NetWinder-Maschine
+zu installieren, benötigen Sie noch die folgende Einstellung:
+
+<informalexample><screen>
+    NeTTrom command-&gt; setenv cmdappend root=/dev/ram console=ttyS0,115200
+</screen></informalexample>
+
+Mit dem <command>printenv</command>-Kommando können Sie Ihre
 Einstellungen zur Kontrolle noch einmal überprüfen. Zu guter Letzt: falls
-bei Ihnen die NeTTrom-Variable <envar>cmdappend</envar> die Option
-<option>noinitrd</option> hat (dies ist nötig, um 2.4er Kernel zu booten),
-müssen Sie sie entfernen, damit der heruntergeladene Kernel mit der
-zugehörigen RAM-Disk starten kann.
+bei Ihnen für die NeTTrom-Variable <envar>cmdappend</envar> die Option
+<option>noinitrd</option> gesetzt ist, müssen Sie sie entfernen, damit der 
+heruntergeladene Kernel mit der zugehörigen RAM-Disk starten kann.
 
 </para>
   </sect3>
