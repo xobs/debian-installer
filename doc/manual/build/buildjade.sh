@@ -34,11 +34,18 @@ if [ -f install.${language}.profiled.xml ] ; then
 
 	# Next we use jadetext to generate a .dvi file
 	# This needs three passes to properly generate the index (pagenumbering)
-	echo "Generating .dvi..."
-	jadetex install.${language}.profiled.tex >/dev/null
-	jadetex install.${language}.profiled.tex >/dev/null
-	jadetex install.${language}.profiled.tex >/dev/null
-	echo "Transcript written on install.nl.profiled.log."
+#	echo "Generating .dvi..."
+	jadetex install.${language}.profiled.tex
+	jadetex install.${language}.profiled.tex
+	jadetex install.${language}.profiled.tex
+	rm install.${language}.profiled.out
+	rm install.${language}.profiled.aux
+
+	# echo "Generating .pdf (using pdfjadetex)..."
+	# pdfjadetex install.${language}.profiled.tex
+
+	# echo "Generating .pdf (using dvipdf)..."
+	dvipdf install.${language}.profiled.dvi
 else
 	echo "install.${language}.profiled.xml not found; please run buildone.sh first."
 fi
