@@ -3,6 +3,7 @@
 ARCH=$(shell dpkg-architecture -qDEB_BUILD_ARCH)
 VERSION=$(shell LC_ALL=C dpkg-parsechangelog | grep ^Version: | sed 's/^Version: *//')
 TYPES=$(shell dh_listpackages -s | sed s/debian-installer-//)
+UPLOADED_TO=$(shell LC_ALL=C dpkg-parsechangelog | grep ^Distribution: | sed 's/^Distribution: *//')
 
 include config/main
 include config/dir
@@ -15,7 +16,7 @@ clean:
 
 build:
 	for TYPE in $(TYPES) ; do \
-		$(MAKE) DEST=dest/$$TYPE TYPE=$$TYPE image ; \
+		$(MAKE) SUITE=$(UPLOADED_TO) DEST=dest/$$TYPE TYPE=$$TYPE image ; \
 	done 
 
 install: build
