@@ -211,6 +211,7 @@ _list:
 	echo demo_$(targetstring); \
 	echo shell_$(targetstring); \
 	echo uml_$(targetstring); \
+	echo qemu_$(targetstring); \
 	echo
 
 
@@ -762,10 +763,10 @@ demo_%:
 	export SUBARCH=; \
 	export FLAVOUR=; \
 	export MEDIUM=$(subst demo_,,$@); \
-	$(submake) demo1
+	$(submake) _demo
 
-.PHONY: demo1
-demo1:
+.PHONY: _demo
+_demo:
 	@$(submake) tree_mount; \
 	[ -f questions.dat ] && cp -f questions.dat $(TREE)/var/lib/cdebconf/ ; \
 	sudo chroot $(TREE) bin/sh -c "export DEBCONF_DEBUG=5 ; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; exec /usr/share/debconf/frontend /usr/bin/main-menu" ; \
@@ -776,10 +777,10 @@ shell_%:
 	@export SUBARCH=; \
 	export FLAVOUR=; \
 	export MEDIUM=$(subst shell_,,$@); \
-	$(submake) shell1
+	$(submake) _shell
 
-.PHONY: shell1
-shell1:
+.PHONY: _shell
+_shell:
 	@$(submake) tree_mount; \
 	sudo chroot $(TREE) bin/sh; \
 	$(submake) tree_umount
@@ -790,8 +791,27 @@ uml_%:
 	export SUBARCH=; \
 	export FLAVOUR=; \
 	export MEDIUM=$(subst uml_,,$@); \
-	$(submake) uml1
+	$(submake) _uml
 
-.PHONY: uml1
-uml1:
+.PHONY: _uml
+_uml:
 	-linux initrd=$(INITRD) root=/dev/rd/0 ramdisk_size=8192 con=fd:0,fd:1 devfs=mount
+
+.PHONY: qemu_%
+qemu_%:
+	@set -e; \
+	export SUBARCH=; \
+	export FLAVOUR=; \
+	export MEDIUM=$(subst qemu_,,$@); \
+	$(submake) _qemu $(shell $(submake) $(subst qemu_,validate_,$@))
+
+.PHONY: _qemu
+_qemu:
+	@case "$(MEDIA_TYPE)" in \
+	floppy) \
+		$(QEMU) -fda $(BOOT); \
+	;; \
+	*) \
+		echo "Sorry, don't know how to handle media type '$(MEDIA_TYPE)'" >&2; \
+		exit 1; \
+	esac
