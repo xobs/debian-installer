@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 19466 -->
+<!-- original version: 24840 -->
 
  <sect2 arch="alpha" id="alpha-firmware">
  <title>Firmware do Console Alpha</title>
@@ -57,13 +57,25 @@ as instalações SRM.
 
 </para><para>
 
-Por causa que o GNU/Linux é o único sistema operacional no Alpha que
-pode ser inicializado através de ambos os tipos de console, a 
-escolha também depende de qual outro sistema operacional você irá
-executa na mesma máquina. Todos os outros sistemas operacionais
-estilo Unix (Tru64, Unix, FreeBSD, OpenBSD e NetBSD) e OpenVMS 
-apenas podem ser inicializados através da SRM, enquanto o Windows
-NT somente pode inicializar através do ARC.
+O GNU/Linux é o único sistema operacional na alpha que pode ser 
+inicializada através de ambos os tipos de console, mas a &debian; 
+&release; somente suporta a inicialização em sistemas baseados 
+em SRM. Se tiver em um Alpha em que nenhuma versão do SRM esteja 
+disponível, se estiver fazendo dupla inicializaçào do sistema com 
+o Windows NT ou se seu dispositivo de inicialização requer o suporte
+a console ARC para a inicializaçõa da BIOS, você não será capaz de 
+utilizar o programa de instalação da &debian; &release;. Você ainda 
+poderá executar a &debian; &release; em tal sistema usando outra 
+mídia de instalação; por exemplo, poderá isntalar a Debian woody com
+o MILO e realizar a atualização.
+
+</para><para>
+
+Por causa que o <command>MILO</command> não está disponiel para 
+qualquer sistema Alpha em produção (em Fevereiro 2000) e porque 
+não é mais necessário comprar uma licença do OpenVMS ou Unix Tru64 para 
+ter uma firmware SRM em seu Alpha antigo, é recomendado que utilize uma 
+firmware SRM quando possível.
 
 </para><para>
 
@@ -127,7 +139,7 @@ qualquer um dos tipos de consoles compatíveis com o ARC.
   <entry>somente o SRM</entry>
 </row><row>
   <entry>nautilus</entry>
-  <entry>somente o ARC (veja o manual da placa mãe)</entry>
+  <entry>ARC (veja o manual da placa mãe) ou SRM</entry>
 </row><row>
   <entry>noname</entry>
   <entry>ARC ou SRM</entry>
@@ -173,11 +185,28 @@ qualquer um dos tipos de consoles compatíveis com o ARC.
 </para><para>
 
 Geralmente, nenhum destes consoles podem inicializar o Linux 
-diretamente, desta forma é requerida a assistência de um gerenciador
+diretamente assim é necessária a assistência de um gerenciador
+de partida intermediário. Para o console SRM, é utilizado o 
+<command>aboot</command>, um gerenciador de partida pequeno e 
+independente de plataforma. Veja o (infelizmente desatualizado) <ulink 
+url="&url-srm-howto;">SRM HOWTO</ulink> para mais informações
+sobre o <command>aboot</command>.
+
+</para><para condition="FIXME">
+
+Os seguines parágrafos foram retirados do manual de instalação da 
+Woody e estão incluidos aqui para referência; eles podem ser úteis para
+alguém em um estágio mais avançado quando a Debian suportará novamente
+instalações baseados no MILO.
+
+</para><para condition="FIXME">
+
+Geralmente nenhum destes consoles podem inicializar diretamente no 
+Linux, assim é requerida a assistência de um gerenciador
 de partida intermediário. Existem dois gerenciadores principais
 no Linux: <command>MILO</command> and <command>aboot</command>.
 
-</para><para>
+</para><para condition="FIXME">
 
 O <command>MILO</command> por si próprio é um console, que substitui 
 o ARC ou SRM na memória. O <command>MILO</command> pode ser diretamente
@@ -189,7 +218,7 @@ estes sistemas, no qual o suporte ao ARC é mostrado na tabela acima.
 Veja também o (infelizmente desatualizado)
 <ulink url="&url-milo-howto;">MILO HOWTO</ulink>.
 
-</para><para>
+</para><para condition="FIXME">
 
 O <command>aboot</command> é um gerenciador de partida pequeno e 
 independente de plataforma que somente roda a partir do SRM. 
@@ -197,7 +226,7 @@ Veja o (também infelizmente desatualizado) <ulink
 url="&url-srm-howto;">SRM HOWTO</ulink> para mais informações sobre o 
 <command>aboot</command>.
 
-</para><para>
+</para><para condition="FIXME">
 
 Assim, três cenários são possíveis, dependendo do firmware do 
 console do sistema e se o <command>MILO</command> estiver ou não
@@ -205,20 +234,11 @@ disponível:
 
 <informalexample><screen>
 
-SRM -> aboot
-SRM -> MILO
-ARC -> MILO
+SRM -&gt; aboot
+SRM -&gt; MILO
+ARC -&gt; MILO
 
 </screen></informalexample>
-
-</para><para>
-
-A placa mãe UP1000 (com o nome de sub-arquitetura "nautilus") do 
-processador Alpha, Inc. é diferente de todas as outras, pois ele 
-utiliza um gerenciador de partira específico de API que 
-é executado sobre a firmware AlphaBIOS.
-
-</para><para>
 
 Por causa que o <command>MILO</command> não está disponível para qualquer 
 um dos sistemas alpha atualmente em produção (em Fevereiro de 2000) e 
@@ -261,30 +281,24 @@ e será listada na saída do comando <userinput>show dev</userinput>,
 como este (levemente editado):
 
 <informalexample><screen>
-
->>>show dev
+&gt;&gt;&gt; show dev
 ewa0.0.0.9.0               EWA0              08-00-2B-86-98-65
 ewb0.0.0.11.0              EWB0              08-00-2B-86-98-54
 ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
-
 </screen></informalexample>
 
 Você precisará ajustar o protocolo de inicialização:
 <informalexample><screen>
-
->>> set ewa0_protocol bootp
-
+&gt;&gt;&gt; set ewa0_protocol bootp
 </screen></informalexample>
 
-Então verifique se o tipo de mídia está correto:
+Então verificar se o tipo de mídia está correto:
 
 <informalexample><screen>
-
->>> set ewa0_mode <replaceable>mode</replaceable>
-
+&gt;&gt;&gt; set ewa0_mode <replaceable>mode</replaceable>
 </screen></informalexample>
 
-Você poderá obter uma listagem de modos válidos com <userinput>>>>set ewa0_mode</userinput>.
+Você poderá obter uma listagem de modos válidos com <userinput>&gt;&gt;&gt;set ewa0_mode</userinput>.
 
 </para><para>
 
@@ -292,12 +306,9 @@ Então, para inicializar através da primeira interface Ethernet, você poderá
 digitar:
 
 <informalexample><screen>
-
->>> boot ewa0 -flags " "
-
+&gt;&gt;&gt; boot ewa0 -flags ""
 </screen></informalexample>
 
-</para><para>
 Isto fará a inicialização usando os parâmetros padrões do kernel como incluídas na
 imagem de inicialização netboot.
 
@@ -310,14 +321,14 @@ passar o argumento <userinput>console=</userinput> ao kernel.
 Isto pode ser feito usando o argumento <userinput>-flags</userinput> 
 ao comando <userinput>boot</userinput> do console SRM. As portas 
 seriais tem o mesmo nome dos seus arquivos correspondentes em 
-<userinput>/dev</userinput>. Por exemplo, para inicializar 
+<userinput>/dev</userinput>. Também, quando especificar parâmetros 
+adicionais de kernel, vocÊ deverá repetir certas opções adicionais
+que são necessárias pelas imagens do &d-i;. Por exemplo, para inicializar 
 através de <userinput>ewa0</userinput> e usar uma console na 
 primeira porta serial, você deverá digitar: 
 
 <informalexample><screen>
-
->>> boot ewa0 -flags console=ttyS0
-
+&gt;&gt;&gt;boot ewa0 -flags console=ttyS0
 </screen></informalexample>
 
 </para>
@@ -329,9 +340,7 @@ primeira porta serial, você deverá digitar:
 Digite
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot xxxx -flags 0
-
 </screen></informalexample>
 
 onde <replaceable>xxxx</replaceable> é sua unidade de CD-ROM
@@ -340,7 +349,7 @@ na notação do SRM.
 </para>
   </sect2>
 
-  <sect2 arch="alpha">
+  <sect2 arch="alpha" condition="FIXME">
   <title>Inicializando através de um CD-ROM com o ARC ou console AlphaBIOS</title>
 <para>
 
@@ -357,7 +366,7 @@ gerenciador de partida.
   </sect2>
 
 
-  <sect2 arch="alpha">
+  <sect2 arch="alpha" condition="supports-floppy-boot">
   <title>Inicialização através de Disquetes com o Console SRM</title>
 <para>
 
@@ -365,18 +374,14 @@ No aviso de comando do SRM (<prompt>&gt;&gt;&gt;</prompt>), digite o seguinte
 comando:
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot dva0 -flags 0
-        
 </screen></informalexample>
 
 Possivelmente substituindo <filename>dva0</filename> com o nome de 
 dispositivo atual. Normalmente <filename>dva0</filename> é o disquete; digite
 
 <informalexample><screen>
-
 &gt;&gt;&gt; show dev
-        
 </screen></informalexample>
 
 para ver a lista de dispositivos (e.g., caso deseje inicializar a partir de 
@@ -391,10 +396,9 @@ Se tudo funcionar bem, você verá o kernel do Linux iniciando.
 Se quiser especificar parâmetros de inicialização do 
 kernel via <command>aboot</command>, use o seguinte comando:
 <informalexample><screen>
-
 &gt;&gt;&gt; boot dva0 -file linux.bin.gz -flags "root=/dev/fd0 load_ramdisk=1 argumentos"
-        
 </screen></informalexample>
+
 (digite um por linha), substituindo, se necessário, o nome atual
 do dispositivo de inicialização SRM por <filename>dva0</filename>, 
 o nome do dispositivo de inicialização do Linux por
@@ -410,7 +414,7 @@ inicialização assim que entrar no MILO. Veja <xref linkend="booting-from-milo"/>
   </sect2>
 
 
-  <sect2 arch="alpha">
+  <sect2 arch="alpha" condition="supports-floppy-boot">
   <title>Inicializando a partir de Disquetes com o Console ARC ou AlphaBIOS</title>
 
 <para>
@@ -422,24 +426,8 @@ sistema operacional. Inicie usando a nova entrada criada.
 </para>
   </sect2>
 
-  <sect2 arch="alpha">
-  <title>Inicializando através de disquetes com o gerenciador de partida APB (UP1000)</title>
 
-<para>
-
-Para inicializar nesta plataforma, execute <command>\apb\apb.exe</command> a 
-partir do menu "Utility/Run Maintenance Program" e digite
-      <informalexample><screen>
-
-boot debian_install
-      
-</screen></informalexample>
- no aviso de comando do APB.
-
-</para>
-  </sect2>
-
- <sect2 arch="alpha" id="booting-from-milo"><title>Inicializando com o MILO</title>
+<sect2 arch="alpha" condition="FIXME" id="booting-from-milo"><title>Inicializando com o MILO</title>
 <para>
 
 O MILO contido na mídia de inicialização está configurado par a
@@ -454,12 +442,8 @@ para fornecer parâmetros adicionais), você poderá usar um comando
 como este:
 
 <informalexample><screen>
-
-MILO&gt; boot fd0:linux.bin.gz root=/dev/fd0 load_ramdisk=1 <!-- argumentos -->
-        
+MILO> boot fd0:linux.bin.gz root=/dev/fd0 load_ramdisk=1 <!-- argumentos -->
 </screen></informalexample>
-
-</para><para>
 
 Se estiver inicializando através de alguma outra mídia que não seja 
 um disquete, substitua <filename>fd0</filename> do exemplo acima com

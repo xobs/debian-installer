@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 22229 -->
+<!-- original version: 23672 -->
 
  <sect1 id="installation-media">
  <title>Mídia de Instalação</title>
@@ -69,6 +69,15 @@ contém dados atualizados de como utilizar CD-ROMs com o Linux.
 Unidades de CD-ROM USB também são suportado, como são dispositivos 
 FireWare pois são suportados pelos dispositivos ohci1394 e sbp2.
 
+</para><para arch="alpha">
+
+Ambos os CD-ROMs SCSI e IDE/ATAPI são suportados na &arch-title;, assim 
+se a controladora for suportada pelo console SRM. Esta regra não se 
+aplica a muitas controladoras adicionais, mas a maioria dos chips 
+integrados IDE e SCSI e placas controladores que são fornecidas pelo
+fabricante são capazes de funcionar. Para checar se seu dispositivo é suportado
+pelo console SRM, veja o <ulink url="&url-srm-howto;">SRM HOWTO</ulink>.
+
 </para><para arch="arm"> 
 
 CD-ROMs IDE/ATAPI são suportados por todas as máquinas ARM.
@@ -76,9 +85,13 @@ Em RiscPCs, unidades de CD-ROMs SCSI também são suportadas.
 
 </para><para arch="mips">
 
-Em máquinas SGI, é possível inicializar através de um CD e existem imagens
-disponíveis. Para iniciar a instalação, simplesmente selecione <quote>Instalação
-do Sistema</quote> na firmware. A BCM1250 suporta dispositivos que seguem o padrão
+Em máquinas SGI, a inicialização através da unidade de CD-Rom requer uma 
+unidade de CD-ROM SCSI capaz de funcionar com um tamanho de blocos lógico 
+de 512 bytes. Muitas das unidades de CD-ROM envidas no mercado de PCs não tem esta capacidade. Se sua unidade de CD tem um jumper com a identificação Unix/PC ou
+512/2048, coloque-a na posição "Unix" ou "512".
+
+Para iniciar a instalação, simplesmente selecione <quote>Instalação
+do Sistema</quote> na firmware. A BCM91250A suporta dispositivos que seguem o padrão
 IDE, incluindo unidades de CD-ROM, mas não são fornecidas imagens de CD para esta 
 plataforma porque a firmware não reconhece unidades de CD.
 
@@ -180,7 +193,7 @@ HTTP.
   <sect2><title>Sistema GNU ou *ix</title>
 <para>
 
-Se estiver executando um outro sistema no estilo Unix, será permitido 
+Se estiver executando um sistema adicional no estilo Unix, é possível 
 usa-lo para instalar a &debian; sem usar o &d-i; descrito no resto do 
 manual. Este tipo de instalação poderá ser útil para usuários possuem
 hardwares não suportados ou de máquinas que não podem tomar downtimes. 
@@ -269,31 +282,10 @@ para mais informações sobre hardwares SPARC suportados pelo kernel do Linux.
 </para><para arch="alpha">
 
 Qualquer sistema de armazenamento suportado pelo kernel do Linux
-também é suportado pelo sistema de inicialização. Os seguintes
-controladores SCSI estão suportados no kernel padrão:
-
-<itemizedlist>
-<listitem><para>
-
-Qlogic ISP
-
-</para></listitem>
-<listitem><para>
-
-NCR e Symbios 53c8xx
-
-</para></listitem>
-<listitem><para>
-
-Adaptec AIC7xxx
-
-</para></listitem>
-</itemizedlist>
-
-Os discos IDE também são suportados. Note, no entanto, que em 
-muitos sistemas, o console SRM é incapaz de inicializar a partir
-de discos IDE e o Jensen é incapaz de inicializar a partir de 
-disquetes.  (veja
+também é suportado pelo sistema de inicialização. Isto inclui ambos
+discos SCSI e IDE. Note, no entanto, que em 
+muitos sistemas, o console SRM é incapaz de inicializar através de unidades
+IDE e o Jensem é incapaz de inicializar através de disquetes.  (veja
 <ulink url="&url-jensen-howto;"></ulink> 
 para mais detalhes de como inicializar no Jensen)
 

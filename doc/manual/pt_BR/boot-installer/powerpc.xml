@@ -17,7 +17,7 @@ juntas enquanto inicializa através de um CD-ROM.
 </para><para>
 
 PowerMacs OldWorld não inicializarão usando o CD da Debian, porque
-os computadores OldWorld confiam que o driver MacOSROM esteja presente no
+os computadores OldWorld confiam que o driver Mac OSR OM esteja presente no
 CD e uma versão em software livre deste driver não está disponível. 
 Todos os sistemas OldWorld possuem unidades de disquetes, assim 
 use o disquete para iniciar o programa de instalação e 
@@ -35,9 +35,7 @@ rígido, exceto use o caminho para o <command>yaboot</command> no CD
 no aviso OF, tal como
 
 <informalexample><screen>
-
-0 > boot cd:,\install\yaboot
-
+0 &gt; boot cd:,\install\yaboot
 </screen></informalexample>
 </para>
   </sect2>
@@ -78,18 +76,17 @@ de instalação.
   <title>Inicializando Macs NewWorld através do OpenFirmware</title>
 <para>
 
-Você já deverá ter gravado os arquivos <filename>linux.bin, yaboot,
-yaboot.conf</filename> e <filename>root.bin</filename> na partição 
-raíz do seu sistema de arquivos HFS em <xref linkend="files-newworld"/>. 
+Você já deverá ter substituido os arquivos <filename>vmlinux</filename>,
+<filename>initrd.gz</filename>, <filename>yaboot</filename> e
+<filename>yaboot.conf</filename> no diretório raíz da partição HFS como 
+descrito em <xref linkend="files-newworld"/>. 
 Reinicie o computador e imediatamente (durante o beep) pressione 
 as teclas <keycap>Option</keycap>, <keycap>Command (cloverleaf/Apple)</keycap>,
 <keycap>o</keycap> e <keycap>f</keycap> juntas. Após alguns segundos
 você verá o aviso de comando do Open Firmware. Então digite:
 
 <informalexample><screen>
-
-0 > boot hd:<replaceable>x</replaceable>,yaboot
-
+0 &gt; boot hd:<replaceable>x</replaceable>,yaboot
 </screen></informalexample>
 
 trocando <replaceable>x</replaceable> pelo número da partição da 
@@ -99,9 +96,7 @@ de  &enterkey;. Em algumas máquinas, você poderá usar
 Após mais alguns segundos você verá o aviso de comando do yaboot
 
 <informalexample><screen>
-
 boot:
-
 </screen></informalexample>
 
 No aviso de comando <prompt>boot:</prompt> do yaboot, você poderá digitar
@@ -114,6 +109,75 @@ da Debian também deverá iniciar.
 </para>
    </sect3>
   </sect2>
+
+
+  <sect2 arch="powerpc" id="usb-boot">
+  <title>Inicialização através da memória stick USB</title>
+<para>
+
+Atualmente, sistemas PowerMac NewWorld são conhecidos por suportar 
+a inicialização através de USB.
+
+</para>
+
+<para>
+
+Tenha certeza de ter preparado tudo de acordo com o passo <xref
+linkend="boot-usb-files"/>. Para inicializar em um sistema 
+Macintosh através de uma memória stick USB, você precisará usar o 
+aviso do Open Firmware, pois o Open Firmware não pesquisa em dispositivos
+USB por padrão.
+<!-- TODO: embora isto possa ser feito; observe este espaço -->
+Para obter o aviso de comandos, pressione a tecla
+<keycombo><keycap>Command</keycap> <keycap>Option</keycap>
+<keycap>o</keycap> <keycap>f</keycap></keycombo> juntas 
+durante a inicialização (veja <xref linkend="invoking-openfirmware"/>).
+
+</para><para>
+
+Você precisará alterar o local onde o dispositivo USB aparece na árvore 
+de dispositivos, pois no momento o <command>ofpath</command> não pode 
+trabalhar automaticamente. Digite <userinput>dev / ls</userinput> e
+<userinput>devalias</userinput> no aviso de comandos do Open Firmware 
+para obter uma lista de todos os dispositivos conhecidos 
+e apelidos de cada um. No sistema do autor com vários tipos de 
+memórias stick USB, caminhos tais como 
+<filename>usb0/disk</filename>, <filename>usb0/hub/disk</filename>,
+<filename>/pci@f2000000/usb@1b,1/disk@1</filename> e
+<filename>/pci@f2000000/usb@1b,1/hub@1/disk@1</filename> funcionam.
+
+</para><para>
+
+Tendo funcionado o caminho de dispositivo, use um comando como este
+para iniciar o programa de instalação:
+
+<informalexample><screen>
+boot <replaceable>usb0/disk</replaceable>:<replaceable>2</replaceable>,\\:tbxi
+</screen></informalexample>
+
+O <replaceable>2</replaceable> confere com a partição Apple_HFS ou
+Apple_Bootstrap partition em que copiou a imagem de inicialização
+anteriormente e a parte <userinput>,\\:tbxi</userinput> instrui o 
+Open Firmware para inicializar através do arquivo com um tipo de 
+sistemas de arquivos HFS"tbxi" (i.e.
+<command>yaboot</command>) no diretório anteriormente abençoado com o 
+<command>hattrib -b</command>.
+
+</para><para>
+
+O sistema deverá inicializar agora, e lhe presenteará com o 
+aviso <prompt>boot:</prompt> prompt. Aqui você poderá entrar com
+parâmetros iniciais de partida ou simplesmente pressionar &enterkey;.
+
+</para><warning><para>
+
+Este método de inicialização é novo e pode ser difícil para faze-lo 
+funcionar em sistemas NewWorld. Se tiver problemas, por favor envie um 
+relatório de instalação como explicado em <xref linkend="submit-bug"/>.
+
+</para></warning>
+  </sect2>
+
 
   <sect2 arch="powerpc" id="boot-tftp"><title>Inicializando com o TFTP</title>
 

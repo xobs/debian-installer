@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 22664 -->
+<!-- original version: 25149 -->
 
   <sect2 arch="i386"><title>Inicializando através de um CD-ROM</title>
 
@@ -88,10 +88,7 @@ prompt de comando"). Entre com o subdiretório do tipo de seu sabor
 que escolheu., e.g.,
 
 <informalexample><screen>
-
 cd c:\install
-
-
 </screen></informalexample>.  
 
 Então, execute o comando <command>install.bat</command>.
@@ -132,7 +129,7 @@ Alternativamente, se tiver a intenção de manter uma partição existente
 no disco rígido inalterada durante a instalação, você poderá baixar o arquivo
 <filename>hd-media/initrd.gz</filename>
 e seu kernel, assim como copiar um CD iso nesta unidade (tenha certeza que
-o arquivo finaliza em ".iso". O programa de instalação poderá então inicializar
+o arquivo finaliza em ".iso"). O programa de instalação poderá então inicializar
 a partir do disco e ser instalado através da imagem de CD, sem precisar da 
 rede.
 </para>
@@ -160,13 +157,11 @@ Aqui está um exemplo do <filename>/etc/lilo.conf</filename>:
 </para><para>
 
 <informalexample><screen>
-
 image=/boot/newinstall/vmlinuz
        label=newinstall
        initrd=/boot/newinstall/initrd.gz
-       root=/dev/ram
-       append="devfs=mount,dall ramdisk_size=17000
-
+       root=/dev/ram0
+       append="devfs=mount,dall ramdisk_size=12000"
 </screen></informalexample>
 
 Para mais detalhes, veja as páginas de manual do 
@@ -182,15 +177,18 @@ Localize o arquivo <filename>menu.lst</filename> no diretório <filename>/boot/gr
 e adicione as seguintes linhas:
 
 <informalexample><screen>
-
 title  Nova Instalação
 kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram devfs=mount,dall ramdisk_size=17000
 
 initrd (hd0,0)/boot/newinstall/initrd.gz
-
 </screen></informalexample>
 
-e reinicie. Note que o valor de <userinput>ramdisksize</userinput>
+e reinicie. Caso a inicialização falhe, tente adicionar 
+<userinput>devfs=mount,dall</userinput> a linha do <quote>kernel</quote>.
+
+</para><para>
+
+Note que o valor de <userinput>ramdisk_size</userinput>
 pode precisa ser ajustado para o tamanho da imagem do initrd. 
 De agora em diante, não deverá existir diferenças entre o <command>GRUB</command>
 ou <command>LILO</command>.
@@ -409,7 +407,7 @@ opções de faixa de recursos de seu hardware. Por exemplo, se tiver um dos
 modelos de notebooks Dell mencionados acima, você poderá entrar com o 
 parâmetro <userinput>exclude port 0x800-0x8ff</userinput>. Existe uma lista
 de opções de faixa no link <ulink
-url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-2.html#ss2.5">System
+url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-1.html#ss1.12">System
 resource settings section of the PCMCIA HOWTO</ulink>. Note que você terá que omitir
 as vírgulas, se existirem, quando passar um valor para o programa de instalação.
 

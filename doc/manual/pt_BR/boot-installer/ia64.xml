@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 21882 -->
-<!-- Gleydson: Seja quem for que está escrevendo sobre IA-64, precisa melhorar os 
-     textos. Estou fazendo o possível para tentar deixa-los claros na tradução e 
-     depois corrigir erros no original -->
+<!-- original version: 24663 -->
+<!-- Gleydson: Seja quem for que está escrevendo sobre IA-64 no manual original, 
+     precisa melhorar os textos. Estou fazendo o possível para tentar deixa-los 
+     claros na tradução e depois corrigir erros no original -->
 
   <sect2 arch="ia64"><title>Inicializando através de um CD-ROM</title>
 
@@ -32,7 +32,7 @@ uma grande variedade de pacotes sem precisar acessar a rede.
 A arquitetura IA-64 utiliza a próxima geração da Interface de Firmware
 Extensível (EFI) fabricada pela Intel.
 Ao invés de saber um pouco sobre o dispositivo de inicialização assim 
-como a BIOS x86 ao invés da tabela de partição e MBR (master boot 
+como a BIOS x86 e um pouco sobre a tabela de partição e MBR (master boot 
 record), o EFI pode ler e gravar arquivos para partições de discos
 formatadas com o sistema FAT16 e FAT32.
 Isto simplifica o processo de inicialização do sistema.
@@ -45,9 +45,9 @@ como o existente em sistemas convencionais.
 
 </para><para>
 
-O CD do Debian Installer contém uma partição EFI pequena onde o 
+O CD do Debian Installer contém uma partição EFI pequena onde estão localizados o 
 gerenciador de partida <command>ELILO</command>, seu arquivo de configuração, o 
-kernel de instalação e sistema de arquivos iniciais (initrd) estão localizados.
+kernel de instalação e sistema de arquivos iniciais (initrd).
 
 O sistema em execução também contém uma partição EFI aonde os arquivos necessários
 para a inicialização do sistema residem. Estes arquivos são lidos a partir do 
@@ -105,7 +105,7 @@ de comandos.
 <itemizedlist>
 
 <listitem><para>
-Insira o Cd na unidade de CD/DVD e reinicie a máquina. A 
+Insira o CD na unidade de CD/DVD e reinicie a máquina. A 
 firmware mostrará a página do gerenciador de partida EFI e 
 o menu após completar sua inicialização do sistema.
 </para></listitem>
@@ -232,26 +232,11 @@ comandos. Continue selecionando o kernel para inicialização e suas opções.
 
   </sect3>
 
-  <sect3 arch="ia64" id="kernel-option-menu">
-  <title>Selecionando o kernel de inicialização e Opções</title>
+  <sect3 arch="ia64" id="serial-console">
+  <title>Instalação usando um Console Serial</title>
 
 <para>
 
-O gerenciador de partida mostrará uma lista de menu e uma
-janela texto com o aviso de comando <classname>Boot:</classname>.
-As setas de teclado selecionam um item a partir do menu e 
-qualquer texto digitado no teclado aparecerá na janela de texto.
-Existem também telas de ajuda que podem ser mostradas pressionando-se
-a tecla de função apropriada. A tela de ajuda
-<classname>General</classname> explicará cada uma das opções do menu e a 
-tela <classname>Params</classname> explicará as opções padrões de linha 
-de comando.
-
-</para>
-
-<!--
-   <title>Console Serial</title>
-<para>
 Você pode optar por fazer a instalação usando um monitor e teclado ou 
 usando uma conexão serial. Para usar a configuração de monitor/teclado, 
 seleciona uma opção contendo a string [VGA console]. Para instalar
@@ -260,14 +245,16 @@ string [<replaceable>BAUD</replaceable> baud serial console], aonde
 <replaceable>BAUD</replaceable> é a velocidade de sua console serial. Os 
 ítens de menus para as configurações de taxa baud mais típicas em 
 ttyS0 estão pré-definidas.
-</para>
-<para>
+
+</para><para>
+
 Na maioria das circunstâncias, você precisará fazer com que o programa
 de instalação utilize a mesma taxa baud de sua conexão com a console EFI.
 Se não estiver seguro de qual é a configuração, você pode obtê-la usando
 o comando <command>baud</command> no interpretador de comandos do EFI.
-</para>
-<para>
+
+</para><para>
+
 Caso não exista uma opção disponível que esteja configurada para o 
 dispositivo serial ou taxa baud que deseja usar, você pode substituir
 a configuração de console por uma das opções de menu existentes. Por 
@@ -275,6 +262,7 @@ exemplo, para usar uma taxa de console de 57600 através de um dispositivo
 ttyS1, enter com o parâmetro
 <command>console=ttyS1,57600n8</command> na janela de texto 
 <classname>Boot:</classname>.
+
 </para>
 
 <note><para>
@@ -292,9 +280,24 @@ selecionar o e kernel e entrar com parâmetros, mas ambas a tela e
 sua entrada padrão irão desaparecer assim que o kernel for iniciado, 
 será necessário que reinicie antes de começar a instalação.
 </para></warning>
--->
+  </sect3>
+ 
+  <sect3 arch="ia64" id="kernel-option-menu">
+  <title>Selecionando o Kernel de Inicialização e Opções</title>
 
 <para>
+
+O gerenciador de partida mostrará um formulário com uma lista
+de opções de menu e uma janela de textos com o aviso 
+<classname>Boot:</classname>.
+As setas de teclado selecionam um item do menu e qualquer 
+texto digiatdo no teclado aparecerá na janela de textos. Também
+existem telas de ajdua que podem ser mostradas pressionando-se 
+a tecla de função apropriada. A tela de ajuda <classname>General</classname> 
+explica as escolhas de menu e a tela <classname>Params</classname> 
+as opções comuns de linha de comando.
+
+</para><para>
 
 Consulte a tela de ajuda <classname>General</classname> para obter uma 
 descrição dos kernels e modos de instalação mais apropriados para sua 
@@ -378,7 +381,6 @@ Uma entrada TFTP recomendada para a inicialização de um sistema ia64 via
 rede se parece com esta:
 
 <informalexample><screen>
-
 host mcmuffin {
         hardware ethernet 00:30:6e:1e:0e:83;
         fixed-address 10.0.0.21;
