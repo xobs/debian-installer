@@ -7,157 +7,254 @@
 # This makefile builds a debian-installer system and bootable images from 
 # a collection of udebs which it downloads from a Debian archive. See
 # README for details.
+#
+
+#
+# General layout of our build directory hierarchy
+#
+# build/config/[<subarch>/][<medium>/][<flavour>/]<leaf-config>
+# build/tmp/[<subarch>/][<medium>/][<flavour>/]<build-area>
+# build/dest/[<subarch>/][<medium>/][<flavour>-]<images>
+#
+# Items in brackets can be left out if they are superfluous.
+#
+# These following <image> names are conventional.
+#
+# For small changeable media (floppies and the like):
+# - boot.img, root.img, driver.img
+#
+# For single bootable images (e.g. tftp boot images):
+# - boot.img
+#
+# For compressed single bootable images (harddisk or hd emulation):
+# - boot.img.gz
+#
+# If those are not bootable:
+# - root.img.gz
+#
+# Raw kernel images:
+# - vmlinux or vmlinuz
+#
+# Example:
+#
+# dest/
+# |-- cdrom-boot.img
+# |-- floppy
+# |   |-- access
+# |   |   |-- boot.img
+# |   |   |-- drivers.img
+# |   |   `-- root.img
+# |   |-- boot.img
+# |   |-- cd-drivers.img
+# |   |-- net-drivers.img
+# |   `-- root.img
+# |-- hd-media-boot.img.gz
+# `-- netboot
+#     |-- initrd.gz
+#     `-- vmlinuz
+#
+
+# Add to PATH so dpkg will always work, and so local programs will be found.
+PATH := $(PATH):/usr/sbin:/sbin:.
 
 DEB_HOST_ARCH = $(shell dpkg-architecture -qDEB_HOST_ARCH)
 DEB_HOST_GNU_CPU = $(shell dpkg-architecture -qDEB_HOST_GNU_CPU)
 DEB_HOST_GNU_SYSTEM = $(shell dpkg-architecture -qDEB_HOST_GNU_SYSTEM)
 
-# Include main config
-include config/main
+# We loop over all needed combinations of ARCH, SUBARCH, MEDIUM, FLAVOUR
+# via recursive make calls. ARCH is constant, we don't support
+# cosscompiling.
+ARCH = $(DEB_HOST_ARCH)
 
-# Include arch configs
-include config/arch/$(DEB_HOST_GNU_SYSTEM)
-include config/arch/$(DEB_HOST_GNU_SYSTEM)-$(DEB_HOST_GNU_CPU)
+#
+# By default, we just advertise what we can do.
+#
+.PHONY: all
+all:
+	@echo "Useful targets:"
+	@echo
+	@echo "all_build"
+	@echo "all_stats"
+	@echo "all_clean"
+	@echo "reallyclean"
+	@echo
+	@echo "demo"
+	@echo "shell"
+	@echo
+	@$(submake) all_list
 
-# Include type configs
--include config/type/$(TYPE)
--include config/type/$(TYPE)-$(DEB_HOST_GNU_SYSTEM)
--include config/type/$(TYPE)-$(DEB_HOST_ARCH)
-
-# Include directory config
+#
+# Configurations for the varying ARCH, SUBARCH, MEDIUM, FLAVOUR.
+# For simplicity, we use a similiar tree layout for config/, tmp/
+# and dest/.
+#
+# Cheap trick: if one of the variables isn't defined, we run in
+# a non-existing file and ignore it.
+#
+include config/common
 include config/dir
-
-# Local config override.
 -include config/local
+-include config/$(ARCH).cfg
+-include config/$(ARCH)/$(SUBARCH).cfg
+-include config/$(ARCH)/$(SUBARCH)/$(MEDIUM).cfg
+-include config/$(ARCH)/$(SUBARCH)/$(MEDIUM)/$(FLAVOUR).cfg
 
-# Add to PATH so dpkg will always work, and so local programs will be found.
-PATH:=$(PATH):/usr/sbin:/sbin:.
+#
+# Useful command sequences
+#
+define submake
+$(MAKE) --no-print-directory
+endef
 
-# Get the list of udebs to install.
-UDEBS = $(shell ./pkg-list $(TYPE) $(KERNEL_FLAVOUR) $(KERNELIMAGEVERSION)) $(EXTRAS)
+define recurse_once
+	@set -e; $(submake) $(1)_$(2)
+endef
 
-ifeq ($(TYPE),floppy)
-# List of additional udebs for driver floppys.
-DRIVERFD_UDEBS = \
-	$(shell set -e; for target in $(EXTRA_FLOPPIES) ; do \
-		./pkg-list $$target $(KERNEL_FLAVOUR) $(KERNELIMAGEVERSION); \
-	done)
-endif
+define recurse_many
+	@set -e; $(foreach var,$($(1)_SUPPORTED),$(submake) $(2)_$(3) $(1)=$(var);)
+endef
 
-# Sanity check TYPE against the list.
-ifeq (,$(filter $(TYPE),$(TYPES_SUPPORTED)))
-%:
-	@echo "unsupported type: $(TYPE)"
-	@echo "supported types: $(TYPES_SUPPORTED)"
-	@exit 1
-endif
+define recurse
+	$(if $($(1)_SUPPORTED),$(call recurse_many,$(1),$(2),$(3)),$(call recurse_once,$(2),$(3)))
+endef
 
-# Include arch targets
--include make/arch/$(DEB_HOST_GNU_SYSTEM)
-include make/arch/$(DEB_HOST_GNU_SYSTEM)-$(DEB_HOST_GNU_CPU)
+define genext2fs
+	genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` -r 0
+endef
 
-build: tree_umount $(TYPE)-tree-stamp $(EXTRA_TARGETS) stats
+#
+# Globally useful variables.
+#
+targetstring = $(patsubst _%,%,$(if $(filter-out default,$(SUBARCH)),_$(SUBARCH),)$(if $(filter-out default,$(MEDIUM)),_$(MEDIUM),)$(if $(filter-out default,$(FLAVOUR)),_$(FLAVOUR),))
+targetdirs = $(subst _,/,$(targetstring))
 
-image: arch-image $(EXTRA_IMAGES)
-ifeq ($(COMPRESS_IMAGE),y)
-	gzip -9f $(IMAGE)
-endif
 
-tree_mount: $(TYPE)-tree-stamp
-	-@sudo /bin/mount -t proc proc $(TREE)/proc
-ifndef USERDEVFS
-	-@sudo /bin/mount -t devfs dev $(TREE)/dev
-else
-	-@sudo chroot $(TREE) /usr/bin/update-dev
-endif
+#
+# A generic recursion rule
+#
+.PHONY: all_%
+all_%:
+	@install -d $(STAMPS)
+	$(call recurse,SUBARCH,subarch,$*)
 
-tree_umount:
-ifndef USERDEVFS
-	-@if [ -L $(TREE)/dev/fd ] ; then sudo /bin/umount $(TREE)/dev 2>/dev/null ; fi
-endif
-	-@if [ -L $(TREE)/proc/self ] ; then sudo /bin/umount $(TREE)/proc 2>/dev/null ; fi
+.PHONY: subarch_%
+subarch_%:
+	$(call recurse,MEDIUM,medium,$*)
 
-demo:
-	@$(MAKE) --no-print-directory TYPE=demo demo1
+.PHONY: medium_%
+medium_%:
+	$(call recurse,FLAVOUR,flavour,$*)
 
-demo1: tree_mount demo2 tree_umount
-demo2:
-	-@[ -f questions.dat ] && cp -f questions.dat $(TREE)/var/lib/cdebconf/
-	-@sudo chroot $(TREE) bin/sh -c "export DEBCONF_DEBUG=5 ; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; exec /usr/share/debconf/frontend /usr/bin/main-menu"
+.PHONY: flavour_%
+flavour_%:
+	$(if $(targetstring),@$(submake) _$*)
 
-shell: tree_mount shell1 tree_umount
-shell1:
-	-@sudo chroot $(TREE) bin/sh
 
-uml: $(INITRD)
-	-linux initrd=$(INITRD) root=/dev/rd/0 ramdisk_size=8192 con=fd:0,fd:1 devfs=mount
+#
+# Validate a targetstring, echo env variables for valid ones
+#
+.PHONY: validate_%
+validate_%:
+	@set -e; \
+	SUBARCH= var='$(subst _, ,$(subst validate_,,$@))'; \
+	tmp=$$(echo $$var |sed 's/[ ].*$$//'); \
+	[ -z '$(SUBARCH_SUPPORTED)' ] || [ -n "$$tmp" ] || [ -z "$$(echo $(SUBARCH_SUPPORTED) |grep -w default)" ] || SUBARCH=default; \
+	[ -z '$(SUBARCH_SUPPORTED)' ] || [ -z "$$tmp" ] || [ -z "$$(echo $(SUBARCH_SUPPORTED) |grep -w $$tmp)" ] || SUBARCH=$$tmp; \
+	$(submake) medium_validate SUBARCH=$$SUBARCH var="$$var"
 
-demo_clean:
-ifneq (,$(filter demo,$(TYPES_SUPPORTED)))
-	@$(MAKE) --no-print-directory TYPE=demo tree_umount
-endif
+.PHONY: medium_validate
+medium_validate:
+	@set -e; \
+	MEDIUM= var="$(strip $(patsubst $(SUBARCH)%,%,$(var)))"; \
+	tmp=$$(echo $$var |sed 's/[ ].*$$//'); \
+	[ -z '$(MEDIUM_SUPPORTED)' ] || [ -n "$$tmp" ] || [ -z "$$(echo $(MEDIUM_SUPPORTED) |grep -w default)" ] || MEDIUM=default; \
+	[ -z '$(MEDIUM_SUPPORTED)' ] || [ -z "$$tmp" ] || [ -z "$$(echo $(MEDIUM_SUPPORTED) |grep -w $$tmp)" ] || MEDIUM=$$tmp; \
+	$(submake) flavour_validate MEDIUM=$$MEDIUM var="$$var"
 
-clean: demo_clean tmp_mount debian/control
-	rm -rf $(TEMP) || sudo rm -rf $(TEMP)
-	dh_clean
-	rm -f $(TYPE)-*-stamp
-	rm -rf $(UDEBDIR) $(EXTRAUDEBDIR) $(TMP_MNT) debian/build
-	rm -rf $(DEST)/$(TYPE)-* $(EXTRA_IMAGES) || sudo rm -rf $(DEST)/$(TYPE)-* $(EXTRA_IMAGES)
-	rm -f unifont-reduced-$(TYPE).bdf
-ifdef DEST_KERNEL
-	$(foreach NAME,$(KERNELNAME),rm -f $(DEST)/$(NAME);)
-else
-	$(foreach NAME,$(KERNELNAME),rm -f $(TEMP)/$(NAME);)
-endif
+.PHONY: flavour_validate
+flavour_validate:
+	@set -e; \
+	FLAVOUR= var="$(strip $(patsubst $(MEDIUM)%,%,$(var)))"; \
+	tmp=$$(echo $$var |sed 's/[ ].*$$//'); \
+	[ -z '$(FLAVOUR_SUPPORTED)' ] || [ -n "$$tmp" ] || [ -z "$$(echo $(FLAVOUR_SUPPORTED) |grep -w default)" ] || FLAVOUR=default; \
+	[ -z '$(FLAVOUR_SUPPORTED)' ] || [ -z "$$tmp" ] || [ -z "$$(echo $(FLAVOUR_SUPPORTED) |grep -w $$tmp)" ] || FLAVOUR=$$tmp; \
+	$(submake) finish_validate FLAVOUR=$$FLAVOUR var="$$var"
 
+.PHONY: finish_validate
+finish_validate:
+	@set -e; \
+	var="$(strip $(patsubst $(FLAVOUR)%,%,$(var)))"; \
+	if [ -z "$$var" ]; then \
+		echo SUBARCH=$$SUBARCH MEDIUM=$$MEDIUM FLAVOUR=$$FLAVOUR; \
+	else \
+		echo SUBARCH= MEDIUM= FLAVOUR=; \
+	fi;
+
+
+#
+# List all targets useful for direct invocation.
+#
+.PHONY: _list
+_list:
+	@set -e; \
+	echo build_$(targetstring); \
+	$(if $(findstring $(MEDIUM),$(WRITE_MEDIA)),echo write_$(targetstring);) \
+	echo clean_$(targetstring)
+
+
+#
+# Clean all targets.
+#
+.PHONY: reallyclean
 reallyclean: all_clean
-	rm -rf $(APTDIR) $(APTDIR).udeb $(APTDIR).deb $(DEST) $(BASE_TMP) $(SOURCEDIR) $(DEBUGUDEBDIR)
-	rm -f diskusage*.txt all-*.utf *.bdf
+	rm -rf $(APTDIR) $(APTDIR).udeb $(APTDIR).deb $(BASE_DEST) $(BASE_TMP) $(SOURCEDIR) $(DEBUGUDEBDIR)
 	rm -f sources.list sources.list.udeb sources.list.deb
+	rm -rf $(UDEBDIR) $(STAMPS)
 
-# Auto-generate a sources.list.type
-sources.list.udeb:
-	( \
-	set -e; \
-	echo "# This file is automatically generated, edit sources.list.udeb.local instead."; \
-	if [ "$(MIRROR)x" != "x" ]; then \
-		echo "deb $(MIRROR) $(SUITE) main/debian-installer"; \
-	else \
-	cat $(SYSTEM_SOURCES_LIST) | egrep '^deb[[:space:]]' | grep -v debian-non-US | grep -v non-us.debian.org | egrep '[[:space:]]main' | grep -v 'security.debian.org' | \
-		awk '{print $$1 " " $$2}' | sed "s,/* *$$, $(SUITE) main/debian-installer," | sed "s,^deb file,deb copy," | uniq; \
-	fi; \
-	) > sources.list.udeb
+# For manual invocation, we provide a generic clean rule.
+.PHONY: clean_%
+clean_%:
+	@$(submake) _clean $(shell $(submake) $(subst clean_,validate_,$@))
 
-sources.list.deb:
-	( \
-	set -e; \
-	echo "# This file is automatically generated, edit sources.list.deb.local instead."; \
-	if [ "$(MIRROR)x" != "x" ]; then \
-		echo "deb $(MIRROR) $(SUITE) main"; \
-	else \
-	cat $(SYSTEM_SOURCES_LIST) | grep ^deb\  | grep -v debian-non-US | grep ' main' | grep -v 'security.debian.org' | \
-		awk '{print $$1 " " $$2}' | sed "s,/* *$$, $(SUITE) main," | sed "s,^deb file,deb copy," | uniq; \
-	fi; \
-	) > sources.list.deb
+# The general clean rule.
+.PHONY: _clean
+_clean: tree_umount
+	@[ -n "$(filter-out default,$(SUBARCH) $(MEDIUM) $(FLAVOUR))" ] || { echo "invalid target"; false; }
+	-rm -f $(STAMPS)tree-$(targetstring)-stamp $(STAMPS)extra-$(targetstring)-stamp $(STAMPS)get_udebs-$(targetstring)-stamp
+	rm -f $(TEMP)/diskusage.txt
+	rm -f $(TEMP)/all.utf
+	rm -f $(TEMP)/unifont.bdf $(TREE)/unifont.bgf
+	rm -f $(INITRD) $(KERNEL) $(BOOT) $(ROOT) $(EXTRA)
+	rm -rf $(TEMP)
 
-# Get all required udebs and put in UDEBDIR.
-get_udebs: $(TYPE)-get_udebs-stamp
-$(TYPE)-get_udebs-stamp: sources.list.udeb
-	rm -f $@
-	./get-packages udeb $(UDEBS)
-	( export UDEBDIR=$(EXTRAUDEBDIR); \
-	  ./get-packages udeb $(DRIVERFD_UDEBS); )
-	touch $@
 
-# Build the installer tree.
-tree: $(TYPE)-tree-stamp
-$(TYPE)-tree-stamp: $(TYPE)-get_udebs-stamp debian/control
+#
+# all_build is provided automagically, but for manual invocation
+# we provide a generic build rule.
+#
+.PHONY: build_%
+build_%:
+	@install -d $(STAMPS)
+	@$(submake) _build $(shell $(submake) $(subst build_,validate_,$@))
+
+# The general build rule.
+.PHONY: _build
+_build:
+	@[ -n "$(filter-out default,$(SUBARCH) $(MEDIUM) $(FLAVOUR))" ] || { echo "invalid target"; false; }
+	@$(submake) tree_umount $(EXTRATARGETS) $(TARGET)
+
+
+#
+# The general tree target.
+# FIXME: This is way too convoluted.
+#
+$(STAMPS)tree-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
 	dh_testroot
-
 	dpkg-checkbuilddeps
+	@rm -f $@
 
 	# This build cannot be restarted, because dpkg gets confused.
-	rm -rf $(TREE) $@
+	rm -rf $(TREE)
 	# Set up the basic files [u]dpkg needs.
 	mkdir -p $(DPKGDIR)/info
 	touch $(DPKGDIR)/status
@@ -169,33 +266,49 @@ $(TYPE)-tree-stamp: $(TYPE)-get_udebs-stamp debian/control
 
 	# Unpack the udebs with dpkg. This command must run as root
 	# or fakeroot.
-	echo -n > diskusage-$(TYPE).txt
+	echo -n > $(TEMP)/diskusage.txt
 	set -e; \
 	oldsize=0; oldblocks=0; oldcount=0; for udeb in $(UDEBDIR)/*.udeb ; do \
-		pkg=`basename $$udeb` ; \
-		dpkg $(DPKG_UNPACK_OPTIONS) --root=$(TREE) --unpack $$udeb ; \
-		newsize=`du -bs $(TREE) | awk '{print $$1}'` ; \
-		newblocks=`du -s $(TREE) | awk '{print $$1}'` ; \
-		newcount=`find $(TREE) -type f | wc -l | awk '{print $$1}'` ; \
-		usedsize=`echo $$newsize - $$oldsize | bc`; \
-		usedblocks=`echo $$newblocks - $$oldblocks | bc`; \
-		usedcount=`echo $$newcount - $$oldcount | bc`; \
-		version=`dpkg-deb --info $$udeb | grep Version: | awk '{print $$2}'` ; \
-		echo " $$usedsize B - $$usedblocks blocks - $$usedcount files used by pkg $$pkg (version $$version)" >>diskusage-$(TYPE).txt;\
-		oldsize=$$newsize ; \
-		oldblocks=$$newblocks ; \
-		oldcount=$$newcount ; \
+		if [ -f "$$udeb" ]; then \
+			pkg=`basename $$udeb` ; \
+			dpkg $(DPKG_UNPACK_OPTIONS) --root=$(TREE) --unpack $$udeb ; \
+			newsize=`du -bs $(TREE) | awk '{print $$1}'` ; \
+			newblocks=`du -s $(TREE) | awk '{print $$1}'` ; \
+			newcount=`find $(TREE) -type f | wc -l | awk '{print $$1}'` ; \
+			usedsize=`echo $$newsize - $$oldsize | bc`; \
+			usedblocks=`echo $$newblocks - $$oldblocks | bc`; \
+			usedcount=`echo $$newcount - $$oldcount | bc`; \
+			version=`dpkg-deb --info $$udeb | grep Version: | awk '{print $$2}'` ; \
+			echo " $$usedsize B - $$usedblocks blocks - $$usedcount files used by pkg $$pkg (version $$version)" >>$(TEMP)/diskusage.txt;\
+			oldsize=$$newsize ; \
+			oldblocks=$$newblocks ; \
+			oldcount=$$newcount ; \
+		fi; \
 	done
-	sort -n < diskusage-$(TYPE).txt > diskusage-$(TYPE).txt.new && \
-		mv diskusage-$(TYPE).txt.new diskusage-$(TYPE).txt
+	sort -n < $(TEMP)/diskusage.txt > $(TEMP)/diskusage.txt.new && \
+		mv $(TEMP)/diskusage.txt.new $(TEMP)/diskusage.txt
 
 	# Clean up after dpkg.
 	rm -rf $(DPKGDIR)/updates
 	rm -f $(DPKGDIR)/available $(DPKGDIR)/*-old $(DPKGDIR)/lock
 
+ifdef KERNELVERSION
 	# Set up modules.dep, ensure there is at least one standard dir (kernel
 	# in this case), so depmod will use its prune list for archs with no
 	# modules.
+	#
+	# FIXME:
+	# linux-kernel-di does not yet generate uniquely named System.map files.
+	#
+	#set -e; \
+	#$(foreach VERSION,$(KERNELVERSION), \
+	#	mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
+	#	if [ -e $(TREE)/boot/System.map-$(VERSION) ]; then \
+	#		depmod -F $(TREE)/boot/System.map-$(VERSION) -q -a -b $(TREE)/ $(VERSION); \
+	#		rm -f $(TREE)/boot/System.map-$(VERSION); \
+	#	else \
+	#		depmod -q -a -b $(TREE)/ $(VERSION); \
+	#	fi;)
 	set -e; \
 	$(foreach VERSION,$(KERNELVERSION), \
 		mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
@@ -204,13 +317,14 @@ $(TYPE)-tree-stamp: $(TYPE)-get_udebs-stamp debian/control
 			rm -f $(TREE)/boot/System.map; \
 		else \
 			depmod -q -a -b $(TREE)/ $(VERSION); \
-		fi ; )
+		fi;)
 	# These files depmod makes are used by hotplug, and we shouldn't
 	# need them, yet anyway.
 	find $(TREE)/lib/modules/ -name 'modules*' \
 		-not -name modules.dep -not -type d | xargs rm -f
+endif
 
-	# Create a dev tree
+	# Create a dev tree.
 	mkdir -p $(TREE)/dev
 ifdef USERDEVFS
 	# Create initial /dev entries -- only those that are absolutely
@@ -236,19 +350,12 @@ ifdef USERDEVFS
 	mknod $(TREE)/dev/loop/3 b 7 3 
 endif
 
-	# Move the kernel image out of the way, either into a temp directory
-	# for use later, or to dest.
-ifdef DEST_KERNEL
-	install -d $(DEST)
-	set -e; \
-	$(foreach NAME,$(KERNELNAME), \
-		mv -f $(TREE)/boot/$(NAME) $(DEST)/$(NAME);)
-else
-	set -e; \
-	$(foreach NAME,$(KERNELNAME), \
-		mv -f $(TREE)/boot/$(NAME) $(TEMP)/$(NAME);)
+ifdef KERNELNAME
+	# Move the kernel image out of the way.
+	$(foreach name,$(KERNELNAME), \
+		mv -f $(TREE)/boot/$(name) $(TEMP)/$(name);)
+	rmdir $(TREE)/boot/
 endif
-	-rmdir $(TREE)/boot/
 
 ifdef EXTRAFILES
 	# Copy in any extra files
@@ -261,21 +368,20 @@ endif
 
 ifdef EXTRALIBS
 	# Copy in any extra libs.
-	cp -a $(EXTRALIBS) $(TREE)/lib/
+	set -e; \
+	for file in $(EXTRALIBS); do \
+		mkdir -p $(TREE)/`dirname $$file`; \
+		cp -a $$file $(TREE)/$$file; \
+	done
 endif
 
-ifeq ($(TYPE),floppy)
-	# Unpack additional driver disks, so mklibs runs on them too.
-	rm -rf $(DRIVEREXTRASDIR)
-	mkdir -p $(DRIVEREXTRASDIR)
-	mkdir -p $(DRIVEREXTRASDPKGDIR)/info $(DRIVEREXTRASDPKGDIR)/updates
-	touch $(DRIVEREXTRASDPKGDIR)/status $(DRIVEREXTRASDPKGDIR)/available
-	set -e; \
-	for udeb in $(EXTRAUDEBDIR)/*.udeb ; do \
-		if [ -f "$$udeb" ]; then \
-			dpkg $(DPKG_UNPACK_OPTIONS) --root=$(DRIVEREXTRASDIR) --unpack $$udeb; \
-		fi; \
-	done
+ifdef EXTRADRIVERS
+	# Unpack the udebs of additional driver disks, so mklibs runs on them too.
+	mkdir -p $(EXTRADRIVERSDIR)
+	mkdir -p $(EXTRADRIVERSDPKGDIR)/info $(EXTRADRIVERSDPKGDIR)/updates
+	touch $(EXTRADRIVERSDPKGDIR)/status $(EXTRADRIVERSDPKGDIR)/available
+	dpkg $(DPKG_UNPACK_OPTIONS) --root=$(EXTRADRIVERSDIR) --unpack \
+		$(wildcard $(foreach dir,$(EXTRADRIVERS),$(dir)/*.udeb))
 endif
 
 	# Library reduction.
@@ -328,7 +434,7 @@ endif
 	set -e; \
 	if [ -e $(TREE)/etc/pcmcia/config ]; then \
 		./pcmcia-config-reduce.pl $(TREE)/etc/pcmcia/config \
-			`if [ -d "$(DRIVEREXTRASDIR)" ]; then find $(DRIVEREXTRASDIR)/lib/modules -name \*.o -name \*.ko; fi` \
+			`if [ -d "$(EXTRADRIVERSDIR)" ]; then find $(EXTRADRIVERSDIR)/lib/modules -name \*.o -name \*.ko; fi` \
 			`find $(TREE)/lib/modules/ -name \*.o -name \*.ko` > \
 			$(TREE)/etc/pcmcia/config.reduced; \
 		mv -f $(TREE)/etc/pcmcia/config.reduced $(TREE)/etc/pcmcia/config; \
@@ -352,176 +458,306 @@ endif
 	done
 
 	# Collect the used UTF-8 strings, to know which glyphs to include in
-	# the font.  Using strings is not the best way, but no better
-	# suggestion has been made yet.
-	cp graphic.utf all-$(TYPE).utf
-ifeq ($(TYPE),floppy)
-	if [ -n "`find $(DRIVEREXTRASDPKGDIR)/info/ -name \\*.templates`" ]; then \
-		cat $(DRIVEREXTRASDPKGDIR)/info/*.templates >> all-$(TYPE).utf; \
+	# the font.
+	cp graphic.utf $(TEMP)/all.utf
+ifdef EXTRADRIVERS
+	if [ -n "`find $(EXTRADRIVERSDPKGDIR)/info/ -name \\*.templates`" ]; then \
+		cat $(EXTRADRIVERSDPKGDIR)/info/*.templates >> $(TEMP)/all.utf; \
 	fi
 endif
 	if [ -n "`find $(DPKGDIR)/info/ -name \\*.templates`" ]; then \
-		cat $(DPKGDIR)/info/*.templates >> all-$(TYPE).utf; \
+		cat $(DPKGDIR)/info/*.templates >> $(TEMP)/all.utf; \
 	fi
-	#find $(TREE) -type f | xargs strings >> all-$(TYPE).utf
 
-ifeq ($(TYPE),floppy)
+ifdef EXTRADRIVERS
 	# Remove additional driver disk contents now that we're done with
 	# them.
-	rm -rf $(DRIVEREXTRASDIR)
+	rm -rf $(EXTRADRIVERSDIR)
 endif
 
 	# Tree target ends here. Whew!
-	touch $@
+	@touch $@
 
-unifont-reduced-$(TYPE).bdf: all-$(TYPE).utf
+
+#
+# Acquire the necessary .udeb packages.
+#
+
+# Get the list of udebs to install.
+# HACK Alert: pkg-lists/ is still sorted by TYPE instead of a dir hierarchy.
+UDEBS = $(shell set -e; ./pkg-list $(TYPE) $(KERNEL_FLAVOUR) $(KERNELIMAGEVERSION)) $(EXTRAS)
+
+# Get all required udebs and put them in UDEBDIR.
+$(STAMPS)get_udebs-$(targetstring)-stamp: sources.list.udeb
+	@rm -f $@
+	./get-packages udeb $(UDEBS)
+	@touch $@
+
+# Auto-generate a sources.list.type
+sources.list.udeb:
+	(set -e; \
+	echo "# This file is automatically generated, edit $@.local instead."; \
+	if [ "$(MIRROR)x" != "x" ]; then \
+		echo "deb $(MIRROR) $(SUITE) main/debian-installer"; \
+	else \
+		grep '^deb[ \t]' $(SYSTEM_SOURCES_LIST) \
+		|grep -v '\(debian-non-US\|non-us.debian.org\|security.debian.org\)' \
+		|grep '[ \t]main' \
+		|awk '{print $$1 " " $$2}' \
+		|sed "s,/* *$$, $(SUITE) main/debian-installer," \
+		|sed "s,^deb file,deb copy," \
+		|sort |uniq; \
+	fi) > $@
+
+sources.list.deb:
+	(set -e; \
+	echo "# This file is automatically generated, edit $@.local instead."; \
+	if [ "$(MIRROR)x" != "x" ]; then \
+		echo "deb $(MIRROR) $(SUITE) main"; \
+	else \
+		grep '^deb[ \t]' $(SYSTEM_SOURCES_LIST) \
+		|grep -v '\(debian-non-US\|non-us.debian.org\|security.debian.org\)' \
+		|grep '[ \t]main' \
+		|awk '{print $$1 " " $$2}' \
+		|sed "s,/* *$$, $(SUITE) main," \
+		|sed "s,^deb file,deb copy," \
+		|sort |uniq; \
+	fi) > $@
+
+
+#
+# Font generation.
+#
+$(TREE)/unifont.bgf: $(TEMP)/all.utf
 	# Use the UTF-8 locale in rootskel-locale. This target shouldn't
 	# be called when it is not present anyway.
 	# reduce-font is part of package libbogl-dev
 	# unifont.bdf is part of package bf-utf-source
 	# The locale must be generated after installing the package locales
+	set -e; \
 	CHARMAP=`LOCPATH=$(LOCALE_PATH) LC_ALL=C.UTF-8 locale charmap`; \
             if [ UTF-8 != "$$CHARMAP" ]; then \
 	        echo "error: Trying to build unifont.bgf without rootskel-locale!"; \
 	        exit 1; \
 	    fi
-	cat all-$(TYPE).utf | LOCPATH=$(LOCALE_PATH) LC_ALL=C.UTF-8 reduce-font /usr/src/unifont.bdf > $@.tmp
-	mv $@.tmp $@
-
-$(TREE)/unifont.bgf: unifont-reduced-$(TYPE).bdf
+	cat $(TEMP)/all.utf | LOCPATH=$(LOCALE_PATH) LC_ALL=C.UTF-8 reduce-font /usr/src/unifont.bdf > $(TEMP)/unifont.bdf
 	# bdftobogl is part of package libbogl-dev
-	bdftobogl -b unifont-reduced-$(TYPE).bdf > $@.tmp
+	bdftobogl -b $(TEMP)/unifont.bdf > $@.tmp
 	mv $@.tmp $@
 
-# Build the driver floppy image
-$(EXTRA_TARGETS) : %-stamp : $(TYPE)-get_udebs-stamp
-	mkdir -p ${TEMP}/$*
-	set -e; \
-	for file in $(shell grep --no-filename -v ^\#  pkg-lists/$*/common \
-		`if [ -f pkg-lists/$*/$(DEB_HOST_ARCH) ]; then echo pkg-lists/$*/$(DEB_HOST_ARCH); fi` \
-	  	| sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2\n)/g' ) ; do \
-			cp $(EXTRAUDEBDIR)/$$file* ${TEMP}/$*  ; \
-	done
-	./pkg-list $* $(KERNEL_FLAVOUR) $(KERNELIMAGEVERSION) > ${TEMP}/$*/udeb_include
-	./makelabel ${DISK_LABEL_$*} ${BUILD_DATE} > ${TEMP}/$*/disk.lbl
-	touch $@
 
-$(EXTRA_IMAGES) : $(DEST)/%-image.img :  $(EXTRA_TARGETS)
-	rm -f $@
-	install -d $(TEMP)
-	install -d $(DEST)
-	set -e; if [ $(INITRD_FS) = ext2 ]; then \
-		genext2fs -d $(TEMP)/$* -b $(FLOPPY_SIZE) -r 0  $@; \
-        elif [ $(INITRD_FS) = romfs ]; then \
-                genromfs -d $(TEMP)/$* -f $@; \
-        else \
-                echo "Unsupported filesystem type"; \
-                exit 1; \
-        fi;
-
-tarball: $(TYPE)-tree-stamp
-	tar czf $(DEST)/$(TYPE)-debian-installer.tar.gz $(TREE)
-
-# Make sure that the temporary mountpoint exists and is not occupied.
-tmp_mount:
-	if mount | grep -q $(TMP_MNT) && ! umount $(TMP_MNT) ; then \
-		echo "Error unmounting $(TMP_MNT)" 2>&1 ; \
-		exit 1; \
-	fi
-	mkdir -p $(TMP_MNT)
-
+#
+# Create the images for dest/. Those are the targets called from config.
+#
 # Create a compressed image of the root filesystem by way of genext2fs.
-initrd: $(INITRD)
-$(INITRD): $(TYPE)-tree-stamp
+$(INITRD): $(TEMP_INITRD)
+	install -m 644 -D $< $@
+
+$(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 	# Only build the font if we have rootskel-locale
 	if [ -d "$(LOCALE_PATH)/C.UTF-8" ]; then \
-	    $(MAKE) $(TREE)/unifont.bgf; \
+		$(submake) $(TREE)/unifont.bgf; \
 	fi
-	rm -f $(TEMP)/image.tmp
 	install -d $(TEMP)
-	install -d $(DEST)
+	install -d $(SOME_DEST)
 
 	if [ $(INITRD_FS) = ext2 ]; then \
-		genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` $(TEMP)/image.tmp; \
+		$(genext2fs) $(TEMP)/initrd; \
 	elif [ $(INITRD_FS) = romfs ]; then \
-		genromfs -d $(TREE) -f $(TEMP)/image.tmp; \
+		genromfs -d $(TREE) $(TEMP)/initrd; \
 	else \
 		echo "Unsupported filesystem type"; \
 		exit 1; \
 	fi;
-	gzip -vc9 $(TEMP)/image.tmp > $(INITRD).tmp
-	mv $(INITRD).tmp $(INITRD)
+	gzip -v9f $(TEMP)/initrd
 
-# Write image to floppy
-floppy: boot_floppy
-boot_floppy: $(IMAGE)
-	install -d $(DEST)
-	sudo dd if=$(IMAGE) of=$(FLOPPYDEV) bs=$(FLOPPY_SIZE)k
+# raw kernel images
+$(KERNEL): $(STAMPS)tree-$(targetstring)-stamp
+	install -m 644 -D $(TEMP)/$(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,') $@
 
-# Write drivers floppy
-%_floppy: $(DEST)/%-image.img
-	sudo dd if=$< of=$(FLOPPYDEV) bs=$(FLOPPY_SIZE)k
+# bootable images
+$(BOOT): $(TEMP_INITRD) arch_boot
+	install -m 644 -D $(TEMP_BOOT)$(GZIPPED) $@
+
+# non-bootable root images
+$(ROOT): $(TEMP_INITRD) arch_root
+	install -m 644 -D $(TEMP_ROOT)$(GZIPPED) $@
+
+# Other images, e.g. driver floppies. Those are simply handled as flavours
+$(EXTRA): $(TEMP_EXTRA)
+	install -m 644 -D $(TEMP_EXTRA)$(GZIPPED) $@
+
+$(TEMP_EXTRA): $(STAMPS)extra-$(targetstring)-stamp
+	install -d $(shell dirname $@)
+	install -d $(TREE)
+	install -d $(SOME_DEST)
+	set -e; if [ $(INITRD_FS) = ext2 ]; then \
+		$(genext2fs) $@; \
+	elif [ $(INITRD_FS) = romfs ]; then \
+		genromfs -d $(TREE) $@; \
+	else \
+		echo "Unsupported filesystem type"; \
+                exit 1; \
+	fi;
+	$(if $(GZIPPED),gzip -v9f $(TEMP_EXTRA))
+
+$(STAMPS)extra-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
+	@rm -f $@
+	mkdir -p $(TREE)
+	echo -n > $(TEMP)/diskusage.txt
+	set -e; \
+	for file in $(shell grep --no-filename -v ^\#  pkg-lists/$(TYPE)/common \
+		`if [ -f pkg-lists/$(TYPE)/$(ARCH) ]; then echo pkg-lists/$(TYPE)/$(ARCH); fi` \
+		| sed -e 's/^\(.*\)$${kernel:Version}\(.*\)$$/$(foreach VERSION,$(KERNELIMAGEVERSION),\1$(VERSION)\2\n)/g' ) ; do \
+			cp $(UDEBDIR)/$$file* $(TREE) ; \
+	done
+	for udeb in $(TREE)/*.udeb ; do \
+		if [ -f "$$udeb" ]; then \
+			pkg=`basename $$udeb` ; \
+			usedsize=`du -bs $$udeb | awk '{print $$1}'` ; \
+			usedblocks=`du -s $$udeb | awk '{print $$1}'` ; \
+			usedcount=1 ; \
+			version=`dpkg-deb --info $$udeb | grep Version: | awk '{print $$2}'` ; \
+			echo " $$usedsize B - $$usedblocks blocks - $$usedcount files used by pkg $$pkg (version $$version)" >>$(TEMP)/diskusage.txt;\
+		fi; \
+	done
+	sort -n < $(TEMP)/diskusage.txt > $(TEMP)/diskusage.txt.new && \
+		mv $(TEMP)/diskusage.txt.new $(TEMP)/diskusage.txt
+	echo $(UDEBS) > $(TREE)/udeb_include
+	./makelabel $(DISK_LABEL) $(BUILD_DATE) > $(TREE)/disk.lbl
+	@touch $@
+
+
+#
+# Write (floppy) images
+#
+.PHONY: write_%
+write_%:
+	@install -d $(STAMPS)
+	@$(submake) _write $(shell $(submake) $(subst write_,validate_,$@))
+
+.PHONY: _write
+_write: _build
+	sudo dd if=$(TARGET) of=$(FLOPPYDEV) bs=$(FLOPPY_SIZE)k
 
 # If you're paranoid (or things are mysteriously breaking..),
 # you can check the floppy to make sure it wrote properly.
-# This target will fail if the floppy doesn't match the floppy image.
-floppy_check: $(IMAGE)
-	sudo cmp $(FLOPPYDEV) $(IMAGE)
+.PHONY: checkedwrite_%
+checkedwrite_%:
+	@install -d $(STAMPS)
+	@$(submake) _checkedwrite $(shell $(submake) $(subst checkedwrite_,validate_,$@))
 
-listtypes:
-	@echo "supported types: $(TYPES_SUPPORTED)"
+.PHONY: _checkedwrite
+_checkedwrite: _write
+	sudo cmp $(FLOPPYDEV) $(TARGET)
 
-stats: $(TYPE)-tree-stamp $(EXTRA_TARGETS) general-stats $(EXTRA_STATS)
 
-COMPRESSED_SZ=$(shell expr $(shell tar czf - $(TREE) | wc -c) / 1024)
-KERNEL_SZ=$(shell expr \( $(foreach NAME,$(KERNELNAME),$(shell du -b $(TEMP)/$(NAME) 2>/dev/null | cut -f 1) +) 0 \) / 1024)
-general-stats:
-	@echo
-	@echo "System stats for $(TYPE)"
-	@echo "-------------------------"
-	@echo "Installed udebs: $(UDEBS)"
-	@echo -n "Total system size: $(shell du -h -s $(TREE) | cut -f 1)"
-	@echo -n " ($(shell du -h --exclude=modules -s $(TREE)/lib | cut -f 1) libs, "
-	@echo "$(shell du -h -s $(TREE)/lib/modules | cut -f 1) kernel modules)"
-	@echo "Initrd size: $(COMPRESSED_SZ)k"
-	@echo "Kernel size: $(KERNEL_SZ)k"
-ifneq (,$(FLOPPY_SIZE))
-	@echo "Free space: $(shell expr $(FLOPPY_SIZE) - $(KERNEL_SZ) - $(COMPRESSED_SZ))k"
-endif
-	@echo "Disk usage per package:"
-	@sed 's/^/  /' < diskusage-$(TYPE).txt
-# Add your interesting stats here.
-
-SZ=$(shell expr $(shell du -b $(TEMP)/$*  | cut -f 1 ) / 1024)
-$(EXTRA_STATS) : %-stats:
-	@echo
-	@echo "$* size: $(SZ)k"
-ifneq (,$(FLOPPY_SIZE))
-	@echo "Free space: $(shell expr $(FLOPPY_SIZE) - $(SZ))k"
-endif
-	@echo "Disk usage per package:"
-	@cd $(TEMP)/$*/ && ls -l *.udeb
-
-# These targets act on all available types (the demo target is a bit special).
-all_build:
-	set -e; \
-	$(foreach TYPE,$(TYPES_SUPPORTED),$(MAKE) build TYPE=$(TYPE);)
-all_images:
-	set -e; \
-	$(foreach TYPE,$(filter-out demo,$(TYPES_SUPPORTED)), \
-		$(MAKE) image TYPE=$(TYPE);)
-all_clean:
-	$(foreach TYPE,$(TYPES_SUPPORTED),$(MAKE) clean TYPE=$(TYPE);)
+#
+# generate statistics
+#
 # Suitable for a cron job, you'll only see the stats unless a build fails.
+.PHONY: all_stats
 all_stats:
 	@echo "Image size stats"
 	@echo
-	@(set -e; $(MAKE) all_build >tmp/log 2>&1 || \
-	  (echo "build failure!"; cat tmp/log; false))
-	@rm -f tmp/log
-	@$(foreach TYPE,$(TYPES_SUPPORTED),$(MAKE) -s stats TYPE=$(TYPE);)
+	$(call recurse,SUBARCH,subarch,stats)
 
-.PHONY: build image tree_mount tree_umount demo demo1 demo2 shell shell1 uml \
-	demo_clean clean reallyclean get_udebs tree tarball tmp_mount \
-	initrd floppy boot_floppy floppy_check listtypes stats general-stats \
-	all_build all_images all_clean all_stats
+# For manual invocation we provide a generic stats rule.
+.PHONY: stats_%
+stats_%:
+	@$(submake) _stats $(shell $(submake) $(subst stats_,validate_,$@))
+
+.PHONY: _stats
+_stats: 
+	@install -d $(BASE_TMP)
+	@install -d $(STAMPS)
+	@(set -e; $(submake) _build >$(BASE_TMP)log 2>&1 || \
+	  (echo "build failure!"; cat $(BASE_TMP)log; false))
+	@rm -f $(BASE_TMP)log
+	@$(submake) general-stats
+
+TOTAL_SZ = $(shell du -hs $(TREE) | cut -f 1)
+LIBS_SZ = $(shell [ -d $(TREE)/lib ] && du -hs --exclude=modules $(TREE)/lib |cut -f 1)
+MODULES_SZ = $(shell [ -d $(TREE)/lib/modules ] && du -hs $(TREE)/lib/modules |cut -f 1)
+DISK_SZ = $(shell expr \( $(shell du -bs $(TREE) |cut -f 1) + 0 \) / 1024)
+INITRD_SZ = $(shell expr \( $(shell [ -f $(TEMP_INITRD) ] && du -bs $(TEMP_INITRD) |cut -f 1) + 0 \) / 1024)
+KERNEL_SZ = $(shell expr \( $(foreach kern,$(TEMP_KERNEL),$(shell [ -f $(kern) ] && du -bs $(kern) |cut -f 1)) + 0 \) / 1024)
+.PHONY: general-stats
+general-stats:
+	@echo
+	@echo "System stats for $(targetstring)"
+	@echo "-------------------------"
+	@echo "Installed udebs: $(UDEBS)"
+	@echo "Total system size: $(TOTAL_SZ) ($(LIBS_SZ) libs, $(MODULES_SZ) kernel modules)"
+	@echo "Uncompressed disk size: $(DISK_SZ)k"
+	@echo "Initrd size: $(INITRD_SZ)k"
+	@echo "Kernel size: $(KERNEL_SZ)k"
+ifdef FLOPPY_SIZE
+ifneq ($(INITRD_SZ),0)
+	@echo "Free space: $(shell expr $(FLOPPY_SIZE) - $(KERNEL_SZ) - $(INITRD_SZ))k"
+else
+	@echo "Free space: $(shell expr $(FLOPPY_SIZE) - $(KERNEL_SZ) - $(DISK_SZ))k"
+endif
+endif
+	@echo "Disk usage per package:"
+	@sed 's/^/  /' < $(TEMP)/diskusage.txt
+
+
+#
+# demo target handling.
+#
+.PHONY: tree_mount
+tree_mount: $(STAMPS)tree-$(targetstring)-stamp
+	-@sudo /bin/mount -t proc proc $(TREE)/proc
+ifdef USERDEVFS
+	-@sudo chroot $(TREE) /usr/bin/update-dev
+else
+	-@sudo /bin/mount -t devfs dev $(TREE)/dev
+endif
+
+.PHONY: tree_umount
+tree_umount:
+ifndef USERDEVFS
+	-@[ ! -c $(TREE)/dev/console ] || sudo /bin/umount $(TREE)/dev
+endif
+	-@[ ! -L $(TREE)/proc/self ] || sudo /bin/umount $(TREE)/proc
+
+# For manual invocation, we provide a demo rule. This starts the
+# d-i demo from the tree in tmp/demo.
+.PHONY: demo
+demo:
+	@set -e; \
+	export SUBARCH=; \
+	export MEDIUM=demo; \
+	export FLAVOUR=; \
+	$(submake) demo1
+
+.PHONY: demo1
+demo1: $(STAMPS)tree-demo-stamp
+	@$(submake) tree_mount; \
+	[ -f questions.dat ] && cp -f questions.dat $(TREE)/var/lib/cdebconf/ ; \
+	sudo chroot $(TREE) bin/sh -c "export DEBCONF_DEBUG=5 ; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; exec /usr/share/debconf/frontend /usr/bin/main-menu" ; \
+	$(submake) tree_umount
+
+.PHONY: shell
+shell:
+	@export SUBARCH=; \
+	export MEDIUM=demo; \
+	export FLAVOUR=; \
+	$(submake) shell1
+
+.PHONY: shell1
+shell1:
+	@$(submake) tree_mount; \
+	sudo chroot $(TREE) bin/sh; \
+	$(submake) tree_umount
+
+# This is broken due to lacking SUBARCH/MEDIUM/FLAVOUR definitions.
+#.PHONY: uml
+#uml: $(INITRD)
+#	-linux initrd=$(INITRD) root=/dev/rd/0 ramdisk_size=8192 con=fd:0,fd:1 devfs=mount
+
+# This is broken due to lacking SUBARCH/MEDIUM/FLAVOUR definitions.
+#.PHONY: tarball
+#tarball: $(STAMPS)tree-$(targetstring)-stamp
+#	tar czf $(BASE_DEST)/$(targetstring)-debian-installer.tar.gz $(TREE)
