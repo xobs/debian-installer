@@ -33,15 +33,6 @@ include config/dir
 # Add to PATH so dpkg will always work, and so local programs will be found.
 PATH:=$(PATH):/usr/sbin:/sbin:.
 
-# All these options make apt read the right sources list, and use APTDIR for
-# everything so it need not run as root.
-CWD:=$(shell pwd)/
-APT_GET=apt-get --assume-yes \
-	-o Dir::Etc::sourcelist=$(CWD)$(SOURCES_LIST) \
-	-o Dir::State=$(CWD)$(APTDIR)/state \
-	-o Debug::NoLocking=true \
-	-o Dir::Cache=$(CWD)$(APTDIR)/cache
-
 # Get the list of udebs to install.
 UDEBS = $(shell ./pkg-list $(TYPE) $(KERNEL_FLAVOUR) $(KERNELIMAGEVERSION)) $(EXTRAS)
 
