@@ -48,20 +48,20 @@ developers when i18n/l10n topics are involved.
 </abstract>
 
 <copyright>
- <year>2002-2004
+ <year>2002-2005
  <trademark class="copyright">
  </trademark>
  </year>
  <holder>Christian Perrier</holder>
 </copyright>
 <copyright>
- <year>2003-2004
+ <year>2003-2005
  <trademark class="copyright"></trademark>
  </year> 
  <holder>Dennis Stampfer</holder>
 </copyright>
 <copyright>
- <year>2001-2004
+ <year>2001-2005
  <trademark class="copyright"></trademark>
  </year> 
  <holder>Petter Reinholdtsen</holder>
@@ -1762,7 +1762,7 @@ Getting files for xdebconfigurator
 
 <para>
 The xdebconfigurator package is maintained by the Debian-Edu project
-maintainers.  Direct CVS commit/checkout access to Debian-Edu may be requested to the project administrators. Please provide your Alioth account
+maintainers.  Direct SVN commit/checkout access to Debian-Edu may be requested to the project administrators. Please provide your Alioth account
 name.
 </para>
 
@@ -1776,7 +1776,7 @@ entry. Remember that, being a menu entry, its translation must be kept
 short: below 70 columns</para>
 
 
-<para>If you can't work with CVS:
+<para>If you can't work with SVN:
 </para>
 
 <para>Check whether an incomplete translation exists for your language:
@@ -1796,7 +1796,7 @@ Sending/commiting files for xdebconfigurator
 </emphasis>
 
 <para>
-If you commit your translations directly to CVS, don't forget to
+If you commit your translations directly to SVN, don't forget to
 update the debian/changelog file accordingly. See other entries in
 this file for reference.
 </para>
@@ -1830,7 +1830,7 @@ Getting files for localization-config
 
 <para>
 The localization-config package is maintained by the Debian-Edu project
-maintainers.  Direct CVS commit/checkout access to Debian-Edu may be requested to the project administrators. Please provide your Alioth account
+maintainers.  Direct SVN commit/checkout access to Debian-Edu may be requested to the project administrators. Please provide your Alioth account
 name.
 </para>
 
@@ -1843,7 +1843,7 @@ source tree. If no translation for your language exists, copy
 entry. Remember that, being a menu entry, its translation must be kept
 short: below 70 columns</para>
 
-<para>If you can't work with CVS:
+<para>If you can't work with SVN:
 </para>
 
 <para>Check whether an incomplete translation exists for your language:
@@ -1863,7 +1863,7 @@ Sending/commiting files for localization-config
 </emphasis>
 
 <para>
-If you commit your translations directly to CVS, don't forget to
+If you commit your translations directly to SVN, don't forget to
 update the debian/changelog file accordingly. See other entries in
 this file for reference.
 </para>
@@ -3720,14 +3720,14 @@ skilled shell programmer cleans it out).
 </para>
 
 <para>
-A few environment variables affect the script's behaviour:
+The script uses some command-line switches which may affetc its behaviour:
 </para>
 
 
 	  <itemizedlist>
 	    <listitem>
 	      <para>
-		defining DEBUG=Y will trigger more output by the
+		"--debug" will trigger more output by the
 		script. Otherwise, the script reports about its
 		actions but commands output (such as
 		<command>svn</command>,
@@ -3738,40 +3738,35 @@ A few environment variables affect the script's behaviour:
 	    </listitem>
 	    <listitem>
 	      <para>
-		the ONLINE variable is very important:
+		the "--online" switch is very important:
 	      </para>
 	      <itemizedlist>
 		<listitem>
 		  <para>
-		    defining ONLINE=Y will trigger "svn update" commands before
+		    it triggers "svn update" commands before
 		    working on files
 		  </para>
 		</listitem>
 		<listitem>
 		  <para>
-		    defining ONLINE="YES_I_KNOW_WHAT_I_DO" will allow the script
+		    it allows the script
 		    to COMMIT files back to the D-I repository
 		    Of course, this is quite risky and must be done only on
 		    controlled environments because this will update a lot of files
 		    in D-I repository
 		  </para>
 		</listitem>
-		<listitem>
-		  <para>
-		    other values will make the script work only locally
-		  </para>
-		</listitem>
 	      </itemizedlist>
 	    </listitem>
 	    <listitem>
 	      <para>
-		the <command>svn</command> variable defines the command for calling the <command>svn</command> utility
+		the <command>svn</command> switch defines the command for calling the <command>svn</command> utility
 		It is used in the script just in case some special behaviour is needed
 	      </para>
 	    </listitem>
 	    <listitem>
 	      <para>
-		the <command>debconfupdatepo</command> utility serves the same purpose the the
+		the <command>debconfupdatepo</command> switch serves the same purpose the the
 		<command>debconf-updatepo</command> command. It allows using a specially crafted
 		<command>debconf-updatepo</command> command, for just updating <filename>templates.pot</filename> files
 		and save a lot of time
@@ -3786,7 +3781,7 @@ to be passed as an argument. It makes some simple checks about the copy.
 
 <para>
 When using this script with commits, the D-I copy must be as clean
-as possible. It should not be used for development tasks.
+as possible. It should not be used for development tasks. The scripts checks for possible SVN conflict files and aborts if it finds some.
 </para>
 
 <para>
@@ -3806,7 +3801,7 @@ About prospective languages
 <para>
 Since September 2004, the number of languages supported by debian-installer for sarge is frozen.
 All languages which started translating after September 2004 are called "prospective languages".
-These languages won't make it into sarge.
+These languages won't go into sarge but rather in the next release of the distribution.
 </para>
 
 <para>
@@ -3925,6 +3920,11 @@ languages differ too much.
 	      instance only one mailing list)
 	    </para>
 	  </listitem>
+	  <listitem>
+	    <para>
+	      pa_IN/pa_PK    : the Punjabi language has only one spoken for, but two written forms : one using Indic-style glyphs, mostly used in India (Punjab state), and another one, using an Arabic script, mostly used in Pakistan.
+	    </para>
+	  </listitem>
 	</itemizedlist>
 
 <para>FAQ about variants:
@@ -3934,7 +3934,7 @@ languages differ too much.
 <listitem>
 <para>
 there are no en_GB/en_US variants in Debian. The use of either
- <emphasis>British</emphasis> or <emphasis>American</emphasis> spelling is not highly standardised in Debian.
+ <emphasis>British</emphasis> or <emphasis>American</emphasis> spelling is not highly standardised in Debian. The installer team has however decided to refer to US-style spelling.
 </para>
 
 </listitem>
