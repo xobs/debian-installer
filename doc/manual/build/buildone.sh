@@ -154,18 +154,34 @@ create_text () {
     case "$language" in
         ja)
             mv $destdir/install.${language}.txt $tempdir
-            sed "s:¨£:¨£¨¡:g  s:¨¨:¨¨¨¡:g  s:¨¤:¨¡¨¤:g
-                 s:¨§:¨§¨¡:g  s:¨«:¨«¨¡:g  s:¨©:¨¡¨©:g
-                 s:¨¦:¨¦¨¡:g  s:¨ª:¨ª¨¡:g  s:¨¥:¨¡¨¥:g
-                 s:¨¢$: ¨¢:g  s:¨¡:¨¡¨¡:g  s:¨¢:¨¢ :g" \
+            sed "s:¨£:¨£¨¡:g
+                 s:¨¨:¨¨¨¡:g
+                 s:¨¤:¨¡¨¤:g
+                 s:¨§:¨§¨¡:g
+                 s:¨«:¨«¨¡:g
+                 s:¨©:¨¡¨©:g
+                 s:¨¦:¨¦¨¡:g
+                 s:¨ª:¨ª¨¡:g
+                 s:¨¥:¨¡¨¥:g
+                 s:¨¢$: ¨¢:g
+                 s:¨¡:¨¡¨¡:g
+                 s:¨¢:¨¢ :g" \
             $tempdir/install.${language}.txt >$destdir/install.${language}.txt
             ;;
         ko)
             mv $destdir/install.${language}.txt $tempdir
-            sed "s:¦£:¦£¦¡:g  s:¦¨:¦¨¦¡:g  s:¦¤:¦¡¦¤:g
-                 s:¦§:¦§¦¡:g  s:¦«:¦«¦¡:g  s:¦©:¦¡¦©:g
-                 s:¦¦:¦¦¦¡:g  s:¦ª:¦ª¦¡:g  s:¦¥:¦¡¦¥:g
-                 s:¦¢$: ¦¢:g  s:¦¡:¦¡¦¡:g  s:¦¢:¦¢ :g" \
+            sed "s:¦£:¦£¦¡:g
+                 s:¦¨:¦¨¦¡:g
+                 s:¦¤:¦¡¦¤:g
+                 s:¦§:¦§¦¡:g
+                 s:¦«:¦«¦¡:g
+                 s:¦©:¦¡¦©:g
+                 s:¦¦:¦¦¦¡:g
+                 s:¦ª:¦ª¦¡:g
+                 s:¦¥:¦¡¦¥:g
+                 s:¦¢$: ¦¢:g
+                 s:¦¡:¦¡¦¡:g
+                 s:¦¢:¦¢ :g" \
             $tempdir/install.${language}.txt >$destdir/install.${language}.txt
             ;;
     esac
