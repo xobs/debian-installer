@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 14362 -->
+<!-- original version: 16313 -->
 
   <sect2 arch="i386"><title>CD-ROM からの起動</title>
 
@@ -825,85 +825,29 @@ PCMCIA を無効にできます。
 </para><para>
 
 <!--
-Alternatively you can try the following workaround:
+Alternatively, you can boot the installer in expert mode. You will
+then be asked to enter the resource range options your hardware
+needs. For example, if you have one of the Dell laptops mentioned
+above, you should enter <userinput>exclude port
+0x800-0x8ff</userinput> here. There is also a list of some common
+resource range options in the <ulink
+url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-2.html#ss2.5">System
+resource settings section of the PCMCIA HOWTO</ulink>. Note that you
+have to omit the commas, if any, when you enter this value in the
+installer.
 -->
-その他、以下の方法をかわりに試すことができます。
-
-<itemizedlist>
-<listitem><para>
-
-<!--
-boot the installation system in expert mode, choose your language and country,
-but stop before hardware detection
--->
-インストールシステムをエキスパートモードで起動し、
-言語と国を選択したら、ハードウェア検出の前で止めてください。
-
-</para></listitem>
-<listitem><para>
-
-<!--
-enter the system shell (see <xref linkend="shell"/> for details)
--->
-システムシェルに入ってください。
-(詳細は <xref linkend="shell"/> をご覧ください)
-
-</para></listitem>
-<listitem><para>
-
-<!--
-execute this command:
-<userinput>echo exclude port <replaceable>0x810-0x81f</replaceable> >>
-/etc/pcmcia/config.opts</userinput><footnote>
-<para>
- 
-The address range in this example is for the Dell problem cited above; you may
-have to exclude other address range(s) in your situation.
-See section <quote>System resource settings</quote> in the
-<ulink url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO.html">PCMCIA
-HOWTO</ulink> for other examples.
-
+その他、インストーラをエキスパートモードで起動することができます。
+その後、ハードウェアが必要とするリソース範囲オプションを、
+入力するように促されます。
+例えば、上記の Dell のラップトップコンピュータを持っていれば、
+ここで <userinput>exclude port 0x800-0x8ff</userinput> と入力するといいです。
+さらにいくつかの共通のリソース範囲オプションのリストが<ulink
+url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-2.html#ss2.5">PCMCIA
+HOWTO のシステムリソースの設定</ulink> にあります。
+インストーラにこの値を入力する場合、
+もしあればカンマを省略しなければならないことに注意してください。
 </para>
-</footnote>
 
--->
-このコマンドを実行してください:
-<userinput>echo exclude port <replaceable>0x810-0x81f</replaceable> >>
-/etc/pcmcia/config.opts</userinput><footnote>
-<para>
- 
-この例のアドレス範囲は、Dell の問題用です。
-あなたの状況に応じて、他のアドレス範囲を除外しなければならないでしょう。
-その他の例は、
-<ulink url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO.html">PCMCIA
-HOWTO</ulink> の <quote>System resource settings</quote> 節を参照してください。
-
-</para>
-</footnote>
-
-</para></listitem>
-<listitem><para>
-
-<!--
-now return to the main menu and continue with the installation process
--->
-メインメニューに戻って、インストールプロセスを続けてください。
-
-</para></listitem>
-</itemizedlist>
-
-<!--
-You will also have to exclude the same address range(s) in
-<userinput>/target/etc/pcmcia/config.opts</userinput> before you reboot the
-computer to avoid running into the same problem when you boot into your new
-Debian system.
--->
-新しい Debian システムを起動したときに同じ問題に遭遇しないために、
-コンピュータを再起動する前に、
-<userinput>/target/etc/pcmcia/config.opts</userinput> 
-に同じアドレス範囲を除外するよう、設定する必要があります。
-
-</para>
   </sect2>
 
   <sect2 arch="i386">
