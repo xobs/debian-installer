@@ -172,7 +172,7 @@ $(TYPE)-get_udebs-stamp:
 		package=`echo $$file | cut -d _ -f 1`; \
 		needed=`echo " $$needed " | sed "s/ $$package */ /"`; \
 	done; \
-	if [ $(DEBUG) = y ] ; then \
+	if [ "$(DEBUG)" = y ] ; then \
 		mkdir -p $(DEBUGUDEBDIR); \
 		cd $(DEBUGUDEBDIR); \
 		export DEB_BUILD_OPTIONS="debug"; \
