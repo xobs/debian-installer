@@ -162,7 +162,7 @@ get_udebs-stamp:
 	needed="$(UDEBS)"; \
 	for file in `find $(LOCALUDEBDIR) -name "*_*" -printf "%f\n" 2>/dev/null`; do \
 		package=`echo $$file | cut -d _ -f 1`; \
-		needed=`echo $$needed | sed "s/$$package *//"`; \
+		needed=`echo " $$needed " | sed "s/ $$package */ /"`; \
 	done; \
 	if [ $(DEBUG) = y ] ; then \
 		mkdir -p $(DEBUGUDEBDIR); \
