@@ -1,12 +1,12 @@
 #!/bin/sh
 
-if [ "$#" -ne 2 ]; then
+if [ "$1" = "--help" ]; then
     echo "Usage: $0 doctype lang"
-    exit 1
+    exit 0
 fi
 
-doctype=${1-pdf}
-language=${2-en}
+doctype=${1:-pdf}
+language=${2:-en}
 
 case $doctype in
     pdf|ps|txt)
