@@ -66,7 +66,6 @@ demo:
 shell:
 	sudo chroot $(DEST) bin/sh
 
-
 demo_clean:
 	-if [ -e $(DEST)/proc/self ]; then \
 		sudo chroot $(DEST) bin/sh -c "if mount | grep ^proc ; then bin/umount /proc ; fi" &> /dev/null; \
@@ -160,3 +159,13 @@ stats:
 	@echo Compresses to: $(shell expr $(shell tar cz $(DEST) | wc -c) / 1024)k
 # Add your interesting stats here.
 
+# Upload a daily build to klecker. If you're not Joey Hess, you probably
+# don't want to use this grungy code, at least not without overrideing
+# this:
+UPLOAD_DIR=klecker.debian.org:~/public_html/debian-installer/daily/
+daily_build:
+	fakeroot $(MAKE) PATH=$$PATH:. image > log 2>&1
+	scp -q -B log $(UPLOAD_DIR)
+	scp -q -B ../debian-installer.tar.gz \
+		$(UPLOAD_DIR)/debian-installer-$(shell date +%Y%m%d).tar.gz
+	rm -f log
