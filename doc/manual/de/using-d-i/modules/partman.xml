@@ -14,9 +14,9 @@ wollen, lesen Sie <xref linkend="partitioning"/>.
 
 Zuerst wird Ihnen die Auswahl geboten, automatisch entweder eine gesamte Platte
 zu partitionieren oder nur den freien Speicherplatz auf einer Platte.
-Dies wird auch <quote>geführte</quote> Partitionierung
-genannt. Wenn Sie keine automatische Partitionierung wollen, wählen Sie
-<guimenuitem>Partitionstabelle von Hand ändern</guimenuitem>.
+Dies wird auch als <quote>Geführte Partitionierung</quote>
+bezeichnet. Wenn Sie keine automatische Partitionierung wollen, wählen Sie
+<guimenuitem>"Partitionstabelle von Hand eingeben"</guimenuitem>.
 
 </para><para>
 
@@ -36,7 +36,7 @@ wird die automatische Partitionierung fehlschlagen.
 <thead>
 <row>
   <entry>Partitionierungsschema</entry>
-  <entry>Mindest-Anforderung an Festplattenplatz</entry>
+  <entry>Mindestens erforderlicher Festplattenplatz</entry>
   <entry>Erstellte Partitionen</entry>
 </row>
 </thead>
@@ -67,7 +67,7 @@ wird die automatische Partitionierung fehlschlagen.
 <para arch="ia64">
 
 Wenn Sie automatische Partitionierung für Ihr IA64-System wählen, wird eine
-weitere Partition, formatiert als bootfähiges FAT16-Dateisystem, für
+zusätzliche Partition, formatiert als bootfähiges FAT16-Dateisystem, für
 den EFI-Bootloader erstellt. Es gibt ebenfalls einen zusätzlichen Menüpunkt
 im Format-Menü, um eine Partition manuell als EFI-Boot-Partition einzurichten.
 
@@ -90,20 +90,20 @@ Die Liste der Partitionen sieht in ihrer Struktur ähnlich aus wie diese:
 <!-- TODO: show some flags here (lightning, skull, smiley) -->
 <informalexample><screen>
   IDE1 master (hda) - 6.4 GB WDC AC36400L
-        #1 primary   16.4 MB     ext2       /boot
-        #2 primary  551.0 MB     swap       swap
-        #3 primary    5.8 GB     ntfs
-           pri/log    8.2 MB     FREE SPACE
+        #1 primär    16.4 MB     ext2       /boot
+        #2 primär   551.0 MB     swap       swap
+        #3 primär     5.8 GB     ntfs
+           pri/log    8.2 MB     FREIER SPEICHER
 
   IDE1 slave (hdb) - 80.0 GB ST380021A
-        #1 primary   15.9 MB     ext3
-        #2 primary  996.0 MB     fat16
-        #3 primary    3.9 GB     xfs        /home
-        #5 logical    6.0 GB     ext3       /
-        #6 logical    1.0 GB     ext3       /var
-        #7 logical  498.8 GB     ext3
-        #8 logical  551.5 GB     swap       swap
-        #9 logical   65.8 GB     ext2
+        #1 primär    15.9 MB     ext3
+        #2 primär   996.0 MB     fat16
+        #3 primär     3.9 GB     xfs        /home
+        #5 logisch    6.0 GB     ext3       /
+        #6 logisch    1.0 GB     ext3       /var
+        #7 logisch  498.8 GB     ext3
+        #8 logisch  551.5 GB     swap       swap
+        #9 logisch   65.8 GB     ext2
 </screen></informalexample>
 
 Dieses Beispiel zeigt, wie zwei IDE-Festplatten in mehrere Partitionen aufgeteilt
@@ -115,18 +115,18 @@ dem Dateisystemtyp und dem Einhängepunkt im Dateisystem (falls vorhanden).
 </para><para>
 
 Hiermit ist die Vorauswahl der automatischen Partitionierung beendet. Wenn Sie mit der
-erstellten Partitionstabelle zufrieden sind, wählen Sie <guimenuitem>Partitionierung
-beenden und Änderungen auf die Festplatte schreiben</guimenuitem>, um die neue
+erstellten Partitionstabelle zufrieden sind, wählen Sie <guimenuitem>"Partitionierung
+beenden und Änderungen übernehmen"</guimenuitem>, um die neue
 Partitionstabelle zu aktivieren (wie am Ende dieses Kapitels beschrieben).
-Sind Sie nicht zufrieden, können Sie <guimenuitem>Änderungen an den Partitionen
-rückgängig machen</guimenuitem> wählen, um die automatische Partitionierung erneut
+Sind Sie nicht zufrieden, können Sie <guimenuitem>"Änderungen an den Partitionen
+rückgängig machen"</guimenuitem> wählen, um die automatische Partitionierung erneut
 zu starten oder führen Sie die vorgeschlagenen Änderungen manuell durch, wie weiter
-unten unter »Manuelles Partitionieren« erläutert.
+unten unter Manuelles Partitionieren erläutert.
 
 </para><para>
 
-Ein ähnliches Bild wie oben wird Ihnen angezeigt, wenn Sie »Manuelle
-Partitionierung« wählen, mit dem Unterschied, dass Ihre derzeit existierende
+Ein ähnliches Bild wie oben wird Ihnen angezeigt, wenn Sie "Manuelle
+Partitionierung" wählen, mit dem Unterschied, dass Ihre derzeit existierende
 Partitionstabelle angezeigt wird, aber ohne die Einhängepunkte.
 Wie Sie die Partitionstabelle manuell einrichten (sowie einiges über die Nutzung
 der Partitionen durch Ihr neues Debian-System) wird im Rest dieses Kapitels
@@ -137,7 +137,7 @@ beschrieben.
 Wenn Sie eine neue, unberührte Platte auswählen, die weder Partitionen noch
 freien Speicher enthält, wird angeboten, eine neue Partitionstabelle zu
 erstellen (dies ist nötig, um neue Partitionen anlegen zu können).
-Danach sollte eine neue Zeile <quote>FREE SPACE</quote> (freier Speicher)
+Danach sollte eine neue Zeile <quote>FREIER SPEICHER</quote>
 für die ausgewählte Festplatte erscheinen.
 
 </para><para>
@@ -147,20 +147,21 @@ Partition zu erstellen. Sie müssen eine Reihe von Fragen über ihre Größe, de
 Typ (primär oder logisch) und die Lage auf der Platte (am Anfang oder am Ende
 des freien Speicherbereichs) beantworten. Danach wird eine detaillierte Übersicht
 der neuen Partition angezeigt mit Einträgen für: den Einhängepunkt im zukünftigen
-Dateisystem, Optionen zum Einhängen, die »bootfähig«-Markierung sowie die Art der Nutzung.
+Dateisystem, Optionen zum Mounten (Einhängen), die "Boot-Flag"-Markierung
+(ob die Partition bootfähig ist oder nicht) sowie die Art der Nutzung.
 Falls Ihnen die gewählten Standardwerte nicht zusagen, scheuen Sie sich nicht, sie
 Ihren Bedürfnissen entsprechend zu ändern. Z.B. können Sie mittels der
-<guimenuitem>Benutzen als:</guimenuitem>-Option unterschiedliche Dateisysteme einstellen
+<guimenuitem>"Benutzen als:"</guimenuitem>-Option unterschiedliche Dateisysteme einstellen
 sowie haben die Möglichkeit, die Partition als Swap (um Arbeitsspeicher auf die Platte
 auszulagern), Software-RAID, LVM oder überhaupt nicht zu nutzen.
 Eine andere, tolle Funktion ist, Daten von einer bestehenden Partition auf die neue
-zu kopieren. Wenn Sie mit den neu erstellten Partitionen zufrieden sind, wählen Sie
-<guimenuitem>Partition fertig</guimenuitem>, um zurück zum
+zu kopieren. Wenn Sie mit der neu erstellten Partition zufrieden sind, wählen Sie
+<guimenuitem>"Anlegen der Partition beenden"</guimenuitem>, um zurück zum
 <command>partman</command>-Hauptbildschirm zu gelangen.
 
 </para><para>
 
-Wenn Sie meinen, etwas an Ihren Partitionen ändern zu müssen, wählen Sie einfach
+Wenn Sie meinen, noch etwas an Ihren Partitionen ändern zu müssen, wählen Sie einfach
 eine aus und Sie kommen zum Partitions-Konfigurationsmenü. Dies ist das gleiche Bild
 wie beim Erstellen von Partitionen; deshalb stehen auch die gleichen Optionen zur
 Auswahl. Eine Sache, die vielleicht auf den ersten Blick nicht ganz einleuchtend
@@ -195,7 +196,7 @@ oder <filename>partman-lvm</filename>).
 </para><para>
 
 Wenn Sie mit der Partitionierung zufrieden sind, wählen Sie
-<guimenuitem>Partitionierung beenden und Änderungen auf die Platte schreiben</guimenuitem>
+<guimenuitem>"Partitionierung beenden und Änderungen übernehmen"</guimenuitem>
 aus dem Partitionierungs-Menü. Es wird eine Zusammenfassung aller Änderungen, die gemacht
 wurden, angezeigt und Sie werden aufgefordert, die Erstellung der Dateisysteme zu
 bestätigen.
