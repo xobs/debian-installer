@@ -29,10 +29,10 @@ IFS="
 "
 :>$TEMPDIR/entlist
 echo "Building list of entities..."
-for ENT in `grep "<!ENTITY" $BUILDDIR/docstruct.ent` ; do
+for ENT in `grep "<!ENTITY" $BUILDDIR/templates/docstruct.ent` ; do
     echo -n "$(echo $ENT | sed "s/.*ENTITY\ *//" | sed "s/\ *SYSTEM.*$//")" >>$TEMPDIR/entlist
     echo -n ":" >>$TEMPDIR/entlist
-    echo    "$(echo $ENT | sed "s/.*SYSTEM\ *\"en\///" | sed "s/\">//")" >>$TEMPDIR/entlist
+    echo    "$(echo $ENT | sed "s/.*SYSTEM\ *\"##SRCPATH##\///" | sed "s/\">//")" >>$TEMPDIR/entlist
     
 done
 IFS=$OLD_IFS
@@ -60,7 +60,7 @@ echo "" >>$LOG
 echo "Merging .xml files per 'chapter'..."
 echo "Merging .xml files per 'chapter'..." >>$LOG
 awk -v WORKDIR="$TEMPDIR" -v LOG=$LOG -v ENTLIST="$TEMPDIR/entlist" \
-    -f $SCRIPTDIR/merge_xml.awk $BUILDDIR/install.${language}.xml
+    -f $SCRIPTDIR/merge_xml.awk $BUILDDIR/templates/install.xml.template
 
 # Copy the results to their proper location
 TARGET="$WORKDIR/$language"
