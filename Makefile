@@ -122,7 +122,7 @@ sources.list:
 	if [ "$(MIRROR)x" != "x" ]; then \
 		echo "deb $(MIRROR) $(SUITE) main/debian-installer"; \
 	else \
-	cat $(SYSTEM_SOURCES_LIST) | grep ^deb\  |grep -v file:/ | grep -v debian-non-US | grep ' main' | \
+	cat $(SYSTEM_SOURCES_LIST) | grep ^deb\  |grep -v file:/ | grep -v debian-non-US | grep ' main' | grep -v 'security.debian.org' \
 		awk '{print $$1 " " $$2}' | sed s/\\/*\ *$$/\ $(SUITE)\ main\\/debian-installer/ | uniq; \
 	fi; \
 	) > sources.list
