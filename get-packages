@@ -59,22 +59,26 @@ fi
 APT_GET="apt-get --assume-yes \
 	-o Dir::Etc::sourcelist=`pwd`/$LIST \
 	-o Dir::State=`pwd`/$APTDIR/state \
-	-o Dir::State::Status=`pwd`/$APTDIR/state/status \
 	-o Debug::NoLocking=true \
 	-o Dir::Cache=`pwd`/$APTDIR/cache "
 
 # Prepare APTDIR
 mkdir -p $APTDIR/state/lists/partial
 mkdir -p $APTDIR/cache/archives/partial
-# Prime status file with system libraries - 
-echo -n > $APTDIR/state/status
-if [ "$TYPE" = "udeb" ]; then
+if [ "$TYPE" = "deb" ]; then
+	echo -n > $APTDIR/state/status
+	APT_GET="$APT_GET -o Dir::State::Status=`pwd`/$APTDIR/state/status"
+else
+	# Prime status file with system libraries
+	# Currently disabled and we use the system status file, but this
+	# may be used when we transition to using proper library udebs.
+	#echo -n > $APTDIR/state/status
 	# Some archs have libc6 others have libc6.1
-	dpkg -s libc6 >> $APTDIR/state/status || dpkg -s libc6.1 >> $APTDIR/state/status
-	for i in libnewt0.51 libdebconfclient0 libdebian-installer4 \
-		libdb1-compat slang1a-utf8; do
-		dpkg -s $i >> $APTDIR/state/status
-	done
+	#dpkg -s libc6 >> $APTDIR/state/status || dpkg -s libc6.1 >> $APTDIR/state/status
+	#for i in libnewt0.51 libdebconfclient0 libdebian-installer4 \
+	#         libdb1-compat slang1a-utf8 libdiscover1 discover-data; do
+	#	dpkg -s $i >> $APTDIR/state/status
+	#done
 fi
 
 # Update package lists and autoclean cache
