@@ -24,14 +24,17 @@ EXTRAS=""
 # debug versions of the needed udebs
 DEBUG=n
 
+# All output files will go here.
+DEST=dest
+
 # Filename of initrd to create.
-INITRD=$(TYPE)-initrd.gz
+INITRD=$(DEST)/$(TYPE)-initrd.gz
 
 # How big a floppy image should I make? (in kilobytes)
 FLOPPY_SIZE=1440
 
 # The floppy image to create.
-FLOPPY_IMAGE=$(TYPE)-$(FLOPPY_SIZE).img
+FLOPPY_IMAGE=$(DEST)/$(TYPE)-$(FLOPPY_SIZE).img
 
 # Directory apt uses for stuff.
 APTDIR=apt
@@ -111,8 +114,8 @@ demo_clean:
 
 clean: demo_clean
 	dh_clean
-	rm -f $(FLOPPY_IMAGE) $(INITRD) *-stamp
-	rm -rf $(TREE) $(APTDIR) $(UDEBDIR) $(TEMP)
+	rm -f *-stamp
+	rm -rf $(TREE) $(APTDIR) $(UDEBDIR) $(TEMP) $(DEST)
 
 # Get all required udebs and put in UDEBDIR.
 get_udebs: get_udebs-stamp
@@ -216,7 +219,7 @@ tree-stamp:
 	touch tree-stamp
 
 tarball: tree
-	tar czf $(TYPE)-debian-installer.tar.gz $(TREE)
+	tar czf $(DEST)/$(TYPE)-debian-installer.tar.gz $(TREE)
 
 # Make sure that the temporary mountpoint exists and is not occupied.
 tmp_mount:
@@ -245,6 +248,7 @@ $(INITRD):
 	mount -t ext2 -o loop $(TMP_FILE) $(TMP_MNT)
 	cp -a $(TREE)/* $(TMP_MNT)/
 	umount $(TMP_MNT)
+	install -d $(DEST)
 	dd if=$(TMP_FILE) bs=1k | gzip -v9 > $(INITRD)
 
 # Create a bootable floppy image. i386 specific. FIXME
@@ -254,6 +258,7 @@ $(INITRD):
 floppy_image: Makefile initrd tmp_mount $(FLOPPY_IMAGE)
 $(FLOPPY_IMAGE):
 	dh_testroot
+	install -d $(DEST)
 	
 	dd if=/dev/zero of=$(FLOPPY_IMAGE) bs=1k count=$(FLOPPY_SIZE)
 	mkfs.msdos -i deb00001 -n 'Debian Installer' $(FLOPPY_IMAGE)
@@ -271,6 +276,7 @@ $(FLOPPY_IMAGE):
 
 # Write image to floppy
 boot_floppy: floppy_image
+	install -d $(DEST)
 	dd if=$(FLOPPY_IMAGE) of=/dev/fd0
 
 # If you're paranoid, you can check the floppy to make sure it wrote
@@ -298,9 +304,10 @@ stats: tree
 # this:
 UPLOAD_DIR=klecker.debian.org:~/public_html/debian-installer/daily/
 daily_build:
-	fakeroot $(MAKE) tarball > tmp/log 2>&1
-	scp -q -B tmp/log $(UPLOAD_DIR)
-	scp -q -B $(TYPE)-debian-installer.tar.gz \
+	install -d $(DEST)
+	fakeroot $(MAKE) tarball > $(DEST)/log 2>&1
+	scp -q -B $(DEST)/log $(UPLOAD_DIR)
+	scp -q -B $(DEST)/$(TYPE)-debian-installer.tar.gz \
 		$(UPLOAD_DIR)/$(TYPE)-debian-installer-$(shell date +%Y%m%d).tar.gz
 	rm -f log
 
