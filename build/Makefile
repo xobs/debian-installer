@@ -119,7 +119,7 @@ define recurse
 endef
 
 define genext2fs-userdevfs
-  genext2fs -d $(TREE) -b $(USERDEVFS_SIZE) -r 0
+  genext2fs -d $(TREE) -b $(USERDEVFS_SIZE) -r 0 -f userdevfs-dev.txt
 endef
 
 define genext2fs
@@ -384,28 +384,9 @@ $(STAMPS)tree-$(targetstring)-stamp: $(STAMPS)tree-unpack-$(targetstring)-stamp
 	# Create a dev tree.
 	mkdir -p $(TREE)/dev
 	# Always needed, in case devfs is not mounted on boot.
+	# userdevfs uses userdevfs-dev.txt w/genext2fs
+ifndef USERDEVFS
 	mknod $(TREE)/dev/console c 5 1
-ifdef USERDEVFS
-	# Create initial /dev entries -- only those that are absolutely
-	# required to boot sensibly, though.
-	mkdir -p $(TREE)/dev/vc
-	mknod $(TREE)/dev/vc/0 c 4 0
-	mknod $(TREE)/dev/vc/1 c 4 1
-	mknod $(TREE)/dev/vc/2 c 4 2
-	mknod $(TREE)/dev/vc/3 c 4 3
-	mknod $(TREE)/dev/vc/4 c 4 4
-	mknod $(TREE)/dev/vc/5 c 4 5
-	mkdir -p $(TREE)/dev/rd
-	mknod $(TREE)/dev/rd/0 b 1 0
-	mknod $(TREE)/dev/tty c 5 0
-	mknod $(TREE)/dev/ttyS0 c 4 64
-	mknod $(TREE)/dev/ttyS1 c 4 65
-	mknod $(TREE)/dev/scd0 b 11 0
-	mkdir -p $(TREE)/dev/loop
-	mknod $(TREE)/dev/loop/0 b 7 0
-	mknod $(TREE)/dev/loop/1 b 7 1
-	mknod $(TREE)/dev/loop/2 b 7 2 
-	mknod $(TREE)/dev/loop/3 b 7 3 
 endif
 
 ifdef EXTRADRIVERS
