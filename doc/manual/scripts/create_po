@@ -26,11 +26,18 @@ if [ -d "$PODIR" ] ; then
     for i in `find $PODIR/ -name "*.$language.po"` ; do
         rm $i
     done
+else
+    echo "Error: directory $PODIR does not exist."
+    exit 1
 fi
 
 XMLLIST=$(find $SOURCEDIR -name "*.xml")
 
 echo "Creating .po files for language '$language'..."
+
+export NO_CREDITS=1      # Repress KDE specific credits
+                         # Note: not yet supported by split2po
+
 for SOURCEXML in $XMLLIST ; do
     SUBDIR=$(dirname $SOURCEXML | sed "s:$SOURCEDIR::" | sed "s:^/::")
     if [ ! -d $PODIR/$SUBDIR ] ; then
@@ -48,9 +55,11 @@ for SOURCEXML in $XMLLIST ; do
         continue
     fi
 
+continue
     # Remove strange references created by split2po
     # Note: this is a workaround for a bug in the tools:
     #       http://bugs.kde.org/show_bug.cgi?id=90112
+    # Can be removed when NO_CREDITS=1 is supported by split2po
     if grep -q "POXML_" $PO ; then
         echo "   Converting "POXML_" references..."
         cat $PO | \
