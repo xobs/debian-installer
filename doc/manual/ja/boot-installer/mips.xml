@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 22232 -->
+<!-- original version: 22939 -->
 
 
   <sect2 arch="mips" id="boot-tftp"><title>TFTP での起動</title>
@@ -15,7 +15,7 @@ After entering the command monitor use
 SGI Indy では、コマンドモニタに入ったところで
 <informalexample><screen>
 
-bootp(): root=/dev/ram0
+bootp():
 
 </screen></informalexample>
 <!--
@@ -114,8 +114,23 @@ via your bootp/dhcp server - Example:
 bootp/dhcp サーバの方から名前を与えていない場合は、
 <command>bootp():</command> の後に
 起動させるファイルのパスと名前を与えることが可能です。
-(例: <command>bootp():/boot/tftpboot.img</command>)
+例: 
+<informalexample><screen>
 
+bootp():/boot/tftpboot.img
+
+</screen></informalexample>
+</para><para>
+
+<!--
+Further kernel parameters can be passed via <command>append</command>:
+-->
+さらにカーネルパラメータは <command>append</command> を通して渡せます:
+<informalexample><screen>
+
+bootp(): append="root=/dev/sda1"
+
+</screen></informalexample>
 </para>
   </sect3>
 
