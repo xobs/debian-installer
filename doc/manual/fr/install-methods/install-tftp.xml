@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 20465 -->
+<!-- original version: 22232 -->
 
  <sect1 condition="supports-tftp" id="install-tftp">
  <title>Préparer les fichiers pour amorcer depuis le réseau en TFTP</title>
@@ -22,7 +22,8 @@ un serveur BOOTP<phrase condition="supports-rarp">, ou un serveur RARP</phrase>
 <phrase condition="supports-rarp">Le protocole de recherche des adresses 
 inverses (<emphasis>Reverse address Resolution Protocol</emphasis> ou RARP)
 est une solution pour indiquer à votre client l'adresse IP qu'il doit 
-utiliser pour lui-même. Une autre solution est d'utiliser le protocole BOOTP.</phrase>
+utiliser pour lui-même. Une autre solution est d'utiliser le protocole BOOTP.
+</phrase>
 
 <phrase condition="supports-bootp">BOOTP est un protocole IP qui indique à un 
 ordinateur quelle est son adresse IP et lui dit où obtenir sur le réseau une 
@@ -123,8 +124,9 @@ pré-amorçage (PXE) de TFTP, vous avez besoin d'un serveur TFTP avec
 
 </para><para arch="mips">
 
-Si votre serveur TFTP est une machine GNU/Linux avec Linux 2.4.X, il vous
-faudra effectuer la manoeuvre suivante sur votre serveur&nbsp;:
+Si vous voulez installer Debian sur une machine SGI et si votre serveur TFTP 
+est une machine GNU/Linux avec Linux 2.4.X, il vous faudra effectuer la 
+manoeuvre suivante sur votre serveur&nbsp;:
 
 <informalexample><screen>
 
@@ -211,13 +213,11 @@ Copiez l'image tftp que vous allez utiliser dans
 
 Le microprogramme des DECstation autorise l'amorçage via TFTP par
 la commande <userinput>boot <replaceable>#</replaceable>/tftp</userinput> 
-où <replaceable>#</replaceable> est le numéro de
-         périphérique «&nbsp;TurboChannel&nbsp;» sur lequel
-         amorcer. Sur la plupart des DECstation, c'est le numéro
-         «&nbsp;3&nbsp;». Si le serveur BOOTP/DHCP ne fournit pas le
-         nom du fichier ou bien que vous ayez besoin de passer des
-         paramètres supplémentaires, cela peut se faire avec la
-         syntaxe suivante&nbsp;:
+où <replaceable>#</replaceable> est le numéro de périphérique 
+«&nbsp;TurboChannel&nbsp;» sur lequel amorcer. Sur la plupart des DECstation, 
+c'est le numéro «&nbsp;3&nbsp;». Si le serveur BOOTP/DHCP ne fournit pas le
+nom du fichier ou bien que vous ayez besoin de passer des paramètres 
+supplémentaires, cela peut se faire avec la syntaxe suivante&nbsp;:
 
 </para><para>
 
@@ -225,24 +225,21 @@ où <replaceable>#</replaceable> est le numéro de
 
 </para><para>
 
-Plusieurs révisions des microprogrammes des DECstation ont un
-          problème avec l'amorçage sur le réseau&nbsp;: le
-          transfert débute mais après un certain temps, il s'arrête
-avec <computeroutput>a.out err</computeroutput>. Cela peut avoir plusieurs
-          causes&nbsp;:
+Plusieurs révisions des microprogrammes des DECstation ont un problème avec 
+l'amorçage sur le réseau&nbsp;: le transfert débute mais après un certain 
+temps, il s'arrête avec <computeroutput>a.out err</computeroutput>. 
+Il peut y avoir plusieurs causes&nbsp;:
 
 <orderedlist>
 <listitem><para>
 
-Le microprogramme ne répond pas à une requête ARP durant un
-             transfert TFTP. Cela conduit à une suspension ARP et le
-             transfert s'arrête. La solution est d'ajouter l'adresse
-             MAC de la carte Ethernet de la DECstation statiquement
-             dans la table ARP du serveur TFTP. On peut le faire avec
+Le microprogramme ne répond pas à une requête ARP durant un transfert TFTP. 
+Cela conduit à une suspension ARP et le transfert s'arrête. La solution est 
+d'ajouter l'adresse MAC de la carte Ethernet de la DECstation dans la table 
+ARP du serveur TFTP. On peut le faire avec
 <userinput>arp -s <replaceable>IP-address</replaceable>
-<replaceable>MAC-address</replaceable></userinput> en tant que root
-             sur la machine servant de serveur TFTP. On peut lire
-             l'adresse MAC de la DECstation en entrant
+<replaceable>MAC-address</replaceable></userinput> en tant que root sur la 
+machine serveur TFTP. On peut lire l'adresse MAC de la DECstation en entrant
 <command>cnfg</command> à l'invite du microprogramme de la DECstation.
 
 </para></listitem>
@@ -254,8 +251,8 @@ Le microprogramme impose une taille limite aux fichiers
 </para></listitem>
 </orderedlist>
 
-Il y aussi des révisions de microprogramme qui ne peuvent pas
-          s'amorcer du tout par TFTP, voyez 
+Il y aussi des révisions de microprogramme qui ne peuvent pas s'amorcer du 
+tout par TFTP, voyez 
 <ulink url="http://www.netbsd.org/Ports/pmax/board-list.html#proms">les pages web de NetBSD</ulink>.
 
 </para>
@@ -327,6 +324,16 @@ obtenir le nom du fichier TFTP. Il est donné soit par
 <userinput>bf=</userinput> dans <filename>/etc/bootptab</filename> ou 
 bien par l'option <userinput>filename=</userinput> dans 
 <filename>/etc/dhcpd.conf</filename>.
+
+</para>
+   </sect3>
+
+   <sect3 arch="mips">
+   <title>Amorcer avec TFTP la carte Broadcom BCM91250A</title>
+<para>
+
+Il n'est pas utile de configurer DHCP car vous indiquerez à CFE l'adresse 
+exacte du fichier qui doit être chargé
 
 </para>
    </sect3>
