@@ -13,8 +13,12 @@ architecture    := $(shell dpkg-architecture -qDEB_HOST_ARCH)
 # The version of the kernel to use.
 
 ifeq "$(architecture)" "hppa"
-KERNELVERSION=2.4.19-32
+KERNELIMAGEVERSION=2.4.19-32
+KERNELVERSION=${KERNELIMAGEVERSION}-udeb
 KERNELNAME=vmlinux-${KERNELVERSION}
+KERNELIMAGEVERSION_SECOND=2.4.19-64
+KERNELVERSION_SECOND=${KERNELIMAGEVERSION_SECOND}-udeb
+KERNELNAME_SECOND=vmlinux-${KERNELVERSION_SECOND}
 endif
 ifeq "$(architecture)" "i386"
 KERNELVERSION=2.4.19-386
@@ -43,6 +47,9 @@ endif
 
 ifndef KERNELIMAGEVERSION
 KERNELIMAGEVERSION=${KERNELVERSION}
+endif
+ifndef KERNELIMAGEVERSION_SECOND
+KERNELIMAGEVERSION_SECOND=${KERNELVERSION_SECOND}
 endif
 
 # The type of system to build. Determines what udebs are unpacked into
@@ -156,7 +163,7 @@ APT_GET=apt-get --assume-yes \
 	-o Dir::Cache=$(CWD)$(APTDIR)/cache
 
 # Get the list of udebs to install. Comments are allowed in the lists.
-UDEBS=$(shell grep --no-filename -v ^\# pkg-lists/base pkg-lists/$(TYPE)/common `if [ -f pkg-lists/$(TYPE)/$(architecture) ]; then echo pkg-lists/$(TYPE)/$(architecture); fi` | sed 's/$${kernel:Version}/$(KERNELIMAGEVERSION)/g') $(EXTRAS)
+UDEBS=$(shell grep --no-filename -v ^\# pkg-lists/base pkg-lists/$(TYPE)/common `if [ -f pkg-lists/$(TYPE)/$(architecture) ]; then echo pkg-lists/$(TYPE)/$(architecture); fi` | sed -e 's/$${kernel:Version}/$(KERNELIMAGEVERSION)/g' -e 's/$${kernel_second:Version}/$(KERNELIMAGEVERSION_SECOND)/g') $(EXTRAS)
 
 # Scratch directory.
 BASE_TMP=./tmp/
@@ -293,9 +300,13 @@ $(TYPE)-tree-stamp:
 	# modules.
 	mkdir -p $(TREE)/lib/modules/$(KERNELVERSION)/kernel
 	depmod -q -a -b $(TREE)/ $(KERNELVERSION)
+ifdef KERNELVERSION_SECOND
+	mkdir -p $(TREE)/lib/modules/$(KERNELVERSION_SECOND)/kernel
+	depmod -q -a -b $(TREE)/ $(KERNELVERSION_SECOND)
+endif
 	# These files depmod makes are used by hotplug, and we shouldn't
 	# need them, yet anyway.
-	find $(TREE)/lib/modules/$(KERNELVERSION)/ -name 'modules*' \
+	find $(TREE)/lib/modules/ -name 'modules*' \
 		-not -name modules.dep | xargs rm -f
 	# Create a dev tree
 	mkdir -p $(TREE)/dev
@@ -401,7 +412,7 @@ $(INITRD):
 # hppa boots a lifimage, which can contain an initrd and two kernels (one 32 and one 64 bit)
 lifimage: Makefile initrd $(DEST)/$(TYPE)-lifimage $(KERNEL) $(KERNEL_SECOND)
 $(DEST)/$(TYPE)-lifimage:
-	palo -f /dev/null -k $(KERNEL) -r $(INITRD) -s $(DEST)/$(TYPE)-lifimage \
+	palo -f /dev/null -k $(KERNEL) -k $(KERNEL_SECOND) -r $(INITRD) -s $(DEST)/$(TYPE)-lifimage \
 		-c "0/linux HOME=/ ramdisk_size=8192 initrd=0/ramdisk rw"
 
 # Create a bootable floppy image. i386 specific. FIXME
