@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 11648 -->
+<!-- original version: 20809 -->
 
  <sect1 id="automatic-install">
  <title>Installation automatisée</title>
@@ -10,8 +10,61 @@ d'automatiser complètement l'installation en utilisant les
 paquets Debian suivants&nbsp;:
 <classname>fai</classname> (qui utilise un serveur d'installation),
 <classname>replicator</classname>,
-<classname>systemimager</classname>, et
-<classname>autoinstall</classname>.
+<classname>systemimager</classname>,
+<classname>autoinstall</classname> et
+l'<classname>installateur Debian</classname>.
 
 </para>
- </sect1>
+ 
+<sect2>
+<title>Installation automatique avec l'installateur Debian</title>
+
+<para>
+L'installateur Debian peut automatiser des installations grâce à des fichiers
+de préconfiguration. Un fichier de préconfiguration peut être téléchargé sur le
+réseau ou sur un support amovible. Il sert à répondre aux questions qui seront
+posées pendant l'installation.
+</para>
+<para>
+Le format de ce fichier est celui de la commande debconf-set-selections. 
+La façon la plus facile de créer le fichier est de faire une installation,
+puis d'utiliser la commande debconf-get-selections pour copier les données
+de debconf et cdebconf dans /var/log/debian-installer/cdebconf et les mettre
+dans un seul fichier&nbsp;:
+
+<informalexample><screen>
+debconf-get-selections --installer > fichier
+debconf-get-selections >> fichier
+</screen></informalexample>
+
+</para>
+<para>
+
+Une fois que vous avez créé ce fichier de préconfiguration, vous pouvez le
+modifier, le placer sur un serveur web ou le copier sur le support de
+l'installateur. Mais, quelque soit sa place, vous devez dire à l'installateur
+de l'utiliser au moment de l'amorçage.
+</para>
+<para>
+Pour que l'installateur utilise un fichier de préconfiguration sur le réseau,
+il faut ajouter preseed/url=http://url/to/config aux paramètres d'amorçage du
+noyau. Bien sûr, la préconfiguration ne fonctionnera pas avant que 
+l'installateur n'ait installé le réseau et récupéré le fichier&nbsp;; le mieux
+est que l'installateur utilise DHCP et installe le réseau sans poser de 
+questions. On peut aussi régler la priorité à «&nbsp;critique&nbsp;» pour
+éviter toute question pendant l'installation du réseau.
+Voyez <xref linkend="installer-args"/>.
+</para>
+<para>
+Pour mettre un fichier de préconfiguration sur un cédérom, il faut recréer
+l'image ISO et y ajouter le fichier. Voyez la page de manuel de mkisofs.
+</para>
+<para arch="i386">
+Si vous voulez amorcer d'une clé USB, vous pouvez copier le fichier de
+préconfiguration sur le système de fichier de la clé, modifier le fichier
+syslinux.cfg et y ajouter preseed/file=/hd-media/config pour les paramètres
+d'amorçage du noyau.
+</para>
+</sect2>
+</sect1>
+
