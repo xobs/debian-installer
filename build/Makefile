@@ -625,6 +625,13 @@ $(DEBIAN_CD_INFO): $(TEMP_BOOT_SCREENS)
 
 $(TEMP_BOOT_SCREENS): arch_boot_screens
 
+$(MISC): TEMP_REAL_MISC = $(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,')
+$(MISC): 
+	install -m 644 $(TEMP_REAL_MISC) $(SOME_DEST)/$(EXTRANAME)
+	./update-manifest \
+		$(SOME_DEST)/$(EXTRANAME)$(shell basename $(TEMP_REAL_MISC)) \
+		$(MANIFEST-MISC)
+
 # Other images, e.g. driver floppies. Those are simply handled as flavours
 $(EXTRA): $(TEMP_EXTRA)
 	install -m 644 -D $(TEMP_EXTRA)$(GZIPPED) $@
