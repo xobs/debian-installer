@@ -1,103 +1,28 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: boot-new.xml 12840 2004-04-07 21:44:06Z fjpop-guest $ -->
+<!-- original version: 21672 untranslated -->
 
 <chapter id="boot-new">
  <title>Booting Into Your New Debian System</title>
 
- <sect1><title>Make System Bootable</title>
-<para>
-
-Note that multiple operating systems booting on a single machine is
-still something of a black art.  This document does not even attempt
-to document the various boot managers, which vary by architecture and
-even by subarchitecture.   You should see your boot manager's
-documentation for more information.
-
-</para>
-
-&bootloader-i386.xml;
-&bootloader-m68k.xml;
-&bootloader-alpha.xml;
-&bootloader-sparc.xml;
-&bootloader-powerpc.xml;
-&bootloader-hppa.xml;
-&bootloader-s390.xml;
-&bootloader-arm.xml;
-&bootloader-mipsel.xml;
-
-  <sect2 condition="supports-nfsroot"><title>Diskless Workstations</title>
-<para>
-
-If you are installing a diskless workstation, obviously, booting off
-the local disk isn't a meaningful option, and this step will be
-skipped. <phrase arch="sparc">You may wish to set the OpenBoot to boot
-from the network by default; see <xref
-linkend="boot-dev-select-sun"/>.</phrase>
-
-</para>
-
-  </sect2>
-</sect1>
-
- <sect1 id="make-boot-floppy"><title>Making a Boot Floppy</title>
-<para>
-
-You may wish to make a boot floppy even if you intend to boot the
-system from the hard disk. The reason for this is that it's possible
-for the hard disk bootstrap to be mis-installed, but a boot floppy
-will almost always work.
-
-</para><para>
-
-Feed the system a blank floppy as directed. Make sure the floppy isn't
-write-protected, as the software will format and write it. Mark this
-the <quote>Custom Boot</quote> floppy and write-protect it once it has
-been written.
-
-</para><para>
-
-This floppy will contain a kernel and a simple file system, with a
-directive to use your new root file system.
-
-</para><para arch="alpha">
-
-Unfortunately, a boot floppy can only be made for SRM systems, since
-<command>MILO</command> won't fit together with a kernel on a single
-floppy.
-
-</para>
- </sect1>
-
-
  <sect1 id="base-boot"><title>The Moment of Truth</title>
 <para>
 
-You system's first boot on its own power is what electrical engineers
+Your system's first boot on its own power is what electrical engineers
 call the <quote>smoke test</quote>.
-
-</para><para arch="s390">
-
-Select the ``Reboot the System'' menu item which will halt the system
-because rebooting is not supported on &arch-title; in this case. You
-then need to IPL GNU/Linux from the DASD which you selected for the
-root filesystem during the first steps of the installation.
 
 </para><para>
 
 If you are booting directly into Debian, and the system doesn't start
-up, either use your original installation boot media (for instance,
-the rescue floppy), or insert the custom boot floppy if you created
-one, and reset your system.  If you are <emphasis>not</emphasis> using
-the custom boot floppy, you will probably need to add some boot
-arguments.  If booting with the rescue floppy or similar technique,
-you need to specify
-<userinput>rescue root=<replaceable>root</replaceable></userinput>,
-where <replaceable>root</replaceable> is your root partition, such as
+up, either use your original installation boot media, or insert the
+custom boot floppy if you have one, and reset your system.  This way,
+you will probably need to add some boot arguments like
+<userinput>root=<replaceable>root</replaceable></userinput>, where
+<replaceable>root</replaceable> is your root partition, such as
 <filename>/dev/sda1</filename>.
 
 </para>
 
-  <sect2 arch="m68k"><title>VME6000 Booting</title>
+  <sect2 arch="m68k"><title>BVME 6000 Booting</title>
 <para>
 
 If you have just performed a diskless install on a BVM or Motorola
@@ -109,7 +34,7 @@ VMEbus machine: once the system has loaded the
 <listitem><para>
 
 <userinput>b6000</userinput> followed by &enterkey;
-to boot a BVME4000/6000
+to boot a BVME 4000/6000
 
 </para></listitem><listitem><para>
 
@@ -173,7 +98,91 @@ when you first booted the installation system, followed by some new
 messages. 
 
 </para>
+   </sect2>
 
+
+  <sect2 arch="powerpc"><title>OldWorld PowerMacs</title>
+<para>
+
+If the machine fails to boot after completing the installation, and
+stops with a <prompt>boot:</prompt> prompt, try typing
+<userinput>Linux</userinput> followed by &enterkey;. (The default boot
+configuration in <filename>quik.conf</filename> is labeled Linux). The
+labels defined in <filename>quik.conf</filename> will be displayed if
+you press the <keycap>Tab</keycap> key at the <prompt>boot:</prompt>
+prompt. You can also try booting back into the installer, and editing
+the <filename>/target/etc/quik.conf</filename> placed there by the
+<guimenuitem>Install <command>Quik</command> on a Hard
+Disk</guimenuitem> step. Clues for dealing with
+<command>quik</command> are available at <ulink
+url="&url-powerpc-quik-faq;"></ulink>.
+
+</para><para>
+
+To boot back into MacOS without resetting the nvram, type
+<userinput>bye</userinput> at the OpenFirmware prompt (assuming MacOS
+has not been removed from the machine). To obtain an OpenFirmware
+prompt, hold down the <keycombo> <keycap>command</keycap>
+<keycap>option</keycap> <keycap>o</keycap> <keycap>f</keycap>
+</keycombo> keys while cold booting the machine. If you need to reset
+the OpenFirmware nvram changes to the MacOS default in order to boot
+back to MacOS, hold down the <keycombo> <keycap>command</keycap>
+<keycap>option</keycap> <keycap>p</keycap> <keycap>r</keycap>
+</keycombo> keys while cold booting the machine.
+
+</para><para>
+
+If you use <command>BootX</command> to boot into the installed system,
+just select your desired kernel in the <filename>Linux
+Kernels</filename> folder, un-choose the ramdisk option, and add
+a root device corresponding to your installation;
+e.g. <userinput>/dev/hda8</userinput>.
+
+</para>
+   </sect2>
+
+
+  <sect2 arch="powerpc"><title>NewWorld PowerMacs</title>
+<para>
+
+On G4 machines and iBooks, you can hold down the
+<keycap>option</keycap> key and get a graphical screen with a button
+for each bootable OS, &debian; will be a button with a small penguin
+icon.
+
+</para><para>
+
+If you kept MacOS and at some point it changes the OpenFirmware
+<envar>boot-device</envar> variable you should reset OpenFirmware to
+its default configuration.  To do this hold down the <keycombo>
+<keycap>command</keycap> <keycap>option</keycap> <keycap>p</keycap>
+<keycap>r</keycap> </keycombo> keys while cold booting the machine.
+
+</para><para>
+
+The labels defined in <filename>yaboot.conf</filename> will be
+displayed if you press the <keycap>Tab</keycap> key at the
+<prompt>boot:</prompt> prompt.
+
+</para><para>
+
+Resetting OpenFirmware on G3 or G4 hardware will cause it to boot
+&debian; by default (if you correctly partitioned and placed the
+Apple_Bootstrap partition first).  If you have &debian; on a SCSI disk
+and MacOS on an IDE disk this may not work and you will have to enter
+OpenFirmware and set the <envar>boot-device</envar> variable,
+<command>ybin</command> normally does this automatically.
+
+</para><para>
+
+After you boot &debian; for the first time you can add any additional
+options you desire (such as dual boot options) to
+<filename>/etc/yaboot.conf</filename> and run <command>ybin</command>
+to update your boot partition with the changed configuration.  Please
+read the <ulink url="&url-powerpc-yaboot-faq;">yaboot HOWTO</ulink>
+for more information.
+
+</para>
    </sect2>
  </sect1>
 

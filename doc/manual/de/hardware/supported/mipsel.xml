@@ -1,24 +1,49 @@
-<!-- original document: 11648 -->
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 22939 untranslated -->
 
 
-  <sect2 arch="mipsel"><title>CPU, Main Boards, und Video Unterstützung</title>
+  <sect2 arch="mipsel"><title>CPU, Main Boards, and Video Support</title>
 <para>
 
-Komplette Informationen über unterstützte mips/mipsel Maschinen können im
-<ulink url="&url-mips-howto;">Linux MIPS HOWTO</ulink> gefunden werden.
-Der Zweck dieses Abschnitts ist, die Systeme zu behandeln,
-die von den Boot Disketten unterstützt werden.
+Debian on &arch-title; currently supports three subarchitectures:
+
+<itemizedlist>
+<listitem><para>
+
+DECstation: various models of the DECstation are supported.
+
+</para></listitem>
+<listitem><para>
+
+Cobalt Microserver: only MIPS based Cobalt machines are covered here.
+This included the Cobalt Qube, RaQ, Qube2 and RaQ2, and the Gateway
+Microserver.
+
+</para></listitem>
+<listitem><para>
+
+Broadcom BCM91250A (SWARM): this is an ATX form factor evaluation board from
+Broadcom based on their SiByte processor family.
+
+</para></listitem>
+</itemizedlist>
+
+Complete information regarding supported mips/mipsel machines can be found
+at the <ulink url="&url-linux-mips;">Linux-MIPS homepage</ulink>.  In the
+following, only the systems supported by the Debian installer will be
+covered.  If you are looking for support for other subarchitectures, please
+contact the <ulink url="&url-list-subscribe;">
+debian-&architecture; mailing list</ulink>.
 
 </para>
 
-   <sect3><title>CPU/Maschinentypen</title>
+   <sect3><title>CPU/Machine types</title>
 
 <para>
 
-Momentan werden nur DECstations mit R3000 und R4000/R4400 CPUs
-vom Debian Installationssystem auf Little-Endian MIPS unterstützt.
-Das Debian Installationssystem funktioniert auf den folgenden
-Maschinen:
+Currently only DECstations with R3000 and R4000/R4400 CPUs are
+supported by the Debian installation system on little endian MIPS.
+The Debian installation system works on the following machines:
 
 </para><para>
 
@@ -26,8 +51,8 @@ Maschinen:
 <tgroup cols="4">
 <thead>
 <row>
-  <entry>System Typ</entry><entry>CPU</entry><entry>Codename</entry>
-  <entry>Debian Unterarchitektur</entry>
+  <entry>System Type</entry><entry>CPU</entry><entry>Code-name</entry>
+  <entry>Debian subarchitecture</entry>
 </row>
 </thead>
 
@@ -42,6 +67,11 @@ Maschinen:
   <entry>R4000</entry>
   <entry>3MIN</entry>
   <entry>r4k-kn04</entry>
+</row><row>
+  <entry>DECstation 5000/200</entry>
+  <entry>R3000</entry>
+  <entry>3MAX</entry>
+  <entry>r3k-kn02</entry>
 </row><row>
   <entry>DECstation 5000/240</entry>
   <entry>R3000</entry>
@@ -67,36 +97,33 @@ Maschinen:
 
 </para><para>
 
-Linux/MIPS funktioniert auch auf der DECstation 5000/200, wird jedoch
-momentan vom Debian Installationssystem nicht unterstützt.
+All Cobalt machines are supported which have a serial console (which is
+needed for the installation).
+
+</para><para>
+
+The Broadcom BCM91250A evaluation board comes with an SB1250 chip with two
+SB-1 cores which are supported in SMP mode by this installer.
 
 </para>
    </sect3>
 
-   <sect3><title>Unterstützte Konsolen-Optionen</title>
+   <sect3><title>Supported console options</title>
 <para>
 
-Die serielle Konsole ist auf allen unterstützten DECstations (9600 bps,
-8N1) verfügbar. Um die serielle Konsole zu verwenden, müssen Sie das
-Installer Image mit dem "console=ttySx" Kernel-Parameter (wobei "x" die
-Nummer des seriellen Ports ist, mit dem das Terminal verbunden ist -
-normalerweise "2", für die Personal DECstations jedoch "0").
-Auf 3MIN und 3MAX+ (DECstation 5000/1xx, 5000/240 und 5000/260)
-ist die lokale Konsole nur mit der PMAG-BA und der PMAGB-B Grafikoption
-verfügbar.
+Serial console is available on all supported DECstations (9600 bps,
+8N1). For using serial console, you have to boot the installer image
+with the "console=ttySx" kernel parameter (with "x" being the number
+of the serial port you have your terminal connected to - usually "2",
+but "0" for the Personal DECstations).  On 3MIN and 3MAX+ (DECstation
+5000/1xx, 5000/240 and 5000/260) local console is available with the
+PMAG-BA and the PMAGB-B graphics options.
 
 </para><para>
 
-Falls Sie Unterstützung für andere Subarchitekturen haben wollen,
-kontaktieren Sie bitte die
-<ulink url="&url-list-subscribe;">debian-mips Mailing-Liste</ulink>.
-
-</para><para>
-
-Wenn Sie ein Linux System als serielles Terminal verwenden, ist
-ein einfacher Weg, cu darauf zu starten (Teil des <classname>uucp</classname>
-Pakets).
-Beispiel:
+If you have a Linux system to use as serial terminal, an easy way
+is to run cu (part of the <classname>uucp</classname> package) on it.
+Example:
 
 <informalexample><screen>
 
@@ -106,12 +133,14 @@ cu -l /dev/ttyS1 -s 9600
 
 </para><para>
 
-wobei die Option "-l" (line) den zu verwendenden seriellen Port und
-"-s" (speed) die Verbindungsgeschwindigkeit angibt (9600 bits pro Sekunde).
+where the option "-l" (line) sets the serial port to use and "-s" (speed)
+sets the speed for the connection (9600 bits per second).
+
+</para><para>
+
+Both Cobalt and Broadcom BCM91250A use 115200 bps.
 
 </para>
    </sect3>
   </sect2>
-
-
 

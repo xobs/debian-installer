@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- $Id: trouble.xml 11648 2004-03-22 00:37:46Z joeyh $ -->
+<!-- original version: 20466 untranslated -->
 
  <sect1 id="boot-troubleshooting">
  <title>Troubleshooting the Install Process</title>
@@ -60,8 +60,8 @@ as discussed in <xref linkend="boot-parms"/>.
 </para><para>
 
 If you are booting with your own kernel instead of the one supplied
-with the installer, be sure that <userinput>CONFIG_DEVFS</userinput> is not set in
-your kernel.  The installer is not compatible with
+with the installer, be sure that <userinput>CONFIG_DEVFS</userinput> is set in
+your kernel.  The installer requires
 <userinput>CONFIG_DEVFS</userinput>.
 
 </para><para>
@@ -69,15 +69,6 @@ your kernel.  The installer is not compatible with
 Often, problems can be solved by removing add-ons and peripherals, and
 then trying booting again.  <phrase arch="i386">Internal modems, sound
 cards, and Plug-n-Play devices can be especially problematic.</phrase>
-
-</para><para>
-
-There are, however, some limitations in our boot floppy set with
-respect to supported hardware.  Some Linux-supported platforms might
-not be directly supported by our boot floppies.  If this is the case,
-you may have to create a custom boot disk (see
-<xref linkend="rescue-replace-kernel"/>), or investigate network
-installations.
 
 </para><para>
 
@@ -130,7 +121,7 @@ this information to the bug report.
 </para><para>
 
 Other pertinent installation messages may be found in
-<filename>/target/var/log/debian-installer/</filename> during the
+<filename>/var/log/</filename> during the
 installation, and <filename>/var/log/debian-installer/</filename>
 after the computer has been booted into the installed system.
 
@@ -138,53 +129,57 @@ after the computer has been booted into the installed system.
   </sect2>
 
   <sect2 id="submit-bug">
-  <title>Submitting Bug Reports</title>
+  <title>Submitting Installation Reports</title>
 <para>
-
-If you still have problems, please submit a bug report.  Send an email
-to <email>submit@bugs.debian.org</email>.  You
-<emphasis>must</emphasis> include the following as the first lines of
-the email:
-
-<informalexample><screen>
-
-Package: install
-Version: <replaceable>version</replaceable>
-
-</screen></informalexample>
-
-Be sure to fill in <replaceable>version</replaceable> with the
-version of the debian-installer that you used. If you don't know the
-version number, fill in the date you downloaded the cd image, and
-include the location where you found it, or the source of a CD you
-bought.
-
-</para><para>
-
-You should also include the following information in your bug report.
-If you use the program <command>reportbug</command> to submit your 
-report, this information will be included automatically.
+	
+If you still have problems, please submit an installation report. We also
+encourage installation reports to be sent even if the installation is
+successful, so that we can get as much information as possible on the largest
+number of hardware configurations. Please use this template when filling out
+installation reports, and file the report as a bug report against the
+"installation-reports" pseudo package, by sending it to
+<email>submit@bugs.debian.org</email>.
 
 <informalexample><screen>
 
-<phrase arch="i386">
-flavor:        <replaceable>flavor of image you are using</replaceable>
-</phrase>
-architecture:  &architecture; 
-model:         <replaceable>your general hardware vendor and model</replaceable>
-memory:        <replaceable>amount of RAM</replaceable>
-scsi:          <replaceable>SCSI host adapter, if any</replaceable>
-cd-rom:        <replaceable>CD-ROM model and interface type, e.g., ATAPI</replaceable>
-network card:  <replaceable>network interface card, if any</replaceable>
-pcmcia:        <replaceable>details of any PCMCIA devices</replaceable>
+Package: installation-reports
+
+Debian-installer-version: &lt;Fill in date and from where you got the image&gt;
+uname -a: &lt;The result of running uname -a on a shell prompt&gt;
+Date: &lt;Date and time of the install&gt;
+Method: &lt;How did you install?  What did you boot off?  If network
+      install, from where?  Proxied?&gt;
+
+Machine: &lt;Description of machine (eg, IBM Thinkpad R32)&gt;
+Processor:
+Memory:
+Root Device: &lt;IDE?  SCSI?  Name of device?&gt;
+Root Size/partition table: &lt;Feel free to paste the full partition
+      table, with notes on which partitions are mounted where.&gt;
+Output of lspci and lspci -n:
+
+Base System Installation Checklist:
+[O] = OK, [E] = Error (please elaborate below), [ ] = didn't try it
+
+Initial boot worked:    [ ]
+Configure network HW:   [ ]
+Config network:         [ ]
+Detect CD:              [ ]
+Load installer modules: [ ]
+Detect hard drives:     [ ]
+Partition hard drives:  [ ]
+Create file systems:    [ ]
+Mount partitions:       [ ]
+Install base system:    [ ]
+Install boot loader:    [ ]
+Reboot:                 [ ]
+
+Comments/Problems:
+
+&lt;Description of the install, in prose, and any thoughts, comments
+      and ideas you had during the initial install.&gt;
 
 </screen></informalexample>
-
-</para><para>
-
-Depending on the nature of the bug, it also might be useful to report
-whether you are installing to IDE or SCSI disks, other peripheral
-devices such as audio, disk capacity, and the model of video card.
 
 </para><para>
 
