@@ -55,8 +55,8 @@ create_profiled () {
     fi
     . arch-options/${arch}
 
-    ## Join all gathered info into one big variable
-    cond="$fdisk;$network;$boot;$smp;$other;$goodies;$unofficial_build"
+    ## Join all architecture options into one big variable
+    condition="$fdisk;$network;$boot;$smp;$other;$goodies;$unofficial_build;$status"
 
     ## Write dynamic non-profilable entities into the file
     echo "<!-- arch- and lang-specific non-profilable entities -->" > $dynamic
@@ -74,7 +74,7 @@ create_profiled () {
     $xsltprocessor \
 	--xinclude \
 	--stringparam profile.arch "$archspec" \
-	--stringparam profile.condition "$cond" \
+	--stringparam profile.condition "$condition" \
 	--output $tempdir/install.${language}.profiled.xml \
 	$stylesheet_profile \
 	$tempdir/install.${language}.xml
