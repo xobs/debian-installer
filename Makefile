@@ -22,6 +22,12 @@ KVERS=2.4.19
 FLAVOUR=powerpc
 KERNELNAME=vmlinux
 endif
+ifeq "$(architecture)" "s390"
+KVERS=2.4.19
+FLAVOUR=s390
+KERNELNAME=vmlinux
+KERNELNAME_SECOND=vmlinux-tape
+endif
 
 # The type of system to build. Determines what udebs are unpacked into
 # the system. See the .list files for various types. You may want to
@@ -149,30 +155,31 @@ TMP_MNT=`pwd`/mnt/
 
 # This is the kernel image that we will boot from.
 KERNEL=$(TEMP)/$(KERNELNAME)
+KERNEL_SECOND=$(TEMP)/$(KERNELNAME_SECOND)
 
 build: demo_clean tree stats
 
 demo: tree
-	sudo chroot $(TREE) bin/sh -c "if ! mount | grep ^proc ; then bin/mount proc -t proc /proc; fi"
-	-[ -f questions.dat ] && cp -f questions.dat $(TREE)/var/lib/cdebconf/
-	sudo chroot $(TREE) bin/sh -c "export DEBCONF_DEBUG=5; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; /usr/share/debconf/frontend /usr/bin/main-menu"
+	-@sudo chroot $(TREE) bin/sh -c "bin/umount /dev; bin/mount -t devfs dev /dev" &> /dev/null
+	-@sudo chroot $(TREE) bin/sh -c "bin/umount /proc; bin/mount -t proc proc /proc" &> /dev/null
+	-@[ -f questions.dat ] && cp -f questions.dat $(TREE)/var/lib/cdebconf/
+	-@sudo chroot $(TREE) bin/sh -c "export DEBCONF_DEBUG=5; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; exec /usr/share/debconf/frontend /usr/bin/main-menu"
 	$(MAKE) demo_clean
 
 shell: tree
-	mkdir -p $(TREE)/proc 
-	sudo chroot $(TREE) bin/sh -c "if ! mount | grep ^proc ; then bin/mount proc -t proc /proc; fi"
-	sudo chroot $(TREE) bin/sh
+	-@sudo chroot $(TREE) bin/sh -c "bin/umount /dev; bin/mount -t devfs dev /dev" &> /dev/null
+	-@sudo chroot $(TREE) bin/sh -c "bin/umount /proc; bin/mount -t proc proc /proc" &> /dev/null
+	-@sudo chroot $(TREE) bin/sh
 	$(MAKE) demo_clean
 
 demo_clean:
-	-if [ -e $(TREE)/proc/self ]; then \
-		sudo chroot $(TREE) bin/sh -c "if mount | grep ^proc ; then bin/umount /proc ; fi" &> /dev/null; \
-	fi
+	-@sudo chroot $(TREE) bin/sh -c "bin/umount /dev ; bin/umount /proc" &> /dev/null
 
 clean: demo_clean tmp_mount
 	dh_clean
 	rm -f *-stamp
-	rm -rf $(TREE) $(APTDIR) $(UDEBDIR) $(BASE_TEMP) $(DEST) $(TMP_MNT)
+	rm -rf $(TREE) || sudo rm -rf $(TREE)
+	rm -rf $(APTDIR) $(UDEBDIR) $(BASE_TEMP) $(DEST) $(TMP_MNT)
 
 # Get all required udebs and put in UDEBDIR.
 get_udebs: $(TYPE)-get_udebs-stamp
@@ -268,6 +275,9 @@ $(TYPE)-tree-stamp:
 	# Move the kernel image out of the way, into a temp directory
 	# for use later. We don't need it bloating our image!
 	mv -f $(TREE)/boot/$(KERNELNAME) $(KERNEL)
+ifdef KERNELNAME_SECOND
+	mv -f $(TREE)/boot/$(KERNELNAME_SECOND) $(KERNEL_SECOND)
+endif
 	-rmdir $(TREE)/boot/
 
 	# Copy terminfo files for slang frontend
