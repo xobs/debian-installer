@@ -1,0 +1,109 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 16557 untranslated -->
+
+
+ <sect1 id="debian-orientation"><title>Orienting Yourself to Debian</title>
+<para>
+
+Debian is a little different from other distributions.  Even if you're
+familiar with Linux in other distributions, there are things you
+should know about Debian to help you to keep your system in a good,
+clean state.  This chapter contains material to help you get oriented;
+it is not intended to be a tutorial for how to use Debian, but just a
+very brief glimpse of the system for the very rushed.
+
+</para>
+
+  <sect2><title>Debian Packaging System</title>
+<para>
+
+The most important concept to grasp is the Debian packaging system.
+In essence, large parts of your system should be considered under the
+control of the packaging system.  These include:
+
+<itemizedlist>
+<listitem><para>
+
+<filename>/usr</filename> (excluding <filename>/usr/local</filename>)
+
+</para></listitem>
+<listitem><para>
+
+<filename>/var</filename> (you could make
+<filename>/var/local</filename> and be safe in there)
+
+</para></listitem>
+<listitem><para>
+
+<filename>/bin</filename>
+
+</para></listitem>
+<listitem><para>
+
+<filename>/sbin</filename>
+
+</para></listitem>
+<listitem><para>
+
+<filename>/lib</filename>
+
+</para></listitem>
+</itemizedlist>
+
+For instance, if you replace <filename>/usr/bin/perl</filename>, that
+will work, but then if you upgrade your <classname>perl</classname>
+package, the file you put there will be replaced.  Experts can get
+around this by putting packages on ``hold'' in
+<command>aptitude</command>.
+
+</para><para>
+
+One of the best installation methods is apt. You can use the command
+line version <command>apt-get</command> or full-screen text version
+<application>aptitude</application>.  Note apt will also let you merge
+main, contrib, and non-free so you can have export-restricted packages
+as well as standard versions.
+
+</para>
+  </sect2>
+
+  <sect2><title>Application Version Management</title>
+<para>
+
+ 
+Alternative versions of applications are managed by update-alternatives. If
+you are maintaining multiple versions of your applications, read the
+update-alternatives man page.
+
+</para>
+  </sect2>
+
+  <sect2><title>Cron Job Management</title>
+<para>
+
+Any jobs under the purview of the system administrator should be in
+<filename>/etc</filename>, since they are configuration files.  If you
+have a root cron job for daily, weekly, or nightly runs, put them in
+<filename>/etc/cron.{daily,weekly,monthly}</filename>.  These are
+invoked from <filename>/etc/crontab</filename>, and will run in
+alphabetic order, which serializes them.
+
+</para><para>
+
+On the other hand, if you have a cron job that (a) needs to run as a
+special user, or (b) needs to run at a special time or frequency, you
+can use either <filename>/etc/crontab</filename>, or, better yet,
+<filename>/etc/cron.d/whatever</filename>.  These particular files
+also have an extra field that allows you to stipulate the user under
+which the cron job runs.
+
+</para><para>
+
+In either case, you just edit the files and cron will notice them
+automatically. There is no need to run a special command. For more
+information see cron(8), crontab(5), and
+<filename>/usr/share/doc/cron/README.Debian</filename>.
+
+</para>
+  </sect2>
+ </sect1>

@@ -1,0 +1,110 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 22664 untranslated -->
+
+
+  <sect2 condition="supports-dhcp" id="dhcpd">
+   <title>Setting up a DHCP server</title>
+<para>
+
+One free software DHCP server is ISC <command>dhcpd</command>.  
+In &debian;, this is available in the <classname>dhcp</classname> package.
+Here is a sample configuration file for it (usually
+<filename>/etc/dhcpd.conf</filename>):
+
+<informalexample><screen>
+
+option domain-name "example.com";
+option domain-name-servers ns1.example.com;
+option subnet-mask 255.255.255.0;
+default-lease-time 600;
+max-lease-time 7200;
+server-name "servername";
+
+subnet 192.168.1.0 netmask 255.255.255.0 {
+  range 192.168.1.200 192.168.1.253;
+  option routers 192.168.1.1;
+}
+
+host clientname {
+  filename "/tftpboot/tftpboot.img";
+  server-name "servername";
+  next-server servername;
+  hardware ethernet 01:23:45:67:89:AB; 
+  fixed-address 192.168.1.90;
+}
+
+</screen></informalexample>
+
+Note: the new (and preferred) <classname>dhcp3</classname> package uses
+<filename>/etc/dhcp3/dhcpd.conf</filename>.
+
+</para><para>
+
+In this example, there is one server
+<replaceable>"servername"</replaceable> which performs all of the work
+of DHCP, server, TFTP server, and network gateway.  You will almost
+certainly need to change the domain-name options, as well as the
+server name and client hardware address.  The
+<replaceable>"filename"</replaceable> option should be the name of the
+file which will be retrieved via TFTP.
+
+</para><para>
+
+After you have edited the <command>dhcpd</command> configuration file,
+restart it with <userinput>/etc/init.d/dhcpd restart</userinput>.
+
+</para>
+
+   <sect3 arch="i386">
+   <title>Enabling PXE Booting in the DHCP configuration</title>
+<para>
+Here is another example for a <filename>dhcp.conf</filename> using the
+Pre-boot Execution Environment (PXE) method of TFTP.
+
+<informalexample><screen>
+
+option domain-name "example.com";
+
+default-lease-time 6048;
+max-lease-time 604800;
+
+allow booting;
+allow bootp;
+
+# The next paragraph needs to be modified to fit your case
+subnet 192.168.1.0 netmask 255.255.255.0 {
+  range 192.168.1.200 192.168.1.253;
+  option subnet-mask 255.255.255.0;
+  option broadcast-address 192.168.1.255;
+# the gateway address which can be different 
+# (access to the internet for instance)
+  option routers 192.168.1.1;
+# indicate the dns you want to use
+  option domain-name-servers 192.168.1.3;
+}
+
+host tftpserver {
+# tftp server ip address
+  fixed-address 192.168.1.90;
+# tftp server hardware address
+  hardware ethernet 01:23:45:67:89:AB;
+}
+
+group {
+ next-server 192.168.1.3;
+ host tftpclient {
+# tftp client hardware address
+  hardware ethernet  00:10:DC:27:6C:15;
+  filename "/tftpboot/pxelinux.0";
+ }
+}
+
+</screen></informalexample>
+
+Note that for PXE booting, the client filename <filename>pxelinux.0</filename>
+is a boot loader, not a kernel image (see <xref linkend="tftp-images"/>
+below).
+
+</para>
+   </sect3>
+  </sect2>

@@ -1,0 +1,88 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 22580 untranslated -->
+
+ <sect1 id="automatic-install">
+ <title>Automatic Installation</title>
+<para>
+
+For installing on multiple computers it's possible to do fully
+automatic installations. Debian packages intended for this include
+<classname>fai</classname> (which uses an install server),
+<classname>replicator</classname>,
+<classname>systemimager</classname>,
+<classname>autoinstall</classname>, and 
+the Debian Installer itself.
+
+</para>
+
+<sect2>
+<title>Automatic installation using the Debian Installer</title>
+
+<para>
+The Debian Installer supports automating installs via preconfiguration
+files. A preconfiguration file can be loaded from the network or from
+removable media, and used to fill in answers to question asked during the
+installation process.
+
+</para><para>
+
+The preconfiguration file is in the format used by the
+debconf-set-selections command. A well documented and working example that
+you can edit is in <xref linkend="example-preseed"/>.
+
+</para><para>
+
+The preconfiguration file is in the format used by the
+debconf-set-selections command, and one way to get a complete file listing
+all the values that can be preseeded is to do a manual install,
+and then use <filename>debconf-get-selections</filename>,
+from the <classname>debconf-utils</classname> package,
+to dump both the debconf database and the cdebconf
+database in /var/log/debian-installer/cdebconf to a single file:
+
+<informalexample><screen>
+debconf-get-selections --installer > file
+debconf-get-selections >> file
+</screen></informalexample>
+
+</para><para>
+
+However, a file generated in this manner will have some items that should
+not be preseeded, and the file in <xref linkend="example-preseed"/> is a
+better starting place for most users.
+
+</para><para>
+
+Once you have a preconfiguation file, you can edit it if necessary, and
+place it on a web server, or copy it onto the installer's boot media. Wherever
+you place the file, you need to pass a parameter to the installer at boot
+time to tell it to use the file.
+
+</para><para>
+
+To make the installer use a preconfiguration file downloaded from the
+network, add preseed/url=http://url/to/preseed.cfg to the kernel boot
+parameters. Of course the preconfiguration will not take effect until the
+installer manages to set up the network to download the file, so this is
+most useful if the installer can set up the network via DHCP without asking
+any questions. You may want to set the installation priority to critical to
+avoid any questions while the network is being configured. See 
+<xref linkend="installer-args"/>.
+
+</para><para>
+
+To place a preconfiguration file on a CD, you would need to remaster the
+ISO image to include your preconfiguraton file. See the manual page for
+mkisofs for details. Alternatively, put the preseed file on a floppy, and
+use preseed/file=/floppy/preseed.cfg
+
+</para><para arch="i386">
+
+If you'll be booting from a USB memory stick, then you can simply copy your
+preconfiguration file onto the memory stick's filesystem, and edit the
+syslinux.cfg file to add preseed/file=/hd-media/preseed.cfg to the kernel boot
+parameters.
+
+</para>
+</sect2>
+ </sect1>

@@ -1,0 +1,331 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 18674 untranslated -->
+
+
+  <sect2 arch="i386" id="bios-setup"><title>Invoking the BIOS Set-Up Menu</title>
+
+<para>
+
+BIOS provides the basic functions needed to boot your machine to allow
+your operating system to access your hardware.  Your system probably
+provides a BIOS set-up menu, which is used to configure the BIOS.
+Before installing, you <emphasis>must</emphasis> ensure that your BIOS
+is setup correctly; not doing so can lead to intermittent crashes or
+an inability to install Debian.
+
+</para><para>
+
+The rest of this section is lifted from the 
+<ulink url="&url-pc-hw-faq;"></ulink>, answering the question, "How do I
+enter the CMOS configuration menu?".  How you access the BIOS (or
+``CMOS'') configuration menu depends on who wrote your BIOS software:
+
+</para>
+
+<!-- From: burnesa@cat.com (Shaun Burnet) -->
+<variablelist>
+
+<varlistentry>
+ <term>AMI BIOS</term>
+ <listitem><para>
+
+<keycap>Delete</keycap> key during the POST (power on self test)
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+ <term>Award BIOS</term>
+ <listitem><para>
+
+<keycombo>
+  <keycap>Ctrl</keycap><keycap>Alt</keycap><keycap>Esc</keycap>
+</keycombo>, or <keycap>Delete</keycap> key during the POST
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry><term>DTK BIOS</term>
+ <listitem><para>
+
+<keycap>Esc</keycap> key during the POST
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry><term>IBM PS/2 BIOS</term>
+ <listitem><para>
+
+<keycombo>
+  <keycap>Ctrl</keycap><keycap>Alt</keycap><keycap>Insert</keycap>
+</keycombo>
+after
+<keycombo>
+  <keycap>Ctrl</keycap><keycap>Alt</keycap><keycap>Delete</keycap>
+</keycombo>
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+ <term>Phoenix BIOS</term>
+ <listitem><para>
+
+<keycombo>
+  <keycap>Ctrl</keycap><keycap>Alt</keycap><keycap>Esc</keycap>
+</keycombo>
+or
+<keycombo>
+  <keycap>Ctrl</keycap><keycap>Alt</keycap><keycap>S</keycap>
+</keycombo>
+or
+<keycap>F1</keycap>
+
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+<para>
+
+Information on invoking other BIOS routines can be found in 
+<ulink url="&url-invoking-bios-info;"></ulink>.
+
+</para><para>
+
+Some &arch-title; machines don't have a CMOS configuration menu in the
+BIOS.  They require a software CMOS setup program.  If you don't have
+the Installation and/or Diagnostics diskette for your machine, you can
+try using a shareware/freeware program.  Try looking in 
+<ulink url="&url-simtel;"></ulink>.
+
+</para>
+  </sect2>
+
+  <sect2 arch="i386" id="boot-dev-select"><title>Boot Device Selection</title>
+
+<para>
+
+Many BIOS set-up menus allow you to select the devices that will be
+used to bootstrap the system. Set this to look for a bootable
+operating system on <filename>A:</filename> (the first floppy disk),
+then optionally the first CD-ROM device (possibly appearing as
+<filename>D:</filename> or <filename>E:</filename>), and then from
+<filename>C:</filename> (the first hard disk).  This setting enables
+you to boot from either a floppy disk or a CD-ROM, which are the two
+most common boot devices used to install Debian.
+
+</para><para>
+
+If you have a newer SCSI controller and you have a CD-ROM device
+attached to it, you are usually able to boot from the CD-ROM.  All you
+have to do is enable booting from a CD-ROM in the SCSI-BIOS of your
+controller. 
+
+</para><para>
+
+Other popular option is to boot from a USB storage (also called USB
+memory stick or USB key).  Some BIOSes can boot USB storage directly,
+and some cannot. You may need to configure your BIOS to boot from
+a <quote>Removable drive</quote> or even a <quote>USB-ZIP</quote> to
+get it to boot from the USB device.
+
+</para><para>
+
+Here are some details about how to set the boot order. Remember to
+reset the boot order after Linux is installed, so that you restart
+your machine from the hard drive.
+
+</para>
+
+   <sect3 id="ctbooi">
+   <title>Changing the Boot Order on IDE Computers</title>
+
+<orderedlist>
+<listitem><para>
+
+As your computer starts, press the keys to enter the BIOS 
+utility. Often, it is the <keycap>Delete</keycap> key. However,
+consult the hardware documentation for the exact keystrokes.
+
+</para></listitem>
+<listitem><para>
+
+Find the boot sequence in the setup utility. Its location depends on
+your BIOS, but you are looking for a field that lists drives.
+
+</para><para>
+
+   
+Common entries on IDE machines are C, A, cdrom or A, C, cdrom.
+
+</para><para>
+
+   
+C is the hard drive, and A is the floppy drive.
+
+</para></listitem>   
+<listitem><para>
+
+Change the boot sequence setting so that the CD-ROM or the
+floppy is first. Usually, the <keycap>Page Up</keycap> or
+<keycap>Page Down</keycap> keys cycle 
+through the possible choices.
+
+</para></listitem>
+<listitem><para>
+
+Save your changes. Instructions on the screen tell you how to
+save the changes on your computer.
+
+</para></listitem>
+</orderedlist>
+   </sect3>
+
+   <sect3 id="ctboos">
+   <title>Changing the Boot Order on SCSI Computers</title>
+<para>
+
+<orderedlist>
+<listitem><para>
+
+As your computer starts, press the keys to enter the SCSI setup
+utility.
+
+</para><para>
+
+You can start the SCSI setup utility after the memory check and
+the message about how to start the BIOS utility displays when you
+start your computer.
+
+</para><para>
+
+The keystrokes you need depend on the utility. Often, it is
+<keycombo><keycap>Ctrl</keycap><keycap>F2</keycap></keycombo>.
+However, consult your hardware documentation for the
+exact keystrokes.
+
+</para></listitem>
+<listitem><para>
+
+Find the utility for changing the boot order.
+
+</para></listitem>
+<listitem><para>
+
+Set the utility so that the SCSI ID of the CD drive is first on
+the list.
+
+</para></listitem>
+<listitem><para>
+
+Save your changes. Instructions on the screen tell you how to
+save the changes on your computer. Often, you must press
+<keycap>F10</keycap>.
+
+</para></listitem>
+</orderedlist>
+
+</para>
+   </sect3>
+  </sect2>
+
+  <sect2 arch="i386">
+  <title>Miscellaneous BIOS Settings</title>
+
+   <sect3 id="cd-settings"><title>CD-ROM Settings</title>
+<para>
+
+Some BIOS systems (such as Award BIOS) allow you to automatically set
+the CD speed.  You should avoid that, and instead set it to, say, the
+lowest speed.  If you get <userinput>seek failed</userinput> error
+messages, this may be your problem.
+
+</para>
+   </sect3>
+
+   <sect3><title>Extended vs. Expanded Memory</title>
+<para>
+
+If your system provides both ex<emphasis>ten</emphasis>ded and
+ex<emphasis>pan</emphasis>ded memory, set it so that there is as much
+extended and as little expanded memory as possible. Linux requires
+extended memory and cannot use expanded memory.
+
+</para>
+   </sect3>
+
+   <sect3><title>Virus Protection</title>
+<para>
+
+Disable any virus-warning features your BIOS may provide. If you have
+a virus-protection board or other special hardware, make sure it is
+disabled or physically removed while running GNU/Linux. These aren't
+compatible with GNU/Linux; moreover, due to the file system
+permissions and protected memory of the Linux kernel, viruses are
+almost unheard of.
+
+<footnote>
+<para>
+
+After installation you can enable Boot Sector protection if you
+want. This offers no additional security in Linux but if you also run
+Windows it may prevent a catastrophe. There is no need to tamper with
+the Master Boot Record (MBR) after the boot manager has been set up.
+
+</para>
+</footnote>
+
+</para>
+   </sect3>
+
+   <sect3><title>Shadow RAM</title>
+<para>
+
+Your motherboard may provide <emphasis>shadow RAM</emphasis> or BIOS
+caching. You may see settings for ``Video BIOS Shadow'', ``C800-CBFF
+Shadow'', etc. <emphasis>Disable</emphasis> all shadow RAM.  Shadow
+RAM is used to accelerate access to the ROMs on your motherboard and
+on some of the controller cards. Linux does not use these ROMs once it
+has booted because it provides its own faster 32-bit software in place
+of the 16-bit programs in the ROMs. Disabling the shadow RAM may make
+some of it available for programs to use as normal memory.  Leaving
+the shadow RAM enabled may interfere with Linux access to hardware
+devices.
+
+</para>
+   </sect3>
+
+   <sect3><title>Memory Hole</title>
+<para>
+
+If your BIOS offers something like ``15-16 MB Memory Hole'', please
+disable that. Linux expects to find memory there if you have that much
+RAM.
+
+</para><para>
+
+We have a report of an Intel Endeavor motherboard on which there is an
+option called ``LFB'' or ``Linear Frame Buffer''. This had two
+settings: ``Disabled'' and ``1 Megabyte''. Set it to ``1 Megabyte''.
+When disabled, the installation floppy was not read correctly, and the
+system eventually crashed. At this writing we don't understand what's
+going on with this particular device &mdash; it just worked with that
+setting and not without it.
+
+</para>
+   </sect3>
+
+<!-- no other platforms other than x86 provide this sort of thing, AFAIK -->
+
+   <sect3><title>Advanced Power Management</title>
+<para>
+
+If your motherboard provides Advanced Power Management (APM),
+configure it so that power management is controlled by APM. Disable
+the doze, standby, suspend, nap, and sleep modes, and disable the hard
+disk's power-down timer.  Linux can take over control of these modes,
+and can do a better job of power-management than the BIOS.
+
+</para>
+   </sect3>
+  </sect2>

@@ -1,0 +1,214 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 18647 untranslated -->
+
+
+ <sect1 id="linuxdevices"><title>Linux Devices</title>
+<para>
+
+In Linux you have various special files in
+<filename>/dev</filename>. These files are called devices files. In
+the Unix world accessing hardware is different.  There you have a
+special file which actually runs a driver which in turn accesses the
+hardware. The device file is an interface to the actual system
+component. Files under <filename>/dev</filename> also behave
+differently than ordinary files. Below are the most important device
+files listed.
+
+</para><para>
+
+<informaltable><tgroup cols="2"><tbody>
+<row>
+  <entry><filename>fd0</filename></entry>
+  <entry>First Floppy Drive</entry>
+</row><row>
+  <entry><filename>fd1</filename></entry>
+  <entry>Second Floppy Drive</entry>
+</row>
+</tbody></tgroup></informaltable>
+
+<informaltable><tgroup cols="2"><tbody>
+<row>
+  <entry><filename>hda</filename></entry>
+  <entry>IDE Hard disk / CD-ROM on the first IDE port (Master)</entry>
+</row><row>
+  <entry><filename>hdb</filename></entry>
+  <entry>IDE Hard disk / CD-ROM on the first IDE port (Slave)</entry>
+</row><row>
+  <entry><filename>hdc</filename></entry>
+  <entry>IDE Hard disk / CD-ROM on the second IDE port (Master)</entry>
+</row><row>
+  <entry><filename>hdd</filename></entry>
+  <entry>IDE Hard disk / CD-ROM on the second IDE port (Slave)</entry>
+</row><row>
+  <entry><filename>hda1</filename></entry>
+  <entry>First partition of the first IDE hard disk</entry>
+</row><row>
+  <entry><filename>hdd15</filename></entry>
+  <entry>Fifteenth partition of the fourth IDE hard disk</entry>
+</row>
+</tbody></tgroup></informaltable>
+
+<informaltable><tgroup cols="2"><tbody>
+<row>
+  <entry><filename>sda</filename></entry>
+  <entry>SCSI Hard disk with lowest SCSI ID (e.g. 0)</entry>
+</row><row>
+  <entry><filename>sdb</filename></entry>
+  <entry>SCSI Hard disk with next higher SCSI ID (e.g. 1)</entry>
+</row><row>
+  <entry><filename>sdc</filename></entry>
+  <entry>SCSI Hard disk with next higher SCSI ID (e.g. 2)</entry>
+</row><row>
+  <entry><filename>sda1</filename></entry>
+  <entry>First partition of the first SCSI hard disk</entry>
+</row><row>
+  <entry><filename>sdd10</filename></entry>
+  <entry>Tenth partition of the fourth SCSI hard disk</entry>
+</row>
+</tbody></tgroup></informaltable>
+
+<informaltable><tgroup cols="2"><tbody>
+<row>
+  <entry><filename>sr0</filename></entry>
+  <entry>SCSI CD-ROM with the lowest SCSI ID</entry>
+</row><row>
+  <entry><filename>sr1</filename></entry>
+  <entry>SCSI CD-ROM with the next higher SCSI ID</entry>
+</row>
+</tbody></tgroup></informaltable>
+
+<informaltable><tgroup cols="2"><tbody>
+<row>
+  <entry><filename>ttyS0</filename></entry>
+  <entry>Serial port 0, COM1 under MS-DOS</entry>
+</row><row>
+  <entry><filename>ttyS1</filename></entry>
+  <entry>Serial port 1, COM2 under MS-DOS</entry>
+</row><row>
+  <entry><filename>psaux</filename></entry>
+  <entry>PS/2 mouse device</entry>
+</row><row>
+  <entry><filename>gpmdata</filename></entry>
+  <entry>Pseudo device, repeater data from GPM (mouse) daemon</entry>
+</row>
+</tbody></tgroup></informaltable>
+
+<informaltable><tgroup cols="2"><tbody>
+<row>
+  <entry><filename>cdrom</filename></entry>
+  <entry>Symbolic link to the CD-ROM drive</entry>
+</row><row>
+  <entry><filename>mouse</filename></entry>
+  <entry>Symbolic link to the mouse device file</entry>
+</row>
+</tbody></tgroup></informaltable>
+
+<informaltable><tgroup cols="2"><tbody>
+<row>
+  <entry><filename>null</filename></entry>
+  <entry>Everything pointed to this device will disappear</entry>
+</row><row>
+  <entry><filename>zero</filename></entry>
+  <entry>One can endlessly read zeros out of this device</entry>
+</row>
+</tbody></tgroup></informaltable>
+
+</para>
+
+  <sect2>
+<title>Setting Up Your Mouse</title>
+
+<para>
+
+The mouse can be used in both the Linux console (with gpm) and the X window
+environment. The two uses can be made compatible if the gpm repeater is used
+to allow the signal to flow to the X server as shown:
+<informalexample><screen>
+mouse =&#62; /dev/psaux  =&#62; gpm =&#62; /dev/gpmdata -&#62; /dev/mouse =&#62; X
+         /dev/ttyS0             (repeater)        (symlink)
+         /dev/ttyS1
+</screen></informalexample>
+
+</para><para>
+
+Set the repeater protocol to be raw (in <filename>/etc/gpm.conf</filename>) while
+setting X to the original mouse protocol in <filename>/etc/X11/XF86Config</filename>
+or <filename>/etc/X11/XF86Config-4</filename>.
+
+</para><para>
+
+This approach to use gpm even in X has advantages when the mouse is
+unplugged inadvertently.  Simply restarting gpm with
+<informalexample><screen>
+user@debian:# /etc/init.d/gpm restart
+</screen></informalexample>
+will re-connect the mouse in software without restarting X.
+
+</para><para>
+
+If gpm is disabled or not installed with some reason, make sure to set X to
+read directly from the mouse device such as /dev/psaux. For details, refer
+to the 3-Button Mouse mini-Howto at
+<filename>/usr/share/doc/HOWTO/en-txt/mini/3-Button-Mouse.gz</filename>, 
+<userinput>man gpm</userinput>, 
+<filename>/usr/share/doc/gpm/FAQ.gz</filename>, and 
+<ulink url="&url-xfree86;current/mouse.html">README.mouse</ulink>.
+
+</para><para arch="powerpc">
+
+For PowerPC, in <filename>/etc/X11/XF86Config</filename> or
+<filename>/etc/X11/XF86Config-4</filename>, set the mouse device to
+<userinput>"/dev/input/mice"</userinput>. 
+
+</para><para arch="powerpc">
+
+Modern kernels give you the capability to emulate a three-button mouse
+when your mouse only has one button. Just add the following lines to
+<filename>/etc/sysctl.conf</filename> file.
+
+<informalexample><screen>
+
+# 3-button mouse emulation 
+# turn on emulation
+/dev/mac_hid/mouse_button_emulation = 1
+# Send middle mouse button signal with the F11 key
+/dev/mac_hid/mouse_button2_keycode = 87
+# Send right mouse button signal with the F12 key
+/dev/mac_hid/mouse_button3_keycode = 88
+# For different keys, use showkey to tell you what the code is.
+
+</screen></informalexample>  
+</para>
+  </sect2>
+ </sect1>
+
+ <sect1 id="tasksel-size-list">
+ <title>Disk Space Needed for Tasks</title>
+<para>
+
+The base sarge installation for i386, including all standard packages,
+requires 178MB of disk space.
+
+</para><para>
+
+The following table lists sizes reported by aptitude for the tasks listed in
+tasksel. Note that some tasks have overlapping constituents, so the total
+installed size for two tasks together may be less than the total obtained by
+adding the numbers up. 
+
+</para><para>
+
+<informalexample><screen>
+Task                              Installed  Download   Space Needed 
+                                  Size (MB)  Size (MB)  To Install (MB)
+
+Desktop                            1537        521        2058
+Web server                           71         21          92
+Print server                        240         83         323
+Mail server                          41         12          53
+File server                          85         34         119
+SQL database                        108         33         141
+
+</screen></informalexample>
+</para>
+ </sect1>
