@@ -41,6 +41,13 @@ create_profiled () {
 
     echo "Info: creating temporary profiled .xml file..."
 
+    entity_l10n="$entities_path/l10n/$language.ent"
+    entity_master="$entities_path/l10n/master.ent"
+    [ -f "$entity_master" ] || {
+        echo "Error: file '$entity_master' is missing"
+        return 1
+    }
+
     if [ ! "$official_build" ]; then
         unofficial_build="FIXME;unofficial-build"
     else
@@ -64,6 +71,10 @@ create_profiled () {
     echo "<!ENTITY kernelversion \"${kernelversion}\">" >> $dynamic
     echo "<!ENTITY altkernelversion \"${altkernelversion}\">" >> $dynamic
     sed "s:##SRCPATH##:$source_path:" templates/docstruct.ent >> $dynamic
+    # Add translated and language specific entities, if a file for them exists
+    [ -f "$entity_lang" ] && cat $entity_lang >> $dynamic
+    # Add default (English) translatable entities
+    cat $entity_master >> $dynamic
 
     sed "s:##LANG##:$language:g" templates/install.xml.template | \
         sed "s:##TEMPDIR##:$tempdir:g" | \
