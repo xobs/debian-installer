@@ -14,14 +14,14 @@ indem Sie einige Sachen umlagerten, symbolische Links verwendeten und so weiter.
 
 </para><para>
 
-Um die beschriebene Situation zu vermeiden, können Sie "Logical Volume Manager"
+Um die beschriebene Situation zu vermeiden, können Sie <quote>Logical Volume Manager</quote>
 (LVM) verwenden. Einfach ausgedrückt: mit LVM können Sie ihre Partitionen
 (in der LVM-Sprache <firstterm>Physical Volumes</firstterm> genannt)
 zusammenfassen, um eine virtuelle Festplatte (eine so genannte
 <firstterm>Volume Group</firstterm>) zu erstellen, die dann wieder in
 virtuelle Partitionen (<firstterm>Logical Volumes</firstterm>) aufgeteilt
-wird. Der Trick dabei ist, dass sich die "Logical Volumes" (und natürlich
-auch die darunterliegenden "Volume Groups") über mehrere physikalische
+wird. Der Trick dabei ist, dass sich die <quote>Logical Volumes</quote> (und natürlich
+auch die darunterliegenden <quote>Volume Groups</quote>) über mehrere physikalische
 Laufwerke verteilen können.
 
 </para><para>
@@ -29,7 +29,7 @@ Laufwerke verteilen können.
 Wenn Sie sich jetzt vorstellen, dass Sie mehr Platz auf Ihrer alten
 160GB-<filename>/home</filename>-Partition brauchen, können Sie einfach
 eine neue 300GB Festplatte in Ihren Rechner einbauen, zu Ihrer vorhandenen
-"Volume Group" hinzufügen und dann das "Logical Volume", das Ihr
+<quote>Volume Group</quote> hinzufügen und dann das <quote>Logical Volume</quote>, das Ihr
 <filename>/home</filename> beherbergt, vergrößern und voilà &ndash; schon haben
 Ihre Nutzer wieder Platz auf Ihrer erneuerten 460GB-Partition. Dieses Beispiel
 ist natürlich etwas sehr stark vereinfacht. Falls noch nicht geschehen,
@@ -39,61 +39,63 @@ lesen.
 </para><para>
 
 LVM im &d-i; einzurichten, ist sehr einfach. Als erstes müssen Sie die
-Partitionen festlegen, die als "Physical Volumes" für LVM genutzt werden
+Partitionen festlegen, die als <quote>Physical Volumes</quote> für LVM genutzt werden
 sollen. (Dies erledigen Sie in <command>partman</command> in den
-<guimenu>"Partitions-Einstellungen"</guimenu> der entsprechenden Partition, wo Sie unter
-<menuchoice> <guimenu>"Benutzen als:"</guimenu> <guimenuitem>"Physical Volume für
-LVM"</guimenuitem> </menuchoice> auswählen.) Starten Sie dann das
+<guimenu>Partitions-Einstellungen</guimenu> der entsprechenden Partition, wo Sie unter
+<menuchoice> <guimenu>Benutzen als:</guimenu> <guimenuitem>Physical Volume für
+LVM</guimenuitem> </menuchoice> auswählen.) Starten Sie dann das
 <command>lvmcfg</command>-Modul (entweder direkt aus <command>partman</command>
 heraus oder aus dem Hauptmenü des &d-i;) und fassen Sie über den Menüeintrag
 <guimenuitem>Volume-Gruppen (VG) modifizieren</guimenuitem> die
-"Physical Volumes" zu "Volume Groups" zusammen. Danach erstellen Sie über
+<quote>Physical Volumes</quote> zu <quote>Volume Groups</quote> zusammen.
+Danach erstellen Sie über
 den Menüpunkt <guimenuitem>Logische Volumes (LV) modifizieren</guimenuitem>
-Ihre "Logical Volumes".
+Ihre <quote>Logical Volumes</quote>.
 
 <note arch="powerpc"><para>
 
 Es gibt keinen allgemein akzeptierten Standard, um auf
 Apple-Power-Macintosh-Maschinen Partitionen zu erkennen, die LVM-Daten
-enthalten. Die oben beschriebene Prozedur, "Physical Volumes" und
-"Volume Groups" zu erstellen, wird auf dieser speziellen Hardware nicht funktionieren.
+enthalten. Die oben beschriebene Prozedur, <quote>Physical Volumes</quote> und
+<quote>Volume Groups</quote> zu erstellen, wird auf dieser speziellen Hardware nicht funktionieren.
 Es gibt eine provisorische Lösung, um für diese Einschränkung Abhilfe zu schaffen,
 vorausgesetzt, Sie kennen sich mit den zugrunde liegenden LVM-Werkzeugen aus.
 
 </para><para>
 
-Bei einer Installation auf Power-Macintosh-Hardware, die "Logical Volumes"
+Bei einer Installation auf Power-Macintosh-Hardware, die <quote>Logical Volumes</quote>
 benutzt, sollten Sie zunächst die Festplattenpartitionen für die
-"Logical Volumes" wie gewöhnlich erstellen. In den <guimenu>"Partitions-Einstellungen"</guimenu>
-wählen Sie für diese Partitionen <menuchoice><guimenu>"Benutzen als:"</guimenu>
+<quote>Logical Volumes</quote> wie gewöhnlich erstellen. In den <guimenu>Partitions-Einstellungen</guimenu>
+wählen Sie für diese Partitionen <menuchoice><guimenu>Benutzen als:</guimenu>
 <guimenuitem>Nicht benutzen</guimenuitem></menuchoice> aus (es wird Ihnen in diesem Fall hier
-nicht angeboten, die Partition als "Physical Volume" zu verwenden).
+nicht angeboten, die Partition als <quote>Physical Volume</quote> zu verwenden).
 Wenn Sie alle Ihre Partitionen erstellt haben, sollten Sie den
-"Logical Volume Manager" wie normal starten. Da allerdings noch keine
-"Physical Volumes" erzeugt wurden, müssen Sie nun die Kommandozeile auf
+<quote>Logical Volume Manager</quote> wie normal starten. Da allerdings noch keine
+<quote>Physical Volumes</quote> erzeugt wurden, müssen Sie nun die Kommandozeile auf
 dem zweiten virtuellen Terminal aufrufen (siehe <xref linkend="shell"/>),
 um sie manuell zu erstellen.
 
 </para><para>
 
 Benutzen Sie den Befehl <command>pvcreate</command> am Shell-Prompt, um auf
-jeder der entsprechenden Partitionen ein "Physical Volume" zu erzeugen.
+jeder der entsprechenden Partitionen ein <quote>Physical Volume</quote> zu erzeugen.
 Dann erstellen Sie mittels <command>vgcreate</command> die gewünschten
-"Volume Groups". Währenddessen können Sie Fehlermeldungen bezüglich
-inkorrekter Metadaten ("incorrect metadata"), Bereichs-Header-Prüfsummen
-("area header checksums") oder fsync-Fehlern ("fsync failures") problemlos ignorieren.
-Wenn Sie alle "Volume Groups" erstellt haben, gehen Sie auf das erste
+<quote>Volume Groups</quote>. Währenddessen können Sie Fehlermeldungen bezüglich
+inkorrekter Metadaten (<quote>incorrect metadata</quote>), Bereichs-Header-Prüfsummen
+(<quote>area header checksums</quote>) oder fsync-Fehlern
+(<quote>fsync failures</quote>) problemlos ignorieren.
+Wenn Sie alle <quote>Volume Groups</quote> erstellt haben, gehen Sie auf das erste
 virtuelle Terminal zurück und springen direkt zum Menüeintrag
-"Logische Volumes (LV) modifizieren" in <command>lvmcfg</command>.
-Sie sehen dort Ihre "Volume Groups" und können nun die benötigten
-"Logical Volumes" auf normalem Wege erzeugen.
+<quote>Logische Volumes (LV) modifizieren</quote> in <command>lvmcfg</command>.
+Sie sehen dort Ihre <quote>Volume Groups</quote> und können nun die benötigten
+<quote>Logical Volumes</quote> auf normalem Wege erzeugen.
 
 </para></note>
 
 </para><para>
 
 Wenn Sie von <command>lvmcfg</command> zu <command>partman</command>
-zurückkehren, erscheinen dort die erstellten "Logical Volumes" wie
+zurückkehren, erscheinen dort die erstellten <quote>Logical Volumes</quote> wie
 gewöhnliche Partitionen (und sollten auch als solche behandelt werden).
 
 </para>
