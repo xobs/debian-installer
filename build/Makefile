@@ -807,7 +807,6 @@ KERNEL_SZ = 0
 endif
 .PHONY: general-stats
 general-stats:
-	@echo k $(KERNEL_SZ) f $(FLOPPY_SIZE) i $(INITRD_SZ)
 	@echo "System stats for $(targetstring)"
 	@echo "-------------------------"
 	@echo "Installed udebs: $(UDEBS)"
