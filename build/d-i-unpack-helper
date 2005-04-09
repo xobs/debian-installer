@@ -1,0 +1,17 @@
+#!/bin/sh -x
+
+ARCH="$1"
+if [ -z "$BASEDIR" ]; then
+	BASEDIR=public_html/d-i/$ARCH
+fi
+if [ -z "$DIR" ]; then
+	DIR=`date +%Y-%m-%d`
+fi
+
+mkdir -p $BASEDIR/${DIR}_COPY_IN_PROGRESS
+test ! -d $BASEDIR/daily || cp -a $BASEDIR/daily/* $BASEDIR/${DIR}_COPY_IN_PROGRESS/
+tar zxf - -C $BASEDIR/${DIR}_COPY_IN_PROGRESS/
+rm -rf $BASEDIR/$DIR
+mv $BASEDIR/${DIR}_COPY_IN_PROGRESS $BASEDIR/$DIR
+rm -rf $BASEDIR/daily
+ln -sf $DIR $BASEDIR/daily
