@@ -1,6 +1,8 @@
 #!/bin/sh -e
 
 # Overridable environment variables for uploading.
+RESTRICTED_SSH=
+
 if [ -z "$HOST" ]; then
 	HOST=people.debian.org
 fi
@@ -15,10 +17,13 @@ fi
 if [ "$HOST" = "local" ]; then
 	SYNC="rsync"
 	SYNC_BASEDIR="$BASEDIR"
+	HELPER=d-i-unpack-helper
 else
 	CALL="ssh $HOST"
 	SYNC="rsync -e ssh"
 	SYNC_BASEDIR="$HOST:$BASEDIR"
+	# trade performance (using rsync) for security (restricted ssh keys)
+	HELPER="ssh -i ~/.ssh/gluck_d-i $HOST d-i-unpack-helper"
 fi
 # Overridable environment variables for building.
 if [ -z "$ROOTCMD" ]; then
@@ -63,13 +68,17 @@ build () {
 
 upload () {
 	header UPLOADING FILES
-	$CALL mkdir -p $BASEDIR/${DIR}_RSYNC_IN_PROGRESS
-	$CALL test ! -d $BASEDIR/daily || $CALL cp -a $BASEDIR/daily/* $BASEDIR/${DIR}_RSYNC_IN_PROGRESS/
-	$SYNC --stats -rvl --safe-links --delete -e ssh dest/ $SYNC_BASEDIR/${DIR}_RSYNC_IN_PROGRESS/
-	$CALL rm -rf $BASEDIR/$DIR
-	$CALL mv $BASEDIR/${DIR}_RSYNC_IN_PROGRESS $BASEDIR/$DIR
-	$CALL rm -rf $BASEDIR/daily
-	$CALL ln -sf $DIR $BASEDIR/daily
+	if [ -n "$RESTRICTED_SSH" ]; then
+		tar zcvf - -C dest/ . | $HELPER
+	else
+		$CALL mkdir -p $BASEDIR/${DIR}_RSYNC_IN_PROGRESS
+		$CALL test ! -d $BASEDIR/daily || $CALL cp -a $BASEDIR/daily/* $BASEDIR/${DIR}_RSYNC_IN_PROGRESS/
+		$SYNC --stats -rvl --safe-links --delete -e ssh dest/ $SYNC_BASEDIR/${DIR}_RSYNC_IN_PROGRESS/
+		$CALL rm -rf $BASEDIR/$DIR
+		$CALL mv $BASEDIR/${DIR}_RSYNC_IN_PROGRESS $BASEDIR/$DIR
+		$CALL rm -rf $BASEDIR/daily
+		$CALL ln -sf $DIR $BASEDIR/daily
+	fi
 }
 
 usage () {
