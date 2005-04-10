@@ -2747,6 +2747,32 @@ svn.debian.org.</para>
 
 
 </sect3>
+
+<sect3>
+<title>Branches in D-I SVN repository</title>
+<para>Debian Installer is maintained in two separate branches:</para>
+
+<itemizedlist>
+	    <listitem>
+	      The <emphasis>sarge</emphasis> branch includes all packages included in the release of the installer targeted at the sarge release of the Debian distribution. This is the <emphasis>stable</emphasis> branch of Debian installer with few modifications.
+	    </listitem>
+	    <listitem>
+	      The <emphasis>trunk</emphasis> branch is the development branch of D-I. This is the place where new features, or bug fixes appear first. So, this is also the place where new translations have to go and the place where new strings are added or existing strings are changed.
+	    </listitem>
+</itemizedlist>
+
+<para>From the translator point of view, all updates, <emphasis>even
+those targeted at sarge</emphasis> have to be made in the trunk
+branch. The synchronisation script run by D-I i18n coordinators will
+do the job of spreading the changes to the sarge branch. So, in short,
+most of the time, translators will only change files in the trunk branch.</para>
+
+<para>The only case where translators will have to commit changes to the sarge branch is for strings which have disappeared from trunk and are only in sarge. A list of those strings will be maintained by D-I i18n coordinators.</para>
+
+<para>From the devleopers point of view, the only important point to mention is that changesets merged from trunk to sarge do not need to include the content of debian/po directories as it will be updated anyway by the synchronisation script.</para>
+
+</sect3>
+
 </sect2>
 <sect2 id="updating_changelog">
 <title>
@@ -3637,7 +3663,7 @@ commit back the new <filename>xx.po</filename> file to <filename>packages/po</fi
 <para>
 A script named <emphasis>switch-language</emphasis> has been written
 for handling this switch to the master file. Using it absolutely needs
-that no action happens simultaneously on the switched language
+that no action happens simultaneously on the switched language 
 files. Translators are requested to NOT USE it and rather ask one of
 the coordinators to do it for themselves.
 </para>
@@ -3657,18 +3683,23 @@ all D-I packages.
 </para>
 
 <para>
-The time period during which this process occurs is called <emphasis>l10n
-synchronisation window</emphasis>. Such window occurs four times a day (at H+27
-at 1, 7, 13 and 19 UTC) during normal D-I development process and
-hourly (at H+27) during string freezes.
-</para>
-
-<para>
 While running, this script will also run <command>debconf-updatepo</command> for each
 D-I package and will commit back the regenerated templates.pot files
 (package maintainers often forget running debconf-udpatepo when
 commiting changes to English templates).
 </para>
+
+<para>
+The time period during which this process occurs is called <emphasis>l10n
+synchronisation window</emphasis>. Such window occurs four times a day (at H+27
+at 0, 3, 9 and 15 UTC) during normal D-I development process and
+hourly (at H+27) during string freezes.
+</para>
+
+<para>When operating on the sarge branch, the l10n-sync will also
+merge translations from master files in the trunk branch, by using the
+<filename>--merge</filename> option. Synchronisations on the sarge
+branch only occur once a day at 21:27 UTC.</para>
 
 <para>  
 The general process is:
@@ -3725,6 +3756,11 @@ The general process is:
 		<listitem>
 		  <para>
 		      synchronize with D-I SVN
+		  </para>
+		</listitem>
+		<listitem>
+		  <para>
+		      if in sarge branch, merge translations from the master file in the trunk branch 
 		  </para>
 		</listitem>
 		<listitem>
@@ -3852,15 +3888,19 @@ The script uses some command-line switches which may affect its behaviour:
 	    </listitem>
 	    <listitem>
 	      <para>
-		the "--debconf-updatepo" switch serves the same purpose the the
+		the "--debconf-updatepo" switch serves the same purpose for the
 		<command>debconf-updatepo</command> command. It allows using a specially crafted
-		<command>debconf-updatepo</command> command, for just updating <filename>templates.pot</filename> files
-		and save a lot of time
+		<command>debconf-updatepo</command> switch, often the "--skip-merge" switch which only updated templates.pot files and not PO files. This skip-merge option is used in 3 of the 4 daily runs of l10n-sync in order to spped them.
 	      </para>
 	    </listitem>
 	    <listitem>
 	      <para>
 		the "--sort-order" switch allows giving at the command line the order the packages should be dealt with. This allows to put a crafted order in the generated templates.pot file so that the translators begin to work on the most important packages.
+	      </para>
+	    </listitem>
+	    <listitem>
+	      <para>
+		the "--merge" switch allows merging master files from another branch. It is used on the sarge branch for merging translations coming from trunk.
 	      </para>
 	    </listitem>
 	  </itemizedlist>
@@ -3893,7 +3933,7 @@ About prospective languages
 
 <para>
 During some periods in the development of Debian Installer, the
-develoment team may decide to "freeze" the number of supported
+development team may decide to "freeze" the number of supported
 languages.  All languages which start after the freeze date are called
 "prospective languages".  These languages won't go in the prepared
 release but rather in the next release of the installer.
