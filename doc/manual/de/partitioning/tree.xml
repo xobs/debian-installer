@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 25496 -->
+<!-- original version: 26715 -->
 
 
  <sect1 id="directory-tree">
@@ -42,17 +42,23 @@ die folgenden Unterverzeichnisse:
   <entry><filename>lib</filename></entry>
   <entry>Grundlegende, gemeinsam genutzte Bibliotheken und Kernelmodule</entry>
 </row><row>
+  <entry><filename>media</filename></entry>
+  <entry>Enthält Einhängepunkte für austauschbare Medien</entry>
+</row><row>
   <entry><filename>mnt</filename></entry>
   <entry>Einhängepunkt für vorübergehend einzuhängende Dateisysteme</entry>
 </row><row>
   <entry><filename>proc</filename></entry>
-  <entry>Virtuelles Verzeichnis für System-Informationen</entry>
+  <entry>Virtuelles Verzeichnis für System-Informationen (2.4- and 2.6-Kernel)</entry>
 </row><row>
   <entry><filename>root</filename></entry>
   <entry>Home-Verzeichnis des Superusers root</entry>
 </row><row>
   <entry><filename>sbin</filename></entry>
   <entry>Grundlegende System-Binär-Dateien</entry>
+</row><row>
+  <entry><filename>sys</filename></entry>
+  <entry>Virtuelles Verzeichnis für System-Informationen (2.6-Kernel)</entry>
 </row><row>
   <entry><filename>tmp</filename></entry>
   <entry>Temporäre Dateien</entry>
@@ -72,7 +78,10 @@ die folgenden Unterverzeichnisse:
 <para>
 
 Es folgt eine Liste mit wichtigen Festlegungen bezüglich Verzeichnissen
-und Partitionen.
+und Partitionen. Bedenken Sie, dass die Festplattennutzung abhängig
+von Systemkonfiguration und speziellen Einsatzbedingungen stark unterschiedlich
+sein kann. Die hier gegebenen Empfehlungen sind grundlegende Richtlinien und
+sollen eine Basis für die Partitionierung darstellen.
 
 </para>
 <itemizedlist>
@@ -82,19 +91,48 @@ Die root-Partition <filename>/</filename> muss immer physikalisch
 die Verzeichnisse <filename>/etc</filename>, <filename>/bin</filename>,
 <filename>/sbin</filename>, <filename>/lib</filename> und
 <filename>/dev</filename> enthalten, sonst können Sie nicht booten.
-100MB sind ein typischer Wert für die root-Partition, dies kann jedoch
-variieren.
+Typischerweise werden 150&ndash;250 MB für die root-Partition benötigt.
 
 </para></listitem>
 <listitem><para>
 
-<filename>/usr</filename>: alle Benutzer-Programme
+<filename>/usr</filename>: enthält alle Benutzer-Programme
 (<filename>/usr/bin</filename>), Bibliotheken
 (<filename>/usr/lib</filename>), Dokumentation
-(<filename>/usr/share/doc</filename>), etc. sind in diesem Verzeichnis.
-Dieser Teil des Dateisystems benötigt den meisten Platz. Sie sollten mindestens
-500MB Festplattenplatz vorsehen. Möchten Sie viele Pakete installieren, sollten
-Sie den Platz für dieses Verzeichnis erhöhen.
+(<filename>/usr/share/doc</filename>) etc.
+Dies ist der Teil des Dateisystems, der generell den meisten Platz belegt.
+Sie sollten mindestens 500MB Festplattenspeicher dafür vorsehen. Dieser
+Wert sollte unter Umständen noch erhöht werden abhängig von der Zahl und
+Art der Pakete, die Sie installieren möchten. Für eine großzügige Arbeitsplatz-
+oder Serverinstallation sollten 4&ndash;6 GB zur Verfügung stehen.
+
+</para></listitem>
+<listitem><para>
+
+<filename>/var</filename>: veränderliche Daten, wie News-Artikel, E-Mails,
+Webseiten, Datenbanken, der Zwischenspeicher des Paketmanagement-Systems usw.
+werden unterhalb dieses Verzeichnisses abgelegt. Die Größe hängt überwiegend von
+der Nutzung des Systems ab, wird aber bei vielen Leuten überwiegend durch den Overhead
+des Paketmanagement-Systems bestimmt. Wenn Sie eine Komplettinstallation
+durchführen oder in einem Durchgang fast alles installieren, was Debian
+zu bieten hat, sind 2 oder 3 Gigabyte passend für <filename>/var</filename>.
+Wenn Sie in mehreren Schritten installieren
+(also sagen wir zuerst die Dienste und Werkzeuge, dann
+Textbearbeitungs-Werkzeuge, dann X, ... ), können Sie mit 300 bis 500MB
+auskommen. Falls Plattenplatz rar ist und Sie
+keine großen Systemupdates planen, können auch 30 oder 40MB reichen.
+
+</para></listitem>
+<listitem><para>
+
+<filename>/tmp</filename>: von Benutzerprogrammen erzeugte temporäre Daten
+werden wahrscheinlich in diesem Verzeichnis abgelegt. 40&ndash;100 MB sollten
+normalerweise genügen. Einige Anwendungen &ndash; wie z.B.
+Archivbearbeitungsprogramme, CD/DVD-Erstellungswerkzeuge und Multimediasoftware
+&ndash; könnten <filename>/tmp</filename> benutzen, um vorübergehend
+Image-(Abbild-)Dateien zu speichern. Wenn Sie vorhaben, solche Anwendungen
+zu nutzen, sollten Sie den verfügbaren Platz in <filename>/tmp</filename>
+entsprechend anpassen.
 
 </para></listitem>
 <listitem><para>
@@ -104,31 +142,8 @@ Unterverzeichnis von /home ab. Die Größe hängt davon ab, wie viele Nutzer
 das System hat und welche Dateien diese in ihren Verzeichnissen abspeichern.
 Abhängig von der geplanten Nutzung sollten Sie mindestens 100MB für jeden
 Benutzer reservieren, dieser Wert kann aber je nach Ihren Bedürfnissen
-variieren.
-
-</para></listitem>
-<listitem><para>
-
-<filename>/var</filename>: alle veränderlichen Daten, wie News-Artikel, E-Mails,
-Webseiten, der Zwischenspeicher des Paketmanagement-Systems usw. werden
-unterhalb dieses Verzeichnisses abgelegt. Die Größe hängt überwiegend von
-der Nutzung des Rechners ab, wird aber bei vielen Leuten auch durch den Overhead
-des Paketmanagement-Systems bestimmt. Wenn Sie eine Komplettinstallation
-durchführen oder in einem Durchgang fast alles installieren, was Debian
-zu bieten hat, sind 2 oder 3 Gigabyte passend für <filename>/var</filename>.
-Wenn Sie in mehreren Schritten installieren
-(also sagen wir zuerst die Dienste und Werkzeuge, dann
-Textbearbeitungs-Werkzeuge, dann X, ... ), können Sie mit 300 bis 500MB
-für <filename>/var</filename> auskommen. Wenn Plattenplatz rar ist und Sie
-keine großen Systemupdates planen, können Sie auch mit wenig Platz, ca. 30 oder
-40MB, für <filename>/var</filename> auskommen.
-
-</para></listitem>
-<listitem><para>
-
-<filename>/tmp</filename>: wenn ein Programm temporäre Dateien erzeugt, werden
-diese wahrscheinlich in <filename>/tmp</filename> gespeichert. 20 bis 50MB sollten
-hier meistens genügen.
+variieren. Stellen Sie erheblich mehr Platz zur Verfügung, wenn Sie beabsichtigen,
+viele Multimedia-Dateien (MP3, Filme) abzuspeichern.
 
 </para></listitem>
 </itemizedlist>
