@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 25496 -->
+<!-- original version: 26715 -->
 
  <sect1 id="directory-tree">
  <title>Strom adresářů</title>
@@ -41,6 +41,9 @@ adresáře:
   <entry><filename>lib</filename></entry>
   <entry>Podstatné sdílené knihovny a moduly jádra</entry>
 </row><row>
+  <entry><filename>media</filename></entry>
+  <entry>Obsahuje přípojné body pro výměnná média</entry>
+</row><row>
   <entry><filename>mnt</filename></entry>
   <entry>Místo pro dočasné připojování souborových systémů</entry>
 </row><row>
@@ -52,6 +55,9 @@ adresáře:
 </row><row>
   <entry><filename>sbin</filename></entry>
   <entry>Důležité systémové programy</entry>
+</row><row>
+  <entry><filename>sys</filename></entry>
+  <entry>Virtuální adresář pro systémové informace (od jader 2.6)</entry>
 </row><row>
   <entry><filename>tmp</filename></entry>
   <entry>Dočasné soubory</entry>
@@ -71,7 +77,9 @@ adresáře:
 <para>
 
 Následující seznam by vám měl pomoci při rozhodování o rozdělení disku
-na oblasti. 
+na oblasti. Berte prosím na vědomí, že využití disku se velmi liší
+podle způsobu používání systému a proto jsou následující doporučení
+pouze obecné a měly by sloužit jen jako možný základ pro dělení disku.
 
 </para>
 <itemizedlist>
@@ -81,28 +89,21 @@ na oblasti.
 adresáře <filename>/etc</filename>, <filename>/bin</filename>,
 <filename>/sbin</filename>, <filename>/lib</filename> a
 <filename>/dev</filename>, protože jinak byste nemohli zavést systém.
-Typicky je potřeba 100 MB, ale v konkrétních podmínkách se požadavky
-mohou lišit.
+Typicky je potřeba 150&ndash;250 MB, ale v konkrétních podmínkách se
+požadavky mohou lišit.
 
 </para></listitem>
 <listitem><para>
 
-<filename>/usr</filename>: všechny uživatelské programy
+<filename>/usr</filename>: obsahuje všechny uživatelské programy
 (<filename>/usr/bin</filename>), knihovny
-(<filename>/usr/lib</filename>), dokumentace
-(<filename>/usr/share/doc</filename>), atd., jsou v tomto adresáři.
+(<filename>/usr/lib</filename>), dokumentaci
+(<filename>/usr/share/doc</filename>), atd.
 Protože tato část souborového systému spotřebuje nejvíce místa,  měli
 byste jí na disku poskytnout alespoň 500 MB. Pokud budete instalovat
-hodně balíčků, měli byste tomuto adresáři vyhradit ještě více místa.
-
-</para></listitem>
-<listitem><para>
-
-<filename>/home</filename>: každý uživatel si bude ukládat data do
-svého podadresáře v tomto adresáři. Jeho velikost závisí na tom, kolik
-uživatelů bude systém používat a jaké soubory se v jejich adresářích
-budou uchovávat. Pro každého uživatele byste měli počítat alespoň
-100 MB místa, ale opět závisí na konkrétní situaci.
+hodně balíčků, měli byste tomuto adresáři vyhradit ještě více
+místa. Velkoryse pojatá instalace pracovní stanice nebo serveru může
+klidně zabrat i 4-6 GB.
 
 </para></listitem>
 <listitem><para>
@@ -124,7 +125,20 @@ megabajty.
 <listitem><para>
 
 <filename>/tmp</filename>: sem programy většinou zapisují dočasná data.
-Obvykle by mělo stačit 20-50 MB.
+Obvykle by mělo stačit 40-100 MB. Některé aplikace &mdash; včetně
+nadstaveb archivačních programů, authoringových CD/DVD nástrojů
+a multimediálních programů &mdash; mohou <filename>/tmp</filename>
+využívat pro uložení celých obrazů. Plánujete-li využívat takovéto
+programy, měli byste dostupné místo příslušně zvýšit.
+
+</para></listitem>
+<listitem><para>
+
+<filename>/home</filename>: každý uživatel si bude ukládat data do
+svého podadresáře v tomto adresáři. Jeho velikost závisí na tom, kolik
+uživatelů bude systém používat a jaké soubory se v jejich adresářích
+budou uchovávat. Pro každého uživatele byste měli počítat alespoň
+100 MB místa, ale opět závisí na konkrétní situaci.
 
 </para></listitem>
 </itemizedlist>
