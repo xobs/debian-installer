@@ -54,6 +54,9 @@ else
 	make sources.list.$TYPE
 fi
 
+# Update local udebs Packages file.
+apt-ftparchive packages $LOCALUDEBDIR | gzip > $LOCALUDEBDIR/Packages.gz
+
 # All these options make apt read the right sources list, and use APTDIR for
 # everything so it need not run as root.
 APT_GET="apt-get --assume-yes \
@@ -106,33 +109,23 @@ if [ "$PACKAGES" = update ]; then
 	exit 0
 fi
 
-# If there are local (u)debs, remove them from the list of things to
-# get. Then get all the (u)debs that are left to get. Note that the
-# trailing blank on the next line is significant. It makes the sed
-# below always work.
-
-needed="$PACKAGES "
-for file in `find $LOCALUDEBDIR -name "*_*" -printf "%f\n" 2>/dev/null`; do
-	package=`echo $file | cut -d _ -f 1`
-	needed=`echo " $needed " | sed "s/ $package / /g"`
-done
+# Get udebs.
 if [ "$DEBUG" = y ]; then
 	mkdir -p $DEBUGUDEBDIR
 	cd $DEBUGUDEBDIR
 	export DEB_BUILD_OPTIONS="debug"
-	$APT_GET source --build --yes $needed
+	$APT_GET source --build --yes $PACKAGES
 	cd ..
 else
-	echo Need to download : $needed
-	if [ -n "$needed" ]; then
-		$APT_GET -dy install $needed
+	echo Need to download : $PACKAGES
+	if [ -n "$PACKAGES" ]; then
+		$APT_GET -dy install $PACKAGES
 	fi
 fi
 
-# Now the (u)debs are in APTDIR/cache/archives/ and maybe LOCALUDEBDIR
-# or DEBUGUDEBDIR, but there may be other (u)debs there too besides
-# those we asked for. So link those we asked for to UDEBDIR, renaming
-# them to more useful names.
+# Now the (u)debs are in APTDIR/cache/archives/ (and maybe DEBUGUDEBDIR)
+# but there may be other (u)debs there too besides those we asked for. So
+# link those we asked for to UDEBDIR, renaming them to more useful names.
 rm -rf $UDEBDIR
 mkdir -p $UDEBDIR
 
@@ -146,10 +139,9 @@ lnpkg() {
 
 for package in $PACKAGES; do
 	lnpkg $package $APTDIR/cache/archives $UDEBDIR
-	lnpkg $package $LOCALUDEBDIR $UDEBDIR
 	lnpkg $package $DEBUGUDEBDIR $UDEBDIR
 	if [ ! -e $UDEBDIR/$package.$TYPE ]; then
-		echo "Needed $package not found (looked in $APTDIR/cache/archives/, $LOCALUDEBDIR/, $DEBUGUDEBDIR/)";
+		echo "Needed $package not found (looked in $APTDIR/cache/archives/, $DEBUGUDEBDIR/)";
 		exit 1
 	fi
 done
