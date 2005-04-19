@@ -1,0 +1,1596 @@
+# Debian GNU/Linux Installation Guide
+msgid ""
+msgstr ""
+"Project-Id-Version: d-i-manual\n"
+"POT-Creation-Date: 2001-02-09 01:25+0100\n"
+"PO-Revision-Date: 2005-04-15 15:10+0800\n"
+"Last-Translator: Jungle Ji <jungle@soforge.com>\n"
+"Language-Team: debian-chinese-gb <debian-chinese-gb@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Tag: title
+#: partitioning.xml:5
+#, no-c-format
+msgid "Partitioning for Debian"
+msgstr "为 Debian 准备分区"
+
+#. Tag: title
+#: partitioning.xml:13
+#, no-c-format
+msgid "Deciding on Debian Partitions and Sizes"
+msgstr "决定 Debian 分区以及大小"
+
+#. Tag: para
+#: partitioning.xml:14
+#, no-c-format
+msgid ""
+"At a bare minimum, GNU/Linux needs one partition for itself. You can have a "
+"single partition containing the entire operating system, applications, and "
+"your personal files. Most people feel that a separate swap partition is also "
+"a necessity, although it's not strictly true. <quote>Swap</quote> is scratch "
+"space for an operating system, which allows the system to use disk storage "
+"as <quote>virtual memory</quote>. By putting swap on a separate partition, "
+"Linux can make much more efficient use of it. It is possible to force Linux "
+"to use a regular file as swap, but it is not recommended."
+msgstr ""
+"最小化情况下，GNU/Linux 需要一个分区。你可以有一个包含整个操作系统，应用程序"
+"以及你私人数据 的分区。大多数人感到一个分离的交换分区也是很有必要的，尽管它并"
+"非严格真实。 <quote>Swap</quote> 是一个操作系统用空白空间，允许系统使用磁盘来"
+"提供 <quote>虚拟内存</quote>。通过放置交换空间至一个分离的分区，Linux 可以非"
+"常有效地使用它。 强迫 Linux 使用一个普通文件做为交换空间也是可行的，但是并不"
+"推荐这种做法。"
+
+#. Tag: para
+#: partitioning.xml:26
+#, no-c-format
+msgid ""
+"Most people choose to give GNU/Linux more than the minimum number of "
+"partitions, however. There are two reasons you might want to break up the "
+"file system into a number of smaller partitions. The first is for safety. If "
+"something happens to corrupt the file system, generally only one partition "
+"is affected. Thus, you only have to replace (from the backups you've been "
+"carefully keeping) a portion of your system. At a bare minimum, you should "
+"consider creating what is commonly called a <quote>root partition</quote>. "
+"This contains the most essential components of the system. If any other "
+"partitions get corrupted, you can still boot into GNU/Linux to fix the "
+"system. This can save you the trouble of having to reinstall the system from "
+"scratch."
+msgstr ""
+"但是大多数人选择给 GNU/Linu 更多的分区。这里有两个原因使你愿意把系统放置到一"
+"些较小的分区上。 第一个问题是安全性。如果文件系统出现了问题，一般来说只是一个"
+"分区会受到影响。 因此，你只需要更换(来自于你小心维护的备份)一个分区。 在原始"
+"最小化阶段，你应该考虑创建所谓的 <quote>根分区</quote>。它含有最基础的系统组"
+"件。如果其它分区出现了问题，你仍然可以引导至 GNU/Linux 来修复系统。 这个可以"
+"让你不用从头重新安装系统。"
+
+#. Tag: para
+#: partitioning.xml:40
+#, no-c-format
+msgid ""
+"The second reason is generally more important in a business setting, but it "
+"really depends on your use of the machine. For example, a mail server "
+"getting spammed with e-mail can easily fill a partition. If you made "
+"<filename>/var/mail</filename> a separate partition on the mail server, most "
+"of the system will remain working even if you get spammed."
+msgstr ""
+"第二个理由对商业设置来说更重要，但是它非常取决于你的机器的使用。比如，一个邮"
+"件服务器接受到很多 垃圾邮件会很快填满一个分区，如果你创建 <filename>/var/"
+"mail</filename>在一个分离的分区上面，大多数系统在你得到太多垃圾邮件的情况下继"
+"续工作。"
+
+#. Tag: para
+#: partitioning.xml:48
+#, no-c-format
+msgid ""
+"The only real drawback to using more partitions is that it is often "
+"difficult to know in advance what your needs will be. If you make a "
+"partition too small then you will either have to reinstall the system or you "
+"will be constantly moving things around to make room in the undersized "
+"partition. On the other hand, if you make the partition too big, you will be "
+"wasting space that could be used elsewhere. Disk space is cheap nowadays, "
+"but why throw your money away?"
+msgstr ""
+"使用更多分区的唯一缺点很难知道你将来的需求。如果你建立了一个分区容量太小则你"
+"将或者重装系统或者 不停地移动数据来给分区分配空间。在另外一个方面，如果你建立"
+"的分区过大，你将浪费一些可以用在别的 地方的空间。磁盘容量目前很便宜，但是为什"
+"么你要把金钱随意抛洒呢？"
+
+#. Tag: title
+#: partitioning.xml:67
+#, no-c-format
+msgid "The Directory Tree"
+msgstr "目录树"
+
+#. Tag: para
+#: partitioning.xml:68
+#, no-c-format
+msgid ""
+"&debian; adheres to the <ulink url=\"&url-fhs-home;\">Filesystem Hierarchy "
+"Standard</ulink> for directory and file naming. This standard allows users "
+"and software programs to predict the location of files and directories. The "
+"root level directory is represented simply by the slash <filename>/</"
+"filename>. At the root level, all Debian systems include these directories:"
+msgstr ""
+"&debian; 依照 <ulink url=\"&url-fhs-home;\">文件系统层次标准 (Filesystem "
+"Hierarchy Standard)</ulink> 安排文件以及文件命名。这个标准允许用户以及软件程"
+"序预测文件以及目录的位置。 根层次目录只是简单表现为 <filename>/</filename>。 "
+"在根层次，所有的 Debian 系统包括这些目录："
+
+#. Tag: entry
+#: partitioning.xml:82
+#, no-c-format
+msgid "Directory"
+msgstr "目录"
+
+#. Tag: entry
+#: partitioning.xml:82
+#, no-c-format
+msgid "Content"
+msgstr "内容"
+
+#. Tag: filename
+#: partitioning.xml:88
+#, no-c-format
+msgid "<filename>bin</filename>"
+msgstr "<filename>bin</filename>"
+
+#. Tag: entry
+#: partitioning.xml:89
+#, no-c-format
+msgid "Essential command binaries"
+msgstr "基础命令执行文件"
+
+#. Tag: filename
+#: partitioning.xml:91
+#, no-c-format
+msgid "boot"
+msgstr "boot"
+
+#. Tag: entry
+#: partitioning.xml:92
+#, no-c-format
+msgid "Static files of the boot loader"
+msgstr "引导装载器的静态链结文件"
+
+#. Tag: filename
+#: partitioning.xml:94
+#, no-c-format
+msgid "<filename>dev</filename>"
+msgstr "<filename>dev</filename>"
+
+#. Tag: entry
+#: partitioning.xml:95
+#, no-c-format
+msgid "Device files"
+msgstr "设备文件"
+
+#. Tag: filename
+#: partitioning.xml:97
+#, no-c-format
+msgid "<filename>etc</filename>"
+msgstr "<filename>etc</filename>"
+
+#. Tag: entry
+#: partitioning.xml:98
+#, no-c-format
+msgid "Host-specific system configuration"
+msgstr "主机特定的系统配置"
+
+#. Tag: filename
+#: partitioning.xml:100
+#, no-c-format
+msgid "home"
+msgstr "home"
+
+#. Tag: entry
+#: partitioning.xml:101
+#, no-c-format
+msgid "User home directories"
+msgstr "用户活动目录"
+
+#. Tag: filename
+#: partitioning.xml:103
+#, no-c-format
+msgid "<filename>lib</filename>"
+msgstr "<filename>lib</filename>"
+
+#. Tag: entry
+#: partitioning.xml:104
+#, no-c-format
+msgid "Essential shared libraries and kernel modules"
+msgstr "基本共享库以及内核模块"
+
+#. Tag: filename
+#: partitioning.xml:106
+#, no-c-format
+msgid "<filename>mnt</filename>"
+msgstr "<filename>mnt</filename>"
+
+#. Tag: entry
+#: partitioning.xml:107
+#, no-c-format
+msgid "Mount point for mounting a file system temporarily"
+msgstr "用于临时挂接一个文件系统"
+
+#. Tag: filename
+#: partitioning.xml:109
+#, no-c-format
+msgid "proc"
+msgstr "proc"
+
+#. Tag: entry
+#: partitioning.xml:110
+#, no-c-format
+msgid "Virtual directory for system information"
+msgstr "系统信息的虚拟目录"
+
+#. Tag: filename
+#: partitioning.xml:112
+#, no-c-format
+msgid "root"
+msgstr "root"
+
+#. Tag: entry
+#: partitioning.xml:113
+#, no-c-format
+msgid "Home directory for the root user"
+msgstr "根用户的活动目录"
+
+#. Tag: filename
+#: partitioning.xml:115
+#, no-c-format
+msgid "sbin"
+msgstr "sbin"
+
+#. Tag: entry
+#: partitioning.xml:116
+#, no-c-format
+msgid "Essential system binaries"
+msgstr "基本的系统级程序"
+
+#. Tag: filename
+#: partitioning.xml:118
+#, no-c-format
+msgid "<filename>tmp</filename>"
+msgstr "<filename>tmp</filename>"
+
+#. Tag: entry
+#: partitioning.xml:119
+#, no-c-format
+msgid "Temporary files"
+msgstr "临时文件"
+
+#. Tag: filename
+#: partitioning.xml:121
+#, no-c-format
+msgid "<filename>usr</filename>"
+msgstr "<filename>usr</filename>"
+
+#. Tag: entry
+#: partitioning.xml:122
+#, no-c-format
+msgid "Secondary hierarchy"
+msgstr "第二层次"
+
+#. Tag: filename
+#: partitioning.xml:124
+#, no-c-format
+msgid "<filename>var</filename>"
+msgstr "<filename>var</filename>"
+
+#. Tag: entry
+#: partitioning.xml:125
+#, no-c-format
+msgid "Variable data"
+msgstr "活动数据"
+
+#. Tag: filename
+#: partitioning.xml:127
+#, no-c-format
+msgid "<filename>opt</filename>"
+msgstr "<filename>opt</filename>"
+
+#. Tag: entry
+#: partitioning.xml:128
+#, no-c-format
+msgid "Add-on application software packages"
+msgstr "附加的应用程序软件包"
+
+#. Tag: para
+#: partitioning.xml:133
+#, no-c-format
+msgid ""
+"The following is a list of important considerations regarding directories "
+"and partitions."
+msgstr "接下来是一个有关目录和分区的重要考虑列表。"
+
+#. Tag: para
+#: partitioning.xml:140
+#, no-c-format
+msgid ""
+"The root partition <filename>/</filename> must always physically contain "
+"<filename>/etc</filename>, <filename>/bin</filename>, <filename>/sbin</"
+"filename>, <filename>/lib</filename> and <filename>/dev</filename>, "
+"otherwise you won't be able to boot. Typically 100 MB is needed for the root "
+"partition, but this may vary."
+msgstr ""
+"根分区 <filename>/</filename> 必须总是物理地包含 <filename>/etc</filename>, "
+"<filename>/bin</filename>, <filename>/sbin</filename>, <filename>/lib</"
+"filename> 以及 <filename>/dev</filename>，否则你将不能引导。 通常 root 分区需"
+"要100MB大小空间但是可能会有变化。"
+
+#. Tag: para
+#: partitioning.xml:149
+#, no-c-format
+msgid ""
+"<filename>/usr</filename>: all user programs (<filename>/usr/bin</"
+"filename>), libraries (<filename>/usr/lib</filename>), documentation "
+"(<filename>/usr/share/doc</filename>), etc., are in this directory. This "
+"part of the file system needs most of the space. You should provide at least "
+"500 MB of disk space. If you want to install more packages you should "
+"increase the amount of space you give this directory."
+msgstr ""
+"<filename>/usr</filename>：所有的用户程序 (<filename>/usr/bin</filename>)， "
+"库文件 (<filename>/usr/lib</filename>)，文档 (<filename>/usr/share/doc</"
+"filename>)，等等在这个目录下面，这个部分的文件系统需要最多的空间。 你需要提供"
+"至少500MB磁盘空间。如果你想安装更多的软件包你应该给这个磁盘容量。"
+
+#. Tag: para
+#: partitioning.xml:161
+#, no-c-format
+msgid ""
+"<filename>/home</filename>: every user will put his data into a subdirectory "
+"of this directory. The size of this depends on how many users will be using "
+"the system and what files are to be stored in their directories. Depending "
+"on your planned usage you should reserve about 100 MB for each user, but "
+"adapt this value to your needs."
+msgstr ""
+"<filename>/home</filename>：每个用户将放置他们的数据到这个目录的子目录下。 其"
+"大小取决于有多少用户将使用系统并且什么文件放在他们的目录下。 取决于你计划的 "
+"使用量你应该为每个用户准备100MB空间不过这个值应该迎合你的需求。"
+
+#. Tag: para
+#: partitioning.xml:170
+#, no-c-format
+msgid ""
+"<filename>/var</filename>: all variable data like news articles, e-mails, "
+"web sites, the packaging system cache, etc. will be placed under this "
+"directory. The size of this directory depends greatly on the usage of your "
+"computer, but for most people will be dictated by the package management "
+"tool's overhead. If you are going to do a full installation of just about "
+"everything Debian has to offer, all in one session, setting aside 2 or 3 "
+"gigabytes of space for <filename>/var</filename> should be sufficient. If "
+"you are going to install in pieces (that is to say, install services and "
+"utilities, followed by text stuff, then X, ...), you can get away with "
+"300&ndash;500 megabytes in <filename>/var</filename>. If hard drive space is "
+"at a premium and you don't plan on doing major system updates, you can get "
+"by with as little as 30 or 40 megabytes in <filename>/var</filename>."
+msgstr ""
+"<filename>/var</filename>：所有的变量数据比如新的文章，电子邮件，网页，软件包"
+"系统的缓存等等将被放置入这个目录。 这个目录的大小取决于你对计算机的使用，但是"
+"对于大多数人来说将主要用在软件包系统的管理工具。 如果你准备做一个完全的安装包"
+"含 Debian 提供的所有程序，2到3GB的空间在 <filename>/var</filename> 下面应该满"
+"足需求。如果你准备逐次安装 (安装服务程序和工具，然后是文本处理工具， 然后是 "
+"X ，你可以准备 300 &mdash; 500 MB 在 <filename>/var</filename> 下。如果硬盘驱"
+"动空间很紧张并且你不准备做主要的系统升级，你可以 配置 <filename>/var</"
+"filename> 为 30-40MB 大小。"
+
+#. Tag: para
+#: partitioning.xml:187
+#, no-c-format
+msgid ""
+"<filename>/tmp</filename>: if a program creates temporary data it will most "
+"likely go in <filename>/tmp</filename>. 20-50 MB should usually be enough."
+msgstr ""
+"<filename>/tmp</filename>：如果一个程序会临时创建数据它很可能会放置 "
+"<filename>/tmp</filename> 中。一般 20-50 MB 应该足够使用。"
+
+#. Tag: title
+#: partitioning.xml:204
+#, no-c-format
+msgid "Recommended Partitioning Scheme"
+msgstr "推荐的分区方案"
+
+#. Tag: para
+#: partitioning.xml:205
+#, no-c-format
+msgid ""
+"For new users, personal Debian boxes, home systems, and other single-user "
+"setups, a single <filename>/</filename> partition (plus swap) is probably "
+"the easiest, simplest way to go. However, if your partition is larger than "
+"around 6GB, choose ext3 as your partition type. Ext2 partitions need "
+"periodic file system integrity checking, and this can cause delays during "
+"booting when the partition is large."
+msgstr ""
+"对于新用户，个人 Debian 系统，家庭系统以及其它单用户配置来说，一个单一 "
+"<filename>/</filename> 分区 (加上交换分区) 可能是最容易的方案。但是如果你的分"
+"区大于6GB， 请选择 ext3 做为你的分区类型。 Ext2 分区需要周期性的系统完整性检"
+"查并且当分区很大的时候， 这个特性将导致引导期间的延迟。"
+
+#. Tag: para
+#: partitioning.xml:214
+#, no-c-format
+msgid ""
+"For multi-user systems or systems with lots of disk space, it's best to put "
+"<filename>/usr</filename>, <filename>/var</filename>, <filename>/tmp</"
+"filename>, and <filename>/home</filename> each on their own partitions "
+"separate from the <filename>/</filename> partition."
+msgstr ""
+"对于多用户系统或者有很多磁盘空间的系统，最好放置 <filename>/usr</filename>, "
+"<filename>/var</filename>, <filename>/tmp</filename>, 以及 <filename>/home</"
+"filename> 到每个他们自己的分区空间以和 <filename>/</filename> 分区分离开来。"
+
+#. Tag: para
+#: partitioning.xml:222
+#, no-c-format
+msgid ""
+"You might need a separate <filename>/usr/local</filename> partition if you "
+"plan to install many programs that are not part of the Debian distribution. "
+"If your machine will be a mail server, you might need to make <filename>/var/"
+"mail</filename> a separate partition. Often, putting <filename>/tmp</"
+"filename> on its own partition, for instance 20 to 50MB, is a good idea. If "
+"you are setting up a server with lots of user accounts, it's generally good "
+"to have a separate, large <filename>/home</filename> partition. In general, "
+"the partitioning situation varies from computer to computer depending on its "
+"uses."
+msgstr ""
+"当你计划安装许多不是 Debian 分发版本的程序的时候，你也许需要运行一个独立的 "
+"<filename>/usr/local</filename> 分区。如果你的机器是一个小的邮件服务器，你也"
+"许需要为 <filename>/var/mail</filename> 建立一个独立的分区。通常情况下放置 "
+"<filename>/tmp</filename> 至它独立的分区，比如20至50MB是一个好主意。 如果你正"
+"在配置一个服务器带有放多用户帐户，通常需要一个独立的大 <filename>/home</"
+"filename> 分区。一般来说，分区状况对每台计算机都有所不同，这取决于他们的用"
+"途。"
+
+#. Tag: para
+#: partitioning.xml:234
+#, no-c-format
+msgid ""
+"For very complex systems, you should see the <ulink url=\"&url-multidisk-"
+"howto;\"> Multi Disk HOWTO</ulink>. This contains in-depth information, "
+"mostly of interest to ISPs and people setting up servers."
+msgstr ""
+"对于非常复杂的系统来说，你应该阅读 <ulink url=\"&url-multidisk-howto;\"> "
+"Multi Disk HOWTO</ulink>。其中包含了很多对于 ISPs 以及配置服务器的用户很有用"
+"的高级信息。"
+
+#. Tag: para
+#: partitioning.xml:241
+#, no-c-format
+msgid ""
+"With respect to the issue of swap partition size, there are many views. One "
+"rule of thumb which works well is to use as much swap as you have system "
+"memory. It also shouldn't be smaller than 16MB, in most cases. Of course, "
+"there are exceptions to these rules. If you are trying to solve 10000 "
+"simultaneous equations on a machine with 256MB of memory, you may need a "
+"gigabyte (or more) of swap."
+msgstr ""
+"在交换分区大小方面，这里有很多观点。我们的建议是使用和内存大小相同的交换分"
+"区。在 大多数情况下它也应该不小于16MB。当然，这里有一些例外。如果你正在尝试在"
+"一个有 256MB 内存的机器上解决10000 个联立方程式，你也许需要 1G (或者更多)的交"
+"换分区。"
+
+#. Tag: para
+#: partitioning.xml:250
+#, no-c-format
+msgid ""
+"On the other hand, Atari Falcons and Macs feel pain when swapping, so "
+"instead of making a large swap partition, get as much RAM as possible."
+msgstr ""
+"在另外一个方面，Atari Falcons 以及 Macs 会对交换感到很痛苦，因此建立一个大的"
+"交换分区不如 获得尽可能多的 RAM 。"
+
+#. Tag: para
+#: partitioning.xml:255
+#, no-c-format
+msgid ""
+"On 32-bit architectures (i386, m68k, 32-bit SPARC, and PowerPC), the maximum "
+"size of a swap partition is 2GB. That should be enough for nearly any "
+"installation. However, if your swap requirements are this high, you should "
+"probably try to spread the swap across different disks (also called "
+"<quote>spindles</quote>) and, if possible, different SCSI or IDE channels. "
+"The kernel will balance swap usage between multiple swap partitions, giving "
+"better performance."
+msgstr ""
+"在32位体系结构(i386, m68k, 32位 SPARC 以及 PowerPC) 下，最大尺寸的交换分区是"
+"2GB。这应该 基本满足任何安装情况。但是如果你的交换分区需求非常大，你应该尝试"
+"分离交换分区至不同磁盘中 (这也 叫做 <quote>spindles</quote> )以及，如果可能的"
+"话，不同的 SCSI 或者 IDE 通道。 内核将在多个交换空间平衡用量来达到更好的性"
+"能。"
+
+#. Tag: para
+#: partitioning.xml:265
+#, no-c-format
+msgid ""
+"As an example, an older home machine might have 32MB of RAM and a 1.7GB IDE "
+"drive on <filename>/dev/hda</filename>. There might be a 500MB partition for "
+"another operating system on <filename>/dev/hda1</filename>, a 32MB swap "
+"partition on <filename>/dev/hda3</filename> and about 1.2GB on <filename>/"
+"dev/hda2</filename>) as the Linux partition."
+msgstr ""
+"做为一个例子，一个比较老的机器可能具有32MB内存以及一个1.7GB的 IDE 驱动器在 "
+"<filename>/dev/hda</filename>上。这里 <filename>/dev/hda1</filename>是一个"
+"500MB的分区给其它操作系统，一个32MB交换分区做为 <filename>/dev/hda3</"
+"filename>以及一个1.2GB分区 <filename>/dev/hda2</filename>)做为 Linux 分区。"
+
+#. Tag: para
+#: partitioning.xml:274
+#, no-c-format
+msgid ""
+"For an idea of the space taken by tasks you might be interested in adding "
+"after your system installation is complete, check <xref linkend=\"tasksel-"
+"size-list\"/>."
+msgstr ""
+"想建立对于不同任务所需要多大的空间的概念， 你也许对于安装系统后如何加入更多的"
+"安装感兴趣，请检查 <xref linkend=\"tasksel-size-list\"/>。"
+
+#. Tag: title
+#: partitioning.xml:290
+#, no-c-format
+msgid "Device Names in Linux"
+msgstr "Linux 里面的设备名称"
+
+#. Tag: para
+#: partitioning.xml:291
+#, no-c-format
+msgid ""
+"Linux disks and partition names may be different from other operating "
+"systems. You need to know the names that Linux uses when you create and "
+"mount partitions. Here's the basic naming scheme:"
+msgstr ""
+"Linux 磁盘以及分区名称可能和其它的操作系统有所不同。你需要知道 Linux 用于创建"
+"以及挂接分区的 设备名称。这里是基本的命名方案："
+
+#. Tag: para
+#: partitioning.xml:299
+#, no-c-format
+msgid "The first floppy drive is named <filename>/dev/fd0</filename>."
+msgstr "第一个软盘驱动器被命名为 <filename>/dev/fd0</filename>。"
+
+#. Tag: para
+#: partitioning.xml:304
+#, no-c-format
+msgid "The second floppy drive is named <filename>/dev/fd1</filename>."
+msgstr "第二个软盘驱动器被命名为 <filename>/dev/fd1</filename>。"
+
+#. Tag: para
+#: partitioning.xml:309
+#, no-c-format
+msgid ""
+"The first SCSI disk (SCSI ID address-wise) is named <filename>/dev/sda</"
+"filename>."
+msgstr ""
+"第一个 SCSI 驱动器 (SCSI ID 反向地址) 被命名为 <filename>/dev/sda</"
+"filename>。"
+
+#. Tag: para
+#: partitioning.xml:315
+#, no-c-format
+msgid ""
+"The second SCSI disk (address-wise) is named <filename>/dev/sdb</filename>, "
+"and so on."
+msgstr ""
+"第二个 SCSI 驱动器 (反向地址) 被命名为 <filename>/dev/sdb</filename>，等等。"
+
+#. Tag: para
+#: partitioning.xml:321
+#, no-c-format
+msgid ""
+"The first SCSI CD-ROM is named <filename>/dev/scd0</filename>, also known as "
+"<filename>/dev/sr0</filename>."
+msgstr ""
+"第一个 SCSI 光盘驱动器被命名为 <filename>/dev/scd0</filename>，也叫 "
+"<filename>/dev/sr0</filename>。"
+
+#. Tag: para
+#: partitioning.xml:327
+#, no-c-format
+msgid ""
+"The master disk on IDE primary controller is named <filename>/dev/hda</"
+"filename>."
+msgstr "主 IDE 驱动器下的主磁盘被命名为 <filename>/dev/hda</filename>。"
+
+#. Tag: para
+#: partitioning.xml:333
+#, no-c-format
+msgid ""
+"The slave disk on IDE primary controller is named <filename>/dev/hdb</"
+"filename>."
+msgstr ""
+"第二个控制器的主磁盘和从磁盘会分别被叫做 <filename>/dev/hdb</filename>。"
+
+#. Tag: para
+#: partitioning.xml:339
+#, no-c-format
+msgid ""
+"The master and slave disks of the secondary controller can be called "
+"<filename>/dev/hdc</filename> and <filename>/dev/hdd</filename>, "
+"respectively. Newer IDE controllers can actually have two channels, "
+"effectively acting like two controllers. <phrase arch=\"m68k\"> The letters "
+"may differ from what shows in the mac program pdisk (i.e. what shows up as "
+"<filename>/dev/hdc</filename> on pdisk may show up as <filename>/dev/hda</"
+"filename> in Debian). </phrase>"
+msgstr ""
+"第二个控制器的主磁盘和从磁盘会分别被叫做 <filename>/dev/hdc</filename> 以及 "
+"<filename>/dev/hdd</filename>，较新的 IDE 控制器实际上有两个通道，扮演着两个"
+"控制器的角色。 <phrase arch=\"m68k\"> 字母可能和 mac 程序 pdisk 显示有所不"
+"同。(在 pdisk 上的 <filename>/dev/hdc</filename> 可能在 Debian 中显示为 "
+"<filename>/dev/hda</filename>)。 </phrase>"
+
+#. Tag: para
+#: partitioning.xml:354
+#, no-c-format
+msgid "The first XT disk is named <filename>/dev/xda</filename>."
+msgstr "第一个 XT 磁盘会被命名为 <filename>/dev/xda</filename>。"
+
+#. Tag: para
+#: partitioning.xml:359
+#, no-c-format
+msgid "The second XT disk is named <filename>/dev/xdb</filename>."
+msgstr "第二个 XT 磁盘会被命名为 <filename>/dev/xdb</filename>。"
+
+#. Tag: para
+#: partitioning.xml:364
+#, no-c-format
+msgid ""
+"The first ACSI device is named <filename>/dev/ada</filename>, the second is "
+"named <filename>/dev/adb</filename>."
+msgstr ""
+"第一个 ACSI 设备被命名为 <filename>/dev/ada</filename> ，第二个则是 "
+"<filename>/dev/adb</filename>。"
+
+#. Tag: para
+#: partitioning.xml:373
+#, no-c-format
+msgid "The first DASD device is named <filename>/dev/dasda</filename>."
+msgstr "第一个 DASD 设备被命名为 <filename>/dev/dasda</filename>。"
+
+#. Tag: para
+#: partitioning.xml:379
+#, no-c-format
+msgid ""
+"The second DASD device is named <filename>/dev/dasdb</filename>, and so on."
+msgstr "第二个 DASD 设备被命名为 <filename>/dev/dasdb</filename>，等等。"
+
+#. Tag: para
+#: partitioning.xml:387
+#, no-c-format
+msgid ""
+"The partitions on each disk are represented by appending a decimal number to "
+"the disk name: <filename>sda1</filename> and <filename>sda2</filename> "
+"represent the first and second partitions of the first SCSI disk drive in "
+"your system."
+msgstr ""
+"每个磁盘的分区名的显示是通过在磁盘名称后面附加一个十进制数字： "
+"<filename>sda1</filename> 以及 <filename>sda2</filename> 表示你系统里第一个 "
+"SCSI 磁盘驱动器的第一个第一个以及第二个分区。"
+
+#. Tag: para
+#: partitioning.xml:394
+#, no-c-format
+msgid ""
+"Here is a real-life example. Let's assume you have a system with 2 SCSI "
+"disks, one at SCSI address 2 and the other at SCSI address 4. The first disk "
+"(at address 2) is then named <filename>sda</filename>, and the second "
+"<filename>sdb</filename>. If the <filename>sda</filename> drive has 3 "
+"partitions on it, these will be named <filename>sda1</filename>, "
+"<filename>sda2</filename>, and <filename>sda3</filename>. The same applies "
+"to the <filename>sdb</filename> disk and its partitions."
+msgstr ""
+"这里有一个具体的例子。假设你有一个系统带有两个 SCSI 磁盘，一个 SCSI 地址是 2 "
+"并且另外一个 地址是 4 。第一个磁盘 (在 2 上) 会被命名为 <filename>sda</"
+"filename>并且第二个 <filename>sdb</filename>。如果 <filename>sda</filename> "
+"驱动器有3个分区，它们将被命名为 <filename>sda1</filename>, <filename>sda2</"
+"filename>, 以及 <filename>sda3</filename>。这同样适合 <filename>sdb</"
+"filename> 及其分区。"
+
+#. Tag: para
+#: partitioning.xml:405
+#, no-c-format
+msgid ""
+"Note that if you have two SCSI host bus adapters (i.e., controllers), the "
+"order of the drives can get confusing. The best solution in this case is to "
+"watch the boot messages, assuming you know the drive models and/or "
+"capacities."
+msgstr ""
+"主意如果你有两个 SCSI 主机总线适配器 (控制器)，设备的顺序可能会比较混乱。最好"
+"的解决方案是 观察引导信息，假设你知道驱动器模式以及/或者容量。"
+
+#. Tag: para
+#: partitioning.xml:412
+#, no-c-format
+msgid ""
+"Linux represents the primary partitions as the drive name, plus the numbers "
+"1 through 4. For example, the first primary partition on the first IDE drive "
+"is <filename>/dev/hda1</filename>. The logical partitions are numbered "
+"starting at 5, so the first logical partition on that same drive is "
+"<filename>/dev/hda5</filename>. Remember that the extended partition, that "
+"is, the primary partition holding the logical partitions, is not usable by "
+"itself. This applies to SCSI disks as well as IDE disks."
+msgstr ""
+"Linux 表示主分区为你的驱动器名称加上数字1到4。例如，在第一个 IDE 驱动器上的第"
+"一个主分区是 <filename>/dev/hda1</filename>。逻辑驱动器将会从数字5开始，因此"
+"在相同驱动器上的第一个逻辑驱动器是 <filename>/dev/hda5</filename>。记住拓展分"
+"区，也就是含有逻辑驱动器的主分区本身将不可用。这个规则对 SCSI 也同样适用。"
+
+#. Tag: para
+#: partitioning.xml:423
+#, no-c-format
+msgid ""
+"VMEbus systems using the TEAC FC-1 SCSI floppy drive will see it as normal "
+"SCSI disk. To make identification of the drive simpler the installation "
+"software will create a symbolic link to the appropriate device and name it "
+"<filename>/dev/sfd0</filename>."
+msgstr ""
+"VMEbus 系统使用的 TEAC FC-1 SCSI 软盘驱动器将被看成正常的 SCSI 磁盘。为了让驱"
+"动器辨认更强容易 安装软件将创建一个符号链接至合适的设备并且称为 <filename>/"
+"dev/sfd0</filename>。"
+
+#. Tag: para
+#: partitioning.xml:430
+#, no-c-format
+msgid ""
+"Sun disk partitions allow for 8 separate partitions (or slices). The third "
+"partition is usually (and is preferred to have) the ``Whole Disk'' "
+"partition. This partition references all of the sectors of the disk, and is "
+"used by the boot loader (either SILO, or Sun's)."
+msgstr ""
+"Sun 磁盘分区允许8个独立的分区 (或者片)。第三个分区通常(一般也是)“整个磁盘”分"
+"区 。这个分区 代表磁盘上所有的扇区，并且将被引导装载器 (SILO 或者 SUN 的)使"
+"用。"
+
+#. Tag: para
+#: partitioning.xml:437
+#, no-c-format
+msgid ""
+"The partitions on each disk are represented by appending a decimal number to "
+"the disk name: <filename>dasda1</filename> and <filename>dasda2</filename> "
+"represent the first and second partitions of the first DASD device in your "
+"system."
+msgstr ""
+"每个磁盘的分区名的显示是通过在磁盘名称后面附加一个十进制数字： "
+"<filename>dasda1</filename> 以及 <filename>dasda2</filename> 表示你系统上第一"
+"个 DASD 设备的第一个以及第二个分区。"
+
+#. Tag: title
+#: partitioning.xml:452
+#, no-c-format
+msgid "Debian Partitioning Programs"
+msgstr "Debian 分区程序"
+
+#. Tag: para
+#: partitioning.xml:453
+#, no-c-format
+msgid ""
+"Several varieties of partitioning programs have been adapted by Debian "
+"developers to work on various types of hard disks and computer "
+"architectures. Following is a list of the program(s) applicable for your "
+"architecture."
+msgstr ""
+"Debian 开发人员配置了几种在不同硬盘和不同体系结构上的分区程序。 下面是一个适"
+"合你的结构的程序列表。"
+
+#. Tag: command
+#: partitioning.xml:465
+#, no-c-format
+msgid "partman"
+msgstr "partman"
+
+#. Tag: para
+#: partitioning.xml:466
+#, no-c-format
+msgid ""
+"Recommended partitioning tool in Debian. This swiss army knife can also "
+"resize partitions, create filesystems <phrase arch=\"i386\"> (<quote>format</"
+"quote> in Windows speak)</phrase> and assign them to the mountpoints."
+msgstr ""
+"推荐的 Debian 分区工具。这个小而全的工具可以修改分区大小，创建文件系统 "
+"<phrase arch=\"i386\">(在 Windows 下的说法是 <quote>format</quote>)</phrase> "
+"以及联系分区至挂接点。"
+
+#. Tag: command
+#: partitioning.xml:477
+#, no-c-format
+msgid "fdisk"
+msgstr "fdisk"
+
+#. Tag: para
+#: partitioning.xml:478
+#, no-c-format
+msgid "The original Linux disk partitioner, good for gurus."
+msgstr "原始版本的 Linux 磁盘分区工具，对于高手很好用。"
+
+#. Tag: para
+#: partitioning.xml:482
+#, no-c-format
+msgid ""
+"Be careful if you have existing FreeBSD partitions on your machine. The "
+"installation kernels include support for these partitions, but the way that "
+"<command>fdisk</command> represents them (or not) can make the device names "
+"differ. See the <ulink url=\"&url-linux-freebsd;\">Linux+FreeBSD HOWTO</"
+"ulink>"
+msgstr ""
+"这里注意如果你的机器上有一个 FreeBSD 分区。安装内核将包括这些分区的支持，但"
+"是 <command>fdisk</command> 表示他们的设备名称方式可能有所不同(也可能不是)。"
+"请参照 <ulink url=\"&url-linux-freebsd;\">Linux+FreeBSD HOWTO</ulink>"
+
+#. Tag: command
+#: partitioning.xml:494
+#, no-c-format
+msgid "cfdisk"
+msgstr "cfdisk"
+
+#. Tag: para
+#: partitioning.xml:495
+#, no-c-format
+msgid "A simple-to-use, full-screen disk partitioner for the rest of us."
+msgstr "一个简单易用，给其它人使用的是全屏幕磁盘分区程序。"
+
+#. Tag: para
+#: partitioning.xml:499
+#, no-c-format
+msgid ""
+"Note that <command>cfdisk</command> doesn't understand FreeBSD partitions at "
+"all, and, again, device names may differ as a result."
+msgstr ""
+"请注意 <command>cfdisk</command> 完全不了解 FreeBSD 的分区，因此，再一次设备"
+"名称可能最后有所不同。"
+
+#. Tag: command
+#: partitioning.xml:508
+#, no-c-format
+msgid "atari-fdisk"
+msgstr "atari-fdisk"
+
+#. Tag: para
+#: partitioning.xml:509
+#, no-c-format
+msgid "Atari-aware version of <command>fdisk</command>."
+msgstr "Atari 版本的 <command>fdisk</command>。"
+
+#. Tag: command
+#: partitioning.xml:517
+#, no-c-format
+msgid "amiga-fdisk"
+msgstr "amiga-fdisk"
+
+#. Tag: para
+#: partitioning.xml:518
+#, no-c-format
+msgid "Amiga-aware version of <command>fdisk</command>."
+msgstr "Amiga-aware 版本的 <command>fdisk</command>。"
+
+#. Tag: command
+#: partitioning.xml:526
+#, no-c-format
+msgid "mac-fdisk"
+msgstr "mac-fdisk"
+
+#. Tag: para
+#: partitioning.xml:527
+#, no-c-format
+msgid "Mac-aware version of <command>fdisk</command>."
+msgstr "Mac-aware 版本的 <command>fdisk</command>。"
+
+#. Tag: command
+#: partitioning.xml:535
+#, no-c-format
+msgid "pmac-fdisk"
+msgstr "pmac-fdisk"
+
+#. Tag: para
+#: partitioning.xml:536
+#, no-c-format
+msgid ""
+"PowerMac-aware version of <command>fdisk</command>, also used by BVM and "
+"Motorola VMEbus systems."
+msgstr "PowerMac 的 <command>fdisk</command>版本，同时也用于 BVM 以及 Motorola VMEbus 系统。"
+
+#. Tag: command
+#: partitioning.xml:545
+#, no-c-format
+msgid "fdasd"
+msgstr "fdasd"
+
+#. Tag: para
+#: partitioning.xml:546
+#, no-c-format
+msgid ""
+"&arch-title; version of <command>fdisk</command>; Please read the fdasd "
+"manual page or chapter 13 in <ulink url=\"http://oss.software.ibm.com/"
+"developerworks/opensource/linux390/docu/l390dd08.pdf\"> Device Drivers and "
+"Installation Commands</ulink> for details."
+msgstr ""
+"&arch-title; <command>fdisk</command> 的版本; 请阅读 <ulink url=\"fdasd.txt\">fdasd 手册页</ulink>或者 <ulink url=\"http://oss.software.ibm.com/developerworks/opensource/linux390/docu/l390dd08.pdf\"> Device Drivers and \"\n"
+"\"Installation Commands</ulink> 的第 13 章获得详细信息。"
+
+#. Tag: para
+#: partitioning.xml:557
+#, no-c-format
+msgid ""
+"One of these programs will be run by default when you select "
+"<guimenuitem>Partition a Hard Disk</guimenuitem>. If the one which is run by "
+"default isn't the one you want, quit the partitioner, go to the shell "
+"(<userinput>tty2</userinput>) by pressing <keycap>Alt</keycap> and "
+"<keycap>F2</keycap> keys together, and manually type in the name of the "
+"program you want to use (and arguments, if any). Then skip the "
+"<guimenuitem>Partition a Hard Disk</guimenuitem> step in <command>debian-"
+"installer</command> and continue to the next step."
+msgstr ""
+"当你选择 <guimenuitem>对硬盘进行分区</guimenuitem> 时这些程序之一将会运行。 "
+"如果缺省运行的那个并非你所希望的，退出分区程序，在 shell (<userinput>tty2</"
+"userinput>) 下按下<keycap>Alt</keycap> 以及 <keycap>F2</keycap> ，并且手工输"
+"入你想使用的程序名称 (以及可能的参数)。 然后跳过 <guimenuitem>对硬盘进行分区"
+"</guimenuitem> 步骤至 <command>debian-installer</command> 并继续进行下一步。"
+
+#. Tag: para
+#: partitioning.xml:568
+#, no-c-format
+msgid ""
+"If you will be working with more than 20 partitions on your ide disk, you "
+"will need to create devices for partitions 21 and beyond. The next step of "
+"initializing the partition will fail unless a proper device is present. As "
+"an example, here are commands you can use in <userinput>tty2</userinput> or "
+"under Execute A Shell to add a device so the 21st partition can be "
+"initialized: <informalexample><screen>\n"
+"# cd /dev\n"
+"# mknod hda21 b 3 21 \n"
+"# chgrp disk hda21\n"
+"# chmod 660 hda21\n"
+"</screen></informalexample> Booting into the new system will fail unless "
+"proper devices are present on the target system. After installing the kernel "
+"and modules, execute: <informalexample><screen>\n"
+"# cd /target/dev\n"
+"# mknod hda21 b 3 21 \n"
+"# chgrp disk hda21\n"
+"# chmod 660 hda21\n"
+"</screen></informalexample> <phrase arch=\"i386\">Remember to mark your boot "
+"partition as <quote>Bootable</quote>.</phrase>"
+msgstr ""
+"如果你的 ide 磁盘上会超过多过20个分区，你将需要为21以上的分区创建设备文件。 "
+"这种情况下如果只是一个普通的设备文件则下一步初始化分区将失败。 做为一个例子，"
+"这里列举了相关的命令让你可以在 <userinput>tty2</userinput> 中使用或者在运行一"
+"个 Shell 下加入一个设备文件令多于21个的分区能够被初始化。 "
+"<informalexample><screen>\n"
+"# cd /dev\n"
+"# mknod hda21 b 3 21 \n"
+"# chgrp disk hda21\n"
+"# chmod 660 hda21\n"
+"</screen></informalexample> 除非在目标系统上有合适的设备名称，引导一个新的系"
+"统将会失败。在安装完内核和模块以后，执行： <informalexample><screen>\n"
+"# cd /target/dev\n"
+"# mknod hda21 b 3 21 \n"
+"# chgrp disk hda21\n"
+"# chmod 660 hda21\n"
+"</screen></informalexample> <phrase arch=\"i386\">记住标记你的引导分区为 "
+"<quote>Bootable</quote>。</phrase>"
+
+#. Tag: para
+#: partitioning.xml:587
+#, no-c-format
+msgid ""
+"One key point when partitioning for Mac type disks is that the swap "
+"partition is identified by its name; it must be named `swap'. All Mac linux "
+"partitions are the same partition type, Apple_UNIX_SRV2. Please read the "
+"fine manual. We also suggest reading the <ulink url=\"&url-mac-fdisk-"
+"tutorial;\">mac-fdisk Tutorial</ulink>, which includes steps you should take "
+"if you are sharing your disk with MacOS."
+msgstr "关键一点是交换分区的确认是根据它的名字；它必须被命名为 `swap'。所有的 Mac Linux 分区都是相同的 Apple_UNIX_SRV2 分区类型。请阅读合适的手册。我们也通常建议阅读 <ulink url=\"&url-mac-fdisk-tutorial;\">mac-fdisk 使用指南</ulink>，其中包括了如何同 MacOS 共享磁盘的步骤。"
+
+# index.docbook:612, index.docbook:672, index.docbook:696, index.docbook:793, index.docbook:912, index.docbook:989
+#. Tag: title
+#: partitioning.xml:604 partitioning.xml:664 partitioning.xml:688
+#: partitioning.xml:785 partitioning.xml:904 partitioning.xml:981
+#, no-c-format
+msgid "Partitioning for &arch-title;"
+msgstr "为 &arch-title; 准备分区"
+
+#. Tag: para
+#: partitioning.xml:605
+#, no-c-format
+msgid ""
+"Booting Debian from the SRM console (the only disk boot method supported by "
+"&releasename;) requires you to have a BSD disk label, not a DOS partition "
+"table, on your boot disk. (Remember, the SRM boot block is incompatible with "
+"MS-DOS partition tables &mdash; see <xref linkend=\"alpha-firmware\"/>.) As "
+"a result, <command>partman</command> creates BSD disk labels when running on "
+"&architecture;, but if your disk has an existing DOS partition table the "
+"existing partitions will need to be deleted before partman can convert it to "
+"use a disk label."
+msgstr ""
+"从 SRM 控制台引导 Debian (唯一能被 &releasename; 支持的启动方法)要求您的启动"
+"盘上有 BSD 磁盘卷标， 而不是 DOS 分区。(注意， SRM 引导块不和 MS-DOS 分区兼"
+"容 &mdash; 请参阅 <xref linkend=\"alpha-firmware\"/>。)因此，"
+"<command>partman</command> 在 &architecture; 上运行时会创建 BSD 磁盘卷标，如"
+"果您的磁盘上已经存在一个 DOS 分区表， 在 partman 转换到磁盘卷标前需要将它删"
+"除。"
+
+#. Tag: para
+#: partitioning.xml:616
+#, no-c-format
+msgid ""
+"If you have chosen to use <command>fdisk</command> to partition your disk, "
+"and the disk that you have selected for partitioning does not already "
+"contain a BSD disk label, you must use the `b' command to enter disk label "
+"mode."
+msgstr ""
+"如果您选择使用 <command>fdisk</command> 为您的磁盘分区，并且该磁盘上没有 BSD "
+"磁盘卷标，您必须使用 `b' 命令进入磁盘卷标模式。"
+
+#. Tag: para
+#: partitioning.xml:623
+#, no-c-format
+msgid ""
+"Unless you wish to use the disk you are partitioning from Tru64 Unix or one "
+"of the free 4.4BSD-Lite derived operating systems (FreeBSD, OpenBSD, or "
+"NetBSD), it is suggested that you do <emphasis>not</emphasis> make the third "
+"partition contain the whole disk. This is not required by <command>aboot</"
+"command>, and in fact, it may lead to confusion since the "
+"<command>swriteboot</command> utility used to install <command>aboot</"
+"command> in the boot sector will complain about a partition overlapping with "
+"the boot block."
+msgstr ""
+"除非你想在 Tru64 Unix 或者一个 free 4.4BSD-Lite 兼容的系统下(FreeBSD, "
+"OpenBSD 或 NetBSD)使用这个磁盘，请 <emphasis>不要</emphasis> 建立包含整个磁盘"
+"的第三方分区。<command>aboot</command> 并不需要这样，并且，它可能导致一些混乱"
+"这是因为当用 <command>swriteboot</command> 工具在引导分区下安装时，"
+"<command>aboot</command> 将报怨引导扇区将被一个分区覆盖。"
+
+#. Tag: para
+#: partitioning.xml:634
+#, no-c-format
+msgid ""
+"Also, because <command>aboot</command> is written to the first few sectors "
+"of the disk (currently it occupies about 70 kilobytes, or 150 sectors), you "
+"<emphasis>must</emphasis> leave enough empty space at the beginning of the "
+"disk for it. In the past, it was suggested that you make a small partition "
+"at the beginning of the disk, to be left unformatted. For the same reason "
+"mentioned above, we now suggest that you do not do this on disks that will "
+"only be used by GNU/Linux. When using <command>partman</command>, a small "
+"partition will still be created for <command>aboot</command> for convenience "
+"reasons."
+msgstr ""
+"同时，由于 <command>aboot</command> 将被写到磁盘的前面的几个扇区 (目前它占用"
+"大约 70 KB 空间，或者 150 个扇区。你 <emphasis>必须</emphasis> 在磁盘的开始处"
+"留下足够的空间。以前的方法建议你在磁盘的开始处分出一个较小并且不格式化的分"
+"区。 基于上面的理由我们现在建议你这块磁盘专门用于 GNU/Linux 。当使用 "
+"<command>partman</command>，仍会建立一个小的分区给 <command>aboot</command>，"
+"这是习惯所致。"
+
+#. Tag: para
+#: partitioning.xml:646
+#, no-c-format
+msgid ""
+"For ARC installations, you should make a small FAT partition at the "
+"beginning of the disk to contain <command>MILO</command> and "
+"<command>linload.exe</command> &mdash; 5 megabytes should be sufficient, see "
+"<xref linkend=\"non-debian-partitioning\"/>. Unfortunately, making FAT file "
+"systems from the menu is not yet supported, so you'll have to do it manually "
+"from the shell using <command>mkdosfs</command> before attempting to install "
+"the boot loader."
+msgstr ""
+"对于 ARC 的安装来说， 你应该在磁盘开始处建立一个小的 FAT 分区以便装入 "
+"<command>MILO</command> 以及 <command>linload.exe</command> &mdash; 至少需要 "
+"5 MB 空间，请参见 <xref linkend=\"non-debian-partitioning\"/> 。不幸地是，从"
+"菜单建立 FAT 文件系统的方法是不被支持的， 因此你必须在 Shell 下面使用 "
+"<command>mkdosfs</command> 然后再尝试安装引导装载器。"
+
+#. Tag: para
+#: partitioning.xml:665
+#, no-c-format
+msgid ""
+"PALO, the HPPA boot loader, requires a partition of type <quote>F0</quote> "
+"somewhere in the first 2GB. This is where the boot loader and an optional "
+"kernel and RAMdisk will be stored, so make it big enough for that -- at "
+"least 4Mb (I like 8-16Mb). An additional requirement of the firmware is that "
+"the Linux kernel must reside within the first 2GB of the disk. This is "
+"typically achieved by making the root ext2 partition fit entirely within the "
+"first 2GB of the disk. Alternatively you can create a small ext2 partition "
+"near the start of the disk and mount that on <filename>/boot</filename>, "
+"since that is the directory where the Linux kernel(s) will be stored. "
+"<filename>/boot</filename> needs to be big enough to hold whatever kernels "
+"you might wish load; 8-16MB is generally sufficient."
+msgstr ""
+"PALO 是一个 HPPA 的引导装载器。它需要在磁盘前 2GB 内得到一个 <quote>F0</"
+"quote> 分区。这个分区里面装有引导装载器以及可选的内核和内存虚拟磁盘。 因此最"
+"好这个分区的大小应该符合这个要求 -- 至少需要 4 MB (我个人倾向于 8-16 MB)。 固"
+"件的一个附加的要求是 Linux 内核必须在磁盘的前 2 GB 内。 达到这一点要求需要把"
+"根 ext2 分区整个放在磁盘的头 2GB 内。 或者你可以在磁盘前部创建一个小分区并且"
+"被挂接成 <filename>/boot</filename>，然后在这个目录下面放置 Linux 内核。"
+"<filename>/boot</filename> 需要足够大以便能够放置入内核；8-16 MB 一般来说应该"
+"足够了。"
+
+#. Tag: para
+#: partitioning.xml:689
+#, no-c-format
+msgid ""
+"If you have an existing other operating system such as DOS or Windows and "
+"you want to preseve that operating system while installing Debian, you may "
+"need to resize its partition to free up space for the Debian installation. "
+"The installer supports resizing of both FAT and NTFS filesystems; when you "
+"get to the installer's partitioning step, select the option to partition "
+"manually and then simply select an existing partition and change its size."
+msgstr ""
+"如果你已经有 DOS 或 Windows 这样的其他操作系统存在，并想在安装 Debian 时保留"
+"它们， 你应该重新设置分区大小，释放更多的空间给 Debian 安装程序。 安装程序支"
+"持 FAT 和 NTFS 文件系统的尺寸修改；当你走到安装程序的分区步骤， 选择手动分"
+"区，只需选择该分区，并更改其尺寸。"
+
+#. Tag: para
+#: partitioning.xml:698
+#, no-c-format
+msgid ""
+"The PC BIOS generally adds additional constraints for disk partitioning. "
+"There is a limit to how many <quote>primary</quote> and <quote>logical</"
+"quote> partitions a drive can contain. Additionally, with pre 1994-98 BIOS, "
+"there are limits to where on the drive the BIOS can boot from. More "
+"information can be found in the <ulink url=\"&url-partition-howto;\">Linux "
+"Partition HOWTO</ulink> and the <ulink url=\"&url-phoenix-bios-faq-large-"
+"disk;\">Phoenix BIOS FAQ</ulink>, but this section will include a brief "
+"overview to help you plan most situations."
+msgstr ""
+"PC BIOS 一般会对磁盘分区加入一些约束。比如一个磁盘驱动可以含有多少个 <quote>"
+"主 (primry) </quote> 和 <quote> 逻辑 </quote> 分区。在 1994-1998 年的 BIOS "
+"里，还有关于 BIOS 能够从什么地方引导的限制。 详细的信息可以在 <ulink url="
+"\"&url-partition-howto;\">Linux Partition HOWTO</ulink> 以及 <ulink url="
+"\"&url-phoenix-bios-faq-large-disk;\">Phoenix BIOS FAQ</ulink> 中找到。但是这"
+"一节将包含一个简单的介绍来帮助在大部分情况下进行规划。"
+
+#. Tag: para
+#: partitioning.xml:710
+#, no-c-format
+msgid ""
+"<quote>Primary</quote> partitions are the original partitioning scheme for "
+"PC disks. However, there can only be four of them. To get past this "
+"limitation, <quote>extended</quote> and <quote>logical</quote> partitions "
+"were invented. By setting one of your primary partitions as an extended "
+"partition, you can subdivide all the space allocated to that partition into "
+"logical partitions. You can create up to 60 logical partitions per extended "
+"partition; however, you can only have one extended partition per drive."
+msgstr ""
+"<quote>Primary</quote> 分区是 PC 磁盘上最原始的分区方案。但是，每个磁盘只能含"
+"有四个主分区。 为了突破这个限制，发明了 <quote>拓展 (extended)</quote> 以及 "
+"<quote> 逻辑 </quote> 分区。通过设置一个主分区为拓展分区，你可以把它相关的分"
+"区划分成逻辑分区。 你最多可以为每个拓展分区分配多至 60 逻辑驱动器；但是每个磁"
+"盘你只能含有一个拓展分区。"
+
+#. Tag: para
+#: partitioning.xml:721
+#, no-c-format
+msgid ""
+"Linux limits the partitions per drive to 15 partitions for SCSI disks (3 "
+"usable primary partitions, 12 logical partitions), and 63 partitions on an "
+"IDE drive (3 usable primary partitions, 60 logical partitions). However the "
+"normal &debian; system provides only 20 devices for partitions, so you may "
+"not install on partitions higher than 20 unless you first manually create "
+"devices for those partitions."
+msgstr ""
+"对于 SCSI 来说，Linux 限制每个驱动器最多有15个分区 (3 个可用的主分区，12个逻"
+"辑分区)。 对于 IDE 来说可以有 63 个分区 (3个可用的主分区，60个逻辑分区)。但是"
+"对于正常的 &debian; 版本来说，系统只支持20个分区设备，因此你你可能不能安装超"
+"过20个的分区，除非你为这些首先 手工创建了设备文件。"
+
+#. Tag: para
+#: partitioning.xml:731
+#, no-c-format
+msgid ""
+"If you have a large IDE disk, and are using neither LBA addressing, nor "
+"overlay drivers (sometimes provided by hard disk manufacturers), then the "
+"boot partition (the partition containing your kernel image) must be placed "
+"within the first 1024 cylinders of your hard drive (usually around 524 "
+"megabytes, without BIOS translation)."
+msgstr ""
+"如果你有一个巨大的 IDE 磁盘，并且既没有使用 LBA 寻址，也没有拓展驱动器 (硬盘"
+"制造商有时候提供 此功能)，那么引导分区 (含有你内核映像的分区) 必须放置在硬盘"
+"第一个1024柱面内。 (大约有 524MB 大，在没有 BIOS 转换的情况下)。"
+
+#. Tag: para
+#: partitioning.xml:739
+#, no-c-format
+msgid ""
+"This restriction doesn't apply if you have a BIOS newer than around 1995-98 "
+"(depending on the manufacturer) that supports the <quote>Enhanced Disk Drive "
+"Support Specification</quote>. Both Lilo, the Linux loader, and Debian's "
+"alternative <command>mbr</command> must use the BIOS to read the kernel from "
+"the disk into RAM. If the BIOS int 0x13 large disk access extensions are "
+"found to be present, they will be utilized. Otherwise, the legacy disk "
+"access interface is used as a fall-back, and it cannot be used to address "
+"any location on the disk higher than the 1023rd cylinder. Once Linux is "
+"booted, no matter what BIOS your computer has, these restrictions no longer "
+"apply, since Linux does not use the BIOS for disk access."
+msgstr ""
+"如果你的 BIOS 在 1995-98 年之后出现 (取决于制造商) 并且支持 <quote>Enhanced "
+"Disk Drive Support Specification</quote> ，这个限制并不有效。Lilo，Linux "
+"Loader 以及 Debian's 的方案 <command>mbr</command> 必须使用 BIOS 来从磁盘读取"
+"内核至内存。如果 BIOS int 0x13 大硬盘访问拓展被打开， 则将被使用。否则会使用"
+"遗留的磁盘访问界面，并且它不能找到任何大于 1023rd 柱面。 一旦 Linux 被引导"
+"后，不管你的计算机 BIOS 是什么，这些限制将不再起任何作用， 因为 Linux 并不使"
+"用 BIOS 来进行磁盘寻址。"
+
+#. Tag: para
+#: partitioning.xml:753
+#, no-c-format
+msgid ""
+"If you have a large disk, you might have to use cylinder translation "
+"techniques, which you can set from your BIOS setup program, such as LBA "
+"(Logical Block Addressing) or CHS translation mode (<quote>Large</quote>). "
+"More information about issues with large disks can be found in the <ulink "
+"url=\"&url-large-disk-howto;\">Large Disk HOWTO</ulink>. If you are using a "
+"cylinder translation scheme, and the BIOS does not support the large disk "
+"access extensions, then your boot partition has to fit within the "
+"<emphasis>translated</emphasis> representation of the 1024th cylinder."
+msgstr ""
+"如果你有一个大硬盘，你也许必须使用柱面转换 (cylinder translation) 技术。它可"
+"以在你的 BIOS 设置程序中打开，比如 LBA (Logical Block Addressing) 或者 CHS 转"
+"换模式 (<quote>Large</quote>) 。关于大硬盘的各种问题可以在 <ulink url=\"&url-"
+"large-disk-howto;\">Large Disk HOWTO</ulink>下找到。如果你正在使用一个柱面转"
+"换方案，并且 BIOS 并不支持大硬盘访问拓展， 你的引导分区必须放置在 <emphasis>"
+"转换后</emphasis> 的 1024 柱面内。"
+
+#. Tag: para
+#: partitioning.xml:765
+#, no-c-format
+msgid ""
+"The recommended way of accomplishing this is to create a small (5-10MB "
+"should suffice) partition at the beginning of the disk to be used as the "
+"boot partition, and then create whatever other partitions you wish to have, "
+"in the remaining area. This boot partition <emphasis>must</emphasis> be "
+"mounted on <filename>/boot</filename>, since that is the directory where the "
+"Linux kernel(s) will be stored. This configuration will work on any system, "
+"regardless of whether LBA or large disk CHS translation is used, and "
+"regardless of whether your BIOS supports the large disk access extensions."
+msgstr ""
+"解决这个问题的推荐方法是在磁盘开始处创建一个小的 (5-10MB 足矣) 分区来作为引导"
+"分区。 并且在其它地方创建其它的分区。这个引导分区 <emphasis>必须</emphasis>挂"
+"接至<filename>/boot</filename>下，这是因为它是 Linux 内核放置的地方。这样的配"
+"置将可以在任意系统上工作， 不管 LBA 或者大硬盘 CHS 转换是否起作用，甚至也不管"
+"你的 BIOS 是否支持大硬盘访问拓展。"
+
+#. Tag: para
+#: partitioning.xml:787
+#, no-c-format
+msgid ""
+"The <command>partman</command> disk partitioner is the default partitioning "
+"tool for the installer. It manages the set of partitions and their mount "
+"points to ensure that the disks and filesystems is properly configured for a "
+"successful installation. It actually uses the <command>parted</command> to "
+"do the on-disk partitioning."
+msgstr ""
+"<command>partman</command> 是安装程序的缺省分区工具。它管理一系列分区以及挂接"
+"点来保证磁盘和文件系统对于成功的安装来说具有有合适的配置。 实际上它使用的是 "
+"<command>parted</command> 来进行磁盘分区的。"
+
+#. Tag: title
+#: partitioning.xml:799
+#, no-c-format
+msgid "EFI Recognized Formats"
+msgstr "EFI 能够识别的格式"
+
+#. Tag: para
+#: partitioning.xml:800
+#, no-c-format
+msgid ""
+"The IA64 EFI firmware supports two partition table (or disk label) formats, "
+"GPT and MS-DOS. MS-DOS, the format typically used on i386 PCs, is no longer "
+"recommended for IA64 systems. Although the installer also provides the "
+"<command>cfdisk</command>, you should only use the <ulink url=\"parted.txt"
+"\"> <command>parted</command></ulink> because only it can manage both GPT "
+"and MS-DOS tables correctly."
+msgstr ""
+"IA64 EFI 固件支持 GPT 和 MS-DOS 两种分区表 (或者磁盘标记) 格式。 MS-DOS 格式"
+"通常用在 i386 PC 上，并且对于 IA64 系统来说并不合适推荐使用。 尽管安装程序同"
+"时提供了 <command>cfdisk</command> 你应该只采用 <ulink url=\"parted.txt\"> "
+"<command>parted</command></ulink> 因为只有它能够同时正确地管理 GPT 和 MS-DOS "
+"分区表。"
+
+#. Tag: para
+#: partitioning.xml:812
+#, no-c-format
+msgid ""
+"The automatic partitioning recipes for <command>partman</command> allocate "
+"an EFI partition as the first partition on the disk. You can also set up the "
+"partition under the <guimenuitem>Guided partitioning</guimenuitem> from the "
+"main menu in a manner similar to setting up a <emphasis>swap</emphasis> "
+"partition."
+msgstr ""
+"<command>partman</command> 自动分区方案会分配一个 EFI 分区作为磁盘上的第一个"
+"分区。 你也可以在主菜单下选择 <guimenuitem>Guided partitioning</guimenuitem> "
+"配置分区。其方法类似设置一个 <emphasis>交换</emphasis> 分区。"
+
+#. Tag: para
+#: partitioning.xml:820
+#, no-c-format
+msgid ""
+"The <command>partman</command> partitioner will handle most disk layouts. "
+"For those rare cases where it is necessary to manually set up a disk, you "
+"can use the shell as described above and run the <command>parted</command> "
+"utility directly using its command line interface. Assuming that you want to "
+"erase your whole disk and create a GPT table and some partitions, then "
+"something similar to the following command sequence could be used: "
+"<informalexample><screen>\n"
+"      mklabel gpt\n"
+"      mkpartfs primary fat 0 50\n"
+"      mkpartfs primary linux-swap 51 1000\n"
+"      mkpartfs primary ext2 1001 3000\n"
+"      set 1 boot on\n"
+"      print\n"
+"      quit\n"
+"</screen></informalexample> This creates a new partition table, and three "
+"partitions to be used as an EFI boot partition, swap space, and a root file "
+"system. Finally it sets the boot flag on the EFI partition. Partitions are "
+"specified in Megabytes, with start and end offsets from the beginning of the "
+"disk. So, for example, above we created a 1999MB ext2 file system starting "
+"at offset 1001MB from the start of the disk. Note that formatting swap space "
+"with <command>parted</command> can take a few minutes to complete, as it "
+"scans the partition for bad blocks."
+msgstr ""
+"<command>partman</command> 分区员将掌握大部分的磁盘布局。对于那些需要手工设置"
+"磁盘的罕见例子， 你可以按照上面方法采用 shell 并且直接运行 <command>parted</"
+"command> 工具下的明令行界面。比如你想擦除你的整个硬盘并且创立一个 GPT 分区表"
+"以及一些分区， 则可以才采用类似下面命令的方法： <informalexample><screen>\n"
+"      mklabel gpt\n"
+"      mkpartfs primary fat 0 50\n"
+"      mkpartfs primary linux-swap 51 1000\n"
+"      mkpartfs primary ext2 1001 3000\n"
+"      set 1 boot on\n"
+"      print\n"
+"      quit\n"
+"</screen></informalexample> 这里创建了一个新的分区表，以及三个分区分别用做 "
+"EFI 引导分区，交换空间以及一个根文件系统。 最后它设置了 EFI 分区的引导标记。"
+"分区将用兆字节以及起始和结束位置到磁盘开始的偏移量来表示。 因此，比如在上面我"
+"们在到磁盘开始处偏移量为 1001MB 的地方开始创建了一个 1999MB ext2 文件 系统。"
+"注意采用 <command>parted</command> 格式化交换分区可能要花一些时间来完成，因为"
+"它可能要扫描坏区。"
+
+#. Tag: title
+#: partitioning.xml:845
+#, no-c-format
+msgid "Boot Loader Partition Requirements"
+msgstr "引导装载器分区要求"
+
+#. Tag: para
+#: partitioning.xml:847
+#, no-c-format
+msgid ""
+"ELILO, the ia64 boot loader, requires a partition containing a FAT file "
+"system with the <userinput>boot</userinput> flag set. The partition must be "
+"big enough to hold the boot loader and any kernels or RAMdisks you may wish "
+"to boot. A minimum size would be about 20MB, but if you expect to run with "
+"multiple kernels, then 128MB might be a better size."
+msgstr ""
+"ELILO 作为一种 ia64 引导装载器需要一个含有 FAT 文件系统的分区。且此分区标记"
+"为 <userinput>boot</userinput>。分区必须足够大以便能够放入引导装载器，你想引"
+"导的内核以及 RAMdisks 内存磁盘镜像。 最小的尺寸大概有 20MB ，但是如果你想使用"
+"多个内核的话，128MB 也许更好。"
+
+#. Tag: para
+#: partitioning.xml:856
+#, no-c-format
+msgid ""
+"The EFI Boot Manager and the EFI Shell fully support the GPT table so the "
+"boot partition does not necessarily have to be the first partition or even "
+"on the same disk. This is convenient if you should forget to allocate the "
+"partition and only find out after you have formatted the other partitions on "
+"your disk(s). The <command>partman</command> partitioner checks for an EFI "
+"partition at the same time it checks for a properly set up <emphasis>root</"
+"emphasis> partition. This gives you an opportunity to correct the disk "
+"layout before the package install begins. The easiest way to correct this "
+"omission is to shrink the last partition of the disk to make enough free "
+"space for adding an EFI partition."
+msgstr ""
+"因为 EFI Boot Manager 以及 EFI Shell 完全支持 GPT 表格所以引导分区不需要一定"
+"是第一个 分区，甚至可以不在本地磁盘上。这样方便你在格式化磁盘上的其它分区后再"
+"决定。<command>partman</command> 分区程序将在设置 <emphasis>root</emphasis> "
+"分区时会同时检查一个 EFI 分区。这样你就有机会在开始安装软件包之前检查磁盘的布"
+"局。 纠正这个问题的最简单的方法是在最后一个分区末尾留下足够的磁盘空间来加入一"
+"个 EFI 分区。"
+
+#. Tag: para
+#: partitioning.xml:871
+#, no-c-format
+msgid ""
+"It is strongly recommended that you allocate the EFI boot partition on the "
+"same disk as the <emphasis>root</emphasis> filesystem."
+msgstr ""
+"强烈建议你把 EFI 引导分区和 <emphasis>root</emphasis> 文件系统分配在同一个磁"
+"盘上。"
+
+#. Tag: title
+#: partitioning.xml:880
+#, no-c-format
+msgid "EFI Diagnostic Partitions"
+msgstr "EFI 诊断分区"
+
+#. Tag: para
+#: partitioning.xml:882
+#, no-c-format
+msgid ""
+"The EFI firmware is significantly more sophisticated than the usual BIOS "
+"seen on most x86 PCs. Some system vendors take advantage of the ability of "
+"the EFI to access files and run programs from a hard disk filesystem to "
+"store diagnostics and EFI based system management utilities on the hard "
+"disk. This is a separate FAT format filesystem on the system disk. Consult "
+"the system documentation and accessories that come with the system for "
+"details. The easiest time to set up a diagnostics partition is at the same "
+"time you set up the EFI boot partition."
+msgstr ""
+"对于在大多数 x86 PCs 上常见的 BIOS 来说，EFI 固件明显要复杂的多。一些系统制造"
+"商利用 EFI 的 优点从硬盘文件系统来访问文件以及运行程序以保存一些诊断信息和 "
+"EFI 的系统管理工具。 这将在系统磁盘上存在一个分开的 FAT 文件系统。请查阅随机"
+"相关的系统文档和附件以获得细节。 最轻松设置一个诊断分区的时候是在设置 EFI 引"
+"导分区的时候。"
+
+#. Tag: para
+#: partitioning.xml:905
+#, no-c-format
+msgid ""
+"SGI Indys require an SGI disk label in order to make the system bootable "
+"from hard disk. It can be created in the fdisk expert menu. The thereby "
+"created volume header(partition number 9) should be at least 3MB large. If "
+"the volume header created is too small, you can simply delete partition "
+"number 9 and re-add it with a different size. Note that the volume header "
+"must start at sector 0."
+msgstr ""
+"SGI Indys 需要一个 SGI 磁盘标记来确保系统能够从硬盘上引导。它能够在 fdisk "
+"expert menu 下创建。 因此创建的 volume header (分区号 9) 应该有至少 3MB 大。"
+"但是为了能够保存各种不同的 内核，我们推荐 10 MB 大小。如果 volume header 创建"
+"的太小，你可以简单的删除分区号 9 并且 重新加入另外不同的尺寸。注意 volume "
+"header 必须从0号扇区开始。"
+
+#. Tag: title
+#: partitioning.xml:922
+#, no-c-format
+msgid "Partitioning Newer PowerMacs"
+msgstr "为较新的 PowerMacs 分区"
+
+#. Tag: para
+#: partitioning.xml:923
+#, no-c-format
+msgid ""
+"If you are installing onto a NewWorld PowerMac you must create a special "
+"bootstrap partition to hold the boot loader. The size of this partition must "
+"be 800KB and its partition type must be <emphasis>Apple_Bootstrap</"
+"emphasis>. If the bootstrap partition is not created with the "
+"<emphasis>Apple_Bootstrap</emphasis> type your machine cannot be made "
+"bootable from the hard disk. This partition can easily be created by "
+"creating a new partition in <command>partman</command> and telling it to use "
+"it as a <quote>NewWorld boot partition</quote>, or in <command>mac-fdisk</"
+"command> using the <userinput>b</userinput> command."
+msgstr ""
+"如果你正在一台 NewWorld PowerMac 上面安装，你必须创建一个特殊的启动分区来驻留"
+"引导 装载器。这个分区的尺寸必须是 800KB 并且它的分区类型必须是 "
+"<emphasis>Apple_Bootstrap</emphasis>。如果启动分区并非 "
+"<emphasis>Apple_Bootstrap</emphasis> 类型则你的机器不能从硬盘上引导。可以采"
+"用 <command>partman</command> 并告诉它用它作为 <quote>NewWorld boot "
+"partition</quote>，或在 <command>mac-fdisk</command> 使用 <userinput>b</"
+"userinput> 命令。"
+
+#. Tag: para
+#: partitioning.xml:936
+#, no-c-format
+msgid ""
+"The special partition type Apple_Bootstrap is required to prevent MacOS from "
+"mounting and damaging the bootstrap partition, as there are special "
+"modifications made to it in order for OpenFirmware to boot it automatically."
+msgstr ""
+"这里要求特殊的分区类型 Apple_Bootstrap 来阻止 MacOS 挂接以及处理启动分区。因"
+"为里面 含有一些特殊修改的模式来让 OpenFirmware 能够自动启动它。"
+
+#. Tag: para
+#: partitioning.xml:943
+#, no-c-format
+msgid ""
+"Note that the bootstrap partition is only meant to hold 3 very small files: "
+"the <command>yaboot</command> binary, its configuration <filename>yaboot."
+"conf</filename>, and a first stage OpenFirmware loader <command>ofboot.b</"
+"command>. It need not and must not be mounted on your file system nor have "
+"kernels or anything else copied to it. The <command>ybin</command> and "
+"<command>mkofboot</command> utilities are used to manipulate this partition."
+msgstr ""
+"注意启动分区只含有三个非常小的文件：<command>yaboot</command> 可执行文件，它"
+"的配置文件 <filename>yaboot.conf</filename>，以及一个第一级 OpenFirmware 装载"
+"器 <command>ofboot.b</command>。它不需要，也一定不要被你的文件系统挂接，或者"
+"把内核以及其它文件放入在其中。<command>ybin</command> 和 <command>mkofboot</"
+"command> 工具可以用来维护这个分区。"
+
+#. Tag: para
+#: partitioning.xml:953
+#, no-c-format
+msgid ""
+"In order for OpenFirmware to automatically boot &debian; the bootstrap "
+"partition should appear before other boot partitions on the disk, especially "
+"MacOS boot partitions. The bootstrap partition should be the first one you "
+"create. However, if you add a bootstrap partition later, you can use "
+"<command>mac-fdisk</command>'s <userinput>r</userinput> command to reorder "
+"the partition map so the bootstrap partition comes right after the map "
+"(which is always partition 1). It's the logical map order, not the physical "
+"address order, that counts."
+msgstr ""
+"为了确保 OpenFirmware 能够自动引导 &debian; 启动分区应该先于其它磁盘上的引导"
+"分区， 特别是 MacOS 引导分区。启动分区应该是你第一个创建的分区。但是，如果你"
+"在其它情况下后 加入启动分区，你可以使用 <command>mac-fdisk</command> 的 "
+"<userinput>r</userinput> 命令来重新调整分区布局。这样启动分区就可以在随后时间"
+"内顺利使用 (它总是位于 1 号分区)。 注意的是，这只是逻辑布局顺序而不是物理地址"
+"顺序。"
+
+#. Tag: para
+#: partitioning.xml:965
+#, no-c-format
+msgid ""
+"Apple disks normally have several small driver partitions. If you intend to "
+"dual boot your machine with MacOSX, you should retain these partitions and a "
+"small HFS partition (800k is the minimum size). That is because MacOSX, on "
+"every boot, offers to initialize any disks which do not have active MacOS "
+"partitions and driver partitions."
+msgstr ""
+"Apple 磁盘通常有一些小的驱动分区。如果你想和 MacOSX 一起使用而采用双引导，你"
+"应该保持 这些分区以及一个小的 HFS 分区 (最少要求 800k)。这是因为 MacOSX 在每"
+"次启动的时候，会初始化 没有任何激活的 MacOS 分区以及驱动分区的磁盘。"
+
+#. Tag: para
+#: partitioning.xml:982
+#, no-c-format
+msgid ""
+"Make sure you create a <quote>Sun disk label</quote> on your boot disk. This "
+"is the only kind of partition scheme that the OpenBoot PROM understands, and "
+"so it's the only scheme from which you can boot. The <keycap>s</keycap> key "
+"is used in <command>fdisk</command> to create Sun disk labels."
+msgstr ""
+"首先确保在你的引导磁盘上面创建有一个 <quote>Sun 磁盘标记</quote> 。这是 "
+"OpenBoot PROM 唯一懂得的分区方式因此它是唯一能够被引导的分区类型。可以在 "
+"<keycap>s</keycap> 中用 <command>fdisk</command> 键来创建 Sun 磁盘标记。"
+
+#. Tag: para
+#: partitioning.xml:990
+#, no-c-format
+msgid ""
+"Furthermore, on &arch-title; disks, make sure your first partition on your "
+"boot disk starts at cylinder 0. While this is required, it also means that "
+"the first partition will contain the partition table and the boot block, "
+"which are the first two sectors of the disk. You must <emphasis>not</"
+"emphasis> put swap on the first partition of the boot drive, since swap "
+"partitions do not preserve the first few sectors of the partition. You can "
+"put Ext2 or UFS partitions there; these will leave the partition table and "
+"the boot block alone."
+msgstr ""
+"进一步来说，在 &arch-title; 磁盘里，请确定你的引导磁盘的第一分区是从 "
+"cylinder 0 开始的。 在这里这是必须的，这意味着第一个分区将含有分区表以及引导"
+"块。它们通常在磁盘的前两个扇区内。你 必须 <emphasis>not</emphasis> 能设置引导"
+"磁盘的第一分区为交换分区，因为交换分区并不能保留分区前两个扇区。 你可以放置 "
+"Ext2 或者 UFS 分区在那里；它们将隔离分区表和引导块。"
+
+#. Tag: para
+#: partitioning.xml:1001
+#, no-c-format
+msgid ""
+"It is also advised that the third partition should be of type <quote>Whole "
+"disk</quote> (type 5), and contain the entire disk (from the first cylinder "
+"to the last). This is simply a convention of Sun disk labels, and helps the "
+"<command>SILO</command> boot loader keep its bearings."
+msgstr ""
+"这里建议第三个分区应该是 <quote>Whole disk</quote>(type 5)，并且包含整个磁盘 "
+"(从第一个柱面至最后一个)，这是 Sun 磁盘格式的惯例， 并且确保 <command>SILO</"
+"command> 引导装载器工作良好。"
+
+#~ msgid ""
+#~ "Atari-aware version of <command>fdisk</command>; read the <ulink url="
+#~ "\"atari-fdisk.txt\">atari-fdisk manual page</ulink>."
+#~ msgstr ""
+#~ "理解 Atari 的 <command>fdisk</command>版本；请阅读 <ulink url=\"atari-"
+#~ "fdisk.txt\">atari-fdisk 手册页</ulink>。"
+
+#~ msgid ""
+#~ "Amiga-aware version of <command>fdisk</command>; read the <ulink url="
+#~ "\"amiga-fdisk.txt\">amiga-fdisk manual page</ulink>."
+#~ msgstr ""
+#~ "理解 Amiga 的 <command>fdisk</command>版本；请阅读 <ulink url=\"amiga-"
+#~ "fdisk.txt\">amiga-fdisk 手册页</ulink>。"
+
+#~ msgid ""
+#~ "Mac-aware version of <command>fdisk</command>; read the <ulink url=\"mac-"
+#~ "fdisk.txt\">mac-fdisk manual page</ulink>."
+#~ msgstr ""
+#~ "理解 Mac 的 <command>fdisk</command>版本；请阅读 <ulink url=\"mac-fdisk."
+#~ "txt\">mac-fdisk 手册页</ulink>。"
