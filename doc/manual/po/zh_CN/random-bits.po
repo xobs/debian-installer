@@ -429,12 +429,15 @@ msgstr ""
 "# \n"
 "# While you're at it, you may want to throw a debconf/priority=critical in\n"
 "# there, to avoid most questions even if the preseeding below misses some.\n"
-"# And you might set the timeout to 1 in syslinux.cfg to avoid needing to hit\n"
+"# And you might set the timeout to 1 in syslinux.cfg to avoid needing to "
+"hit\n"
 "# enter to boot the installer.\n"
 "#\n"
-"# Language, country, and keyboard selection cannot be preseeded from a file,\n"
+"# Language, country, and keyboard selection cannot be preseeded from a "
+"file,\n"
 "# because the questions are asked before the preseed file can be loaded.\n"
-"# Instead, to avoid these questions, pass some more parameters to the kernel:\n"
+"# Instead, to avoid these questions, pass some more parameters to the "
+"kernel:\n"
 "#\n"
 "#    languagechooser/language-name=English\n"
 "#    countrychooser/shortlist=US\n"
@@ -533,7 +536,8 @@ msgstr ""
 "#d-i partman-auto/choose_recipe         select Multi-user workstation\n"
 "\n"
 "# Or provide a recipe of your own...\n"
-"# The recipe format is documented in the file devel/partman-auto-recipe.txt.\n"
+"# The recipe format is documented in the file devel/partman-auto-recipe."
+"txt.\n"
 "# If you have a way to get a recipe file into the d-i environment, you can\n"
 "# just point at it.\n"
 "#d-i partman-auto/expert_recipe_file    string /hd-media/recipe\n"
@@ -576,11 +580,13 @@ msgstr ""
 "# instead, uncomment this:\n"
 "#d-i grub-installer/skip                boolean true\n"
 "\n"
-"# This is fairly safe to set, it makes grub install automatically to the MBR\n"
+"# This is fairly safe to set, it makes grub install automatically to the "
+"MBR\n"
 "# if no other operating system is detected on the machine.\n"
 "d-i  grub-installer/only_debian         boolean true\n"
 "\n"
-"# This one makes grub-installer install to the MBR if if finds some other OS\n"
+"# This one makes grub-installer install to the MBR if if finds some other "
+"OS\n"
 "# too, which is less safe as it might not be able to boot that other OS.\n"
 "d-i  grub-installer/with_other_os       boolean true\n"
 "\n"
@@ -604,7 +610,8 @@ msgstr ""
 "# Avoid the final message.\n"
 "base-config  base-config/login          note\n"
 "\n"
-"# If you installed a display manager, but don't want to start it immediately\n"
+"# If you installed a display manager, but don't want to start it "
+"immediately\n"
 "# after base-config finishes.\n"
 "#base-config base-config/start-display-manager        boolean false\n"
 "\n"
@@ -681,7 +688,8 @@ msgstr ""
 "# aptitude. You can also choose to install no tasks, and force the\n"
 "# installation of a set of packages in some other way.\n"
 "tasksel      tasksel/first   multiselect Desktop environment\n"
-"#tasksel     tasksel/first   multiselect Web server, Mail server, DNS server\n"
+"#tasksel     tasksel/first   multiselect Web server, Mail server, DNS "
+"server\n"
 "\n"
 "###### Mailer configuration.\n"
 "\n"
@@ -715,7 +723,8 @@ msgstr ""
 "# Uncomment if you have an LCD display.\n"
 "#xserver-xfree86 xserver-xfree86/config/monitor/lcd   boolean true\n"
 "# X has three configuration paths for the monitor. Here's how to preseed\n"
-"# the \"medium\" path, which is always available. The \"simple\" path may not\n"
+"# the \"medium\" path, which is always available. The \"simple\" path may "
+"not\n"
 "# be available, and the \"advanced\" path asks too many questions.\n"
 "xserver-xfree86  xserver-xfree86/config/monitor/selection-method \\\n"
 "    select medium\n"
@@ -742,9 +751,11 @@ msgstr ""
 "\n"
 "# More flexibly, this runs a shell command and if it outputs the names of\n"
 "# preseed files, includes those files. For example, to switch configs based\n"
-"# on a particular usb storage device (in this case, a built-in card reader):\n"
+"# on a particular usb storage device (in this case, a built-in card "
+"reader):\n"
 "#d-i preseed/include_command            string \\\n"
-"#    if $(grep -q \"GUID: 0aec3050aec305000001a003\" /proc/scsi/usb-storage-*/*); \\\n"
+"#    if $(grep -q \"GUID: 0aec3050aec305000001a003\" /proc/scsi/usb-storage-"
+"*/*); \\\n"
 "#    then echo kraken.cfg; else echo otherusb.cfg; fi"
 
 #. Tag: title
@@ -1169,17 +1180,17 @@ msgid "Disk Space Needed for Tasks"
 msgstr "各软件集所需的磁盘空间"
 
 #. Tag: para
-#: random-bits.xml:212
-#, no-c-format
+#: random-bits.xml:223
+#, fuzzy, no-c-format
 msgid ""
-"The base sarge installation for i386, including all standard packages, "
-"requires 178MB of disk space."
+"The base sarge installation for i386 using the default 2.4 kernel, including "
+"all standard packages, requires 573MB of disk space."
 msgstr ""
 "在 i386 架构上，基本的 sarge 安装需要 178MB 的磁盘空间，这其中以包含了 所有的"
 "标准软件包。"
 
 #. Tag: para
-#: random-bits.xml:217
+#: random-bits.xml:228
 #, no-c-format
 msgid ""
 "The following table lists sizes reported by aptitude for the tasks listed in "
@@ -1191,190 +1202,229 @@ msgstr ""
 "aptitude 生成的。请注意，有些软件集之间会有相重叠的部分，所以两个软件集一同 "
 "安装后所占的空间，可能会小于这两个软件集分别安装所占的空间。"
 
+#. Tag: para
+#: random-bits.xml:235
+#, no-c-format
+msgid ""
+"Note that you will need to add the sizes listed in the table to the size of "
+"the base sarge installation when determining the size of partitions. Most of "
+"the size listed as <quote>Installed size</quote> will end up in <filename>/"
+"usr</filename>; the size listed as <quote>Download size</quote> is "
+"(temporarily) required in <filename>/var</filename>."
+msgstr ""
+
 #. Tag: entry
-#: random-bits.xml:229
+#: random-bits.xml:248
 #, no-c-format
 msgid "Task"
 msgstr "任务"
 
 #. Tag: entry
-#: random-bits.xml:230
+#: random-bits.xml:249
 #, no-c-format
 msgid "Installed size (MB)"
 msgstr "安装尺寸 (MB)"
 
 #. Tag: entry
-#: random-bits.xml:231
+#: random-bits.xml:250
 #, no-c-format
 msgid "Download size (MB)"
 msgstr "下载尺寸 (MB)"
 
 #. Tag: entry
-#: random-bits.xml:232
+#: random-bits.xml:251
 #, no-c-format
 msgid "Space needed to install (MB)"
 msgstr "用于安装所需空间 (MB)"
 
 #. Tag: entry
-#: random-bits.xml:238
+#: random-bits.xml:257
 #, no-c-format
 msgid "Desktop"
 msgstr "桌面"
 
 #. Tag: entry
-#: random-bits.xml:239
+#: random-bits.xml:258
 #, no-c-format
-msgid "1537"
-msgstr "1537"
+msgid "1392"
+msgstr ""
 
 #. Tag: entry
-#: random-bits.xml:240
-#, no-c-format
-msgid "<entry>521</entry>"
-msgstr "<entry>521</entry>"
+#: random-bits.xml:259
+#, fuzzy, no-c-format
+msgid "<entry>460</entry>"
+msgstr "<entry>240</entry>"
 
 #. Tag: entry
-#: random-bits.xml:241
+#: random-bits.xml:260
 #, no-c-format
-msgid "2058"
-msgstr "2058"
+msgid "1852"
+msgstr ""
 
 #. Tag: entry
-#: random-bits.xml:245
+#: random-bits.xml:264
 #, no-c-format
 msgid "Web server"
 msgstr "Web 服务器"
 
 #. Tag: entry
-#: random-bits.xml:246
-#, no-c-format
-msgid "<entry>71</entry>"
-msgstr "<entry>71</entry>"
+#: random-bits.xml:265
+#, fuzzy, no-c-format
+msgid "<entry>36</entry>"
+msgstr "<entry>33</entry>"
 
 #. Tag: entry
-#: random-bits.xml:247
-#, no-c-format
-msgid "<entry>21</entry>"
-msgstr "<entry>21</entry>"
-
-#. Tag: entry
-#: random-bits.xml:248
-#, no-c-format
-msgid "<entry>92</entry>"
-msgstr "<entry>92</entry>"
-
-#. Tag: entry
-#: random-bits.xml:252
-#, no-c-format
-msgid "Print server"
-msgstr "打印服务器"
-
-#. Tag: entry
-#: random-bits.xml:253
-#, no-c-format
-msgid "<entry>240</entry>"
-msgstr "<entry>240</entry>"
-
-#. Tag: entry
-#: random-bits.xml:254
-#, no-c-format
-msgid "<entry>83</entry>"
-msgstr "<entry>83</entry>"
-
-#. Tag: entry
-#: random-bits.xml:255
-#, no-c-format
-msgid "<entry>323</entry>"
-msgstr "<entry>323</entry>"
-
-#. Tag: entry
-#: random-bits.xml:259
-#, no-c-format
-msgid "Mail server"
-msgstr "邮件服务器"
-
-#. Tag: entry
-#: random-bits.xml:260
-#, no-c-format
-msgid "<entry>41</entry>"
-msgstr "<entry>41</entry>"
-
-#. Tag: entry
-#: random-bits.xml:261
+#: random-bits.xml:266
 #, no-c-format
 msgid "<entry>12</entry>"
 msgstr "<entry>12</entry>"
 
 #. Tag: entry
-#: random-bits.xml:262
-#, no-c-format
-msgid "<entry>53</entry>"
-msgstr "<entry>53</entry>"
+#: random-bits.xml:267
+#, fuzzy, no-c-format
+msgid "<entry>48</entry>"
+msgstr "<entry>34</entry>"
 
 #. Tag: entry
-#: random-bits.xml:266
+#: random-bits.xml:271
+#, no-c-format
+msgid "Print server"
+msgstr "打印服务器"
+
+#. Tag: entry
+#: random-bits.xml:272
+#, fuzzy, no-c-format
+msgid "<entry>168</entry>"
+msgstr "<entry>108</entry>"
+
+#. Tag: entry
+#: random-bits.xml:273
+#, fuzzy, no-c-format
+msgid "<entry>58</entry>"
+msgstr "<entry>85</entry>"
+
+#. Tag: entry
+#: random-bits.xml:274
+#, fuzzy, no-c-format
+msgid "<entry>226</entry>"
+msgstr "<entry>12</entry>"
+
+#. Tag: entry
+#: random-bits.xml:278
+#, fuzzy, no-c-format
+msgid "DNS server"
+msgstr "Web 服务器"
+
+#. Tag: entry
+#: random-bits.xml:279
+#, fuzzy, no-c-format
+msgid "<entry>2</entry>"
+msgstr "<entry>21</entry>"
+
+#. Tag: entry
+#: random-bits.xml:280
+#, fuzzy, no-c-format
+msgid "<entry>1</entry>"
+msgstr "<entry>71</entry>"
+
+#. Tag: entry
+#: random-bits.xml:281 random-bits.xml:294
+#, fuzzy, no-c-format
+msgid "<entry>3</entry>"
+msgstr "<entry>83</entry>"
+
+#. Tag: entry
+#: random-bits.xml:285
 #, no-c-format
 msgid "File server"
 msgstr "文件服务器"
 
 #. Tag: entry
-#: random-bits.xml:267
-#, no-c-format
-msgid "<entry>85</entry>"
-msgstr "<entry>85</entry>"
-
-#. Tag: entry
-#: random-bits.xml:268
-#, no-c-format
-msgid "<entry>34</entry>"
+#: random-bits.xml:286
+#, fuzzy, no-c-format
+msgid "<entry>47</entry>"
 msgstr "<entry>34</entry>"
 
 #. Tag: entry
-#: random-bits.xml:269
-#, no-c-format
-msgid "<entry>119</entry>"
-msgstr "<entry>119</entry>"
+#: random-bits.xml:287
+#, fuzzy, no-c-format
+msgid "<entry>24</entry>"
+msgstr "<entry>240</entry>"
 
 #. Tag: entry
-#: random-bits.xml:273
+#: random-bits.xml:288
+#, no-c-format
+msgid "<entry>71</entry>"
+msgstr "<entry>71</entry>"
+
+#. Tag: entry
+#: random-bits.xml:292
+#, no-c-format
+msgid "Mail server"
+msgstr "邮件服务器"
+
+#. Tag: entry
+#: random-bits.xml:293
+#, fuzzy, no-c-format
+msgid "<entry>10</entry>"
+msgstr "<entry>108</entry>"
+
+#. Tag: entry
+#: random-bits.xml:295
+#, fuzzy, no-c-format
+msgid "<entry>13</entry>"
+msgstr "<entry>33</entry>"
+
+#. Tag: entry
+#: random-bits.xml:299
 #, no-c-format
 msgid "SQL database"
 msgstr "SQL 数据库"
 
 #. Tag: entry
-#: random-bits.xml:274
-#, no-c-format
-msgid "<entry>108</entry>"
-msgstr "<entry>108</entry>"
-
-#. Tag: entry
-#: random-bits.xml:275
-#, no-c-format
-msgid "<entry>33</entry>"
+#: random-bits.xml:300
+#, fuzzy, no-c-format
+msgid "<entry>66</entry>"
 msgstr "<entry>33</entry>"
 
 #. Tag: entry
-#: random-bits.xml:276
+#: random-bits.xml:301
 #, no-c-format
-msgid "<entry>141</entry>"
-msgstr "<entry>141</entry>"
+msgid "<entry>21</entry>"
+msgstr "<entry>21</entry>"
+
+#. Tag: entry
+#: random-bits.xml:302
+#, fuzzy, no-c-format
+msgid "<entry>87</entry>"
+msgstr "<entry>85</entry>"
 
 #. Tag: para
-#: random-bits.xml:282
+#: random-bits.xml:308
 #, no-c-format
 msgid ""
 "The <emphasis>Desktop</emphasis> task will install both the Gnome and KDE "
 "desktop environments."
 msgstr "<emphasis>桌面</emphasis> 任务将同时安装 Gnome 和 KDE 桌面环境。"
 
+#. Tag: para
+#: random-bits.xml:315
+#, no-c-format
+msgid ""
+"If you install in a language other than English, <command>tasksel</command> "
+"may automatically install a <firstterm>localization task</firstterm>, if one "
+"is available for your language. Space requirements differ per language; you "
+"should allow up to 200MB in total for download and installation."
+msgstr ""
+
 #. Tag: title
-#: random-bits.xml:297
+#: random-bits.xml:330
 #, no-c-format
 msgid "Installing &debian; from a Unix/Linux System"
 msgstr "通过 Unix/Linux 系统来安装 &debian;"
 
 #. Tag: para
-#: random-bits.xml:299
+#: random-bits.xml:332
 #, no-c-format
 msgid ""
 "This section explains how to install &debian; from an existing Unix or Linux "
@@ -1395,7 +1445,7 @@ msgstr ""
 "chroot 环境中输入的。"
 
 #. Tag: para
-#: random-bits.xml:311
+#: random-bits.xml:344
 #, no-c-format
 msgid ""
 "Once you've got the new Debian system configured to your preference, you can "
@@ -1410,13 +1460,13 @@ msgstr ""
 "或者安装介质完成安装的权宜之计。"
 
 #. Tag: title
-#: random-bits.xml:323
+#: random-bits.xml:356
 #, no-c-format
 msgid "Getting Started"
 msgstr "准备运动"
 
 #. Tag: para
-#: random-bits.xml:324
+#: random-bits.xml:357
 #, no-c-format
 msgid ""
 "With your current *nix partitioning tools, repartition the hard drive as "
@@ -1429,7 +1479,7 @@ msgstr ""
 "X， 就需要至少 300MB 的空间了。"
 
 #. Tag: para
-#: random-bits.xml:331
+#: random-bits.xml:364
 #, no-c-format
 msgid ""
 "To create file systems on your partitions. For example, to create an ext3 "
@@ -1447,7 +1497,7 @@ msgstr ""
 "<userinput>-j</userinput>。"
 
 #. Tag: para
-#: random-bits.xml:341
+#: random-bits.xml:374
 #, no-c-format
 msgid ""
 "Initialize and activate swap (substitute the partition number for your "
@@ -1470,7 +1520,7 @@ msgstr ""
 "统)。 挂载点的名称是任意的，后面的步骤将会用到它。"
 
 #. Tag: screen
-#: random-bits.xml:353
+#: random-bits.xml:386
 #, no-c-format
 msgid ""
 "# mkdir /mnt/debinst\n"
@@ -1480,13 +1530,13 @@ msgstr ""
 "# mount /dev/hda6 /mnt/debinst"
 
 #. Tag: title
-#: random-bits.xml:359
+#: random-bits.xml:392
 #, no-c-format
 msgid "Install <command>debootstrap</command>"
 msgstr "安装 <command>debootstrap</command>"
 
 #. Tag: para
-#: random-bits.xml:360
+#: random-bits.xml:393
 #, no-c-format
 msgid ""
 "The tool that the Debian installer uses, which is recognized as the official "
@@ -1503,7 +1553,7 @@ msgstr ""
 "载并安装 <command>debootstrap</command>。"
 
 #. Tag: para
-#: random-bits.xml:370
+#: random-bits.xml:403
 #, no-c-format
 msgid ""
 "If you have an rpm-based system, you can use alien to convert the .deb into ."
@@ -1515,7 +1565,7 @@ msgstr ""
 "debian.org/~blade/install/debootstrap\"></ulink>"
 
 #. Tag: para
-#: random-bits.xml:376
+#: random-bits.xml:409
 #, no-c-format
 msgid ""
 "Or, you can use the following procedure to install it manually. Make a work "
@@ -1541,7 +1591,7 @@ msgstr ""
 "的权限。"
 
 #. Tag: screen
-#: random-bits.xml:391
+#: random-bits.xml:424
 #, no-c-format
 msgid ""
 "# tar -xf debootstrap_0.X.X_arch.deb\n"
@@ -1553,13 +1603,13 @@ msgstr ""
 "# zcat /full-path-to-work/work/data.tar.gz | tar xv"
 
 #. Tag: title
-#: random-bits.xml:397
+#: random-bits.xml:430
 #, no-c-format
 msgid "Run <command>debootstrap</command>"
 msgstr "运行 <command>debootstrap</command>"
 
 #. Tag: para
-#: random-bits.xml:398
+#: random-bits.xml:431
 #, no-c-format
 msgid ""
 "<command>debootstrap</command> can download the needed files directly from "
@@ -1575,7 +1625,7 @@ msgstr ""
 "README.mirrors\"></ulink>。"
 
 #. Tag: para
-#: random-bits.xml:407
+#: random-bits.xml:440
 #, no-c-format
 msgid ""
 "If you have a &releasename; &debian; CD mounted at <filename>/cdrom</"
@@ -1587,7 +1637,7 @@ msgstr ""
 "debian/</userinput>"
 
 #. Tag: para
-#: random-bits.xml:413
+#: random-bits.xml:446
 #, no-c-format
 msgid ""
 "Substitute one of the following for <replaceable>ARCH</replaceable> in the "
@@ -1607,7 +1657,7 @@ msgstr ""
 "<userinput>sparc</userinput>。"
 
 #. Tag: screen
-#: random-bits.xml:430
+#: random-bits.xml:463
 #, no-c-format
 msgid ""
 "# /usr/sbin/debootstrap --arch ARCH &releasename; \\\n"
@@ -1617,13 +1667,13 @@ msgstr ""
 "http://http.us.debian.org/debian"
 
 #. Tag: title
-#: random-bits.xml:436
+#: random-bits.xml:469
 #, no-c-format
 msgid "Configure The Base System"
 msgstr "基系统的配置"
 
 #. Tag: para
-#: random-bits.xml:437
+#: random-bits.xml:470
 #, no-c-format
 msgid ""
 "Now you've got a real Debian system, though rather lean, on disk. "
@@ -1633,19 +1683,19 @@ msgstr ""
 "<command>Chroot</command> 用来进入该系统："
 
 #. Tag: screen
-#: random-bits.xml:442
+#: random-bits.xml:475
 #, no-c-format
 msgid "# chroot /mnt/debinst /bin/bash"
 msgstr "# chroot /mnt/debinst /bin/bash"
 
 #. Tag: title
-#: random-bits.xml:447
+#: random-bits.xml:480
 #, no-c-format
 msgid "Mount Partitions"
 msgstr "分区的挂载"
 
 #. Tag: para
-#: random-bits.xml:448
+#: random-bits.xml:481
 #, no-c-format
 msgid ""
 "You need to create <filename>/etc/fstab</filename>. "
@@ -1706,37 +1756,37 @@ msgstr ""
 "a</userinput>，那么请一定要再接着做之前先把 proc 挂载好："
 
 #. Tag: screen
-#: random-bits.xml:469
+#: random-bits.xml:502
 #, no-c-format
 msgid "# mount -t proc proc /proc"
 msgstr "# mount -t proc proc /proc"
 
 #. Tag: title
-#: random-bits.xml:475
+#: random-bits.xml:508
 #, no-c-format
 msgid "Configure Keyboard"
 msgstr "键盘的配置"
 
 #. Tag: para
-#: random-bits.xml:476
+#: random-bits.xml:509
 #, no-c-format
 msgid "To configure your keyboard:"
 msgstr "若要配置您的键盘，请："
 
 #. Tag: screen
-#: random-bits.xml:480
+#: random-bits.xml:513
 #, no-c-format
 msgid "# dpkg-reconfigure console-data"
 msgstr "# dpkg-reconfigure console-data"
 
 #. Tag: title
-#: random-bits.xml:486
+#: random-bits.xml:519
 #, no-c-format
 msgid "Configure Networking"
 msgstr "网络的配置"
 
 #. Tag: para
-#: random-bits.xml:487
+#: random-bits.xml:520
 #, no-c-format
 msgid ""
 "To configure networking, edit <filename>/etc/network/interfaces</filename>, "
@@ -1834,13 +1884,13 @@ msgstr ""
 "等)。"
 
 #. Tag: title
-#: random-bits.xml:523
+#: random-bits.xml:556
 #, no-c-format
 msgid "Configure Timezone, Users, and APT"
 msgstr "时区、用户和 APT 的配置"
 
 #. Tag: para
-#: random-bits.xml:524
+#: random-bits.xml:557
 #, no-c-format
 msgid ""
 "Set your timezone, add a normal user, and choose your <command>apt</command> "
@@ -1850,19 +1900,19 @@ msgstr ""
 "command> 源"
 
 #. Tag: screen
-#: random-bits.xml:529
+#: random-bits.xml:562
 #, no-c-format
 msgid "# /usr/sbin/base-config new"
 msgstr "# /usr/sbin/base-config new"
 
 #. Tag: title
-#: random-bits.xml:535
+#: random-bits.xml:568
 #, no-c-format
 msgid "Configure Locales"
 msgstr "locales 的设置"
 
 #. Tag: para
-#: random-bits.xml:536
+#: random-bits.xml:569
 #, no-c-format
 msgid ""
 "To configure your locale settings to use a language other than English, "
@@ -1883,13 +1933,13 @@ msgstr ""
 "参阅相应的 本地化指南(localisation HOWTO)。"
 
 #. Tag: title
-#: random-bits.xml:552
+#: random-bits.xml:585
 #, no-c-format
 msgid "Install a Kernel"
 msgstr "内核的安装"
 
 #. Tag: para
-#: random-bits.xml:553
+#: random-bits.xml:586
 #, no-c-format
 msgid ""
 "If you intend to boot this system, you probably want a Linux kernel and a "
@@ -1905,7 +1955,7 @@ msgstr ""
 "来安装它。"
 
 #. Tag: screen
-#: random-bits.xml:562
+#: random-bits.xml:595
 #, no-c-format
 msgid ""
 "# apt-get install kernel-image-<replaceable>2.X.X-arch-etc</replaceable>"
@@ -1913,13 +1963,13 @@ msgstr ""
 "# apt-get install kernel-image-<replaceable>2.X.X-arch-etc</replaceable>"
 
 #. Tag: title
-#: random-bits.xml:568
+#: random-bits.xml:601
 #, no-c-format
 msgid "Set up the Boot Loader"
 msgstr "Boot Loader 的设置"
 
 #. Tag: para
-#: random-bits.xml:569
+#: random-bits.xml:602
 #, no-c-format
 msgid ""
 "To make your &debian; system bootable, set up your boot loader to load the "
@@ -1932,7 +1982,7 @@ msgstr ""
 "Debian 的 chroot 中使用 apt-get 完成。"
 
 #. Tag: para
-#: random-bits.xml:576
+#: random-bits.xml:609
 #, no-c-format
 msgid ""
 "Check <userinput>info grub</userinput> or <userinput>man lilo.conf</"
@@ -1953,13 +2003,13 @@ msgstr ""
 "lilo，它就会用哪个系统里的 <filename>lilo.conf</filename> )。"
 
 #. Tag: para
-#: random-bits.xml:587
+#: random-bits.xml:620
 #, no-c-format
 msgid "Here is a basic <filename>/etc/lilo.conf</filename> as an example:"
 msgstr "下面有一个简单的<filename>/etc/lilo.conf</filename> 作为例子："
 
 #. Tag: screen
-#: random-bits.xml:591
+#: random-bits.xml:624
 #, no-c-format
 msgid ""
 "boot=/dev/hda6\n"
@@ -1979,7 +2029,7 @@ msgstr ""
 "label=Debian"
 
 #. Tag: para
-#: random-bits.xml:593
+#: random-bits.xml:626
 #, no-c-format
 msgid ""
 "Check <userinput>man yaboot.conf</userinput> for instructions on setting up "
@@ -1997,7 +2047,7 @@ msgstr ""
 "filename> )。"
 
 #. Tag: para
-#: random-bits.xml:603
+#: random-bits.xml:636
 #, no-c-format
 msgid ""
 "Here is a basic <filename>/etc/yaboot.conf</filename> as an example: "
@@ -2025,3 +2075,30 @@ msgstr ""
 "label=Debian\n"
 "</screen></informalexample> 在有的电脑上，您或许应该把 <userinput>ide0:</"
 "userinput> 换成 <userinput>hd:</userinput>。"
+
+#~ msgid "1537"
+#~ msgstr "1537"
+
+#~ msgid "<entry>521</entry>"
+#~ msgstr "<entry>521</entry>"
+
+#~ msgid "2058"
+#~ msgstr "2058"
+
+#~ msgid "<entry>92</entry>"
+#~ msgstr "<entry>92</entry>"
+
+#~ msgid "<entry>323</entry>"
+#~ msgstr "<entry>323</entry>"
+
+#~ msgid "<entry>41</entry>"
+#~ msgstr "<entry>41</entry>"
+
+#~ msgid "<entry>53</entry>"
+#~ msgstr "<entry>53</entry>"
+
+#~ msgid "<entry>119</entry>"
+#~ msgstr "<entry>119</entry>"
+
+#~ msgid "<entry>141</entry>"
+#~ msgstr "<entry>141</entry>"
