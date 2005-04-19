@@ -723,7 +723,7 @@ pkg-lists/standard-udebs:
 	grep-dctrl -FPriority -e 'required|standard|important' \
 		-sPackage apt.udeb/state/lists/*_Packages* | \
 		grep -v kernel-image | grep -v -- -modules | \
-		cut -d " " -f 2 > $@
+		cut -d " " -f 2 | sed 's/$$/ */' > $@
 
 # Get a list of all kernel modules matching the kernel version.
 pkg-lists/kernel-module-udebs:
@@ -732,7 +732,7 @@ pkg-lists/kernel-module-udebs:
 	$(foreach VERSION,$(KERNELVERSION), \
 		grep-dctrl -P -e '.*-modules-$(VERSION)-$(KERNEL_FLAVOUR)' \
 			-sPackage apt.udeb/state/lists/*_Packages* | \
-			cut -d " " -f 2 >> $@;)
+			cut -d " " -f 2 | sed 's/$$/ */' >> $@;)
 
 # The kernel version changes from build to build, so always regen the file.
 .PHONY: pkg-lists/kernel-module-udebs
