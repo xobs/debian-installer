@@ -38,6 +38,24 @@ foreach my $p (sort keys %$collect) {
 	}
 }
 
+# Run apt-cache on udebs, return result.
+sub apt_cache {
+	my $params=shift;
+	
+	my $sourceslist;
+	if (-f 'sources.list.udeb.local') {
+		$sourceslist='sources.list.udeb.local';
+	} else {
+		$sourceslist='sources.list.udeb';
+	}
+	
+	return `LANG=C apt-cache \\
+		-o Dir::Etc::sourcelist=./$sourceslist \\
+		-o Dir::State=./apt.udeb/state \\
+		-o Dir::State::Status=./apt.udeb/state/status \\
+		-o Dir::Cache=./apt.udeb/cache $params 2>/dev/null`;
+}
+
 # Add a package, possibly expanding dependencies.
 sub collectpackage {
 	my $line=shift;
@@ -48,6 +66,11 @@ sub collectpackage {
 		my %kernels=();
 		$kernels{$_} = 1 foreach split ' ', $2;
 		return unless $kernels{$kernel_major};
+	}
+	elsif ($line=~s/\s*\?$//) {
+		# Question mark at the end means check for the package and
+		# don't include it if it's not available in apt sources.
+		return unless length apt_cache("show '$line'");
 	}
 
 	if ($line=~/^(.*) \*$/) {
@@ -79,22 +102,12 @@ sub collectdeps {
 		collectdeps($dep, $collect, \%seendeps);
 	}
 }
-
+		
 # Get the dependencies of a package;
 sub pkgdeps {
 	my $package=shift;
 	my @ret;
-	my $sourceslist;
-	if (-f 'sources.list.udeb.local') {
-		$sourceslist='sources.list.udeb.local';
-	} else {
-		$sourceslist='sources.list.udeb';
-	}
-	my @deps=`LANG=C apt-cache \\
-		-o Dir::Etc::sourcelist=./$sourceslist \\
-		-o Dir::State=./apt.udeb/state \\
-		-o Dir::State::Status=./apt.udeb/state/status \\
-		-o Dir::Cache=./apt.udeb/cache depends $package`;
+	my @deps=apt_cache("depends $package");
 	shift @deps; # package name;
 	foreach my $dep (@deps) {
 		chomp $dep;
