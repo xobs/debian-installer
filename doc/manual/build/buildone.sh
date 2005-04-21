@@ -277,9 +277,9 @@ RET=$?; [ $RET -ne 0 ] && exit 1
 BUILD_OK=""
 BUILD_FAIL=""
 for format in $formats ; do
-    if [ "$language" = "el" -o "$language" = "ja" -o "$language" = "ko" ] && \
+    if [ "$language" = "el" -o "$language" = "ja" -o "$language" = "ko" -o "$language" = "zh_CN" ] && \
        [ "$format" = "pdf" -o "$format" = "ps" ] ; then
-        echo "Warning: pdf and ps formats are currently not supported for Greek, Japanese and Korean"
+        echo "Warning: pdf and ps formats are currently not supported for Chinese, Greek, Japanese and Korean"
         BUILD_SKIP="$BUILD_SKIP $format"
         continue
     fi
