@@ -131,14 +131,14 @@ create_text () {
     case "$language" in
         cs)
             CHARSET=ISO-8859-2 ;;
-        el)
-            CHARSET=UTF-8 ;;
         ja)
             CHARSET=EUC-JP ;;
         ko)
             CHARSET=EUC-KR ;;
         ru)
             CHARSET=KOI8-R ;;
+        el|zh_CN)
+            CHARSET=UTF-8 ;;
         *)
             CHARSET=ISO-8859-1 ;;
     esac
