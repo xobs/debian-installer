@@ -1,88 +1,140 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 22580 untranslated -->
+<!-- original version: 24663 -->
 
  <sect1 id="automatic-install">
- <title>Automatic Installation</title>
+ <!-- <title>Automatic Installation</title> -->
+ <title>Installazione automatizzata</title>
+
 <para>
 
-For installing on multiple computers it's possible to do fully
+<!-- For installing on multiple computers it's possible to do fully
 automatic installations. Debian packages intended for this include
 <classname>fai</classname> (which uses an install server),
 <classname>replicator</classname>,
 <classname>systemimager</classname>,
 <classname>autoinstall</classname>, and 
-the Debian Installer itself.
+the Debian Installer itself. -->
+
+È possibile effettuare installazioni su parecchi computer attraverso procedure
+completamente automatizzate. I pacchetti Debian adatti a questo scopo sono
+<classname>fai</classname> (che usa un server di installazione),
+<classname>replicator</classname>, <classname>systemimager</classname>,
+<classname>autoinstall</classname> e lo stesso Installatore Debian.
 
 </para>
 
-<sect2>
-<title>Automatic installation using the Debian Installer</title>
+  <sect2>
+  <!-- <title>Automatic installation using the Debian Installer</title> -->
+  <title>Installazione automatizzata usando l'Installatore Debian</title>
 
 <para>
-The Debian Installer supports automating installs via preconfiguration
+
+<!-- The Debian Installer supports automating installs via preconfiguration
 files. A preconfiguration file can be loaded from the network or from
 removable media, and used to fill in answers to question asked during the
-installation process.
+installation process. -->
+
+L'Installatore Debian supporta le installazioni automatizzate tramite dei
+file di preconfigurazione. Un file di preconfigurazione può essere caricato
+dalla rete o da un supporto rimovibile ed è usato per rispondere alle
+domande che sarebbero normalmente poste durante il processo di installazione.
 
 </para><para>
 
-The preconfiguration file is in the format used by the
+<!-- The preconfiguration file is in the format used by the
 debconf-set-selections command. A well documented and working example that
-you can edit is in <xref linkend="example-preseed"/>.
+you can edit is in <xref linkend="example-preseed"/>. -->
+
+Il file di preconfigurazione ha lo stesso formato usato dal comando
+debconf-set-selections. Un esempio ben documentato e funzionante, che è
+possibile modificare, si trova in <xref linkend="example-preseed"/>.
 
 </para><para>
 
-The preconfiguration file is in the format used by the
-debconf-set-selections command, and one way to get a complete file listing
+<!-- Alternatively, one way to get a complete file listing
 all the values that can be preseeded is to do a manual install,
 and then use <filename>debconf-get-selections</filename>,
 from the <classname>debconf-utils</classname> package,
 to dump both the debconf database and the cdebconf
-database in /var/log/debian-installer/cdebconf to a single file:
+database in /var/log/debian-installer/cdebconf to a single file: -->
+
+In alternativa un metodo per ottenere un file che elenchi di tutti i valori
+che si possono preinserire consiste nell'effettuare una installazione manuale
+e poi usare il comando <filename>debconf-get-selections</filename>, contenuto
+nel pacchetto <classname>debconf-utils</classname>, per riversare il contenuto
+dei database di debconf e cdebconf in /var/log/debian-installer/cdebconf su
+un singolo file:
 
 <informalexample><screen>
-debconf-get-selections --installer > file
-debconf-get-selections >> file
+$ debconf-get-selections --installer &gt; file
+$ debconf-get-selections &gt;&gt; file
 </screen></informalexample>
 
-</para><para>
-
-However, a file generated in this manner will have some items that should
+<!-- However, a file generated in this manner will have some items that should
 not be preseeded, and the file in <xref linkend="example-preseed"/> is a
-better starting place for most users.
+better starting place for most users. -->
+
+Un file creato con questo metodo conterrà anche dei parametri che non devono
+essere preinseriti; il file in <xref linkend="example-preseed"/> è il miglior
+punto di partenza per la maggior parte degli utenti.
 
 </para><para>
 
-Once you have a preconfiguation file, you can edit it if necessary, and
+<!-- Once you have a preconfiguration file, you can edit it if necessary, and
 place it on a web server, or copy it onto the installer's boot media. Wherever
 you place the file, you need to pass a parameter to the installer at boot
-time to tell it to use the file.
+time to tell it to use the file. -->
+
+Una volta che si dispone di un file di preconfigurazione è possibile, se
+necessario, modificarlo e pubblicarlo su un server web oppure copiarlo sul
+supporto di avvio dell'installatore. Qualsiasi sia la posizione scelta per
+il file è necessario passare un parametro all'avvio dell'installatore per
+forzarne l'uso.
 
 </para><para>
 
-To make the installer use a preconfiguration file downloaded from the
+<!-- To make the installer use a preconfiguration file downloaded from the
 network, add preseed/url=http://url/to/preseed.cfg to the kernel boot
 parameters. Of course the preconfiguration will not take effect until the
 installer manages to set up the network to download the file, so this is
 most useful if the installer can set up the network via DHCP without asking
 any questions. You may want to set the installation priority to critical to
 avoid any questions while the network is being configured. See 
-<xref linkend="installer-args"/>.
+<xref linkend="installer-args"/>. -->
+
+Per far usare all'installatore un file di preconfigurazione scaricato dalla
+rete aggiungere preseed/url=http://url/del/file/preseed.cfg ai parametri di
+avvio del kernel. Ovviamente la preconfigurazione non può avere nessun effetto
+fino a quando chi fa l'installazione non imposta la rete in modo da poter
+scaricare il file. Perciò si consiglia di impostare la rete tramite DHCP
+senza dover rispondere a nessuna domanda. È possibile impostare la priorità
+dell'installazione a critica in modo da evitare qualsiasi domanda durante la
+configurazione della rete. Consultare <xref linkend="installer-args"/>.
 
 </para><para>
 
-To place a preconfiguration file on a CD, you would need to remaster the
-ISO image to include your preconfiguraton file. See the manual page for
+<!-- To place a preconfiguration file on a CD, you would need to remaster the
+ISO image to include your preconfiguration file. See the manual page for
 mkisofs for details. Alternatively, put the preseed file on a floppy, and
-use preseed/file=/floppy/preseed.cfg
+use preseed/file=/floppy/preseed.cfg -->
+
+Per usare un file di preconfigurazione su un CD è necessario rimasterizzare
+l'immagine ISO del CD e inserirvi il file di preconfigurazione. Per maggiori
+dettagli consultare la pagina man di mkisofs. In alternativa mettere il file
+di preconfigurazione su un dischetto e usare preseed/file=/floppy/preseed.cfg.
 
 </para><para arch="i386">
 
-If you'll be booting from a USB memory stick, then you can simply copy your
-preconfiguration file onto the memory stick's filesystem, and edit the
-syslinux.cfg file to add preseed/file=/hd-media/preseed.cfg to the kernel boot
-parameters.
+<!-- If you'll be booting from a USB memory stick, then you can simply copy
+your preconfiguration file onto the memory stick's filesystem, and edit the
+syslinux.cfg file to add preseed/file=/hd-media/preseed.cfg to the kernel
+boot parameters. -->
+
+Usando una penna USB per l'avvio, si può semplicemente copiare il proprio
+file di preconfigurazione sul filesystem della penna e modificare il file
+syslinux.cfg aggiungendo preseed/file=/hd-media/preseed.cfg ai parametri di
+avvio del kernel.
 
 </para>
-</sect2>
+  </sect2>
  </sect1>
