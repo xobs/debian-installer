@@ -25,6 +25,10 @@ else
 	# trade performance (using rsync) for security (restricted ssh keys)
 	HELPER="ssh -i ~/.ssh/gluck_d-i $HOST d-i-unpack-helper"
 fi
+if [ -z "$NUM_KEEP" ]; then
+	# Default to keeping 30 days of builds. Set to zero to keep all.
+	NUM_KEEP=30
+fi
 # Overridable environment variables for building.
 if [ -z "$ROOTCMD" ]; then
 	ROOTCMD="fakeroot"
@@ -81,6 +85,19 @@ upload () {
 	fi
 }
 
+trim () {
+	header TRIMMING OLD BUILDS
+	if [ -n "$RESTRICTED_SSH" ]; then
+		echo "(trim not implemented for RESTRICTED_SSH mode)"
+	elif [ -n "$NUM_KEEP" ] && [ "$NUM_KEEP" != 0 ]; then
+		$CALL find $BASEDIR -maxdepth 1 | egrep '/[0-9][0-9][0-9][0-9]+-[0-9][0-9]-[0-9][0-9]$' | \
+			sort -n | ./util/trim-daily-builds "$NUM_KEEP" | \
+			$CALL xargs rm -rf
+	else
+		echo "(keeping all old builds)"
+	fi
+}
+
 usage () {
 	echo These subcommands are available:
 	awk -F\) '/subcommand$/ { print " ", $1 }' $0
@@ -93,17 +110,20 @@ if [ ! -d pkg-lists ]; then
 fi
 
 case $1 in
-	build)  # subcommand
+	build) 	# subcommand
 		build
 	;;
-	upload) # subcommand
+	upload)	# subcommand
 		upload
 	;;
-	'')     # no subcommand, for backwards compatability
+	trim)	# subcommand
+		trim
+	;;
+	'')	# no subcommand, for backwards compatability
 		build
 		upload
 	;;
-	both)   # subcommand
+	all)	# subcommand
 		build
 		upload
 	;;
