@@ -51,6 +51,10 @@ create_profiled () {
         unofficial_build=""
     fi
 
+    if [ -z "$manual_release" ]; then
+        manual_release="sarge"
+    fi
+
     # Now we source the profiling information for the selected architecture
     [ -f "arch-options/${arch}" ] || {
         echo "Error: unknown architecture '$arch'"
@@ -59,7 +63,7 @@ create_profiled () {
     . arch-options/$arch
 
     # Join all architecture options into one big variable
-    condition="$fdisk;$network;$boot;$smp;$other;$goodies;$unofficial_build;$status"
+    condition="$fdisk;$network;$boot;$smp;$other;$goodies;$unofficial_build;$status;$manual_release"
 
     # Write dynamic non-profilable entities into the file
     echo "<!-- arch- and lang-specific non-profilable entities -->" > $dynamic
@@ -315,7 +319,7 @@ for format in $formats ; do
 done
 
 # Clean up
-#rm -r $tempdir
+rm -r $tempdir
 
 # Evaluate the overall results
 [ -n "$BUILD_SKIP" ] && echo "Info: The following formats were skipped:$BUILD_SKIP"
