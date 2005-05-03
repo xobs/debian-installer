@@ -126,6 +126,10 @@ define genext2fs
   genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` -r 0
 endef
 
+define mkinitramfs
+  (cd $(TREE) && find . | cpio --quiet -o -H newc) > 
+endef
+
 define e2fsck
   e2fsck -fy
 endef
@@ -603,6 +607,8 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 		$(e2fsck) $(TEMP)/initrd || true ;; \
 	cramfs) \
 		$(mkcramfs) $(TEMP)/initrd ;; \
+	initramfs) \
+		$(mkinitramfs) $(TEMP)/initrd ;; \
 	*) \
 		echo "Unsupported filesystem type"; \
 		exit 1 ;; \
