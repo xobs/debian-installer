@@ -249,7 +249,7 @@ _clean: tree_umount
 	-rm -f $(STAMPS)tree-unpack-$(targetstring)-stamp $(STAMPS)tree-$(targetstring)-stamp $(STAMPS)extra-$(targetstring)-stamp $(STAMPS)get_udebs-$(targetstring)-stamp
 	rm -f $(TEMP)/diskusage.txt
 	rm -f $(TEMP)/all.utf
-	rm -f $(TEMP)/unifont.bdf $(TREE)/unifont.bgf
+	rm -f $(TEMP)/unifont.bdf $(TREE)/lib/unifont.bgf
 	rm -f pkg-lists/standard-udebs pkg-lists/kernel-module-udebs
 	rm -rf $(TARGET)
 	rm -rf $(TEMP)
@@ -563,7 +563,7 @@ sources.list.deb:
 #
 # Font generation.
 #
-$(TREE)/unifont.bgf: $(TEMP)/all.utf
+$(TREE)/lib/unifont.bgf: $(TEMP)/all.utf
 	# Use the UTF-8 locale in rootskel-locale. This target shouldn't
 	# be called when it is not present anyway.
 	# The locale must be generated after installing the package locales
@@ -592,7 +592,7 @@ $(INITRD): $(TEMP_INITRD) $(TEMP_INITRD_LIST)
 $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 	# Only build the font if we have rootskel-locale
 	if [ -d "$(LOCALE_PATH)/C.UTF-8" ] && [ -e /usr/src/unifont.bdf ]; then \
-		$(submake) $(TREE)/unifont.bgf; \
+		$(submake) $(TREE)/lib/unifont.bgf; \
 	fi
 	install -d $(TEMP)
 
