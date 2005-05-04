@@ -12,7 +12,7 @@
  7f³70   Text mode (improves interactivity     DEBIAN_FRONTEND=text               ³10
  7f³70              for slow consoles)                                            ³10
  7f³70                                                                            ³10
- 7f³70                                                                            ³10
+ 7f³70   Rescue mode                           rescue/enable=true                 ³10
  7f³70                                                                            ³10
  7f³70                                                                            ³10
  7f³70                                                                            ³10
