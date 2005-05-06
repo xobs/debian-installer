@@ -578,6 +578,8 @@ $(TREE)/lib/unifont.bgf: $(TEMP)/all.utf
 	CHARMAP=`LOCPATH=$(LOCALE_PATH) LC_ALL=C.UTF-8 locale charmap`; \
             if [ UTF-8 != "$$CHARMAP" ]; then \
 	        echo "error: Trying to build unifont.bgf without rootskel-locale!"; \
+		echo "(Alternatively, rootskel-locale may have been built against"; \
+		echo "a version of glibc with a different locale data format.)"; \
 	        exit 1; \
 	    fi
 	LOCPATH=$(LOCALE_PATH) LC_ALL=C.UTF-8 reduce-font /usr/src/unifont.bdf < $(TEMP)/all.utf > $(TEMP)/unifont.bdf
