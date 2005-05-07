@@ -449,7 +449,7 @@ msgstr ""
 msgid "If you like more flexibility or just want to know what's going on, you should use the following method to put the files on your stick."
 msgstr ""
 
-#: install-methods.xml:645 install-methods.xml:739
+#: install-methods.xml:645 install-methods.xml:741
 #, no-c-format
 #. Tag: title
 msgid "USB stick partitioning on &arch-title;"
@@ -498,10 +498,10 @@ msgid ""
       "The <filename>syslinux.cfg</filename> configuration file should contain the following two lines: <informalexample><screen>\n"
       "default vmlinuz\n"
       "append initrd=initrd.gz ramdisk_size=12000 root=/dev/rd/0 init=/linuxrc rw\n"
-      "</screen></informalexample> Please note that the <userinput>ramdisk_size</userinput> parameter may need to be increased, depending on the image you are booting. If the boot fails, you can try adding <userinput>devfs=mount,dall</userinput> to the <quote>append</quote> line."
+      "</screen></informalexample> Please note that the <userinput>ramdisk_size</userinput> parameter may need to be increased, depending on the image you are booting. <phrase condition=\"sarge\"> If the boot fails, you can try adding <userinput>devfs=mount,dall</userinput> to the <quote>append</quote> line. </phrase>"
 msgstr ""
 
-#: install-methods.xml:740
+#: install-methods.xml:742
 #, no-c-format
 #. Tag: para
 msgid ""
@@ -510,13 +510,13 @@ msgid ""
       "</screen></informalexample> Take care that you use the correct device name for your USB stick. The <command>hformat</command> command is contained in the <classname>hfsutils</classname> Debian package."
 msgstr ""
 
-#: install-methods.xml:756
+#: install-methods.xml:758
 #, no-c-format
 #. Tag: para
 msgid "In order to start the kernel after booting from the USB stick, we will put a boot loader on the stick. The <command>yaboot</command> boot loader can be installed on an HFS filesystem and can be reconfigured by just editing a text file. Any operating system which supports the HFS file system can be used to make changes to the configuration of the boot loader."
 msgstr ""
 
-#: install-methods.xml:765
+#: install-methods.xml:767
 #, no-c-format
 #. Tag: para
 msgid ""
@@ -529,43 +529,43 @@ msgid ""
       "</screen></informalexample> Again, take care that you use the correct device name. The partition must not be otherwise mounted during this procedure. This procedure writes the boot loader to the partition, and uses the HFS utilities to mark it in such a way that Open Firmware will boot it. Having done this, the rest of the USB stick may be prepared using the normal Unix utilities."
 msgstr ""
 
-#: install-methods.xml:781
+#: install-methods.xml:783
 #, no-c-format
 #. Tag: para
 msgid "Mount the partition (<userinput>mount /dev/sda2 /mnt</userinput>) and copy the following files from the Debian archives to the stick:"
 msgstr ""
 
-#: install-methods.xml:787
+#: install-methods.xml:789
 #, no-c-format
 #. Tag: para
 msgid "<filename>vmlinux</filename> (kernel binary)"
 msgstr ""
 
-#: install-methods.xml:792
+#: install-methods.xml:794
 #, no-c-format
 #. Tag: para
 msgid "<filename>initrd.gz</filename> (initial ramdisk image)"
 msgstr ""
 
-#: install-methods.xml:797
+#: install-methods.xml:799
 #, no-c-format
 #. Tag: para
 msgid "<filename>yaboot.conf</filename> (yaboot configuration file)"
 msgstr ""
 
-#: install-methods.xml:802
+#: install-methods.xml:804
 #, no-c-format
 #. Tag: para
 msgid "<filename>boot.msg</filename> (optional boot message)"
 msgstr ""
 
-#: install-methods.xml:807
+#: install-methods.xml:809
 #, no-c-format
 #. Tag: para
 msgid "Optional kernel modules"
 msgstr ""
 
-#: install-methods.xml:814
+#: install-methods.xml:816
 #, no-c-format
 #. Tag: para
 msgid ""
@@ -578,277 +578,277 @@ msgid ""
       "image=/vmlinux\n"
       "        label=install\n"
       "        initrd=/initrd.gz\n"
-      "        initrd-size=10000\n"
-      "        append=\"devfs=mount,dall --\"\n"
+      "        initrd-size=10000<phrase condition=\"sarge\">\n"
+      "        append=\"devfs=mount,dall --\"</phrase>\n"
       "        read-only\n"
       "</screen></informalexample> Please note that the <userinput>initrd-size</userinput> parameter may need to be increased, depending on the image you are booting."
 msgstr ""
 
-#: install-methods.xml:829
+#: install-methods.xml:831
 #, no-c-format
 #. Tag: title
 msgid "Adding an ISO image"
 msgstr ""
 
-#: install-methods.xml:830
+#: install-methods.xml:832
 #, no-c-format
 #. Tag: para
 msgid "Now you should put any Debian ISO image (businesscard, netinst or even a full one) onto your stick (if it fits). The file name of such an image must end in <filename>.iso</filename>."
 msgstr ""
 
-#: install-methods.xml:836
+#: install-methods.xml:838
 #, no-c-format
 #. Tag: para
 msgid "If you want to install over the network, without using an ISO image, you will of course skip the previous step. Moreover you will have to use the initial ramdisk from the <filename>netboot</filename> directory instead of the one from <filename>hd-media</filename>, because <filename>hd-media/initrd.gz</filename> does not have network support."
 msgstr ""
 
-#: install-methods.xml:845
+#: install-methods.xml:847
 #, no-c-format
 #. Tag: para
 msgid "When you are done, unmount the USB memory stick (<userinput>umount /mnt</userinput>) and activate its write protection switch."
 msgstr ""
 
-#: install-methods.xml:855
+#: install-methods.xml:857
 #, no-c-format
 #. Tag: title
 msgid "Booting the USB stick"
 msgstr ""
 
-#: install-methods.xml:856
+#: install-methods.xml:858
 #, no-c-format
 #. Tag: para
 msgid "If your system refuses to boot from the memory stick, the stick may contain an invalid master boot record (MBR). To fix this, use the <command>install-mbr</command> command from the package <classname>mbr</classname>:"
 msgstr ""
 
-#: install-methods.xml:863
+#: install-methods.xml:865
 #, no-c-format
 #. Tag: screen
 msgid "# install-mbr /dev/<replaceable>sda</replaceable>"
 msgstr ""
 
-#: install-methods.xml:875
+#: install-methods.xml:877
 #, no-c-format
 #. Tag: title
 msgid "Preparing Files for Hard Disk Booting"
 msgstr ""
 
-#: install-methods.xml:876
+#: install-methods.xml:878
 #, no-c-format
 #. Tag: para
 msgid "The installer may be booted using boot files placed on an existing hard drive partition, either launched from another operating system or by invoking a boot loader directly from the BIOS."
 msgstr ""
 
-#: install-methods.xml:882
+#: install-methods.xml:884
 #, no-c-format
 #. Tag: para
 msgid "A full, \"pure network\" installation can be achieved using this technique. This avoids all hassles of removable media, like finding and burning CD images or struggling with too numerous and unreliable floppy disks."
 msgstr ""
 
-#: install-methods.xml:889
+#: install-methods.xml:891
 #, no-c-format
 #. Tag: para
 msgid "The installer cannot boot from files on an NTFS file system."
 msgstr ""
 
-#: install-methods.xml:893
+#: install-methods.xml:895
 #, no-c-format
 #. Tag: para
 msgid "The installer cannot boot from files on an HFS+ file system. MacOS System 8.1 and above may use HFS+ file systems; NewWorld PowerMacs all use HFS+. To determine whether your existing file system is HFS+, select <userinput>Get Info</userinput> for the volume in question. HFS file systems appear as <userinput>Mac OS Standard</userinput>, while HFS+ file systems say <userinput>Mac OS Extended</userinput>. You must have an HFS partition in order to exchange files between MacOS and Linux, in particular the installation files you download."
 msgstr ""
 
-#: install-methods.xml:904
+#: install-methods.xml:906
 #, no-c-format
 #. Tag: para
 msgid "Different programs are used for hard disk installation system booting, depending on whether the system is a ``NewWorld'' or an ``OldWorld'' model."
 msgstr ""
 
-#: install-methods.xml:913
+#: install-methods.xml:915
 #, no-c-format
 #. Tag: title
 msgid "Hard disk installer booting using <command>LILO</command> or <command>GRUB</command>"
 msgstr ""
 
-#: install-methods.xml:915
+#: install-methods.xml:917
 #, no-c-format
 #. Tag: para
 msgid "This section explains how to add to or even replace an existing linux installation using either <command>LILO</command> or <command>GRUB</command>."
 msgstr ""
 
-#: install-methods.xml:921
+#: install-methods.xml:923
 #, no-c-format
 #. Tag: para
 msgid "At boot time, both bootloaders support loading in memory not only the kernel, but also a disk image. This RAM disk can be used as the root file-system by the kernel."
 msgstr ""
 
-#: install-methods.xml:927
+#: install-methods.xml:929
 #, no-c-format
 #. Tag: para
 msgid "Copy the following files from the Debian archives to a convenient location on your hard drive, for instance to <filename>/boot/newinstall/</filename>."
 msgstr ""
 
-#: install-methods.xml:934
+#: install-methods.xml:936
 #, no-c-format
 #. Tag: para
 msgid "<filename>vmlinuz</filename> (kernel binary)"
 msgstr ""
 
-#: install-methods.xml:939
+#: install-methods.xml:941
 #, no-c-format
 #. Tag: para
 msgid "<filename>initrd.gz</filename> (ramdisk image)"
 msgstr ""
 
-#: install-methods.xml:946
+#: install-methods.xml:948
 #, no-c-format
 #. Tag: para
 msgid "Finally, to configure the bootloader proceed to <xref linkend=\"boot-initrd\"/>."
 msgstr ""
 
-#: install-methods.xml:956
+#: install-methods.xml:958
 #, no-c-format
 #. Tag: title
 msgid "Hard Disk Installer Booting for OldWorld Macs"
 msgstr ""
 
-#: install-methods.xml:957
+#: install-methods.xml:959
 #, no-c-format
 #. Tag: para
 msgid "The <filename>boot-floppy-hfs</filename> floppy uses <application>miBoot</application> to launch Linux installation, but <application>miBoot</application> cannot easily be used for hard disk booting. <application>BootX</application>, launched from MacOS, supports booting from files placed on the hard disk. <application>BootX</application> can also be used to dual-boot MacOS and Linux after your Debian installation is complete. For the Performa 6360, it appears that <command>quik</command> cannot make the hard disk bootable. So <application>BootX</application> is required on that model."
 msgstr ""
 
-#: install-methods.xml:970
+#: install-methods.xml:972
 #, no-c-format
 #. Tag: para
 msgid "Download and unstuff the <application>BootX</application> distribution, available from <ulink url=\"&url-powerpc-bootx;\"></ulink>, or in the <filename>dists/woody/main/disks-powerpc/current/powermac</filename> directory on Debian http/ftp mirrors and official Debian CDs. Use <application>Stuffit Expander</application> to extract it from its archive. Within the package, there is an empty folder called <filename>Linux Kernels</filename>. Download <filename>linux.bin</filename> and <filename>ramdisk.image.gz</filename> from the <filename>disks-powerpc/current/powermac</filename> folder, and place them in the <filename>Linux Kernels</filename> folder. Then place the <filename>Linux Kernels</filename> folder in the active System Folder."
 msgstr ""
 
-#: install-methods.xml:990
+#: install-methods.xml:992
 #, no-c-format
 #. Tag: title
 msgid "Hard Disk Installer Booting for NewWorld Macs"
 msgstr ""
 
-#: install-methods.xml:991
+#: install-methods.xml:993
 #, no-c-format
 #. Tag: para
 msgid "NewWorld PowerMacs support booting from a network or an ISO9660 CD-ROM, as well as loading ELF binaries directly from the hard disk. These machines will boot Linux directly via <command>yaboot</command>, which supports loading a kernel and RAMdisk directly from an ext2 partition, as well as dual-booting with MacOS. Hard disk booting of the installer is particularly appropriate for newer machines without floppy drives. <command>BootX</command> is not supported and must not be used on NewWorld PowerMacs."
 msgstr ""
 
-#: install-methods.xml:1002
+#: install-methods.xml:1004
 #, no-c-format
 #. Tag: para
 msgid "<emphasis>Copy</emphasis> (not move) the following four files which you downloaded earlier from the Debian archives, onto the root level of your hard drive (this can be accomplished by <keycap>option</keycap>-dragging each file to the hard drive icon)."
 msgstr ""
 
-#: install-methods.xml:1012
+#: install-methods.xml:1014
 #, no-c-format
 #. Tag: filename
 msgid "vmlinux"
 msgstr ""
 
-#: install-methods.xml:1017
+#: install-methods.xml:1019
 #, no-c-format
 #. Tag: filename
 msgid "initrd.gz"
 msgstr ""
 
-#: install-methods.xml:1022
+#: install-methods.xml:1024
 #, no-c-format
 #. Tag: filename
 msgid "yaboot"
 msgstr ""
 
-#: install-methods.xml:1027
+#: install-methods.xml:1029
 #, no-c-format
 #. Tag: filename
 msgid "yaboot.conf"
 msgstr ""
 
-#: install-methods.xml:1032
+#: install-methods.xml:1034
 #, no-c-format
 #. Tag: para
 msgid "Make a note of the partition number of the MacOS partition where you place these files. If you have the MacOS <command>pdisk</command> program, you can use the L command to check for the partition number. You will need this partition number for the command you type at the Open Firmware prompt when you boot the installer."
 msgstr ""
 
-#: install-methods.xml:1040
+#: install-methods.xml:1042
 #, no-c-format
 #. Tag: para
 msgid "To boot the installer, proceed to <xref linkend=\"boot-newworld\"/>."
 msgstr ""
 
-#: install-methods.xml:1053
+#: install-methods.xml:1055
 #, no-c-format
 #. Tag: title
 msgid "Preparing Files for TFTP Net Booting"
 msgstr ""
 
-#: install-methods.xml:1054
+#: install-methods.xml:1056
 #, no-c-format
 #. Tag: para
 msgid "If your machine is connected to a local area network, you may be able to boot it over the network from another machine, using TFTP. If you intend to boot the installation system from another machine, the boot files will need to be placed in specific locations on that machine, and the machine configured to support booting of your specific machine."
 msgstr ""
 
-#: install-methods.xml:1062
+#: install-methods.xml:1064
 #, no-c-format
 #. Tag: para
 msgid "You need to setup a TFTP server, and for many machines, a BOOTP server <phrase condition=\"supports-rarp\">, or RARP server</phrase> <phrase condition=\"supports-dhcp\">, or DHCP server</phrase>."
 msgstr ""
 
-#: install-methods.xml:1068
+#: install-methods.xml:1070
 #, no-c-format
 #. Tag: para
 msgid "<phrase condition=\"supports-rarp\">The Reverse Address Resolution Protocol (RARP) is one way to tell your client what IP address to use for itself. Another way is to use the BOOTP protocol. </phrase> <phrase condition=\"supports-bootp\">BOOTP is an IP protocol that informs a computer of its IP address and where on the network to obtain a boot image. </phrase> <phrase arch=\"m68k\"> Yet another alternative exists on VMEbus systems: the IP address can be manually configured in boot ROM. </phrase> <phrase condition=\"supports-dhcp\">The DHCP (Dynamic Host Configuration Protocol) is a more flexible, backwards-compatible extension of BOOTP. Some systems can only be configured via DHCP. </phrase>"
 msgstr ""
 
-#: install-methods.xml:1085
+#: install-methods.xml:1087
 #, no-c-format
 #. Tag: para
 msgid "For PowerPC, if you have a NewWorld Power Macintosh machine, it is a good idea to use DHCP instead of BOOTP. Some of the latest machines are unable to boot using BOOTP."
 msgstr ""
 
-#: install-methods.xml:1091
+#: install-methods.xml:1093
 #, no-c-format
 #. Tag: para
 msgid "Unlike the Open Firmware found on Sparc and PowerPC machines, the SRM console will <emphasis>not</emphasis> use RARP to obtain its IP address, and therefore you must use BOOTP for net booting your Alpha. You can also enter the IP configuration for network interfaces directly in the SRM console."
 msgstr ""
 
-#: install-methods.xml:1100
+#: install-methods.xml:1102
 #, no-c-format
 #. Tag: para
 msgid "Alpha systems can also be net-booted using the DECNet MOP (Maintenance Operations Protocol), but this is not covered here. Presumably, your local OpenVMS operator will be happy to assist you should you have some burning need to use MOP to boot Linux on your Alpha."
 msgstr ""
 
-#: install-methods.xml:1108
+#: install-methods.xml:1110
 #, no-c-format
 #. Tag: para
 msgid "Some older HPPA machines (e.g. 715/75) use RBOOTD rather than BOOTP. An RBOOTD package is available on the parisc-linux web site."
 msgstr ""
 
-#: install-methods.xml:1113
+#: install-methods.xml:1115
 #, no-c-format
 #. Tag: para
 msgid "The Trivial File Transfer Protocol (TFTP) is used to serve the boot image to the client. Theoretically, any server, on any platform, which implements these protocols, may be used. In the examples in this section, we shall provide commands for SunOS 4.x, SunOS 5.x (a.k.a. Solaris), and GNU/Linux."
 msgstr ""
 
-#: install-methods.xml:1121
+#: install-methods.xml:1123
 #, no-c-format
 #. Tag: para
 msgid "To use the Pre-boot Execution Environment (PXE) method of TFTP booting, you will need a TFTP server with <userinput>tsize</userinput> support. On a &debian; server, the <classname>atftpd</classname> and <classname>tftpd-hpa</classname> packages qualify; we recommend <classname>tftpd-hpa</classname>."
 msgstr ""
 
-#: install-methods.xml:1139
+#: install-methods.xml:1141
 #, no-c-format
 #. Tag: title
 msgid "Setting up RARP server"
 msgstr ""
 
-#: install-methods.xml:1140
+#: install-methods.xml:1142
 #, no-c-format
 #. Tag: para
 msgid "To setup RARP, you need to know the Ethernet address (a.k.a. the MAC address) of the client computers to be installed. If you don't know this information, you can <phrase arch=\"sparc\"> pick it off the initial OpenPROM boot messages, use the OpenBoot <userinput>.enet-addr</userinput> command, or </phrase> boot into ``Rescue'' mode (e.g., from the rescue floppy) and use the command <userinput>/sbin/ifconfig eth0</userinput>."
 msgstr ""
 
-#: install-methods.xml:1152
+#: install-methods.xml:1154
 #, no-c-format
 #. Tag: para
 msgid ""
@@ -865,31 +865,31 @@ msgid ""
       "</screen></informalexample> you probably need to load the RARP kernel module or else recompile the kernel to support RARP. Try <userinput>modprobe rarp</userinput> and then try the <command>rarp</command> command again."
 msgstr ""
 
-#: install-methods.xml:1168
+#: install-methods.xml:1170
 #, no-c-format
 #. Tag: para
 msgid "On a RARP server system using a Linux 2.4.x kernel, there is no RARP module, and you should instead use the <command>rarpd</command> program. The procedure is similar to that used under SunOS in the following paragraph."
 msgstr ""
 
-#: install-methods.xml:1176
+#: install-methods.xml:1178
 #, no-c-format
 #. Tag: para
 msgid "Under SunOS, you need to ensure that the Ethernet hardware address for the client is listed in the ``ethers'' database (either in the <filename>/etc/ethers</filename> file, or via NIS/NIS+) and in the ``hosts'' database. Then you need to start the RARP daemon. In SunOS 4, issue the command (as root): <userinput>/usr/etc/rarpd -a</userinput>; in SunOS 5, use <userinput>/usr/sbin/rarpd -a</userinput>."
 msgstr ""
 
-#: install-methods.xml:1195
+#: install-methods.xml:1197
 #, no-c-format
 #. Tag: title
 msgid "Setting up BOOTP server"
 msgstr ""
 
-#: install-methods.xml:1196
+#: install-methods.xml:1198
 #, no-c-format
 #. Tag: para
 msgid "There are two BOOTP servers available for GNU/Linux, the CMU <command>bootpd</command> and the other is actually a DHCP server, ISC <command>dhcpd</command>, which are contained in the <classname>bootp</classname> and <classname>dhcp</classname> packages in &debian;."
 msgstr ""
 
-#: install-methods.xml:1204
+#: install-methods.xml:1206
 #, no-c-format
 #. Tag: para
 msgid ""
@@ -906,19 +906,19 @@ msgid ""
       "</screen></informalexample> You will need to change at least the \"ha\" option, which specifies the hardware address of the client. The \"bf\" option specifies the file a client should retrieve via TFTP; see <xref linkend=\"tftp-images\"/> for more details. <phrase arch=\"mips\"> On SGI Indys you can just enter the command monitor and type <userinput>printenv</userinput>. The value of the <userinput>eaddr</userinput> variable is the machine's MAC address. </phrase>"
 msgstr ""
 
-#: install-methods.xml:1237
+#: install-methods.xml:1239
 #, no-c-format
 #. Tag: para
 msgid "By contrast, setting up BOOTP with ISC <command>dhcpd</command> is really easy, because it treats BOOTP clients as a moderately special case of DHCP clients. Some architectures require a complex configuration for booting clients via BOOTP. If yours is one of those, read the section <xref linkend=\"dhcpd\"/>. Otherwise, you will probably be able to get away with simply adding the <userinput>allow bootp</userinput> directive to the configuration block for the subnet containing the client, and restart <command>dhcpd</command> with <userinput>/etc/init.d/dhcpd restart</userinput>."
 msgstr ""
 
-#: install-methods.xml:1258
+#: install-methods.xml:1260
 #, no-c-format
 #. Tag: title
 msgid "Setting up a DHCP server"
 msgstr ""
 
-#: install-methods.xml:1259
+#: install-methods.xml:1261
 #, no-c-format
 #. Tag: para
 msgid ""
@@ -945,25 +945,25 @@ msgid ""
       "</screen></informalexample> Note: the new (and preferred) <classname>dhcp3</classname> package uses <filename>/etc/dhcp3/dhcpd.conf</filename>."
 msgstr ""
 
-#: install-methods.xml:1271
+#: install-methods.xml:1273
 #, no-c-format
 #. Tag: para
 msgid "In this example, there is one server <replaceable>\"servername\"</replaceable> which performs all of the work of DHCP, server, TFTP server, and network gateway. You will almost certainly need to change the domain-name options, as well as the server name and client hardware address. The <replaceable>\"filename\"</replaceable> option should be the name of the file which will be retrieved via TFTP."
 msgstr ""
 
-#: install-methods.xml:1281
+#: install-methods.xml:1283
 #, no-c-format
 #. Tag: para
 msgid "After you have edited the <command>dhcpd</command> configuration file, restart it with <userinput>/etc/init.d/dhcpd restart</userinput>."
 msgstr ""
 
-#: install-methods.xml:1289
+#: install-methods.xml:1291
 #, no-c-format
 #. Tag: title
 msgid "Enabling PXE Booting in the DHCP configuration"
 msgstr ""
 
-#: install-methods.xml:1290
+#: install-methods.xml:1292
 #, no-c-format
 #. Tag: para
 msgid ""
@@ -998,13 +998,13 @@ msgid ""
       "</screen></informalexample> Note that for PXE booting, the client filename <filename>pxelinux.0</filename> is a boot loader, not a kernel image (see <xref linkend=\"tftp-images\"/> below)."
 msgstr ""
 
-#: install-methods.xml:1306
+#: install-methods.xml:1308
 #, no-c-format
 #. Tag: title
 msgid "Enabling the TFTP Server"
 msgstr ""
 
-#: install-methods.xml:1307
+#: install-methods.xml:1309
 #, no-c-format
 #. Tag: para
 msgid ""
@@ -1013,13 +1013,13 @@ msgid ""
       "</screen></informalexample> Debian packages will in general set this up correctly by default when they are installed."
 msgstr ""
 
-#: install-methods.xml:1318
+#: install-methods.xml:1320
 #, no-c-format
 #. Tag: para
 msgid "Look in that file and remember the directory which is used as the argument of <command>in.tftpd</command>; you'll need that below. The <userinput>-l</userinput> argument enables some versions of <command>in.tftpd</command> to log all requests to the system logs; this is useful for diagnosing boot errors. If you've had to change <filename>/etc/inetd.conf</filename>, you'll have to notify the running <command>inetd</command> process that the file has changed. On a Debian machine, run <userinput>/etc/init.d/inetd reload</userinput>; on other machines, find out the process ID for <command>inetd</command>, and run <userinput>kill -HUP <replaceable>inetd-pid</replaceable></userinput>."
 msgstr ""
 
-#: install-methods.xml:1332
+#: install-methods.xml:1334
 #, no-c-format
 #. Tag: para
 msgid ""
@@ -1030,85 +1030,85 @@ msgid ""
       "</screen></informalexample> to adjust the range of source ports the Linux TFTP server uses."
 msgstr ""
 
-#: install-methods.xml:1354
+#: install-methods.xml:1356
 #, no-c-format
 #. Tag: title
 msgid "Move TFTP Images Into Place"
 msgstr ""
 
-#: install-methods.xml:1355
+#: install-methods.xml:1357
 #, no-c-format
 #. Tag: para
 msgid "Next, place the TFTP boot image you need, as found in <xref linkend=\"where-files\"/>, in the <command>tftpd</command> boot image directory. Generally, this directory will be <filename>/tftpboot</filename>. You'll have to make a link from that file to the file which <command>tftpd</command> will use for booting a particular client. Unfortunately, the file name is determined by the TFTP client, and there are no strong standards."
 msgstr ""
 
-#: install-methods.xml:1365
+#: install-methods.xml:1367
 #, no-c-format
 #. Tag: para
 msgid "On NewWorld Power Macintosh machines, you will need to set up the <command>yaboot</command> boot loader as the TFTP boot image. <command>Yaboot</command> will then retrieve the kernel and RAMdisk images via TFTP itself. For net booting, use the <filename>yaboot-netboot.conf</filename>. Just rename this to <filename>yaboot.conf</filename> in the TFTP directory."
 msgstr ""
 
-#: install-methods.xml:1374
+#: install-methods.xml:1376
 #, no-c-format
 #. Tag: para
 msgid "For PXE booting, everything you should need is set up in the <filename>netboot/netboot.tar.gz</filename> tarball. Simply extract this tarball into the <command>tftpd</command> boot image directory. Make sure your dhcp server is configured to pass <filename>/pxelinux.0</filename> to <command>tftpd</command> as the filename to boot."
 msgstr ""
 
-#: install-methods.xml:1382
+#: install-methods.xml:1384
 #, no-c-format
 #. Tag: para
 msgid "For PXE booting, everything you should need is set up in the <filename>netboot/netboot.tar.gz</filename> tarball. Simply extract this tarball into the <command>tftpd</command> boot image directory. Make sure your dhcp server is configured to pass <filename>/debian-installer/ia64/elilo.efi</filename> to <command>tftpd</command> as the filename to boot."
 msgstr ""
 
-#: install-methods.xml:1394
+#: install-methods.xml:1396
 #, no-c-format
 #. Tag: title
 msgid "DECstation TFTP Images"
 msgstr ""
 
-#: install-methods.xml:1395
+#: install-methods.xml:1397
 #, no-c-format
 #. Tag: para
 msgid "For DECstations, there are tftpimage files for each subarchitecture, which contain both kernel and installer in one file. The naming convention is <replaceable>subarchitecture</replaceable>/netboot-boot.img. Copy the tftpimage file you would like to use to <userinput>/tftpboot/tftpboot.img</userinput> if you work with the example BOOTP/DHCP setups described above."
 msgstr ""
 
-#: install-methods.xml:1404
+#: install-methods.xml:1406
 #, no-c-format
 #. Tag: para
 msgid "The DECstation firmware boots by TFTP with the command <userinput>boot <replaceable>#</replaceable>/tftp</userinput>, where <replaceable>#</replaceable> is the number of the TurboChannel device from which to boot. On most DECstations this is \"3\". If the BOOTP/DHCP server does not supply the filename or you need to pass additional parameters, they can optionally be appended with the following syntax:"
 msgstr ""
 
-#: install-methods.xml:1416
+#: install-methods.xml:1418
 #, no-c-format
 #. Tag: userinput
 msgid "boot #/tftp/filename param1=value1 param2=value2 ..."
 msgstr ""
 
-#: install-methods.xml:1418
+#: install-methods.xml:1420
 #, no-c-format
 #. Tag: para
 msgid "Several DECstation firmware revisions show a problem with regard to net booting: the transfer starts, but after some time it stops with an <computeroutput>a.out err</computeroutput>. This can have several reasons: <orderedlist> <listitem><para> The firmware does not respond to ARP requests during a TFTP transfer. This leads to an ARP timeout and the transfer stops. The solution is to add the MAC address of the Ethernet card in the DECstation statically to the ARP table of the TFTP server. This is done by running <userinput>arp -s <replaceable>IP-address</replaceable> <replaceable>MAC-address</replaceable></userinput> as root on the machine acting as TFTP server. The MAC-address of the DECstation can be read out by entering <command>cnfg</command> at the DECstation firmware prompt. </para></listitem> <listitem><para> The firmware has a size limit on the files that can be booted by TFTP. </para></listitem> </orderedlist> There are also firmware revisions that cannot boot via TFTP at all. An overview about the different firmware revisions can be found at the NetBSD web pages: <ulink url=\"http://www.netbsd.org/Ports/pmax/board-list.html#proms\"></ulink>."
 msgstr ""
 
-#: install-methods.xml:1456
+#: install-methods.xml:1458
 #, no-c-format
 #. Tag: title
 msgid "Alpha TFTP Booting"
 msgstr ""
 
-#: install-methods.xml:1457
+#: install-methods.xml:1459
 #, no-c-format
 #. Tag: para
 msgid "On Alpha, you must specify the filename (as a relative path to the boot image directory) using the <userinput>-file</userinput> argument to the SRM <userinput>boot</userinput> command, or by setting the <userinput>BOOT_FILE</userinput> environment variable. Alternatively, the filename can be given via BOOTP (in ISC <command>dhcpd</command>, use the <userinput>filename</userinput> directive). Unlike Open Firmware, there is <emphasis>no default filename</emphasis> on SRM, so you <emphasis>must</emphasis> specify a filename by either one of these methods."
 msgstr ""
 
-#: install-methods.xml:1472
+#: install-methods.xml:1474
 #, no-c-format
 #. Tag: title
 msgid "SPARC TFTP Booting"
 msgstr ""
 
-#: install-methods.xml:1473
+#: install-methods.xml:1475
 #, no-c-format
 #. Tag: para
 msgid ""
@@ -1117,85 +1117,91 @@ msgid ""
       "</screen></informalexample> This will spit out the IP in hexadecimal; to get to the correct filename, you will need to change all letters to uppercase and if necessary append the subarchitecture name."
 msgstr ""
 
-#: install-methods.xml:1490
+#: install-methods.xml:1492
 #, no-c-format
 #. Tag: para
 msgid "You can also force some sparc systems to look for a specific file name by adding it to the end of the OpenPROM boot command, such as <userinput>boot net my-sparc.image</userinput>. This must still reside in the directory that the TFTP server looks in."
 msgstr ""
 
-#: install-methods.xml:1501
+#: install-methods.xml:1503
 #, no-c-format
 #. Tag: title
 msgid "BVM/Motorola TFTP Booting"
 msgstr ""
 
-#: install-methods.xml:1502
+#: install-methods.xml:1504
 #, no-c-format
 #. Tag: para
 msgid "For BVM and Motorola VMEbus systems copy the files &bvme6000-tftp-files; to <filename>/tftpboot/</filename>."
 msgstr ""
 
-#: install-methods.xml:1507
+#: install-methods.xml:1509
 #, no-c-format
 #. Tag: para
 msgid "Next, configure your boot ROMs or BOOTP server to initially load the <filename>tftplilo.bvme</filename> or <filename>tftplilo.mvme</filename> files from the TFTP server. Refer to the <filename>tftplilo.txt</filename> file for your subarchitecture for additional system-specific configuration information."
 msgstr ""
 
-#: install-methods.xml:1519
+#: install-methods.xml:1521
 #, no-c-format
 #. Tag: title
 msgid "SGI Indys TFTP Booting"
 msgstr ""
 
-#: install-methods.xml:1520
+#: install-methods.xml:1522
 #, no-c-format
 #. Tag: para
 msgid "On SGI Indys you can rely on the <command>bootpd</command> to supply the name of the TFTP file. It is given either as the <userinput>bf=</userinput> in <filename>/etc/bootptab</filename> or as the <userinput>filename=</userinput> option in <filename>/etc/dhcpd.conf</filename>."
 msgstr ""
 
-#: install-methods.xml:1532
+#: install-methods.xml:1534
 #, no-c-format
 #. Tag: title
 msgid "Broadcom BCM91250A TFTP Booting"
 msgstr ""
 
-#: install-methods.xml:1533
+#: install-methods.xml:1535
 #, no-c-format
 #. Tag: para
 msgid "You don't have to configure DHCP in a special way because you'll pass the full path of the file to the loaded to CFE."
 msgstr ""
 
-#: install-methods.xml:1638
+#: install-methods.xml:1640
 #, no-c-format
 #. Tag: title
 msgid "Automatic Installation"
 msgstr ""
 
-#: install-methods.xml:1639
+#: install-methods.xml:1641
 #, no-c-format
 #. Tag: para
 msgid "For installing on multiple computers it's possible to do fully automatic installations. Debian packages intended for this include <classname>fai</classname> (which uses an install server), <classname>replicator</classname>, <classname>systemimager</classname>, <classname>autoinstall</classname>, and the Debian Installer itself."
 msgstr ""
 
-#: install-methods.xml:1652
+#: install-methods.xml:1654
 #, no-c-format
 #. Tag: title
 msgid "Automatic installation using the Debian Installer"
 msgstr ""
 
-#: install-methods.xml:1654
+#: install-methods.xml:1656
 #, no-c-format
 #. Tag: para
 msgid "The Debian Installer supports automating installs via preconfiguration files. A preconfiguration file can be loaded from the network or from removable media, and used to fill in answers to question asked during the installation process."
 msgstr ""
 
-#: install-methods.xml:1660
+#: install-methods.xml:1662
+#, no-c-format
+#. Tag: para
+msgid "Although most dialogs used by &d-i; can be preseeded using this method, there are some notable exceptions. You currently cannot use preseeding to set up RAID and LVM. Also, with the exception of network driver modules, it is not possible to preconfigure kernel module parameters."
+msgstr ""
+
+#: install-methods.xml:1669
 #, no-c-format
 #. Tag: para
 msgid "The preconfiguration file is in the format used by the debconf-set-selections command. A well documented and working example that you can edit is in <xref linkend=\"example-preseed\"/>."
 msgstr ""
 
-#: install-methods.xml:1666
+#: install-methods.xml:1675
 #, no-c-format
 #. Tag: para
 msgid ""
@@ -1205,25 +1211,25 @@ msgid ""
       "</screen></informalexample> However, a file generated in this manner will have some items that should not be preseeded, and the file in <xref linkend=\"example-preseed\"/> is a better starting place for most users."
 msgstr ""
 
-#: install-methods.xml:1681
+#: install-methods.xml:1690
 #, no-c-format
 #. Tag: para
 msgid "Once you have a preconfiguration file, you can edit it if necessary, and place it on a web server, or copy it onto the installer's boot media. Wherever you place the file, you need to pass a parameter to the installer at boot time to tell it to use the file."
 msgstr ""
 
-#: install-methods.xml:1688
+#: install-methods.xml:1697
 #, no-c-format
 #. Tag: para
 msgid "To make the installer use a preconfiguration file downloaded from the network, add preseed/url=http://url/to/preseed.cfg to the kernel boot parameters. Of course the preconfiguration will not take effect until the installer manages to set up the network to download the file, so this is most useful if the installer can set up the network via DHCP without asking any questions. You may want to set the installation priority to critical to avoid any questions while the network is being configured. See <xref linkend=\"installer-args\"/>."
 msgstr ""
 
-#: install-methods.xml:1699
+#: install-methods.xml:1708
 #, no-c-format
 #. Tag: para
 msgid "To place a preconfiguration file on a CD, you would need to remaster the ISO image to include your preconfiguration file. See the manual page for mkisofs for details. Alternatively, put the preseed file on a floppy, and use preseed/file=/floppy/preseed.cfg"
 msgstr ""
 
-#: install-methods.xml:1706
+#: install-methods.xml:1715
 #, no-c-format
 #. Tag: para
 msgid "If you'll be booting from a USB memory stick, then you can simply copy your preconfiguration file onto the memory stick's filesystem, and edit the syslinux.cfg file to add preseed/file=/hd-media/preseed.cfg to the kernel boot parameters."
