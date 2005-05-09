@@ -51,36 +51,6 @@ for SOURCEXML in $XMLLIST ; do
         echo "** Error during conversion."
         continue
     fi
-
-    # Remove strange references created by split2po
-    # Note: this is a workaround for a bug in the tools:
-    #       http://bugs.kde.org/show_bug.cgi?id=90112
-    # Can be removed when NO_CREDITS=1 is supported by split2po
-    if grep -q "POXML_" $PO ; then
-        echo "   Converting "POXML_" references..."
-        cat $PO | \
-            sed "s/!POXML_AMP!/\&/g" | \
-            sed "s/        /\\\t/g" | \
-            sed "s/&POXML_SPACE;/ /g" | \
-            sed "s/&POXML_LINEFEED;/\\\n\"\n      \"/g" | \
-            sed "s/&POXML_LT;/</g" | \
-            sed "s/&POXML_GT;/>/g" \
-            >/tmp/tmp.po.$$
-        cp /tmp/tmp.po.$$ $PO
-    fi
-    # Check if there are any we don't yet know about
-    if grep "POXML_" $PO ; then
-        echo "** Error: file contains unknown 'POXML_' references."
-    fi
-
-    # Remove spurious msgid's created by split2po (drop last 6 lines)
-    # Note: this is a workaround for a feature in the tools:
-    #       http://bugs.kde.org/show_bug.cgi?id=90112
-    if grep "ROLES_OF_TRANSLATORS" $PO >/dev/null; then
-        LINES=$(cat $PO | wc -l)
-        head -n $(($LINES - 6)) $PO >/tmp/tmp.po.$$
-        cp /tmp/tmp.po.$$ $PO
-    fi
 done
 
 # Check the results
