@@ -6,7 +6,8 @@ Contents:
   2. Examples
   3. Architecture specific recipes
   4. Limitations
-  5. Appendix
+  5. How the actual partition sizes are computed
+  6. Appendix
 
 0. INTRODUCTION
 ---------------
@@ -207,7 +208,40 @@ devices.  Do not use higher than 1000000000 numbers because the shell
 arithmetic is limited to 31 bits (on i386).
 
 
-5. APPENDIX
+5. HOW THE ACTUAL PARTIITON SIZES ARE COMPUTED
+----------------------------------------------
+
+Suppose we have to create N partitions and min[i], max[i] and
+priority[i] are the minimal size, the maximal size and the priority of
+the partition #i as described in section 1.
+
+Let free_space be the size of the free space to partition.
+
+Then do the following:
+
+for(i=1;i<=N;i++) {
+   factor[i] = priority[i] - min[i];
+}
+ready = FALSE;
+while (! ready) {
+   minsum = min[1] + min[2] + ... + min[N];
+   factsum = factor[1] + factor[2] + ... + factor[N];
+   ready = TRUE;
+   for(i=1;i<=N;i++) {
+      x = min[i] + (free_space - minsum) * factor[i] / factsum;
+      if (x > max[i])
+         x = max[i];
+      if (x != min[i]) {
+         ready = FALSE;
+         min[i] = x;
+      }
+   }
+}
+
+Then min[i] will be the size of partition #i.
+
+
+6. APPENDIX
 -----------
 
 On May 25th 2004, it was noted that on i386 systems, the very minimum size of
