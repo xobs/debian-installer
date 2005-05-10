@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: d-i-manual\n"
 "POT-Creation-Date: 2001-02-09 01:25+0100\n"
-"PO-Revision-Date: 2005-04-21 00:19+0800\n"
+"PO-Revision-Date: 2005-05-10 14:03+0800\n"
 "Last-Translator: Ji YongGang<jungle@soforge.com>\n"
 "Language-Team: debian-chinese-gb <debian-chinese-gb@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -945,7 +945,7 @@ msgstr ""
 
 #. Tag: para
 #: install-methods.xml:719
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The <filename>syslinux.cfg</filename> configuration file should contain the "
 "following two lines: <informalexample><screen>\n"
@@ -962,9 +962,9 @@ msgstr ""
 "default vmlinuz\n"
 "append initrd=initrd.gz ramdisk_size=12000 root=/dev/rd/0 init=/linuxrc rw\n"
 "</screen></informalexample> 请注意，根据所启动的内存映像的大小，在必要的时"
-"候，您可能需要增大<userinput>ramdisk_size</userinput> 参数的数值。 如果引导失"
-"败，您可以尝试添加 <userinput>devfs=mount,dall</userinput> 到 <quote>append</"
-"quote> 那一行。"
+"候，您可能需要增大<userinput>ramdisk_size</userinput> 参数的数值。<phrase "
+"condition=\"sarge\">如果引导失败，您可以尝试添加 <userinput>devfs=mount,"
+"dall</userinput> 到 <quote>append</quote> 那一行。</phrase>"
 
 #. Tag: para
 #: install-methods.xml:742
@@ -1083,7 +1083,7 @@ msgstr "可选的内核模块"
 
 #. Tag: para
 #: install-methods.xml:816
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The <filename>yaboot.conf</filename> configuration file should contain the "
 "following lines: <informalexample><screen>\n"
@@ -1112,8 +1112,8 @@ msgstr ""
 "image=/vmlinux\n"
 "        label=install\n"
 "        initrd=/initrd.gz\n"
-"        initrd-size=10000\n"
-"        append=\"devfs=mount,dall --\"\n"
+"        initrd-size=10000<phrase condition=\"sarge\">\n"
+"        append=\"devfs=mount,dall --\"</phrase>\n"
 "        read-only\n"
 "</screen></informalexample> 请注意，在必要的时候，您可能需要增大"
 "<userinput>initrd-size</userinput> 参数的数值，这完全取决于您所使用的内存映像"
@@ -2301,7 +2301,7 @@ msgid ""
 "classname>, <classname>systemimager</classname>, <classname>autoinstall</"
 "classname>, and the Debian Installer itself."
 msgstr ""
-"对于有多台需要安装的计算机的情况，可以采用全自动安装的方式。 用于此项任务的 "
+"对于有多台需要安装的计算机的情况，可以采用全自动安装的方式。用于此项任务的 "
 "Debian 软件包有 <classname>fai</classname>(需要使用一台安装服务器)， "
 "<classname>replicator</classname>、 <classname>systemimager</classname>、 "
 "<classname>autoinstall</classname>，以及 Debian 安装程序本身。"
@@ -2321,8 +2321,8 @@ msgid ""
 "removable media, and used to fill in answers to question asked during the "
 "installation process."
 msgstr ""
-"Debian 安装程序支持通过预先配置文件进行自动安装。 一个预配置文件可以从网络上"
-"或者可移动 介质上被装载，并且被用来在安装过程中自动回答问题。"
+"Debian 安装程序支持通过预先配置文件进行自动安装。一个预配置文件可以从网络上或"
+"者可移动介质上被装载，并且被用来在安装过程中自动回答问题。"
 
 #. Tag: para
 #: install-methods.xml:1662
@@ -2333,6 +2333,9 @@ msgid ""
 "set up RAID and LVM. Also, with the exception of network driver modules, it "
 "is not possible to preconfigure kernel module parameters."
 msgstr ""
+"虽然大多少 &d-i; 使用的对话框可以用这种方法预置，但还是有明显的例外。\n"
+"当前还是无法预先设置 RAID 和 LVM。还有，网络驱动模块，也无法预先设置内核模块"
+"参数。"
 
 #. Tag: para
 #: install-methods.xml:1669
@@ -2360,10 +2363,10 @@ msgid ""
 "have some items that should not be preseeded, and the file in <xref linkend="
 "\"example-preseed\"/> is a better starting place for most users."
 msgstr ""
-"除此之外，要得到一个包含所有可被预设置的项目的完整文件， 您可以进行手动安装，"
+"除此之外，要得到一个包含所有可被预设置的项目的完整文件，您可以进行手动安装，"
 "然后使用 <filename>debconf-get-selections</filename> 命令(它来自 "
-"<classname>debconf-utils</classname>软件包)将 debconf 数据库和 位于 /var/log/"
-"debian-installer/cdebconf 的 cdebconf 数据库的内容 导出至一个单一的文件： "
+"<classname>debconf-utils</classname>软件包)将 debconf 数据库和位于 /var/log/"
+"debian-installer/cdebconf 的 cdebconf 数据库的内容导出至一个单一的文件： "
 "<informalexample><screen>\n"
 "$ debconf-get-selections --installer &gt; <replaceable>文件</replaceable>\n"
 "$ debconf-get-selections &gt;&gt; <replaceable>文件</replaceable>\n"
@@ -2380,9 +2383,9 @@ msgid ""
 "Wherever you place the file, you need to pass a parameter to the installer "
 "at boot time to tell it to use the file."
 msgstr ""
-"一旦您有了一个预配置文件，您可以在需要时编辑它，并且上传至一个 web 服务器， "
-"或者拷贝至安装程序的启动引导介质。无论您将此文件放置在哪里， 您都需要在启动安"
-"装程序时向它传递一个参数来告诉它使用这个文件。"
+"一旦您有了一个预配置文件，可以在需要时编辑它，并且上传至一个 web 服务器，或者"
+"拷贝至安装程序的启动引导介质。无论您将此文件放置在哪里，都需要在启动安装程序"
+"时向它传递一个参数来告诉它使用这个文件。"
 
 #. Tag: para
 #: install-methods.xml:1697
@@ -2398,10 +2401,10 @@ msgid ""
 "\"installer-args\"/>."
 msgstr ""
 "要让安装程序使用一个从网络下载的预配置文件，请将 preseed/url=http://url/to/"
-"config 加入内核启动参数。当然这个预配置文件只有安装程序能够管理网络并下载文件"
-"后才能起作用， 因此如果安装程序能够通过 DHCP 设置网络而不需要询问任何问题的"
-"话，此方法会更有用。 如果您已经被设置好了网络，可能还会想将安装优先级调至“关"
-"键”来避免任何提问。请参见 <xref linkend=\"installer-args\"/>。"
+"config 加入内核启动参数。当然这个预配置文件，只有安装程序能够管理网络并下载文"
+"件后才能起作用，因此如果安装程序能够通过 DHCP 设置网络而不需要询问任何问题的"
+"话，此方法会更有用。如果您已经被设置好了网络，可能还会想将安装优先级调至关键"
+"来避免任何提问。请参见 <xref linkend=\"installer-args\"/>。"
 
 #. Tag: para
 #: install-methods.xml:1708
@@ -2412,9 +2415,9 @@ msgid ""
 "for details. Alternatively, put the preseed file on a floppy, and use "
 "preseed/file=/floppy/preseed.cfg"
 msgstr ""
-"要将预配置文件放置在光盘中，您将需要重新生成 ISO 映像以包括您的预配置文件。 "
-"请阅读 mkisofs 的手册来获得细节信息。另外， 您也可以将预配置文件放置在一张软"
-"盘中，然后使用 preseed/file=/floppy/preseed.cfg 参数。"
+"要将预配置文件放置在光盘中，您将需要重新生成 ISO 映像以包括您的预配置文件。请"
+"阅读 mkisofs 的手册来获得细节信息。另外，您也可以将预配置文件放置在一张软盘"
+"中，然后使用 preseed/file=/floppy/preseed.cfg 参数。"
 
 #. Tag: para
 #: install-methods.xml:1715
