@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 25763 -->
+<!-- original version: 26846 -->
 
 
  <sect1 id="linuxdevices"><title>Linux のデバイス</title>
@@ -241,22 +241,42 @@ when your mouse only has one button. Just add the following lines to
 
  <sect1 id="tasksel-size-list">
  <title>タスクに必要なディスクの空き容量</title>
+
+<!-- Note for d-i and manual maintainers
+ Sizes of tasks should be determined by running "tasksel new" on a system
+ that been fully installed without selecting any tasks. By selecting a
+ task together with the "manual selection" option, aptitude will be started
+ and show the sizes for the task. After deselecting the packages to be
+ installed, quit aptitude and repeat for other tasks.
+ Space requirements need to be determined from tasksel as tasksel will not
+ install recommended packages while selecting a task from aptitude will.
+d-i・マニュアルメンテナ向け注
+ いずれのタスクも選択せずにインストールした状態で "tasksel new" を実行して、
+ タスクのサイズを決定するべきです。
+ "manual selection" オプションを用いてタスクを選択しようとすると、
+ aptitude がタスク用に起動して、サイズを示します。
+ インストールするパッケージの選択を解除して、
+ aptitude を終了しほかのタスクについて繰り返します。
+ 必要な空き領域は、aptitude からタスクを選択した時のように、
+ tasksel が推奨パッケージをインストールしない状態で決定する必要があります。
+-->       
+
 <para>
 
 <!--
-The base sarge installation for i386, including all standard packages,
-requires 178MB of disk space.
+The base sarge installation for i386 using the default 2.4 kernel,
+including all standard packages, requires 573MB of disk space.
 -->
-i386 用の基本 sarge インストールは、全標準パッケージを含めると、
-178MB のディスク領域が必要です。
+デフォルトの 2.4 カーネルを用いた i386 用の基本 sarge インストールは、
+全標準パッケージを含めると、573MB のディスク領域が必要です。
 
 </para><para>
 
 <!--
-The following table lists sizes reported by aptitude for the tasks listed in
-tasksel. Note that some tasks have overlapping constituents, so the total
-installed size for two tasks together may be less than the total obtained by
-adding up the numbers.
+The following table lists sizes reported by aptitude for the tasks listed
+in tasksel. Note that some tasks have overlapping constituents, so the
+total installed size for two tasks together may be less than the total
+obtained by adding up the numbers.
 -->
 以下の表は tasksel で表示されるタスクについて、
 aptitude が報告したサイズです。
@@ -267,67 +287,30 @@ aptitude が報告したサイズです。
 </para><para>
 
 <!--
+Note that you will need to add the sizes listed in the table to the size
+of the base sarge installation when determining the size of partitions.
+Most of the size listed as <quote>Installed size</quote> will end up in
+<filename>/usr</filename>; the size listed as <quote>Download size</quote>
+is (temporarily) required in <filename>/var</filename>.
+-->
+パーティションのサイズを決定するとき、基本 sarge インストールのサイズに加え、
+以下の表に列挙したサイズが必要であるのに注意してください。
+<quote>Installed size</quote> はインストール完了時に <filename>/usr</filename>
+に必要なサイズを、<quote>Download size</quote> は <filename>/var</filename> に
+(一時的に) 必要なサイズを記述しています。
+
+</para><para>
+
 <informaltable><tgroup cols="4">
 <thead>
 <row>
+<!--
   <entry>Task</entry>
   <entry>Installed size (MB)</entry>
   <entry>Download size (MB)</entry>
   <entry>Space needed to install (MB)</entry>
-</row>
-</thead>
-
-<tbody>
-<row>
-  <entry>Desktop</entry>
-  <entry>1537</entry>
-  <entry>521</entry>
-  <entry>2058</entry>
-</row>
-
-<row>
-  <entry>Web server</entry>
-  <entry>71</entry>
-  <entry>21</entry>
-  <entry>92</entry>
-</row>
-
-<row>
-  <entry>Print server</entry>
-  <entry>240</entry>
-  <entry>83</entry>
-  <entry>323</entry>
-</row>
-
-<row>
-  <entry>Mail server</entry>
-  <entry>41</entry>
-  <entry>12</entry>
-  <entry>53</entry>
-</row>
-
-<row>
-  <entry>File server</entry>
-  <entry>85</entry>
-  <entry>34</entry>
-  <entry>119</entry>
-</row>
-
-<row>
-  <entry>SQL database</entry>
-  <entry>108</entry>
-  <entry>33</entry>
-  <entry>141</entry>
-</row>
-
-</tbody>
-</tgroup></informaltable>
-
 -->
-<informaltable><tgroup cols="4">
-<thead>
-<row>
-  <entry>Task</entry>
+  <entry>タスク</entry>
   <entry>インストールサイズ (MB)</entry>
   <entry>ダウンロードサイズ (MB)</entry>
   <entry>インストールに必要な空き容量 (MB)</entry>
@@ -336,45 +319,73 @@ aptitude が報告したサイズです。
 
 <tbody>
 <row>
+<!--
+  <entry>Desktop</entry>
+-->
   <entry>デスクトップ</entry>
-  <entry>1537</entry>
-  <entry>521</entry>
-  <entry>2058</entry>
+  <entry>1392</entry>
+  <entry>460</entry>
+  <entry>1852</entry>
 </row>
 
 <row>
+<!--
+  <entry>Web server</entry>
+-->
   <entry>ウェブサーバ</entry>
-  <entry>71</entry>
-  <entry>21</entry>
-  <entry>92</entry>
-</row>
-
-<row>
-  <entry>印刷サーバ</entry>
-  <entry>240</entry>
-  <entry>83</entry>
-  <entry>323</entry>
-</row>
-
-<row>
-  <entry>メールサーバ</entry>
-  <entry>41</entry>
+  <entry>36</entry>
   <entry>12</entry>
-  <entry>53</entry>
+  <entry>48</entry>
 </row>
 
 <row>
+<!--
+  <entry>Print server</entry>
+-->
+  <entry>印刷サーバ</entry>
+  <entry>168</entry>
+  <entry>58</entry>
+  <entry>226</entry>
+</row>
+
+<row>
+<!--
+  <entry>DNS server</entry>
+-->
+  <entry>DNS サーバ</entry>
+  <entry>2</entry>
+  <entry>1</entry>
+  <entry>3</entry>
+</row>
+
+<row>
+<!--
+  <entry>File server</entry>
+-->
   <entry>ファイルサーバ</entry>
-  <entry>85</entry>
-  <entry>34</entry>
-  <entry>119</entry>
+  <entry>47</entry>
+  <entry>24</entry>
+  <entry>71</entry>
 </row>
 
 <row>
+<!--
+  <entry>Mail server</entry>
+-->
+  <entry>メールサーバ</entry>
+  <entry>10</entry>
+  <entry>3</entry>
+  <entry>13</entry>
+</row>
+
+<row>
+<!--
+  <entry>SQL database</entry>
+-->
   <entry>SQL データベース</entry>
-  <entry>108</entry>
-  <entry>33</entry>
-  <entry>141</entry>
+  <entry>66</entry>
+  <entry>21</entry>
+  <entry>87</entry>
 </row>
 
 </tbody>
@@ -390,6 +401,19 @@ desktop environments.
 Gnome と KDE の両デスクトップ環境をインストールします。
 
 </para></note>
+
+</para><para>
+
+<!--
+If you install in a language other than English, <command>tasksel</command>
+may automatically install a <firstterm>localization task</firstterm>, if one
+is available for your language. Space requirements differ per language;
+you should allow up to 200MB in total for download and installation.
+-->
+英語以外の言語でインストールする場合、その言語が有効ななら 
+<command>tasksel</command> は <firstterm>地域化タスク</firstterm> を、
+自動的にインストールします。
+空き領域は、言語ごとにダウンロードとインストールあわせ 200MB 必要となります。
 
 </para>
  </sect1>
