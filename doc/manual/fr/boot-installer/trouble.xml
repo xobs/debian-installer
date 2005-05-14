@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 26698 -->
+<!-- original version: 27474 -->
 
  <sect1 id="boot-troubleshooting">
  <title>Dysfonctionnements pendant la procédure d'installation</title>
@@ -11,8 +11,8 @@
 
 <para>
 
-Le plus gros problème pour les gens qui installent Debian pour la première 
-fois semble être la fiabilité des disquettes.
+Le plus gros problème pour les gens qui utilisent des disquettes pour installer Debian 
+est celui de la fiabilité des disquettes.
 
 </para><para>
 
@@ -84,6 +84,91 @@ voir, par exemple <userinput>mem=512m</userinput>.
 
 </para>
   </sect2>
+
+  <sect2 arch="i386" id="i386-boot-problems">
+  <title>Problèmes communs pour &arch-title;</title>
+<para>
+Certains problèmes d'installation peuvent être résolus ou évités en
+passant des paramètres d'amorçage à l'installateur.
+</para>
+<para>
+Certains systèmes ont un lecteur de disquettes avec
+«&nbsp;DCL inversés&nbsp;». Si vous obtenez des erreurs lors de la
+lecture de disquettes et si vous savez que les disquettes sont
+«&nbsp;bonnes&nbsp;», essayez le paramètre
+<userinput>floppy=thinkpad</userinput>.
+</para>
+<para>
+Sur certains systèmes, tels que les IBM PS/1 ou ValuePoint (qui ont des
+pilotes de disques ST-506), le disque IDE peut ne pas être reconnu. Encore
+une fois, essayez d'abord sans paramètre supplémentaire pour voir si
+votre disque IDE est reconnu correctement. Si ce n'est pas le cas, déterminez
+la géométrie du disque (cylindres, têtes et secteurs) et utilisez le
+paramètre
+<userinput>hd=<replaceable>cylindres</replaceable>,<replaceable>têtes</replaceable>,<replaceable>secteurs</replaceable></userinput>.
+</para>
+<para>
+Si vous avez une très vieille machine et si le noyau gèle après avoir
+affiché <computeroutput>Checking 'hlt' instruction...</computeroutput>,
+vous devez passer le paramètre d'amorçage <userinput>no-hlt</userinput>
+qui désactive ce test.
+</para>
+<para>
+Si votre écran commence à afficher une image bizarre lors des démarrages
+du noyau, par exemple, un écran entièrement blanc, noir ou un écran
+contenant un mélange de couleurs, alors votre système a très certainement une carte
+video problématique qui ne parvient pas à passer en mode
+<emphasis>framebuffer</emphasis> correctement. Dans ce cas, essayez de
+passer le paramètre d'amorçage
+<userinput>debian-installer/framebuffer=false</userinput> ou
+<userinput>video=vga16:off</userinput>,
+pour désactiver la console <emphasis>framebuffer</emphasis>. Le menu de
+sélection de la langue n'apparaîtra pas, et l'anglais sera la seule
+langue utilisable pour l'installation&nbsp;; c'est dû aux caractéristiques
+limitées de la console. Référez-vous à la <xref linkend="boot-parms"/> pour plus
+de précisions.
+</para>
+
+<sect3>
+<title>Le système bloque lors de la configuration du module PCMCIA</title>
+<para>
+Quelques ordinateurs portables fabriqués par Dell plantent fréquemment
+lorsque la détection des périphériques essaie d'accéder à certaines
+adresses matérielles. D'autres portables ont aussi des problèmes
+semblables. Si vous rencontrez un tel problème et si vous n'avez pas besoin de
+PCMCIA pendant l'installation, vous pouvez désactiver cette option avec le
+paramètre <userinput>hw-detect/start_pcmcia=false</userinput>. Vous pourrez
+configurer PCMCIA après l'installation et éviter le problème des adresses des
+ressources.
+  </para>
+<para>
+Vous pouvez aussi démarrer l'installateur en mode expert.
+On vous demandera d'indiquer les options pour les adresses des
+ressources de votre matériel. Par exemple, si votre ordinateur est un des portables
+Dell mentionnés plus haut, vous pouvez indiquer
+<userinput>exclude port 0x800-0x8ff</userinput>. Il existe une liste de
+ces options communes dans la section sur les ressources système du
+<ulink
+url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-1.html#ss1.12">HOWTO
+PCMCIA</ulink>. Notez qu'il faut supprimer les virgules quand vous
+passez ces valeurs à l'installateur.
+</para>
+</sect3>
+
+<sect3>
+<title>Le système se bloque lors du chargement des modules USB</title>
+<para>
+Le noyau essaye normalement d'installer les modules USB et les pilotes
+de claviers USB afin de permettre l'installation de quelques claviers USB
+non standard. Cependant, sur certains systèmes USB, le pilote provoque un
+blocage lors du démarrage.
+Il est possible d'éviter ces problèmes en désactivant le contrôleur USB
+dans la configuration BIOS de votre carte mère. Il est également possible
+d'utiliser le paramètre <userinput>debian-installer/probe/usb=false</userinput> à l'invite de
+démarrage, ce qui empêchera le chargement de ces modules.
+</para>
+</sect3>
+</sect2>
 
   <sect2 id="kernel-msgs">
   <title>Comprendre les messages du noyau au démarrage</title>

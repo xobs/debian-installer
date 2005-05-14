@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 27383 -->
+<!-- original version: 27518 -->
 
  <sect1 id="automatic-install">
  <title>Installation automatisée</title>
@@ -29,9 +29,10 @@ posées pendant l'installation.
 <para>
 La plupart des dialogues de l'installateur Debian peuvent être
 préconfigurés de cette manière. Il y a cependant des exceptions
-notables.
-On ne peut pas actuellement installer RAID et LVM en utilisant cette
-méthode.
+notables. On peut partitionner tout un disque ou partitionner seulement
+une partie de l'espace disponible&nbsp;; on ne peut pas utiliser des
+partitions existantes .
+On ne peut pas installer RAID et LVM en utilisant cette méthode.
 <phrase condition="sarge">Il n'est pas possible non plus de
 préconfigurer les paramètres des modules du noyau, à l'exception des
 modules réseau.</phrase>
@@ -82,10 +83,28 @@ utiliser preseed/file=/floppy/preseed.cfg
 </para>
 <para arch="i386">
 Si vous voulez amorcer à partir d'une clé USB, vous pouvez copier le fichier de
-préconfiguration sur le système de fichier de la clé, modifier le fichier
+préconfiguration sur le système de fichiers de la clé, modifier le fichier
 syslinux.cfg et y ajouter preseed/file=/hd-media/preseed.cfg pour les 
 paramètres d'amorçage du noyau.
 </para>
+
+   <sect3 condition="etch">
+   <title>Préconfiguration des valeurs par défaut</title>
+<para>
+
+Il est possible de préconfigurer la réponse à une question tout en
+permettant que la question soit posée. Le drapeau
+<firstterm>seen</firstterm> doit être mis à <quote>false</quote> une
+fois la valeur déclarée.
+
+<informalexample><screen>
+d-i foo/bar string value
+d-i foo/bar seen false
+</screen></informalexample>
+
+</para>
+   </sect3>
+
 </sect2>
 </sect1>
 
