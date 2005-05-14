@@ -2,21 +2,28 @@
 
 # This script checks if the translations of the documents are up to date.
 # When called with "-d" option, it also prints what has changed in the
-# original since last translation
+# original since last translation.
+# If the "-r" option is used with the "-d" option, the diff will be taken
+# against the revision number specified with the -r option instead of
+# the latest revision of the English original.
 # When called with "-s" option, it also shows all files that are marked
-# untranslated
+# untranslated.
 
 # SYNOPSIS:
-#             ./doc-check [-d] [-s] [-v] [-V] [lang]
+#             ./doc-check [-d] [-r <revision>] [-s] [-v] [-V] [lang]
 #
 #	(uses $lang set below if lang is not given on commandline)
 
 use Getopt::Std;
 use File::Find;
-$opt_d = $opt_s = $opt_v = $opt_V = 0;
-getopts('dsvV');
+$opt_d = $opt_r = $opt_s = $opt_v = $opt_V = 0;
+getopts('r:dsvV');
 # You may set this to your default language code
 $lang = shift || "pl";
+if ($opt_r and $opt_r !~ /[0-9]+/) {
+	warn "Please enter a revision number for parameter -r.\n";
+	exit 1
+}
 
 sub checkdiff
 {
@@ -24,6 +31,9 @@ sub checkdiff
 	my ($plrev, $enrev, $untrans) = getrev($plfname, $enfname);
 	$plrev and $enrev or return;
 	if ( "$plrev" ne "$enrev" ) {
+		if ($opt_d and $opt_r and $opt_r < $enrev) {
+			$enrev = $opt_r;
+		}
 		if ($untrans) {
 			print "$enfname : $plrev -> $enrev (untranslated)\n";
 		} else {
