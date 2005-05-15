@@ -400,6 +400,11 @@ ifdef EXTRALIBS
 	done
 endif
 
+	# Create an lsb release file.
+	echo 'DISTRIB_ID=$(LSB_DISTRIB_ID)' > $(TREE)/etc/lsb-release
+	echo 'DISTRIB_DESCRIPTION=$(LSB_DISTRIB_DESCRIPTION)' >> $(TREE)/etc/lsb-release
+	echo 'DISTRIB_RELEASE=$(LSB_DISTRIB_RELEASE)' >> $(TREE)/etc/lsb-release
+
 	@touch $@
 
 
