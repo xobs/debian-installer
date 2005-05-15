@@ -2,16 +2,18 @@
 <!-- original version: 25513 -->
 
    <sect3 id="mdcfg">
-   <title>Configurando o Dispositivo Multi-Discos (RAID via Software)</title>
+   <title>Configurando o dispositivo Multi-Discos (RAID via Software)</title>
 <para>
 
-Caso tenha mais de um disco rígido<footnote><para>
+Caso tenha mais de um disco rígido
+<footnote><para>
 
 Para ser honesto, você pode contruir dispositivos MD até mesmo dentro de 
 partições residindo dentro de uma unidade física simples, mas não lhe trará 
 nada útil.
 
-</para></footnote> em seu computador, você poderá usar o 
+</para></footnote> 
+em seu computador, você poderá usar o 
 <command>mdcfg</command> para configurar suas unidades para 
 aumentar a performance e/ou melhorar a confiabilidade em seus dados. O 
 resultado é chamado <firstterm>Dispositivo Muldi-Discos</firstterm> (ou 
@@ -83,20 +85,20 @@ dados. O RAID5 divide todos os dados de entrada em pedaços e os
 distribui igualmente em todos os discos exceto um (parecido com o 
 RAID0). Ao contrário do RAID0, o RAID5 também utiliza informações
 de <firstterm>paridade</firstterm>, que são gravadas no disco 
-restante. O fisco de paridade não é estático (senão seria chamado
+restante. O disco de paridade não é estático (senão seria chamado 
 de RAID4), mas é alterada periodicamente, assim as informações de 
 partidade são distribuidas igualmente em todos os discos. Quando 
 um dos discos falha, a parte faltante dos dados pode 
-ser computado dos dados restantes junto com sua paridade. O RAID5 deve
+ser computada dos dados restantes junto com sua paridade. O RAID5 deve 
 consistir de no mínimo três partições ativas. Opcionalmente você 
-poderá ter um disco reserva na array que tomará lugar do disco defeituoso
+poderá ter um disco reserva na array que tomará lugar do disco defeituoso 
 em caso de falha.
 
 </para><para>
 
-Como você pode notar, o RAID5 tem um grau parecido de confiança como
-o RAID1 enquanto mantém menos redundância. Por outro lado as operações
-de gravação são um pouco mais lentas que o RAID0 devido a computação
+Como você pode notar, o RAID5 tem um grau parecido de confiança com 
+o RAID1 enquanto mantém menos redundância. Por outro lado as operações 
+de gravação são um pouco mais lentas que o RAID0 devido a computação 
 das informações de paridade.
 
 </para></listitem>
@@ -111,7 +113,7 @@ Para configurar:
 <row>
   <entry>Tipo</entry>
   <entry>Dispositivos Mínimos</entry>
-  <entry>Dispositivo Spare</entry>
+  <entry>Dispositivo Reserva</entry>
   <entry>Sobrevive a falha de disco?</entry>
   <entry>Espaço Disponível</entry>
 </row>
@@ -137,7 +139,7 @@ Para configurar:
 <row>
   <entry>RAID5</entry>
   <entry>3</entry>
-  <entry>optional</entry>
+  <entry>opcional</entry>
   <entry>sim</entry>
   <entry>
     Tamanho da menos partição multiplicada pelo número de dispositivos no
@@ -149,7 +151,7 @@ raid menos 1.
 
 </para><para>
 
-Se você quiser saber toda a verdade sobre o RAID via software, de uma 
+Se quiser saber toda a verdade sobre o RAID via software, de uma 
 olhada no <ulink url="&url-software-raid-howto;">Software RAID HOWTO</ulink>.
 
 </para><para>
@@ -163,20 +165,20 @@ RAID</guimenuitem> </menuchoice>.)
 
 </para><warning><para>
 
-O suporte a MD é uma adição relativamente nova ao 
-programa de instalação. Você pode ter problemas em alguns
+O suporte a MD é uma adição relativamente nova no 
+programa de instalação. Você pode ter problemas em alguns 
 níveis de RAID e em combinação com alguns gerenciadores de 
-partida se tentar usar o MD como sistema de arquivos
-(<filename>/</filename>). Para usuários experientes, é possível
-contornar estes problemas executando alguns passos de instalação
-ou configurações manualmente através do interpretador de comandos.
+partida se tentar usar o MD como sistema de arquivos 
+(<filename>/</filename>). Para usuários experientes, é possível 
+contornar estes problemas executando alguns passos de instalação 
+ou configurações manualmente através do interpretador de comandos. 
 
 </para></warning><para>
 
 Como próximo passo, você deverá selecionar <guimenuitem>Configurar o RAID via 
 software</guimenuitem> através do menu principal do <command>partman</command>.
 Na primeira tela do <command>mdcfg</command> selecione o item 
-<guimenuitem>Criar um dispositivo MD</guimenuitem>. Você será presenteado com
+<guimenuitem>Criar um dispositivo MD</guimenuitem>. Você será presenteado com 
 uma lista de tipos suportados de dispositivos MD, no qual poderá escolher um 
 (e.g. RAID1). O que segue, depende do tipo de MD que selecionou.
 </para>
@@ -194,9 +196,9 @@ O RAID1 é um pouco mais detalhista. Primeiro, o sistema lhe perguntará
 para entrar com o número de dispositivos ativos e o número de dispositivos
 spare que formarão o MD. Após isto, você precisará selecionar através de uma 
 lista de dispositivos RAID as que se tornarão ativas e então escolher as que 
-serão spare. O número de partições selecionadas deverá ser igual ao número
+serão spare. O número de partições selecionadas deverá ser igual ao número 
 especificado anteriormente. Não se preocupe se cometer algum erro e 
-selecionar um número de partições diferente, o &d-i; não lhe permitirá continuar
+selecionar um número de partições diferente, o &d-i; não lhe permitirá continuar 
 até que corrija o problema.
 
 </para></listitem>
@@ -214,16 +216,16 @@ partições ativas.
 
 É perfeitamente possível ter diversos tipos de MD de uma só vez. Por 
 exemplo se tiver três discos rígidos de 200GB dedicados ao MD, cada 
-contendo duas partições de 100GB, você poderá combinar as primeiras
-partições em todos os três discos no RAID0 (uma partição rápida
+contendo duas partições de 100GB, você poderá combinar as primeiras 
+partições em todos os três discos no RAID0 (uma partição rápida 
 de 300GB para edição de vídeos) e usar as outras três partições 
 (2 ativas e 1 spare) para o RAID1 (uma partição mais confiável de 
 100GB para armazenar o sistema de arquivos <filename>/home</filename>).
 
 </para><para>
 
-Após configurar os dispositivos MD conforme suas necessidades, você poderá
-selecionar <guimenuitem>Finalizar</guimenuitem> <command>mdcfg</command> para
+Após configurar os dispositivos MD conforme suas necessidades, selecione
+<guimenuitem>Finalizar</guimenuitem> <command>mdcfg</command> para 
 retornar ao <command>partman</command> e criar sistemas de arquivos em seus 
 novos dispositivos MD e especificar opções como pontos desmontagem.
 
