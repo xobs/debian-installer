@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 26698 -->
+<!-- original version: 27474 -->
 
  <sect1 id="boot-troubleshooting">
  <title>Problémy s instalačním systémem</title>
@@ -12,8 +12,8 @@
 
 <para>
 
-Pro lidi, kteří instalují Debian poprvé, bývá největším problémem
-spolehlivost disket.
+Pro lidi, kteří instalují Debian z disket, bývá největším problémem
+spolehlivost těchto médií.
 
 </para><para>
 
@@ -76,6 +76,97 @@ se v průběhu zavádění jádra zasekne, zkuste omezit viditelnou paměť
 zaváděcím parametrem <userinput>mem=512m</userinput>.
 
 </para>
+  </sect2>
+
+  <sect2 arch="i386" id="i386-boot-problems">
+  <title>Běžné instalační problémy na &arch-title;</title>
+<para>
+
+V praxi se můžete potkat s instalačními problémy, které lze vyřešit,
+nebo je aspoň obejít, zadáním určitých zaváděcích parametrů
+instalačnímu programu.
+
+</para><para>
+
+Některé systémy mají disketové mechaniky s invertovanými DCL. Pokud
+při čtení z mechaniky zaznamenáte chyby a přitom jste si jisti, že
+disketa je dobrá, zkuste parametr
+<userinput>floppy=thinkpad</userinput>.
+
+</para><para>
+
+Na některých systémech jako např. IBM PS/1 nebo ValuePoint, které
+používají řadiče disků ST-506, asi nebude řadič IDE rozpoznán
+korektně. Nejprve pokud možno vyzkoušejte zavést systém beze změny
+parametrů. Pokud nebude disk rozpoznán, zkuste zadat geometrii disku
+(počet cylindrů, hlav a sektorů) pomocí parametru:
+<userinput>hd=<replaceable>cylindry</replaceable>,<replaceable>hlavy</replaceable>,<replaceable>sektory</replaceable></userinput>.
+
+</para><para>
+
+Jestliže máte velmi starý počítač a jádro se zasekne po hlášce
+<computeroutput>Checking 'hlt' instruction...</computeroutput>, potom
+by mohl pomoci parametr <userinput>no-hlt</userinput>, kterým zakážete
+provádění tohoto testu.
+
+</para><para>
+
+Jestliže je obraz na obrazovce během zavádění jádra
+<quote>divný</quote>, jako třeba čistě bílý, naprosto černý, nebo se
+zobrazuje barevné <quote>smetí</quote>, máte problematickou grafickou
+kartu, která se neumí správně přepnout do grafického režimu. V takovém
+případě pomůže zaváděcí parametr
+<userinput>debian-installer/framebuffer=false</userinput> nebo
+<userinput>video=vga16:off</userinput>, kterým vypnete grafickou
+konzolu. Během instalace se však nezobrazí výzva pro výběr jazyka
+a celá instalace proběhne pouze v angličtině. Zaváděcí parametry
+popisuje <xref linkend="boot-parms"/>.
+
+</para>
+
+   <sect3>
+   <title>Systém zamrzne během konfigurování PCMCIA</title>
+<para>
+
+Některé modely notebooků firmy Dell jsou známé tím, že se zhroutí,
+když automatické rozpoznávání PCMCIA zařízení přistoupí na určité
+hardwarové adresy. Toto chování mohou vykazovat i některé notebooky
+jiných výrobců. Pokud se u vás tento problém projevuje a pro instalaci
+podporu PCMCIA nepotřebujete, můžete ji vypnout zaváděcím parametrem
+<userinput>hw-detect/start_pcmcia=false</userinput>. Služby PCMCIA
+můžete zprovoznit později po instalaci.
+
+</para><para>
+
+Alternativně můžete instalační program zavést v expertním režimu. Pak
+budete mimo jiné dotázáni na rozsah zdrojů, které váš hardware
+vyžaduje. Například pokud máte jeden z výše zmíněných Dellů, měli
+byste zde zadat <userinput>exclude port
+0x800-0x8ff</userinput>. Seznam obvyklých rozsahů se nachází například
+v <ulink
+url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-1.html#ss1.12">System
+resource settings section of the PCMCIA HOWTO</ulink>.
+Při zadávání rozsahů do instalačního programu vynechejte všechny
+čárky (pokud se v rozsazích nachází).
+
+</para>
+   </sect3>
+
+   <sect3 arch="i386">
+   <title>Systém zamrzne během nahrávání USB modulů</title>
+<para>
+
+Jádro se standardně snaží nahrát ovladače pro USB a konkrétně pro USB
+klávesnice, aby umožnilo instalaci uživatelům s nestandardními USB
+klávesnicemi. Bohužel existují porouchané USB systémy, na kterých se
+ovladač při nahrávání zasekne. Obejít je můžete tím, že problémový USB
+řadič deaktivujete v BIOSu základní desky. Jinou možností je zaváděcí
+parametr <userinput>debian-installer/probe/usb=false</userinput>,
+který zabrání zavedení USB modulů, i když je příslušný hardware
+nalezen.
+
+</para>
+   </sect3>
   </sect2>
 
   <sect2 id="kernel-msgs">

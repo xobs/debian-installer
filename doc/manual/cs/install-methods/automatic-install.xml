@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 24663 -->
+<!-- original version: 27518 -->
 
  <sect1 id="automatic-install">
  <title>Automatická Instalace</title>
@@ -15,7 +15,7 @@ automatickou instalaci. Příslušné balíky se jmenují
 
 </para>
 
-  <sect2>
+  <sect2 id="preseed">
   <title>debian-installer</title>
 <para>
 
@@ -24,6 +24,15 @@ Instalační program Debianu podporuje automatické instalace pomocí
 soubor obsahuje odpovědi na otázky, které se &d-i; ptá během
 instalace. Tento soubor můžete nahrát ze sítě nebo z vyměnitelného
 média.
+
+</para><para>
+
+Totuto metodou můžete přednastavit hodnoty pro většinu dialogů
+v &d-i;, ale existuje několik výjimek. Můžete použít volné místo nebo
+rozdělit celý disk, ale nemůžete využít stávající oblasti. Momentálně
+také nelze přednastavit RAID a LVM. <phrase condition="sarge">S
+výjimkou síťových modulů nelze nastavit ani parametry modulů
+jádra.</phrase>
 
 </para><para>
 
@@ -81,5 +90,22 @@ přidal <userinput>preseed/file=/hd-media/preseed.cfg</userinput>.
 
 </para>
 
+   <sect3 condition="etch">
+   <title>Použití přednastavení pro změnu výchozí hodnoty</title>
+<para>
+
+Pomocí přednastavení je možné změnit výchozí odpověď na otázku
+a zároveň tuto otázku zobrazit. (Tj. instalace automaticky nepokračuje
+a čeká na potvrzení od uživatele, ovšem s novou přednastavenou
+hodnotou.) Dosáhnete toho tak, že po nastavení hodnoty změníte příznak
+<firstterm>seen</firstterm> na hodnotu <quote>false</quote>.
+
+<informalexample><screen>
+d-i foo/bar string hodnota
+d-i foo/bar seen false
+</screen></informalexample>
+
+</para>
+   </sect3>
   </sect2>
  </sect1>

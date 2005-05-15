@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-2"?>
 <!-- $Id$ -->
-<!-- original version: 26637 -->
+<!-- original version: 27474 -->
 
   <sect2 arch="i386"><title>Zavedení z CD-ROM</title>
 
@@ -160,7 +160,7 @@ image=/boot/newinstall/vmlinuz
        label=newinstall
        initrd=/boot/newinstall/initrd.gz
        root=/dev/ram0
-       append="devfs=mount,dall ramdisk_size=12000"
+       append="<phrase condition="sarge">devfs=mount,dall</phrase> ramdisk_size=12000"
 </screen></informalexample>
 
 Pokud vás zajímají pikantní detaily, prozkoumejte manuálové stránky
@@ -183,9 +183,9 @@ kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram0 ramdisk_size=12000
 initrd (hd0,0)/boot/newinstall/initrd.gz
 </screen></informalexample>
 
-a restartujte počítač. Pokud zavádění selže, zkuste na konec řádku
-<quote>kernel</quote> přidat parametr
-<userinput>devfs=mount,dall</userinput>.
+a restartujte počítač. <phrase condition="sarge">Pokud zavádění selže,
+zkuste na konec řádku <quote>kernel</quote> přidat parametr
+<userinput>devfs=mount,dall</userinput>.</phrase>
 
 </para><para>
 
@@ -319,106 +319,53 @@ zavádět z TFTP.
    </sect3>
   </sect2>
 
-  <sect2 arch="i386"><title>Zaváděcí parametry pro i386</title>
+  <sect2 arch="i386"><title>Zaváděcí výzva</title>
 <para>
 
-Po startu instalačního programu se objeví tzv. zaváděcí výzva (boot
-prompt) <prompt>boot:</prompt>. Zde se můžete porozhlédnout po
-nápovědě, která se skrývá pod klávesami <keycap>F1</keycap> až
-<keycap>F10</keycap>, nebo můžete stisknout &enterkey; a zavést
-systém.
+Při zavádění instalačního programu se objeví grafická obrazovka
+s logem Debianu, pod kterým se nachází tzv. zaváděcí výzva (boot
+prompt):
+
+<informalexample><screen>
+Press F1 for help, or ENTER to boot:
+</screen></informalexample>
+
+Zde se můžete porozhlédnout po nápovědě, která se skrývá pod klávesami
+<keycap>F1</keycap> až <keycap>F10</keycap>, nebo můžete stisknout
+&enterkey; a zavést systém s výchozími hodnotami.
 
 </para><para>
 
 Pokud chcete zadat některé z parametrů, o kterých jste se dočetli
-v nápovědě pod klávesami <keycap>F3</keycap> až <keycap>F7</keycap>,
+v nápovědě pod klávesami <keycap>F3</keycap> až <keycap
+condition="sarge">F7</keycap><keycap condition="etch">F8</keycap>,
 nezapomeňte na prvním místě zadat název jádra, které chcete zavést
 (implicitní je <userinput>linux</userinput>).  Celý řádek by tedy
-vypadal třeba takto: <userinput>linux floppy=thinkpad</userinput>.
+vypadal třeba takto: <userinput>linux debconf/priority=medium</userinput>.
 Jestliže stisknete pouze &enterkey;, je to stejné, jako kdyby jste
 zadali <userinput>linux</userinput> bez dalších parametrů.
 
-</para><para>
+<note><para>
 
-Některé systémy mají disketové mechaniky s invertovanými DCL. Pokud
-při čtení z mechaniky zaznamenáte chyby a přitom jste si jisti, že
-disketa je dobrá, zkuste parametr
-<userinput>floppy=thinkpad</userinput>.
+Instalujete-li systém přes zařízení pro vzdálenou správu, jež nabízí
+textové rozhraní k VGA konzoli (např. Compaq <quote>integrated Lights
+Out</quote> (iLO), HP <quote>Integrated Remote Assistant</quote>
+(IRA), ...), je možné že neuvidíte grafickou část obrazovky a někdy
+dokonce ani zaváděcí výzvu. Můžete se pokusit naslepo stisknout
+klávesu <keycap>F1</keycap><footnote><para>
 
-</para><para>
+Pro některá zařízení to znamená použít speciální sekvenci kláves,
+například IRA používá <keycombo> <keycap>Ctrl</keycap>
+<keycap>F</keycap> </keycombo>,&nbsp;<keycap>1</keycap>.
+ 
+</para></footnote>
 
-Na některých systémech jako např. IBM PS/1 nebo ValuePoint, které
-používají řadiče disků ST-506, asi nebude řadič IDE rozpoznán
-korektně. Nejprve pokud možno vyzkoušejte zavést systém beze změny
-parametrů. Pokud nebude disk rozpoznán, zkuste zadat geometrii disku
-(počet cylindrů, hlav a sektorů) pomocí parametru:
-<userinput>hd=<replaceable>cylindry</replaceable>,<replaceable>hlavy</replaceable>,<replaceable>sektory</replaceable></userinput>.
+a přepnout se tak na (textovou) obrazovku s nápovědou. Zde by už mělo
+fungovat echo, tj. znaky, které na klávesnici napíšete, by měly být
+normálně vidět na řádku se zaváděcí výzvou. Chcete-li instalačnímu
+systému zakázat použití grafického framebufferu ve zbytku instalace,
+přidejte na řádek parametr
+<userinput>debian-installer/framebuffer=false</userinput>.
 
-</para><para>
-
-Jestliže máte velmi starý počítač a jádro se zasekne po hlášce
-<computeroutput>Checking 'hlt' instruction...</computeroutput>, potom
-by mohl pomoci parametr <userinput>no-hlt</userinput>, kterým zakážete
-provádění tohoto testu.
-
-</para><para>
-
-Jestliže je obraz na obrazovce během zavádění jádra
-<quote>divný</quote>, jako třeba čistě bílý, naprosto černý, nebo se
-zobrazuje barevné <quote>smetí</quote>, máte problematickou grafickou
-kartu, která se neumí správně přepnout do grafického režimu. V takovém
-případě pomůže zaváděcí parametr
-<userinput>debian-installer/framebuffer=false</userinput> nebo
-<userinput>video=vga16:off</userinput>, kterým vypnete grafickou
-konzolu. Během instalace se však nezobrazí výzva pro výběr jazyka a
-celá instalace proběhne pouze v angličtině. Zaváděcí parametry
-popisuje <xref linkend="boot-parms"/>.
-
-</para>
-  </sect2>
-
-
-  <sect2 arch="i386">
-  <title>Systém zamrzne během konfigurování PCMCIA</title>
-
-<para>
-
-Některé modely notebooků firmy Dell jsou známé tím, že se zhroutí,
-když automatické rozpoznávání PCMCIA zařízení přistoupí na určité
-hardwarové adresy. Toto chování mohou vykazovat i některé notebooky
-jiných výrobců. Pokud se u vás tento problém projevuje a pro instalaci
-podporu PCMCIA nepotřebujete, můžete ji vypnout zaváděcím parametrem
-<userinput>hw-detect/start_pcmcia=false</userinput>. Služby PCMCIA
-můžete zprovoznit později po instalaci.
-
-</para><para>
-
-Alternativně můžete instalační program zavést v expertním režimu. Pak
-budete mimo jiné dotázáni na rozsah zdrojů, které váš hardware
-vyžaduje. Například pokud máte jeden z výše zmíněných Dellů, měli
-byste zde zadat <userinput>exclude port
-0x800-0x8ff</userinput>. Seznam obvyklých rozsahů se nachází například
-v <ulink
-url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-1.html#ss1.12">System
-resource settings section of the PCMCIA HOWTO</ulink>.
-Při zadávání rozsahů do instalačního programu vynechejte všechny
-čárky (pokud se v rozsazích nachází).
-
-</para>
-  </sect2>
-
-  <sect2 arch="i386">
-  <title>Systém zamrzne během nahrávání USB modulů</title>
-<para>
-
-Jádro se standardně snaží nahrát ovladače pro USB a konkrétně pro USB
-klávesnice, aby umožnilo instalaci uživatelům s nestandardními USB
-klávesnicemi. Bohužel existují porouchané USB systémy, na kterých se
-ovladač při nahrávání zasekne. Obejít je můžete tím, že problémový USB
-řadič deaktivujete v BIOSu základní desky. Jinou možností je zaváděcí
-parametr <userinput>debian-installer/probe/usb=false</userinput>,
-který zabrání zavedení USB modulů, i když je příslušný hardware
-nalezen.
-
-</para>
+</para></note></para>
   </sect2>
