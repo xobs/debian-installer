@@ -5,7 +5,7 @@
  <title>Firmware do Console Alpha</title>
 <para>
 
-O firmware do console é armazenado em uma flash ROM e iniciado 
+O firmware do console é armazenado em uma flash ROM e inicializado
 quando sistema Alpha é ligado ou reiniciado. Existem dois tipos
 diferentes de especificações de consoles usados nos sistemas Alpha, 
 e duas classes de firmwares de consoles disponíveis:
@@ -41,7 +41,7 @@ inicializou.
 O ARC requer que utilize uma tabela de partição MS-DOS (como
 criada pelo comando <command>cfdisk</command>) para o disco de inicialização.
 As tabelas de partição MS-DOS são partições no formato "nativo" quando
-inicializa através do ARC. De fato, pois o AlphaBIOS contém um utilitário
+inicializa o sistema através do ARC. De fato, pois o AlphaBIOS contém um utilitário
 de particionamento de disco, você pode preferir particionar seus discos
 através dos menus da firmware antes de instalar o Linux.
 
@@ -50,28 +50,28 @@ através dos menus da firmware antes de instalar o Linux.
 De modo oposto, o SRM é <emphasis>incompatível</emphasis> com tabelas
 de partição do MS-DOS.
 <footnote><para>Especificamente, o formato do setor de inicialização
-requerida pela especificação do subsistema conflita com a substituição
+requerida pela especificação do sub-sistema, conflita com a substituição
 da tabela de partição do DOS.</para></footnote> Pois sistemas Unix Tru64
-usam o formato BSD de volume de disco, este é o formato nativo de partições para
+usa o formato BSD como volume de disco, este é o formato nativo de partições para
 as instalações SRM.
 
 </para><para>
 
-O GNU/Linux é o único sistema operacional na alpha que pode ser 
-inicializada através de ambos os tipos de console, mas a &debian; 
+O GNU/Linux é o único sistema operacional na Alpha que pode ser 
+inicializado através de ambos os tipos de console, mas a &debian; 
 &release; somente suporta a inicialização em sistemas baseados 
-em SRM. Se tiver em um Alpha em que nenhuma versão do SRM esteja 
+em SRM. Se tiver um Alpha em que nenhuma versão do SRM esteja 
 disponível, se estiver fazendo dupla inicializaçào do sistema com 
 o Windows NT ou se seu dispositivo de inicialização requer o suporte
-a console ARC para a inicializaçõa da BIOS, você não será capaz de 
-utilizar o programa de instalação da &debian; &release;. Você ainda 
+a console ARC para a inicializaçõa da BIOS, não será possível 
+usar o programa de instalação da &debian; &release;. Você ainda 
 poderá executar a &debian; &release; em tal sistema usando outra 
-mídia de instalação; por exemplo, poderá isntalar a Debian woody com
+mídia de instalação; por exemplo, poderá instalar a Debian woody com
 o MILO e realizar a atualização.
 
 </para><para>
 
-Por causa que o <command>MILO</command> não está disponiel para 
+Devido ao <command>MILO</command> não estar disponível para 
 qualquer sistema Alpha em produção (em Fevereiro 2000) e porque 
 não é mais necessário comprar uma licença do OpenVMS ou Unix Tru64 para 
 ter uma firmware SRM em seu Alpha antigo, é recomendado que utilize uma 
@@ -201,17 +201,17 @@ instalações baseados no MILO.
 
 </para><para condition="FIXME">
 
-Geralmente nenhum destes consoles podem inicializar diretamente no 
+Geralmente nenhum destes consoles podem ser iniciados diretamente no 
 Linux, assim é requerida a assistência de um gerenciador
 de partida intermediário. Existem dois gerenciadores principais
-no Linux: <command>MILO</command> and <command>aboot</command>.
+no Linux: o <command>MILO</command> e o <command>aboot</command>.
 
 </para><para condition="FIXME">
 
 O <command>MILO</command> por si próprio é um console, que substitui 
 o ARC ou SRM na memória. O <command>MILO</command> pode ser diretamente
-inicializado a partir do ARC e SRM e é o único método de iniciar o 
-Linux no console ARC.
+inicializado a partir do ARC e SRM e é o único método de inicializar o 
+Linux através do console ARC.
 O <command>MILO</command> é específico de plataforma (um <command>MILO</command>
 diferente é necessário para cada tipo de sistema) e existe somente para 
 estes sistemas, no qual o suporte ao ARC é mostrado na tabela acima. 
@@ -242,7 +242,7 @@ ARC -&gt; MILO
 
 Por causa que o <command>MILO</command> não está disponível para qualquer 
 um dos sistemas alpha atualmente em produção (em Fevereiro de 2000) e 
-porque ele não é mais necessária a compra de licenças OpenVMS ou 
+porque não é mais necessária a compra de licenças OpenVMS ou 
 Unix Tru64 para ter uma firmware SRM em seu antigo Alpha, é recomendado
 que você use o SRM e o <command>aboot</command> em novas instalações do
 GNU/Linux, a não ser que deseje fazer dupla inicialização com o 
@@ -250,7 +250,7 @@ Windows NT.
 
 </para><para>
 
-A maioria dos servidores Alpha e todas os produtos servidores e estações 
+A maioria dos servidores Alpha e todos os produtos servidores e estações 
 contém ambos o SRM e o AlphaBIOS em sua firmware. Para máquinas
 "falf-flash" tal como as várias placas de avaliação. É possível
 mudar de uma versão para outra regravando a firmware. Também, 
@@ -315,14 +315,13 @@ imagem de inicialização netboot.
 </para><para>
 
 
-
 Se deseja usar uma console serial, você <emphasis>deve</emphasis>
 passar o argumento <userinput>console=</userinput> ao kernel.
 Isto pode ser feito usando o argumento <userinput>-flags</userinput> 
 ao comando <userinput>boot</userinput> do console SRM. As portas 
 seriais tem o mesmo nome dos seus arquivos correspondentes em 
 <userinput>/dev</userinput>. Também, quando especificar parâmetros 
-adicionais de kernel, vocÊ deverá repetir certas opções adicionais
+adicionais de kernel, você deverá repetir certas opções adicionais
 que são necessárias pelas imagens do &d-i;. Por exemplo, para inicializar 
 através de <userinput>ewa0</userinput> e usar uma console na 
 primeira porta serial, você deverá digitar: 
@@ -421,7 +420,7 @@ inicialização assim que entrar no MILO. Veja <xref linkend="booting-from-milo"/>
 
 No menu de seleção de sistema operacional, defina o <command>linload.exe</command> 
 como gerenciador de partida e <command>milo</command> como o caminho do 
-sistema operacional. Inicie usando a nova entrada criada.
+sistema operacional. Inicialize usando a nova entrada criada.
 
 </para>
   </sect2>
@@ -430,8 +429,8 @@ sistema operacional. Inicie usando a nova entrada criada.
 <sect2 arch="alpha" condition="FIXME" id="booting-from-milo"><title>Inicializando com o MILO</title>
 <para>
 
-O MILO contido na mídia de inicialização está configurado par a
-prosseguir para o Linux automaticamente. Caso deseje intervir, tudo
+O MILO contido na mídia de inicialização está configurado para 
+iniciar automaticamente o Linux. Caso deseje intervir, tudo
 que precisa fazer é pressionar espaço durante a contagem regressiva 
 do MILO.
 

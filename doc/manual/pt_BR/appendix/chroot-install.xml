@@ -7,10 +7,10 @@
 <para>
 
 Esta seção explica como instalar a &debian; a partir de um 
-sistema Unix ou Linux existente, sem usar o sistema de instalação
+sistema Unix ou Linux já existente, sem usar o sistema de instalação
 baseado em ncurses, guiado por menus como explicado no resto deste 
 manual. O HOWTO "cross-install"  foi pedido por usuários que estavam 
-migrando para o &debian; a partir do Red Hat, Mandrake e SUSE. 
+migrando para a &debian; a partir do Red Hat, Mandrake e SUSE. 
 É assumida nesta seção alguma familiaridade com a linha de comando e 
 navegação no sistema de arquivos.
 O símbolo <prompt>$</prompt> significa um comando que será executado por 
@@ -22,7 +22,7 @@ comando no chroot da Debian.
 Uma vez que tiver o novo sistema Debian configurado para sua 
 preferência, você poderá migrar os dados existentes de usuários (se 
 existirem) para ele, e mantê-lo em pleno funcionamento. Isto é 
-chamada instalação do &debian; "sem parada". Este 
+chamada instalação do &debian; "sem interrupção". Este 
 também é um excelente método para lidar com hardwares que 
 não se comportam de forma amigável com vários tipos de 
 inicialização ou mídias de instalação.
@@ -64,9 +64,9 @@ pela partição que deseja usar para a Debian):
 </screen></informalexample>
 
 Monte uma partição como <filename>/mnt/debinst</filename> (o 
-ponto de instalação, que será o dispositivo raíz (<filename>/</filename>) 
-de seu novo sistema). O ponto de montagem é estritamente arbitrário e 
-será referenciado mais adiante abaixo.
+ponto de montagem da instalação, que será o dispositivo raíz (<filename>/</filename>) 
+de seu novo sistema). O ponto de montagem é de livre escolha e 
+será referenciado mais adiante no texto.
 
 <informalexample><screen>
  # mkdir /mnt/debinst
@@ -109,7 +109,7 @@ O binário <command>debootstrap</command> está localizado nos arquivos
 da Debian (se assegure de selecionar o arquivo apropriado para sua 
 arquitetura). Baixe o pacote .deb do <command>debootstrap</command> de
 <ulink url="http://ftp.debian.org/debian/pool/main/d/debootstrap/">
-pool</ulink>, copie o pacote para o diretório de trabalho, e descompacte
+pool</ulink>, copie o pacote para o diretório de trabalho e descompacte
 os arquivos binários a partir deste. Você precisará ter privilégios de 
 root para instalar estes binários.
 
@@ -123,14 +123,14 @@ root para instalar estes binários.
   </sect2>
 
   <sect2>
-  <title>Executar o <command>debootstrap</command></title>
+  <title>Executando o <command>debootstrap</command></title>
 <para>
 
-O <command>debootstrap</command> pode baixar os arquivos 
-necessários diretamente de um repositório quando o executa. Você 
-poderá substitui-lo por qualquer espelho de arquivos da Debian ao 
+O <command>debootstrap</command>, ao ser executado, pode baixar os arquivos 
+necessários diretamente de um repositório. Você 
+poderá substitui-lo por qualquer espelho (mirror) de arquivos da Debian ao 
 invés de usar <userinput>http.us.debian.org/debian</userinput> no 
-exemplo do comando abaixo, preferivelmente um mirror mais perto
+exemplo do comando abaixo, use preferivelmente um mirror mais perto
 de você em sua rede. A lista de mirrors estão disponíveis a 
 partir de <ulink url="http://www.debian.org/misc/README.mirrors"></ulink>.
 
@@ -178,7 +178,7 @@ o comando <command>chroot</command> dentro dele:
 </para>
 
    <sect3>
-   <title>Montar as Partições</title>
+   <title>Montando as Partições</title>
 <para>
 
 Você precisará criar o arquivo <filename>/etc/fstab</filename>.
@@ -219,7 +219,7 @@ ou para montar os sistemas de arquivos individualmente use:
 </para><para>
 
 Você poderá montar o sistema de arquivos proc múltiplas vezes e 
-em localizações diversas, pois /proc é para customizações. Se não 
+em localizações diversas, pois /proc tem esta flexibilidade. Se não 
 usar o <userinput>mount -a</userinput>, tenha certeza de montar o 
 proc antes de continuar:
 
@@ -231,7 +231,7 @@ proc antes de continuar:
    </sect3>
 
    <sect3>
-   <title>Configurar o Teclado</title>
+   <title>Configurando o Teclado</title>
 
 <para>
 
@@ -309,7 +309,7 @@ Entre com seu nome de host (2 a 63 caracteres):
  # echo DebianHostName &gt; /etc/hostname
 </screen></informalexample>
 
-Se tiver múltiplas placas de rede, você poderá organizar os nomes 
+Se tiver várias placas de rede, você poderá organizar os nomes 
 na ordem desejada no arquivo <filename>/etc/modules</filename>. 
 Então durante a inicialização, a placa terá seu nome associado com 
 o nome da interface (eth0, eth1, etc.) que deseja.
@@ -318,7 +318,7 @@ o nome da interface (eth0, eth1, etc.) que deseja.
    </sect3>
 
    <sect3>
-   <title>Configurar o fuso-horário, usuários e o APT</title>
+   <title>Configurando o fuso-horário, usuários e o APT</title>
 <para>
 
 Configure seu fuso-horário, adicione um usuário normal, e 
@@ -374,11 +374,11 @@ nome de pacote.
   </sect2>
 
   <sect2>
-<title>Configurando seu Gerenciador de Inicialização</title>
+<title>Configurando seu Gerenciador de Partida</title>
 <para>
 
 Para tornar seu sistema &debian; inicializável, 
-ajuste seu gerenciador de inicialização para carregar o kernel
+ajuste seu gerenciador de partida para carregar o kernel
 instalado com sua nova partição raíz. Note que o debootstrap
 não instala um gerenciador de partida, você deverá executar um 
 apt-get dentro do seu chroot da Debian para faze-lo.
@@ -413,7 +413,7 @@ label=Debian
 </para><para arch="powerpc">
 
 Veja <userinput>man yaboot.conf</userinput> por instruções de 
-como configurar seu gerenciador de inicialização. Se estiver 
+como configurar seu gerenciador de partida. Se estiver 
 mantendo o sistema que usou para instalar a Debian, apenas adicione 
 uma entrada no arquivo <filename>yaboot.conf</filename> Você também 
 poderá copia-lo para o novo sistema e edita-lo lá. Após terminar a 
