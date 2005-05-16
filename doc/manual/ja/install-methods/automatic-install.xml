@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 27383 -->
+<!-- original version: 27518 -->
 
  <sect1 id="automatic-install">
  <title>自動インストール</title>
@@ -25,10 +25,10 @@ the Debian Installer itself.
 
 </para>
 
-<sect2>
-<title>Debian インストーラを用いた自動インストール</title>
-
+  <sect2 id="preseed">
+  <title>Debian インストーラを用いた自動インストール</title>
 <para>
+
 <!--
 The Debian Installer supports automating installs via preconfiguration
 files. A preconfiguration file can be loaded from the network or from
@@ -43,14 +43,16 @@ preconfiguration ファイルは、ネットワークやリムーバブルメディアから読み込まれ、
 
 <!--
 Although most dialogs used by &d-i; can be preseeded using this method,
-there are some notable exceptions. You currently cannot use preseeding
-to set up RAID and LVM.
+there are some notable exceptions. You can (re)partition an entire disk
+or use available free space on a disk; it is not possible to use existing
+partitions. You currently cannot use preseeding to set up RAID and LVM.
 <phrase condition="sarge">Also, with the exception of network driver modules,
-it is not possible to preconfigure kernel module
-parameters.</phrase>
+it is not possible to preconfigure kernel module parameters.</phrase>
 -->
 &d-i; で使用するほとんどの質問は、この方法であらかじめ設定できますが、
 いくつかの例外があります。
+ディスク全体のパーティション (再) 分割や、ディスクの空き領域は利用できますが、
+すでにあるパーティションの利用はできません。
 現在、RAID や LVM のセットアップは、あらかじめ設定できません。
 <phrase condition="sarge">また、ネットワークドライバモジュール以外の
 カーネルモジュールパラメータをあらかじめ設定できません。</phrase>
@@ -165,5 +167,32 @@ USB メモリスティックから起動するのであれば、
 syslinux.cfg ファイルを編集できます。
 
 </para>
-</sect2>
+  
+   <sect3 condition="etch">
+<!--
+   <title>Using Preseeding to Change Default Values</title>
+-->
+   <title>デフォルト値の変更に preseed を利用する</title>
+<para>
+
+<!--
+It is also possible to use preseeding to change the default answer for a
+question, but still have the question asked. To do this the
+<firstterm>seen</firstterm> flag must be reset to <quote>false</quote> after
+setting the value for a template.
+-->
+質問に対するデフォルトの回答を変更するのに、preseed を利用できますが、
+依然として質問が表示されます。
+これに対処するためには、テンプレートの値を設定したあとに 
+<firstterm>seen</firstterm> フラグを <quote>false</quote> 
+としてリセットしてください。
+
+<informalexample><screen>
+d-i foo/bar string value
+d-i foo/bar seen false
+</screen></informalexample>
+
+</para>
+   </sect3>
+  </sect2>
  </sect1>

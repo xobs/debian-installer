@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 26698 -->
+<!-- original version: 27474 -->
 
  <sect1 id="boot-troubleshooting">
  <title>インストールプロセスのトラブルシューティング</title>
@@ -13,10 +13,10 @@
 <para>
 
 <!--
-The biggest problem for people installing Debian for the first time
+The biggest problem for people using floppy disks to install Debian
 seems to be floppy disk reliability.
 -->
-初めて Debian をインストールする人がつまづく最大の問題は、
+フロッピーディスクを用いて Debian をインストールする人がつまづく最大の問題は、
 フロッピーディスクの信頼性だと思います。
 
 </para><para>
@@ -139,6 +139,176 @@ kernel sees, such as <userinput>mem=512m</userinput>.
 カーネルが扱うメモリの量を制限する必要があるかもしれません。
 
 </para>
+  </sect2>
+
+  <sect2 arch="i386" id="i386-boot-problems">
+<!--
+  <title>Common &arch-title; Installation Problems</title>
+-->
+  <title>&arch-title; へのインストールに共通の問題</title>
+<para>
+
+<!--
+There are some common installation problems that can be solved or avoided by
+passing certain boot parameters to the installer.
+-->
+インストールの際の共通の問題がいくつかあり、
+これはインストーラに渡す起動パラメータで解決したり、
+確実にバイパスして回避したりできます。
+
+</para><para>
+
+<!--
+Some systems have floppies with <quote>inverted DCLs</quote>. If you receive
+errors reading from the floppy, even when you know the floppy is good,
+try the parameter <userinput>floppy=thinkpad</userinput>.
+-->
+システムによっては ``inverted DCLs'' 
+つきのフロッピードライブを装備したものがあります。
+フロッピーディスク自体には問題がないはずなのに、
+読み込み中にエラーが出た場合には、
+<userinput>floppy=thinkpad</userinput> というパラメータを試してください。
+
+</para><para>
+
+<!--
+On some systems, such as the IBM PS/1 or ValuePoint (which have ST-506
+disk drivers), the IDE drive may not be properly recognized.  Again,
+try it first without the parameters and see if the IDE drive is
+recognized properly.  If not, determine your drive geometry
+(cylinders, heads, and sectors), and use the parameter
+<userinput>hd=<replaceable>cylinders</replaceable>,<replaceable>heads</replaceable>,<replaceable>sectors</replaceable></userinput>.
+-->
+IBM PS/1 や (ST-506 ディスクドライバを装備した) ValuePoint
+などのシステムでは、IDE ドライブが正しく認識されないことがあります。
+繰り返しになりますが、まずパラメータなしでカーネルを起動し、
+IDE ドライブが正しく認識されるかどうかを見てください。
+もし認識できなかったら、
+ドライブのジオメトリ (シリンダ・ヘッダ・セクタ) を調べて、
+<userinput>hd=<replaceable>cylinders</replaceable>,<replaceable>heads</replaceable>,<replaceable>sectors</replaceable></userinput>
+というパラメータを使ってください。
+
+</para><para>
+
+<!--
+If you have a very old machine, and the kernel hangs after saying
+<computeroutput>Checking 'hlt' instruction...</computeroutput>, then
+you should try the <userinput>no-hlt</userinput> boot argument, which
+disables this test.
+-->
+非常に古いマシンにおいて、
+<computeroutput>Checking 'hlt' instruction...</computeroutput>
+と表示されたあとにカーネルがハングしてしまう場合は、
+ブート引数 <userinput>no-hlt</userinput> を使って、
+このチェックを無効にしてみるとよいでしょう。
+
+</para><para>
+
+<!--
+If your screen begins to show a weird picture while the kernel boots,
+eg. pure white, pure black or colored pixel garbage, your system may
+contain a problematic video card which does not switch to the
+framebuffer mode properly.  Then you can use the boot parameter
+<userinput>debian-installer/framebuffer=false</userinput> or
+<userinput>video=vga16:off</userinput> to disable the framebuffer
+console. Only the English
+language will be available during the installation due to limited
+console features. See <xref linkend="boot-parms"/> for details.
+-->
+カーネルの起動時に画面が不思議な絵 (例: 真っ白、真っ黒、色付きピクセル屑) 
+を表示し始める場合、あなたのシステムは、
+フレームバッファモードに適切に変わらない問題のあるビデオカードがついているかもしれません。
+その場合、フレームバッファコンソールを無効にするため、
+ブートパラメータに <userinput>debian-installer/framebuffer=false</userinput> 
+か <userinput>video=vga16:off</userinput> を使用できます。
+コンソールの機能が制限されているため、インストール中には英語しか使えません。
+詳細は <xref linkend="boot-parms"/> をご覧ください。
+
+</para>
+  
+  <sect3>
+<!--
+  <title>System Freeze During the PCMCIA Configuration Phase</title>
+-->
+  <title>PCMCIA 設定中のシステムフリーズ</title>
+<para>
+
+<!--
+Some laptop models produced by Dell are known to crash when PCMCIA device
+detection tries to access some hardware addresses. Other laptops may display
+similar problems. If you experience such a problem and you don't need PCMCIA
+support during the installation, you can disable PCMCIA using the
+<userinput>hw-detect/start_pcmcia=false</userinput> boot parameter. You can
+then configure PCMCIA after the installation is completed and exclude the
+resource range causing the problems.
+-->
+DELL のラップトップモデルのいくつかは、
+PCMCIA デバイス検出でいくつかハードウェアアドレスをアクセスしようとすると、
+クラッシュすることが知られています。
+他のラップトップコンピュータでも、同様の問題が起きるかもしれません。
+そのような問題に遭遇しても、PCMCIA サポートが必要でなければ、
+<userinput>hw-detect/start_pcmcia=false</userinput> というブートパラメータで、
+PCMCIA を無効にできます。
+インストールが完了した後、PCMCIA を設定し、
+問題が起きるリソース範囲を除外することができます。
+
+</para><para>
+
+<!--
+Alternatively, you can boot the installer in expert mode. You will
+then be asked to enter the resource range options your hardware
+needs. For example, if you have one of the Dell laptops mentioned
+above, you should enter <userinput>exclude port
+0x800-0x8ff</userinput> here. There is also a list of some common
+resource range options in the <ulink
+url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-1.html#ss1.12">System
+resource settings section of the PCMCIA HOWTO</ulink>. Note that you
+have to omit the commas, if any, when you enter this value in the
+installer.
+-->
+その他、インストーラをエキスパートモードで起動することができます。
+その後、ハードウェアが必要とするリソース範囲オプションを、
+入力するように促されます。
+例えば、上記の Dell のラップトップコンピュータを持っていれば、
+ここで <userinput>exclude port 0x800-0x8ff</userinput> と入力するといいです。
+さらにいくつかの共通のリソース範囲オプションのリストが<ulink
+url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-1.html#ss1.12">
+PCMCIA HOWTO のシステムリソースの設定</ulink> にあります。
+インストーラにこの値を入力する場合、
+もしあればカンマを省略しなければならないことに注意してください。
+
+</para>
+   </sect3>
+
+   <sect3>
+<!--
+   <title>System Freeze while Loading the USB Modules</title>
+-->
+   <title>USB モジュールロード中のシステムフリーズ</title>
+<para>
+
+<!--
+The kernel normally tries to install USB modules and the USB keyboard driver
+in order to support some non-standard USB keyboards. However, there are some
+broken USB systems where the driver hangs on loading. A possible workaround
+may be disabling the USB controller in your mainboard BIOS setup. Another option
+is passing the <userinput>debian-installer/probe/usb=false</userinput> parameter
+at the boot prompt, which will prevent the modules from being loaded.
+-->
+カーネルは、非標準 USB キーボードをサポートするように、
+通常 USB モジュールと USB キーボードドライバをインストールしようとします。
+しかし、ドライバがロード中に止まるような、
+イカレた USB システムがまれにあります。
+これはマザーボードの BIOS セットアップで、
+USB コントローラを無効にできるかもしれません。
+別の方法は、
+ブートプロンプトに <userinput>debian-installer/probe/usb=false</userinput> 
+パラメータを渡すことです。
+これにより USB ハードウェアが検知されても、
+モジュールがロードされるのを防ぐことができます。
+
+</para>
+   </sect3>
   </sect2>
 
   <sect2 id="kernel-msgs">
