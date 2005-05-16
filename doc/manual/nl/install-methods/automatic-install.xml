@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 27383 untranslated -->
+<!-- original version: 27518 untranslated -->
 
  <sect1 id="automatic-install">
  <title>Automatic Installation</title>
@@ -15,10 +15,10 @@ the Debian Installer itself.
 
 </para>
 
-<sect2>
-<title>Automatic installation using the Debian Installer</title>
-
+  <sect2 id="preseed">
+  <title>Automatic Installation Using the Debian Installer</title>
 <para>
+
 The Debian Installer supports automating installs via preconfiguration
 files. A preconfiguration file can be loaded from the network or from
 removable media, and used to fill in answers to question asked during the
@@ -27,11 +27,11 @@ installation process.
 </para><para>
 
 Although most dialogs used by &d-i; can be preseeded using this method,
-there are some notable exceptions. You currently cannot use preseeding
-to set up RAID and LVM.
+there are some notable exceptions. You can (re)partition an entire disk
+or use available free space on a disk; it is not possible to use existing
+partitions. You currently cannot use preseeding to set up RAID and LVM.
 <phrase condition="sarge">Also, with the exception of network driver modules,
-it is not possible to preconfigure kernel module
-parameters.</phrase>
+it is not possible to preconfigure kernel module parameters.</phrase>
 
 </para><para>
 
@@ -90,5 +90,22 @@ syslinux.cfg file to add preseed/file=/hd-media/preseed.cfg to the kernel boot
 parameters.
 
 </para>
-</sect2>
+  
+   <sect3 condition="etch">
+   <title>Using Preseeding to Change Default Values</title>
+<para>
+
+It is also possible to use preseeding to change the default answer for a
+question, but still have the question asked. To do this the
+<firstterm>seen</firstterm> flag must be reset to <quote>false</quote> after
+setting the value for a template.
+
+<informalexample><screen>
+d-i foo/bar string value
+d-i foo/bar seen false
+</screen></informalexample>
+
+</para>
+   </sect3>
+  </sect2>
  </sect1>

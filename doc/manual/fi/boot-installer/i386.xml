@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 27345 untranslated -->
+<!-- original version: 27474 untranslated -->
 
   <sect2 arch="i386"><title>Booting from a CD-ROM</title>
 
@@ -106,7 +106,7 @@ bf2.4 flavor. The symptom of the problem is an
 END FIXME -->
 
   <sect2 arch="i386" id="boot-initrd">
-  <title>Booting from linux using <command>LILO</command> or
+  <title>Booting from Linux Using <command>LILO</command> or
   <command>GRUB</command></title>
 
 <para>
@@ -196,7 +196,7 @@ or <command>LILO</command>.
   </sect2>
 
   <sect2 arch="i386" id="usb-boot">
-  <title>Booting from USB memory stick</title>
+  <title>Booting from USB Memory Stick</title>
 <para>
 
 Let's assume you have prepared everything from <xref
@@ -300,7 +300,7 @@ network.
 </para>
    </sect3>
    
-   <sect3><title>NIC with network bootROM</title>
+   <sect3><title>NIC with Network BootROM</title>
 <para>
 
 It could be that your Network Interface Card provides
@@ -324,105 +324,57 @@ provides bootdiskettes and even bootroms that do a TFTPboot.
    </sect3>
   </sect2>
 
-  <sect2 arch="i386"><title>i386 Boot Parameters</title>
+  <sect2 arch="i386"><title>The Boot Prompt</title>
 <para>
 
-When the installer boots, you will be presented with the boot prompt,
-<prompt>boot:</prompt>. You can do two things at the <prompt>boot:</prompt>
-prompt. You can press the function keys <keycap>F1</keycap> through
-<keycap>F10</keycap> to view a few pages of helpful information, or
-you can press <keycap>Enter</keycap> to boot the system.
+When the installer boots, you should be presented with a friendly graphical
+screen showing the Debian logo and the boot prompt:
 
-</para><para>
+<informalexample><screen>
+Press F1 for help, or ENTER to boot:
+</screen></informalexample>
 
-Information on boot parameters which might be useful can be found by
-pressing <keycap>F3</keycap> through 
-<phrase condition="sarge"><keycap>F7</keycap></phrase><phrase
-condition="etch"><keycap>F8</keycap></phrase>.
-If you add any parameters to
-the boot command line, be sure to type the boot method (the default is
-<userinput>linux</userinput>) and a space before the first parameter (e.g.,
-<userinput>linux floppy=thinkpad</userinput>). If you simply press &enterkey;,
-that's the same as typing <userinput>linux</userinput> without any special
+At the boot prompt
+you can either just press &enterkey; to boot the installer with
+default options or enter a specific boot method and, optionally, boot
 parameters.
 
 </para><para>
 
-Some systems have floppies with ``inverted DCLs''. If you receive
-errors reading from the floppy, even when you know the floppy is good,
-try the parameter <userinput>floppy=thinkpad</userinput>.
+Information on available boot methods and on boot parameters which might
+be useful can be found by pressing <keycap>F2</keycap> through 
+<phrase condition="sarge"><keycap>F7</keycap></phrase><phrase
+condition="etch"><keycap>F8</keycap></phrase>. If you add any parameters to
+the boot command line, be sure to type the boot method (the default is
+<userinput>linux</userinput>) and a space before the first parameter (e.g.,
+<userinput>linux debconf/priority=medium</userinput>).
 
-</para><para>
+<note><para>
 
-On some systems, such as the IBM PS/1 or ValuePoint (which have ST-506
-disk drivers), the IDE drive may not be properly recognized.  Again,
-try it first without the parameters and see if the IDE drive is
-recognized properly.  If not, determine your drive geometry
-(cylinders, heads, and sectors), and use the parameter
-<userinput>hd=<replaceable>cylinders</replaceable>,<replaceable>heads</replaceable>,<replaceable>sectors</replaceable></userinput>.
-
-</para><para>
-
-If you have a very old machine, and the kernel hangs after saying
-<computeroutput>Checking 'hlt' instruction...</computeroutput>, then
-you should try the <userinput>no-hlt</userinput> boot argument, which
-disables this test.
-
-</para><para>
-
-If your screen begins to show a weird picture while the kernel boots,
-eg. pure white, pure black or colored pixel garbage, your system may
-contain a problematic video card which does not switch to the
-framebuffer mode properly.  Then you can use the boot parameter
-<userinput>debian-installer/framebuffer=false</userinput> or
-<userinput>video=vga16:off</userinput> to disable the framebuffer
-console. Only the English
-language will be available during the installation due to limited
-console features. See <xref linkend="boot-parms"/> for details.
-
-</para>
-  </sect2>
-
-
-  <sect2 arch="i386">
-  <title>System freeze during the PCMCIA configuration phase</title>
+If you are installing the system via a remote management device that
+provides a text interface to the VGA console, you may not be able to
+see the initial graphical splash screen upon booting the installer;
+you may even not see the boot prompt. Examples of these devices include
+the text console of Compaq's <quote>integrated Lights Out</quote> (iLO)
+and HP's <quote>Integrated Remote Assistant</quote> (IRA).
+You can blindly press F1<footnote>
 
 <para>
 
-Some laptop models produced by Dell are known to crash when PCMCIA device
-detection tries to access some hardware addresses. Other laptops may display
-similar problems. If you experience such a problem and you don't need PCMCIA
-support during the installation, you can disable PCMCIA using the
-<userinput>hw-detect/start_pcmcia=false</userinput> boot parameter. You can
-then configure PCMCIA after the installation is completed and exclude the
-resource range causing the problems.
-
-</para><para>
-
-Alternatively, you can boot the installer in expert mode. You will
-then be asked to enter the resource range options your hardware
-needs. For example, if you have one of the Dell laptops mentioned
-above, you should enter <userinput>exclude port
-0x800-0x8ff</userinput> here. There is also a list of some common
-resource range options in the <ulink
-url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-1.html#ss1.12">System
-resource settings section of the PCMCIA HOWTO</ulink>. Note that you
-have to omit the commas, if any, when you enter this value in the
-installer.
-
+In some cases these devices will require special escape sequences to
+enact this keypress, for example the IRA uses <keycombo> <keycap>Ctrl</keycap>
+<keycap>F</keycap> </keycombo>,&nbsp;<keycap>1</keycap>.
+ 
 </para>
-  </sect2>
 
-  <sect2 arch="i386">
-  <title>System freeze while loading the USB modules</title>
-<para>
+</footnote> to bypass this screen and view the help text. Once you are
+past the splash screen and at the help text your keystrokes will be echoed
+at the prompt as expected. To prevent the installer from using the
+framebuffer for the rest of the installation, you will also want to add
+<userinput>debian-installer/framebuffer=false</userinput> to the boot prompt,
+as described in the help text.
 
-The kernel normally tries to install USB modules and the USB keyboard driver
-in order to support some non-standard USB keyboards. However, there are some
-broken USB systems where the driver hangs on loading. A possible workaround
-may be disabling the USB controller in your mainboard BIOS setup. Another option
-is passing the <userinput>debian-installer/probe/usb=false</userinput> parameter
-at the boot prompt, which will prevent the modules from being loaded.
-
+</para></note>
 </para>
+
   </sect2>
