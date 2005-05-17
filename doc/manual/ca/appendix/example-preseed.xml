@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 25005 untranslated -->
+<!-- original version: 27282 untranslated -->
 
 <sect1 id="example-preseed">
 <title>Preconfiguration File Example</title>
@@ -11,11 +11,19 @@ install. Its use is explained in <xref linkend="automatic-install"/>. You
 may want to uncomment some of the lines before using the file.
 
 <note><para>
+
 In order to be able to properly present this example in the manual, we've had
 to split some lines. This is indicated by the use of the line-continuation-character
 <quote>\</quote> and extra indentation in the next line. In a real preconfiguration
 file, these split lines have to be joined into <emphasis>one single line</emphasis>.
 If you do not, preconfiguration will fail with unpredictable results.
+
+</para><para>
+
+A <quote>clean</quote> example file is included on the official Debian
+installation CD-ROMs in <filename>/doc/install/manual</filename> and available from
+the Internet at <ulink url="&url-example-preseed;"></ulink>.
+
 </para></note>
 
 <informalexample><screen>
@@ -51,10 +59,12 @@ If you do not, preconfiguration will fail with unpredictable results.
 # Note that the kernel accepts a maximum of 8 command line options and
 # 8 environment options (including any options added by default for the
 # installer). If these numbers are exceeded, 2.4 kernels will drop any
-# excess options and 2.6 kernels will panic.
-# Some of the default options, like 'vga=normal' and 'devfs=mount' may be
-# safely removed for most installations, which may allow you to add more
-# options for preseeding.
+# excess options and 2.6 kernels will panic. With kernel 2.6.9 or newer,
+# you can use 32 command line options and 32 environment options.
+#
+# Some of the default options, like 'vga=normal' may be safely removed
+# for most installations, which may allow you to add more options for
+# preseeding.
 
 #### Shell commands.
 
@@ -320,7 +330,7 @@ exim4-config exim4/dc_postmaster        string
 
 # Monitor autodetection is recommended.
 xserver-xfree86 xserver-xfree86/autodetect_monitor    boolean true
-# Uncomment if you have a LCD display.
+# Uncomment if you have an LCD display.
 #xserver-xfree86 xserver-xfree86/config/monitor/lcd   boolean true
 # X has three configuration paths for the monitor. Here's how to preseed
 # the "medium" path, which is always available. The "simple" path may not
