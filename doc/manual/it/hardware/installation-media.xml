@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 22229 -->
+<!-- original version: 23672 -->
 
  <sect1 id="installation-media">
  <title>Supporti per l'installazione</title>
@@ -106,7 +106,23 @@ are supported by the ohci1394 and sbp2 drivers. -->
 Sono supportati anche i CD-ROM con interfaccia USB, cos&igrave; come i
 dispositivi FireWire che sono supportati dai driver ohci1394 e sbp2.
 
-</para><para arch="arm"> 
+</para><para arch="alpha">
+
+<!-- Both SCSI and IDE/ATAPI CD-ROMs are supported on &arch-title;, as long
+as the controller is supported by the SRM console.  This rules out many
+add-on controller cards, but most integrated IDE and SCSI chips and
+controller cards that were provided by the manufacturer can be expected
+to work.  To find out whether your device is supported from the SRM
+console, see the <ulink url="&url-srm-howto;">SRM HOWTO</ulink>. -->
+
+Sia i CD-ROM SCSI che quelli IDE/ATAPI sono supportati su &arch-title;,
+sempre che il controller sia supportato dalla console SRM. Questo esclude
+molte dei controller su schede aggiuntive, per&ograve; parecchi dei chip
+IDE e SCSI integrati e le schade controller fornite dal produttore dovrebbero
+funzionare. Per scoprire se un dispositivo &egrave; supportato dalla console
+SRM si consulti l'<ulink url="&url-srm-howto;">SRM HOWTO</ulink>.
+
+</para><para arch="arm">
 
 <!-- IDE/ATAPI CD-ROMs are supported on all ARM machines.
 On RiscPCs, SCSI CD-ROMs are also supported. -->
@@ -116,15 +132,23 @@ sono supportati anche i CD-ROM SCSI.
 
 </para><para arch="mips">
 
-<!-- On SGI machines, it is possible to boot from CD and images are provided.
+<!-- On SGI machines, booting from CD-ROM requires a SCSI CD-ROM drive
+capable of working with a logical blocksize of 512 bytes. Many of the
+SCSI CD-DROM drives sold for the PC market do not have this
+capability. If your CD-ROM drive has a jumper labeled "Unix/PC" or
+"512/2048", place it in the "Unix" or "512" position.
 To start the install, simply choose the <quote>System installation</quote>
-entry in the firmware.  The Broadcom BCM1250 supports standard IDE devices,
+entry in the firmware.  The Broadcom BCM91250A supports standard IDE devices,
 including CD-ROM drives, but CD images for this platform are currently not
 provided because the firmware doesn't recognize CD drives. -->
 
-Sulle macchine SGI &egrave; possibile boottare dai CD e sono fornite delle immagini.
+Sulle macchine SGI l'avvio da CD-ROM richiede un lettore CD-ROM in grado
+con blocchi logici di dimensione pari a 512&nbsp;byte. Parecchi dei lettori
+di CD-ROM SCSI sul mercato non hanno questa funzionalit&agrave;; se il
+proprio lettore ha un jumper etichettato con "Unix/PC" o con "512/2048"
+spostarlo sulla posizione "Unix" o "512".
 Per avviare l'installazione basta semplicemente selezionare la voce
-<quote>System installation</quote> nel firmware. La Broadcom BCM1250 supporta i
+<quote>System installation</quote> nel firmware. La Broadcom BCM91250A supporta i
 dispositivi IDE, tra cui anche le unit&agrave; CD-ROM, ma le immagini dei CD per
 questa piattaforma non sono attualmente disponibili perch&eacute; il firmware
 non riconosce i CD.
@@ -209,7 +233,7 @@ preferita per le macchine &architecture;.
 </para><para arch="sparc">
 
 <!-- Although the &arch-title; does not allow booting from SunOS 
-(Solaris), you can install from a SunOS partiton (UFS slices). -->
+(Solaris), you can install from a SunOS partition (UFS slices). -->
 
 Sebbene &arch-title; non permetta di effettuare il boot da SunOS
 (Solaris), &egrave; possibile installare da una partizione SunOS (UFS slice).
@@ -276,10 +300,10 @@ via FTP o HTTP.
 
 <para>
 
-<!-- If you are running other Unix-like system, you could use it to install
+<!-- If you are running another Unix-like system, you could use it to install
 &debian; without using the &d-i; described in the rest of the
 manual. This kind of install may be useful for users with otherwise
-unsupported hardware or on hosts which can't afford downtimes.  If you
+unsupported hardware or on hosts which can't afford downtime.  If you
 are interested in this technique, skip to the <xref
 linkend="linux-upgrade"/>. -->
 
@@ -409,41 +433,18 @@ kernel Linux.
 </para><para arch="alpha">
 
 <!-- Any storage system supported by the Linux kernel is also supported by
-the boot system.  The following SCSI drivers are supported in the default
-kernel: -->
-
-Ogni sistema di archiviazione supportato dal kernel di Linux &egrave;
-supportato anche dal sistema di boot. I seguenti controller SCSI sono
-supportati nel kernel predefinito:
-
-<itemizedlist>
-<listitem><para>
-
-Qlogic ISP
-
-</para></listitem>
-<listitem><para>
-
-NCR e Symbios 53c8xx
-
-</para></listitem>
-<listitem><para>
-
-Adaptec AIC7xxx
-
-</para></listitem>
-</itemizedlist>
-
-<!-- IDE disks are also supported.  Note, however, that on many systems,
-the SRM console is unable to boot from IDE drives, and the Jensen is
-unable to boot from floppies.  (see 
+the boot system.  This includes both SCSI and IDE disks.  Note, however,
+that on many systems, the SRM console is unable to boot from IDE drives,
+and the Jensen is unable to boot from floppies.  (see 
 <ulink url="&url-jensen-howto;"></ulink> 
 for more information on booting the Jensen) -->
 
-Anche i dischi IDE sono supportati. Notate, tuttavia, che su molti sistemi
-la console SRM non &egrave; in grado di boottare dai dischi IDE e che Jensen
-non &egrave; in grado di boottare da floppy. (si veda <ulink url="&url-jensen-howto;"></ulink>
-per maggiori iinformazioni sul boot di Jensen).
+Ogni sistema di archiviazione supportato dal kernel di Linux &egrave;
+supportato anche dal sistema di boot. Quindi sia dischi SCSI che IDE.
+Notate, tuttavia, che su molti sistemi la console SRM non &egrave; in
+grado di boottare dai dischi IDE e che Jensen non &egrave; in grado di
+fare l'avvio da dischetto. (si veda <ulink url="&url-jensen-howto;"></ulink>
+per maggiori informazioni sull'avvio boot di Jensen).
 
 </para><para arch="powerpc"> 
 

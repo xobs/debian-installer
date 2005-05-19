@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 18674 -->
+<!-- original version: 24663 -->
 
   <!-- <sect2 arch="powerpc" id="boot-cd"><title>Booting from a CD-ROM</title> -->
   <sect2 arch="powerpc" id="boot-cd"><title>Avviare da CD-ROM</title>
@@ -23,8 +23,8 @@ contemporaneamente durante l'accensione per avviare da CD-ROM.
 
 </para><para>
 
-<!--OldWorld Powermacs will not boot a Debian CD, because OldWorld
-computers relied on a MacOSROM CD boot driver to be present on the CD,
+<!--OldWorld PowerMacs will not boot a Debian CD, because OldWorld
+computers relied on a Mac OS ROM CD boot driver to be present on the CD,
 and a free-software version of this driver is not available. All
 OldWorld systems have floppy drives, so use the floppy drive to launch
 the installer, and then point the installer to the CD for the needed
@@ -32,7 +32,7 @@ files. -->
 
 I PowerMac "OldWorld" non sono avviabili con i CD Debian perché
 questi computer si basano sul presupposto che il CD contenga il
-"MacOSROM CD boot driver", del quale non esiste una versione libera.
+"Mac OS ROM CD boot driver", del quale non esiste una versione libera.
 Tutte le macchine OldWorld hanno dei lettori di dischetti, quindi 
 questi possono essere usati per avviare l'installer che può poi
 proseguire leggendo i propri file da CD.
@@ -56,10 +56,9 @@ da disco fisso, che sono disponibili alla pagina
 di <command>yaboot</command> al prompt, come mostrato di seguito:
 
 <informalexample><screen>
-
-0 > boot cd:,\install\yaboot
-
+0 &gt; boot cd:,\install\yaboot
 </screen></informalexample>
+
 </para>
   </sect2>
 
@@ -93,7 +92,7 @@ chance to select the <filename>ramdisk.image.gz</filename> file. You
 may need to select the <guilabel>No Video Driver</guilabel> checkbox,
 depending on your hardware. Then click the
 <guibutton>Linux</guibutton> button to shut down MacOS and launch the
-installer.-->
+installer. -->
 
 Se si ha impostato BootX in <xref linkend="files-oldworld"/>, lo si
 può utilizzare per avviare il sistema di installazione. Fare
@@ -116,17 +115,19 @@ l'installatore.
   <title>Avviare Mac NewWorld con OpenFirmware</title>
 <para>
 
-<!--You will have already placed the <filename>linux.bin, yaboot,
-yaboot.conf</filename>, and <filename>root.bin</filename> files at the
-root level of your HFS partition in <xref linkend="files-newworld"/>. 
+<!-- You will have already placed the <filename>vmlinux</filename>,
+<filename>initrd.gz</filename>, <filename>yaboot</filename>, and
+<filename>yaboot.conf</filename> files at the root level of your HFS
+partition in <xref linkend="files-newworld"/>. 
 Restart the computer, and immediately (during the chime) hold down the
 <keycap>Option</keycap>, <keycap>Command (cloverleaf/Apple)</keycap>,
 <keycap>o</keycap>, and <keycap>f</keycap> keys all together. After 
 a few seconds you will be presented with the Open Firmware prompt.
-At the prompt, type-->
+At the prompt, type -->
 
-Come primo passo si devono copiare i file <filename>linux.bin, yaboot,
-yaboot.conf</filename> e <filename>root.bin</filename> nella radice
+Come primo passo si devono copiare i file <filename>vmlinux</filename>,
+<filename>initrd.gz</filename>, <filename>yaboot</filename> e
+<filename>yaboot.conf</filename> nella radice
 della partizione HFS come riportato in <xref linkend="files-newworld"/>.
 Riavviare il computer e immediatamente (durante il segnale acustico)
 premere i tasti
@@ -136,9 +137,7 @@ Dopo alcuni secondi si avrà accesso al prompt di Open
 Firmware. Si scriva
 
 <informalexample><screen>
-
-0 > boot hd:<replaceable>x</replaceable>,yaboot
-
+0 &gt; boot hd:<replaceable>x</replaceable>,yaboot
 </screen></informalexample>
 
 <!-- replacing <replaceable>x</replaceable> with the partition number of
@@ -156,9 +155,7 @@ necessario inserire <userinput>ide0:</userinput> al posto di
 al prompt di yaboot
 
 <informalexample><screen>
-
 boot:
-
 </screen></informalexample>
 
 <!-- At yaboot's <prompt>boot:</prompt> prompt, type either
@@ -179,6 +176,108 @@ il programma di installazione di Debian.
    </sect3>
   </sect2>
 
+  <sect2 arch="powerpc" id="usb-boot">
+  <!--<title>Booting from USB memory stick</title>-->
+  <title>Avvio da penna USB</title>
+<para>
+
+<!-- Currently, NewWorld PowerMac systems are known to support USB booting. -->
+
+Attualmente i sistemi PawerMac NewWorld supportano l'avvio da USB.
+
+</para>
+
+<para>
+
+<!-- Make sure you have prepared everything from <xref
+linkend="boot-usb-files"/>. To boot a Macintosh system from a USB stick,
+you will need to use the Open Firmware prompt, since Open Firmware does
+not search USB storage devices by default.
+<!- TODO: although it could be made to; watch this space ->
+To get to the prompt, hold down
+<keycombo><keycap>Command</keycap> <keycap>Option</keycap>
+<keycap>o</keycap> <keycap>f</keycap></keycombo> all together while
+booting (see <xref linkend="invoking-openfirmware"/>). -->
+
+Assicurarsi di aver preparato tutto seguendo le indicazioni in <xref
+linkend="boot-usb-files"/>. Per avviare un sistema Macintosh da una penna
+USB è necessario usare il prompt di Open Firmware dato che Open Firmware
+non ricerca i dispositivi di memorizzazione USB autonomamente. Per ottenere
+il prompt tenere premuto i tasti <keycombo><keycap>Command</keycap>
+<keycap>Option</keycap> <keycap>o</keycap> <keycap>f</keycap></keycombo>
+tutti insieme durante l'avvio (si consulti <xref
+linkend="invoking-openfirmware"/>).
+
+</para><para>
+
+<!-- You will need to work out where the USB storage device appears in the
+device tree, since at the moment <command>ofpath</command> cannot work
+that out automatically. Type <userinput>dev / ls</userinput> and
+<userinput>devalias</userinput> at the Open Firmware prompt to get a
+list of all known devices and device aliases. On the author's system
+with various types of USB stick, paths such as
+<filename>usb0/disk</filename>, <filename>usb0/hub/disk</filename>,
+<filename>/pci@f2000000/usb@1b,1/disk@1</filename>, and
+<filename>/pci@f2000000/usb@1b,1/hub@1/disk@1</filename> work. -->
+
+È necessario scoprire dove compaiono i dispositivi di memorizzazione USB
+nell'albero dei device dato che al momento <command>ofpath</command> non
+può farlo automaticamente. Inserire <userinput>dev / ls</userinput> e
+<userinput>devalias</userinput> al prompt di Open Firmware per ottenere
+un elenco di tutti i device e di tutti gli alias conosciuti. Sul sistema
+dell'autore con diversi tipi di penne USB funzionano questi percorsi:
+<filename>usb0/disk</filename>, <filename>usb0/hub/disk</filename>,
+<filename>/pci@f2000000/usb@1b,1/disk@1</filename> e
+<filename>/pci@f2000000/usb@1b,1/hub@1/disk@1</filename>.
+
+</para><para>
+
+<!-- Having worked out the device path, use a command like this to boot the
+installer: -->
+
+Dopo aver scoperto il prcorso del device usare un comando simile a questo
+per avviare il sistema di installazione:
+
+<informalexample><screen>
+boot <replaceable>usb0/disk</replaceable>:<replaceable>2</replaceable>,\\:tbxi
+</screen></informalexample>
+
+<!-- The <replaceable>2</replaceable> matches the Apple_HFS or
+Apple_Bootstrap partition onto which you copied the boot image earlier,
+and the <userinput>,\\:tbxi</userinput> part instructs Open Firmware to
+boot from the file with an HFS file type of "tbxi" (i.e.
+<command>yaboot</command>) in the directory previously blessed with
+<command>hattrib -b</command>. -->
+
+Il <replaceable>2</replaceable> corrisponde alla partizione Apple_HFS o
+Apple_Bootstrap su cui è stato copiata in precedenza l'immagine per l'avvio
+e la parte <userinput>,\\:tbxi</userinput> indica a Open Firmware di avviare
+il file con tipo HFS "tbxi" (cioè <command>yaboot</command>) nella directory
+precedentemente designata con <command>hattrib -b</command>.
+
+</para><para>
+
+<!-- The system should now boot up, and you should be presented with the
+<prompt>boot:</prompt> prompt. Here you can enter optional boot
+arguments, or just hit &enterkey;. -->
+
+Adesso il sistema si dovrebbe avviare e si dovrebbe presentare con il prompt
+<prompt>boot:</prompt>. Adesso è possibile inserire dei parametri d'avvio
+opzionali oppure premere &enterkey;.
+
+</para><warning><para>
+
+<!-- This boot method is new, and may be difficult to get to work on some
+NewWorld systems. If you have problems, please file an installation
+report, as explained in <xref linkend="submit-bug"/>. -->
+
+Questo metodo è nuovo e potrebbe esse difficoltoso farlo funzionare su alcuni
+sistemi NewWorld. Se si hanno problemi inviare un resoconto dell'installazione
+come spiegato in <xref linkend="submit-bug"/>.
+
+</para></warning>
+  </sect2>
+
   <!--<sect2 arch="powerpc" id="boot-tftp"><title>Booting with TFTP</title> -->
   <sect2 arch="powerpc" id="boot-tftp"><title>Avviare via TFTP</title>
 
@@ -187,6 +286,7 @@ il programma di installazione di Debian.
 <para>
 
 <!--Currently, PReP and New World PowerMac systems support netbooting. -->
+
 Attualmente solo i sistemi PowerMac PReP e New World sono capaci di
 avviarsi via rete.
 
@@ -218,7 +318,7 @@ Su macchina PReP si può provare
 <!--Booting from floppies is supported for &arch-title;, although it is
 generally only applicable for OldWorld systems. NewWorld systems are
 not equipped with floppy drives, and attached USB floppy drives are 
-not supported for booting.-->
+not supported for booting. -->
 
 L'avvio da dischetto è supportato per &arch-title;, anche
 se in genere è applicabile solo per sistemi OldWorld.
@@ -228,7 +328,7 @@ dispositivi USB non sono utilizzabili per l'avvio.
 </para><para>
 
 <!--You will have already downloaded the floppy images you needed and
-created floppies from the images in <xref linkend="create-floppy"/>.-->
+created floppies from the images in <xref linkend="create-floppy"/>. -->
 
 Si dovrà aver già scaricato le immagini dei dischetti
 richieste e queste dovranno già essere state scritte come
@@ -238,7 +338,7 @@ spiegato in <xref linkend="create-floppy"/>.
 
 <!--To boot from the <filename>boot-floppy-hfs.img</filename> floppy,
 place it in floppy drive after shutting the system down, and before
-pressing the power-on button.-->
+pressing the power-on button. -->
 
 Per avviare dal dischetto <filename>boot-floppy-hfs.img</filename>,
 lo si deve inserire nel lettore dopo aver spento il sistema e prima
@@ -249,7 +349,7 @@ di premere il bottone d'accensione.
 floppy operations: a floppy placed in the machine prior to boot will
 be the first priority for the system to boot from. A floppy without a
 valid boot system will be ejected, and the machine will then check for
-bootable hard disk partitions.-->
+bootable hard disk partitions. -->
 
 Per chi non ha familiarità con la gestione dei dischetti di Macintosh:
 un dischetto inserito nel lettore prima di avviare la macchina
@@ -263,7 +363,7 @@ partizioni del disco fisso.
 <!--After booting, the <filename>root.bin</filename> floppy is
 requested. Insert the root floppy and press &enterkey;. The installer
 program is automatically launched after the root system has been
-loaded into memory.-->
+loaded into memory. -->
 
 Dopo aver avviato, verrà richiesto il dischetto <filename>root.bin</filename>.
 Lo si inserisca e si prema il tasto &enterkey;. La procedura di
@@ -282,7 +382,7 @@ il contenuto del dischetto sia stato caricato in memoria.
 appears skewed on an older Apple monitor, try appending the boot
 argument <userinput>video=atyfb:vmode:6</userinput> , which will
 select that mode for most Mach64 and Rage video hardware. For Rage 128
-hardware, this changes to-->
+hardware, this changes to -->
 
 Se l'immagine appare distorta utilizzando un video Apple in modalità
 640x480 67Hz, si provi ad aggiungere il parametro di avvio

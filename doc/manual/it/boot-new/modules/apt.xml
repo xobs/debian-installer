@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 18642 untranslated -->
+<!-- original version: 23845 untranslated -->
 
  <sect2 id="configure-apt">
  <title>Configuring APT</title>
@@ -14,18 +14,26 @@ via a program called <command>apt-get</command>, from the
 
 Note that the actual program that installs packages is called
 <command>dpkg</command>.  However, this package is more of a low-level
-tool.  <command>apt-get</command> will invoke <command>dpkg</command>
-as appropriate; it is a higher-level too, however, because it knows to
-install other packages which are required for the package you're
+tool.  <command>apt-get</command> is a higher-level tool as it will
+invoke <command>dpkg</command> as appropriate and also because it knows
+to install other packages which are required for the package you're
 trying to install, as well as how to retrieve the package from your
 CD, the network, or wherever.
 
 </para>
 </footnote>
 
-APT must be configured, however, so that it knows where to retrieve
-packages from.  The helper application which assists in this task is
-called <command>apt-setup</command>.
+Other front-ends for package management, like <command>aptitude</command>,
+<command>synaptic</command> and the older <command>dselect</command> also
+use and depend on <command>apt-get</command>. These front-ends are recommended
+for new users, since they integrate some additional features (package
+searching and status checks) in a nice user interface.
+
+</para><para>
+
+APT must be configured so that it knows where to retrieve packages from.
+The helper application which assists in this task is called
+<command>apt-setup</command>.
 
 </para><para>
 
@@ -69,28 +77,38 @@ archives for new versions.
 If you plan on installing the rest of your system via the network, the
 most common option is to select the <userinput>http</userinput>
 source.  The <userinput>ftp</userinput> source is also acceptable, but
-tends to be a little slower making connections.
+tends to be somewhat slower making connections.
 
 </para><para>
 
-The next step during the configuration of network packages sources is
+The next step during the configuration of network package sources is
 to tell <command>apt-setup</command> which country you live in.  This
-configures which of the official Debian Internet mirror network you
-connect to.  Depending on which country you select, you will be given
-a list of possible machines.  Its generally fine to pick the one on
-the top of the list, but any of them should work.
+configures which of the official Debian Internet mirrors you will
+connect to.  Depending on which country you select, you will be presented
+with a list of possible servers.  It's generally fine to pick the one at
+the top of the list, but any of them should work. Note however that the
+mirror list provided by the installation was generated when this version
+of Debian was released and some mirrors may no longer be available.
 
 </para><para>
 
-If you are installing via HTTP, you will be asked to configure your
-proxy server.  This is sometimes required by people behind firewalls,
-on corporate networks, etc.
+After you have selected a mirror, you will be asked if a proxy server
+should be used. A proxy server is a server that will forward all your
+HTTP and/or FTP requests to the Internet and is most often used to regulate
+and optimize access to the Internet on corporate networks. In some networks
+only the proxy server is allowed access to the Internet, in which case you
+will have to enter the name of the proxy server. You may also have to
+include an user name and password. Most home users will not need to specify
+a proxy server, although some ISPs may provide proxy servers for their
+users.
 
 </para><para>
 
-Finally, your new network package source will be tested.  If all goes
-well, you will be prompted whether you want to do it all over again
-with another network source.
+After you select a mirror, your new network package source will be tested.
+If all goes well, you will be prompted whether you want to add another
+package source. If you have any problems using the package source you selected,
+try using a different mirror (either from your country list or from the
+global list), or try using a different network package source.
 
 </para>
   </sect3>

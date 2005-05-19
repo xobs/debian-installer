@@ -1,7 +1,8 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 22664 untranslated -->
+<!-- original version: 27345 untranslated -->
 
-  <sect2 arch="i386"><title>Booting from a CD-ROM</title>
+  <sect2 arch="i386">
+  <title>Avvio da CD-ROM</title>
 
 &boot-installer-intro-cd.xml;
 
@@ -87,10 +88,8 @@ moment (and optionally select the `safe mode command prompt only'
 option).  Enter the subdirectory for the flavor you chose, e.g.,
 
 <informalexample><screen>
-
 cd c:\install
-
-</screen></informalexample>.  
+</screen></informalexample>.
 
 Next, execute <command>install.bat</command>.
 The kernel will load and launch the installer system. 
@@ -130,7 +129,7 @@ Alternatively, if you intend to keep an existing partition on the hard
 drive unchanged during the install, you can download the
 <filename>hd-media/initrd.gz</filename>
 file and its kernel, as well as copy a CD iso to the drive (make sure the
-file is named ending in ".iso". The installer can then boot from the drive
+file is named ending in ".iso"). The installer can then boot from the drive
 and install from the CD image, without needing the network.
 </para>
 
@@ -156,13 +155,11 @@ Here is a <filename>/etc/lilo.conf</filename> example:
 </para><para>
 
 <informalexample><screen>
-
 image=/boot/newinstall/vmlinuz
        label=newinstall
        initrd=/boot/newinstall/initrd.gz
-       root=/dev/ram
-       append="devfs=mount,dall ramdisk_size=17000
-
+       root=/dev/ram0
+       append="<phrase condition="sarge">devfs=mount,dall </phrase>ramdisk_size=12000"
 </screen></informalexample>
 
 For more details, refer to the
@@ -180,16 +177,20 @@ directory (sometimes in the <filename>/boot/boot/grub/</filename>),
 add the following lines:
 
 <informalexample><screen>
-
 title  New Install
-kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram devfs=mount,dall ramdisk_size=17000
+kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram0 ramdisk_size=12000
 initrd (hd0,0)/boot/newinstall/initrd.gz
-
 </screen></informalexample>
 
-and reboot. Note that the value of the <userinput>ramdisksize</userinput>
-may need to be adjusted for the size of the initrd image. 
-From now on, there should be no difference between <command>GRUB</command>
+and reboot. <phrase condition="sarge">If the boot fails, you can try adding
+<userinput>devfs=mount,dall</userinput> to the <quote>kernel</quote> line.
+</phrase>
+
+</para><para>
+
+Note that the value of the <userinput>ramdisk_size</userinput> may need to be
+adjusted for the size of the initrd image.
+From here on, there should be no difference between <command>GRUB</command>
 or <command>LILO</command>.
 
 </para>
@@ -199,7 +200,7 @@ or <command>LILO</command>.
   <title>Booting from USB memory stick</title>
 <para>
 
-Lets assume you have prepared everything from <xref
+Let's assume you have prepared everything from <xref
 linkend="boot-dev-select"/> and <xref linkend="boot-usb-files"/>.  Now
 just plug your USB stick into some free USB connector and reboot the
 computer.  The system should boot up, and you should be presented with
@@ -235,7 +236,7 @@ on.
 
 </para><para>
 
-For installing from a LS-120 drive (ATAPI version) with a set of
+For installing from an LS-120 drive (ATAPI version) with a set of
 floppies, you need to specify the virtual location for the floppy
 device.  This is done with the <emphasis>root=</emphasis> boot
 argument, giving the device that the ide-floppy driver maps the device
@@ -264,7 +265,7 @@ prompt.
 Once you press &enterkey;, you should see the message
 <computeroutput>Loading...</computeroutput>, followed by
 <computeroutput>Uncompressing Linux...</computeroutput>, and
-then a screenful or so of information about the hardware in your
+then a screenfull or so of information about the hardware in your
 system.  More information on this phase of the boot process can be
 found below in <xref linkend="kernel-msgs"/>.
 
@@ -336,8 +337,10 @@ you can press <keycap>Enter</keycap> to boot the system.
 </para><para>
 
 Information on boot parameters which might be useful can be found by
-pressing <keycap>F3</keycap> through <keycap>F7</keycap>.  If you add any
-parameters to
+pressing <keycap>F3</keycap> through 
+<phrase condition="sarge"><keycap>F7</keycap></phrase><phrase
+condition="etch"><keycap>F8</keycap></phrase>.
+If you add any parameters to
 the boot command line, be sure to type the boot method (the default is
 <userinput>linux</userinput>) and a space before the first parameter (e.g.,
 <userinput>linux floppy=thinkpad</userinput>). If you simply press &enterkey;,
@@ -374,7 +377,7 @@ contain a problematic video card which does not switch to the
 framebuffer mode properly.  Then you can use the boot parameter
 <userinput>debian-installer/framebuffer=false</userinput> or
 <userinput>video=vga16:off</userinput> to disable the framebuffer
-console. Only the english
+console. Only the English
 language will be available during the installation due to limited
 console features. See <xref linkend="boot-parms"/> for details.
 
@@ -403,7 +406,7 @@ needs. For example, if you have one of the Dell laptops mentioned
 above, you should enter <userinput>exclude port
 0x800-0x8ff</userinput> here. There is also a list of some common
 resource range options in the <ulink
-url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-2.html#ss2.5">System
+url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-2.html#ss2.12">System
 resource settings section of the PCMCIA HOWTO</ulink>. Note that you
 have to omit the commas, if any, when you enter this value in the
 installer.

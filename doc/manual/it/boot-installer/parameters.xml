@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 22236 untranslated -->
+<!-- original version: 27076 untranslated -->
 
  <sect1 id="boot-parms"><title>Boot Parameters</title>
 <para>
@@ -30,9 +30,7 @@ common gotchas are included below in
 When the kernel boots, a message 
 
 <informalexample><screen>
-
 Memory:<replaceable>avail</replaceable>k/<replaceable>total</replaceable>k available 
-
 </screen></informalexample>
 
 should be emitted early in the process.
@@ -48,8 +46,8 @@ example, both <userinput>mem=65536k</userinput> and
 </para><para condition="supports-serial-console">
 
 If you are booting with a serial console, generally the kernel will
-autodetect this 
-<phrase arch="mipsel">(although not on DECstations)</phrase>
+autodetect
+this<phrase arch="mipsel"> (although not on DECstations)</phrase>.
 If you have a videocard (framebuffer) and a keyboard also attached to
 the computer which you wish to boot via serial console, you may have
 to pass the
@@ -72,8 +70,18 @@ Alternatively, set the <envar>input-device</envar> and
   <sect2 id="installer-args"><title>Debian Installer Parameters</title>
 <para>
 
-The installation system recognizes a few additional boot parameters which may
-be useful. 
+The installation system recognizes a few additional boot parameters<footnote>
+
+<para>
+
+Note that the kernel accepts a maximum of 8 command line options and
+8 environment options (including any options added by default for the
+installer). If these numbers are exceeded, 2.4 kernels will drop any
+excess options and 2.6 kernels will panic.
+
+</para>
+
+</footnote> which may be useful. 
 
 </para>
 
@@ -82,8 +90,7 @@ be useful.
 <term>debconf/priority</term>
 <listitem><para>
 
-This parameter settings will set the highest priority of messages
-to be displayed. 
+This parameter sets the highest priority of messages to be displayed. 
 
 </para><para>
 
@@ -190,7 +197,7 @@ Debian installer from. For example,
 
 </para><para>
 
-The boot floppy, which normally scans all floppys and USB storage
+The boot floppy, which normally scans all floppies and USB storage
 devices it can to find the root floppy, can be overridden by this
 parameter to only look at the one device.
 
@@ -222,7 +229,17 @@ Such problems have been reported on the Amiga 1200 and SE/30.
 
 Such problems have been reported on hppa.
 
-</para></listitem>
+</para><note arch="sparc"><para>
+
+Because of display problems on some systems, framebuffer support is
+<emphasis>disabled by default</emphasis> for &arch-title;. This can result
+in ugly display on systems that do properly support the framebuffer, like
+those with ATI graphical cards.
+If you see display problems in the installer, you can try booting with
+parameter <userinput>debian-installer/framebuffer=true</userinput>.
+
+</para></note></listitem>
+
 </varlistentry>
 
 <varlistentry>
@@ -241,7 +258,7 @@ boot, if that causes problems.
 
 By default, the &d-i; automatically probes for network configuration
 via DHCP. If the probe succeeds, you won't have a chance to review and
-chage the obtained settings. You can get to the manual network setup
+change the obtained settings. You can get to the manual network setup
 only in case the DHCP probe fails.
 
 </para><para>
@@ -260,7 +277,7 @@ the network with DHCP and to enter the information manually.
 
 Set to <userinput>false</userinput> to prevent starting PCMCIA
 services, if that causes problems. Some laptops are well known for
-this misbehaviour.
+this misbehavior.
 
 </para></listitem>
 </varlistentry>
@@ -281,6 +298,27 @@ automating the install. See <xref linkend="automatic-install"/>.
 
 Specify the url to a preconfiguration file to load to
 automating the install. See <xref linkend="automatic-install"/>.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry condition="etch">
+<term>cdrom-detect/eject</term>
+<listitem><para>
+
+By default, before rebooting, &d-i; automatically ejects the optical
+media used during the installation. This can be unnecessary if the system
+does not automatically boot off the CD. In some cases it may even be
+undesirable, for example if the optical drive cannot reinsert the media
+itself and the user is not there to do it manually. Many slot loading,
+slim-line, and caddy style drives cannot reload media automatically. 
+
+</para><para>
+
+Set to <userinput>false</userinput> to disable automatic ejection, and
+be aware that you may need to ensure that the system does not
+automatically boot from the optical drive after the initial
+installation.
 
 </para></listitem>
 </varlistentry>

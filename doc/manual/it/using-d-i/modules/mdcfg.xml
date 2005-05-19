@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 22841 untranslated -->
+<!-- original version: 27118 untranslated -->
 
    <sect3 id="mdcfg">
    <title>Configuring Multidisk Device (Software RAID)</title>
@@ -35,7 +35,7 @@ creating. Currently supported are:
 
 <term>RAID0</term><listitem><para>
 
-Is mainly aimed at performance.  RAID0 splits all incomming data into
+Is mainly aimed at performance.  RAID0 splits all incoming data into
 <firstterm>stripes</firstterm> and distributes them equally over each
 disk in the array. This can increase the speed of read/write
 operations, but when one of the disks fails, you will loose
@@ -54,8 +54,8 @@ The typical use for RAID0 is a partition for video editing.
 <term>RAID1</term><listitem><para>
 
 Is suitable for setups where reliability is the first concern.  It
-consists of several (usualy two) equaly sized partitions where every
-partition contains exactly the same data. This essentialy means three
+consists of several (usually two) equally sized partitions where every
+partition contains exactly the same data. This essentially means three
 things.  First, if one of your disks fails, you still have the data
 mirrored on the remaining disks. Second, you can use only a fraction
 of the available capacity (more precisely, it is the size of the
@@ -67,6 +67,31 @@ server, that tends to be loaded with more disk reads than writes.
 
 Optionally you can have a spare disk in the array which will take the
 place of the failed disk in the case of failure.
+
+</para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term>RAID5</term><listitem><para>
+
+Is a good compromise between speed, reliability and data redundancy.
+RAID5 splits all incomming data into stripes and distributes them
+equally on all but one disks (similar to RAID0). Unlike RAID0, RAID5
+also computes <firstterm>parity</firstterm> information, which gets
+written on the remaining disk. The parity disk is not static (that
+would be called RAID4), but is changing periodically, so the parity
+information is distributed equally on all disks.  When one of the
+disks fails, the missing part of information can be computed from
+remaining data and its parity. RAID5 must consist of at least three
+active partitions. Optionally you can have a spare disk in the array
+which will take the place of the failed disk in the case of failure.
+
+</para><para>
+
+As you can see, RAID5 has similar degree of reliability like RAID1
+while achieving less redundancy. On the other hand it might be a bit
+slower on write operation than RAID0 due to computation of parity
+information.
 
 </para></listitem>
 </varlistentry>
@@ -103,6 +128,17 @@ To sum it up:
   <entry>Size of the smallest partition in RAID</entry>
 </row>
 
+<row>
+  <entry>RAID5</entry>
+  <entry>3</entry>
+  <entry>optional</entry>
+  <entry>yes</entry>
+  <entry>
+    Size of the smallest partition multiplied by (number of devices in
+    RAID minus one)
+  </entry>
+</row>
+
 </tbody></tgroup></informaltable>
 
 </para><para>
@@ -116,8 +152,8 @@ To create a MD device, you need to have the desired partitions it
 should consist of marked for use in a RAID.  (This is done in
 <command>partman</command> in the <guimenu>Partition
 settings</guimenu> menu where you should select <menuchoice>
-<guimenu>Use as:</guimenu> <guimenuitem>Use the partition as a RAID
-device</guimenuitem> </menuchoice>.)
+<guimenu>Use as:</guimenu> <guimenuitem>physical volume for
+RAID</guimenuitem> </menuchoice>.)
 
 </para><warning><para>
 
@@ -156,6 +192,12 @@ spare. The count of selected partitions must be equal to the number
 provided few seconds ago. Don't worry. If you make a mistake and
 select different number of partitions, the &d-i; won't let you
 continue until you correct the issue.
+
+</para></listitem>
+<listitem><para>
+
+RAID5 has similar setup procedure as RAID1 with the exception that you
+need to use at least <emphasis>three</emphasis> active partitions.
 
 </para></listitem>
 </itemizedlist>

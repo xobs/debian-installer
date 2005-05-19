@@ -1,12 +1,14 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 18647 -->
+<!-- original version: 26846 -->
 
- <sect1 id="linuxdevices"><!-- <title>Linux Devices</title> -->
-<title>I device linux</title>
+
+ <sect1 id="linuxdevices">
+ <!-- <title>Linux Devices</title> -->
+ <title>I device linux</title>
 <para>
 
 <!-- In Linux you have various special files in
-<filename>/dev</filename>. These files are called devices files. In
+<filename>/dev</filename>. These files are called device files. In
 the Unix world accessing hardware is different.  There you have a
 special file which actually runs a driver which in turn accesses the
 hardware. The device file is an interface to the actual system
@@ -221,9 +223,8 @@ ordinari. Segue un elenco dei file di device pi&ugrave; significativi.
 </para>
 
   <sect2>
-<!-- <title>Setting Up Your Mouse</title> -->
-<title>Configurazione del mouse</title>
-
+  <!-- <title>Setting Up Your Mouse</title> -->
+  <title>Configurazione del mouse</title>
 <para>
 
 <!-- The mouse can be used in both the Linux console (with gpm) and the X window
@@ -236,12 +237,10 @@ il ripetitore di dati di gpm per permettere al segnale di passare
 al server X, come mostrato di seguito:
 
 <informalexample><screen>
-mouse =&#62; /dev/psaux  =&#62; gpm =&#62; /dev/gpmdata -&#62; /dev/mouse =&#62; X
+mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; X
          /dev/ttyS0             (ripetitore)      (link simbolico)
          /dev/ttyS1
 </screen></informalexample>
-
-</para><para>
 
 <!-- Set the repeater protocol to be raw (in <filename>/etc/gpm.conf</filename>) while
 setting X to the original mouse protocol in <filename>/etc/X11/XF86Config</filename>
@@ -258,13 +257,15 @@ originario del mouse.
 unplugged inadvertently.  Simply restarting gpm with -->
 
 L'utilizzo di gpm anche in X si dimostra vantaggioso nel caso il mouse
-venga inavvertitamente scollegato. Baster&agrave; semplicemente rilanciare gpm
-con
+venga inavvertitamente scollegato. Baster&agrave; semplicemente rilanciare
+gpm con
+
 <informalexample><screen>
-user@debian:# /etc/init.d/gpm restart
+# /etc/init.d/gpm restart
 </screen></informalexample>
 
 <!-- will re-connect the mouse in software without restarting X. -->
+
 per riconnettere via software il mouse senza dover rilanciare X.
 
 </para><para>
@@ -305,7 +306,6 @@ ad un solo tasto. &Egrave; sufficiente aggiungere le righe seguenti al
 file <filename>/etc/sysctl.conf</filename>.
 
 <!-- <informalexample><screen>
-
 # 3-button mouse emulation
 # turn on emulation
 /dev/mac_hid/mouse_button_emulation = 1
@@ -313,10 +313,10 @@ file <filename>/etc/sysctl.conf</filename>.
 /dev/mac_hid/mouse_button2_keycode = 87
 # Send right mouse button signal with the F12 key
 /dev/mac_hid/mouse_button3_keycode = 88
-# For different keys, use showkey to tell you what the code is. -->
+# For different keys, use showkey to tell you what the code is.
+</screen></informalexample> -->
 
 <informalexample><screen>
-
 # Emulazione di mouse a 3 tasti
 # attiva l'emulazione
 /dev/mac_hid/mouse_button_emulation = 1
@@ -326,29 +326,30 @@ file <filename>/etc/sysctl.conf</filename>.
 /dev/mac_hid/mouse_button3_keycode = 88
 # in caso si vogliano usare tasti diversi da F11 e F12, con
 # showkey si possono ottenere i codici corrispondenti
-
 </screen></informalexample>
+
 </para>
   </sect2>
  </sect1>
 
  <sect1 id="tasksel-size-list">
-<!-- <title>Disk Space Needed for Tasks</title> -->
+ <!-- <title>Disk Space Needed for Tasks</title> -->
  <title>Spazio necessario per i task di tasksel</title>
 <para>
 
-<!-- The base sarge installation for i386, including all standard packages,
-requires 178MB of disk space. -->
+<!-- The base sarge installation for i386 using the default 2.4 kernel,
+including all standard packages, requires 573MB of disk space. -->
 
-L'installazione base di sarge per i386, compresi tutti i pacchetti
-standard, richiede 178MB di spazio sul disco fisso.
+L'installazione base di sarge per i386 con il kernel 2.4 predefinito,
+compresi tutti i pacchetti standard, richiede 573&nbsp;MB di spazio sul
+disco fisso.
 
 </para><para>
 
-<!-- The following table lists sizes reported by aptitude for the tasks listed in
-tasksel. Note that some tasks have overlapping constituents, so the total
-installed size for two tasks together may be less than the total obtained by
-adding the numbers up. -->
+<!-- The following table lists sizes reported by aptitude for the tasks listed
+in tasksel. Note that some tasks have overlapping constituents, so the
+total installed size for two tasks together may be less than the total
+obtained by adding up the numbers. -->
 
 La tabella seguente elenca le dimensioni dei task proposti in tasksel, secondo
 quanto riportato da aptitude. Si noti che alcuni task hanno dei componenti in
@@ -357,30 +358,171 @@ potrebbe essere minore della somma teorica.
 
 </para><para>
 
-<!-- <informalexample><screen>
-Task                              Installed  Download   Space Needed
-                                  Size (MB)  Size (MB)  To Install (MB)
+<!-- Note that you will need to add the sizes listed in the table to the size
+of the base sarge installation when determining the size of partitions.
+Most of the size listed as <quote>Installed size</quote> will end up in
+<filename>/usr</filename>; the size listed as <quote>Download size</quote>
+is (temporarily) required in <filename>/var</filename>. -->
 
-Desktop                            1537        521        2058
-Web server                           71         21          92
-Print server                        240         83         323
-Mail server                          41         12          53
-File server                          85         34         119
-SQL database                        108         33         141
+Si noti che &egrave; necessario aggiungere dello spazio rispetto a quanto indicato
+nella tabella come spazio minimo per sarge nel momento in cui si definisce
+la dimensione delle partizioni. La maggior parte delle dimensioni elencate
+come <quote>Dimensione installazione</quote> va a finire all'interno
+di <filename>/usr</filename>; le dimensioni elencate come <quote>Dimensione
+download</quote> devono essere (temporaneamente) disponibili in
+<filename>/var</filename>.
 
-</screen></informalexample> -->
+</para><para>
 
-<informalexample><screen>
-Task                     Dimensioni       Dimensioni    Spazio necessario
-                         installato (MB)  scarico (MB)  all'installazione (MB)
+<!-- <informaltable><tgroup cols="4">
+<thead>
+<row>
+  <entry>Task</entry>
+  <entry>Installed size (MB)</entry>
+  <entry>Download size (MB)</entry>
+  <entry>Space needed to install (MB)</entry>
+</row>
+</thead>
 
-Desktop                        1537          521          2058
-Web server                       71           21            92
-Print server                    240           83           323
-Mail server                      41           12            53
-File server                      85           34           119
-SQL database                    108           33           141
+<tbody>
+<row>
+  <entry>Desktop</entry>
+  <entry>1392</entry>
+  <entry>460</entry>
+  <entry>1852</entry>
+</row>
 
-</screen></informalexample>
+<row>
+  <entry>Web server</entry>
+  <entry>36</entry>
+  <entry>12</entry>
+  <entry>48</entry>
+</row>
+
+<row>
+  <entry>Print server</entry>
+  <entry>168</entry>
+  <entry>58</entry>
+  <entry>226</entry>
+</row>
+
+<row>
+  <entry>DNS server</entry>
+  <entry>2</entry>
+  <entry>1</entry>
+  <entry>3</entry>
+</row>
+
+<row>
+  <entry>File server</entry>
+  <entry>47</entry>
+  <entry>24</entry>
+  <entry>71</entry>
+</row>
+
+<row>
+  <entry>Mail server</entry>
+  <entry>10</entry>
+  <entry>3</entry>
+  <entry>13</entry>
+</row>
+
+<row>
+  <entry>SQL database</entry>
+  <entry>66</entry>
+  <entry>21</entry>
+  <entry>87</entry>
+</row>
+
+</tbody>
+</tgroup></informaltable> -->
+
+<informaltable><tgroup cols="4">
+<thead>
+<row>
+  <entry>Task</entry>
+  <entry>Dimensione installazione (MB)</entry>
+  <entry>Dimensione download (MB)</entry>
+  <entry>Spazio necessario all'installazione (MB)</entry>
+</row>
+</thead>
+
+<tbody>
+<row>
+  <entry>Desktop</entry>
+  <entry>1392</entry>
+  <entry>460</entry>
+  <entry>1852</entry>
+</row>
+
+<row>
+  <entry>Web server</entry>
+  <entry>36</entry>
+  <entry>12</entry>
+  <entry>48</entry>
+</row>
+
+<row>
+  <entry>Print server</entry>
+  <entry>168</entry>
+  <entry>58</entry>
+  <entry>226</entry>
+</row>
+
+<row>
+  <entry>DNS server</entry>
+  <entry>2</entry>
+  <entry>1</entry>
+  <entry>3</entry>
+</row>
+
+<row>
+  <entry>File server</entry>
+  <entry>47</entry>
+  <entry>24</entry>
+  <entry>71</entry>
+</row>
+
+<row>
+  <entry>Mail server</entry>
+  <entry>10</entry>
+  <entry>3</entry>
+  <entry>13</entry>
+</row>
+
+<row>
+  <entry>SQL database</entry>
+  <entry>66</entry>
+  <entry>21</entry>
+  <entry>87</entry>
+</row>
+
+</tbody>
+</tgroup></informaltable>
+
+<note><para>
+
+<!-- The <emphasis>Desktop</emphasis> task will install both the Gnome and KDE
+desktop environments. -->
+
+Il task <emphasis>Desktop</emphasis> installa sia l'ambiente desktop GNOME
+che KDE.
+
+</para></note>
+
+</para><para>
+
+<!-- If you install in a language other than English, <command>tasksel</command>
+may automatically install a <firstterm>localization task</firstterm>, if one
+is available for your language. Space requirements differ per language;
+you should allow up to 200MB in total for download and installation. -->
+
+Se l'installazione avviene in una lingua diversa dall'inglese,
+<command>tasksel</command> potrebbe installare automaticamente un
+<firstterm>localization task</firstterm> se &egrave; disponibile per la propria
+lingua. Lo spazio richiesto varia a seconda della lingua; potrebbe essere
+necessari altri 200&nbsp;MB per il download e l'installazione di questo
+task.
+
 </para>
  </sect1>

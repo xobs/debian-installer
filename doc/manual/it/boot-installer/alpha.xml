@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 19466 -->
+<!-- original version: 26932 -->
 
  <sect2 arch="alpha" id="alpha-firmware">
  <title>Alpha Console Firmware</title>
@@ -88,20 +88,37 @@ le installazioni SRM.
 
 </para><para>
 
-<!-- Because GNU/Linux is the only operating system on Alpha that can be
-booted from both console types, the choice will also depend on what
-other operating systems you wish to run on the same machine.  All
-other Unix-like operating systems (Tru64 Unix, FreeBSD, OpenBSD, and
-NetBSD) and OpenVMS can only boot from SRM, whereas Windows NT can
-only boot from ARC. -->
+<!-- GNU/Linux is the only operating system on Alpha that can be booted from
+both console types, but &debian; &release; only supports booting on
+SRM-based systems.  If you have an Alpha for which no version of SRM is
+available, if you will be dual-booting the system with Windows NT, or if
+your boot device requires ARC console support for BIOS initialization,
+you will not be able to use the &debian; &release; installer.  You can
+still run &debian; &release; on such systems by using other install
+media; for instance, you can install Debian woody with MILO and upgrade. -->
 
-Poiché GNU/Linux è il solo sistema operativo per Alpha
-che può essere avviato da entrambi i tipi di console, la
-scelta dipenderà anche da quale altro sistema operativo si voglia
-eseguire sulla stessa macchina. Ogni altro sistema operativo simil Unix
-(Tru64 Unix, FreeBSD, OpenBSD e NetBSD) e OpenVMS può solo
-essere avviato da SRM, mentre Windows NT può essere avviato
-solo da ARC.
+GNU/Linux è il solo sistema operativo per Alpha che può essere avviato da
+entrambi i tipi di console, purtroppo &debian; &release; può essere avviato
+solo da sistemi SRM. Se si possiede un Alpha per cui non esiste una versione
+di SRM, se il sistema dovrà essere in dual-boot con Windows-NT oppure se
+il dispositivo di avvio richiede una console ARC per l'inizializzazione
+del BIOS allora non è possibile usare il sistema di installazione di &debian;
+&release;. Si può comunque usare &debian; &release; su questi sistemi usando
+un supporto diverso per l'installazione; per esempio si può installare Debian
+Woody con MILO e poi fare un aggiornamento.
+
+</para><para>
+
+<!-- Because <command>MILO</command> is not available for any of the Alpha
+systems currently in production (as of February 2000), and because it
+is no longer necessary to buy an OpenVMS or Tru64 Unix license to have
+SRM firmware on your older Alpha, it is recommended that you use SRM
+when possible. -->
+
+Poiché <command>MILO</command> non è disponibile per tutti i sistemi Alpha
+attualmente in produzioni (al febbraio 2000) e poiché non è più necessario
+comprare una licenza OpenVMS o Tru64 per avere il firmware SRM su gli Alpha
+più vecchi, si riccomanda l'uso di SRM quando possibile.
 
 </para><para>
 
@@ -175,8 +192,8 @@ denota le console aderenti alla specifica ARC.
   <entry>Solo SRM</entry>
 </row><row>
   <entry>nautilus</entry>
-  <!-- <entry>ARC only (see motherboard manual)</entry> -->
-  <entry>Solo ARC (vedere il manuale della scheda madre)</entry>
+  <!-- <entry>ARC (see motherboard manual) or SRM</entry> -->
+  <entry>ARC (vedere il manuale della scheda madre) o SRM</entry>
 </row><row>
   <entry>noname</entry>
   <entry>ARC o SRM</entry>
@@ -222,14 +239,42 @@ denota le console aderenti alla specifica ARC.
 </para><para>
 
 <!-- Generally, none of these consoles can boot Linux directly, so the
+assistance of an intermediary bootloader is required.  For the SRM
+console, <command>aboot</command>, a small, platform-independent
+bootloader, is used.  See the (unfortunately outdated) <ulink
+url="&url-srm-howto;">SRM HOWTO</ulink> for more information on
+<command>aboot</command>. -->
+
+Normalmente nessuna di queste console è in grado di avviare Linux
+direttamente, quindi è necessario l'utilizzo di un «bootloader»
+intermedio. Per la console SRM si usa <command>aboot</command>, un
+bootloader piccolo e indipendente dalla piattaforma. Si consulti
+(l'ormai vecchio) <ulink url="&url-srm-howto;">SRM HOWTO</ulink> per
+maggiori informazioni su <command>aboot</command>.
+
+</para><para condition="FIXME">
+
+<!-- The following paragraphs are from the woody install manual, and are
+included here for reference; they may be useful to someone at a later
+date when Debian supports MILO-based installs again. -->
+
+I prossimi paragrafi sono presi dal manuale di installazione di woody e
+sono stati riportati qui come riferimento; possono risultare utili a
+qualcuno almeno fino a quando non saranno nuovamente supportate le
+installazioni con MILO.
+
+</para><para condition="FIXME">
+
+<!-- Generally, none of these consoles can boot Linux directly, so the
 assistance of an intermediary bootloader is required.  There are two
 mainstream Linux loaders: <command>MILO</command> and <command>aboot</command>. -->
+
 Normalmente nessuna di queste console è in grado di avviare Linux
 direttamente, quindi è necessario l'utilizzo di un «bootloader»
 intermedio. Ci sono due «loader» principali di Linux: <command>MILO</command>
 e <command>aboot</command>.
 
-</para><para>
+</para><para condition="FIXME">
 
 <!-- <command>MILO</command> is itself a console, which replaces ARC or SRM in
 memory.  <command>MILO</command> can be booted from both ARC and SRM and is
@@ -249,7 +294,7 @@ per quei sistemi per i quali è indicato il supporto di ARC nella tabella
 precedente. Vedere anche il &mdash;purtroppo&mdash; datato <ulink url="&url-milo-howto;">MILO
 HOWTO</ulink>.
 
-</para><para>
+</para><para condition="FIXME">
 
 <!-- <command>aboot</command> is a small, platform-independent bootloader, which
 runs from SRM only.  See the (also unfortunately outdated) <ulink
@@ -261,7 +306,7 @@ piattaforma, che può essere eseguito solo da SRM. Vedere anche
 il &mdash;purtroppo&mdash; datato <ulink url="&url-srm-howto;">SRM HOWTO</ulink> per
 maggiore informazioni su <command>aboot</command>.
 
-</para><para>
+</para><para condition="FIXME">
 
 <!-- Thus, three scenarios are generally possible, depending on the
 system's console firmware and whether or not <command>MILO</command> is
@@ -271,23 +316,10 @@ Si presentano quindi tre possibili scenari, a seconde dalla console
 firmware presente e della disponibilità di <command>MILO</command>.
 
 <informalexample><screen>
-
-SRM -> aboot
-SRM -> MILO
-ARC -> MILO
-
+SRM -&gt; aboot
+SRM -&gt; MILO
+ARC -&gt; MILO
 </screen></informalexample>
-
-</para><para>
-
-<!-- The UP1000 motherboard (subarchitecture name `nautilus') from Alpha
-Processor, Inc. is different from all the others, in that it uses an
-API-specific bootloader that runs under AlphaBIOS firmware. -->
-
-La scheda madre UP1000 (nome della sotto architettura `nautilus')
-della Alpha Processor, Inc. è diversa da tutte le altre
-poiché utilizza un «bootloader» specifico per l'API disponibile
-che viene eseguito dal firmware AlphaBIOS.
 
 </para><para>
 
@@ -314,9 +346,8 @@ products contain both SRM and AlphaBIOS in their firmware.  For
 possible to switch from one version to another by reflashing the
 firmware.  Also, once SRM is installed, it is possible to run
 ARC/AlphaBIOS from a floppy disk (using the <command>arc</command>
-command).  For the
-reasons mentioned above, we recommend switching to SRM before
-installing &debian;. -->
+command).  For the reasons mentioned above, we recommend switching to
+SRM before installing &debian;. -->
 
 La maggior parte degli AlphaServer e tutti gli attuali server e
 workstation contengono i firmware SRM e AlphaBIOS. Per le
@@ -332,7 +363,7 @@ prima di installare &debian;.
 
 <!-- As on other architectures, you should install the newest available
 revision of the firmware <footnote><para>Except on Jensen, where
-Linux is not supported on firmware versions newer than 1.7 - see
+Linux is not supported on firmware versions newer than 1.7 &mdash; see
 <ulink url="&url-jensen-howto;"></ulink> for more
 information</para></footnote> before installing &debian;.  For
 Alpha, firmware updates can be obtained from 
@@ -341,7 +372,7 @@ Alpha, firmware updates can be obtained from
 Come per le altre architetture si dovrebbe installare l'ultima revisione
 del firmware <footnote><para>Con l'eccezione di Jensen, per il
 quale Linux non è supportato nelle versioni successive alla
-1.7 - vedere <ulink url="&url-jensen-howto;"></ulink> per altre
+1.7 &mdash; vedere <ulink url="&url-jensen-howto;"></ulink> per altre
 informazioni</para></footnote> prima di installare &debian;. Per
 Alpha è possibile ottenere gli aggiornamenti del firmware
 da <ulink url="&url-alpha-firmware;">Alpha Firmware Updates</ulink>.
@@ -364,21 +395,17 @@ prefisso <userinput>ewa</userinput> e sono elencate con il comando
 mostrato di seguito:
 
 <informalexample><screen>
-
->>> show dev
+&gt;&gt;&gt; show dev
 ewa0.0.0.9.0               EWA0              08-00-2B-86-98-65
 ewb0.0.0.11.0              EWB0              08-00-2B-86-98-54
 ewc0.0.0.2002.0            EWC0              00-06-2B-01-32-B0
-
 </screen></informalexample>
 
 <!-- You first need to set the boot protocol: -->
 Per prima cosa si deve specificare il protocollo per l'avvio:
 
 <informalexample><screen>
-
->>> set ewa0_protocol bootp
-
+&gt;&gt;&gt; set ewa0_protocol bootp
 </screen></informalexample>
 
 <!-- Then check the medium type is correct: -->
@@ -386,14 +413,12 @@ Per prima cosa si deve specificare il protocollo per l'avvio:
 Successivamente si deve verificare che il tipo di medium sia corretto:
 
 <informalexample><screen>
-
->>> set ewa0_mode <replaceable>mode</replaceable>
-
+&gt;&gt;&gt; set ewa0_mode <replaceable>mode</replaceable>
 </screen></informalexample>
 
-<!-- You can get a listing of valid modes with <userinput>>>>set ewa0_mode</userinput>. -->
+<!-- You can get a listing of valid modes with <userinput>&gt;&gt;&gt;set ewa0_mode</userinput>. -->
 
-Si può ottenere un elenco di modi permessi con <userinput>>>>set ewa0_mode</userinput>.
+Si può ottenere un elenco di modi permessi con <userinput>&gt;&gt;&gt;set ewa0_mode</userinput>.
 
 </para><para>
 
@@ -402,12 +427,8 @@ Si può ottenere un elenco di modi permessi con <userinput>>>>set ewa0_mode</use
 Infine, per avviare dalla prima interfaccia ethernet, si scriverà:
 
 <informalexample><screen>
-
->>> boot ewa0 -flags ""
-
+&gt;&gt;&gt; boot ewa0 -flags ""
 </screen></informalexample>
-
-</para><para>
 
 <!-- This will boot using the default kernel parameters as included in the
 netboot image. -->
@@ -422,22 +443,23 @@ pass the <userinput>console=</userinput> parameter to the kernel.
 This can be done using the <userinput>-flags</userinput> argument to
 the SRM <userinput>boot</userinput> command.  The serial ports are
 named the same as their corresponding files in
-<userinput>/dev</userinput>.  For example, to boot from
-<userinput>ewa0</userinput> and use a console on the first serial
-port, you would type: -->
+<userinput>/dev</userinput>.  Also, when specifying additional kernel
+parameters, you must repeat certain default options that are needed by
+the &d-i; images.  For example, to boot from <userinput>ewa0</userinput>
+and use a console on the first serial port, you would type: -->
 
 Se si vuole utilizzare una console seriale, si <emphasis>deve</emphasis>
 passare il parametro <userinput>console=</userinput> al kernel.
 Questo non può essere fatto con argomenti <userinput>-flags</userinput>
 al comando <userinput>boot</userinput> di SRM. I nomi delle porte
 seriali sono gli stessi dei corrispondenti device in <userinput>/dev</userinput>.
+Inoltre, quando si specificano dei parametri aggiuntivi del kernel si devono
+ripetere alcune delle opzioni predefinite perché necessari alle immagini &d-i;.
 Ad esempio per avviare da <userinput>ewa0</userinput> e utilizzare una console
 sulla prima porta seriale, si scriverà:
 
 <informalexample><screen>
-
->>> boot ewa0 -flags console=ttyS0
-
+&gt;&gt;&gt; boot ewa0 -flags console=ttyS0
 </screen></informalexample>
 
 </para>
@@ -451,9 +473,7 @@ sulla prima porta seriale, si scriverà:
 Scrivere
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot xxxx -flags 0
-
 </screen></informalexample>
 
 <!-- where <replaceable>xxxx</replaceable> is your CD-ROM drive in SRM notation. -->
@@ -463,7 +483,7 @@ dove <replaceable>xxxx</replaceable> è il drive CD-ROM nella notazione di SRM.
 </para>
   </sect2>
 
-  <sect2 arch="alpha">
+  <sect2 arch="alpha" condition="FIXME">
   <!-- <title>Booting from CD-ROM with the ARC or AlphaBIOS Console</title> -->
   <title>Avvio da CD-ROM tramite la console ARC o AlphaBIOS</title>
 <para>
@@ -490,7 +510,7 @@ come bootloader.
   </sect2>
 
 
-  <sect2 arch="alpha">
+  <sect2 arch="alpha" condition="supports-floppy-boot">
   <!-- <title>Booting from Floppies with the SRM Console</title> -->
   <title>Avvio da dischetto con la console SRM</title>
 <para>
@@ -502,9 +522,7 @@ Al prompt di SRM (<prompt>&gt;&gt;&gt;</prompt>), eseguire il comando
 seguente:
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot dva0 -flags 0
-        
 </screen></informalexample>
 
 <!-- possibly replacing <filename>dva0</filename> with the actual device
@@ -514,9 +532,7 @@ attuale del device. Di norma <filename>dva0</filename> è il lettore
 di dischetto; scrivere
 
 <informalexample><screen>
-
 &gt;&gt;&gt; show dev
-        
 </screen></informalexample>
 
 <!-- to see the list of devices (e.g., if you want to boot from a CD).
@@ -541,10 +557,9 @@ l'avvio tramite <command>aboot</command>, usare il seguente
 comando:
 
 <informalexample><screen>
-
 &gt;&gt;&gt; boot dva0 -file linux.bin.gz -flags "root=/dev/fd0 load_ramdisk=1 arguments"
-        
 </screen></informalexample>
+
 <!-- (typed on one line), substituting, if necessary, the actual SRM boot
 device name for <filename>dva0</filename>, the Linux boot device name for
 <filename>fd0</filename>, and the desired kernel parameters for
@@ -569,7 +584,7 @@ una volta che MILO è in esecuzione. Vedere <xref linkend="booting-from-milo"/>.
   </sect2>
 
 
-  <sect2 arch="alpha">
+  <sect2 arch="alpha" condition="supports-floppy-boot">
   <!-- <title>Booting from Floppies with the ARC or AlphaBIOS Console</title> -->
   <title>Avvio da dischetto tramite console ARC o AlphaBIOS</title>
 
@@ -586,33 +601,9 @@ tali impostazioni.
 </para>
   </sect2>
 
-  <sect2 arch="alpha">
-  <!-- <title>Booting from Floppies with the APB Boot Loader (UP1000)</title> -->
-  <title>Avvio da dischetto tramite il bootloader APB (UP1000)</title>
-
-<para>
-
-<!-- To boot on this platform, run <command>\apb\apb.exe</command> from the
-`Utility/Run Maintenance Program' menu, and type -->
-
-Per avviare su questa piattaforma, eseguire <command>\apb\apb.exe</command>
-dal menu `Utility/Run Maintenance Program' e scrivere
-
-      <informalexample><screen>
-
-boot debian_install
-      
-</screen></informalexample>
-
-<!-- at the APB prompt.-->
-
-al prompt APB.
-
-</para>
-  </sect2>
-
- <!-- <sect2 arch="alpha" id="booting-from-milo"><title>Booting with MILO</title> -->
- <sect2 arch="alpha" id="booting-from-milo"><title>Avvio con MILO</title>
+  <sect2 arch="alpha" condition="FIXME" id="booting-from-milo">
+  <!--<title>Booting with MILO</title>-->
+  <title>Avvio con MILO</title>
 <para>
 
 <!-- MILO contained on the bootstrap media is configured to proceed straight
@@ -634,12 +625,8 @@ parametri aggiuntivi), è possibile usare un comando come
 il seguente:
 
 <informalexample><screen>
-
 MILO&gt; boot fd0:linux.bin.gz root=/dev/fd0 load_ramdisk=1 <!-- arguments -->
-        
 </screen></informalexample>
-
-</para><para>
 
 <!-- If you are booting from something other than a floppy, substitute
 <filename>fd0</filename> in the above example with the appropriate device name
@@ -653,4 +640,3 @@ breve resonconto dell'interfaccia MILO.
 
 </para>
  </sect2>
-

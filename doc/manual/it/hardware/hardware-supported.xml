@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 22237 -->
+<!-- original version: 26574 -->
 
  <sect1 id="hardware-supported">
  <title>Hardware supportato</title>
@@ -89,14 +89,10 @@ di ogni architettura, che vanno sotto il nome di 'flavors'.
 </row>
 
 <row>
-  <entry morerows="2">DEC Alpha</entry>
-  <entry morerows="2">alpha</entry>
-  <entry morerows="2"></entry>
-  <entry>generic</entry>
-</row><row>
-  <entry>jensen</entry>
-</row><row>
-  <entry>nautilus</entry>
+  <entry>DEC Alpha</entry>
+  <entry>alpha</entry>
+  <entry></entry>
+  <entry></entry>
 </row>
 
 <row>
@@ -128,7 +124,7 @@ di ogni architettura, che vanno sotto il nome di 'flavors'.
   <entry>chrp</entry>
 </row><row>
   <entry>PowerMac</entry>
-  <entry>powermac, new-powermac</entry>
+  <entry>pmac</entry>
 </row><row>
   <entry>PReP</entry>
   <entry>prep</entry>
@@ -162,7 +158,7 @@ di ogni architettura, che vanno sotto il nome di 'flavors'.
 </row><row>
   <entry>r5k-ip22</entry>
 </row><row>
-  <entry>Broadcom BCM1250 (SWARM)</entry>
+  <entry>Broadcom BCM91250A (SWARM)</entry>
   <entry>sb1-swarm-bn</entry>
 </row>
 
@@ -177,17 +173,18 @@ di ogni architettura, che vanno sotto il nome di 'flavors'.
 </row><row>
   <entry>r3k-kn02</entry>
 </row><row>
-  <entry>Broadcom BCM1250 (SWARM)</entry>
+  <entry>Broadcom BCM91250A (SWARM)</entry>
   <entry>sb1-swarm-bn</entry>
 </row>
 
 <row>
   <entry morerows="1">IBM S/390</entry>
   <entry morerows="1">s390</entry>
-  <entry morerows="1"></entry>
-  <entry>tape</entry>
+  <entry>IPL from VM-reader and DASD</entry>
+  <entry>generic</entry>
 </row><row>
-  <entry>vmrdr</entry>
+  <entry>IPL from tape</entry>
+  <entry>tape</entry>
 </row>
 
 </tbody></tgroup></informaltable>
@@ -264,17 +261,15 @@ il processo di installazione descritto in questo documento.
 </para><para>
 
 <!-- Debian's support for graphical interfaces is determined by the
-underlying support found in XFree86's X11 system.  The newer AGP video
-slots are actually a modification on the PCI specification, and most
-AGP video cards work under XFree86.  Details on supported graphics
+underlying support found in XFree86's X11 system.  Most AGP, PCI and
+PCIe video cards work under XFree86.  Details on supported graphics
 buses, cards, monitors, and pointing devices can be found at 
 <ulink url="&url-xfree86;"></ulink>.  Debian &release; ships 
 with XFree86 version &x11ver;. -->
 
 Il supporto di Debian per le interfacce grafiche &egrave; determinato
-dal sottostante supporto trovato nel sistema X11 di XFree86. I nuovi
-connettori video AGP sono una modifica delle specifiche PCI e la
-maggior parte delle schede video AGP funzionano con XFree86. I dettagli
+dal sottostante supporto trovato nel sistema X11 di XFree86. La maggior
+parte delle schede video AGP, PCI e PCIe funzionano con XFree86. I dettagli
 sulle schede video supportate, sui bus, monitor e dispositivi di puntamento
 possono essere trovati in <ulink url="&url-xfree86;"></ulink>. Debian
 &release; include la versione &x11ver; di XFree86.
@@ -282,32 +277,32 @@ possono essere trovati in <ulink url="&url-xfree86;"></ulink>. Debian
 </para><para arch="mips">
 
 <!-- The XFree86 X11 window system is only supported on the SGI Indy.  The
-Broadcom BCM1250 evaluation board has standard 3.3v PCI slots and supports
+Broadcom BCM91250A evaluation board has standard 3.3v PCI slots and supports
 VGA emulation or Linux framebuffer on a selected range of graphics cards.
 A <ulink url="&url-bcm91250a-hardware;">compatibility listing</ulink> for
-the BCM1250 is available. -->
+the BCM91250A is available. -->
 
 Il sistema a finestre XFree86 X11 &egrave; supportato solo sulle SGI Indy.
-La scheda di valutazione Broadcom BCM1250 ha degli slot standard PCI 3.3v
+La scheda di valutazione Broadcom BCM91250A ha degli slot standard PCI 3.3v
 e supporta l'emulazione VGA o il Linux framebuffer su un ridotto insieme di
 schede video. &Egrave; disponibile una 
 <ulink url="&url-bcm91250a-hardware;">lista delle schede compatibili</ulink>
-per la BCM1250.
+per la BCM91250A.
 
 </para><para arch="mipsel">
 
 <!-- The XFree86 X11 window system is supported on some DECstation models.  The
-Broadcom BCM1250 evaluation board has standard 3.3v PCI slots and supports
+Broadcom BCM91250A evaluation board has standard 3.3v PCI slots and supports
 VGA emulation or Linux framebuffer on a selected range of graphics cards.
 A <ulink url="&url-bcm91250a-hardware;">compatibility listing</ulink> for
-the BCM1250 is available. -->
+the BCM91250A is available. -->
 
-Il sistema a finestre XFree86 X11 &egrave; supportato solo su qualche modello 
-di DECstation. La scheda di valutazione Broadcom BCM1250 ha degli slot 
-standard PCI 3.3v e supporta l'emulazione VGA o il Linux framebuffer su un 
+Il sistema a finestre XFree86 X11 &egrave; supportato solo su qualche modello
+di DECstation. La scheda di valutazione Broadcom BCM91250A ha degli slot
+standard PCI 3.3v e supporta l'emulazione VGA o il Linux framebuffer su un
 ridotto insieme di schede video. &Egrave; disponibile una
 <ulink url="&url-bcm91250a-hardware;">lista delle schede compatibili</ulink>
-per la BCM1250.
+per la BCM91250A.
 
 </para>
 
@@ -437,17 +432,18 @@ Per sfruttare tutti i vantaggi dei sistemi multiprocessore, dovete controllare
 se &egrave; stato installato un kernel che supporta l'SMP e in caso contrario
 scegliere un pacchetto con un kernel appropriato.
 
-<!-- You can also build your own customised kernel to support SMP. You can find
+<!-- You can also build your own customized kernel to support SMP. You can find
 a discussion of how to do this in <xref linkend="kernel-baking"/>.  At this
 time (kernel version &kernelversion;) the way you enable SMP is to select
 ``symmetric multi-processing'' in the ``General'' section of the
 kernel config. -->
 
-Potete inoltre compilare il vostro kernel personalizzato con supporto per l'SMP.
-Potete trovare una discussione su come farlo in <xref linkend="kernel-baking"/>.
-Attualmente (versione del kernel &kernelversion;), il modo di abilitare l'SMP 
-&egrave; selezionare la voce ``symmetric multi-processing'' nella sezione 
-``General'' della configurazione del kernel .
+Potete inoltre compilare il vostro kernel personalizzato con supporto
+per l'SMP. Potete trovare una discussione su come farlo in
+<xref linkend="kernel-baking"/>. Attualmente (versione del kernel
+&kernelversion;), il modo di abilitare l'SMP &egrave; selezionare
+la voce <quote>symmetric multi-processing</quote> nella sezione
+<quote>General</quote> della configurazione del kernel.
 
 </para>
   </sect2>
