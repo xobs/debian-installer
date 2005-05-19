@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 24663 -->
+<!-- original version: 27518 -->
 
  <sect1 id="automatic-install">
  <title>Automatische Installation</title>
@@ -14,14 +14,27 @@ vorgesehen sind: <classname>fai</classname> (benutzt einen Installationsserver),
 
 </para>
 
-<sect2>
+<sect2 id="preseed">
 <title>Automatische Installation mit dem Debian-Installer</title>
-
 <para>
+
 Der Debian-Installer bietet automatische Installationen über
 Voreinstellungs-Dateien an. Eine solche Voreinstellungs-Datei kann über das Netzwerk oder
 von einem Wechselmedium geladen werden und wird benutzt, um Fragen zu beantworten,
 die während des Installationsprozesses auftreten.
+
+</para><para>
+
+Obwohl die meisten vom &d-i; genutzten Dialoge mit dieser Methode
+voreingestellt werden können, gibt es einige erwähnenswerte Ausnahmen.
+Sie können per Voreinstellung eine ganze Festplatte (neu) partitionieren
+oder freien verfügbaren Platz auf einer Platte verwenden; es ist jedoch
+nicht möglich, bestehende Partitionieren weiter zu verwenden.
+Auch können Sie derzeit Voreinstellungen nicht verwenden, um RAID und LVM
+einzurichten.
+<phrase condition="sarge">Ausserdem kann man keine Parameter
+für Kernelmodule voreinstellen, (dies gilt jedoch nicht für
+Netzwerktreiber-Module).</phrase>
 
 </para><para>
 
@@ -88,5 +101,23 @@ und dann die Datei <filename>syslinux.cfg</filename> editieren, um
 zu den Kernel-Bootparametern hinzuzufügen.
 
 </para>
+
+<sect3 condition="etch">
+<title>Standardwerte verändern mittels Voreinstellung</title>
+<para>
+
+Es ist ebenfalls möglich, die Standardantwort für eine Frage zu ändern,
+die Frage aber trotzdem stellen zu lassen. Dabei muss die
+<firstterm>seen</firstterm>-Markierung auf <quote>false</quote>
+zurückgesetzt werden, nachdem die gewünschte Einstellung für den Wert
+gesetzt wurde:
+ 
+<informalexample><screen>
+d-i foo/bar string value
+d-i foo/bar seen false
+</screen></informalexample>
+ 
+</para>
+</sect3>
 </sect2>
  </sect1>

@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 26698 -->
+<!-- original version: 27474 -->
 
  <sect1 id="boot-troubleshooting">
  <title>Beseitigen von Problemen während der Installation</title>
@@ -11,8 +11,8 @@
 
 <para>
 
-Das größte Problem für Leute, die Debian das erste Mal installieren,
-scheint die (Un-)Zuverlässigkeit von Floppy-Disks zu sein.
+Das größte Problem für Leute, die Disketten für die Installation von
+Debian benutzen, scheint die (Un-)Zuverlässigkeit der Floppy-Disks zu sein.
 
 </para><para>
 
@@ -43,7 +43,7 @@ auf unterschiedliche Disketten schreiben musste, bis alle drei funktionierten.
 
 Andere Benutzer berichteten, dass einfach das mehrmalige Rebooten
 mit derselben Floppy im Laufwerk zu einem erfolgreichen Bootvorgang
-führen kann. Dies alles ist auf fehlerhafte Hardware oder
+geführt hat. Dies alles ist auf fehlerhafte Hardware oder
 Firmware-Floppy-Driver zurückzuführen.
 
 </para>
@@ -81,6 +81,97 @@ des Speichers vor dem Kernel verbirgt bzw. limitiert, z.B.
 <userinput>mem=512m</userinput>.
 
 </para>
+  </sect2>
+
+  <sect2 arch="i386" id="i386-boot-problems">
+  <title>Häufige Installationsprobleme unter &arch-title;</title>
+<para>
+
+Es gibt einige bekannte Installationsprobleme, die gelöst oder vermieden
+werden können, indem man dem Installer entsprechende Bootparameter mit gibt.
+
+</para><para>
+
+Einige Systeme haben Floppy-Laufwerke mit <quote>invertierten DCLs</quote>.
+Wenn Sie Probleme haben, von der Floppy-Disk zu lesen, obwohl Sie wissen,
+dass die Disk in Ordnung ist, versuchen Sie den Parameter
+<userinput>floppy=thinkpad</userinput>.
+
+</para><para>
+
+Auf einigen System wie dem IBM PS/1 oder ValuePoint (das ST-506-Laufwerkstreiber
+hat) werden IDE-Laufwerke unter Umständen nicht korrekt erkannt.
+Versuchen Sie es hier zunächst ohne Boot-Parameter und überprüfen Sie,
+ob das IDE-Laufwerk richtig erkannt wird. Falls nicht, bestimmen Sie
+die Geometrie-Parameter Ihrer Festplatte (Zylinder, Köpfe und Sektoren)
+und nutzen Sie das Boot-Argument
+<userinput>hd=<replaceable>cylinders</replaceable>,<replaceable>heads</replaceable>,<replaceable>sectors</replaceable></userinput>.
+
+</para><para>
+
+Wenn Sie eine sehr alte Maschine haben und der Kernel nach der Meldung
+<computeroutput>Checking 'hlt' instruction...</computeroutput> hängt,
+versuchen Sie es mit dem Boot-Argument <userinput>no-hlt</userinput>,
+das diesen Test deaktiviert.
+
+</para><para>
+
+Wenn Ihr Bildschirm ein eigenartiges Bild zeigt, während der Kernel bootet,
+z.B. komplett weiß, komplett schwarz oder farbiger Pixelmüll, enthält
+Ihr Rechner möglicherweise eine problematische Grafikkarte, die nicht
+ordnungsgemäß in den Framebuffer-Modus schaltet. Sie können dann den
+Boot-Parameter <userinput>debian-installer/framebuffer=false</userinput>
+oder <userinput>video=vga16:off</userinput> benutzen, um den Framebuffer
+auf der Konsole zu deaktivieren. In diesem Fall steht aufgrund von
+eingeschränkter Konsolenfunktionalität nur die englische
+Sprache zur Verfügung. <xref linkend="boot-parms"/> enthält Details zu
+diesem Thema.
+
+</para>
+  
+  <sect3>
+  <title>Während der PCMCIA-Konfiguration friert das System ein</title>
+<para>
+
+Einige Laptop-Modelle von Dell sind bekannt dafür, dass Sie sich aufhängen,
+wenn die PCMCIA-Geräteerkennung versucht, bestimmte Hardwareadressen
+abzufragen. Andere Modelle können ähnliche Symptome zeigen. Wenn Ihnen solche
+Probleme unter kommen und Sie kein PCMCIA-Gerät während der Installation
+benötigen, können Sie PCMCIA komplett deaktivieren, indem Sie den
+Boot-Parameter <userinput>hw-detect/start_pcmcia=false</userinput>
+benutzen. Nachdem die Installation abgeschlossen ist, können Sie PCMCIA so
+konfigurieren, dass der problematische Adressbereich ausgeschlossen wird.
+
+</para><para>
+
+Alternativ können Sie den Installer im Experten-Modus booten.
+Sie werden dann aufgefordert, die Ressourcenbereiche einzugeben,
+die Ihre Hardware benötigt. Ein Beispiel: wenn Sie einen der oben
+erwähnten Dell-Laptops besitzen, sollten Sie hier
+<userinput>exclude port 0x800-0x8ff</userinput> eingeben.
+Im <ulink url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-1.html#ss1.12">Kapitel
+<quote>System resource settings</quote> des PCMCIA-HOWTOs</ulink> gibt es eine
+Liste mit einigen allgemeinen Angaben über Ressourcenbereiche.
+Beachten Sie, dass Sie alle Kommata weglassen müssen, wenn Sie 
+Angaben von dieser Quelle in den Installer eingeben.
+
+</para>
+   </sect3>
+
+   <sect3>
+   <title>Das System friert ein, während die USB-Module geladen werden</title>
+<para>
+
+Der Kernel versucht normalerweise, die USB-Module und die USB-Tastatur-Treiber
+zu laden, um einige <quote>non-standard</quote>-USB-Tastaturen unterstützen zu können.
+Allerdings gibt es einige kaputte USB-Systeme, bei denen sich der Treiber während
+des Ladens aufhängt. Eine Möglichkeit, dies zu umgehen, ist, den USB-Controller
+im BIOS des Mainboards zu deaktivieren. Ein anderer Weg wäre,
+den Parameter <userinput>debian-installer/probe/usb=false</userinput>
+am Boot-Prompt einzugeben; dies verhindert, dass die Module geladen werden.
+
+</para>
+   </sect3>
   </sect2>
 
   <sect2 id="kernel-msgs">

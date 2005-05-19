@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 27301 -->
+<!-- original version: 27474 -->
 
   <sect2 arch="i386"><title>Von einer CD-ROM starten</title>
 
@@ -164,7 +164,7 @@ image=/boot/newinstall/vmlinuz
        label=newinstall
        initrd=/boot/newinstall/initrd.gz
        root=/dev/ram0
-       append="devfs=mount,dall ramdisk_size=12000"
+       append="<phrase condition="sarge">devfs=mount,dall </phrase>ramdisk_size=12000"
 </screen></informalexample>
 
 Mehr Details finden Sie in den Handbuchseiten von
@@ -187,9 +187,10 @@ kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram0 ramdisk_size=12000
 initrd (hd0,0)/boot/newinstall/initrd.gz
 </screen></informalexample>
 
-Starten Sie danach den Rechner neu. Falls der Systemstart fehlschlägt, können
+Starten Sie danach den Rechner neu.
+<phrase condition="sarge">Falls der Systemstart fehlschlägt, können
 Sie versuchen, <userinput>devfs=mount,dall</userinput> zu der
-<quote>kernel</quote>-Zeile hinzuzufügen.
+<quote>kernel</quote>-Zeile hinzuzufügen.</phrase>
 
 </para><para>
 
@@ -333,110 +334,59 @@ bietet Bootdisketten und sogar BootROMs an, die per TFTP-Boot starten.
    </sect3>
   </sect2>
 
-  <sect2 arch="i386"><title>i386-Boot-Parameter</title>
+  <sect2 arch="i386"><title>Der-Boot-Prompt</title>
 <para>
 
-Wenn der Installer bootet, wird Ihnen der Boot-Prompt angezeigt
-(<prompt>boot:</prompt>). Sie können dann zweierlei tun: drücken Sie
-die Funktionstasten <keycap>F1</keycap> bis <keycap>F10</keycap>,
-um hilfreiche Informationen zu bekommen, oder drücken Sie
-<keycap>Enter</keycap>, um das System zu starten.
+Wenn der Installer startet, wird Ihnen ein hübscher grafischer Bildschirm
+angezeigt mit dem Debian-Logo und dem Boot-Prompt:
+
+<informalexample><screen>
+Press F1 for help, or ENTER to boot:
+</screen></informalexample>
+
+Drücken Sie am Boot-Prompt einfach &enterkey;, um den Installer mit den
+Standardoptionen zu starten, oder geben Sie eine andere Bootmethode an
+sowie optionale Bootparameter.
 
 </para><para>
 
-Informationen über nützliche Boot-Parameter bekommen Sie mit
-den Tasten <keycap>F3</keycap> bis <phrase
-condition="sarge"><keycap>F7</keycap></phrase><phrase condition="etch"><keycap>F8</keycap></phrase>.
-Wenn Sie irgendwelche Parameter zur Boot-Zeile hinzufügen, stellen Sie
-sicher, dass Sie als erstes die Boot-Methode (Standard ist
-<userinput>linux</userinput>) und ein Leerzeichen vor dem ersten
-Parameter (z.B. <userinput>linux floppy=thinkpad</userinput>)
-eingeben. Wenn Sie einfach &enterkey; drücken, ist das das gleiche,
-als wenn Sie nur <userinput>linux</userinput> ohne zusätzliche
-Argumente eintippen.
+Informationen zu verfügbaren Bootmethoden und Bootparametern, die für
+Sie nützlich sein könnten, bekommen Sie, indem Sie die Tasten <keycap>F2</keycap>
+bis <phrase condition="sarge"><keycap>F7</keycap></phrase><phrase
+condition="etch"><keycap>F8</keycap></phrase> drücken. Sollten Sie irgendwelche
+Parameter am Boot-Prompt eingeben, denken Sie daran, die Bootmethode
+(Standard hierfür ist <userinput>linux</userinput>) sowie ein nachfolgendes
+Leerzeichen vor den ersten Parameter zu stellen (z.B.
+<userinput>linux debconf/priority=medium</userinput>).
 
-</para><para>
+<note><para>
 
-Einige Systeme haben Floppy-Laufwerke mit <quote>invertierten DCLs</quote>.
-Wenn Sie Probleme haben, von der Floppy-Disk zu lesen, obwohl Sie wissen,
-dass die Disk in Ordnung ist, versuchen Sie den Parameter
-<userinput>floppy=thinkpad</userinput>.
-
-</para><para>
-
-Auf einigen System wie dem IBM PS/1 oder ValuePoint (das ST-506-Laufwerkstreiber
-hat) werden IDE-Laufwerke unter Umständen nicht korrekt erkannt.
-Versuchen Sie es hier zunächst ohne Boot-Parameter und überprüfen Sie,
-ob das IDE-Laufwerk richtig erkannt wird. Falls nicht, bestimmen Sie
-die Geometrie-Parameter Ihrer Festplatte (Zylinder, Köpfe und Sektoren)
-und nutzen Sie das Boot-Argument
-<userinput>hd=<replaceable>cylinders</replaceable>,<replaceable>heads</replaceable>,<replaceable>sectors</replaceable></userinput>.
-
-</para><para>
-
-Wenn Sie eine sehr alte Maschine haben und der Kernel nach der Meldung
-<computeroutput>Checking 'hlt' instruction...</computeroutput> hängt,
-versuchen Sie es mit dem Boot-Argument <userinput>no-hlt</userinput>,
-das diesen Test deaktiviert.
-
-</para><para>
-
-Wenn Ihr Bildschirm ein eigenartiges Bild zeigt, während der Kernel bootet,
-z.B. komplett weiß, komplett schwarz oder farbiger Pixelmüll, enthält
-Ihr Rechner möglicherweise eine problematische Grafikkarte, die nicht
-ordnungsgemäß in den Framebuffer-Modus schaltet. Sie können dann den
-Boot-Parameter <userinput>debian-installer/framebuffer=false</userinput>
-oder <userinput>video=vga16:off</userinput> benutzen, um den Framebuffer
-auf der Konsole zu deaktivieren. In diesem Fall steht aufgrund von
-eingeschränkter Konsolenfunktionalität nur die englische
-Sprache zur Verfügung. <xref linkend="boot-parms"/> enthält Details zu
-diesem Thema.
-
-</para>
-  </sect2>
-
-
-  <sect2 arch="i386">
-  <title>Während der PCMCIA-Konfiguration friert das System ein</title>
+Wenn Sie das System über ein Remote-Management-Gerät installieren, das
+Ihnen eine Textoberfläche auf der VGA-Konsole bereitstellt, könnte es sein,
+dass Sie den grafischen Einführungsbildschirm beim Booten des Installers
+nicht sehen; vielleicht sehen Sie nicht einmal einen Boot-Prompt.
+Dies kommt zum Beispiel bei den Textkonsolen von Compaq's
+<quote>integrated Lights Out</quote> (iLO) und HP's
+<quote>Integrated Remote Assistant</quote> (IRA) vor. Sie können hier blind
+<keycap>F1</keycap> drücken <footnote>
 
 <para>
 
-Einige Laptop-Modelle von Dell sind bekannt dafür, dass Sie sich aufhängen,
-wenn die PCMCIA-Geräteerkennung versucht, bestimmte Hardwareadressen
-abzufragen. Andere Modelle können ähnliche Symptome zeigen. Wenn Ihnen solche
-Probleme unter kommen und Sie kein PCMCIA-Gerät während der Installation
-benötigen, können Sie PCMCIA komplett deaktivieren, indem Sie den
-Boot-Parameter <userinput>hw-detect/start_pcmcia=false</userinput>
-benutzen. Nachdem die Installation abgeschlossen ist, können Sie PCMCIA so
-konfigurieren, dass der problematische Adressbereich ausgeschlossen wird.
-
-</para><para>
-
-Alternativ können Sie den Installer im Experten-Modus booten.
-Sie werden dann aufgefordert, die Ressourcenbereiche einzugeben,
-die Ihre Hardware benötigt. Ein Beispiel: wenn Sie einen der oben
-erwähnten Dell-Laptops besitzen, sollten Sie hier
-<userinput>exclude port 0x800-0x8ff</userinput> eingeben.
-Im <ulink url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-1.html#ss1.12">System
-resource settings section of the PCMCIA-HOWTO</ulink> gibt es eine
-Liste mit einigen allgemeinen Angaben über Ressourcenbereiche.
-Beachten Sie, dass Sie alle Kommata weglassen müssen, wenn Sie 
-Angaben von dieser Quelle in den Installer eingeben.
-
+In einigen Fällen erfordern diese Geräte spezielle Tastensequenzen, um diese
+Tastatureingabe zu ermöglichen; der IRA z.B. nutzt <keycombo> <keycap>Ctrl</keycap>
+<keycap>F</keycap> </keycombo>,&nbsp;<keycap>1</keycap>.
+ 
 </para>
-  </sect2>
 
-  <sect2 arch="i386">
-  <title>Das System friert ein, während die USB-Module geladen werden</title>
-<para>
+</footnote>, um diesen Bildschirm zu verlassen und zum Hilfetext zu gelangen.
+Sobald Sie einmal den Einführungsbildschirm hinter sich haben und die Hilfeseite
+sehen, werden Ihre Tastatureingaben wie erwartet am Prompt angezeigt.
+Um den Installer anzuweisen, für den Rest der Installation keinen Framebuffer mehr
+zu verwenden, geben Sie am Boot-Prompt
+<userinput>debian-installer/framebuffer=false</userinput> ein, wie es auch im
+Hilfetext steht.
 
-Der Kernel versucht normalerweise, die USB-Module und die USB-Tastatur-Treiber
-zu laden, um einige <quote>non-standard</quote>-USB-Tastaturen unterstützen zu können.
-Allerdings gibt es einige kaputte USB-Systeme, bei denen sich der Treiber während
-des Ladens aufhängt. Eine Möglichkeit, dies zu umgehen, ist, den USB-Controller
-im BIOS des Mainboards zu deaktivieren. Ein anderer Weg wäre,
-den Parameter <userinput>debian-installer/probe/usb=false</userinput>
-am Boot-Prompt einzugeben; dies verhindert, dass die Module geladen werden.
-
+</para></note>
 </para>
+
   </sect2>
