@@ -1,0 +1,108 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: mips.xml 22939 2004-10-09 23:27:48Z ths-guest $ -->
+
+
+  <sect2 arch="mips" id="boot-tftp"><title>Booting with TFTP</title>
+
+   <sect3>
+   <title>Εκκίνηση για SGI Indy με TFTP </title>
+<para>
+
+Μετά την είσοδο στην οθόνη εντολών χρησιμοποιήστε
+<informalexample><screen>
+
+bootp():
+
+</screen></informalexample>
+σε ένα SGI Indy για να εκκινήσετε το linux και να ξεκινήσετε την εγκατάσταση του
+λογισμικού του Debian.  Για να πετύχετε κάτι τέτοιο πιθανόν να πρέπει να βγάλετε
+την παράμετρο περιβάλλοντος  <envar>netaddr</envar>. Πληκτρολογήστε
+<informalexample><screen>
+
+unsetenv netaddr
+
+</screen></informalexample>
+στην οθόνη εντολών για να το κάνετε αυτό.
+
+</para>
+  </sect3>
+
+   <sect3>
+   <title>Εκκίνηση με TFTP για Broadcom BCM91250A</title>
+<para>
+
+Στη δοκιμαστική μητρική της Broadcom BCM91250A, θα πρέπει να φορτώσετε τον
+φορτωτή εκκίνησης  SiByl μέσω TFTP που με τη σειρά του θα φορτώσει και θα
+ξεκινήσει τον  Debian installer.  Στις περισσότερες περιπτώσεις, θα πρέπει να
+πάρετε πρώτα μια διεύθυνση IP μέσω DHCP αλλά είναι πιθανόν να δωσετε και κάποια
+στατική διεύθυνση. Για να χρησιμοποιήσετε το  DHCP, μπορείτε να δώσετε την
+ακόλουθη εντολή στο προτρεπτικό του CFE:
+
+<informalexample><screen>
+
+ifconfig eth0 -auto
+
+</screen></informalexample>
+
+Έχοντας πάρει μια διεύθυνση IP, μπορείτε να φορτώσετε το SiByl
+με την ακόλουθη εντολή:
+
+<informalexample><screen>
+
+boot 192.168.1.1:/boot/sibyl
+
+</screen></informalexample>
+
+Θα πρέπει να αντικαταστήσετε την διεύθυνση IP που αναφέρεται στο παράδειγμα με
+είτε το όνομα ή την IP διεύθυνση του  TFTP server.  Όταν δώσετε αυτή την εντολή,
+ο εγκαταστάτης θα ξεκινήσει αυτόματα.
+
+</para>
+</sect3>
+  </sect2>
+
+  <sect2 arch="mips"><title>Παράμετροι Εκκίνησης </title>
+
+   <sect3>
+   <title>Εκκίνηση SGI Indy με TFTP</title>
+<para>
+
+Σε συστήματα SGI Indy μπορείτε να παραθέσετε παραμέτρους εκκίνησης στην εντολή
+<command>bootp():</command> στην οθόνη εντολών.
+
+</para><para>
+
+Στο τέλος της  εντολής  <command>bootp():</command> μπορείτε να δώσετε την
+διαδρομή και το όνομα του αρχείου εκκίνησης σε περίπτωση που δεν δώσατε ένα
+συγκεκριμένο όνομα μέσω του bootp/dhcp server σας - Για παράδειγμα:
+<informalexample><screen>
+
+bootp():/boot/tftpboot.img
+
+</screen></informalexample>
+</para><para>
+
+Επιπλέον παράμετροι του πυρήνα μπορούν να δωθούν μέσω της εντολής
+<command>append</command>:
+<informalexample><screen>
+
+bootp(): append="root=/dev/sda1"
+
+</screen></informalexample>
+</para>
+  </sect3>
+
+   <sect3>
+   <title>Εκκίνηση TFTP για Broadcom BCM91250A </title>
+<para>
+
+Δεν μπορείτε να περάσετε οποιεσδήποτε παραμέτρους εκκίνησης απυεθείας στο
+προτρεπτικό CFE. Αντίθετα, θα πρέπει να εκδώσετε το
+αρχείο <filename>/boot/sibyl.conf</filename> στον  TFTP
+server και να προσθέσετε τις παραμέτρους σας στην μεταβλητή
+<replaceable>extra_args</replaceable>.
+
+</para>
+  </sect3>
+
+  </sect2>

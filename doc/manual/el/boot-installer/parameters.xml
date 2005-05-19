@@ -1,0 +1,325 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- $Id: parameters.xml 23207 2004-10-18 20:10:57Z fjpop-guest $ -->
+
+ <sect1 id="boot-parms"><title>Παράμετροι Εκκίνησης</title>
+<para>
+
+Οι παράμετροι εκκίνησης είναι παράμετροι του πυρήνα Linux που χρησιμοποιούνται
+γενικά για την εξασφάλιση της ομαλής διαχείρισης των διαφόρων περιφαρειακών. Στο
+μεγαλύτερο βαθμό ο πυρήνας μπορεί να  ανιχνεύσει αυτόματα την πληροφορία σχετικά
+με τα περιφαρειακά σας. Παρ' όλα αυτά, κάποιες φορές θα πρέπει να του δώσετε μια
+μικρή βοήθεια!
+
+</para><para>
+
+Αν αυτή είναι η πρώτη φορά που μπαίνετε στο σύστημά σας, δοκιμάστε καταρχήν τις
+προκαθορισμένες παραμέτρους εκκίνησης (με άλλα λόγια, μην προσπαθήσετε να βάλετε
+κάποιες παραμέτρους) και δείτε αν αυτό δουλεύει σωστά. Πολύ πιθανόν να είναι έτσι.
+Αν όχι μπορείτε να επανεκκινήσετε αργότερα και να δείτε για ειδικές παραμέτρους που
+μπορούν να ενημερώσουν το σύστημά σας σχετικά με το  hardware σας.
+
+</para><para>
+
+Πληροφορία για αρκετές παραμέτρους εκκίνησης μπορεί να βρεθεί στο
+<ulink url="http://www.tldp.org/HOWTO/BootPrompt-HOWTO.html"> Linux
+BootPrompt HOWTO</ulink>, που περιέχει και χρήσιμες υποδείξεις για
+δύσκολο hardware. Η παρούσα ενότητα περιέχει μόνο ένα περίγραμμα για τις πιο
+γνωστές (διαδεδομένες) παραμέτρους. Μερικά συνηθισμένα προβλήματα περιλαμβάνονται
+παρακάτω στο <xref linkend="boot-troubleshooting"/>.
+
+</para><para>
+
+Όταν ξεκινά ο πυρήνας , το μήνυμα  
+
+<informalexample><screen>
+
+Memory:<replaceable>avail</replaceable>k/<replaceable>total</replaceable>k available 
+
+</screen></informalexample>
+
+θα πρέπει να εμφανιστεί στην αρχή της διαδικασίας. Η τιμή
+<replaceable>total</replaceable> θα πρέπει να ταιριάζει στο μέγεθος της
+συνολικής μνήμης RAM, σε kilobytes.  Αν αυτό  δεν ταιριάζει με το πραγματικό μέγεθος
+μνήμης RAM που έχετε εγκαταστήσει, θα πρέπει να χρησιμοποιήσετε την παράμετρο
+<userinput>mem=<replaceable>ram</replaceable></userinput>,
+όπου η τιμή <replaceable>ram</replaceable> πρέπει να τεθεί ίση με το μέγεθος της
+μνήμης με το επίθεμα ``k'' για kilobytes, ή ``m'' για
+megabytes.  Για παράδειγμα, και οι δυο τιμές <userinput>mem=65536k</userinput> και
+<userinput>mem=64m</userinput> εννοούν  64MB μνήμης  RAM.
+
+</para><para condition="supports-serial-console">
+
+Αν η εκκίνηση γίνεται με μια σειριακή κονσόλα, ο πυρήνας θα εντοπίσει γενικά
+αυτόματα τη μνήμη,
+<phrase arch="mipsel">(αν και όχι σε ένα  DECstation)</phrase>
+Αν έχετε επίσης μια κάρτα οθόνης  (framebuffer) και ένα πληκτρολόγιο συνδεδεμένο
+με τον υπολογιστή που θέλετε να ξεκινήσετε από την σειριακή κονσόλα, ίσως να
+πρέπει να δώσετε και το όρισμα
+<userinput>console=<replaceable>device</replaceable></userinput>
+στον πυρήνα, όπου <replaceable>device</replaceable> είναι η σειριακή συσκευή σας,
+συνήθως κάτι όπως <filename>ttyS0</filename>.
+
+</para><para arch="sparc">
+
+Για αρχιτεκτονική  &arch-title; οι σειριακές συσκευές είναι <filename>ttya</filename>
+ή <filename>ttyb</filename>.
+Εναλλακτικά, θέστε τις μεταβλητές OpenPROM  <envar>input-device</envar>και
+<envar>output-device</envar> σε <filename>ttya</filename>.
+
+</para>
+
+
+  <sect2 id="installer-args"><title>Παράμετροι του Εγκαταστάτη του Debian</title>
+<para>
+
+Το σύστημα εγκατάστασης αναγνωρίζει μερικές επιπρόσθετες παραμέτρους εκκίνησης
+<footnote>
+
+<para>
+
+Σημειώστε ότι ο πυρήνας δέχεται ένα μέγιστο 8 επιλογών γραμμής εντολής και 8
+επιλογές περιβάλλοντος  (που συμπεριλαμβάνουν και όσες επιλογές προστίθενται
+εξ ορισμού για τον εγκαταστάτη). Αν οι αριθμοί αυτοί ξεπεραστούν, πυρήνες 2.4
+θα απορρίψουν τις πλεονάζουσες επιλογές ενώ οι πυρήνες 2.6 θα περάσουν σε
+κατάσταση "πανικού" (kernel  panic).
+
+</para>
+
+</footnote> που μπορεί να είναι χρήσιμες. 
+
+</para>
+
+<variablelist>
+<varlistentry>
+<term>debconf/priority</term>
+<listitem><para>
+
+Οι ρυθμίσεις αυτής της παραμέτρου θα καθορίσουν την υψηλότερη προτεραιότητα των
+μηνυμάτων που θα εμφανίζονται. 
+
+</para><para>
+
+Η προκαθορισμένη εγκατάσταση χρησιμοποιεί
+<userinput>debconf/priority=high</userinput>.
+Αυτό σημαίνει ότι τόσο υψηλής όσο και κρίσιμης προτεραιότητας μηνύματα θα
+εμφανίζονται, αλλά μηνύματα μέσης και χαμηλότερης προτεραιότητας παραλείπονται.
+Αν εμφανιστούν προβλήματα, ο εγκαταστάτης προσαρμόζει την προτεραιότητα όπως
+χρειάζεται.
+
+</para><para>
+
+Αν προσθέσετε την  <userinput>debconf/priority=medium</userinput> σαν παράμετρο
+εκκίνησης, θα δείτε το μενού εγκατάστασης και θα αποκτήσετε μεγαλύτερο έλεγχο πάνω
+στην εγκατάσταση. Όταν χρησιμοποιείται η <userinput>debconf/priority=low</userinput>
+τότε όλα τα μηνύματα εμφανίζονται
+(αυτό είναι ισοδύναμο με την μέθοδο <emphasis>expert</emphasis> για την εγκατάσταση).
+Με την επιλογή  <userinput>debconf/priority=critical</userinput>, το σύστημα
+εγκατάστασης θα εμφανίσει μόνο τα κρίσιμα μηνύματα και θα προσπαθήσει να κάνει 
+το σωστό χωρίς μεγάλο "θόρυβο".
+
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term>DEBIAN_FRONTEND</term>
+<listitem><para>
+
+Αυτή η παράμετρος εκκίνησης ελέγχει τον τύπο του interface για τον  χρήστη που θα
+χρησιμοποιηθεί από τον εγκαταστάτη. Οι πιθανές για την ώρα ρυθμίσεις της παραμέτρου
+ είναι:
+ 
+<itemizedlist>
+<listitem>
+<para><userinput>DEBIAN_FRONTEND=noninteractive</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBIAN_FRONTEND=text</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBIAN_FRONTEND=newt</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBIAN_FRONTEND=slang</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBIAN_FRONTEND=ncurses</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBIAN_FRONTEND=bogl</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBIAN_FRONTEND=gtk</userinput></para>
+</listitem><listitem>
+<para><userinput>DEBIAN_FRONTEND=corba</userinput></para>
+</listitem>
+</itemizedlist>
+
+Tο προκαθορισμένο front end είναι
+<userinput>DEBIAN_FRONTEND=newt</userinput>. Η επιλογή
+<userinput>DEBIAN_FRONTEND=text</userinput> είναι ίσως προτιμότερη για
+εγκαταστάσεις με σειριακή κονσόλα. Γενικά όμως μόνο το 
+<userinput>newt</userinput> frontend είναι διαθέσιμο στα δεδομένα μέσα εγκατάστασης
+οπότε η τελευταία αυτή επιλογή δεν είναι και πολύ χρήσιμη προς το παρόν.
+
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term>BOOT_DEBUG</term>
+<listitem><para>
+
+Περνώντας αυτή την παράμετρο θα προκαλέσει μια πιο λεπτομερειακή καταγραφή της
+διαδικασίας εκκίνησης.
+
+<variablelist>
+<varlistentry>
+<term><userinput>BOOT_DEBUG=0</userinput></term>
+<listitem><para>Αυτή είναι η προκαθορισμένη επιλογή.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>BOOT_DEBUG=1</userinput></term>
+<listitem><para>Πιο αναλυτική από το συνηθισμένο.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>BOOT_DEBUG=2</userinput></term>
+<listitem><para>Άφθονη πληροφορία αποσφαλμάτωσης.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><userinput>BOOT_DEBUG=3</userinput></term>
+<listitem><para>
+
+Κελύφη εκτελούνται σε διάφορα σημεία στη διαδικασία εκκίνησης επιτρέποντας
+λεπτομερειακή αποσφαλμάτωση. Βγείτε από το κέλυφος για να συνεχίσετε κανονικά
+την εκκίνηση.
+
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term>INSTALL_MEDIA_DEV</term>
+<listitem><para>
+
+Η τιμή της παραμέτρου είναι η διαδρομή της συσκευής από την οποία φορτώνεται ο
+εγκαταστάτης του Debian. Για παράδειγμα, 
+<userinput>INSTALL_MEDIA_DEV=/dev/floppy/0</userinput>
+
+</para><para>
+
+Η δισκέττα εκκίνησης, που συνήθως ανιχνεύει όλες τις συσκευές δισκέττας και
+USB συσκευές αποθήκευσης που μπορεί να ανιχνεύσει για να βρει τη δισκέττα με το
+ριζικό σύστημα αρχείων, μπορεί να υπερσκελιστεί με την παράμετρο αυτή ώστε να
+κοιτάξει σε μια συγκεκριμένη μόνο συσκευή.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>debian-installer/framebuffer</term>
+<listitem><para>
+
+Μερικές αρχιτεκτονικές χρησιμοποιούν  τον
+framebuffer του πυρήνα για να προσφέρουν τη δυνατότητα εγκατάστασης σε διάφορες
+γλώσσες. Αν ο  framebuffer προκαλέσει πρόβλημα στο σύστημά σας μπορείτε να
+απενεργοποιήσετε αυτό το γνώρισμα με την παράμετρο 
+<userinput>debian-installer/framebuffer=false</userinput>. Ενδεικτικά συμπτώματα
+ενός προβλήματος είναι διάφορα μηνύματα λάθους σχετικά με το bterm ή το bogl, μια
+λευκή οθόνη, ή ένα "πάγωμα" μερικά λεπτά μετά την εκκίνηση της εγκατάστασης.
+
+</para><para arch="i386">
+
+Tο όρισμα <userinput>video=vga16:off</userinput> μπορεί επίσης να χρησιμοποιηθεί
+για την απενεργοποίηση του framebuffer. Τέτοια προβλήματα έχουν αναφερθεί σε
+συστήματα Dell Inspiron με κάρτα οθόνης Mobile Radeon.
+
+</para><para arch="m68k">
+
+Τέτοια προβλήματα έχουν αναφερθεί για τα Amiga 1200 και SE/30.
+
+</para><para arch="hppa">
+
+Τέτοια προβλήματα έχουν αναφερθεί σε hppa.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>debian-installer/probe/usb</term>
+<listitem><para>
+
+Ρυθμίστε την παράμετρο αυτή σε <userinput>false</userinput> για να αποτρέψετε το
+ψάξιμο USB συσκευών κατά την εκκίνηση, αν αυτό προκαλεί προβλήματα.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>netcfg/disable_dhcp</term>
+<listitem><para>
+
+Εξ ορισμού, ο &d-i; ψάχνει αυτόματα για τη ρύθμιση του δικτύου μέσω DHCP. Αν το
+ψάξιμο αυτό είναι πετυχημένο, δεν έχετε την ευκαιρία να αναθεωρήσετε και να
+αλλάξετε τις ρυθμίσεις που έχουν προκύψει. Μπορείτε να περάσετε σε χειροκίνητη
+ρύθμιση του δικτύου μόνο σε περίπτωση που η διερεύνηση με DHCP αποτύχει.
+
+</para><para>
+
+Αν έχετε έναν DHCP server στο τοπικό σας δίκτυο αλλά θέλετε να τον αποφύγετε επειδή
+, πχ. δίνει λάθος απαντήσεις, μπορείτε να χρησιμοποιήσετε το την παράμετρο 
+<userinput>netcfg/disable_dhcp=true</userinput> για να αποφύγετε την ρύθμιση του
+δικτύου μέσω DHCP και να εισάγετε τις πληροφορίες που θέλετε χειροκίνητα.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>hw-detect/start_pcmcia</term>
+<listitem><para>
+
+Θέστε την παράμετρο στο <userinput>false</userinput> για να αποτρέψετε την εκκίνηση
+των υπηρεσιών PCMCIA, αν αυτό προκαλεί προβλήματα. Μερικοί φορητοί είναι αρκετά
+γνωστοί για αυτή την κακή συμπεριφορά.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>preseed/url</term>
+<listitem><para>
+
+Προσδιορίστε το url ενός αρχείου προρυθμίσεων που μπορείτε να το κατεβάσετε και να
+το χρησιμοποιήσετε για την αυτοματοποίηση της εγκατάστασης. Δείτε το <xref
+linkend="automatic-install"/>.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>preseed/file</term>
+<listitem><para>
+
+Προσδιορίστε το url ενός αρχείου προρυθμίσεων που μπορείτε να το κατεβάσετε και να
+το χρησιμοποιήσετε για την αυτοματοποίηση της εγκατάστασης. Δείτε το <xref
+linkend="automatic-install"/>.
+
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>ramdisk_size</term>
+<listitem><para>
+
+Αν χρησιμοποιείτε έναν πυρήνα 2.2.x kernel, ίσως χρειαστεί να ρυθμίσετε την
+παράμετρο  &ramdisksize;.
+
+</para></listitem>
+</varlistentry>
+
+</variablelist>
+  </sect2>
+ </sect1>
+
