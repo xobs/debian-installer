@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 24663 -->
+<!-- original version: 27518 -->
 
  <sect1 id="automatic-install">
 
@@ -17,14 +17,24 @@ próprio programa de instalação da Debian.
 
 </para>
 
-<sect2>
+<sect2 id="preseed">
 <title>Instalação automática usando o programa de instalação da Debian</title>
-
 <para>
 O programa de instalação da Debian suporte a instalação automática
 através de arquivos de pré-configuração. Um arquivo de pré-configuração
 pode ser carregado através da rede ou de uma mídia removível e usada para 
 responder as questões feitas durante o processo de instalação.
+
+</para><para>
+
+A maioria das caixas de diálogo usadas pelo &d-i; podem ser preenchidas 
+usando este método, existem algumas excessões que deve notar. Você poderá
+(re)particionar todo um disco ou usar seu espaço livre disponível; mas não é
+poss[ivel usar partições existentes. Você não poderá usar o preenchimento
+automático para configurar um RAID ou LVM. 
+<phrase condition="sarge">Também, com a excessão dos módulos de controladores
+de dispositivos, não é possível pré-configurar os parâmetros de módulos do 
+kernel.</phrase>
 
 </para><para>
 
@@ -87,5 +97,23 @@ e edite o arquivo syslinux.cfg adicionando preseed/file=/hd-media/preseed.cfg
 como parâmetro de inicialização do kernel.
 
 </para>
-</sect2>
+
+  
+   <sect3 condition="etch">
+   <title>Usando preenchimento automático para alterar valores padrões</title>
+<para>
+
+É também possível usar o preenchimento automático para alterar a resposta
+padrão de uma questão, mas ainda ter a questão perguntada. Para fazer isto, 
+a opção <firstterm>seen</firstterm> deverá ser resetada para <quote>false</quote> 
+após ajustar o valor de um modelo.
+
+<informalexample><screen>
+d-i foo/bar string value
+d-i foo/bar seen false
+</screen></informalexample>
+
+</para>
+   </sect3>
+  </sect2>
  </sect1>

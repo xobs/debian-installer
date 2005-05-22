@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 25763 -->
+<!-- original version: 26846 -->
 
  <sect1 id="linuxdevices"><title>Dispositivos do Linux</title>
 <para>
@@ -115,9 +115,9 @@ mais importantes.
 
 </para>
 
+
   <sect2>
 <title>Configurando seu Mouse</title>
-
 <para>
 
 O mouse pode ser usado em ambos o console do Linux (com o gpm) e no 
@@ -187,10 +187,24 @@ seguinte linhas no seu arquivo
 
  <sect1 id="tasksel-size-list">
  <title>Espaço em Disco Necessário para as Tarefas (tasks)</title>
+
+<!-- Nota para os mantenedores do d-i e manual
+ Tamanhos de tarefas devem ser determinados executando-se "tasksel new" em um
+ sistema que foi completamente instalado sem a seleção de qualquer tarefa.
+ Selecionando uma tarefa junto com a opção "seleção manual", o aptitude será
+ iniicado e mostrará o tamanho que será usado por aquela tarefa. Após desmarcar
+ os pacotes que serão isntalados, saia do aptitude e repita para outras tarefas.
+ Os requerimentos de espaço precisam ser determinados a partir do tasksel, pois 
+ o tasksel não instala pacotes recomendados enquanto a seleção de uma tarefa pelo
+ aptitude sim.
+-->       
+
 <para>
 
-A instalação do sarge para i386, incluindo todos os pacotes padrões, requer 
-178MB de espaço em disco.
+The base sarge installation for i386 using the default 2.4 kerel,
+including all standard packages, requires 573MB of disk space.
+A instalação do sistema básico para i386, usando o kernel padrão 2.4, 
+incluindo todo os pacotes padrões, requer 573MB de espaço em disco.
 
 </para><para>
 
@@ -200,6 +214,16 @@ usados em outras, assim o tamanho instalado total de duas tarefas juntas pode
 ser menos que o total obtido pela adição dos números.
 
 </para><para>
+
+Note que você precisará adicionar os tamanhos listados na tabela ao 
+tamanho da instalação do sistema básico, quando determinar o tamanho
+de partições. A maioria dos tamanhos listados como <quote>Tamanho 
+instalado</quote> é o requerimento em 
+<filename>/usr</filename>; o tamanho listado em <quote>Tamanho do 
+Download</quote> é o espaço (temporário) requerido em <filename>/var</filename>.
+
+</para><para>
+
 
 <informaltable><tgroup cols="4">
 <thead>
@@ -214,44 +238,51 @@ ser menos que o total obtido pela adição dos números.
 <tbody>
 <row>
   <entry>Desktop</entry>
-  <entry>1537</entry>
-  <entry>521</entry>
-  <entry>2058</entry>
+  <entry>1392</entry>
+  <entry>460</entry>
+  <entry>1852</entry>
 </row>
 
 <row>
   <entry>Servidor Web</entry>
-  <entry>71</entry>
-  <entry>21</entry>
-  <entry>92</entry>
+  <entry>36</entry>
+  <entry>12</entry>
+  <entry>48</entry>
 </row>
 
 <row>
   <entry>Servidor de Impressão</entry>
-  <entry>240</entry>
-  <entry>83</entry>
-  <entry>323</entry>
+  <entry>168</entry>
+  <entry>58</entry>
+  <entry>226</entry>
 </row>
 
 <row>
-  <entry>Servidor de E-mails</entry>
-  <entry>41</entry>
-  <entry>12</entry>
-  <entry>53</entry>
+  <entry>Servidor de DNS</entry>
+  <entry>2</entry>
+  <entry>1</entry>
+  <entry>3</entry>
 </row>
 
 <row>
   <entry>Servidor de Arquivos</entry>
-  <entry>85</entry>
-  <entry>34</entry>
-  <entry>119</entry>
+  <entry>47</entry>
+  <entry>24</entry>
+  <entry>71</entry>
+</row>
+
+ <row>
+  <entry>Servidor de E-mails</entry>
+  <entry>10</entry>
+  <entry>3</entry>
+  <entry>13</entry>
 </row>
 
 <row>
   <entry>Banco de dados SQL</entry>
-  <entry>108</entry>
-  <entry>33</entry>
-  <entry>141</entry>
+  <entry>66</entry>
+  <entry>21</entry>
+  <entry>87</entry>
 </row>
 
 </tbody>
@@ -261,6 +292,14 @@ ser menos que o total obtido pela adição dos números.
 A tarefa <emphasis>Desktop</emphasis> instalará ambos os ambientes de Desktop Gnome e KDE.
 
 </para></note>
+
+</para><para>
+
+Se instalar em um idioma que não seja o inglês, o <command>tasksel</command>
+pode instalar automaticamente uma <firstterm>tarefa de localização</firstterm>, se 
+alguma estiver disponível para seu idioma. Os requerimentos de espaço se diferem
+por idioma, você deverá permitir até 200Mb de espaço total para download e 
+instalação.
 
 </para>
  </sect1>

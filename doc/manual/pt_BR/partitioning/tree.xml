@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 25496 -->
+<!-- original version: 26715 -->
 
  <sect1 id="directory-tree">
  <title>A árvore de diretórios</title>
@@ -41,17 +41,23 @@ todos os sistemas Debian incluem estes diretórios:
   <entry><filename>lib</filename></entry>
   <entry>Bibliotecas compartilhadas essenciais e módulos do kernel</entry>
 </row><row>
+  <entry><filename>media</filename></entry>
+  <entry>Contém pontos de montagem para mídias removíveis</entry>
+</row><row>
   <entry><filename>mnt</filename></entry>
   <entry>Ponto de montagem para montagem temporária de um sistema de arquivos</entry>
 </row><row>
   <entry><filename>proc</filename></entry>
-  <entry>Diretório virtual contendo informações do sistema</entry>
+  <entry>Diretório virtual contendo informações do sistema (kernels 2.4 e 2.6)</entry>
 </row><row>
   <entry><filename>root</filename></entry>
   <entry>Diretório Home do usuário root</entry>
 </row><row>
   <entry><filename>sbin</filename></entry>
   <entry>Binários essenciais do sistema</entry>
+</row><row>
+  <entry><filename>sys</filename></entry>
+  <entry>Diretório Virtual contendo informações do sistema (kernels 2.6)</entry>
 </row><row>
   <entry><filename>tmp</filename></entry>
   <entry>Arquivos temporários</entry>
@@ -71,7 +77,10 @@ todos os sistemas Debian incluem estes diretórios:
 <para>
 
 O que segue é uma lista de considerações importantes sobre os 
-diretórios e partições.
+diretórios e partições. Note que a utilização de disco 
+tem grandes variações de acordo com o uso do sistema e 
+padrões específicos de uso. As recomendações aqui são regras
+gerais e fornecem um ponto de partida para o particionamento.
 
 </para>
 <itemizedlist>
@@ -81,20 +90,49 @@ A partição <filename>/</filename> deve sempre fisicamente conter
 <filename>/etc</filename>, <filename>/bin</filename>,
 <filename>/sbin</filename>, <filename>/lib</filename> e
 <filename>/dev</filename>, caso contrário você não será capaz
-cd inicializar. Tipicamente são necessários 100MB para a partição 
-raíz, mas isso pode variar.
+cd inicializar. Tipicamente são necessários 150&ndash;250 MB para a partição 
+raíz.
 
 </para></listitem>
 <listitem><para>
 
-<filename>/usr</filename>: todos programas de usuários
+<filename>/usr</filename>: contém todos os programas de usuários
 (<filename>/usr/bin</filename>), bibliotecas
 (<filename>/usr/lib</filename>), documentação
-(<filename>/usr/share/doc</filename>), etc., estão neste diretório.
-Esta parte do sistema de arquivos precisa de mais espaço. Você deverá 
-fornecer pelo menos 500MB de espaço em disco. Se desejar instalar 
-mais pacotes, você deverá aumentar a quantidade de espaço neste 
-diretório.
+(<filename>/usr/share/doc</filename>), etc. 
+Esta é a parte do sistema de arquivos que geralmente consome mais espaço
+em disco. Você deverá deixar pelo menos 500MB de espaço em disco. Esta 
+quantidade poderá ser aumentada dependendo do número e tipo de pacotes 
+que deseja instalar. Uma estação de trabalho generosa ou instalação em 
+servidor deverá ter de 4 a 6 GB.
+
+</para></listitem>
+<listitem><para>
+
+<filename>/var</filename>: dados variáveis como artigos news,
+e-mails, sites web, banco de dados, o cache do sistema de empacotamento, etc. serão
+colocados sob este diretório. seu tamanho depende mais do 
+uso do seu computador, mas para a maioria das pessoas ele será dedicado
+ao sistema de gerenciamento de pacotes. Se estiver fazendo uma 
+instalação completa ou apenas tudo que a Debian tem a oferecer em uma 
+só seção, algo em torno de 2 ou 3 GB de espaço para 
+<filename>/var</filename> deverá ser suficiente. se estiver instalando 
+em partes (isto é, instalar serviços e utilitários, seguidos de 
+materiais em texto, então o X, ...), você poderá deixar em torno 
+de 300 a 500 MB. Caso o espaço em disco 
+rígido seja um premio e não planeja fazer muitas atualizações de 
+sistema, a máquina poderá funcionar com o mínimo de 30 ou 40 megabytes. 
+
+</para></listitem>
+<listitem><para>
+
+<filename>/tmp</filename>: normalmente os dados temporários criados
+são colocados neste diretório. 40&ndash;100 MB deverão ser suficientes.
+Alguns aplicativos &mdash; incluindo manipuladores de arquivos,
+ferramentas para criação de CD/DVD e programas multimídia &mdash; podem
+usar <filename>/tmp</filename> para armazenar temporariamente arquivos de 
+imagem. Se planeja usar tais aplicativos, será necessário ajustar o espaço
+disponível de forma apropriada em <filename>/tmp</filename>.
 
 </para></listitem>
 <listitem><para>
@@ -104,32 +142,8 @@ subdiretório dentro deste diretório. O tamanho deste diretório depende
 de quantos usuários estarão usando o sistema e que tipo de arquivos serão
 armazenados em seus diretórios. Dependendo do seu planejamento de uso, 
 deverá ser reservado em média 100MB para cada usuário, mas adapte este
-valor a suas necessidades.
-
-</para></listitem>
-<listitem><para>
-
-<filename>/var</filename>: todos dados variáveis como artigos news,
-e-mails, sites web, o cache do sistema de empacotamento, etc. serão
-colocados sob este diretório. seu tamanho depende mais do 
-uso do seu computador, mas para a maioria das pessoas ele será dedicado
-ao sistema de gerenciamento de pacotes. Se estiver fazendo uma 
-instalação completa ou apenas tudo que a Debian tem a oferecer em uma 
-só seção, algo em torno de 2 ou 3 GB de espaço para 
-<filename>/var</filename> deverá ser suficiente. se estiver instalando 
-em partes (isto é, instalar serviços e utilitários, seguidos de 
-materiais em texto, então o X, ...), você poderá deixar em torno 
-de 300 a 500 MB em <filename>/var</filename>. Caso o espaço em disco 
-rígido seja um premio e não planeja fazer muitas atualizações de 
-sistema, a máquina poderá funcionar com o mínimo de 30 ou 40 megabytes 
-em <filename>/var</filename>. 
-
-</para></listitem>
-<listitem><para>
-
-<filename>/tmp</filename>: caso um programa crie dados temporários ele 
-provavelmente irá para <filename>/tmp</filename>. 20 a 50 MB deverá ser 
-o suficiente.
+valor a suas necessidades. Reserve muito mais espaço se planeja 
+salvar muitos arquivos multimídia (MP3, filmes) em seu diretório pessoal.
 
 </para></listitem>
 </itemizedlist>
