@@ -11,6 +11,11 @@
 <xsl:param name="section.label.includes.component.label">1</xsl:param>
 
 <!-- We want gray background in examples -->
+<!-- No we don't; this option has been obsoleted.
 <xsl:param name="shade.verbatim">1</xsl:param>
+-->
+
+<!-- Indicate we will be including our own custom style sheet -->
+<xsl:param name="html.stylesheet">install.css</xsl:param>
 
 </xsl:stylesheet>

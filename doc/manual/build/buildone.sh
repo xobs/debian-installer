@@ -28,6 +28,7 @@ fi
 stylesheet_html_single="$stylesheet_dir/style-html-single.xsl"
 stylesheet_fo="$stylesheet_dir/style-fo.xsl"
 stylesheet_dsssl="$stylesheet_dir/style-print.dsl"
+stylesheet_css="$stylesheet_dir/install.css"
 
 entities_path="$build_path/entities"
 source_path="$manual_path/$language"
@@ -101,6 +102,9 @@ create_html () {
         $stylesheet_html \
         $tempdir/install.${language}.profiled.xml
     RET=$?; [ $RET -ne 0 ] && return $RET
+
+    # Copy the custom css stylesheet to the destination directory
+    cp $stylesheet_css $destdir/html/
 
     return 0
 }
