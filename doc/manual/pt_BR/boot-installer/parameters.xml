@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 25171 -->
+<!-- original version: 27824 -->
 
  <sect1 id="boot-parms"><title>Parâmetros de Inicialização</title>
 <para>
@@ -69,7 +69,7 @@ Alternativamente, ajuste as variáveis do OpenPROM <envar>input-device</envar> e
 </para>
 
 
-  <sect2 id="installer-args"><title>Parâmetros do Debian Installer</title>
+  <sect2 id="installer-args"><title>Parâmetros da instalação da Debian</title>
 <para>
 
 O sistema de instalação reconhece alguns parâmetros adicionais de inicialização
@@ -240,8 +240,17 @@ Tais problemas foram relatados no Amiga 1200 e SE/30.
 </para><para arch="hppa">
 
 Tais problemas foram relatados no hppa.
+</para><note arch="sparc"><para>
 
-</para></listitem>
+Por causa de problemas de exibição em alguns sistemas, o suporte a
+framebuffer é <emphasis>desativado por padrão</emphasis> na &arch-title;. 
+Isto pode resultar em uma tela não não bonita em sistemas que suportam 
+adequadamente o framebuffer, como os que utilizam placas gráficas ATI.
+Se ver estes problemas durante a instalação, tente inicializar usando o
+parâmetro <userinput>debian-installer/framebuffer=true</userinput>.
+
+</para></note></listitem>
+
 </varlistentry>
 
 <varlistentry>
@@ -284,6 +293,49 @@ notebooks apresentam este mal comportamento.
 
 </para></listitem>
 </varlistentry>
+
+<varlistentry>
+<term>preseed/url</term>
+<listitem><para>
+
+Especifique uma url para o arquivo de configuração que será baixado e usado 
+para fazer a instalação automática. Veja <xref linkend="automatic-install"/>.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>preseed/file</term>
+<listitem><para>
+
+Especifique o caminho o arquivo de configuração que será 
+carregado para realizar a configuração automática. Veja 
+<xref linkend="automatic-install"/>.
+
+</para></listitem>
+</varlistentry>
+
+<varlistentry condition="etch">
+<term>cdrom-detect/eject</term>
+<listitem><para>
+
+Automaticamente, antes de reiniciar, o &d-i; ejetará a mídia ótica
+usada durante a instalação. Isto pode ser desnecessário caso o sistema
+não esteja inicializando diretamente através da unidade de 
+CD. Em alguns casos, podem até mesmo ser desnecessário, por exemplo
+se a unidade ótica não puder sozinha carregar uma nova mídia e o 
+usuário não está lá para fazer isto manualmente. Muitos slots de 
+mídias, slim-line e unidades estili caddy não podem inserir 
+automaticamente mídia.
+</para><para>
+
+Defina esta opção para <userinput>false</userinput> para impedir que a mídia seja
+ejetada automaticamente, e tenha cuidado para que seu sistema não inicialize 
+automaticamente através da unidade óptica após a instalação inicial.
+
+</para></listitem>
+</varlistentry>
+
 
 <varlistentry>
 <term>ramdisk_size</term>

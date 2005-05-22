@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 24663 -->
+<!-- original version: 27474 -->
 
  <sect1 id="boot-troubleshooting">
  <title>Problemas e Processo de Instalação</title>
 <para>
 </para>
 
-  <sect2 id="unreliable-floppies">
+  <sect2 condition="supports-floppy-boot" id="unreliable-floppies">
   <title>Confiança em Disquetes</title>
 
 <para>
 
 O maior problema que as pessoas que estão instalando a Debian 
-pela primeira vez passam está relacionado com a confiança nos 
-disquetes.
+passam está relacionado com a confiança nos disquetes.
 
 </para><para>
 
@@ -86,6 +85,95 @@ como  <userinput>mem=512m</userinput>.
 
 </para>
   </sect2>
+
+  <sect2 arch="i386" id="i386-boot-problems">
+  <title>Problemas comuns de instalação na &arch-title;</title>
+<para>
+
+Existem alguns problemas de instalação comuns que podem ser resolvidos 
+pssando alguns parâmetros de inicialização para o programa de instalação.
+
+</para><para>
+
+Alguns sistemas tem os disquetes com "DCLs invertidas". Caso 
+obter erros de leitura a partir do disquete, até mesmo sabendo
+que o disquete está em bom estado, tente o parâmetro 
+<userinput>floppy=thinkpad</userinput>.
+
+</para><para>
+
+Em alguns sistemas, como o IBM PS/1 ou ValuePoint (que tem 
+controladores de disco ST-506), a unidade IDE poderá não ser 
+corretamente reconhecida. Novamente, tente primeiro a 
+inicialização sem parâmetros e veja se a unidade IDE é 
+reconhecida adequadamente. Caso não seja, determine a geometria
+de sua unidade (cilindros, cabeças e setores), e use o parâmetro
+<userinput>hd=<replaceable>cilindros</replaceable>,<replaceable>cabeças</replaceable>,<replaceable>setores</replaceable></userinput>.
+
+</para><para>
+Caso tenha uma máquina muito antiga e o kernel trava após mostrar
+a mensagem <computeroutput>Checking 'hlt' instruction...</computeroutput>, então
+você deverá tentar usar o argumento de inicialização <userinput>no-hlt</userinput>,
+que desativa este teste.
+
+</para><para>
+
+Caso sua tela comece a mostrar uma foto distorcida enquanto o 
+kernel inicia, eg. totalmente branca, totalmente preta ou 
+alguma bagunça colorida, você provavelmente tem uma placa
+de vídeo problemática que não muda para o modo frame buffer de 
+forma adequada. Então você poderá usar o argumento de inicialização
+<userinput>debian-installer/framebuffer=false</userinput> ou
+<userinput>video=vga16:off</userinput> para desativar o console
+frame buffer. Somente o idioma inglês estará disponível devido a 
+características limitadas do console. Veja <xref linkend="boot-parms"/> 
+para detalhes.
+
+</para>
+
+  <sect3>
+  <title>O sistema trava durante a fase de configuração do PCMCIA</title>
+<para>
+
+Alguns modelos de notebooks produzidos pela Dell são conhecidos ao acessar
+um endereço de hardware durante a detecção de dispositivos PCMCIA.
+Outros notebooks podem mostrar problemas parecidos. Se este
+problema acontecer com você e não precisar do suporte a PCMCIA durante a 
+instalação, você poderá desativar o PCMCIA usando o parâmetro de inicialização
+<userinput>hw-detect/start_pcmcia=false</userinput>. Você pode então configurar 
+o PCMCIA após a instalação ser completada e excluir a faixa de recursos que 
+está causando o problema.
+</para><para>
+
+Alternativamente você pode iniciar o programa de instalação no modo
+avançado. O programa de instalação lhe solicitará para entrar com as
+opções de faixa de recursos de seu hardware. Por exemplo, se tiver um dos
+modelos de notebooks Dell mencionados acima, você poderá entrar com o 
+parâmetro <userinput>exclude port 0x800-0x8ff</userinput>. Existe uma lista
+de opções de faixa no link <ulink
+url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-1.html#ss1.12">System
+resource settings section of the PCMCIA HOWTO</ulink>. Note que você terá que omitir
+as vírgulas, se existirem, quando passar um valor para o programa de instalação.
+
+</para>
+   </sect3>
+
+   <sect3>
+   <title>O sistema trava durante a carga dos módulos USB</title>
+<para>
+
+O kernel normalmente tenta instalar os módulos USB e o controlador de teclado
+USB para suportar dispositivos USB não padrões. No entanto, existem alguns 
+sistemas USB defeituosos onde o driver trava no momento que é carregado. 
+Uma solução possível pode ser desativando o controlador USB no setup de sua 
+placa mãe. Outra solução é passar o parâmetro 
+<userinput>debian-installer/probe/usb=false</userinput> no aviso de boot, que 
+impedirá que os módulos sejam carregados.
+
+</para>
+   </sect3>
+  </sect2>
+
 
   <sect2 id="kernel-msgs">
   <title>Interpretando as Mensagens de Inicialização do Kernel</title>

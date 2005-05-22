@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 25149 -->
+<!-- original version: 27474 -->
 
   <sect2 arch="i386"><title>Inicializando o sistema através de um CD-ROM</title>
 
@@ -107,7 +107,7 @@ tipo de imagem bf2.4. O sintoma deste problema é um erro
 END FIXME -->
 
   <sect2 arch="i386" id="boot-initrd">
-  <title>Inicializando através do Linux usando o <command>LILO</command> ou 
+  <title>Inicializando através do linux usando o <command>LILO</command> ou 
   <command>GRUB</command></title>
 
 <para>
@@ -161,7 +161,7 @@ image=/boot/newinstall/vmlinuz
        label=newinstall
        initrd=/boot/newinstall/initrd.gz
        root=/dev/ram0
-       append="devfs=mount,dall ramdisk_size=12000"
+       append="<phrase condition="sarge">devfs=mount,dall </phrase>ramdisk_size=12000"
 </screen></informalexample>
 
 Para mais detalhes, veja as páginas de manual do 
@@ -183,8 +183,9 @@ kernel (hd0,0)/boot/newinstall/vmlinuz root=/dev/ram devfs=mount,dall ramdisk_si
 initrd (hd0,0)/boot/newinstall/initrd.gz
 </screen></informalexample>
 
-e reinicie. Caso a inicialização falhe, tente adicionar 
+e reinicie. <phrase condition="sarge">Caso a inicialização falhe, tente adicionar 
 <userinput>devfs=mount,dall</userinput> a linha do <quote>kernel</quote>.
+</phrase>
 
 </para><para>
 
@@ -197,7 +198,7 @@ ou <command>LILO</command>.
   </sect2>
 
   <sect2 arch="i386" id="usb-boot">
-  <title>Inicialização Através da Memory Stick USB</title>
+  <title>Inicialização através de uma memory stick USB</title>
 <para>
 
 Nós iremos assumir que preparou tudo de <xref
@@ -220,7 +221,7 @@ iniciando.
   </sect2>
 
   <sect2 arch="i386" id="floppy-boot">
-  <title>Inicialização Através de Disquetes</title>
+  <title>Inicialização através de disquetes</title>
   
 <para>
 
@@ -285,7 +286,7 @@ automaticamente carregado.
 </para>
   </sect2>
 
-  <sect2 arch="i386" id="boot-tftp"><title>Inicialização com o TFTP</title>
+  <sect2 arch="i386" id="boot-tftp"><title>Inicialização usando o TFTP</title>
  
 &boot-installer-intro-net.xml;
  
@@ -324,113 +325,58 @@ fornecem suporte de inicialização usando o protocolo TFTP.
 </sect2>
 
 
-  <sect2 arch="i386"><title>Parâmetros de inicialização para i386</title>
+  <sect2 arch="i386"><title>Parâmetros de inicialização</title>
 <para>
 
-Quando iniciar o programa de instalação, você verá o aviso de 
-boot <prompt>boot:</prompt>. Você poderá fazer duas coisas no 
-aviso de <prompt>boot:</prompt>: Pressionar as teclas de função de 
-<keycap>F1</keycap> até <keycap>F10</keycap> para ver as páginas 
-que contém informações úteis ou pressionar <keycap>Enter</keycap> 
-para iniciar o sistema.
 
+Quando o programa de instalação for iniciado, você deverá ver uma amigável tela 
+gráfica mostrando o logotipo da Debian e o aviso de comando boot:
 
-</para><para>
+<informalexample><screen>
+Pressione F1 para ajuda ou ENTER para inicializar:
+</screen></informalexample>
 
-Informações sobre que parâmetros de inicialização podem ser úteis, são
-encontradas pressionando-se as teclas <keycap>F3</keycap> até <keycap>F7</keycap>.  
-Se adicionar qualquer parâmetro na linha de boot, tenha certeza de digitar o 
-método de inicialização (o padrão é <userinput>linux</userinput>) e um espaço separando-o do segundo parâmetro (e.g.,<userinput>linux floppy=thinkpad</userinput>). 
-Se simplesmente pressionar &enterkey;, é a mesma coisa que digitar 
-<userinput>linux</userinput> sem qualquer parâmetro especial.
+No aviso de comando você poderá simplesmente pressionar a tecla &enterkey; 
+para inicializar com as opções padrões ou entrar com um método específico de
+partida e, opcionalmente, parâmetros de inicialização.
 
 </para><para>
 
+Informações sobre os métodos disponíveis de inicialização e sobre parâmetros
+de inicilaização qe podem ser úteis, pressionando-se as teclas de 
+<keycap>F2</keycap> até <phrase condition="sarge"><keycap>F7</keycap></phrase><phrase
+condition="etch"><keycap>F8</keycap></phrase>. Se adicionar quaisquer parâmetros 
+a linha de comando de inicialização, tenha certeza de entrar com o método de 
+partida (o padrão é <userinput>linux</userinput>) seguido de um espaço antes do 
+primeiro parâmetro (e.g., <userinput>linux debconf/priority=medium</userinput>).
 
-Alguns sistemas tem os disquetes com "DCLs invertidas". Caso 
-obter erros de leitura a partir do disquete, até mesmo sabendo
-que o disquete está em bom estado, tente o parâmetro 
-<userinput>floppy=thinkpad</userinput>.
+<note><para>
 
-</para><para>
-
-Em alguns sistemas, tal como o IBM PS/1 ou ValuePoint (que tem 
-controladores de disco ST-506), a unidade IDE poderá não ser 
-corretamente reconhecida. Novamente, tente primeiro a 
-inicialização sem parâmetros e veja se a unidade IDE é 
-reconhecida adequadamente. Caso não seja, determine a geometria
-de sua unidade (cilindros, cabeças e setores), e use o parâmetro
-<userinput>hd=<replaceable>cilindros</replaceable>,<replaceable>cabeças</replaceable>,<replaceable>setores</replaceable></userinput>.
-
-</para><para>
-
-Caso tenha uma máquina muito antiga e o kernel trava após mostrar
-a mensagem <computeroutput>Checking 'hlt' instruction...</computeroutput>, então
-você deverá tentar usar o argumento de inicialização <userinput>no-hlt</userinput>,
-que desativa este teste.
-
-</para><para>
-
-Caso sua tela comece a mostrar uma foto distorcida enquanto o 
-kernel inicia, eg. totalmente branca, totalmente preta ou 
-alguma bagunça colorida, você provavelmente tem uma placa
-de vídeo problemática que não muda para o modo frame buffer de 
-forma adequada. Então você poderá usar o argumento de inicialização
-<userinput>debian-installer/framebuffer=false</userinput> ou
-<userinput>video=vga16:off</userinput> para desativar o console
-frame buffer. Somente o idioma inglês estará disponível devido a 
-características limitadas do console. Veja <xref linkend="boot-parms"/> 
-para detalhes.
-
-</para>
-  </sect2>
-
-
-  <sect2 arch="i386">
-  <title>O sistema trava durante a fase de configuração do PCMCIA</title>
+Se estiver instalando o sistema através de um dispositivo de gerenciamento
+remoto que fornece informações de texto para consoles VGA, você pode não
+ser capaz de ver a tela gráfica inicial durante o inicio do programa de 
+instalação; você pode até mesmo não ver o aviso de inicialização. Exemplos
+destes dispositivos incluem o console de texto da Compaq's <quote>integrated Lights Out</quote> (iLO) e do HP's <quote>Integrated Remote Assistant</quote> (IRA).
+Você poderá navegar pressionando F1<footnote>
 
 <para>
 
-Alguns modelos de notebooks produzidos pela Dell são conhecidos ao acessar
-um endereço de hardware durante a detecção de dispositivos PCMCIA.
-Outros notebooks podem mostrar problemas parecidos. Se este
-problema acontecer com você e não precisar do suporte a PCMCIA durante a 
-instalação, você poderá desativar o PCMCIA usando o parâmetro de inicialização
-<userinput>hw-detect/start_pcmcia=false</userinput>. Você pode então configurar 
-o PCMCIA após a instalação ser completada e excluir a faixa de recursos que 
-está causando o problema.
-</para><para>
-
-Alternativamente você pode iniciar o programa de instalação no modo
-avançado. O programa de instalação lhe solicitará para entrar com as
-opções de faixa de recursos de seu hardware. Por exemplo, se tiver um dos
-modelos de notebooks Dell mencionados acima, você poderá entrar com o 
-parâmetro <userinput>exclude port 0x800-0x8ff</userinput>. Existe uma lista
-de opções de faixa no link <ulink
-url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-1.html#ss1.12">System
-resource settings section of the PCMCIA HOWTO</ulink>. Note que você terá que omitir
-as vírgulas, se existirem, quando passar um valor para o programa de instalação.
-
+Em alguns casos, estes dispositivos precisarão de sequências especiais de 
+escape para usar esta combinação de teclas, por exemplo, o IRA usa 
+<keycombo> <keycap>Ctrl</keycap> <keycap>F</keycap> 
+</keycombo>,&nbsp;<keycap>1</keycap>.
+ 
 </para>
-  </sect2>
 
-  <sect2 arch="i386">
-  <title>O sistema trava durante a carga dos módulos USB</title>
-<para>
+</footnote> para pular esta tela e ver o texto de ajuda. Assim que puldar
+a tela de abertura e na tela de ajuda suas digitações serão mostradas no
+aviso de comando como esperado. Para evitar que o programa de instalação
+use o framebuffer durante o resto da instalação, você também desejará 
+adicionar o parâmetro
+<userinput>debian-installer/framebuffer=false</userinput> ao aviso de comando, 
+como descrito no texto de ajuda.
 
-O kernel normalmente tenta instalar os módulos USB e o controlador de teclado
-USB para suportar dispositivos USB não padrões. No entanto, existem alguns 
-sistemas USB defeituosos onde o driver trava no momento que é carregado. 
-Uma solução possível pode ser desativando o controlador USB no setup de sua 
-placa mãe. Outra solução é passar o parâmetro 
-<userinput>debian-installer/probe/usb=false</userinput> no aviso de boot, que 
-impedirá que os módulos sejam carregados.
-
-
+</para></note>
 </para>
+
   </sect2>
-
-
-
-
-

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 24663 -->
+<!-- original version: 26371 -->
 
   <sect2 arch="arm" id="boot-tftp"><title>Inicialização através do TFTP</title>
 
@@ -58,20 +58,28 @@ no servidor TFTP caso não esteja na subrede local. O resto da
 configuração é bastante padrão (o passo salvar-tudo é opcional):
 <informalexample><screen>
     NeTTrom command-&gt; setenv kerntftpserver 192.168.0.1
-    NeTTrom command-&gt; setenv kerntftpfile tftpboot.img
+    NeTTrom command-&gt; setenv kerntftpfile boot.img
     NeTTrom command-&gt; save-all
     NeTTrom command-&gt; setenv netconfig_eth0 flash
     NeTTrom command-&gt; setenv kernconfig tftp
+    NeTTrom command-&gt; setenv rootdev /dev/ram
+    NeTTrom command-&gt; setenv cmdappend root=/dev/ram
 </screen></informalexample>
 
-Somente as primeiras duas interfaces com inicialização
+Somente as primeiras quatro interferem com a inicialização
 normal de disco, assim é seguro fazer um <command>save-all</command> 
 antes dele, que armazenará as configurações de rede caso você precise
-novamente inicializar através da rede. Use o comando 
-<command>printenv</command> para revisar suas configurações de ambiente. 
-Finalmente, caso sua variável <envar>cmdappend</envar> do NeTTrom tem
-a opção <option>noinitrd</option> (que é necessária para o boot dos
-kernels 2.4) você deverá remove-lo assim o kernel
+novamente inicializar através da rede. 
+Se planeja usar uma console serial para instalar sua NetWinder, você também
+precisará da seguinte configuração:
+
+<informalexample><screen>
+    NeTTrom command-&gt; setenv cmdappend root=/dev/ram console=ttyS0,115200
+</screen></informalexample>
+
+Use o comando <command>printenv</command> para revisar suas configurações de 
+ambiente. Finalmente, caso sua variável <envar>cmdappend</envar> do NeTTrom 
+tem a opção <option>noinitrd</option> você deverá remove-lo assim o kernel
 baixado poderá inicializar com seu disco ram anexado.
 
 </para>
@@ -87,7 +95,6 @@ aviso de comando Cyclone.
 </para>
    </sect3>
   </sect2>
-
 
 
   <sect2 arch="arm"><title>Inicializando através de um CD-ROM</title>
