@@ -3,6 +3,13 @@
 # load debian-installer via NFS
 #
 -serial on
-lcd 'Loading' 'debian-installer'
+select 'BOOT SELECTION' 50 Installer 'Rescue Mode'
+goto {menu-option}
+@var image-name 'the Installer'
+var args ''
+goto 2
+@var image-name 'Rescue Mode'
+var args rescue/enable=true
+@lcd 'Starting' "{image-name}"
 nfs {dhcp-next-server} {dhcp-root-path} vmlinux-2.4.27-r5k-cobalt initrd.gz
-execute rd_start=0x{initrd-start} rd_size=0x{initrd-size} console=ttyS0,{console-speed}
+execute rd_start=0x{initrd-start} rd_size=0x{initrd-size} console=ttyS0,{console-speed} {args}
