@@ -1,36 +1,36 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 16557 untranslated -->
+<!-- original version: 16557 -->
 
 
- <sect1 id="debian-orientation"><title>Orienting Yourself to Debian</title>
+ <sect1 id="debian-orientation"><title>Orientant-vos a Debian</title>
 <para>
 
-Debian is a little different from other distributions.  Even if you're
-familiar with Linux in other distributions, there are things you
-should know about Debian to help you to keep your system in a good,
-clean state.  This chapter contains material to help you get oriented;
-it is not intended to be a tutorial for how to use Debian, but just a
-very brief glimpse of the system for the very rushed.
+Debian és una mica diferent d'altres distribucions. Fins i tot si esteu
+familiaritzats amb altres distribucions Linux, hi ha coses que hauríeu
+de saber sobre Debian, i que us poden ajudar a mantenir el vostre sistema
+en bon estat i net. Aquest capítol conté material d'ajuda per
+orientar-vos; no pretén ser un tutorial sobre com usar Debian, sinó un
+breu cop d'ull al sistema per als més apressats.
 
 </para>
 
-  <sect2><title>Debian Packaging System</title>
+  <sect2><title>El sistema de paquets de Debian</title>
 <para>
 
-The most important concept to grasp is the Debian packaging system.
-In essence, large parts of your system should be considered under the
-control of the packaging system.  These include:
+El concepte més important que heu de comprendre és els sistema
+d'empaquetament. Essencialment, considereu que la major part del vostre
+sistema està sota el control del sistema de paquets. Això inclou:
 
 <itemizedlist>
 <listitem><para>
 
-<filename>/usr</filename> (excluding <filename>/usr/local</filename>)
+<filename>/usr</filename> (excloent <filename>/usr/local</filename>)
 
 </para></listitem>
 <listitem><para>
 
-<filename>/var</filename> (you could make
-<filename>/var/local</filename> and be safe in there)
+<filename>/var</filename> (podeu crear
+<filename>/var/local</filename> sense risc)
 
 </para></listitem>
 <listitem><para>
@@ -50,58 +50,59 @@ control of the packaging system.  These include:
 </para></listitem>
 </itemizedlist>
 
-For instance, if you replace <filename>/usr/bin/perl</filename>, that
-will work, but then if you upgrade your <classname>perl</classname>
-package, the file you put there will be replaced.  Experts can get
-around this by putting packages on ``hold'' in
-<command>aptitude</command>.
+Per exemple, si reemplaceu <filename>/usr/bin/perl</filename>,
+funcionarà, però si aleshores actualitzeu el vostre paquet
+<classname>perl</classname>, el fitxer que hi havia serà reemplaçat de
+nou. Els més experts ho podeu evitar posant els paquets a «hold»
+(mantenir) a l'<command>aptitude</command>.
 
 </para><para>
 
-One of the best installation methods is apt. You can use the command
-line version <command>apt-get</command> or full-screen text version
-<application>aptitude</application>.  Note apt will also let you merge
-main, contrib, and non-free so you can have export-restricted packages
-as well as standard versions.
+Un dels millors mètodes d'instal·lació és apt. Podeu usar la versió de
+línia de comandes <command>apt-get</command>, o bé la versió amb
+interfície de text a pantalla completa <application>aptitude</application>.
+Noteu que apt també us deixarà combinar main, contrib i non-free
+de tal manera que podeu tenir paquets amb restriccions d'exportació
+així com versions estàndard.
 
 </para>
   </sect2>
 
-  <sect2><title>Application Version Management</title>
+  <sect2><title>Gestió de versions de les aplicacions</title>
 <para>
 
- 
-Alternative versions of applications are managed by update-alternatives. If
-you are maintaining multiple versions of your applications, read the
-update-alternatives man page.
+Les versions alternatives de les aplicacions es gestionen mitjançant
+update-alternatives. Si manteniu múltiples versions dels vostres
+programes, llegiu la pàgina del manual de update-alternatives.
 
 </para>
   </sect2>
 
-  <sect2><title>Cron Job Management</title>
+  <sect2><title>Gestió de tasques amb cron</title>
 <para>
 
-Any jobs under the purview of the system administrator should be in
-<filename>/etc</filename>, since they are configuration files.  If you
-have a root cron job for daily, weekly, or nightly runs, put them in
-<filename>/etc/cron.{daily,weekly,monthly}</filename>.  These are
-invoked from <filename>/etc/crontab</filename>, and will run in
-alphabetic order, which serializes them.
+Qualsevol tasca sota la supervisió de l'administrador del sistema ha
+d'estar a <filename>/etc</filename>, on hi ha els fitxers de configuració.
+Si teniu una tasca cron com a root, podeu posar-la a
+<filename>/etc/cron.{daily,weekly,monthly}</filename> segons si voleu
+que sigui diària, setmanal o mensual. Aquestes tasques seran
+invocades des de <filename>/etc/crontab</filename>, i executades per
+ordre alfabètic.
 
 </para><para>
 
-On the other hand, if you have a cron job that (a) needs to run as a
-special user, or (b) needs to run at a special time or frequency, you
-can use either <filename>/etc/crontab</filename>, or, better yet,
-<filename>/etc/cron.d/whatever</filename>.  These particular files
-also have an extra field that allows you to stipulate the user under
-which the cron job runs.
+D'altra banda, si teniu una tasca que s'ha d'executar (a) com a un
+usuari en concret o (b) en un moment específic o amb una freqüència
+establerta, podeu usar <filename>/etc/crontab</filename>, o encara
+millor, <filename>/etc/cron.d/qualsevol_cosa</filename>. Aquests fitxers
+tenen un camp addicional que permet definir l'usuari que executarà
+la tasca.
 
 </para><para>
 
-In either case, you just edit the files and cron will notice them
-automatically. There is no need to run a special command. For more
-information see cron(8), crontab(5), and
+En qualsevol cas, simplement editeu els fitxers i cron se n'adonarà
+automàticament. No hi ha cap necessitat d'executar comandes especials.
+Per a més informació, consulteu cron(8), crontab(5), i
 <filename>/usr/share/doc/cron/README.Debian</filename>.
 
 </para>
