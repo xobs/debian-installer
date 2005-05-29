@@ -2,6 +2,8 @@
 
 # Overridable environment variables for uploading.
 RESTRICTED_SSH=
+SSHKEY=
+SSHKEY=${SSHKEY:+-i $SSHKEY}
 
 if [ -z "$HOST" ]; then
 	HOST=people.debian.org
@@ -19,11 +21,11 @@ if [ "$HOST" = "local" ]; then
 	SYNC_BASEDIR="$BASEDIR"
 	HELPER=d-i-unpack-helper
 else
-	CALL="ssh $HOST"
-	SYNC="rsync -e ssh"
+	CALL="ssh $SSHKEY $HOST"
+	SYNC="rsync"
 	SYNC_BASEDIR="$HOST:$BASEDIR"
 	# trade performance (using rsync) for security (restricted ssh keys)
-	HELPER="ssh -i ~/.ssh/gluck_d-i $HOST d-i-unpack-helper"
+	HELPER="ssh $SSHKEY $HOST d-i-unpack-helper"
 fi
 if [ -z "$NUM_KEEP" ]; then
 	# Default to keeping 30 days of builds. Set to zero to keep all.
@@ -77,7 +79,7 @@ upload () {
 	else
 		$CALL mkdir -p $BASEDIR/${DIR}_RSYNC_IN_PROGRESS
 		$CALL test ! -d $BASEDIR/daily || $CALL cp -a $BASEDIR/daily/* $BASEDIR/${DIR}_RSYNC_IN_PROGRESS/
-		$SYNC --stats -rvl --safe-links --delete -e ssh dest/ $SYNC_BASEDIR/${DIR}_RSYNC_IN_PROGRESS/
+		$SYNC --stats -rvl --safe-links --delete --rsh="ssh $SSHKEY" dest/ $SYNC_BASEDIR/${DIR}_RSYNC_IN_PROGRESS/
 		$CALL rm -rf $BASEDIR/$DIR
 		$CALL mv $BASEDIR/${DIR}_RSYNC_IN_PROGRESS $BASEDIR/$DIR
 		$CALL rm -rf $BASEDIR/daily
