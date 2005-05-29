@@ -1,16 +1,48 @@
 #!/bin/sh
 
+# For use in .ssh/authorized keys as, e.g., command="~/d-i-unpack-helper alpha"
 ARCH="$1"
+
 if [ -z "$BASEDIR" ]; then
-	BASEDIR=public_html/d-i/$ARCH
+	BASEDIR=public_html/d-i/${ARCH:-images}
 fi
+
 if [ -z "$DIR" ]; then
 	DIR=`date +%Y-%m-%d`
 fi
 
-mkdir -p $BASEDIR/${DIR}_COPY_IN_PROGRESS
-tar zxf - -C $BASEDIR/${DIR}_COPY_IN_PROGRESS/
+[ -n "$SSH_ORIGINAL_COMMAND" ] || exit 1
+
+# Fix up the rsync command for security reasons (letting the user rsync
+# over .ssh would be bad, mmkay)
+# This mangles non-rsync commands quite badly, but since we disallow
+# them below anyway, I don't care. :)
+for WORD in $SSH_ORIGINAL_COMMAND; do
+	case $WORD in
+	rsync|-*|.)
+		SSH_FIXED_COMMAND="$SSH_FIXED_COMMAND $WORD"
+	;;
+	*)
+		SSH_FIXED_COMMAND="$SSH_FIXED_COMMAND $BASEDIR/${DIR}_RSYNC_IN_PROGRESS"
+	;;
+	esac
+done
+
+set -- $SSH_FIXED_COMMAND
+
+# Ignore all requests other than rsync (all other fixups are handled on
+# this side when rsync is called)
+bn=$(basename "$1")
+if [ "$bn" != "rsync" ]; then
+	exit 0
+fi
+
+shift
+
+mkdir -p $BASEDIR/${DIR}_RSYNC_IN_PROGRESS
+test ! -d $BASEDIR/daily || cp -a $BASEDIR/daily/* $BASEDIR/${DIR}_RSYNC_IN_PROGRESS/
+rsync $@
 rm -rf $BASEDIR/$DIR
-mv $BASEDIR/${DIR}_COPY_IN_PROGRESS $BASEDIR/$DIR
+mv $BASEDIR/${DIR}_RSYNC_IN_PROGRESS $BASEDIR/$DIR
 rm -rf $BASEDIR/daily
 ln -sf $DIR $BASEDIR/daily
