@@ -2974,8 +2974,12 @@ msgid ""
 "floppy drives, so use the floppy drive to launch the installer, and then "
 "point the installer to the CD for the needed files."
 msgstr ""
-"OldWorld PowerMacs não irão iniciar a partir de um CD de Debian, porque "
-"computadores OldWorld"
+"OldWorld PowerMacs não irão arrancar de um CD Debian, porque os computadores "
+"OldWorld baseiam-se num driver de arranque Mac OS ROM CD que esteja presento "
+"no CD, e não está disponível uma versão de free-software. Todos os sistemas "
+"OldWorld têm drives de disquete, utilize portanto a drive de disquetes para "
+"iniciar o instalador, e aponte o instalador para os ficheiros necessários do "
+"CD."
 
 #. Tag: para
 #: boot-installer.xml:2132
@@ -3076,6 +3080,27 @@ msgid ""
 "argument is for maximum compatibility; you can try it if <userinput>install</"
 "userinput> doesn't work. The Debian installation program should start."
 msgstr ""
+"Já terá colocado os ficheiros <filename>vmlinux</filename>, <filename>initrd."
+"gz</filename>, <filename>yaboot</filename>, e <filename>yaboot.conf</"
+"filename> ao nível de root da sua partição HFS em <xref linkend=\"files-"
+"newworld\"/>. Reinicie  o computador, e (durante o apito) pressione em "
+"simultâneo o conjunto de teclas constituído por <keycap>Option</keycap>, "
+"<keycap>Command (cloverleaf/Apple)</keycap>, <keycap>o</keycap>, e "
+"<keycap>f</keycap>. Após alguns segundos surgirá uma prompt de Open "
+"Firmware. No prompt, digite <informalexample><screen>\n"
+"0 &gt; boot hd:<replaceable>x</replaceable>,yaboot\n"
+"</screen></informalexample> substituindo <replaceable>x</replaceable> pelo "
+"número da partição HFS onde os ficheiros do kernel e do yaboot foram "
+"colocados, pressione &enterkey; em seguida. Em algumas máquinas , poderá "
+"precisar de utilizar <userinput>ide0:</userinput> em vez de <userinput>hd:</"
+"userinput>. Em alguns segundos visualizará o prompt do yaboot "
+"<informalexample><screen>\n"
+"boot:\n"
+"</screen></informalexample> No prompt do yaboot <prompt>boot:</prompt>, "
+"digite o <userinput>install</userinput> ou <userinput>install video=ofonly</"
+"userinput>, seguindo da tecla &enterkey;. O argumento "
+"<userinput>video=ofonly</userinput> é para o máximo de compatibilidade; "
+"poderá tentar utiliza-lo se <userinput>install</userinput> não funcionar."
 
 #. Tag: title
 #: boot-installer.xml:2232
@@ -3150,6 +3175,16 @@ msgid ""
 "<command>yaboot</command>) in the directory previously blessed with "
 "<command>hattrib -b</command>."
 msgstr ""
+"Tendo retirado a localização do dispositivo, urilize um comando como este "
+"para iniciar o instalador: <informalexample><screen>\n"
+"boot <replaceable>usb0/disk</replaceable>:<replaceable>2</replaceable>,\\\\:"
+"tbxi\n"
+"</screen></informalexample> O <replaceable>2</replaceable> coincide com a "
+"partição Apple_HFS ou Apple_Bootstrap para onde anteriormente copiou a "
+"imagem de arranque, e o <userinput>,\\\\:tbxi</userinput> parte que instrui "
+"o Open Firmware a iniciar a partir do ficheiro com um ficheiro HFS do tipo "
+"\"tbxi\" (ex.: <command>yaboot</command>) numa directoria anteriormente "
+"abençoada com <command>hattrib -b</command>."
 
 #. Tag: para
 #: boot-installer.xml:2277
@@ -3193,6 +3228,12 @@ msgid ""
 "<replaceable>server_ipaddr</replaceable>,<replaceable>file</replaceable>,"
 "<replaceable>client_ipaddr</replaceable></userinput>."
 msgstr ""
+"Em máquinas com Open Firmware, como as Mac NewWorld Power, entre no monitor "
+"de arranque (veja <xref linkend=\"invoking-openfirmware\"/>) e utilize o "
+"comando <command>boot enet:0</command>. As máquinas PReP and CHRP podem "
+"terdiferentes maneiras de endereçar a rede. Numa máquina PReP, deve tentar "
+"<userinput>boot <replaceable>server_ipaddr</replaceable>,<replaceable>file</"
+"replaceable>,<replaceable>client_ipaddr</replaceable></userinput>."
 
 #. Tag: para
 #: boot-installer.xml:2335
@@ -3264,6 +3305,11 @@ msgid ""
 "most Mach64 and Rage video hardware. For Rage 128 hardware, this changes to "
 "<userinput>video=aty128fb:vmode:6</userinput> ."
 msgstr ""
+"Muitos monitores antigos Apple utilizam o modo 640x480 67Hz. Se a sua imagem "
+"aparece enviesada num monitor Apple antigo, tente adicionar o argumento de "
+"arranque <userinput>video=atyfb:vmode:6</userinput>, que irá seleccionar "
+"esse modo para a maioria do hardware Mach64 e Rage. No hardware Rage 128, "
+"isto altera para <userinput>video=aty128fb:vmode:6</userinput> ."
 
 #. Tag: para
 #: boot-installer.xml:2412
@@ -3277,6 +3323,14 @@ msgid ""
 "OpenBoot revisions require using the device name, such as <userinput>boot le"
 "()</userinput>; these probably don't support BOOTP nor DHCP."
 msgstr ""
+"Em máquinas com OpenBoot, entre simplesmente no monitor de arranque da "
+"máquina que está a ser instalada (veja <xref linkend=\"invoking-openboot\"/"
+">). Utilize o comando <userinput>boot net</userinput> para iniciar a partir "
+"do servidor TFTP e RARP, ou tente <userinput>boot net:bootp</userinput> ou "
+"<userinput>boot net:dhcp</userinput> para iniciar a partir de um servidor "
+"TFTP e BOOTP ou DHCP. Algumas revisões antigas do OpenBoot requerem o nome "
+"do dispositivo, tal como <userinput>boot le()</userinput>; Estas, "
+"provavelmente, não suportam BOOTP nem DHCP."
 
 #. Tag: para
 #: boot-installer.xml:2468
@@ -3289,6 +3343,13 @@ msgid ""
 "command. Note that some problems have been reported on Sun4m (e.g., Sparc "
 "10s and Sparc 20s) systems booting from CD-ROM."
 msgstr ""
+"A maioria das versões OpenBoot suportam o comando <userinput>boot cdrom</"
+"userinput> que é simplesmente um alias para iniciar a partir de um "
+"dispositivo SCSI num ID6 (ou o master secundário para sistemas IDE). Você "
+"pode ter de utilizar o nome do dispositivo actual para versões antigas do "
+"OpenBoot que não suportam este especial comando. Note que têm sido "
+"reportadas algumas dificuldades em sistemas de arranque a partir de CD-ROM "
+"em Sun4m (e.g., Sparc 10s and Sparc 20s)."
 
 #. Tag: para
 #: boot-installer.xml:2483
@@ -3303,6 +3364,14 @@ msgid ""
 "IPX) do not support the compressed images found on the disks, so also are "
 "not supported."
 msgstr ""
+"Para iniciar a partir de um disquete numa Sparc, utilize "
+"<informalexample><screen>Stop-A -&gt; OpenBoot: \"boot floppy\"</screen></"
+"informalexample> Fique avisado que a nova arquitectura Sun4u (ultra) não "
+"suporta iniciar de disquete. Uma mensagem de erro tipica é "
+"<computeroutput>Bad magic number in disk label - Can't open disk label "
+"package</computeroutput>. Além disso, um número de modelos Sun4c (tais como "
+"IPX) não suportam imagens comprimidas nos discos, não sendo portanto "
+"suportadas."
 
 #. Tag: para
 #: boot-installer.xml:2495
@@ -3313,6 +3382,10 @@ msgid ""
 "update can be downloaded as product ID 106121 from <ulink url=\"http://"
 "sunsolve.sun.com\"></ulink>."
 msgstr ""
+"Várias Sparcs (ex. Ultra 10) têm um bug OBP que impede-as de arrancar (em "
+"vez de simplesmente não suportarem arrancar de todo). O download da "
+"actualização apropriada de OBP como produto ID 106121 poderá ser feito a "
+"partir de <ulink url=\"http://sunsolve.sun.com\"></ulink>."
 
 #. Tag: para
 #: boot-installer.xml:2502
@@ -3325,6 +3398,11 @@ msgid ""
 "</screen></informalexample> then it is possible that floppy booting is "
 "simply not supported on your machine."
 msgstr ""
+"Se está a iniciar de disquete, e vê mensagens como "
+"<informalexample><screen>Fatal error: Cannot read partition\n"
+"Illegal or malformed device name\n"
+" </screen></informalexample> então é possível que a disquete de arranque não "
+"seja simplesmente suportada na sua máquina."
 
 #. Tag: title
 #: boot-installer.xml:2514
@@ -3341,6 +3419,10 @@ msgid ""
 "information for you firmware, has run out. See the <ulink url=\"&url-sun-"
 "nvram-faq;\">Sun NVRAM FAQ</ulink> for more information."
 msgstr ""
+"Se não consegue iniciar porque recebe mensagens sobre um problema com "
+"``IDPROM'', então é possível que a sua bateria NVRAM, que contém informação "
+"de configuração para o seu firmware. Veja as <ulink url=\"&url-sun-nvram-faq;"
+"\">Sun NVRAM FAQ</ulink> para mais informação."
 
 #. Tag: para
 #: boot-installer.xml:2534
@@ -3351,6 +3433,10 @@ msgid ""
 "can auto-detect information about your peripherals. However, in some cases "
 "you'll have to help the kernel a bit."
 msgstr ""
+"Parâmetros de arranque são parâmetros dos kernel Linux que são geralmente "
+"utilizados para certificar que os periféricos são devidamente tratados. Para "
+"a maioria, o kernel pode auto detectar informação sobre os seus periféricos. "
+"Contudo, em alguns casos terá de ajudar o kernel um pouco."
 
 #. Tag: para
 #: boot-installer.xml:2541
@@ -3361,6 +3447,10 @@ msgid ""
 "correctly. It probably will. If not, you can reboot later and look for any "
 "special parameters that inform the system about your hardware."
 msgstr ""
+"Se esta é a primeira vez que está a iniciar o sistema, tente os parâmetros "
+"de arranque por omissão (ex.: não tente alterar os parâmetros) e veja se "
+"funciona correctamente. Provavelmente sim. Se não, pode mais tarde reiniciar "
+"e procurar por parâmetros especiais que informam o sistema do seu hardware."
 
 #. Tag: para
 #: boot-installer.xml:2548
@@ -3372,6 +3462,12 @@ msgid ""
 "the most salient parameters. Some common gotchas are included below in <xref "
 "linkend=\"boot-troubleshooting\"/>."
 msgstr ""
+"Informação sobre muito parâmetros de arranque podem ser encontrados em "
+"<ulink url=\"http://www.tldp.org/HOWTO/BootPrompt-HOWTO.html\"> Linux "
+"BootPrompt HOWTO</ulink>, incluindo dicas para hardware obscuro. Esta secção "
+"contém apenas um esboço dos pârametros mais distintos. Alguns truques para "
+"identificar problemas estão incluídos abaixo em <xref linkend=\"boot-"
+"troubleshooting\"/>."
 
 #. Tag: para
 #: boot-installer.xml:2557
@@ -3389,6 +3485,18 @@ msgid ""
 "megabytes. For example, both <userinput>mem=65536k</userinput> and "
 "<userinput>mem=64m</userinput> mean 64MB of RAM."
 msgstr ""
+"Quando o kernel arranca, é enviado anteriormente no processo a mensagem "
+"<informalexample><screen>\n"
+"Memory:<replaceable>avail</replaceable>k/<replaceable>total</replaceable>k. "
+"available \n"
+"</screen></informalexample>. <replaceable>total</replaceable> deverá "
+"coincidir com o total de kilobytes da RAM. Se isto não coincidir com a "
+"quantidade real de RAM que tem instalado, precisa de utilizar o parâmetro "
+"<userinput>mem=<replaceable>ram</replaceable></userinput>, onde "
+"<replaceable>ram</replaceable> é substituido pela quantidade de memória, "
+"seguido de ``k'' para kilobytes, ou ``m'' para megabytes. Por  "
+"exemplo<userinput>mem=65536k</userinput> and <userinput>mem=64m</userinput> "
+"significa 64MB of RAM."
 
 #. Tag: para
 #: boot-installer.xml:2573
@@ -3402,6 +3510,13 @@ msgid ""
 "argument to the kernel, where <replaceable>device</replaceable> is your "
 "serial device, which is usually something like <filename>ttyS0</filename>."
 msgstr ""
+"Se estiver a iniciar de uma consola série, geralmente o kernel irá auto "
+"detectar isto <phrase arch=\"mipsel\"> (embora não o faça em DECstations)</"
+"phrase>. Se tem uma placa gráfica (framebuffer) e um teclado agregados ao "
+"computador do qual quer iniciar via consola série, pode querer passar para o "
+"kernel o argumento <userinput>console=<replaceable>device</replaceable></"
+"userinput>, onde <replaceable>device</replaceable> é o seu dispositivo de "
+"série, o qual geralmente é algo parecido com <filename>ttyS0</filename>."
 
 #. Tag: para
 #: boot-installer.xml:2586
@@ -3412,6 +3527,10 @@ msgid ""
 "envar> and <envar>output-device</envar> OpenPROM variables to "
 "<filename>ttya</filename>."
 msgstr ""
+"Para &arch-title; os dispositivos de série são <filename>ttya</filename> ou "
+"<filename>ttyb</filename>. Alternativamente, ajuste as variáveis OpenPROM "
+"<envar>input-device</envar> e <envar>output-device</envar> para "
+"<filename>ttya</filename>."
 
 #. Tag: title
 #: boot-installer.xml:2597
@@ -3430,6 +3549,12 @@ msgid ""
 "will drop any excess options and 2.6 kernels will panic. </para> </footnote> "
 "which may be useful."
 msgstr ""
+"O sistema de instalação reconhece uns quantos parâmetros de arranque "
+"adicionais <footnote> <para> Note que o kernel aceita um máximo de 8 opções "
+"de comando de linha e 8 opções de ambiente (incluindo qualquer opção "
+"adicionada por omissão pelo instalador). Se este números form excedidos, "
+"kernels 2.4 irão retirar as opções em excesso e o kernel 2.6 pode gerar "
+"alguns erros (kernel panic).</para> </footnote> Que pode ser útil."
 
 #. Tag: term
 #: boot-installer.xml:2617
@@ -3442,8 +3567,7 @@ msgstr "debconf/priority"
 #, no-c-format
 msgid "This parameter sets the lowest priority of messages to be displayed."
 msgstr ""
-"Este parâmetro ajusta para prioridade para mínima as mensagens a serem "
-"mostradas."
+"Este parâmetro ajusta para prioridade mínima as mensagens a serem mostradas."
 
 #. Tag: para
 #: boot-installer.xml:2622
@@ -3454,6 +3578,11 @@ msgid ""
 "medium and low priority messages are skipped. If problems are encountered, "
 "the installer adjusts the priority as needed."
 msgstr ""
+"A instalação por omissão utiliza <userinput>debconf/priority=high</"
+"userinput>. Isto significa que as mensagem de prioridade alta e crítica irão "
+"ser mostradas, mas não serão mostradas as mensagens de média e baixa "
+"prioridade. Se forem encontrados problemas, o instalador ajusta a prioridade "
+"de acordo com o necessário."
 
 #. Tag: para
 #: boot-installer.xml:2629
@@ -3467,6 +3596,14 @@ msgid ""
 "installation system will display only critical messages and try to do the "
 "right thing without fuss."
 msgstr ""
+"Se colocou <userinput>debconf/priority=medium</userinput> como parâmetro de "
+"arranque irá-lhe ser mostrado o menu de instalação dessa forma ter mais "
+"poder sobre a instalação. Quando é utilizado <userinput>debconf/"
+"priority=low</userinput> todas as mensagens são mostradas (Isto é "
+"equivalente ao método de arranque <emphasis>avançado</emphasis>). Com "
+"<userinput>debconf/priority=critical</userinput>, o sistema de instalação "
+"irá mostrar somente as mensagens críticas e tentará optar pelas opções "
+"correctas sem grande confusão."
 
 #. Tag: term
 #: boot-installer.xml:2643
@@ -3496,6 +3633,24 @@ msgid ""
 "console installs. Generally only the <userinput>newt</userinput> frontend is "
 "available on default install media, so this is not very useful right now."
 msgstr ""
+"O parâmetro de arranque controla o tipo de interface para o utilizador que é "
+"utilizado para o instalador. Os valores actuais possíveis utilizados são:  "
+"<itemizedlist> <listitem> <para><userinput>DEBIAN_FRONTEND=noninteractive</"
+"userinput></para> </listitem><listitem> "
+"<para><userinput>DEBIAN_FRONTEND=text</userinput></para> </"
+"listitem><listitem> <para><userinput>DEBIAN_FRONTEND=newt</userinput></para> "
+"</listitem><listitem> <para><userinput>DEBIAN_FRONTEND=slang</userinput></"
+"para> </listitem><listitem> <para><userinput>DEBIAN_FRONTEND=ncurses</"
+"userinput></para> </listitem><listitem> "
+"<para><userinput>DEBIAN_FRONTEND=bogl</userinput></para> </"
+"listitem><listitem> <para><userinput>DEBIAN_FRONTEND=gtk</userinput></para> "
+"</listitem><listitem> <para><userinput>DEBIAN_FRONTEND=corba</userinput></"
+"para> </listitem> </itemizedlist> O front end é "
+"<userinput>DEBIAN_FRONTEND=newt</userinput>. O "
+"<userinput>DEBIAN_FRONTEND=text</userinput> pode ser preferível utilizar "
+"para instalações de consolas série. Geralmente por omissão apenas o "
+"frontend<userinput>newt</userinput> está disponível no media de instalação, "
+"assim por ora isto não é muito útil."
 
 #. Tag: term
 #: boot-installer.xml:2680
@@ -3612,6 +3767,12 @@ msgid ""
 "bterm or bogl, a blank screen, or a freeze within a few minutes after "
 "starting the install."
 msgstr ""
+"Algumas arquitecturas utilizam o framebuffer para oferecer uma instalação em "
+"várias língias. Se o framebuffer causar problemas no seu sistema pode "
+"desactivar esta característica através do parâmetro <userinput>debian-"
+"installer/framebuffer=false</userinput>. Os sintomas do problema são "
+"mensagens de erro sobre bterm ou bogl, um ecrã em branco, ou uma paragem de "
+"uns minutos após o inicio da instalação."
 
 #. Tag: para
 #: boot-installer.xml:2745
@@ -3621,6 +3782,9 @@ msgid ""
 "disable the framebuffer. Such problems have been reported on a Dell Inspiron "
 "with Mobile Radeon card."
 msgstr ""
+"O argumento <userinput>video=vga16:off</userinput> pode também ser utilizado "
+"para desactiva o framebuffer. Tais problemas foram reportados numa Dell "
+"Inspiron com cartões Mobile Radeon."
 
 #. Tag: para
 #: boot-installer.xml:2751
@@ -3645,6 +3809,12 @@ msgid ""
 "installer, you can try booting with parameter <userinput>debian-installer/"
 "framebuffer=true</userinput>."
 msgstr ""
+"Devido a serem mostrados as mensagens de erro em alguns sistemas, em &arch-"
+"title; o suporte framebuffer está <emphasis>desactivo por omissão</"
+"emphasis>. Isto pode resultar numa feia disposição em sistemas \tque fazem "
+"um suporte apropriado, como aqueles com placas gráficas ATI. Se é mostrados "
+"no ecrã problemas no instalador, pode tentar iniciar com o parâmetro "
+"<userinput>debian-installer/framebuffer=true</userinput>."
 
 #. Tag: term
 #: boot-installer.xml:2772
@@ -3677,6 +3847,10 @@ msgid ""
 "the obtained settings. You can get to the manual network setup only in case "
 "the DHCP probe fails."
 msgstr ""
+"Por omissão o &d-i; sonda automaticamente a configuração de rede via DHCP. "
+"Se a sonda for bem sucedida, não terá a oportunidade de rever e alterar os "
+"ajustes obtidos. Apenas conseguirá fazer uma configuração manual da rede em "
+"caso do probe DHCP falhar."
 
 #. Tag: para
 #: boot-installer.xml:2790
@@ -3687,6 +3861,10 @@ msgid ""
 "<userinput>netcfg/disable_dhcp=true</userinput> to prevent configuring the "
 "network with DHCP and to enter the information manually."
 msgstr ""
+"Se tem um servidor DHCP na sua rede local, mas quer eviatr utilizá-lo ex.: "
+"devolve respostas erradas, pode utilizar o parâmetro <userinput>netcfg/"
+"disable_dhcp=true</userinput> que previne que a rede não seja configurada "
+"por DHCP e que a inormação seja inserida manualmente."
 
 #. Tag: term
 #: boot-installer.xml:2801
@@ -3755,6 +3933,10 @@ msgid ""
 "is not there to do it manually. Many slot loading, slim-line, and caddy "
 "style drives cannot reload media automatically."
 msgstr ""
+"Por omissão, antes de reiniciar, &d-i; ejecta automaticamente o media "
+"utilizado durante a instalação. Isto poderá ser desnecessário se o sistema "
+"não iniciar de CD. Em alguns casos pode até não ser desejável, por exemplo o "
+"dispositivo optical"
 
 #. Tag: para
 #: boot-installer.xml:2842
@@ -3764,6 +3946,9 @@ msgid ""
 "aware that you may need to ensure that the system does not automatically "
 "boot from the optical drive after the initial installation."
 msgstr ""
+"Coloque <userinput>false</userinput> para desactivar ejecção automatica, e "
+"fique atento pois pode necessitar de assegurar de que o sitema não inicía "
+"automaticamente a partir da drive optical após a instalação inicial."
 
 #. Tag: term
 #: boot-installer.xml:2853
@@ -3812,6 +3997,12 @@ msgid ""
 "failures in the Driver Floppies most of which indicate themselves with a "
 "flood of messages about disk I/O errors."
 msgstr ""
+"A disquete de arranque é a disquete com os piores problemas, porque é lida "
+"directamente pelo hardware, antes do arranque do Linux. Frequentemente o "
+"hardware não lê de uma forma confiável como a drive de disquete, e em caso "
+"de lêr dados incorrectos pode simplesmente parar sem mostrar mensagens de "
+"erro. Pode também existir falhas na drive de disquetes que são indicadas por "
+"muitas mensagens de erros I/O."
 
 #. Tag: para
 #: boot-installer.xml:2892
@@ -3824,6 +4015,11 @@ msgid ""
 "and written with no errors. It is sometimes useful to try writing the floppy "
 "on a different system."
 msgstr ""
+"Se está a enfrentar paragens da instalação numa disquete em particular, a "
+"primeira coisa que deve fazer é re-download da imagem da disquete e gravá-la "
+"para uma disquete <emphasis>diferente</emphasis>. Reformatando simplesmente "
+"a antiga disquete pode não ser suficiente, mesmo que por vezes seja útil "
+"tentar escrever a disquete num sistema diferente."
 
 #. Tag: para
 #: boot-installer.xml:2902
@@ -3833,6 +4029,9 @@ msgid ""
 "emphasis> times before one worked, and then everything was fine with the "
 "third floppy."
 msgstr ""
+"Um utilizador reportou que ele teve de gravar a imagem para a disquetes "
+"<emphasis>três</emphasis> vezes antes de funcionar, e após isso tudo estáva "
+"bem com aterceira disquete."
 
 #. Tag: para
 #: boot-installer.xml:2908
@@ -3842,6 +4041,9 @@ msgid ""
 "floppy in the floppy drive can lead to a successful boot. This is all due to "
 "buggy hardware or firmware floppy drivers."
 msgstr ""
+"Outros utilizadores reportaram que simplesmente reiniciando algumas vezes "
+"com a mesma disquete na drive de disquetes levou a um arranque bem sucedido. "
+"Isto tudo tem a ver com os erros do hardware ou os drivers de disquetes."
 
 #. Tag: title
 #: boot-installer.xml:2917
@@ -3858,6 +4060,10 @@ msgid ""
 "properly, the first thing to check is the boot parameters, as discussed in "
 "<xref linkend=\"boot-parms\"/>."
 msgstr ""
+"Se tiver dificuldade e o kernel parar durante o processo de arranque, não "
+"reconhece periféricos que tem, ou os drivers não são reconhecidos "
+"devidamente, a primeira coisa a verificar são os parâmetros de arranque, "
+"como foi visto em <xref linkend=\"boot-parms\"/>."
 
 #. Tag: para
 #: boot-installer.xml:2926
@@ -3867,6 +4073,10 @@ msgid ""
 "installer, be sure that <userinput>CONFIG_DEVFS</userinput> is set in your "
 "kernel. The installer requires <userinput>CONFIG_DEVFS</userinput>."
 msgstr ""
+"Se está a iniciar com o seu próprio kernel em vez de um que tivesse vindo "
+"com o instalador, certifique-se que <userinput>CONFIG_DEVFS</userinput> está "
+"activo no seu kernel. O instalador requer <userinput>CONFIG_DEVFS</"
+"userinput>."
 
 #. Tag: para
 #: boot-installer.xml:2933
@@ -3876,6 +4086,9 @@ msgid ""
 "trying booting again. <phrase arch=\"i386\">Internal modems, sound cards, "
 "and Plug-n-Play devices can be especially problematic.</phrase>"
 msgstr ""
+"Frequentemente pode ser resolvido removendo add-ons e periféricos, e tente "
+"reiniciar novamente. <phrase arch=\"i386\"> Modem internos, placas de som e "
+"dispositivos Plug-n-Play podem ser specialmente problemáticos.</phrase>"
 
 #. Tag: para
 #: boot-installer.xml:2939
@@ -3886,6 +4099,10 @@ msgid ""
 "include a boot argument to limit the amount of memory the kernel sees, such "
 "as <userinput>mem=512m</userinput>."
 msgstr ""
+"Se tem uma grande quantidade de memória instalada na sua máquina, mais que "
+"512M, e o instalador pára quando inicia o kernel, pode necessitar de incluir "
+"um argumento de arranque para limitar a quantidade de memória que o kernel "
+"vê, tal como <userinput>mem=512m</userinput>."
 
 #. Tag: title
 #: boot-installer.xml:2950
@@ -4073,6 +4290,22 @@ msgid ""
 "find the time it takes to boot the system unacceptably long, you can create "
 "a custom kernel later (see <xref linkend=\"kernel-baking\"/>)."
 msgstr ""
+"Durante a sequência de arranque, pode vêr muitas mensagens sob a forma "
+"<computeroutput>can't find <replaceable>something</replaceable> </"
+"computeroutput>, ou <computeroutput> <replaceable>something</replaceable> "
+"not present</computeroutput>, <computeroutput>can't initialize "
+"<replaceable>something</replaceable> </computeroutput>, ou até "
+"<computeroutput>this driver release depends on <replaceable>something</"
+"replaceable> </computeroutput>. A maioria destas mensagens são inofensivas. "
+"Visualiza-as porque o kernel para a instalação do sistema é feito para "
+"correr em computadores de diferente periféricos. Obviamente, nenhum "
+"computador terá todos os periféricos possíveis, então o sistema operativo "
+"poderá emitir algumas queixas enquanto procura por periféricos que não "
+"possui. Poderá também verificar uma pausa no sistema. Isto acontece quando "
+"aguarda pela resposta de um dispositivo, e o mesmo não está presente no seu "
+"sistema. Se considerar que o tempo de arranque do sistema incrivelmente "
+"longo, poderá mais tarde criar um kernel customizaado (veja <xref linkend="
+"\"kernel-baking\"/>)."
 
 #. Tag: title
 #: boot-installer.xml:3063
