@@ -1,8 +1,80 @@
+<?xml version='1.0'?>
+<!-- -*- DocBook -*- -->
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+    "/usr/share/sgml/docbook/dtd/xml/4.2/docbookx.dtd" [
+ <!ENTITY % sgml.features "IGNORE">
+ <!ENTITY % xml.features  "INCLUDE">
+ <!ENTITY % dbcent PUBLIC
+      "-//OASIS//ENTITIES DocBook Character Entities V4.2//EN"
+      "/usr/share/sgml/docbook/dtd/xml/4.2/dbcentx.mod"> %dbcent;
+ <!ENTITY % commondata     SYSTEM "common.ent"        > %commondata;
+ <!ENTITY % urlsdata       SYSTEM "urls.ent"          > %urlsdata;
+]>
+
+
+<article>
+
+<articleinfo>
+<title>
+&debian; Some bits about the Debian Installer by the development team
+</title>
+<authorgroup>
+  <author>
+  <firstname>Joey</firstname>
+  <surname>Hess</surname>
+  </author>
+
+  <author>
+  <firstname>Holger</firstname>
+  <surname>Levsen</surname>
+  </author>
+
+  <author>
+  <firstname>Christian</firstname>
+  <surname>Perrier</surname>
+  </author>
+
+  <author>
+  <firstname>Frans</firstname>
+  <surname>Pop</surname>
+  </author>
+
+</authorgroup>
+
+<abstract>
+<para>
+This article features details about some specific parts of Debian Installer.
+</para>
+
+<para>
+One part will give details about Debian Installer internationalisation framework and work methods
+</para>
+</abstract>
+
+<copyright>
+ <year>2005
+ <trademark class="copyright">
+ </trademark>
+ </year>
+ <holder>Joey Hess, Holger Levsen, Christian Perrier, Frans Pop</holder>
+</copyright>
+<legalnotice>
+
+<para>
+This article is free; you may redistribute it and/or modify it
+under the terms of the GNU General Public License. 
+</para>
+
+</legalnotice>
+</articleinfo>
+
 <sect1>
 <title>Debian Installer i18n/l10n issues
 </title>
+
 <sect2>
 <title>Some history</title>
+
 <sect3>
 <title>Why localize?</title>
 
@@ -12,59 +84,70 @@ installation process of a Linux distribution. Indeed, a very commonly spread
 idea floats where Unix/Linux systems adminstrators have to get some fluency
 in the English language to do their work, so they should not really worry
 about using this language to install a Linux system.
+</para>
 
 <para>
 This very narrow point of view is fortunately quite outdated in the Debian
 community and the need for localisation of the installer is well established
 for years. However, the main arguments are still valid and reminding them
 may be of some interest.
+</para>
 
 <para>
 First of all, not every system administrator prefers using English. Most of
 them, in real life, just pick up their own language when it is available.
+</para>
 
 <para>
 Moreover, Debian is more and more newbie friendly. As explained elsewhere in
 this paper, one of the design goals of the installer was making it easy to
 use for every user, including newcomers to the Linux environments. Here,
 offering a completely localised installation process becomes a key point.
+</para>
 
 <para>
 Finally, more and more Custom Debian Distributions arebased on Debian sarge
 and thus depend on Debian Installer for their installation process. Some of
 these distributions are targeted at home users or for use in educational
 environments, where a complete localisation is also a key argument of choice.
+</para>
 
 </sect3>
+
 <sect3>
 <title>Boot floppies i18n</title>
 </sect3>
+
 <sect3>
 <title>Early design choices</title>
 
 <para>The very modular nature of D-I has made localisation easier because it
 became really easy for translators to focus on the most important issues.
+</para>
 
 <para>The key point has been putting all translatable strings into
 debconf-style templates (sometimes by using specific templates introduced
 with cdebconf, the C-rewritten debconf program). The advent, during early
 sarge development, of the use of gettext for debconf templates i18n, made
 the process very simple for translators.
+</para>
 
 </sect3>
+
 <sect3>
 <title>The advent of the d-i i18n team</title>
-</sect3>
 
 <para>During the early stages of Debian Installer, translators first were
 the translators of boot-floppies, or were coming from established
 translations teams. The work was then pretty informal with translators
 joining themselves the D-I development mailing list and get accessto the CVS
 repository to commit translations themselves.
+</para>
 
 <para>There was already a few dozens of D-I packages at these moments and
 following the status of translations rapidly became nearly impossible to
 translators.
+</para>
 
 <para>The first D-I beta versions also raised the problem of completing the
 translation work for the releases with barely no infrastructure to follow
@@ -72,22 +155,27 @@ the completion and a need to have a gateway between developers and the
 emerging "team" of translators. The need for some documentation for
 internationalisation and localisation work of the installer was also a goot
 motivation to get people specifically involved in i18n coordination.
+</para>
 
 <para>The first signs of early i18n coordination appeared in mid 2003 with
 the first beta releases of D-I. Petter Reinholdtsen, because of the
 Skolelinux needs in that matter, began acting that way and wrote the first
 version of a specific documentation for D-I localisation.
+</para>
 
 <para>Beta 4 release finally made the i18n coordination team a reality,
 bringing D-I developers a reliable way to include i18n and l10n in release
 schedules.
+</para>
 
+</sect3>
 
 
 </sect2>
 
 <sect2>
 <title>Generalities</title>
+
 <sect3>
 <title>Internationalisation with po-debconf</title>
 
@@ -95,17 +183,21 @@ schedules.
 translations in a "debian/po" directory in the package source tree. In that
 directory, one file per language groups together all the templates strings
 translations for that package
+</para>
 
 <para>The final package build process assembles these templates and their
 translations together without any manual internvention from the package
 maintainer or D-I developer.
+</para>
 
 <para>That very simple process is completely identical to processes involved
 in regular Debian packages for debconf templates translations, which makes
 the work simpler for both translators and developers.
+</para>
 
 
 </sect3>
+
 <sect3>
 <title>The concept of "levels"</title>
 
@@ -115,6 +207,7 @@ leaves other packages control the installation process. Even in the "first
 stage" (the installation step before the only reboot), a few parts of user
 interaction are provided by regular Debian packages, through specific udeb
 packages.
+</para>
 
 <para>After the reboot, the "second stage" of D-I is controlled by the
 base-config package, which may still be seen as a D-I package (it is
@@ -122,16 +215,20 @@ maintained by the D-I team). However, this package heavily relies on other
 packages such as shadow, tasksel, pppconfig and a few others to achieve some
 tasks. This means that a full localisation of the installation process, as
 seen from the user, has to include these packages localisation.
+</para>
 
 <para>In order to give translators priorities and make their work
 progressive, the i18n team has established "levels" of translation which
 group together all involved parts, sorted by order of "importance" with
 regards to localisation.
+</para>
 
 <para>The technical section of this paper will describe details about these
 levels.
+</para>
 
 </sect3>
+
 <sect3>
 <title>Documentation i18n</title>
 
@@ -139,26 +236,35 @@ levels.
 Debian. The Installation Manual is indeed a long tradition of good quality
 documentation to assist users and system administrators installing their new
 Debian system.
+</para>
 
 <para>Because of the complete rewrite of the installation process, the
 Installation Manual had to be completely rewritten, from scratch for many
 parts. Here as well, getting some translation work is a huge improvment to
 make Debian a real "universal operating system".
 
+</para>
+
 <para>The installation manual translations are handled separately from the
 programs translations. Up to a very recent past, they even didn't use
 gettext to handle translations but a system quite similar to the Debian web
 site translation system.
+
+</para>
 
 <para>For obvious reasons, the work being way too much bigger, the
 installation manual is currently translated in less languages than the
 installer itself. This is also probably due to the use of a somewhat more
 complex system not involving gettext.
 
+</para>
+
 <para>Plans for the future are a slow switch to gettext, which already
 began for a few languages, while other teams have preferred staying with the former system as long as sarge is not released.
+</para>
 
 </sect3>
+
 </sect2>
 
 
@@ -172,14 +278,19 @@ shortened to "be the articulation point between D-I developers and D-I
 translators". Even if translators have always been considered as full
 members of the D-I team, the need for this articulation point was obvious.
 
+</para>
+
 <para>
 The role of the i18n coordination team may be resumed in the following tasks:
+</para>
 	    <itemizedlist>
 	      <listitem>
 		<para>
 		     It is the reference point for translators. Each translators
 		     knows the (s)he can get every needed information from
 		     one of the i18n team members.
+                </para>
+	      </listitem>
 	      <listitem>
 		<para>
 		     It guarantees a good consistency among English 
@@ -188,6 +299,8 @@ The role of the i18n coordination team may be resumed in the following tasks:
 		     most often the first aware of new needed templates and an
 		     established practice is now, for developers, to get
 		     a discussion about new templates writing style.
+                </para>
+	      </listitem>
 	      <listitem>
 		<para>
 		     New translators seeking and "validation". 
@@ -199,6 +312,8 @@ The role of the i18n coordination team may be resumed in the following tasks:
 		     it in complete autonomy. This process could be called
 		     the "New Translator" process, even if not as formalized
 		     as the New Maintainer process.
+                </para>
+	      </listitem>
 	      <listitem>
 		<para>
 		     The translators need tools to check whether their
@@ -206,6 +321,8 @@ The role of the i18n coordination team may be resumed in the following tasks:
 		     never happy until they reached the heavens of 100%
 		     completion. The role of the
 		     D-I i18n team is to provide them these tools
+                </para>
+	      </listitem>
 	      <listitem>
 		<para>
 		      The i18n team members have to get a good knowledge of
@@ -213,11 +330,15 @@ The role of the i18n coordination team may be resumed in the following tasks:
 		      well as handle i18n-related issues and bug reports.		
 		      Some D-I packages are also partly maintained by the
 		      i18n team such as languagechooser and countrychooser.
+                </para>
+	      </listitem>
 	      <listitem>
 		<para>
 		      In general, the i18n team coordinates all i18n-related activites
 		      in the D-I team; It also manages the testing of the
 		      release candidates with regards to i18n/l10n
+                </para>
+	      </listitem>
 	      <listitem>
 		<para>
 		      As translators are not always heavily aware of the
@@ -225,6 +346,8 @@ The role of the i18n coordination team may be resumed in the following tasks:
 		      with Debian specific parts such as reporting
 		      translations as bugs when they concern packages which
 		      are not maintained by the D-I team.
+                </para>
+	      </listitem>
 	      <listitem>
 		<para>
 		      Bring new ideas and concept to make the translators
@@ -232,20 +355,29 @@ The role of the i18n coordination team may be resumed in the following tasks:
 		      complex systems such as revision control systems
 		      or bug reporting. The translators time is better
 		      invested doing translation work.
+                </para>
+	      </listitem>
 	      <listitem>
 		<para>
 		      Keep the contact with translators and put them to work
 		      when releases are due
+                </para>
+	      </listitem>
 	      <listitem>
 		<para>
 		      Keep the contact with derived distributions when coordination is needed for l10n issues (Skolelinux, Ubuntu...)
+                </para>
+	      </listitem>
 	      <listitem>
 		<para>
 		      Finally, the i18n team is responsible for all issues
 		      related to Debian installer Manual i18n
-		      </itemizedlist>
+                </para>
+	      </listitem>
+	      </itemizedlist>
 
 </sect3>
+
 <sect3>
 <title>The translators</title>
 
@@ -253,11 +385,13 @@ The role of the i18n coordination team may be resumed in the following tasks:
 people who do the real job. The basic principle in d-i i18n (and
 indeed in whole Debian) is leaving translators and translation teams a
 great freedom for their work method.
+</para>
 
 <para>This ends up in various situations, from languages where a
 single individuals is the only responsible for the whole translation,
 QA work, interaction with i18n coordination team up to languages where
 a very structures team exists.
+</para>
 
 <para>The only requirement by the i18n coordination team is getting
 the name and email address of a "reliable" contact which will be
@@ -267,31 +401,38 @@ the translation is made with the support of a translation team
 (internal or external to the Debian project), the name and address of
 this team is needed (possibly with some write access to the team's
 mailing list).
+</para>
 
 <para>Though the i18n coordination team assists translators in their
 tasks and sometimes commits files in their name, autonomy is highly
 wished with the language coordinator commiting him/herself
 translations produced by the team and reporting bug reports for
 packages not being part of the D-I team maintenance area.
+</para>
 
 </sect3>
+
 <sect3>
 <title>The developers</title>
 
 <para>In the i18n process, the role of D-I developers is to ensure that all possibly translatable material is properly marked as translatable and use strings from the debconf i18n system for their packages. The "cdebconf" package documentation gives good examples of the use of debconf strings even outside the context of debconf.
+</para>
 
 <para>D-I developers also have to coordinate their work with the i18n coordination team when their work is likely to introduce new translatable strings. Such strings need peer review for the English messages style consistency checks.
+</para>
 
 <para>Developers of packages not maintained by the D-I team, but
 needed by the installer (most of the time source packages producing
 udeb paackages) must get in touch with the D-I i18n team when thei
 package includes translatable material.
+</para>
 
 </sect3>
 </sect2>
 
 <sect2>
 <title>Technical aspects</title>
+
 <sect3>
 <title>The levels</title>
 
@@ -302,33 +443,40 @@ package includes translatable material.
 files which are part of the "first stage" of the installation process
 and are maintained by the d-i team. This consists of the whole
 debian-installer/ source tree on D-I development server.
+</para>
 
 <para>For simplicity reasons, the few packages which technically
 belong to level 1 because some of their translatable material is used
 during the first stage of the installation process have been moved to
 "level 2" so that it may be clear that the level 1 is the "core" part
 of D-I translations.
+</para>
 
 <para>At the moment of the writing of this paper, level 1 is made of
 65 packages with l10n messages for a total of 1270 strings.
+</para>
 
 <para>To make the translators work easier to maintain, level 1 files
 are gathered together in a single file put in packages/po in the D-I
 development trees (sarge branch and development branch).
+</para>
 
 <para>This method of work does not allow split work but makes the
 maintenance process far more easier as well as improves Quality
 Assurance (because it guarantees that the same string is translated
 the same way among packages).
+</para>
 
 <para>At the moment of this writing, only one team has not chosen to
 switch to the "single file" system. This is still possible because
 taken into account by the synchronisation script.
+</para>
 
 <para>The synchronisation script (l10n-sync) main job is spreading out
 translations from the "master" file to the PO files in each
 package. The internals of this script are detailed in D-I i18n
 documentation. This script also combines all packages PO templates files (POT files) to a single POT file, which may be used by translators starting a new translation.
+</para>
 
 <para>Some languages may be defined as "prospective" languages, which
 means that the translations for these languages are not spread out to
@@ -337,15 +485,18 @@ have on the initial RAM disk size and the memory requirements of
 D-I. Languages are removed from the "prospective" list only after the
 D-I i18n coordination team has got the agreement of the D-I
 development coordinator.
+</para>
 
 <para>Nine "prospective" language are waiting for the "gates opening"
 as they were added after the language freeze of D-I occurred during
 D-I RC2 development with the decision not to add more languages up to
 the sarge release. These languages have been unmarked during D-I Debcamp during Debconf 5.
+</para>
 
 <para>With the languages, the total of languages supported in D-I is
 50, including English. The number of languages supported in the sarge
 branch is 41.
+</para>
 
 </sect4>
 
@@ -354,21 +505,41 @@ branch is 41.
 
 <para>D-I translation "level 2" includes all packages *prompting*
 users in default (high priority) base system installs.
+</para>
 
 <para>This includes two packages maintained by the D-I team
 itself (base-config and tasksel) as well as regular packages
 maintained by Debian developers outside the D-I team.
+</para>
 
 <para>Packages producing udebs used during the first stage of the
 installation process have been added to this "level"
+</para>
 
- -level 3: all packages *prompting* users in any kind of base system install
- -level 4: all packages displaying messages during a base system install
+</sect4>
+
+<sect4>
+<title>Level 3</title>
+
+<para>D-I translation "level 3" includes all packages *prompting* users in any kind of base system install
+</para>
+
+</sect4>
+
+<sect4>
+<title>Level 4</title>
+
+<para>D-I translation "level 4" includes all packages displaying messages during a base system install
+</para>
+
+</sect4>
+
 
 </sect3>
 <sect3>
 <title>Typical process to integrate a new translation</title>
 
+<para>
 Typical sequence of translation work for a new language
  -level0 : The NT process
   -First contact
@@ -377,25 +548,34 @@ Typical sequence of translation work for a new language
    -local language name
    -early support : languagechooser, display specifics, input systems
    -add language to language/localechooser
+</para>
 
 
 </sect3>
+
 <sect3>
 <title>The framework</title>
 
+<para>
 Infrastructure
  -all level 1 POs merged in one big PO
  -synchronisation scripts
  -semi-manual monitoring of level 1 to 4
+</para>
 
+<para>
 Seppy's status pages
+</para>
 
 </sect3>
+
 <sect3>
 <title>QA work</title>
 
+<para>
 Proofreading made by teams
 Spellchecking framework
+</para>
 
 </sect3>
 </sect2>
@@ -408,17 +588,24 @@ Spellchecking framework
 <sect3>
 <title>Language packs</title>
 
+<para>
  -de-coupling translations from d-i packages : D-I language packs?
+</para>
 
 
 </sect3>
 <sect3>
 <title>Installation manual translations</title>
 
+<para>
 Get more languages supported in manual translations through the new gettext
 translation framework.
+</para>
 
 
 </sect3>
 
 </sect2>
+
+</sect1>
+</article>
