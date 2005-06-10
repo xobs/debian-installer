@@ -664,27 +664,147 @@ This whole process has been proven to be a good way to integrate new translators
 	<sect3>
 	  <title>The framework</title>
 
+	  <para>Stricto sensu, the &d-i; internationalisation framework only consists in the tools used to manage translation of level 1 packages (all packages developed by the &d-i; team) and the tools use to monitor the translation status. This paper will not describe any special method involved in handling translations for level 2-4 packages because there is indeed no special method involve to handle their translation except regular bug reporting and handling of PO files by their maintainers.
+</para>
+
+	  <sect4>
+	    <title>Handling of level 1 PO files</title>
+
+<para>All PO files coming from all &d-i;packages are combined together
+in a big PO file named the "master file". This has the advantage of
+avoiding translators to dig in each and every &d-i; package to update
+its translation. Moreover, as several packages share common strings
+(or similar strings), having these only translated once helps in
+keeping the general consistency among translations.
+</para>
+
+<para>Translators only work on the master file and all
+mergin/spreading of translations back and forth this master file to
+all individual packages is handled by special script named
+"l10n-sync". This script is maintained by the &d-i; i18n coordination
+team and is run from one of the Debian servers available to
+developers.
+</para>
+
+<para>l10n-sync tasks :</para>
+<itemizedlist>
+	      <listitem>
+		<para>merge together all POT files in a single POT file
+</para>
+	      </listitem>
+	      <listitem>
+		<para>update the master files from this POT file
+</para>
+	      </listitem>
+	      <listitem>
+		<para>update all packages PO files for each language from the master file of that language
+</para>
+	      </listitem>
+	    </itemizedlist>
+<para>All this is achieved with a simple shell script, by using the
+various gettext utilities. A minor drawback of this is being dependent
+on the version of the gettext utilities used to run l10n-sync. For
+instance, woody's gettext utilities have different behaviour and
+different options than sarge's gettext utilities. This sometimes
+resulted in gratuitous commits byt the script and some headaches for
+the &d-i; developers.
+</para>
+<para>l10n-sync also has the ability to update a branch of the installer development repository from the PO files in another branch. For instance, the current sarge branch is updated from the PO files in the trunk. This is again aimed to simplfy the work of translators who only have to deal with one file.
+</para>
+
+	  </sect4>
+	  <sect4>
+	    <title>Other levels handling</title>
+<para>
+For levels 2 to 4, the translation files are dealt with
+individually. The translators work on each of them, complete them and
+then send them as bug reports against the relevant packages.To make this work easier, the translation status pages collect the
+files from either the Debian archive (when no public repository is
+accessible for the given package) or from the maintainer(s) CVS or SVN
+repositories. That allows translators to easily grab the files to
+translate without digging into packages and/or repositories.
+</para>
+
+<para>
+To make this work easier, the translation status pages collect the
+files from either the Debian archive (when no public repository is
+accessible for the given package) or from the maintainer(s) CVS or SVN
+repositories. That allows translators to easily grab the files to
+translate without digging into packages and/or repositories.
+</para>
+
+<para>
+The &d-i; i18n coordinators have usually got a commit access on the
+relevant repositories and follow these packages development through
+the Package Tracking System, which allows them to act as gateways
+between translators and maintainers and save some precious time for
+maintainers.
+</para>
+
+	  </sect4>
+	  <sect4>
+	    <title>The translation status pages</title>
+
 	  <para>
-Infrastructure
- -all level 1 POs merged in one big PO
- -synchronisation scripts
- -semi-manual monitoring of level 1 to 4
+The &d-i; i18n coordination team maintains status pages for all levels translations. The main status page is, at the time of this writing, located at http://people.debian.org/%7Eseppy/d-i/translation-status.html. It gives news about the translations (usually modified strings), statistics about each level translation and access to all releavant files (PO files and POT files) for all levels. The status page also features graphics of the translation ratio progress and gives access to other useful resources.
 </para>
 
 	  <para>
-Seppy's status pages
+The staus page is built by scripts run from the i18n coordinators
+account on people.debian.org. These scripts spider through all
+relevant repositories or in the Debian archive (when no repository is
+available for the package). They currently cannot easily work with
+distributed revision control systems. Two packages in the various
+&d-i; l10n levels use such systems (apt and dpkg). For these packages,
+one of the i18n coordinators maintains a special tla branch for l10n.
 </para>
 
+	  </sect4>
 	</sect3>
 	
 	<sect3>
-	  <title>QA work</title>
+	  <title>Quality Assurance work</title>
 
-	  <para>
-Proofreading made by teams
-Spellchecking framework
+	  <sect4>
+	    <title>Error checking, proofreading</title>
+
+<para>Peer review is one of the corner stones of translation
+work. Because translation is a very tedious work, translators are very
+prone to errors, spelling mistakes and typos. For that reason, all
+teams that can afford the required manpower should invest a strong
+effort in peer review. The only drawback is that it needs at least two
+translators, which is currently not yet achieved for all languages.
 </para>
 
+<para>
+Except for automated spellchecking, no special infrastructure exists
+for peer review of translations. Several teams have setup their own
+policyand sometimes even did document it. The Dutch team peer review
+system is for instance very well documented : TODO_ADDRESS.
+</para>
+
+	    </sect4>
+	  <sect4>
+	    <title>Spellchecking</title>
+
+	  <para>
+During the very late steps of sarge development, Davide Viti has setup a framework for automated spellchecking of &d-i; translations. This framework makes use of the aspell utility as well as aspell dictionaries for many language among the languages supported in &d-i;.
+</para>
+
+	  <para>
+A common word list is built for each &d-i; i18n level : this word list contains all words not recognized by aspell (most of the time, jargon words, words kept in English, acronyms, etc.). Each language team can also build its own word list with all words from this language which are not recognized by aspell even if they are correct (here again , most often jargon words, acronyms, country names, etc.).
+</para>
+
+	  <para>
+The spellchecking system also checks for incorrect variable
+substitution in translations. Translators should not translate
+variable names in debconf translations, but mistakes or typos often
+happen in that matter, which results in "strange" displays to
+users. Variable substitution checking has been one of the most
+immediate benefits from the spellcheking framework for &d-i;.
+</para>
+
+</sect4>
 	</sect3>
       </sect2>
 
@@ -693,13 +813,46 @@ Spellchecking framework
 	<sect3>
 	  <title>Web-based translation tools</title>
 	</sect3>
+
+<para>Web-based translation tools currently receive an increased
+popularity in FLOSS development. They allow barely everyone to
+participate in the translation effort because the access to it is made
+very easy, even to people not running Free Software environments.
+</para>
+
+<para>
+Web-based translation tools cannot completely replace specialized
+software such as KBabel, Poedit, Gtranslator or Emacs PO mode,
+especially on heavy translation work. However, they may be very
+convenient for translation maintenance as well as giving more
+opportunities to get new (wo)manpower to localization team.
+</para>
+
+<para>Two main systems have emerged recently:
+</para>
+<itemizedlist>
+<listitem>
+Rosetta, developed for the Ubuntu project, is used quite widely in
+Ubuntu for localisation work. Being mostly developed by contributors in (or near) the Debian community, it may very likely be adapted for Debian specific needs. Its main rawback is being based on a technlogy which does not meet the Debian Free Software Guidelines (at least at the time of this writing).
+</listitem>
+<listitem>
+Pootle, developed by contributors of the translate.org project, has
+got a very wide recognition by several major localisation projects in
+FLOSS. The devleoeprs have setup a server at
+http://pootle.wordforge.net but they also made the Pootle Toolkit
+available to teams who want to setup their own Pootle server. Setting up a Pootle server for Debian could be a way to go, which could help in &d-i; localisation as well as all other localisation work in the project.
+</listitem>
+
+
 	<sect3>
 	  <title>Language packs</title>
 
 	  <para>
- -de-coupling translations from &d-i; packages : &d-i; language packs?
+Currently, integrating a new language in &d-i; needs to remove it from the "prospective" list so that the PO files for it are built into all packages from &d-i; level 1. Then, each one of these packages has to be rebuilt and uploaded for the language translations to be available in &d-i;.
 </para>
 
+	  <para>The drawback here is to bloat &d-i; for each additionnal language. Then the size of the initial RAM disk image as well as the memory requirements of &d-i; may become out of control. This is the major reason for which 9 languages have been kept out of sarge &d-i; since September 2004 while the &d-i; team was doing its best to keep &d-i; in a releasable state so that it is no more a blocker for the whole release of sarge.
+</para>
 
 	</sect3>
 	<sect3>
