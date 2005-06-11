@@ -145,7 +145,7 @@ create_text () {
             CHARSET=EUC-KR ;;
         ru)
             CHARSET=KOI8-R ;;
-        el|ro|zh_CN)
+        el|ro|zh_CN|zh_TW)
             CHARSET=UTF-8 ;;
         *)
             CHARSET=ISO-8859-1 ;;
@@ -286,7 +286,7 @@ BUILD_OK=""
 BUILD_FAIL=""
 for format in $formats ; do
     case "$language" in
-        el|ja|ko|zh_CN)
+        el|ja|ko|zh_CN|zh_TW)
             if [ "$format" = "pdf" -o "$format" = "ps" ] ; then
                 echo "Warning: pdf and ps formats are currently not supported for Chinese, Greek, Japanese and Korean"
                 BUILD_SKIP="$BUILD_SKIP $format"
