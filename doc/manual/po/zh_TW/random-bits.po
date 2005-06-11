@@ -1,0 +1,2113 @@
+# Debian GNU/Linux Installation Guide
+msgid ""
+msgstr ""
+"Project-Id-Version: d-i-manual\n"
+"POT-Creation-Date: 2001-02-09 01:25+0100\n"
+"PO-Revision-Date: 2005-06-10 01:57+0800\n"
+"Last-Translator: Jhang, Jia-Wei<dreamcryer@gmail.com>\n"
+"Language-Team: debian-chinese-big5 <debian-chinese-big5@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Tag: title
+#: random-bits.xml:4
+#, no-c-format
+msgid "Random Bits"
+msgstr "其他"
+
+#. Tag: title
+#: random-bits.xml:11
+#, no-c-format
+msgid "Preconfiguration File Example"
+msgstr "預先設定檔範例"
+
+#. Tag: para
+#: random-bits.xml:13
+#, no-c-format
+msgid ""
+"This is a complete working example of a preconfiguration file for an "
+"automated install. Its use is explained in <xref linkend=\"automatic-install"
+"\"/>. You may want to uncomment some of the lines before using the file."
+msgstr ""
+"這是一個完整的用於自動安裝的預先設定檔的實例。使用的說明在 <xref linkend="
+"\"automatic-install\"/>。您可以在使用該檔案前移除某些行前面的註解。"
+
+#. Tag: para
+#: random-bits.xml:19
+#, no-c-format
+msgid ""
+"In order to be able to properly present this example in the manual, we've "
+"had to split some lines. This is indicated by the use of the line-"
+"continuation-character <quote>\\</quote> and extra indentation in the next "
+"line. In a real preconfiguration file, these split lines have to be joined "
+"into <emphasis>one single line</emphasis>. If you do not, preconfiguration "
+"will fail with unpredictable results."
+msgstr ""
+"為了能在手冊中正確示範這個例子，我們不得不分割一些設定行。透過使用行連接符號 "
+"<quote>\\</quote> 和下一行的縮排標記。在實際的設定檔中，這些分割的設定行必須"
+"合併成 <emphasis>單獨的一行</emphasis>。 如果您沒有這樣做，預先設定檔會造成不"
+"可預估的失敗。"
+
+#. Tag: para
+#: random-bits.xml:27
+#, no-c-format
+msgid ""
+"A <quote>clean</quote> example file is included on the official Debian "
+"installation CD-ROMs in <filename>/doc/install/manual</filename> and "
+"available from the Internet at <ulink url=\"&url-example-preseed;\"></ulink>."
+msgstr ""
+"一個<quote>乾淨的</quote>範例檔包含在安裝光碟的 <filename>/doc/install/"
+"manual</filename> 目錄，網際網路上位於 <ulink url=\"&url-example-preseed;"
+"\"></ulink>。"
+
+#. Tag: screen
+#: random-bits.xml:35
+#, no-c-format
+msgid ""
+"#### Modifying syslinux.cfg.\n"
+"\n"
+"# Edit the syslinux.cfg (or similar) file, and add parameters to the end\n"
+"# of the append line(s) for the kernel.\n"
+"#\n"
+"# You'll at least want to add a parameter telling the installer where to\n"
+"# get its preseed file from.\n"
+"# If you're installing from USB media, use this, and put the preseed file\n"
+"# in the toplevel directory of the USB stick.\n"
+"#   preseed/file=/hd-media/preseed\n"
+"# If you're netbooting, use this instead:\n"
+"#   preseed/url=http://host/path/to/preseed\n"
+"# If you're remastering a CD, you could use this:\n"
+"#   preseed/file=/cdrom/preseed\n"
+"# Be sure to copy this file to the location you specify.\n"
+"# \n"
+"# While you're at it, you may want to throw a debconf/priority=critical in\n"
+"# there, to avoid most questions even if the preseeding below misses some.\n"
+"# And you might set the timeout to 1 in syslinux.cfg to avoid needing to "
+"hit\n"
+"# enter to boot the installer.\n"
+"#\n"
+"# Language, country, and keyboard selection cannot be preseeded from a "
+"file,\n"
+"# because the questions are asked before the preseed file can be loaded.\n"
+"# Instead, to avoid these questions, pass some more parameters to the "
+"kernel:\n"
+"#\n"
+"#    languagechooser/language-name=English\n"
+"#    countrychooser/shortlist=US\n"
+"#    console-keymaps-at/keymap=us\n"
+"#\n"
+"# Note that the kernel accepts a maximum of 8 command line options and\n"
+"# 8 environment options (including any options added by default for the\n"
+"# installer). If these numbers are exceeded, 2.4 kernels will drop any\n"
+"# excess options and 2.6 kernels will panic. With kernel 2.6.9 or newer,\n"
+"# you can use 32 command line options and 32 environment options.\n"
+"#\n"
+"# Some of the default options, like 'vga=normal' may be safely removed\n"
+"# for most installations, which may allow you to add more options for\n"
+"# preseeding.\n"
+"\n"
+"#### Shell commands.\n"
+"\n"
+"# d-i preseeding is inherently not secure. Nothing in the installer checks\n"
+"# for attempts at buffer overflows or other exploits of the values of a\n"
+"# preseed file like this one. Only use preseed files from trusted\n"
+"# locations! To drive that home, and because it's generally useful, here's\n"
+"# a way to run any shell command you'd like inside the installer,\n"
+"# automatically.\n"
+"\n"
+"# This first command is run as early as possible, just after\n"
+"# preseeding is read.\n"
+"#d-i preseed/early_command              string \\\n"
+"#    wget http://url/to/my.udeb -O /tmp/my.udeb; udpkg -i /tmp/my.udeb\n"
+"\n"
+"# This command is run just before the install finishes, but when there is\n"
+"# still a usable /target directory.\n"
+"#d-i preseed/late_command               string \\\n"
+"#    for deb in /hd-media/*.deb; do cp $deb /target/tmp; \\\n"
+"#    chroot /target dpkg -i /tmp/$(basename $deb); done\n"
+"\n"
+"# This command is run just as base-config is starting up.\n"
+"#base-config base-config/early_command  string echo hi mom\n"
+"\n"
+"# This command is run after base-config is done, just before the login:\n"
+"# prompt. This is a good way to install a set of packages you want, or to\n"
+"# tweak the configuration of the system.\n"
+"#base-config base-config/late_command   string \\\n"
+"#    apt-get install zsh; chsh -s /bin/zsh\n"
+"\n"
+"#### Network configuration.\n"
+"\n"
+"# Of course, this won't work if you're loading your preseed file from the\n"
+"# network! But it's great if you're booting from CD or USB stick. You can\n"
+"# also pass network config parameters in on the kernel params if you are\n"
+"# loading preseed files from the network.\n"
+"\n"
+"# netcfg will choose an interface that has link if possible. This makes it\n"
+"# skip displaying a list if there is more than one interface.\n"
+"d-i  netcfg/choose_interface            select auto\n"
+"\n"
+"# If you prefer to configure the network manually, here's how:\n"
+"#d-i netcfg/disable_dhcp                boolean true\n"
+"#d-i netcfg/get_nameservers             string 192.168.1.1\n"
+"#d-i netcfg/get_ipaddress               string 192.168.1.42\n"
+"#d-i netcfg/get_netmask                 string 255.255.255.0\n"
+"#d-i netcfg/get_gateway                 string 192.168.1.1\n"
+"#d-i netcfg/confirm_static              boolean true\n"
+"\n"
+"# Note that any hostname and domain names assigned from dhcp take\n"
+"# precedence over values set here. However, setting the values still\n"
+"# prevents the questions from being shown even if values come from dhcp.\n"
+"d-i  netcfg/get_hostname                string unassigned-hostname\n"
+"d-i  netcfg/get_domain                  string unassigned-domain\n"
+"\n"
+"# Disable that annoying WEP key dialog.\n"
+"d-i  netcfg/wireless_wep                string\n"
+"# The wacky dhcp hostname that some ISPs use as a password of sorts.\n"
+"#d-i netcfg/dhcp_hostname               string radish\n"
+"\n"
+"#### Mirror settings.\n"
+"\n"
+"d-i  mirror/country                     string enter information manually\n"
+"d-i  mirror/http/hostname               string http.us.debian.org\n"
+"d-i  mirror/http/directory              string /debian\n"
+"d-i  mirror/suite                       string testing\n"
+"d-i  mirror/http/proxy                  string \n"
+"\n"
+"### Partitioning.\n"
+"\n"
+"# If the system has free space you can choose to only partition that space.\n"
+"#d-i partman-auto/init_automatically_partition \\\n"
+"#    select Use the largest continuous free space\n"
+"\n"
+"# Alternatively, you can specify a disk to partition. The device name can\n"
+"# be given in either devfs or traditional non-devfs format.\n"
+"# For example, to use the first disk devfs knows of:\n"
+"d-i  partman-auto/disk                  string /dev/discs/disc0/disc\n"
+"\n"
+"# You can choose from any of the predefined partitioning recipes:\n"
+"d-i  partman-auto/choose_recipe         select \\\n"
+"     All files in one partition (recommended for new users)\n"
+"#d-i partman-auto/choose_recipe         select Desktop machine\n"
+"#d-i partman-auto/choose_recipe         select Multi-user workstation\n"
+"\n"
+"# Or provide a recipe of your own...\n"
+"# The recipe format is documented in the file devel/partman-auto-recipe."
+"txt.\n"
+"# If you have a way to get a recipe file into the d-i environment, you can\n"
+"# just point at it.\n"
+"#d-i partman-auto/expert_recipe_file    string /hd-media/recipe\n"
+"\n"
+"# If not, you can put an entire recipe in one line. This example creates\n"
+"# a small /boot partition, suitable swap, and uses the rest of the space\n"
+"# for the root partition:\n"
+"#d-i partman-auto/expert_recipe         string boot-root :: \\\n"
+"#    20 50 100 ext3 $primary{ } $bootable{ } method{ format } format{ } \\\n"
+"#    use_filesystem{ } filesystem{ ext3 } mountpoint{ /boot } . \\\n"
+"#    500 10000 1000000000 ext3 method{ format } format{ } \\\n"
+"#    use_filesystem{ } filesystem{ ext3 } mountpoint{ / } . \\\n"
+"#    64 512 300% linux-swap method{ swap } format{ } . \n"
+"# For reference, here is that same recipe in a more readable form:\n"
+"#    boot-root ::\n"
+"#       40 50 100 ext3\n"
+"#          $primary{ } $bootable{ }\n"
+"#          method{ format } format{ }\n"
+"#          use_filesystem{ } filesystem{ ext3 }\n"
+"#          mountpoint{ /boot }\n"
+"#       .\n"
+"#       500 10000 1000000000 ext3\n"
+"#          method{ format } format{ }\n"
+"#          use_filesystem{ } filesystem{ ext3 }\n"
+"#          mountpoint{ / }\n"
+"#       .\n"
+"#       64 512 300% linux-swap\n"
+"#          method{ swap } format{ }\n"
+"#       .\n"
+"\n"
+"# This makes partman automatically partition without confirmation.\n"
+"d-i partman/confirm_write_new_label     boolean true\n"
+"d-i partman/choose_partition            select \\\n"
+"    Finish partitioning and write changes to disk\n"
+"d-i partman/confirm                     boolean true\n"
+"\n"
+"#### Boot loader installation.\n"
+"\n"
+"# Grub is the default boot loader (for x86). If you want lilo installed\n"
+"# instead, uncomment this:\n"
+"#d-i grub-installer/skip                boolean true\n"
+"\n"
+"# This is fairly safe to set, it makes grub install automatically to the "
+"MBR\n"
+"# if no other operating system is detected on the machine.\n"
+"d-i  grub-installer/only_debian         boolean true\n"
+"\n"
+"# This one makes grub-installer install to the MBR if if finds some other "
+"OS\n"
+"# too, which is less safe as it might not be able to boot that other OS.\n"
+"d-i  grub-installer/with_other_os       boolean true\n"
+"\n"
+"# Alternatively, if you want to install to a location other than the mbr,\n"
+"# uncomment and edit these lines:\n"
+"#d-i grub-installer/bootdev             string (hd0,0)\n"
+"#d-i grub-installer/only_debian         boolean false\n"
+"#d-i grub-installer/with_other_os       boolean false\n"
+"\n"
+"##### Finishing up the first stage install.\n"
+"\n"
+"# Avoid that last message about the install being complete.\n"
+"d-i  prebaseconfig/reboot_in_progress   note \n"
+"\n"
+"\n"
+"##### Preseeding base-config.\n"
+"\n"
+"# Avoid the introductory message.\n"
+"base-config  base-config/intro          note\n"
+"\n"
+"# Avoid the final message.\n"
+"base-config  base-config/login          note\n"
+"\n"
+"# If you installed a display manager, but don't want to start it "
+"immediately\n"
+"# after base-config finishes.\n"
+"#base-config base-config/start-display-manager        boolean false\n"
+"\n"
+"###### Time zone setup.\n"
+"\n"
+"# Controls whether or not the hardware clock is set to GMT.\n"
+"base-config  tzconfig/gmt                             boolean true\n"
+"\n"
+"# If you told the installer that you're in the United States, then you\n"
+"# can set the time zone using this variable.\n"
+"# (Choices are: Eastern, Central, Mountain, Pacific, Alaska, Hawaii,\n"
+"# Aleutian, Arizona East-Indiana, Indiana-Starke, Michigan, Samoa, other)\n"
+"base-config  tzconfig/choose_country_zone/US          select Eastern\n"
+"# If you told it you're in Canada.\n"
+"# (Choices are: Newfoundland, Atlantic, Eastern, Central,\n"
+"# East-Saskatchewan, Saskatchewan, Mountain, Pacific, Yukon, other)\n"
+"base-config  tzconfig/choose_country_zone/CA          select Eastern\n"
+"# If you told it you're in Brazil. (Choices are: East, West, Acre,\n"
+"# DeNoronha, other)\n"
+"base-config  tzconfig/choose_country_zone/BR          select East\n"
+"# Many countries have only one time zone. If you told the installer you're\n"
+"# in one of those countries, you can choose its standard time zone via this\n"
+"# question.\n"
+"base-config  tzconfig/choose_country_zone_single      boolean true\n"
+"# This question is asked as a fallback for countries other than those\n"
+"# listed above, which have more than one time zone. You can preseed one of\n"
+"# the time zones, or \"other\".\n"
+"#base-config tzconfig/choose_country_zone_multiple    select \n"
+"\n"
+"###### Account setup.\n"
+"\n"
+"# To preseed the root password, you have to put it in the clear in this\n"
+"# file. That is not a very good idea, use caution!\n"
+"#passwd passwd/root-password            password r00tme\n"
+"#passwd passwd/root-password-again      password r00tme\n"
+"\n"
+"# If you want to skip creation of a normal user account.\n"
+"#passwd passwd/make-user                boolean false\n"
+"\n"
+"# Alternatively, you can preseed the user's name and login.\n"
+"#passwd passwd/user-fullname            string Debian User\n"
+"#passwd passwd/username                 string debian\n"
+"# And their password, but use caution!\n"
+"#passwd passwd/user-password            password insecure\n"
+"#passwd passwd/user-password-again      password insecure\n"
+"\n"
+"###### Apt setup.\n"
+"\n"
+"# This question controls what source the second stage installation uses\n"
+"# for packages. Choices are cdrom, http, ftp, filesystem, edit sources list\n"
+"# by hand\n"
+"base-config  apt-setup/uri_type         select http\n"
+"\n"
+"# If you choose ftp or http, you'll be asked for a country and a mirror.\n"
+"base-config  apt-setup/country          select enter information manually\n"
+"base-config  apt-setup/hostname         string http.us.debian.org\n"
+"base-config  apt-setup/directory        string /debian\n"
+"# Stop after choosing one mirror.\n"
+"base-config  apt-setup/another          boolean false\n"
+"\n"
+"# You can choose to install non-free and contrib software.\n"
+"#base-config apt-setup/non-free         boolean true\n"
+"#base-config apt-setup/contrib          boolean true\n"
+"\n"
+"# Do enable security updates.\n"
+"base-config  apt-setup/security-updates boolean true\n"
+"\n"
+"###### Package selection.\n"
+"\n"
+"# You can choose to install any combination of tasks that are available.\n"
+"# Available tasks as of this writing include: Desktop environment,\n"
+"# Web server, Print server, DNS server, File server, Mail server, \n"
+"# SQL database, manual package selection. The last of those will run\n"
+"# aptitude. You can also choose to install no tasks, and force the\n"
+"# installation of a set of packages in some other way.\n"
+"tasksel      tasksel/first   multiselect Desktop environment\n"
+"#tasksel     tasksel/first   multiselect Web server, Mail server, DNS "
+"server\n"
+"\n"
+"###### Mailer configuration.\n"
+"\n"
+"# During a normal install, exim asks only two questions. Here's how to\n"
+"# avoid even those. More complicated preseeding is possible.\n"
+"exim4-config exim4/dc_eximconfig_configtype \\\n"
+"    select no configuration at this time\n"
+"\n"
+"# It's a good idea to set this to whatever user account you choose to\n"
+"# create. Leaving the value blank results in postmaster mail going to\n"
+"# /var/mail/mail.\n"
+"exim4-config exim4/dc_postmaster        string \n"
+"\n"
+"###### X Configuration.\n"
+"\n"
+"# Preseeding Debian's X config is possible, but you probably need to know\n"
+"# some details about the video hardware of the machine, since Debian's X\n"
+"# configurator does not do fully automatic configuration of everything.\n"
+"\n"
+"# X can detect the right driver for some cards, but if you're preseeding,\n"
+"# you override whatever it chooses. Still, vesa will work most places.\n"
+"#xserver-xfree86 xserver-xfree86/config/device/driver select vesa\n"
+"\n"
+"# A caveat with mouse autodetection is that if it fails, X will retry it\n"
+"# over and over. So if it's preseeded to be done, there is a possibility of\n"
+"# an infinite loop if the mouse is not autodetected.\n"
+"#xserver-xfree86 xserver-xfree86/autodetect_mouse     boolean true\n"
+"\n"
+"# Monitor autodetection is recommended.\n"
+"xserver-xfree86 xserver-xfree86/autodetect_monitor    boolean true\n"
+"# Uncomment if you have an LCD display.\n"
+"#xserver-xfree86 xserver-xfree86/config/monitor/lcd   boolean true\n"
+"# X has three configuration paths for the monitor. Here's how to preseed\n"
+"# the \"medium\" path, which is always available. The \"simple\" path may "
+"not\n"
+"# be available, and the \"advanced\" path asks too many questions.\n"
+"xserver-xfree86  xserver-xfree86/config/monitor/selection-method \\\n"
+"    select medium\n"
+"xserver-xfree86  xserver-xfree86/config/monitor/mode-list \\\n"
+"    select 1024x768 @ 60 Hz\n"
+"\n"
+"###### Everything else.\n"
+"\n"
+"# Depending on what software you choose to install, or if things go wrong\n"
+"# during the installation process, it's possible that other questions may\n"
+"# be asked. You can preseed those too, of course. To get a list of every\n"
+"# possible question that could be asked during an install, do an\n"
+"# installation, and then run these commands:\n"
+"#   debconf-get-selections --installer > file\n"
+"#   debconf-get-selections >> file\n"
+"\n"
+"# If you like, you can include other preseed files into this one.\n"
+"# Any settings in those files will override pre-existing settings from this\n"
+"# file. More that one file can be listed, separated by spaces; all will be\n"
+"# loaded. The included files can have preseed/include directives of their\n"
+"# own as well. Note that if the filenames are relative, they are taken from\n"
+"# the same directory as the preseed file that includes them.\n"
+"#d-i preseed/include                    string x.cfg\n"
+"\n"
+"# More flexibly, this runs a shell command and if it outputs the names of\n"
+"# preseed files, includes those files. For example, to switch configs based\n"
+"# on a particular usb storage device (in this case, a built-in card "
+"reader):\n"
+"#d-i preseed/include_command            string \\\n"
+"#    if $(grep -q \"GUID: 0aec3050aec305000001a003\" /proc/scsi/usb-storage-"
+"*/*); \\\n"
+"#    then echo kraken.cfg; else echo otherusb.cfg; fi"
+msgstr ""
+"#### Modifying syslinux.cfg.\n"
+"\n"
+"# Edit the syslinux.cfg (or similar) file, and add parameters to the end\n"
+"# of the append line(s) for the kernel.\n"
+"#\n"
+"# You'll at least want to add a parameter telling the installer where to\n"
+"# get its preseed file from.\n"
+"# If you're installing from USB media, use this, and put the preseed file\n"
+"# in the toplevel directory of the USB stick.\n"
+"#   preseed/file=/hd-media/preseed\n"
+"# If you're netbooting, use this instead:\n"
+"#   preseed/url=http://host/path/to/preseed\n"
+"# If you're remastering a CD, you could use this:\n"
+"#   preseed/file=/cdrom/preseed\n"
+"# Be sure to copy this file to the location you specify.\n"
+"# \n"
+"# While you're at it, you may want to throw a debconf/priority=critical in\n"
+"# there, to avoid most questions even if the preseeding below misses some.\n"
+"# And you might set the timeout to 1 in syslinux.cfg to avoid needing to "
+"hit\n"
+"# enter to boot the installer.\n"
+"#\n"
+"# Language, country, and keyboard selection cannot be preseeded from a "
+"file,\n"
+"# because the questions are asked before the preseed file can be loaded.\n"
+"# Instead, to avoid these questions, pass some more parameters to the "
+"kernel:\n"
+"#\n"
+"#    languagechooser/language-name=English\n"
+"#    countrychooser/shortlist=US\n"
+"#    console-keymaps-at/keymap=us\n"
+"#\n"
+"# Note that the kernel accepts a maximum of 8 command line options and\n"
+"# 8 environment options (including any options added by default for the\n"
+"# installer). If these numbers are exceeded, 2.4 kernels will drop any\n"
+"# excess options and 2.6 kernels will panic. With kernel 2.6.9 or newer,\n"
+"# you can use 32 command line options and 32 environment options.\n"
+"#\n"
+"# Some of the default options, like 'vga=normal' may be safely removed\n"
+"# for most installations, which may allow you to add more options for\n"
+"# preseeding.\n"
+"\n"
+"#### Shell commands.\n"
+"\n"
+"# d-i preseeding is inherently not secure. Nothing in the installer checks\n"
+"# for attempts at buffer overflows or other exploits of the values of a\n"
+"# preseed file like this one. Only use preseed files from trusted\n"
+"# locations! To drive that home, and because it's generally useful, here's\n"
+"# a way to run any shell command you'd like inside the installer,\n"
+"# automatically.\n"
+"\n"
+"# This first command is run as early as possible, just after\n"
+"# preseeding is read.\n"
+"#d-i preseed/early_command              string \\\n"
+"#    wget http://url/to/my.udeb -O /tmp/my.udeb; udpkg -i /tmp/my.udeb\n"
+"\n"
+"# This command is run just before the install finishes, but when there is\n"
+"# still a usable /target directory.\n"
+"#d-i preseed/late_command               string \\\n"
+"#    for deb in /hd-media/*.deb; do cp $deb /target/tmp; \\\n"
+"#    chroot /target dpkg -i /tmp/$(basename $deb); done\n"
+"\n"
+"# This command is run just as base-config is starting up.\n"
+"#base-config base-config/early_command  string echo hi mom\n"
+"\n"
+"# This command is run after base-config is done, just before the login:\n"
+"# prompt. This is a good way to install a set of packages you want, or to\n"
+"# tweak the configuration of the system.\n"
+"#base-config base-config/late_command   string \\\n"
+"#    apt-get install zsh; chsh -s /bin/zsh\n"
+"\n"
+"#### Network configuration.\n"
+"\n"
+"# Of course, this won't work if you're loading your preseed file from the\n"
+"# network! But it's great if you're booting from CD or USB stick. You can\n"
+"# also pass network config parameters in on the kernel params if you are\n"
+"# loading preseed files from the network.\n"
+"\n"
+"# netcfg will choose an interface that has link if possible. This makes it\n"
+"# skip displaying a list if there is more than one interface.\n"
+"d-i  netcfg/choose_interface            select auto\n"
+"\n"
+"# If you prefer to configure the network manually, here's how:\n"
+"#d-i netcfg/disable_dhcp                boolean true\n"
+"#d-i netcfg/get_nameservers             string 192.168.1.1\n"
+"#d-i netcfg/get_ipaddress               string 192.168.1.42\n"
+"#d-i netcfg/get_netmask                 string 255.255.255.0\n"
+"#d-i netcfg/get_gateway                 string 192.168.1.1\n"
+"#d-i netcfg/confirm_static              boolean true\n"
+"\n"
+"# Note that any hostname and domain names assigned from dhcp take\n"
+"# precedence over values set here. However, setting the values still\n"
+"# prevents the questions from being shown even if values come from dhcp.\n"
+"d-i  netcfg/get_hostname                string unassigned-hostname\n"
+"d-i  netcfg/get_domain                  string unassigned-domain\n"
+"\n"
+"# Disable that annoying WEP key dialog.\n"
+"d-i  netcfg/wireless_wep                string\n"
+"# The wacky dhcp hostname that some ISPs use as a password of sorts.\n"
+"#d-i netcfg/dhcp_hostname               string radish\n"
+"\n"
+"#### Mirror settings.\n"
+"\n"
+"d-i  mirror/country                     string enter information manually\n"
+"d-i  mirror/http/hostname               string http.us.debian.org\n"
+"d-i  mirror/http/directory              string /debian\n"
+"d-i  mirror/suite                       string testing\n"
+"d-i  mirror/http/proxy                  string \n"
+"\n"
+"### Partitioning.\n"
+"\n"
+"# If the system has free space you can choose to only partition that space.\n"
+"#d-i partman-auto/init_automatically_partition \\\n"
+"#    select Use the largest continuous free space\n"
+"\n"
+"# Alternatively, you can specify a disk to partition. The device name can\n"
+"# be given in either devfs or traditional non-devfs format.\n"
+"# For example, to use the first disk devfs knows of:\n"
+"d-i  partman-auto/disk                  string /dev/discs/disc0/disc\n"
+"\n"
+"# You can choose from any of the predefined partitioning recipes:\n"
+"d-i  partman-auto/choose_recipe         select \\\n"
+"     All files in one partition (recommended for new users)\n"
+"#d-i partman-auto/choose_recipe         select Desktop machine\n"
+"#d-i partman-auto/choose_recipe         select Multi-user workstation\n"
+"\n"
+"# Or provide a recipe of your own...\n"
+"# The recipe format is documented in the file devel/partman-auto-recipe."
+"txt.\n"
+"# If you have a way to get a recipe file into the d-i environment, you can\n"
+"# just point at it.\n"
+"#d-i partman-auto/expert_recipe_file    string /hd-media/recipe\n"
+"\n"
+"# If not, you can put an entire recipe in one line. This example creates\n"
+"# a small /boot partition, suitable swap, and uses the rest of the space\n"
+"# for the root partition:\n"
+"#d-i partman-auto/expert_recipe         string boot-root :: \\\n"
+"#    20 50 100 ext3 $primary{ } $bootable{ } method{ format } format{ } \\\n"
+"#    use_filesystem{ } filesystem{ ext3 } mountpoint{ /boot } . \\\n"
+"#    500 10000 1000000000 ext3 method{ format } format{ } \\\n"
+"#    use_filesystem{ } filesystem{ ext3 } mountpoint{ / } . \\\n"
+"#    64 512 300% linux-swap method{ swap } format{ } . \n"
+"# For reference, here is that same recipe in a more readable form:\n"
+"#    boot-root ::\n"
+"#       40 50 100 ext3\n"
+"#          $primary{ } $bootable{ }\n"
+"#          method{ format } format{ }\n"
+"#          use_filesystem{ } filesystem{ ext3 }\n"
+"#          mountpoint{ /boot }\n"
+"#       .\n"
+"#       500 10000 1000000000 ext3\n"
+"#          method{ format } format{ }\n"
+"#          use_filesystem{ } filesystem{ ext3 }\n"
+"#          mountpoint{ / }\n"
+"#       .\n"
+"#       64 512 300% linux-swap\n"
+"#          method{ swap } format{ }\n"
+"#       .\n"
+"\n"
+"# This makes partman automatically partition without confirmation.\n"
+"d-i partman/confirm_write_new_label     boolean true\n"
+"d-i partman/choose_partition            select \\\n"
+"    Finish partitioning and write changes to disk\n"
+"d-i partman/confirm                     boolean true\n"
+"\n"
+"#### Boot loader installation.\n"
+"\n"
+"# Grub is the default boot loader (for x86). If you want lilo installed\n"
+"# instead, uncomment this:\n"
+"#d-i grub-installer/skip                boolean true\n"
+"\n"
+"# This is fairly safe to set, it makes grub install automatically to the "
+"MBR\n"
+"# if no other operating system is detected on the machine.\n"
+"d-i  grub-installer/only_debian         boolean true\n"
+"\n"
+"# This one makes grub-installer install to the MBR if if finds some other "
+"OS\n"
+"# too, which is less safe as it might not be able to boot that other OS.\n"
+"d-i  grub-installer/with_other_os       boolean true\n"
+"\n"
+"# Alternatively, if you want to install to a location other than the mbr,\n"
+"# uncomment and edit these lines:\n"
+"#d-i grub-installer/bootdev             string (hd0,0)\n"
+"#d-i grub-installer/only_debian         boolean false\n"
+"#d-i grub-installer/with_other_os       boolean false\n"
+"\n"
+"##### Finishing up the first stage install.\n"
+"\n"
+"# Avoid that last message about the install being complete.\n"
+"d-i  prebaseconfig/reboot_in_progress   note \n"
+"\n"
+"\n"
+"##### Preseeding base-config.\n"
+"\n"
+"# Avoid the introductory message.\n"
+"base-config  base-config/intro          note\n"
+"\n"
+"# Avoid the final message.\n"
+"base-config  base-config/login          note\n"
+"\n"
+"# If you installed a display manager, but don't want to start it "
+"immediately\n"
+"# after base-config finishes.\n"
+"#base-config base-config/start-display-manager        boolean false\n"
+"\n"
+"###### Time zone setup.\n"
+"\n"
+"# Controls whether or not the hardware clock is set to GMT.\n"
+"base-config  tzconfig/gmt                             boolean true\n"
+"\n"
+"# If you told the installer that you're in the United States, then you\n"
+"# can set the time zone using this variable.\n"
+"# (Choices are: Eastern, Central, Mountain, Pacific, Alaska, Hawaii,\n"
+"# Aleutian, Arizona East-Indiana, Indiana-Starke, Michigan, Samoa, other)\n"
+"base-config  tzconfig/choose_country_zone/US          select Eastern\n"
+"# If you told it you're in Canada.\n"
+"# (Choices are: Newfoundland, Atlantic, Eastern, Central,\n"
+"# East-Saskatchewan, Saskatchewan, Mountain, Pacific, Yukon, other)\n"
+"base-config  tzconfig/choose_country_zone/CA          select Eastern\n"
+"# If you told it you're in Brazil. (Choices are: East, West, Acre,\n"
+"# DeNoronha, other)\n"
+"base-config  tzconfig/choose_country_zone/BR          select East\n"
+"# Many countries have only one time zone. If you told the installer you're\n"
+"# in one of those countries, you can choose its standard time zone via this\n"
+"# question.\n"
+"base-config  tzconfig/choose_country_zone_single      boolean true\n"
+"# This question is asked as a fallback for countries other than those\n"
+"# listed above, which have more than one time zone. You can preseed one of\n"
+"# the time zones, or \"other\".\n"
+"#base-config tzconfig/choose_country_zone_multiple    select \n"
+"\n"
+"###### Account setup.\n"
+"\n"
+"# To preseed the root password, you have to put it in the clear in this\n"
+"# file. That is not a very good idea, use caution!\n"
+"#passwd passwd/root-password            password r00tme\n"
+"#passwd passwd/root-password-again      password r00tme\n"
+"\n"
+"# If you want to skip creation of a normal user account.\n"
+"#passwd passwd/make-user                boolean false\n"
+"\n"
+"# Alternatively, you can preseed the user's name and login.\n"
+"#passwd passwd/user-fullname            string Debian User\n"
+"#passwd passwd/username                 string debian\n"
+"# And their password, but use caution!\n"
+"#passwd passwd/user-password            password insecure\n"
+"#passwd passwd/user-password-again      password insecure\n"
+"\n"
+"###### Apt setup.\n"
+"\n"
+"# This question controls what source the second stage installation uses\n"
+"# for packages. Choices are cdrom, http, ftp, filesystem, edit sources list\n"
+"# by hand\n"
+"base-config  apt-setup/uri_type         select http\n"
+"\n"
+"# If you choose ftp or http, you'll be asked for a country and a mirror.\n"
+"base-config  apt-setup/country          select enter information manually\n"
+"base-config  apt-setup/hostname         string http.us.debian.org\n"
+"base-config  apt-setup/directory        string /debian\n"
+"# Stop after choosing one mirror.\n"
+"base-config  apt-setup/another          boolean false\n"
+"\n"
+"# You can choose to install non-free and contrib software.\n"
+"#base-config apt-setup/non-free         boolean true\n"
+"#base-config apt-setup/contrib          boolean true\n"
+"\n"
+"# Do enable security updates.\n"
+"base-config  apt-setup/security-updates boolean true\n"
+"\n"
+"###### Package selection.\n"
+"\n"
+"# You can choose to install any combination of tasks that are available.\n"
+"# Available tasks as of this writing include: Desktop environment,\n"
+"# Web server, Print server, DNS server, File server, Mail server, \n"
+"# SQL database, manual package selection. The last of those will run\n"
+"# aptitude. You can also choose to install no tasks, and force the\n"
+"# installation of a set of packages in some other way.\n"
+"tasksel      tasksel/first   multiselect Desktop environment\n"
+"#tasksel     tasksel/first   multiselect Web server, Mail server, DNS "
+"server\n"
+"\n"
+"###### Mailer configuration.\n"
+"\n"
+"# During a normal install, exim asks only two questions. Here's how to\n"
+"# avoid even those. More complicated preseeding is possible.\n"
+"exim4-config exim4/dc_eximconfig_configtype \\\n"
+"    select no configuration at this time\n"
+"\n"
+"# It's a good idea to set this to whatever user account you choose to\n"
+"# create. Leaving the value blank results in postmaster mail going to\n"
+"# /var/mail/mail.\n"
+"exim4-config exim4/dc_postmaster        string \n"
+"\n"
+"###### X Configuration.\n"
+"\n"
+"# Preseeding Debian's X config is possible, but you probably need to know\n"
+"# some details about the video hardware of the machine, since Debian's X\n"
+"# configurator does not do fully automatic configuration of everything.\n"
+"\n"
+"# X can detect the right driver for some cards, but if you're preseeding,\n"
+"# you override whatever it chooses. Still, vesa will work most places.\n"
+"#xserver-xfree86 xserver-xfree86/config/device/driver select vesa\n"
+"\n"
+"# A caveat with mouse autodetection is that if it fails, X will retry it\n"
+"# over and over. So if it's preseeded to be done, there is a possibility of\n"
+"# an infinite loop if the mouse is not autodetected.\n"
+"#xserver-xfree86 xserver-xfree86/autodetect_mouse     boolean true\n"
+"\n"
+"# Monitor autodetection is recommended.\n"
+"xserver-xfree86 xserver-xfree86/autodetect_monitor    boolean true\n"
+"# Uncomment if you have an LCD display.\n"
+"#xserver-xfree86 xserver-xfree86/config/monitor/lcd   boolean true\n"
+"# X has three configuration paths for the monitor. Here's how to preseed\n"
+"# the \"medium\" path, which is always available. The \"simple\" path may "
+"not\n"
+"# be available, and the \"advanced\" path asks too many questions.\n"
+"xserver-xfree86  xserver-xfree86/config/monitor/selection-method \\\n"
+"    select medium\n"
+"xserver-xfree86  xserver-xfree86/config/monitor/mode-list \\\n"
+"    select 1024x768 @ 60 Hz\n"
+"\n"
+"###### Everything else.\n"
+"\n"
+"# Depending on what software you choose to install, or if things go wrong\n"
+"# during the installation process, it's possible that other questions may\n"
+"# be asked. You can preseed those too, of course. To get a list of every\n"
+"# possible question that could be asked during an install, do an\n"
+"# installation, and then run these commands:\n"
+"#   debconf-get-selections --installer > file\n"
+"#   debconf-get-selections >> file\n"
+"\n"
+"# If you like, you can include other preseed files into this one.\n"
+"# Any settings in those files will override pre-existing settings from this\n"
+"# file. More that one file can be listed, separated by spaces; all will be\n"
+"# loaded. The included files can have preseed/include directives of their\n"
+"# own as well. Note that if the filenames are relative, they are taken from\n"
+"# the same directory as the preseed file that includes them.\n"
+"#d-i preseed/include                    string x.cfg\n"
+"\n"
+"# More flexibly, this runs a shell command and if it outputs the names of\n"
+"# preseed files, includes those files. For example, to switch configs based\n"
+"# on a particular usb storage device (in this case, a built-in card "
+"reader):\n"
+"#d-i preseed/include_command            string \\\n"
+"#    if $(grep -q \"GUID: 0aec3050aec305000001a003\" /proc/scsi/usb-storage-"
+"*/*); \\\n"
+"#    then echo kraken.cfg; else echo otherusb.cfg; fi"
+
+#. Tag: title
+#: random-bits.xml:45
+#, no-c-format
+msgid "Linux Devices"
+msgstr "Linux 裡的設備"
+
+#. Tag: para
+#: random-bits.xml:46
+#, no-c-format
+msgid ""
+"In Linux you have various special files in <filename>/dev</filename>. These "
+"files are called device files. In the Unix world accessing hardware is "
+"different. There you have a special file which actually runs a driver which "
+"in turn accesses the hardware. The device file is an interface to the actual "
+"system component. Files under <filename>/dev</filename> also behave "
+"differently than ordinary files. Below are the most important device files "
+"listed."
+msgstr ""
+"在 Linux 裡，您會在 <filename>/dev</filename>發現許多很特別的檔案。這些檔案被"
+"稱為設備檔。在 Unix 世界裡，存取硬體的方式有些不一樣。這些特別的檔案的背後其"
+"實運行著驅動程式，而正是驅動程式控制著硬體。設備檔就是存取真實的系統元件的介"
+"面。<filename>/dev</filename> 目錄下的檔案的各種特性也和普通檔案大相徑庭。下"
+"面列舉了最重要的一些設備檔。"
+
+#. Tag: filename
+#: random-bits.xml:61
+#, no-c-format
+msgid "<filename>fd0</filename>"
+msgstr "<filename>fd0</filename>"
+
+#. Tag: entry
+#: random-bits.xml:62
+#, no-c-format
+msgid "First Floppy Drive"
+msgstr "第一個軟碟機"
+
+#. Tag: filename
+#: random-bits.xml:64
+#, no-c-format
+msgid "<filename>fd1</filename>"
+msgstr "<filename>fd1</filename>"
+
+#. Tag: entry
+#: random-bits.xml:65
+#, no-c-format
+msgid "Second Floppy Drive"
+msgstr "第二個軟碟機"
+
+#. Tag: filename
+#: random-bits.xml:71
+#, no-c-format
+msgid "<filename>hda</filename>"
+msgstr "<filename>hda</filename>"
+
+#. Tag: entry
+#: random-bits.xml:72
+#, no-c-format
+msgid "IDE Hard disk / CD-ROM on the first IDE port (Master)"
+msgstr "在第一個 IDE 埠(Master)的 IDE 硬碟/光碟機"
+
+#. Tag: filename
+#: random-bits.xml:74
+#, no-c-format
+msgid "<filename>hdb</filename>"
+msgstr "<filename>hdb</filename>"
+
+#. Tag: entry
+#: random-bits.xml:75
+#, no-c-format
+msgid "IDE Hard disk / CD-ROM on the first IDE port (Slave)"
+msgstr "在第一個 IDE 埠(Slave)的 IDE 硬碟/光碟機"
+
+#. Tag: filename
+#: random-bits.xml:77
+#, no-c-format
+msgid "<filename>hdc</filename>"
+msgstr "<filename>hdc</filename>"
+
+#. Tag: entry
+#: random-bits.xml:78
+#, no-c-format
+msgid "IDE Hard disk / CD-ROM on the second IDE port (Master)"
+msgstr "在第二個 IDE 埠(Master)的 IDE 硬碟/光碟機"
+
+#. Tag: filename
+#: random-bits.xml:80
+#, no-c-format
+msgid "<filename>hdd</filename>"
+msgstr "<filename>hdd</filename>"
+
+#. Tag: entry
+#: random-bits.xml:81
+#, no-c-format
+msgid "IDE Hard disk / CD-ROM on the second IDE port (Slave)"
+msgstr "在第二個 IDE 埠(Slave)的 IDE 硬碟/光碟機"
+
+#. Tag: filename
+#: random-bits.xml:83
+#, no-c-format
+msgid "hda1"
+msgstr "hda1"
+
+#. Tag: entry
+#: random-bits.xml:84
+#, no-c-format
+msgid "First partition of the first IDE hard disk"
+msgstr "在第一塊 IDE 硬碟上的第一個分割區"
+
+#. Tag: filename
+#: random-bits.xml:86
+#, no-c-format
+msgid "hdd15"
+msgstr "hdd15"
+
+#. Tag: entry
+#: random-bits.xml:87
+#, no-c-format
+msgid "Fifteenth partition of the fourth IDE hard disk"
+msgstr "在第四塊 IDE 硬碟上的第十五個分割區"
+
+#. Tag: filename
+#: random-bits.xml:93
+#, no-c-format
+msgid "<filename>sda</filename>"
+msgstr "<filename>sda</filename>"
+
+#. Tag: entry
+#: random-bits.xml:94
+#, no-c-format
+msgid "SCSI Hard disk with lowest SCSI ID (e.g. 0)"
+msgstr "SCSI ID 最小(例如 0)的 SCSI 硬碟"
+
+#. Tag: filename
+#: random-bits.xml:96
+#, no-c-format
+msgid "<filename>sdb</filename>"
+msgstr "<filename>sdb</filename>"
+
+#. Tag: entry
+#: random-bits.xml:97
+#, no-c-format
+msgid "SCSI Hard disk with next higher SCSI ID (e.g. 1)"
+msgstr "下一個 SCSI ID (例如 1)的 SCSI 硬碟"
+
+#. Tag: filename
+#: random-bits.xml:99
+#, no-c-format
+msgid "<filename>sdc</filename>"
+msgstr "<filename>sdc</filename>"
+
+#. Tag: entry
+#: random-bits.xml:100
+#, no-c-format
+msgid "SCSI Hard disk with next higher SCSI ID (e.g. 2)"
+msgstr "下一個 SCSI ID (例如 2)的 SCSI 硬碟"
+
+#. Tag: filename
+#: random-bits.xml:102
+#, no-c-format
+msgid "sda1"
+msgstr "sda1"
+
+#. Tag: entry
+#: random-bits.xml:103
+#, no-c-format
+msgid "First partition of the first SCSI hard disk"
+msgstr "在第一塊 SCSI 硬碟上的第一個分割區"
+
+#. Tag: filename
+#: random-bits.xml:105
+#, no-c-format
+msgid "sdd10"
+msgstr "sdd10"
+
+#. Tag: entry
+#: random-bits.xml:106
+#, no-c-format
+msgid "Tenth partition of the fourth SCSI hard disk"
+msgstr "在第四塊 SCSI 硬碟上的第十個分割區"
+
+#. Tag: filename
+#: random-bits.xml:112
+#, no-c-format
+msgid "<filename>sr0</filename>"
+msgstr "<filename>sr0</filename>"
+
+#. Tag: entry
+#: random-bits.xml:113
+#, no-c-format
+msgid "SCSI CD-ROM with the lowest SCSI ID"
+msgstr "SCSI ID 最小的 SCSI 光碟機"
+
+#. Tag: filename
+#: random-bits.xml:115
+#, no-c-format
+msgid "<filename>sr1</filename>"
+msgstr "<filename>sr1</filename>"
+
+#. Tag: entry
+#: random-bits.xml:116
+#, no-c-format
+msgid "SCSI CD-ROM with the next higher SCSI ID"
+msgstr "下一個 SCSI ID 的 SCSI 光碟機"
+
+#. Tag: filename
+#: random-bits.xml:122
+#, no-c-format
+msgid "ttyS0"
+msgstr "ttyS0"
+
+#. Tag: entry
+#: random-bits.xml:123
+#, no-c-format
+msgid "Serial port 0, COM1 under MS-DOS"
+msgstr "序列埠 0，即 MS-DOS 下的 COM1"
+
+#. Tag: filename
+#: random-bits.xml:125
+#, no-c-format
+msgid "ttyS1"
+msgstr "ttyS1"
+
+#. Tag: entry
+#: random-bits.xml:126
+#, no-c-format
+msgid "Serial port 1, COM2 under MS-DOS"
+msgstr "序列埠 1，即 MS-DOS 下的 COM2"
+
+#. Tag: filename
+#: random-bits.xml:128
+#, no-c-format
+msgid "psaux"
+msgstr "psaux"
+
+#. Tag: entry
+#: random-bits.xml:129
+#, no-c-format
+msgid "PS/2 mouse device"
+msgstr "PS/2 滑鼠設備"
+
+#. Tag: filename
+#: random-bits.xml:131
+#, no-c-format
+msgid "gpmdata"
+msgstr "gpmdata"
+
+#. Tag: entry
+#: random-bits.xml:132
+#, no-c-format
+msgid "Pseudo device, repeater data from GPM (mouse) daemon"
+msgstr "虛擬設備，中繼從GPM(滑鼠)服務傳來的資料"
+
+#. Tag: filename
+#: random-bits.xml:138
+#, no-c-format
+msgid "cdrom"
+msgstr "cdrom"
+
+#. Tag: entry
+#: random-bits.xml:139
+#, no-c-format
+msgid "Symbolic link to the CD-ROM drive"
+msgstr "指向光碟機的符號鏈結"
+
+#. Tag: filename
+#: random-bits.xml:141
+#, no-c-format
+msgid "mouse"
+msgstr "mouse"
+
+#. Tag: entry
+#: random-bits.xml:142
+#, no-c-format
+msgid "Symbolic link to the mouse device file"
+msgstr "指向滑鼠設備檔的符號鏈結"
+
+#. Tag: filename
+#: random-bits.xml:148
+#, no-c-format
+msgid "null"
+msgstr "null"
+
+#. Tag: entry
+#: random-bits.xml:149
+#, no-c-format
+msgid "Everything pointed to this device will disappear"
+msgstr "所有指向該設備的東西都會消失"
+
+#. Tag: filename
+#: random-bits.xml:151
+#, no-c-format
+msgid "zero"
+msgstr "zero"
+
+#. Tag: entry
+#: random-bits.xml:152
+#, no-c-format
+msgid "One can endlessly read zeros out of this device"
+msgstr "可以從該設備永無休止地讀出零"
+
+#. Tag: title
+#: random-bits.xml:159
+#, no-c-format
+msgid "Setting Up Your Mouse"
+msgstr "設定您的滑鼠"
+
+#. Tag: para
+#: random-bits.xml:161
+#, no-c-format
+msgid ""
+"The mouse can be used in both the Linux console (with gpm) and the X window "
+"environment. The two uses can be made compatible if the gpm repeater is used "
+"to allow the signal to flow to the X server as shown: "
+"<informalexample><screen>\n"
+"mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; "
+"X\n"
+"         /dev/ttyS0             (repeater)        (symlink)\n"
+"         /dev/ttyS1\n"
+"</screen></informalexample> Set the repeater protocol to be raw (in "
+"<filename>/etc/gpm.conf</filename>) while setting X to the original mouse "
+"protocol in <filename>/etc/X11/XF86Config</filename> or <filename>/etc/X11/"
+"XF86Config-4</filename>."
+msgstr ""
+"無論在 Linux 的控制台(console)裡(透過 gpm)，還是在 X 視窗環境之中，您都可以使"
+"用滑鼠。這兩種用法是可以相容的，只要設定 gpm 中繼程式，令其將信號流往 X 伺服"
+"器： <informalexample><screen>\n"
+"mouse =&gt; /dev/psaux  =&gt; gpm =&gt; /dev/gpmdata -&gt; /dev/mouse =&gt; "
+"X\n"
+"         /dev/ttyS0             (repeater)        (symlink)\n"
+"         /dev/ttyS1\n"
+"</screen></informalexample> 把中繼程式的通訊協定設為原始(raw)模式(在 "
+"<filename>/etc/gpm.conf</filename> 裡)，同時在 <filename>/etc/X11/"
+"XF86Config</filename> 或者 <filename>/etc/X11/XF86Config-4</filename> 裡設定"
+"一下，讓 X 使用原始的滑鼠協定。"
+
+#. Tag: para
+#: random-bits.xml:173
+#, no-c-format
+msgid ""
+"This approach to use gpm even in X has advantages when the mouse is "
+"unplugged inadvertently. Simply restarting gpm with "
+"<informalexample><screen>\n"
+"# /etc/init.d/gpm restart\n"
+"</screen></informalexample> will re-connect the mouse in software without "
+"restarting X."
+msgstr ""
+"用這種方法使用 gpm 的話，就算在 X 裡也有其優勢。如果不小心把滑鼠拔下來後，只"
+"要像這樣重新啟動 gpm 就可以了：<informalexample><screen>\n"
+"# /etc/init.d/gpm restart\n"
+"</screen></informalexample> 如此就可以在軟體層面上重新連接滑鼠，而不用重新啟"
+"動 X 了。"
+
+#. Tag: para
+#: random-bits.xml:182
+#, no-c-format
+msgid ""
+"If gpm is disabled or not installed with some reason, make sure to set X to "
+"read directly from the mouse device such as /dev/psaux. For details, refer "
+"to the 3-Button Mouse mini-Howto at <filename>/usr/share/doc/HOWTO/en-txt/"
+"mini/3-Button-Mouse.gz</filename>, <userinput>man gpm</userinput>, "
+"<filename>/usr/share/doc/gpm/FAQ.gz</filename>, and <ulink url=\"&url-"
+"xfree86;current/mouse.html\">README.mouse</ulink>."
+msgstr ""
+"如果您停用 gpm，或者因為某些原因沒有安裝它，請確定設定檔讓 X 從滑鼠設備(例"
+"如 /dev/psaux) 直接讀取資料。欲知詳情，請參閱三鍵滑鼠的迷您指南，即 "
+"<filename>/usr/share/doc/HOWTO/en-txt/mini/3-Button-Mouse.gz</filename>、"
+"<userinput>man gpm</userinput>、<filename>/usr/share/doc/gpm/FAQ.gz</"
+"filename> 以及 <ulink url=\"&url-xfree86;current/mouse.html\">README.mouse</"
+"ulink>。"
+
+#. Tag: para
+#: random-bits.xml:192
+#, no-c-format
+msgid ""
+"For PowerPC, in <filename>/etc/X11/XF86Config</filename> or <filename>/etc/"
+"X11/XF86Config-4</filename>, set the mouse device to <userinput>\"/dev/input/"
+"mice\"</userinput>."
+msgstr ""
+"對 PowerPC 來說，需要在 <filename>/etc/X11/XF86Config</filename> 或者 "
+"<filename>/etc/X11/XF86Config-4</filename> 設定滑鼠設備為 <userinput>\"/dev/"
+"input/mice\"</userinput>。"
+
+#. Tag: para
+#: random-bits.xml:198
+#, no-c-format
+msgid ""
+"Modern kernels give you the capability to emulate a three-button mouse when "
+"your mouse only has one button. Just add the following lines to <filename>/"
+"etc/sysctl.conf</filename> file."
+msgstr ""
+"當您的滑鼠只有一個按鍵的時候，現有的核心具有模擬三鍵滑鼠的能力。只需將下面加"
+"入 <filename>/etc/sysctl.conf</filename> 檔案。"
+
+#. Tag: screen
+#: random-bits.xml:204
+#, no-c-format
+msgid ""
+"# 3-button mouse emulation \n"
+"# turn on emulation\n"
+"/dev/mac_hid/mouse_button_emulation = 1\n"
+"# Send middle mouse button signal with the F11 key\n"
+"/dev/mac_hid/mouse_button2_keycode = 87\n"
+"# Send right mouse button signal with the F12 key\n"
+"/dev/mac_hid/mouse_button3_keycode = 88\n"
+"# For different keys, use showkey to tell you what the code is."
+msgstr ""
+"# 3-button mouse emulation \n"
+"# turn on emulation\n"
+"/dev/mac_hid/mouse_button_emulation = 1\n"
+"# Send middle mouse button signal with the F11 key\n"
+"/dev/mac_hid/mouse_button2_keycode = 87\n"
+"# Send right mouse button signal with the F12 key\n"
+"/dev/mac_hid/mouse_button3_keycode = 88\n"
+"# For different keys, use showkey to tell you what the code is."
+
+#. Tag: title
+#: random-bits.xml:211
+#, no-c-format
+msgid "Disk Space Needed for Tasks"
+msgstr "各軟體集所需的磁碟空間"
+
+#. Tag: para
+#: random-bits.xml:223
+#, fuzzy, no-c-format
+msgid ""
+"The base installation for i386 using the default 2.4 kernel, including all "
+"standard packages, requires 573MB of disk space."
+msgstr ""
+"在 i386 架構上，基本的 sarge 安裝預設使用 2.4 核心，需要 573MB 的磁碟空間，這"
+"裡面包含了所有的標準軟體套件。"
+
+#. Tag: para
+#: random-bits.xml:228
+#, no-c-format
+msgid ""
+"The following table lists sizes reported by aptitude for the tasks listed in "
+"tasksel. Note that some tasks have overlapping constituents, so the total "
+"installed size for two tasks together may be less than the total obtained by "
+"adding up the numbers."
+msgstr ""
+"下面的表格一一列出了 tasksel 中每個軟體集所需的磁碟空間大小。該列表是使用 "
+"aptitude 產生的。請注意，有些軟體集之間會有相重疊的部分，所以兩個軟體集一同 "
+"安裝後所占的空間，可能會小於這兩個軟體集分別安裝所占的空間。"
+
+#. Tag: para
+#: random-bits.xml:235
+#, fuzzy, no-c-format
+msgid ""
+"Note that you will need to add the sizes listed in the table to the size of "
+"the base installation when determining the size of partitions. Most of the "
+"size listed as <quote>Installed size</quote> will end up in <filename>/usr</"
+"filename>; the size listed as <quote>Download size</quote> is (temporarily) "
+"required in <filename>/var</filename>."
+msgstr ""
+"注意您需要將表格中列出的大小加上基本 sarge 安裝大小以決定分割區的大小。多數列"
+"出的大小如 <quote>安裝大小</quote> 將用在 <filename>/usr</filename>﹔列在 "
+"<quote>下載大小</quote> 是(臨時地)用在 <filename>/var</filename>。"
+
+#. Tag: entry
+#: random-bits.xml:248
+#, no-c-format
+msgid "Task"
+msgstr "軟體集"
+
+#. Tag: entry
+#: random-bits.xml:249
+#, no-c-format
+msgid "Installed size (MB)"
+msgstr "安裝大小 (MB)"
+
+#. Tag: entry
+#: random-bits.xml:250
+#, no-c-format
+msgid "Download size (MB)"
+msgstr "下載大小 (MB)"
+
+#. Tag: entry
+#: random-bits.xml:251
+#, no-c-format
+msgid "Space needed to install (MB)"
+msgstr "安裝所需空間 (MB)"
+
+#. Tag: entry
+#: random-bits.xml:257
+#, no-c-format
+msgid "Desktop"
+msgstr "桌面"
+
+#. Tag: entry
+#: random-bits.xml:258
+#, no-c-format
+msgid "1392"
+msgstr "1392"
+
+#. Tag: entry
+#: random-bits.xml:259
+#, no-c-format
+msgid "<entry>460</entry>"
+msgstr "<entry>460</entry>"
+
+#. Tag: entry
+#: random-bits.xml:260
+#, no-c-format
+msgid "1852"
+msgstr "1852"
+
+#. Tag: entry
+#: random-bits.xml:264
+#, no-c-format
+msgid "Web server"
+msgstr "Web 伺服器"
+
+#. Tag: entry
+#: random-bits.xml:265
+#, no-c-format
+msgid "<entry>36</entry>"
+msgstr "<entry>36</entry>"
+
+#. Tag: entry
+#: random-bits.xml:266
+#, no-c-format
+msgid "<entry>12</entry>"
+msgstr "<entry>12</entry>"
+
+#. Tag: entry
+#: random-bits.xml:267
+#, no-c-format
+msgid "<entry>48</entry>"
+msgstr "<entry>48</entry>"
+
+#. Tag: entry
+#: random-bits.xml:271
+#, no-c-format
+msgid "Print server"
+msgstr "印表機伺服器"
+
+#. Tag: entry
+#: random-bits.xml:272
+#, no-c-format
+msgid "<entry>168</entry>"
+msgstr "<entry>168</entry>"
+
+#. Tag: entry
+#: random-bits.xml:273
+#, no-c-format
+msgid "<entry>58</entry>"
+msgstr "<entry>58</entry>"
+
+#. Tag: entry
+#: random-bits.xml:274
+#, no-c-format
+msgid "<entry>226</entry>"
+msgstr "<entry>226</entry>"
+
+#. Tag: entry
+#: random-bits.xml:278
+#, no-c-format
+msgid "DNS server"
+msgstr "DNS 伺服器"
+
+#. Tag: entry
+#: random-bits.xml:279
+#, no-c-format
+msgid "<entry>2</entry>"
+msgstr "<entry>2</entry>"
+
+#. Tag: entry
+#: random-bits.xml:280
+#, no-c-format
+msgid "<entry>1</entry>"
+msgstr "<entry>1</entry>"
+
+#. Tag: entry
+#: random-bits.xml:281 random-bits.xml:294
+#, no-c-format
+msgid "<entry>3</entry>"
+msgstr "<entry>3</entry>"
+
+#. Tag: entry
+#: random-bits.xml:285
+#, no-c-format
+msgid "File server"
+msgstr "檔案伺服器"
+
+#. Tag: entry
+#: random-bits.xml:286
+#, no-c-format
+msgid "<entry>47</entry>"
+msgstr "<entry>47</entry>"
+
+#. Tag: entry
+#: random-bits.xml:287
+#, no-c-format
+msgid "<entry>24</entry>"
+msgstr "<entry>24</entry>"
+
+#. Tag: entry
+#: random-bits.xml:288
+#, no-c-format
+msgid "<entry>71</entry>"
+msgstr "<entry>71</entry>"
+
+#. Tag: entry
+#: random-bits.xml:292
+#, no-c-format
+msgid "Mail server"
+msgstr "郵件伺服器"
+
+#. Tag: entry
+#: random-bits.xml:293
+#, no-c-format
+msgid "<entry>10</entry>"
+msgstr "<entry>10</entry>"
+
+#. Tag: entry
+#: random-bits.xml:295
+#, no-c-format
+msgid "<entry>13</entry>"
+msgstr "<entry>13</entry>"
+
+#. Tag: entry
+#: random-bits.xml:299
+#, no-c-format
+msgid "SQL database"
+msgstr "SQL 資料庫"
+
+#. Tag: entry
+#: random-bits.xml:300
+#, no-c-format
+msgid "<entry>66</entry>"
+msgstr "<entry>66</entry>"
+
+#. Tag: entry
+#: random-bits.xml:301
+#, no-c-format
+msgid "<entry>21</entry>"
+msgstr "<entry>21</entry>"
+
+#. Tag: entry
+#: random-bits.xml:302
+#, no-c-format
+msgid "<entry>87</entry>"
+msgstr "<entry>87</entry>"
+
+#. Tag: para
+#: random-bits.xml:308
+#, no-c-format
+msgid ""
+"The <emphasis>Desktop</emphasis> task will install both the Gnome and KDE "
+"desktop environments."
+msgstr "<emphasis>桌面</emphasis> 軟體集將同時安裝 Gnome 和 KDE 桌面環境。"
+
+#. Tag: para
+#: random-bits.xml:315
+#, no-c-format
+msgid ""
+"If you install in a language other than English, <command>tasksel</command> "
+"may automatically install a <firstterm>localization task</firstterm>, if one "
+"is available for your language. Space requirements differ per language; you "
+"should allow up to 200MB in total for download and installation."
+msgstr ""
+"如果安裝英文之外的其他語言，<command>tasksel</command> 在語言有對應 locale "
+"時，可以自動安裝 <firstterm>localization task</firstterm>。每種語言需要的空間"
+"不同﹔您應該給 200MB 以上的空間用於下載和安裝。"
+
+#. Tag: title
+#: random-bits.xml:330
+#, no-c-format
+msgid "Installing &debian; from a Unix/Linux System"
+msgstr "透過 Unix/Linux 系統來安裝 &debian;"
+
+#. Tag: para
+#: random-bits.xml:332
+#, no-c-format
+msgid ""
+"This section explains how to install &debian; from an existing Unix or Linux "
+"system, without using the ncurses-based, menu-driven installer as explained "
+"in the rest of the manual. This \"cross-install\" HOWTO has been requested "
+"by users switching to &debian; from Red Hat, Mandrake, and SUSE. In this "
+"section some familiarity with entering *nix commands and navigating the file "
+"system is assumed. In this section, <prompt>$</prompt> symbolizes a command "
+"to be entered in the user's current system, while <prompt>#</prompt> refers "
+"to a command entered in the Debian chroot."
+msgstr ""
+"本節說明了如何透過現有的 Unix 或 Linux 系統來安裝 &debian;，而非使用本手冊後"
+"面要談到的基於 ncurses，由選單驅動的安裝軟體。這篇``交叉安裝(cross-"
+"install)'' HOWTO 是應使用者的要求而撰寫的。他們原來是 Redhat、Mandrake 和 "
+"SUSE 的使用者，現轉而使用 &debian;。在本節中，我們假設您對於輸入 *nix 指令以"
+"及在檔案系統中穿梭移動並不生疏。同時，在本節中，<prompt>$</prompt> 符號表示這"
+"個指令是在使用者當前使用的系統中輸入的，而 <prompt>#</prompt> 則表示這個指令"
+"是在 Debian chroot 環境中輸入的。"
+
+#. Tag: para
+#: random-bits.xml:344
+#, no-c-format
+msgid ""
+"Once you've got the new Debian system configured to your preference, you can "
+"migrate your existing user data (if any) to it, and keep on rolling. This is "
+"therefore a \"zero downtime\" &debian; install. It's also a clever way for "
+"dealing with hardware that otherwise doesn't play friendly with various boot "
+"or installation media."
+msgstr ""
+"您一旦根據自己的需求設定好了新的 Debian 系統，就可以將您的原來系統中的使用者"
+"資料(如果有的話)全部遷移到 Debian 裡去。然後就能繼續爽了。一言以蔽之，這是一"
+"次“不關機”的 &debian; 安裝。同時，這也是處理那些因為硬體原因不能透過任何開機"
+"或者安裝媒介完成安裝的權宜之計。"
+
+#. Tag: title
+#: random-bits.xml:356
+#, no-c-format
+msgid "Getting Started"
+msgstr "準備開始"
+
+#. Tag: para
+#: random-bits.xml:357
+#, no-c-format
+msgid ""
+"With your current *nix partitioning tools, repartition the hard drive as "
+"needed, creating at least one filesystem plus swap. You need at least 150MB "
+"of space available for a console only install, or at least 300MB if you plan "
+"to install X."
+msgstr ""
+"根據需要，用已經安裝的 *nix 的分割區工具重新分割詞區，要劃分出至少一個檔案系"
+"統外加 置換分割區。您如果只用控制台(console)的話，至少要準備 150MB 空間，倘若"
+"想要裝 X， 就需要至少 300MB 的空間了。"
+
+#. Tag: para
+#: random-bits.xml:364
+#, no-c-format
+msgid ""
+"To create file systems on your partitions. For example, to create an ext3 "
+"file system on partition <filename>/dev/hda6</filename> (that's our example "
+"root partition): <informalexample><screen>\n"
+"# mke2fs -j /dev/hda6\n"
+"</screen></informalexample> To create an ext2 file system instead, omit "
+"<userinput>-j</userinput>."
+msgstr ""
+"在您的分割區上建立檔案系統。舉例來說，如果要在 <filename>/dev/hda6</"
+"filename> 分割區(以後的例子中，將把它作為 root 分割區) 建立一個 ext3 格式的檔"
+"案系統： <informalexample><screen>\n"
+"# mke2fs -j /dev/hda6\n"
+"</screen></informalexample> 如果想建立的是 ext2 格式的檔案系統，就要去掉 "
+"<userinput>-j</userinput>。"
+
+#. Tag: para
+#: random-bits.xml:374
+#, no-c-format
+msgid ""
+"Initialize and activate swap (substitute the partition number for your "
+"intended Debian swap partition): <informalexample><screen>\n"
+"# mkswap /dev/hda5\n"
+"# sync; sync; sync\n"
+"# swapon /dev/hda5\n"
+"</screen></informalexample> Mount one partition as <filename>/mnt/debinst</"
+"filename> (the installation point, to be the root (<filename>/</filename>) "
+"filesystem on your new system). The mount point name is strictly arbitrary, "
+"it is referenced later below."
+msgstr ""
+"初始化並啟用置換分割區(請把分割區編號替換成您希望用作置換分割區的分割區編"
+"號): <informalexample><screen>\n"
+"# mkswap /dev/hda5\n"
+"# sync; sync; sync\n"
+"# swapon /dev/hda5\n"
+"</screen></informalexample> 把一個分割區掛載(mount)到 <filename>/mnt/"
+"debinst</filename>(這是安裝的位置，將來作為您新系統的根(<filename>/</"
+"filename>)檔案系統)。掛載點的名稱是任意的，後面的步驟將會用到它。"
+
+#. Tag: screen
+#: random-bits.xml:386
+#, no-c-format
+msgid ""
+"# mkdir /mnt/debinst\n"
+"# mount /dev/hda6 /mnt/debinst"
+msgstr ""
+"# mkdir /mnt/debinst\n"
+"# mount /dev/hda6 /mnt/debinst"
+
+#. Tag: title
+#: random-bits.xml:392
+#, no-c-format
+msgid "Install <command>debootstrap</command>"
+msgstr "安裝 <command>debootstrap</command>"
+
+#. Tag: para
+#: random-bits.xml:393
+#, no-c-format
+msgid ""
+"The tool that the Debian installer uses, which is recognized as the official "
+"way to install a Debian base system, is <command>debootstrap</command>. It "
+"uses <command>wget</command> and <command>ar</command>, but otherwise "
+"depends only on <classname>/bin/sh</classname>. Install <command>wget</"
+"command> and <command>ar</command> if they aren't already on your current "
+"system, then download and install <command>debootstrap</command>."
+msgstr ""
+"Debian 安裝程式使用的軟體，同時也為官方所採用，被用來安裝基系統的工具是 "
+"<command>debootstrap</command>。它使用了 <command>wget</command> 和 "
+"<command>ar</command>，否則就僅僅依賴 <classname>/bin/sh</classname>。如果您"
+"的系統裡沒有 <command>wget</command> 和 <command>ar</command>，請安裝。然後再"
+"下載並安裝 <command>debootstrap</command>。"
+
+#. Tag: para
+#: random-bits.xml:403
+#, no-c-format
+msgid ""
+"If you have an rpm-based system, you can use alien to convert the .deb into ."
+"rpm, or download an rpm-ized version at <ulink url=\"http://people.debian."
+"org/~blade/install/debootstrap\"></ulink>"
+msgstr ""
+"如果您用的是以 rpm 為基礎的系統，那麼可以用 alien 將 .deb 檔案轉換成為 .rpm "
+"檔案，或者下載已被包裝成 rpm 套件的版本，它位於 <ulink url=\"http://people."
+"debian.org/~blade/install/debootstrap\"></ulink>"
+
+#. Tag: para
+#: random-bits.xml:409
+#, no-c-format
+msgid ""
+"Or, you can use the following procedure to install it manually. Make a work "
+"folder for extracting the .deb into: <informalexample><screen>\n"
+"# mkdir work\n"
+"# cd work\n"
+"</screen></informalexample> The <command>debootstrap</command> binary is "
+"located in the Debian archive (be sure to select the proper file for your "
+"architecture). Download the <command>debootstrap</command> .deb from the "
+"<ulink url=\"http://ftp.debian.org/debian/pool/main/d/debootstrap/\"> pool</"
+"ulink>, copy the package to the work folder, and extract the binary files "
+"from it. You will need to have root privileges to install the binaries."
+msgstr ""
+"或者您也可以透過下面的步驟手動安裝它。先新建一個工作目錄，它被用來放置解壓縮"
+"後的 .deb 文件： <informalexample><screen>\n"
+"# mkdir work\n"
+"# cd work\n"
+"</screen></informalexample> <command>debootstrap</command> 的二進位檔被包裝"
+"餘 Debian 的檔案庫中(請確保選擇了與您架構相對應的檔案)。下載位於 <ulink url="
+"\"http://ftp.debian.org/debian/pool/main/d/debootstrap/\"> pool</ulink> 的"
+"<command>debootstrap</command> .deb，把它拷貝到工作目錄，並從該檔案解壓縮出這"
+"些二進位檔。要把二進位檔安裝到系統中，您必須要擁有 root 的權限。"
+
+#. Tag: screen
+#: random-bits.xml:424
+#, fuzzy, no-c-format
+msgid ""
+"# ar -x debootstrap_0.X.X_arch.deb\n"
+"# cd /\n"
+"# zcat /full-path-to-work/work/data.tar.gz | tar xv"
+msgstr ""
+"# tar -xf debootstrap_0.X.X_arch.deb\n"
+"# cd /\n"
+"# zcat /full-path-to-work/work/data.tar.gz | tar xv"
+
+#. Tag: title
+#: random-bits.xml:430
+#, no-c-format
+msgid "Run <command>debootstrap</command>"
+msgstr "執行 <command>debootstrap</command>"
+
+#. Tag: para
+#: random-bits.xml:431
+#, no-c-format
+msgid ""
+"<command>debootstrap</command> can download the needed files directly from "
+"the archive when you run it. You can substitute any Debian archive mirror "
+"for <userinput>http.us.debian.org/debian</userinput> in the command example "
+"below, preferably a mirror close to you network-wise. Mirrors are listed at "
+"<ulink url=\"http://www.debian.org/misc/README.mirrors\"></ulink>."
+msgstr ""
+"<command>debootstrap</command> 執行後，會自己從檔案庫直接下載所需的檔案。您可"
+"以把下面的命令列範例中的 <userinput>http.us.debian.org/debian</userinput> 替"
+"換成任何一個 Debian 檔案庫的鏡像站。選擇鏡像站時，可以根據您的網路情況選擇較"
+"近的一個。鏡像的列表在 <ulink url=\"http://www.debian.org/misc/README.mirrors"
+"\"></ulink>。"
+
+#. Tag: para
+#: random-bits.xml:440
+#, no-c-format
+msgid ""
+"If you have a &releasename; &debian; CD mounted at <filename>/cdrom</"
+"filename>, you could substitute a file URL instead of the http URL: "
+"<userinput>file:/cdrom/debian/</userinput>"
+msgstr ""
+"如果您已經把一張 &releasename; 版本的 &debian; CD 掛載在 <filename>/cdrom</"
+"filename>，那麼也可以把 http URL 替換成 file URL，即：<userinput>file:/cdrom/"
+"debian/</userinput>"
+
+#. Tag: para
+#: random-bits.xml:446
+#, no-c-format
+msgid ""
+"Substitute one of the following for <replaceable>ARCH</replaceable> in the "
+"<command>debootstrap</command> command: <userinput>alpha</userinput>, "
+"<userinput>arm</userinput>, <userinput>hppa</userinput>, <userinput>i386</"
+"userinput>, <userinput>ia64</userinput>, <userinput>m68k</userinput>, "
+"<userinput>mips</userinput>, <userinput>mipsel</userinput>, "
+"<userinput>powerpc</userinput>, <userinput>s390</userinput>, or "
+"<userinput>sparc</userinput>."
+msgstr ""
+"請將下列架構中的一個替換 <replaceable>ARCH</replaceable> 於 "
+"<command>debootstrap</command> 指令中： <userinput>alpha</userinput>, "
+"<userinput>arm</userinput>, <userinput>hppa</userinput>, <userinput>i386</"
+"userinput>, <userinput>ia64</userinput>, <userinput>m68k</userinput>, "
+"<userinput>mips</userinput>, <userinput>mipsel</userinput>, "
+"<userinput>powerpc</userinput>, <userinput>s390</userinput>，或 "
+"<userinput>sparc</userinput>。"
+
+#. Tag: screen
+#: random-bits.xml:463
+#, no-c-format
+msgid ""
+"# /usr/sbin/debootstrap --arch ARCH &releasename; \\\n"
+"     /mnt/debinst http://http.us.debian.org/debian"
+msgstr ""
+"# /usr/sbin/debootstrap --arch ARCH &releasename; \\\\n     /mnt/debinst "
+"http://http.us.debian.org/debian"
+
+#. Tag: title
+#: random-bits.xml:469
+#, no-c-format
+msgid "Configure The Base System"
+msgstr "基本系統的設定"
+
+#. Tag: para
+#: random-bits.xml:470
+#, no-c-format
+msgid ""
+"Now you've got a real Debian system, though rather lean, on disk. "
+"<command>Chroot</command> into it:"
+msgstr ""
+"現在您在硬碟上已經裝上了一套真正的 Debian 作業系統，盡管它還很瘦小。"
+"<command>Chroot</command> 用來進入該系統："
+
+#. Tag: screen
+#: random-bits.xml:475
+#, no-c-format
+msgid "# chroot /mnt/debinst /bin/bash"
+msgstr "# chroot /mnt/debinst /bin/bash"
+
+#. Tag: title
+#: random-bits.xml:480
+#, no-c-format
+msgid "Mount Partitions"
+msgstr "分割區的掛載"
+
+#. Tag: para
+#: random-bits.xml:481
+#, no-c-format
+msgid ""
+"You need to create <filename>/etc/fstab</filename>. "
+"<informalexample><screen>\n"
+"# editor /etc/fstab\n"
+"</screen></informalexample> Here is a sample you can modify to suit: "
+"<informalexample><screen>\n"
+"# /etc/fstab: static file system information.\n"
+"#\n"
+"# file system    mount point   type    options                  dump pass\n"
+"/dev/XXX         /             ext2    defaults                 0    0\n"
+"/dev/XXX         /boot         ext2    ro,nosuid,nodev          0    2\n"
+"\n"
+"/dev/XXX         none          swap    sw                       0    0\n"
+"proc             /proc         proc    defaults                 0    0\n"
+"\n"
+"/dev/fd0         /mnt/floppy   auto    noauto,rw,sync,user,exec 0    0\n"
+"/dev/cdrom       /mnt/cdrom    iso9660 noauto,ro,user,exec      0    0\n"
+"\n"
+"/dev/XXX         /tmp          ext2    rw,nosuid,nodev          0    2\n"
+"/dev/XXX         /var          ext2    rw,nosuid,nodev          0    2\n"
+"/dev/XXX         /usr          ext2    rw,nodev                 0    2\n"
+"/dev/XXX         /home         ext2    rw,nosuid,nodev          0    2\n"
+"</screen></informalexample> Use <userinput>mount -a</userinput> to mount all "
+"the file systems you have specified in your <filename>/etc/fstab</filename>, "
+"or to mount file systems individually use: <informalexample><screen>\n"
+"# mount /path   # e.g.: mount /usr\n"
+"</screen></informalexample> You can mount the proc file system multiple "
+"times and to arbitrary locations, though /proc is customary. If you didn't "
+"use <userinput>mount -a</userinput>, be sure to mount proc before continuing:"
+msgstr ""
+"您需要新建 <filename>/etc/fstab</filename>。 <informalexample><screen>\n"
+"# editor /etc/fstab\n"
+"</screen></informalexample> 這裡有個樣板，您不妨根據自己的情況來修改它： "
+"<informalexample><screen>\n"
+"# /etc/fstab: static file system information.\n"
+"#\n"
+"# file system    mount point   type    options                  dump pass\n"
+"/dev/XXX         /             ext2    defaults                 0    0\n"
+"/dev/XXX         /boot         ext2    ro,nosuid,nodev          0    2\n"
+"\n"
+"/dev/XXX         none          swap    sw                       0    0\n"
+"proc             /proc         proc    defaults                 0    0\n"
+"\n"
+"/dev/fd0         /mnt/floppy   auto    noauto,rw,sync,user,exec 0    0\n"
+"/dev/cdrom       /mnt/cdrom    iso9660 noauto,ro,user,exec      0    0\n"
+"\n"
+"/dev/XXX         /tmp          ext2    rw,nosuid,nodev          0    2\n"
+"/dev/XXX         /var          ext2    rw,nosuid,nodev          0    2\n"
+"/dev/XXX         /usr          ext2    rw,nodev                 0    2\n"
+"/dev/XXX         /home         ext2    rw,nosuid,nodev          0    2\n"
+"</screen></informalexample> 您可以透過 <userinput>mount -a</userinput> 來掛載"
+"您的 <filename>/etc/fstab</filename> 中所標明的所有檔案系統，您也可以一個一個"
+"地分別掛載這些檔案系統，像：<informalexample><screen>\n"
+"# mount /path   # e.g.: mount /usr\n"
+"</screen></informalexample> 您可以多次掛載 proc 檔案系統。盡管通常把它掛載"
+"到 /proc，但是它還是可以被掛載到任意的地方。如果您沒有用 <userinput>mount -"
+"a</userinput>，那麼請一定要在接著做之前先把 proc 掛載好："
+
+#. Tag: screen
+#: random-bits.xml:502
+#, no-c-format
+msgid "# mount -t proc proc /proc"
+msgstr "# mount -t proc proc /proc"
+
+#. Tag: title
+#: random-bits.xml:508
+#, no-c-format
+msgid "Configure Keyboard"
+msgstr "鍵盤的設定"
+
+#. Tag: para
+#: random-bits.xml:509
+#, no-c-format
+msgid "To configure your keyboard:"
+msgstr "若要設定您的鍵盤，請："
+
+#. Tag: screen
+#: random-bits.xml:513
+#, no-c-format
+msgid "# dpkg-reconfigure console-data"
+msgstr "# dpkg-reconfigure console-data"
+
+#. Tag: title
+#: random-bits.xml:519
+#, no-c-format
+msgid "Configure Networking"
+msgstr "網路的設定"
+
+#. Tag: para
+#: random-bits.xml:520
+#, no-c-format
+msgid ""
+"To configure networking, edit <filename>/etc/network/interfaces</filename>, "
+"<filename>/etc/resolv.conf</filename>, and <filename>/etc/hostname</"
+"filename>. <informalexample><screen>\n"
+"# editor /etc/network/interfaces \n"
+"</screen></informalexample> Here are some simple examples from <filename>/"
+"usr/share/doc/ifupdown/examples</filename>: <informalexample><screen>\n"
+"######################################################################\n"
+"# /etc/network/interfaces -- configuration file for ifup(8), ifdown(8)\n"
+"# See the interfaces(5) manpage for information on what options are \n"
+"# available.\n"
+"######################################################################\n"
+"\n"
+"# We always want the loopback interface.\n"
+"#\n"
+"auto lo\n"
+"iface lo inet loopback\n"
+"\n"
+"# To use dhcp:\n"
+"#\n"
+"# auto eth0\n"
+"# iface eth0 inet dhcp\n"
+"\n"
+"# An example static IP setup: (broadcast and gateway are optional)\n"
+"#\n"
+"# auto eth0\n"
+"# iface eth0 inet static\n"
+"#     address 192.168.0.42\n"
+"#     network 192.168.0.0\n"
+"#     netmask 255.255.255.0\n"
+"#     broadcast 192.168.0.255\n"
+"#     gateway 192.168.0.1\n"
+"</screen></informalexample> Enter your nameserver(s) and search directives "
+"in <filename>/etc/resolv.conf</filename>: <informalexample><screen>\n"
+"# editor /etc/resolv.conf\n"
+"</screen></informalexample> A simple <filename>/etc/resolv.conf</filename>: "
+"<informalexample><screen>\n"
+"search hqdom.local\\000\n"
+"nameserver 10.1.1.36\n"
+"nameserver 192.168.9.100\n"
+"</screen></informalexample> Enter your system's host name (2 to 63 "
+"characters): <informalexample><screen>\n"
+"# echo DebianHostName &gt; /etc/hostname\n"
+"</screen></informalexample> If you have multiple network cards, you should "
+"arrange the names of driver modules in the <filename>/etc/modules</filename> "
+"file into the desired order. Then during boot, each card will be associated "
+"with the interface name (eth0, eth1, etc.) that you expect."
+msgstr ""
+"要設定網路的話，請修改 <filename>/etc/network/interfaces</filename>, "
+"<filename>/etc/resolv.conf</filename> 和 <filename>/etc/hostname</"
+"filename>。 <informalexample><screen>\n"
+"# editor /etc/network/interfaces \n"
+"</screen></informalexample> 這裡有些從 <filename>/usr/share/doc/ifupdown/"
+"examples</filename>: <informalexample><screen>\n"
+"######################################################################\n"
+"# /etc/network/interfaces -- configuration file for ifup(8), ifdown(8)\n"
+"# See the interfaces(5) manpage for information on what options are \n"
+"# available.\n"
+"######################################################################\n"
+"\n"
+"# We always want the loopback interface.\n"
+"#\n"
+"auto lo\n"
+"iface lo inet loopback\n"
+"\n"
+"# To use dhcp:\n"
+"#\n"
+"# auto eth0\n"
+"# iface eth0 inet dhcp\n"
+"\n"
+"# An example static IP setup: (broadcast and gateway are optional)\n"
+"#\n"
+"# auto eth0\n"
+"# iface eth0 inet static\n"
+"#     address 192.168.0.42\n"
+"#     network 192.168.0.0\n"
+"#     netmask 255.255.255.0\n"
+"#     broadcast 192.168.0.255\n"
+"#     gateway 192.168.0.1\n"
+"</screen></informalexample> 填入您的 nameserver(s) 和搜索指令到 <filename>/"
+"etc/resolv.conf</filename>: <informalexample><screen>\n"
+"# editor /etc/resolv.conf\n"
+"</screen></informalexample> 這裡有個簡單的 <filename>/etc/resolv.conf</"
+"filename>: <informalexample><screen>\n"
+"search hqdom.local\\000\n"
+"nameserver 10.1.1.36\n"
+"nameserver 192.168.9.100\n"
+"</screen></informalexample> 輸入您的系統的主機名(2 到 63 個字符)："
+"<informalexample><screen>\n"
+"# echo DebianHostName &gt; /etc/hostname\n"
+"</screen></informalexample> 如果您有多張網卡，在您修改 <filename>/etc/"
+"modules</filename> 檔案時，一定要按照期望的順序排列驅動模組的名字。這樣的話，"
+"在系統啟動時，每塊網卡就能取得您所預期的 interface 名稱了(eth0、eth1 等等)。"
+
+#. Tag: title
+#: random-bits.xml:556
+#, no-c-format
+msgid "Configure Timezone, Users, and APT"
+msgstr "時區、使用者和 APT 的設定"
+
+#. Tag: para
+#: random-bits.xml:557
+#, no-c-format
+msgid ""
+"Set your timezone, add a normal user, and choose your <command>apt</command> "
+"sources by running"
+msgstr ""
+"設定您的時區，添加一個普通使用者，再執行下面的指令選擇您的 <command>apt</"
+"command> 來源"
+
+#. Tag: screen
+#: random-bits.xml:562
+#, no-c-format
+msgid "# /usr/sbin/base-config new"
+msgstr "# /usr/sbin/base-config new"
+
+#. Tag: title
+#: random-bits.xml:568
+#, no-c-format
+msgid "Configure Locales"
+msgstr "locales 的設定"
+
+#. Tag: para
+#: random-bits.xml:569
+#, no-c-format
+msgid ""
+"To configure your locale settings to use a language other than English, "
+"install the locales support package and configure it: "
+"<informalexample><screen>\n"
+"# apt-get install locales\n"
+"# dpkg-reconfigure locales\n"
+"</screen></informalexample> NOTE: Apt must be configured before, ie. during "
+"the base-config phase. Before using locales with character sets other than "
+"ASCII or latin1, please consult the appropriate localization HOWTO."
+msgstr ""
+"要配置您的 locale 設定，以便使用英語以外的其它語言，就需要安裝提供 locales 支"
+"援的軟體套件，同時設定之： <informalexample><screen>\n"
+"# apt-get install locales\n"
+"# dpkg-reconfigure locales\n"
+"</screen></informalexample> 【注意】：在此之前必須設定好 apt，即在 base-"
+"config 階段就設定好它。在使用非 ASCII 或 latin1 的字符集的 locale 之前，請先"
+"參閱相應的本地化指南(localisation HOWTO)。"
+
+#. Tag: title
+#: random-bits.xml:585
+#, no-c-format
+msgid "Install a Kernel"
+msgstr "核心的安裝"
+
+#. Tag: para
+#: random-bits.xml:586
+#, no-c-format
+msgid ""
+"If you intend to boot this system, you probably want a Linux kernel and a "
+"boot loader. Identify available pre-packaged kernels with "
+"<informalexample><screen>\n"
+"# apt-cache search kernel-image\n"
+"</screen></informalexample> Then install your choice using its package name."
+msgstr ""
+"您若想啟動這個系統，您很可能還需要一個 Linux 核心和一個 boot loader。 可以用"
+"下面指令找到那些目前可用的被打好包的核心 <informalexample><screen>\n"
+"# apt-cache search kernel-image\n"
+"</screen></informalexample> 接下來把您所選中的核心的軟體套件名稱作為命令列的"
+"參數來安裝它。"
+
+#. Tag: screen
+#: random-bits.xml:595
+#, no-c-format
+msgid ""
+"# apt-get install kernel-image-<replaceable>2.X.X-arch-etc</replaceable>"
+msgstr ""
+"# apt-get install kernel-image-<replaceable>2.X.X-arch-etc</replaceable>"
+
+#. Tag: title
+#: random-bits.xml:601
+#, no-c-format
+msgid "Set up the Boot Loader"
+msgstr "Boot Loader 的設定"
+
+#. Tag: para
+#: random-bits.xml:602
+#, no-c-format
+msgid ""
+"To make your &debian; system bootable, set up your boot loader to load the "
+"installed kernel with your new root partition. Note that debootstrap does "
+"not install a boot loader, though you can use apt-get inside your Debian "
+"chroot to do so."
+msgstr ""
+"要讓您的 &debian; 系統能夠啟動，還要設定您的 boot loader，好讓它能已安裝的核"
+"心並用上新的根分割區。注意 debootstrap 不會安裝 boot loader， 因此您要在 "
+"Debian 的 chroot 中使用 apt-get 完成。"
+
+#. Tag: para
+#: random-bits.xml:609
+#, no-c-format
+msgid ""
+"Check <userinput>info grub</userinput> or <userinput>man lilo.conf</"
+"userinput> for instructions on setting up the bootloader. If you are keeping "
+"the system you used to install Debian, just add an entry for the Debian "
+"install to your existing grub <filename>menu.lst</filename> or "
+"<filename>lilo.conf</filename>. For <filename>lilo.conf</filename>, you "
+"could also copy it to the new system and edit it there. After you are done "
+"editing, call lilo (remember it will use <filename>lilo.conf</filename> "
+"relative to the system you call it from)."
+msgstr ""
+"透過查閱 <userinput>info grub</userinput> 或 <userinput>man lilo.conf</"
+"userinput> 可以得到一些有關設定 bootloader 的提示。如果您希望保留用來安裝 "
+"Debian 的那個系統，那麼就在現有的 grub <filename>menu.lst</filename> 或 "
+"<filename>lilo.conf</filename> 裡為 Debian 系統的安裝添加一組設定就可以了。對"
+"於 <filename>lilo.conf</filename> 您也可以把這個檔案拷貝到新的系統裡，然後在"
+"新的系統裡編輯它。當您修改好設定檔，執行 lilo (請記住，您在哪個系統裡執行 "
+"lilo，它就會用哪個系統裡的 <filename>lilo.conf</filename> )。"
+
+#. Tag: para
+#: random-bits.xml:620
+#, no-c-format
+msgid "Here is a basic <filename>/etc/lilo.conf</filename> as an example:"
+msgstr "下面有一個簡單的 <filename>/etc/lilo.conf</filename> 例子："
+
+#. Tag: screen
+#: random-bits.xml:624
+#, no-c-format
+msgid ""
+"boot=/dev/hda6\n"
+"root=/dev/hda6\n"
+"install=/boot/boot-menu.b\n"
+"delay=20\n"
+"lba32\n"
+"image=/vmlinuz\n"
+"label=Debian"
+msgstr ""
+"boot=/dev/hda6\n"
+"root=/dev/hda6\n"
+"install=/boot/boot-menu.b\n"
+"delay=20\n"
+"lba32\n"
+"image=/vmlinuz\n"
+"label=Debian"
+
+#. Tag: para
+#: random-bits.xml:626
+#, no-c-format
+msgid ""
+"Check <userinput>man yaboot.conf</userinput> for instructions on setting up "
+"the bootloader. If you are keeping the system you used to install Debian, "
+"just add an entry for the Debian install to your existing <filename>yaboot."
+"conf</filename>. You could also copy it to the new system and edit it there. "
+"After you are done editing, call ybin (remember it will use <filename>yaboot."
+"conf</filename> relative to the system you call it from)."
+msgstr ""
+"透過查閱 <userinput>man yaboot.conf</userinput> 可以得到一些有關設定 "
+"bootloader 的提示。如果您希望繼續保留用來安裝 Debian 的那個系統，那麼在 "
+"<filename>yaboot.conf</filename> 裡為 Debian 系統的安裝添加一組設定就可以了。"
+"您也可以把這個檔案拷貝到新的系統裡，然後在新的系統裡編輯它。當您修改設定之"
+"後，執行 ybin (請記住，您在哪個系統執行 yaboot 它就會用哪個系統裡的 "
+"<filename>lilo.conf</filename> )。"
+
+#. Tag: para
+#: random-bits.xml:636
+#, no-c-format
+msgid ""
+"Here is a basic <filename>/etc/yaboot.conf</filename> as an example: "
+"<informalexample><screen>\n"
+"boot=/dev/hda2\n"
+"device=hd:\n"
+"partition=6\n"
+"root=/dev/hda6\n"
+"magicboot=/usr/lib/yaboot/ofboot\n"
+"timeout=50\n"
+"image=/vmlinux\n"
+"label=Debian\n"
+"</screen></informalexample> On some machines, you may need to use "
+"<userinput>ide0:</userinput> instead of <userinput>hd:</userinput>."
+msgstr ""
+"下面有一個簡單的 <filename>/etc/yaboot.conf</filename> 例子： "
+"<informalexample><screen>\n"
+"boot=/dev/hda2\n"
+"device=hd:\n"
+"partition=6\n"
+"root=/dev/hda6\n"
+"magicboot=/usr/lib/yaboot/ofboot\n"
+"timeout=50\n"
+"image=/vmlinux\n"
+"label=Debian\n"
+"</screen></informalexample> 在有些電腦上，您或許應該把 <userinput>ide0:</"
+"userinput> 換成 <userinput>hd:</userinput>。"
+
+#~ msgid "1537"
+#~ msgstr "1537"
+
+#~ msgid "<entry>521</entry>"
+#~ msgstr "<entry>521</entry>"
+
+#~ msgid "2058"
+#~ msgstr "2058"
+
+#~ msgid "<entry>92</entry>"
+#~ msgstr "<entry>92</entry>"
+
+#~ msgid "<entry>323</entry>"
+#~ msgstr "<entry>323</entry>"
+
+#~ msgid "<entry>41</entry>"
+#~ msgstr "<entry>41</entry>"
+
+#~ msgid "<entry>53</entry>"
+#~ msgstr "<entry>53</entry>"
+
+#~ msgid "<entry>119</entry>"
+#~ msgstr "<entry>119</entry>"
+
+#~ msgid "<entry>141</entry>"
+#~ msgstr "<entry>141</entry>"
