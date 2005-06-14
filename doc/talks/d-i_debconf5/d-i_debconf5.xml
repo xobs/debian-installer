@@ -66,6 +66,330 @@ under the terms of the GNU General Public License.
       </legalnotice>
     </articleinfo>
 
+  <sect1><title>The future of the Debian Installer</title>
+<para>
+
+A long time ago, installing Debian meant using the boot-floppies, an
+installer so old that even its name harks back to days of yore when a
+floppy disk was the only reasonable way to install linux.
+
+</para><para>
+
+I think it's important to realize what a good installer the boot-floppies
+were for their time. It's possible to find comments circa 1995 praising how
+well Debian's installer worked compared to some of the alternitives back
+then. Although I had to read them three times to believe it. The
+boot-floppies worked, it only took six floppies, and you didn't even need
+to use a command line to install Debian.
+
+</para><para>
+
+So the boot-floppies began as a best of breed linux installer, then were
+retrofitted to kinda support CD installs and a few ports, then after a few
+years began to show their age as hardware detection, streamlined graphical
+installers, and fancy partitioners became standards in linux installation.
+
+</para><para>
+
+By the late 90's they were in maintenance mode and were only pulled out and
+laboriously dusted off and brought up-to-date with newer kernels,
+architectures, and other changes in the several months before new releases
+of Debian. In a time when everyone was running around mass-installing
+server farms of hundreds of machines using cutting-edge new hardware, the
+out of date boot floppies began to hold Debian back.
+
+</para><para>
+
+There's a lesson to be learned in this, and it is that when it comes to
+installation, Debian cannot afford to rest on its laurals. 
+
+</para><para>
+
+Now that sarge is released, Debian finally has an installation system that
+we can be proud of. Kudos to everyone who helped make the new Debian
+Installer the awesome installer it is today; you've wildly exceeded my
+expectations, when I began the project, of what a great installer we would
+have for sarge.
+
+</para><para>
+
+But things should not stop here, because Debian Installer is not just an
+installer for sarge; it's a base we can use for making the Debian install
+process continue to improve for etch and beyond. And the Debian Installer
+is intentionally not a self-contained installer that does its own thing in
+its own corner using its own technology. Instead, from its very core
+(debootstrap) up to its finishing touches (tasksel) it's a part of Debian
+that is designed to be improved as Debian as a whole is improved, and to
+itself promote improvements in Debian.
+
+</para>
+
+   <sect2><title>How to help</title>
+<para>
+
+Here are some ways you can get involved and help &d-i; development.
+
+</para>
+
+    <sect3><title>Translate &d-i;</title>
+<para>
+
+   We are still looking for more new languages, as well as more translators
+   to keep the translations we have current.
+
+</para>
+    </sect3>
+    <sect3><title>Make it install an UTF-8 system</title>
+<para>
+
+   With all these languages, it's time Debian became UTF-8 by default. If
+   you agree, then research the pitfalls, convince everyone this is the
+   right choice, and make it happen.
+
+</para>
+    </sect3>
+    <sect3><title>Get involved in supporting your architecture in &d-i;</title>
+<para>
+
+   &d-i; has between zero and two porters for most architectures. For
+   example, I was forced to do kernel updates for &d-i; hppa a few months
+   back because no actual hppa person was available. I have booted exactly
+   one hppa machine in my life, and know little about the architecture.
+   This was not ideal. 
+   
+</para><para>
+
+   Continued involvement of porters to the less popular architecttures is
+   essential if &d-i; is to continue to support those architectures let alone
+   improve its support. It's quite possible that future &d-i; beta releases
+   for etch may not be available for all ports, if we don't have active 
+   developers and testers for those ports.
+
+</para><para>
+
+   We wouldn't mind seeing &d-i; work as an installer for the Hurd or a BSD
+   either..
+
+</para>
+    </sect3>
+    <sect3><title>Work on &d-i; updates for sarge</title>
+<para>
+
+   &d-i;'s modular design makes it pretty easy to update individual udebs
+   in a sarge point release to fix important bugs. Many such bugs are
+   already known and fixed in unstable; some fixes need backporting to
+   sarge, while some fixes are backported to our sarge branch and need only
+   testing and uploads.
+   
+</para><para>
+
+   Some examples of things it would be nice to fix include some nasty bugs
+   in translations (especially debconf substitution variable typoes),
+   updates to the mirror list to reflect changes since rc3, kernel security
+   updates, and updates to the discover1-data hardware detection database to
+   make sarge autodetect some more hardware.
+
+</para>
+    </sect3>
+    <sect3><title>Work on supporting sarge installs using the etch installer</title>
+<para>
+
+   It should be possible to install sarge using a &d-i; with a newer kernel
+   than 2.6.8 and 2.4.27, so that as new hardware comes out sarge can still
+   be installed on it. Etch's &d-i; is planned to be backwards compatible and
+   capable of installing sarge, but to make it work usefully some packages
+   in sarge (such as kernel and hardware detection packages) will need to
+   be updated in a backports-like repository. And someone would need to do
+   the work to set up such a repository, put together a version of &d-i; that
+   can use this repository, and make CD images based on it.
+
+</para>
+    </sect3>
+    <sect3><title>Help us develop a graphical installer</title>
+<para>
+
+   Work on a graphical version of &d-i; has already begun, and indeed it's
+   now mostly usable. It still needs a lot of work, so people proficient in
+   UI polishing, graphics, and the technical side of making it work well on
+   a variety of graphics hardware are needed in the &d-i; team.
+
+</para>
+    </sect3>
+    <sect3><title>Help improve automated installs</title>
+<para>
+
+   Automated installs work for sarge, but the documentation is poor, it can
+   be hard to set up, and need to preseed parameters to set up a network
+   interface at the kernel boot line is unweildly and problimatic. Also
+   work needs to be done on making the partitioner more flexible and
+   friendly for autmated installs, enabling automated LVM and RAID setup,
+   and so on.
+ 
+</para>
+    </sect3>
+    <sect3><title>Add encrypted filesystem support to partman</title>
+<para>
+
+   Partman was designed with support for encrypted filesystems in mind, so
+   this is just a small matter of code. Your laptop will thank you.
+
+</para>
+    </sect3>
+    <sect3><title>Help improve hardware detection</title>
+<para>
+
+   We hope to be switching &d-i; to use hotplug for hardware detection, at
+   least for 2.6, based on work done by Ubuntu, and we need people to help
+   work on that. Also one of sarge's weak points is that SATA often doesn't
+   work very well, or that other HDD modules are loaded in the wrong order
+   to work properly. We also have issues with network interfaces sometimes
+   changing names between the installer and the installed system.
+
+</para>
+    </sect3>
+    <sect3><title>Help support non-free drivers/firmware</title>
+<para>
+
+   Since Debian is removing non-free firmware from main for etch, we need
+   to make sure that &d-i; can still make use of that firmware, from
+   non-free, if the user needs it. We have some interesting ideas involving
+   initramfs and catting non-free images to free &d-i; images, but all this
+   needs developers to make happen or to come up with better ideas.
+
+</para>
+    </sect3>
+    <sect3><title>Help support secure apt</title>
+<para>
+
+   &d-i; will need changes to support secure apt and signed Packages files.
+   To secure the whole installation, &d-i; needs to check signatures of the
+   udebs it downloads, too.
+
+</para>
+    </sect3>
+    <sect3><title>Help support installation by the blind</title>
+<para>
+
+   Sarge's installer only supports blind users installing on i386 with 2.4,
+   using <emphasis>floppies</emphasis>. We need someone who is committed to
+   making this better and making &d-i; fully accessible to these users.
+
+</para>
+    </sect3>
+    <sect3><title>Help improve base-config, X setup, etc</title>
+<para>
+ 
+   Because the installation doesn't finish where &d-i; proper leaves off.
+   This part of the install is noticibly lacking polish compared to the
+   rest of &d-i;, and we need to find ways to improve that. One possibility
+   is to move all of this part into the first stage of the installer, so
+   that the installer boots diretly into a fully installer desktop system.
+
+</para>
+    </sect3>
+    <sect3><title>Add support for installs via PPPOE</title>
+<para>
+   
+   PPPOE is not well integrated with the installer, it is not supported in
+   the first stage install and has to be set up by hand in the second
+   stage. To get this improved we need a developer who is familiar with
+   PPPOE.
+
+</para>
+    </sect3>
+    <sect3><title>Make it easier to build custom CDs and otherwise customise the installer</title>
+<para>
+
+   Many of our users need custom versions of the installer, and we need
+   improved documentation and/or better tools for doing this.
+   
+</para><para>
+
+   A particular problem area is CD generation, which is very hard to get
+   working. That could be improved by making some easier CD creation tool
+   (like pickax) support &d-i;, or improving debian-cd, or some other way. 
+
+</para><para>
+
+   Another problem area is building versions of the installer with a custom
+   kernel or third party modules. This needs to be made easier, so that a
+   regular user can hope to do it, and it needs to be well documented.
+
+</para>
+    </sect3>
+    <sect3><title>Find a way to remove a single question from the standard install process</title>
+<para>
+
+   Every question the installer asks a user is one more place for the
+   installation process to go wrong or for a newie to give up. During your
+   next install, pick a question and figure out ways to do away with it.
+   
+</para><para>
+
+   Some candidates:
+<itemizedlist>
+<listitem><para>
+       Why should the installer ask the user to choose a Debian mirror when
+       it can pick a good one? 
+</para></listitem>
+<listitem><para>
+       Could the installer get enough sanity checks added so it could 
+       sometimes safely install grub without asking the user for
+       confirmation?
+</para></listitem>
+<listitem><para>
+       Could the installer automatically resize existing Windows partitions
+       to make room for Debian, without the user having to work out how to do
+       it by hand?
+</para></listitem>
+<listitem><para>
+       Could the installer figure out that a machine is a laptop and
+       install the right set of packages for it?
+</para></listitem>
+</itemizedlist>
+
+</para>
+    </sect3>
+    <sect3><title>Invent the next great thing in &d-i;</title>
+<para>
+
+   The &d-i; developers love to take a good idea and run with it. For
+   example, last spring some basic work was contributed to let &d-i; detect
+   other OSes and other linux distros also installed on the machine. Now we
+   detect a dozen or so OSes and all major distros; this feature is a key
+   part of &d-i; and is used in the bootloader setup, partitioner, and
+   elsewhere. It wouldn't have happened without that initial idea and the
+   beginning of work on what has become our os-prober component. Next time
+   you install sarge, see if you cannot think of novel way that &d-i; could
+   improve the installation process -- and then work on coding up enough of
+   it so there's a plausable premise of a nice feature -- and we will help
+   you take it the rest of the way.
+
+</para>
+    </sect3>
+    <sect3><title>Add moon-buggy to &d-i;</title>
+<para>
+
+   This one has just been on our TODO list for too long to be ignored..
+
+</para>
+    </sect3>
+   </sect2>
+   <sect2><title>Conclusion</title>
+
+<para>
+
+So please don't assume that Debian Installer development is over, or that
+it can be put off until near the release of etch. We lost some development
+momentum while the installer was frozen for the sarge release. Now we're
+trying to ramp things back up, involve as many developers with the
+installer as we can, and make sarge's old installer, in a year's time, look
+as quaint as the boot-floppies do today.
+
+</para>
+   </sect2>
+  </sect1>
+
     <sect1>
       <title>Debian Installer i18n/l10n issues</title>
 
