@@ -1187,28 +1187,386 @@ Currently, integrating a new language in &d-i; needs to remove it from the "pros
 </para>
 
 	</sect3>
-	<sect3>
-	  <title>Installation manual translations</title>
-
-	  <para>
-The installation manual translation framework now uses a XML-PO
-gateway so that translators can work on Portable Object files which
-makes the update work easier than using the XML-based system. This
-system is still used by a few translation teams (namely the most
-ancient ones, who preferred avoid switching before the release).
-</para>
-
-	  <para>
-Using gettext for manual translations will however probably be
-enforced soon as this helps using the same framework which is used in
-the programs translations work, with similar tools such a
-spellchecking tools.
-</para>
-
-
-	</sect3>
 
       </sect2>
       
+    </sect1>
+
+    <sect1><title>Installation Guide</title>
+<para>
+
+The final part of this article concerns the Debian Installation Guide.
+The purpose of this manual is to provide users with a definitive guide
+to installing Debian using any of the installation methods for all of the
+architectures supported by Debian. Although for some architectures the
+basics of the installation process are fairly well covered, the manual
+unfortunately falls well short of this goal.
+
+</para><para>
+
+A different version of the Installation Guide is published for each
+architecture:
+
+<itemizedlist>
+<listitem>in the <classname>debian-installer-manual</classname> package</listitem>
+<listitem>on the 1st CD of the full binary CD sets</listitem>
+<listitem>on the 1st CD of the full binary CD sets</listitem>
+<listitem>on the release pages of the Debian website (Sarge version)</listitem>
+<listitem>on the d-i project pages on Alioth (Etch version; working version)</listitem>
+</itemizedlist>
+
+</para><para>
+
+The following formats are available: HTML, text, PDF and Postscript.
+The Postscript format is not actually published anywhere, but can be built.
+
+</para><para>
+
+The current Installation Guide for Sarge is for a large part a copy of
+the Woody's manual for the <classname>boot-floppies</classname> installation
+system. A lot of work has been done in 2003 and 2004 by Miroslav&nbsp;Kuře
+to document most of the components of &d-i;.
+
+</para><para>
+
+The chapters needing most work are those concerning preparation of the
+installation and booting the installer. These chapters still contain a
+lot of outdated text based on Woody. They should be reorganized to provide:
+
+<itemizedlist>
+<listitem><para>
+  a solid general introduction to &d-i;, including system requirements
+</para></listitem>
+<listitem><para>
+  a description of the available installation methods (consisting of boot
+  method and source used to retrieve &d-i; components (udebs) and base system
+  packages
+</para></listitem>
+<listitem><para>
+  a description of the basic options available for the installation (e.g.
+  installing using a 2.6 kernel; how to configure the network statically
+  instead of using DHCP)
+</para></listitem>
+<listitem><para>
+  a description for each installation method of how to prepare for the
+  installation, including how to obtain the necessary image/media and how
+  to boot the installer
+</para></listitem>
+</itemizedlist>
+
+</para><para>
+
+The main challenge is to keep the instructions concise while still covering
+all architectures and especially the differences between them.
+
+</para>
+
+     <sect2><title>Translations</title>
+<para>
+
+Translation of the manual is very active. There are currently nine complete
+translations that are published on the official website. Only 5 of those are
+included on the installation CDs because the others were completed after the
+RC3 release of &d-i;. These nine languages are:
+
+<itemizedlist>
+<listitem>Simplified Chinese</listitem>
+<listitem>Czech</listitem>
+<listitem>French</listitem>
+<listitem>German</listitem>
+<listitem>Japanese</listitem>
+<listitem>Portuguese</listitem>
+<listitem>Portuguese (Brazilian)</listitem>
+<listitem>Russian</listitem>
+<listitem>Spanish</listitem>
+</itemizedlist>
+
+</para><para>
+
+In addition to those nine translations, there are two that are almost complete
+(Korean and Traditional Chinese), four that are in progress (Greek, Italian,
+Catalan and Dutch) and another four that are currently not maintained
+(Tagalog, Basque, Finnish and Danish).
+
+</para><para>
+
+The translations that are not yet complete, are published
+<ulink url="http://d-i.alioth.debian.org/manual/">on Alioth</ulink>. For the
+translations that are in progress, we try to keep the untranslated parts
+up-to-date in English so that the manual is still usable.
+
+</para>
+     </sect2>
+     <sect2><title>Technical aspects</title>
+<para>
+
+The Installation Guide is written in XML. The text is divided into about 160
+individual XML files, the division being mostly by either subject, d-i
+component or architecture.
+
+<!-- For the talk: also cover why XML and not debian-doc SGML -->
+
+</para><para>
+
+There is only one source for all architectures; the source even contains some
+variation between the Sarge version of the installer and the version currently
+in development for Etch. The manual makes heavy use of conditions to determine
+which text is actually included in which version of the manual. This is
+regulated at build time through parameters set in the build scripts.
+
+</para>
+      <sect3><title>Building</title>
+<para>
+
+The build system has evolved very heavily over the past two years.
+There is one central script that builds the manual for a specific
+architecture, for a specific language and for one or more formats. This
+script is generally called by different wrapper scripts that build the
+whole set of versions of the manual:
+
+<itemizedlist>
+<listitem>
+  for the <classname>debian-installer-manual</classname> package (per
+  architecture), also used for the installation CDs; this script is
+  called from the Makefile that builds a release of &d-i;
+</listitem>
+<listitem>
+  for the website; run on request by Frank&nbsp;Lichtenheld
+</listitem>
+<listitem>
+  "daily" builds (in practice 4 times a week); only languages by an update
+  in the repository for a language
+</listitem>
+</itemizedlist>
+
+</para><para>
+
+The last script also includes functions to update and commit POT and PO
+files (see below), mail build logs to translators, calculate translation
+statistics, create an index page, upload and install the built files on Alioth.
+
+</para><para>
+
+The build system uses the following packages:
+
+<variablelist>
+<varlistentry>
+<term>docbook, docbook-xml, docbook-xsl, xsltproc</term>
+<listitem><para>
+  The basic toolset to process the XML files and generate the HTML version
+  of the manual.
+</para></listitem>
+</varlistentry><varlistentry>
+<term>openjade, jadetex, docbook-dsssl</term>
+<listitem><para>
+  Used to generate first a temporary TeX file and then a temporary DVI file
+  from which the PDF format is generated.
+</para></listitem>
+</varlistentry><varlistentry>
+<term>gs-common</term>
+<listitem><para>
+  Used to generate the Postscript format from the temporary DVI file.
+</para></listitem>
+</varlistentry><varlistentry>
+<term>w3m</term>
+<listitem><para>
+  First a single file HTML document is generated after which
+  <classname>w3m</classname> is used to generate the text file.
+</para></listitem>
+</varlistentry>
+</variablelist>
+
+</para>
+      </sect3>
+      <sect3><title>Translation tools</title>
+<para>
+
+Originally translations were done by translating the raw XML files. As many
+translators are not very confortable using XML, we introduced the option
+of using PO files for translation last year. This method is currently used by
+seven translations, of which two were converted from XML.
+
+</para><para>
+
+Three toolsets were considered to generate templates from the English
+XML files and XML files from the translated PO files:
+
+<itemizedlist>
+<listitem><classname>po4a</classname></listitem>
+<listitem><classname>poxml (from the KDE project)</classname></listitem>
+<listitem><classname>po-debiandoc</classname></listitem>
+</itemizedlist>
+
+</para><para>
+
+<classname>po-debiandoc</classname> does not handle XML and therefore was not
+really an option. Both of the others were tested; both had issues.
+<classname>po4a</classname> had no problems converting the XML files, but
+would often divide text that logically belongs together into separate strings,
+mainly if a paragraph contained tags (like an example or footnote), which
+makes translation harder. <classname>poxml</classname> would keep paragraphs
+nicely together (including embedded tags), but choked on the fact that a lot
+of the individual XML files are not <quote>well-formed</quote> XML. In the end we
+chose <classname>poxml</classname> and built a set of scripts that would
+integrate multiple XML files into a single XML file per chapter, which is
+always well-formed. In practice we feel having the larger templates helps
+translation rather than hinders it.
+
+</para><para>
+
+For the old XML based translations we had already introduced a rudimentary
+translation statistics overview showing number of files translated, not
+translated and, more recently, outdated. There also are scripts available
+to translators showing which files need updating and the changes in the
+English text since the last update of the translation.
+
+</para><para>
+
+For the translations using PO files, these are of course no longer needed.
+Instead we make use of the same framework as used for the translation statistics
+of the levels introduced earlier. Translations using PO files are also
+included in the spellchecking framework developed by Davide&nbsp;Viti, although this
+has not yet been formally introduced because some minor improvements are needed
+to make the spellchecks really usable.
+
+</para><para>
+
+The PO file framework has its own set of scripts that "merge" the individual XML
+files into the XML file per chapter, update the POT files after changes in the
+English XML files, update the PO files of translations and generate translated
+XML files from the PO files. These scripts are currently only used automated
+for the daily unofficial build; for the official builds the generated XML files
+are saved to the Sarge branch of the repository. There is one special script
+that can convert an existing XML-based translation to PO files.
+
+</para>
+      </sect3>
+     </sect2>
+     <sect2><title>How can you help?</title>
+<para>
+
+There are four area's where help with the manual is very welcome: general
+review and editing; architecture specific review and editing; build system
+improvement; translation. The last one is fairly obvious, but the others
+deserve some elaboration. If you would like to help, please mail us at
+<emphasis>debian-boot@lists.debian.org</emphasis>.
+
+</para><para>
+
+We are still making changes for the Sarge version of the manual and about once
+every two weeks the latest revision of both the English version and updated
+translations is published on the Debian website. This also means that the
+version available on installation CDs and in the
+<classname>debian-installer-manual</classname> package are somewhat outdated.
+
+</para><para>
+
+For reference, here are our own plans for the near future:
+
+<itemizedlist>
+<listitem><para>
+  reorganization of entities used: 1) to make branding of the manual easier
+  for derived distributions; 2) to make some entities translatable
+</para></listitem>
+<listitem><para>
+  restucturing of chapters 2 and 3 (although that has been in the planning
+  for quite some time already)
+</para></listitem>
+<listitem><para>
+  create a style guide for the different fromats and improve the readability
+  and consistency on the manual
+</para></listitem>
+</itemizedlist>
+
+</para>
+      <sect3><title>General review and editing</title>
+<para>
+
+Review is something everybody can help with: take the manual, read through it,
+perform installation tests and let us know what parts can be improved.
+General remarks are not really useful at the moment as we are already aware
+that some restructuring is needed, especially in the chapters 2 to 5. However,
+if you see things that are just plain wrong, or if there are things in the
+chapters <quote>Welcome to Debian</quote>, <quote>Using the Debian
+Installer</quote> or <quote>Booting Into Your New Debian System</quote> that
+you think should be improved, suggestions are very welcome (especially if
+a proposed new text is attached).
+
+</para><para>
+
+If you want to contribute on a higher level, you should invest some time to
+get familiar with the installer: try different installation methods and
+options, preferably on some different architectures<footnote>
+
+<para>
+Use <classname>hercules</classname> to install Debian on an emulated S/390
+mainframe!
+</para>
+
+</footnote>. You will also need to get familiar with the English XML files,
+but that should not be a big problem.
+
+</para>
+      </sect3>
+      <sect3><title>Architecture specific review and editing</title>
+<para>
+
+A lot of sections in the manual are architecture specific. For some
+architectures these have not been checked at all and so still document a
+Woody <classname>boot-floppies</classname> installation more than a
+Sarge &d-i; installation. For these architectures a warning has been
+included at the start of the Installation Guide.
+
+</para><para>
+
+What we face here is basically the same issue as already mentioned earlier
+in this article and also partly at the basis of the Vancouver proposal: we
+really need people involved in a port to care about other aspects of porting
+than getting the kernel to run and packages built.
+
+</para><para>
+
+Help for all architectures is needed, but the following are officially in bad
+shape (some more than others): arm, hppa, mips(el), powerpc, s390, sparc.
+The most urgent of those obviously is powerpc as that is likely to have the
+largest newbie user base. For some architectures 
+
+</para><para>
+
+Working on this will probably mean you will have to get at least somewhat
+familiar with the XML files to find out which parts are architecture specific
+and how architecture specific changes can safely be made.
+
+</para>
+      </sect3>
+      <sect3><title>Build system improvement</title>
+<para>
+
+The buildsystem currently is fairly complicated. Part of this is probably
+inevetable, but some parts could probably be improved by using different
+tools to generate e.g. the PDF and TXT formats. What would be very welcome
+is some help from packagers and experienced users of available tools to
+help choose the best toolset or improve the way we use them.
+
+</para><para>
+
+Currently we can not build a PDF or PS version of the manual for Greek and
+for oriental languages. Also the font used for Russian is not very nice.
+Nikolai&nbsp;Prokoschenko has done a lot of preliminary work using
+<classname>db2latex</classname> to solve this. However help is needed to
+either finish his work and package it for Debian or to find another
+solution.
+
+</para><para>
+
+There also seems to be interest to use the tools used for the manual for
+other Debian documents, although this seems to depend on who you talk to.
+It would be very nice to get some more interaction with other groups
+within Debian working on documentation and documentation toolsets and
+maybe work towards a more common infrastructure.
+
+</para>
+      </sect3>
+     </sect2>
     </sect1>
   </article>
