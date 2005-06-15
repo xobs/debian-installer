@@ -45,7 +45,10 @@ This article features details about some specific parts of the Debian Installer.
 </para>
 
 	<para>
-One part will give details about Debian Installer internationalization framework and work methods.
+The first part gives some thoughts about the future of &d-i;. Then the
+Debian Installer internationalization framework and work methods are
+detailed and finally some bits about the installation manual are
+developed.
 </para>
       </abstract>
 
@@ -439,8 +442,31 @@ environments, where a complete localization is also a key argument of choice.
 	  <title>Boot floppies i18n</title>
 	</sect3>
 
+<para>
+<classname>boot-floppies</classname> was a single package and thus has only one single
+translation file. It was already using gettext to handle translatable
+material. However, its localisation was completely unsynchronised with
+the localisation of other material involved in the installation
+process. This lead up with quite partial installation procedures which
+required a quite large English knowledge even for languages for which
+the <classname>boot-floppies</classname> was fully translated.
+</para>
+
+<para>
+The boot-floppies development did not include string freeze
+procedures, ie some periods of the development time where no change
+was allowed in English messages. The French translators remember a lot of headaches catching up with last minute changes...
+</para>
+
+<para>
+The number of supported languages was already quite high, but was
+limited by the number of technically skilled translators, able to deal
+themselves with several tasks not directly related to translations,
+such as commits, resynchronisations, etc.
+</para>
+
 	<sect3>
-	  <title>Early design choices</title>
+	  <title>Early design choices of &d-i; for internationalization</title>
 
 	  <para>
 The very modular nature of &d-i; has made localization easier because it
@@ -450,7 +476,7 @@ became really easy for translators to focus on the most important issues.
 	  <para>
 The key point has been putting all translatable strings into
 debconf-style templates (sometimes by using specific templates introduced
-with cdebconf, the C-reimplementation of debconf). The advent, during early
+with <classname>cdebconf</classname>, the C-reimplementation of <classname>debconf</classname>). The advent, during early
 sarge development, of the use of gettext for debconf templates i18n, made
 the process very simple for translators.
 </para>
@@ -462,7 +488,7 @@ the process very simple for translators.
 
 	  <para>
 During the early stages of Debian Installer, translators at first were
-the translators of boot-floppies, or were coming from established
+the translators of <classname>boot-floppies</classname>, or were coming from established
 translation teams. The work was then pretty informal with translators
 spontaneously joining the &d-i; development mailing list and getting
 access to the CVS repository to commit translations themselves.
@@ -478,7 +504,7 @@ translators.
 The first &d-i; beta versions also raised the problem of completing the
 translation work for the releases with hardly any infrastructure to track
 the completion status, and showed a need for a gateway between developers
-and the emerging "team" of translators. The need for some documentation for
+and the emerging team of translators. The need for some documentation for
 internationalization and localization work for the installer was also a good
 motivation to get people specifically involved in i18n coordination.
 </para>
@@ -508,9 +534,9 @@ release planning.
 	  <title>Internationalization with po-debconf</title>
 
 	  <para>Each &d-i; package, just like other regular packages, includes
-a translation template in the "debian/po" directory in the package's source tree. In that
+a translation template in the <filename>debian/po</filename> directory in the package's source tree. In that
 directory, one file per language groups together the translation of all the template's strings
-for that package
+for that package.
 </para>
 
 	  <para>
@@ -529,77 +555,39 @@ the work simpler for both translators and developers.
 	</sect3>
 	
 	<sect3>
-	  <title>The concept of "levels"</title>
+	  <title>The concept of <literal>levels</literal></title>
 
 	  <para>
-The design choices of &d-i; make it strongly interact with "regular" Debian
+The design choices of &d-i; make it strongly interact with <literal>regular</literal> Debian
 packages. Indeed, as soon as possible in the installation process, &d-i;
-relies on packages to control the installation process. Even in the "first
-stage" (the installation phase before the only reboot), some of the user
+relies on packages to control the installation process. Even in the first
+stage (the installation phase before the only reboot), some of the user
 interaction is provided by stripped udeb versions of regular Debian packages.
 </para>
 
 	  <para>
-After the reboot, the "second stage" of &d-i; is controlled by the
-base-config package, which may still be seen as a &d-i; package (it is
+After the reboot, the second stage of &d-i; is controlled by the
+<classname>base-config</classname> package, which may still be seen as a &d-i; package (it is
 maintained by the &d-i; team). However, this package heavily relies on other
-packages such as shadow, tasksel, pppconfig and a few others to achieve some
+packages such as <classname>shadow</classname>, <classname>tasksel</classname>, <classname>pppconfig</classname> and a few others to achieve some
 tasks. This means that a full localization of the installation process, as
 seen from the user, has to include localization of these packages.
 </para>
 
 	  <para>
 In order to give translators priorities and make their work
-progressive, the i18n team has established "levels" of translation which
-group together all involved parts, sorted by order of "importance" with
+progressive, the i18n team has established <literal>levels</literal> of translation which
+group together all involved parts, sorted by order of importance with
 regards to localization.
 </para>
 
 	  <para>
-The technical section of this paper will describe details about these
+The technical part of this section will describe details about these
 levels.
 </para>
 
 	</sect3>
 
-	<sect3>
-	  <title>Documentation i18n</title>
-
-	  <para>
-Documenting the installation process has always been a priority in
-Debian. The Installation Manual is indeed a long tradition of good quality
-documentation to assist users and system administrators installing their new
-Debian system.
-</para>
-
-	  <para>
-Because of the complete rewrite of the installation process, the
-Installation Manual had to be completely rewritten, from scratch in many
-parts. Here as well, getting some translation work is a huge improvement to
-make Debian a real "universal operating system".
-</para>
-
-	  <para>
-The installation manual translations are handled separately from the
-programs' translations. Until the very recent past, they didn't even use
-gettext to handle translations but instead used a system quite similar to the
-Debian web site translation system.
-</para>
-
-	  <para>
-For obvious reasons, the work involved being much larger, the
-installation manual is currently translated in fewer languages than the
-installer itself. This is also probably due to the use of a somewhat more
-complex system not involving gettext.
-</para>
-
-	  <para>
-Plans for the future are a slow switch to gettext, which already
-began for a few languages, while other teams have preferred staying with
-the former system as long as sarge is not released.
-</para>
-
-	</sect3>
 
       </sect2>
 
@@ -611,12 +599,10 @@ the former system as long as sarge is not released.
 
 	  <para>
 The role of the i18n coordination team is very broad. Indeed, it may be
-summarized as "be the articulation point between &d-i; developers and &d-i;
+summarized as "be the pivotal point between &d-i; developers and &d-i;
 translators". Even if translators have always been considered to be full
-members of the &d-i; team, the need for this articulation point was obvious.
+members of the &d-i; team, the need for this gathering point was obvious.
 </para>
-<!-- Not sure what you mean here, but "articulation" almost certainly is not it...
-     Maybe "pivotal"? -->
 
 	  <para>
 The role of the i18n coordination team may be summarized in the following tasks:
@@ -641,7 +627,7 @@ The role of the i18n coordination team may be summarized in the following tasks:
 	    </listitem>
 	    <listitem>
 	      <para>
-		     Searching for and "validating" new translators.
+		     Search for and <literal>validate</literal> new translators.
 		     There are two ways for new languages to get
 		     included: self-nominated volunteers or contacts
 		     established by one of the i18n team members. All these
@@ -667,8 +653,19 @@ The role of the i18n coordination team may be summarized in the following tasks:
 		      &d-i; development to be able to assist translators as
 		      well as handle i18n-related issues and bug reports.
 		      Some &d-i; packages are also partly maintained by the
-		      i18n team, such as localechooser.
-<!-- You could also mention encoding, LTR, special packages to support arabic, oriental languages -->
+		      i18n team, such as <classname>localechooser</classname>.
+                </para>
+	    </listitem>
+	    <listitem>
+	      <para>
+		      Some expertise in more specific topics such as
+		      encoding, left-to-right text handling, special
+		      packages to support arabic, oriental languages
+		      is also needed. More precisely, the i18n team
+		      members do not have to get a deep knowledge of
+		      all these topics, but rather develop of web of
+		      knowledge of all these areas with more specific
+		      contacts with the real specialists.
                 </para>
 	    </listitem>
 	    <listitem>
@@ -736,9 +733,9 @@ a very structured team exists.
 </para>
 
 	  <para>
-The only requirement made by the i18n coordination team is getting
-the name and email address of a "reliable" contact who will be
-further called the "language coordinator" for this language. Having a backup
+The only requirement made by the i18n team is getting
+the name and email address of a <literal>reliable</literal> contact who will be
+further called the <literal>language coordinator</literal> for this language. Having a backup
 coordinator is preferred, but not required. And, finally, if
 the translation is made with the support of a translation team
 (internal or external to the Debian project), the name and address of
@@ -747,7 +744,7 @@ mailing list).
 </para>
 
 	  <para>
-Though the i18n coordination team assists translators in their
+Though the i18n team assists translators in their
 tasks and sometimes commits files in their name, autonomy is highly
 desired, with the language coordinator committing him/herself
 translations produced by the team and reporting bug reports for
@@ -760,11 +757,11 @@ packages that are not part of the &d-i; team maintenance area.
 	  <title>The developers</title>
 
 	  <para>
-In the i18n process, the role of &d-i; developers is to ensure that all possibly translatable material is properly marked as translatable and use strings from the debconf i18n system for their packages. The "cdebconf" package documentation gives good examples of the use of debconf strings even outside the context of debconf.
+In the i18n process, the role of &d-i; developers is to ensure that all possibly translatable material is properly marked as translatable and use strings from the debconf i18n system for their packages. The <classname>cdebconf</classname> package documentation gives good examples of the use of debconf strings even outside the context of debconf.
 </para>
 
 	  <para>
-&d-i; developers also have to coordinate their work with the i18n coordination team when their work is likely to introduce new translatable strings. Such strings need peer review for the English messages style consistency checks.
+&d-i; developers also have to coordinate their work with the i18n team when their work is likely to introduce new translatable strings. Such strings need peer review for the English messages style consistency checks.
 </para>
 
 	  <para>
@@ -788,16 +785,16 @@ package includes translatable material.
 
 	    <para>
 The so-called level 1 of translation in Debian includes all udeb
-files which are part of the "first stage" of the installation process
+files which are part of the first stage of the installation process
 and are maintained by the &d-i; team. This consists of the whole
-debian-installer/ source tree on the &d-i; development server.
+<filename>debian-installer/</filename> source tree on the &d-i; development server.
 </para>
 
 	    <para>
 A few packages which technically
 belong in level 1 because some of their translatable material is used
 during the first stage of the installation process, have been moved to
-level 2 to make it clear that the level 1 is the "core"
+level 2 to make it clear that the level 1 is the core
 of &d-i; translations.
 </para>
 
@@ -808,7 +805,7 @@ At the moment of writing of this paper, level 1 consists of
 
 	    <para>
 To make the translators work easier to maintain, all strings in level 1 files
-are gathered together in a single "master" file in packages/po in the &d-i;
+are gathered together in a single <literal>master</literal> file in packages/po in the &d-i;
 development trees (sarge branch and development branch).
 </para>
 
@@ -821,13 +818,13 @@ the same way among packages).
 
 	    <para>
 At the moment of writing this, only one team has not chosen to
-switch to the "single file" system. This is still possible because
+switch to the <literal>master</literal> file system. This is still possible because
 it is taken into account by the synchronization script.
 </para>
 
 	    <para>
 The synchronization script (l10n-sync) main job is to spread out
-translations from the "master" file to the PO files in each
+translations from the <literal>master</literal> file to the PO files in each
 package. The internals of this script are detailed in the &d-i; i18n
 documentation. This script also combines the PO templates files (POT files)
 from all packages into a single POT file, which may be used by translators
@@ -835,24 +832,24 @@ starting a new translation.
 </para>
 
 	    <para>
-Some languages may be defined as "prospective" languages, which
+Some languages may be defined as <literal>prospective</literal> languages, which
 means that the translations for these languages are not spread out to
 individual packages. The reason for this is the impact translations
 have on the initial RAM disk size and the memory requirements of
-&d-i;. Languages are removed from the "prospective" list only after the
-&d-i; i18n coordination team has received the agreement of the &d-i;
+&d-i;. Languages are removed from the <literal>prospective</literal> list only after the
+&d-i; i18n team has received the agreement of the &d-i;
 development coordinator.
 </para>
 
 	    <para>
-Nine "prospective" languages are waiting for the "opening of the gates".
+Nine <literal>prospective</literal> languages are waiting for the "opening of the gates".
 These translations were started after the language freeze of &d-i; which occurred during
 &d-i; RC2 development with the decision not to add more languages up to
 the sarge release. These languages have been unmarked during &d-i; Debcamp during Debconf 5.
 </para>
 
 	    <para>
-Including the "prospective" languages, the total number of languages supported in &d-i; is
+Including the <literal>prospective</literal> languages, the total number of languages supported in &d-i; is
 50, including English. The number of languages supported in the sarge
 branch is 41.
 </para>
@@ -863,26 +860,26 @@ branch is 41.
 	    <title>Level 2</title>
 
 	    <para>
-&d-i; translation "level 2" includes all packages <emphasis>prompting</emphasis>
+&d-i; translation level 2 includes all packages <emphasis>prompting</emphasis>
 users during a default (high priority) base system installation.
 </para>
 
 	    <para>
 This includes two packages maintained by the &d-i; team
-itself (base-config and tasksel) as well as regular packages
+itself (<classname>base-config</classname> and <classname>tasksel</classname>) as well as regular packages
 maintained by Debian developers outside the &d-i; team.
 </para>
 
 	    <para>
 Packages producing udebs used during the first stage of the
-installation process have been added to this "level". These include
-iso-codes and console-data.
+installation process have been added to this level. These include
+<classname>iso-codes</classname> and <classname>console-data</classname>.
 </para>
 
 	    <para>
 Finally, two regular packages are also included in level 2 because
 part of their debconf templates are used during the second stage of
-the installation process: shadow and exim4.
+the installation process: <classname>shadow</classname> and <classname>exim4</classname>.
 </para>
 
 	  </sect4>
@@ -891,18 +888,18 @@ the installation process: shadow and exim4.
 	    <title>Level 3</title>
 
 	    <para>
-&d-i; translation "level 3" includes all packages <emphasis>prompting</emphasis>
+&d-i; translation level 3 includes all packages <emphasis>prompting</emphasis>
 users during any kind of base system installation.
 </para>
 
 	    <para>
-It currently includes only "regular" Debian packages, some of which are
-quite widely used in some types of installs (aptitude, pppconfig).
+It currently includes only regular Debian packages, some of which are
+quite widely used in some types of installs (<classname>aptitude</classname>, <classname>pppconfig</classname>).
 Some others that are no longer prompting users but used to in the past, are kept for
-historical reasons or in case they come back (popularity-contest,
-pcmcia-cs..) and a few which currently only have their menu entry to
-base-config that needs translation (xdebconfigurator,
-localization-config).
+historical reasons or in case they come back (<classname>popularity-contest</classname>,
+<classname>pcmcia-cs</classname>..) and a few which currently only have their menu entry to
+base-config that needs translation (<classname>xdebconfigurator</classname>,
+<classname>localization-config</classname>).
 </para>
 
 	  </sect4>
@@ -911,7 +908,7 @@ localization-config).
 	    <title>Level 4</title>
 
 	    <para>
-&d-i; translation "level 4" includes all packages that display messages
+&d-i; translation level 4 includes all packages that display messages
 during a base system installation.
 </para>
 
@@ -919,13 +916,13 @@ during a base system installation.
 The purpose of including these packages is to try to reach the
 state where users only see display in their language while installing
 the system. A side-effect is pushing for the translation of two of the
-most important packages in Debian: dpkg and apt.
+most important packages in Debian: <classname>dpkg</classname> and <classname>apt</classname>.
 </para>
 
 	    <para>
 Shadow has been added to this list because it very briefly displays a
 few messages. The side effect here is also getting some very widely
-used programs such as "login", "passwd" and all other such utilities
+used programs such as <command>login</command>, <command>passwd</command> and all other such utilities
 translated into many languages.
 </para>
 
@@ -942,7 +939,7 @@ Several steps are required for new translators to integrate the &d-i; translatio
 </para>
 	  <itemizedlist>
 	    <listitem>
-	      <para>First contact : the translator may come by him/herself, or be directed by a third party to the &d-i; development team. The i18n coordination team also happens to be proactive towards translators already working in other FLOSS projects and try convincing them to work on &d-i; translations.</para>
+	      <para>First contact : the translator may come by him/herself, or be directed by a third party to the &d-i; development team. The i18n team also happens to be proactive towards translators already working in other FLOSS projects and try convincing them to work on &d-i; translations.</para>
 	    </listitem>
 	    <listitem>
 	      <para>Locale and language code identification : from
@@ -956,17 +953,17 @@ Several steps are required for new translators to integrate the &d-i; translatio
 </para>
 	    </listitem>
 	    <listitem>
-<para>Local language name : the translator send the coordinators the name of the language as a UTF-8 string. The i18n coordinator updates localechooser accordingly.
+	      <para>Local language name : the translator send the coordinators the name of the language as a UTF-8 string. The i18n coordinator updates <classname>localechooser</classname> accordingly.
 </para>
 	    </listitem>
 	    <listitem>
 <para>
-   Activate early support : the i18n coordinator adds the languagechooser entry and request the translator about needed information for this : display specifics, input systems...
+   Activate early support : the i18n coordinator adds the <classname>localechooser</classname> entry and request the translator about needed information for this : display specifics, input systems...
 </para>
 	    </listitem>
 	    <listitem>
 <para>
-   The languagechooser and localechooser packages are modified accordingly and possibly uploaded
+   The <classname>localechooser</classname> package is modified accordingly and possibly uploaded
 </para>
 	    </listitem>
 	    <listitem>
@@ -989,7 +986,7 @@ Several steps are required for new translators to integrate the &d-i; translatio
 	    </listitem>
 	  </itemizedlist>
 <para>
-This whole process has been proven to be a good way to integrate new translators and teams progressively. It also gives the i18n coordination team a good method to really test the translators motivation and avoid losing people in the wild.
+This whole process has been proven to be a good way to integrate new translators and teams progressively. It also gives the i18n team a good method to really test the translators motivation and avoid losing people in the wild.
 </para>
 	</sect3>
 
@@ -1003,22 +1000,22 @@ This whole process has been proven to be a good way to integrate new translators
 	    <title>Handling of level 1 PO files</title>
 
 <para>All PO files coming from all &d-i;packages are combined together
-in a big PO file named the "master file". This has the advantage of
+in a big PO file named the <literal>master</literal> file. This has the advantage of
 avoiding translators to dig in each and every &d-i; package to update
 its translation. Moreover, as several packages share common strings
 (or similar strings), having these only translated once helps in
 keeping the general consistency among translations.
 </para>
 
-<para>Translators only work on the master file and all
+	    <para>Translators only work on the <literal>master</literal> file and all
 mergin/spreading of translations back and forth this master file to
 all individual packages is handled by special script named
-"l10n-sync". This script is maintained by the &d-i; i18n coordination
+<command>l10n-sync</command>. This script is maintained by the &d-i; i18n coordination
 team and is run from one of the Debian servers available to
 developers.
 </para>
 
-<para>l10n-sync tasks :</para>
+<para><command>l10n-sync</command> tasks :</para>
 <itemizedlist>
 	      <listitem>
 		<para>merge together all POT files in a single POT file
@@ -1035,13 +1032,13 @@ developers.
 	    </itemizedlist>
 <para>All this is achieved with a simple shell script, by using the
 various gettext utilities. A minor drawback of this is being dependent
-on the version of the gettext utilities used to run l10n-sync. For
-instance, woody's gettext utilities have different behavior and
+on the version of the gettext utilities used to run <command>l10n-sync</command>. For
+instance, woody's gettext utilities have different behaviour and
 different options than sarge's gettext utilities. This sometimes
 resulted in gratuitous commits by the script and some headaches for
 the &d-i; developers.
 </para>
-<para>l10n-sync also has the ability to update a branch of the installer development repository from the PO files in another branch. For instance, the current sarge branch is updated from the PO files in the trunk. This is again aimed to simplfy the work of translators who only have to deal with one file.
+<para><command>l10n-sync</command> also has the ability to update a branch of the installer development repository from the PO files in another branch. For instance, the current sarge branch is updated from the PO files in the trunk. This is again aimed to simplfy the work of translators who only have to deal with one file.
 </para>
 
 	  </sect4>
@@ -1078,7 +1075,7 @@ maintainers.
 	    <title>The translation status pages</title>
 
 	  <para>
-The &d-i; i18n coordination team maintains status pages for all levels translations. The main status page is, at the time of this writing, located at http://people.debian.org/%7Eseppy/d-i/translation-status.html. It gives news about the translations (usually modified strings), statistics about each level translation and access to all releavant files (PO files and POT files) for all levels. The status page also features graphics of the translation ratio progress and gives access to other useful resources.
+The &d-i; i18n team maintains status pages for all levels translations. The main status page is, at the time of this writing, located at <ulink>http://people.debian.org/%7Eseppy/d-i/translation-status.html</ulink>. It gives news about the translations (usually modified strings), statistics about each level translation and access to all releavant files (PO files and POT files) for all levels. The status page also features graphics of the translation ratio progress and gives access to other useful resources.
 </para>
 
 	  <para>
@@ -1087,7 +1084,7 @@ account on people.debian.org. These scripts spider through all
 relevant repositories or in the Debian archive (when no repository is
 available for the package). They currently cannot easily work with
 distributed revision control systems. Two packages in the various
-&d-i; l10n levels use such systems (apt and dpkg). For these packages,
+&d-i; l10n levels use such systems (<classname>apt</classname> and <classname>dpkg</classname>). For these packages,
 one of the i18n coordinators maintains a special tla branch for l10n.
 </para>
 
@@ -1112,7 +1109,7 @@ translators, which is currently not yet achieved for all languages.
 Except for automated spellchecking, no special infrastructure exists
 for peer review of translations. Several teams have setup their own
 policyand sometimes even did document it. The Dutch team peer review
-system is for instance very well documented : TODO_ADDRESS.
+system is for instance very well documented : <ulink>http://wiki.debian.net/?l10nCoordination</ulink>.
 </para>
 
 	    </sect4>
@@ -1180,7 +1177,7 @@ available to teams who want to setup their own Pootle server. Setting up a Pootl
 	  <title>Language packs</title>
 
 	  <para>
-Currently, integrating a new language in &d-i; needs to remove it from the "prospective" list so that the PO files for it are built into all packages from &d-i; level 1. Then, each one of these packages has to be rebuilt and uploaded for the language translations to be available in &d-i;.
+Currently, integrating a new language in &d-i; needs to remove it from the <literal>prospective</literal> list so that the PO files for it are built into all packages from &d-i; level 1. Then, each one of these packages has to be rebuilt and uploaded for the language translations to be available in &d-i;.
 </para>
 
 	  <para>The drawback here is to bloat &d-i; for each additional language. Then the size of the initial RAM disk image as well as the memory requirements of &d-i; may become out of control. This is the major reason for which 9 languages have been kept out of sarge &d-i; since September 2004 while the &d-i; team was doing its best to keep &d-i; in a releasable state so that it is no more a blocker for the whole release of sarge.
@@ -1209,7 +1206,6 @@ architecture:
 
 <itemizedlist>
 <listitem>in the <classname>debian-installer-manual</classname> package</listitem>
-<listitem>on the 1st CD of the full binary CD sets</listitem>
 <listitem>on the 1st CD of the full binary CD sets</listitem>
 <listitem>on the release pages of the Debian website (Sarge version)</listitem>
 <listitem>on the d-i project pages on Alioth (Etch version; working version)</listitem>
