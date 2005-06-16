@@ -7,7 +7,7 @@ set -e
 
 if [ -z "$languages" ]; then
     # Buildlist of languages to be included on the official website
-    languages="en cs de es fr ja pt pt_BR ru zh_CN"
+    languages="en cs de es fr ja pt pt_BR ru zh_CN zh_TW"
 fi
 
 if [ -z "$architectures" ]; then
