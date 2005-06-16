@@ -41,14 +41,19 @@
 
       <abstract>
 	<para>
-This article features details about some specific parts of the Debian Installer.
+The release of Debian sarge has put in evidence one of the biggest
+improvment brought by this new version of the Universal Operating
+System: its installation process, namely the &d-i;.
 </para>
 
 	<para>
-The first part gives some thoughts about the future of &d-i;. Then the
-Debian Installer internationalization framework and work methods are
-detailed and finally some bits about the installation manual are
-developed.
+This article features details about some specific parts of &d-i; project.
+</para>
+
+	<para>
+First, the &d-i; internationalization framework and work
+methods are detailed. Next, the maintenance of the Installation Guide is explained in detail. Finally, some thoughts are developed about the
+future of &d-i; and the areas where more contribution is welcomed.
 </para>
       </abstract>
 
@@ -69,7 +74,7 @@ under the terms of the GNU General Public License.
       </legalnotice>
     </articleinfo>
 
-  <sect1><title>The future of the Debian Installer</title>
+  <sect1><title>Debian Installer: past and present</title>
 <para>
 
 A long time ago, installing Debian meant using the boot-floppies, an
@@ -127,274 +132,11 @@ itself promote improvements in Debian.
 
 </para>
 
-   <sect2><title>How to help</title>
-<para>
+</sect1>
 
-Here are some ways you can get involved and help &d-i; development.
-
-</para>
-
-    <sect3><title>Translate &d-i;</title>
-<para>
-
-   We are still looking for more new languages, as well as more translators
-   to keep the translations we have current.
-
-</para>
-    </sect3>
-    <sect3><title>Make it install an UTF-8 system</title>
-<para>
-
-   With all these languages, it's time Debian became UTF-8 by default. If
-   you agree, then research the pitfalls, convince everyone this is the
-   right choice, and make it happen.
-
-</para>
-    </sect3>
-    <sect3><title>Get involved in supporting your architecture in &d-i;</title>
-<para>
-
-   &d-i; has between zero and two porters for most architectures. This
-   sometimes results in &d-i; developers who have little experience with 
-   an architecture making important changes for it. For example, a few
-   months ago kernel updates for &d-i; hppa had to be done by a developer
-   who knew very little about the architecture. This was not ideal. 
-   
-</para><para>
-
-   Continued involvement of porters to the less popular architectures is
-   essential if &d-i; is to continue to support those architectures let alone
-   improve its support. It's quite possible that future &d-i; beta releases
-   for etch may not be available for all ports, if we don't have active 
-   developers and testers for those ports.
-
-</para><para>
-
-   We wouldn't mind seeing &d-i; work as an installer for the Hurd or a BSD
-   either..
-
-</para>
-    </sect3>
-    <sect3><title>Work on &d-i; updates for sarge</title>
-<para>
-
-   &d-i;'s modular design makes it pretty easy to update individual udebs
-   in a sarge point release to fix important bugs. Many such bugs are
-   already known and fixed in unstable; some fixes need backporting to
-   sarge, while some fixes are backported to our sarge branch and need only
-   testing and uploads.
-   
-</para><para>
-
-   Some examples of things it would be nice to fix include some nasty bugs
-   in translations (especially debconf substitution variable typos),
-   updates to the mirror list to reflect changes since rc3, kernel security
-   updates, and updates to the discover1-data hardware detection database to
-   make sarge autodetect some more hardware.
-
-</para>
-    </sect3>
-    <sect3><title>Work on supporting sarge installs using the etch installer</title>
-<para>
-
-   It should be possible to install sarge using a &d-i; with a newer kernel
-   than 2.6.8 and 2.4.27, so that as new hardware comes out sarge can still
-   be installed on it. Etch's &d-i; is planned to be backwards compatible and
-   capable of installing sarge, but to make it work usefully some packages
-   in sarge (such as kernel and hardware detection packages) will need to
-   be updated in a backports-like repository. And someone would need to do
-   the work to set up such a repository, put together a version of &d-i; that
-   can use this repository, and make CD images based on it.
-
-</para>
-    </sect3>
-    <sect3><title>Help us develop a graphical installer</title>
-<para>
-
-   Work on a graphical version of &d-i; has already begun, and indeed it's
-   now mostly usable. It still needs a lot of work, so people proficient in
-   UI polishing, graphics, and the technical side of making it work well on
-   a variety of graphics hardware are needed in the &d-i; team.
-
-</para>
-    </sect3>
-    <sect3><title>Help improve automated installs</title>
-<para>
-
-   Automated installs work for sarge, but the documentation is poor, it can
-   be hard to set up, and the need to preseed parameters to set up a network
-   interface at the kernel boot line is unwieldy and problematic. Also
-   work needs to be done on making the partitioner more flexible and
-   friendly for automated installs, enabling automated LVM and RAID setup,
-   and so on.
- 
-</para>
-    </sect3>
-    <sect3><title>Add encrypted filesystem support to partman</title>
-<para>
-
-   Partman was designed with support for encrypted filesystems in mind, so
-   this is just a small matter of code. Your laptop will thank you.
-
-</para>
-    </sect3>
-    <sect3><title>Help improve hardware detection</title>
-<para>
-
-   We hope to be switching &d-i; to use hotplug for hardware detection, at
-   least for 2.6, based on work done by Ubuntu, and we need people to help
-   work on that. Also one of sarge's weak points is that SATA often doesn't
-   work very well, or that other HDD modules are loaded in the wrong order
-   to work properly. We also have issues with network interfaces sometimes
-   changing names between the installer and the installed system.
-
-</para>
-    </sect3>
-    <sect3><title>Help support non-free drivers/firmware</title>
-<para>
-
-   Since Debian is removing non-free firmware from main for etch, we need
-   to make sure that &d-i; can still make use of that firmware, from
-   non-free, if the user needs it. We have some interesting ideas involving
-   initramfs and catting non-free images to free &d-i; images, but all this
-   needs developers to make happen or to come up with better ideas.
-
-</para>
-    </sect3>
-    <sect3><title>Help support secure apt</title>
-<para>
-
-   &d-i; will need changes to support secure apt and signed Packages files.
-   To secure the whole installation, &d-i; needs to check signatures of the
-   udebs it downloads, too.
-
-</para>
-    </sect3>
-    <sect3><title>Help support installation by the blind</title>
-<para>
-
-   Sarge's installer only supports blind users installing on i386 with 2.4,
-   using <emphasis>floppies</emphasis>. We need someone who is committed to
-   making this better and making &d-i; fully accessible to these users.
-
-</para>
-    </sect3>
-    <sect3><title>Help improve base-config, X setup, etc</title>
-<para>
- 
-   Because the installation doesn't finish where &d-i; proper leaves off.
-   This part of the install is noticeably lacking polish compared to the
-   rest of &d-i;, and we need to find ways to improve that. One possibility
-   is to move all of this part into the first stage of the installer, so
-   that the installer boots directly into a fully installer desktop system.
-
-</para>
-    </sect3>
-    <sect3><title>Add support for installs via PPPOE</title>
-<para>
-   
-   PPPOE is not well integrated with the installer, it is not supported in
-   the first stage install and has to be set up by hand in the second
-   stage. To get this improved we need a developer who is familiar with
-   PPPOE.
-
-</para>
-    </sect3>
-    <sect3><title>Make it easier to build custom CDs and otherwise customize the installer</title>
-<para>
-
-   Many of our users need custom versions of the installer, and we need
-   improved documentation and/or better tools for doing this.
-   
-</para><para>
-
-   A particular problem area is CD generation, which is very hard to get
-   working. That could be improved by making some easier CD creation tool
-   (like pickax) support &d-i;, or improving debian-cd, or some other way. 
-
-</para><para>
-
-   Another problem area is building versions of the installer with a custom
-   kernel or third party modules. This needs to be made easier, so that a
-   regular user can hope to do it, and it needs to be well documented.
-
-</para>
-    </sect3>
-    <sect3><title>Find a way to remove a single question from the standard install process</title>
-<para>
-
-   Every question the installer asks a user is one more place for the
-   installation process to go wrong or for a newbie to give up. During your
-   next install, pick a question and figure out ways to do away with it.
-   
-</para><para>
-
-   Some candidates:
-<itemizedlist>
-<listitem><para>
-       Why should the installer ask the user to choose a Debian mirror when
-       it can pick a good one? 
-</para></listitem>
-<listitem><para>
-       Could the installer get enough sanity checks added so it could 
-       sometimes safely install grub without asking the user for
-       confirmation?
-</para></listitem>
-<listitem><para>
-       Could the installer automatically resize existing Windows partitions
-       to make room for Debian, without the user having to work out how to do
-       it by hand?
-</para></listitem>
-<listitem><para>
-       Could the installer figure out that a machine is a laptop and
-       install the right set of packages for it?
-</para></listitem>
-</itemizedlist>
-
-</para>
-    </sect3>
-    <sect3><title>Invent the next great thing in &d-i;</title>
-<para>
-
-   The &d-i; developers love to take a good idea and run with it. For
-   example, last spring some basic work was contributed to let &d-i; detect
-   other OSes and other linux distros also installed on the machine. Now we
-   detect a dozen or so OSes and all major distros; this feature is a key
-   part of &d-i; and is used in the bootloader setup, partitioner, and
-   elsewhere. It wouldn't have happened without that initial idea and the
-   beginning of work on what has become our os-prober component. Next time
-   you install sarge, see if you cannot think of novel way that &d-i; could
-   improve the installation process -- and then work on coding up enough of
-   it so there's a plausible premise of a nice feature -- and we will help
-   you take it the rest of the way.
-
-</para>
-    </sect3>
-    <sect3><title>Add moon-buggy to &d-i;</title>
-<para>
-
-   This one has just been on our TODO list for too long to be ignored..
-
-</para>
-    </sect3>
-   </sect2>
-   <sect2><title>Conclusion</title>
-
-<para>
-
-So please don't assume that &d-i; development is over, or that
-it can be put off until near the release of etch. We lost some development
-momentum while the installer was frozen for the sarge release. Now we're
-trying to ramp things back up, involve as many developers with the
-installer as we can, and make sarge's old installer, in a year's time, look
-as quaint as the boot-floppies do today.
-
-</para>
-   </sect2>
-  </sect1>
 
     <sect1>
-      <title>Debian Installer i18n/l10n issues</title>
+      <title>Debian Installer internationalization and localization issues</title>
 
       <sect2>
 	<title>Some history</title>
@@ -403,7 +145,7 @@ as quaint as the boot-floppies do today.
 	  <title>Why localize?</title>
 
 	  <para>
-A recurrent debate often concerns the necessity of localizing the
+A recurrent debate often comes about the need to localize the
 installation process of a Linux distribution. Indeed, a commonly spread idea
 is that Unix/Linux systems administrators have to get some fluency
 in the English language to do their work, so they should not really worry
@@ -412,7 +154,7 @@ about using their language to install a Linux system.
 
 	  <para>
 This very narrow point of view is fortunately quite outdated in the Debian
-community and the need for localization of the installer has been well
+community and the need for l10n of the installer has been well
 established for years. However, the main arguments are still valid and
 revisiting them may be of some interest.
 </para>
@@ -433,23 +175,33 @@ offering a completely localized installation process becomes a key point.
 Finally, more and more Custom Debian Distributions are based on Debian sarge
 and thus depend on Debian Installer for their installation process. Some of
 these distributions are targeted at home users or for use in educational
-environments, where a complete localization is also a key argument of choice.
+environments, where a complete l10n is also a key argument of choice.
 </para>
 
 	</sect3>
 
 	<sect3>
-	  <title>Boot floppies i18n</title>
+	  <title>Boot floppies internationalization</title>
 	</sect3>
 
 <para>
-<classname>boot-floppies</classname> was a single package and thus has only one single
-translation file. It was already using gettext to handle translatable
-material. However, its localisation was completely unsynchronised with
-the localisation of other material involved in the installation
-process. This lead up with quite partial installation procedures which
-required a quite large English knowledge even for languages for which
-the <classname>boot-floppies</classname> was fully translated.
+The former installer of the Debian distribution, namely
+<classname>boot-floppies</classname>, was a single package which already got a good internationalization<footnote>
+
+<para>Internationalization, often abbreviated to <literal>i18n</literal>, is the action of getting software ready to work with different languages in different countries
+</para>
+</footnote> and thus
+has only one single translation file for localization<footnote>
+
+<para>Localization, often abbreviated to <literal>l10n</literal>, is the action of translating software and documentation to different languages
+</para>
+</footnote>. It was already using gettext to
+handle translatable material. However, its l10n was completely
+unsynchronised with the l10n of other material involved in the
+installation process. This lead up with quite partial installation
+procedures which required a quite large English knowledge even for
+languages for which the <classname>boot-floppies</classname> was fully
+translated.
 </para>
 
 <para>
@@ -462,14 +214,14 @@ was allowed in English messages. The French translators remember a lot of headac
 The number of supported languages was already quite high, but was
 limited by the number of technically skilled translators, able to deal
 themselves with several tasks not directly related to translations,
-such as commits, resynchronisations, etc.
+such as commits, resynchronizations, etc.
 </para>
 
 	<sect3>
-	  <title>Early design choices of &d-i; for internationalization</title>
+	  <title>Early design choices of &d-i; for i18n</title>
 
 	  <para>
-The very modular nature of &d-i; has made localization easier because it
+The very modular nature of &d-i; has made l10n easier because it
 became really easy for translators to focus on the most important issues.
 </para>
 
@@ -488,9 +240,10 @@ the process very simple for translators.
 
 	  <para>
 During the early stages of Debian Installer, translators at first were
-the translators of <classname>boot-floppies</classname>, or were coming from established
-translation teams. The work was then pretty informal with translators
-spontaneously joining the &d-i; development mailing list and getting
+the translators of <classname>boot-floppies</classname>, or were
+coming from established translation teams. The work was then pretty
+informal with translators spontaneously joining the &d-i; development
+mailing list (<email>debian-boot@lists.debian.org</email>) and getting
 access to the CVS repository to commit translations themselves.
 </para>
 
@@ -505,7 +258,7 @@ The first &d-i; beta versions also raised the problem of completing the
 translation work for the releases with hardly any infrastructure to track
 the completion status, and showed a need for a gateway between developers
 and the emerging team of translators. The need for some documentation for
-internationalization and localization work for the installer was also a good
+i18n and l10n work for the installer was also a good
 motivation to get people specifically involved in i18n coordination.
 </para>
 
@@ -513,13 +266,15 @@ motivation to get people specifically involved in i18n coordination.
 The first signs of i18n coordination appeared in mid 2003 with
 the first beta releases of &d-i;. Petter Reinholdtsen, because of the
 Skolelinux needs in that area, began acting as a coordinator and wrote the first
-version of a specific documentation of &d-i; localization.
+version of a specific documentation of &d-i; l10n.
 </para>
 
 	  <para>
-The beta 4 release finally made the i18n coordination team a reality,
-providing &d-i; developers with a reliable way to include i18n and l10n in
-release planning.
+The beta 4 release finally made the i18n team a reality, providing
+&d-i; developers with a reliable way to include i18n and l10n in
+release planning. At the moment of this writing, the &d-i; i18n team
+is made of Christian Perrier, Dennis Stampfer and Frans Pop (more
+specialized in the installation manual i18n).
 </para>
 
 	</sect3>
@@ -531,18 +286,18 @@ release planning.
 	<title>Generalities</title>
 
 	<sect3>
-	  <title>Internationalization with po-debconf</title>
+	  <title>I18n with po-debconf</title>
 
 	  <para>Each &d-i; package, just like other regular packages, includes
 a translation template in the <filename>debian/po</filename> directory in the package's source tree. In that
-directory, one file per language groups together the translation of all the template's strings
+directory, one file per language groups together the translations of all the template's strings
 for that package.
 </para>
 
 	  <para>
 The final package build process assembles these templates and their
 translations without any manual intervention from the package
-maintainer or &d-i; developer.
+maintainer or another &d-i; developer.
 </para>
 
 	  <para>
@@ -570,15 +325,15 @@ After the reboot, the second stage of &d-i; is controlled by the
 <classname>base-config</classname> package, which may still be seen as a &d-i; package (it is
 maintained by the &d-i; team). However, this package heavily relies on other
 packages such as <classname>shadow</classname>, <classname>tasksel</classname>, <classname>pppconfig</classname> and a few others to achieve some
-tasks. This means that a full localization of the installation process, as
-seen from the user, has to include localization of these packages.
+tasks. This means that a full l10n of the installation process, as
+seen from the user, has to include l10n of these packages.
 </para>
 
 	  <para>
 In order to give translators priorities and make their work
 progressive, the i18n team has established <literal>levels</literal> of translation which
 group together all involved parts, sorted by order of importance with
-regards to localization.
+regards to l10n.
 </para>
 
 	  <para>
@@ -595,7 +350,7 @@ levels.
       <sect2>
 	<title>Organization</title>
 	<sect3>
-	  <title>The coordination team</title>
+	  <title>The i18n team</title>
 
 	  <para>
 The role of the i18n coordination team is very broad. Indeed, it may be
@@ -610,105 +365,61 @@ The role of the i18n coordination team may be summarized in the following tasks:
 	  <itemizedlist>
 	    <listitem>
 	      <para>
-		     It is the reference point for translators. Each translator
-		     knows that (s)he can get any needed information from
-		     one of the i18n team members.
+		     reference point for translators;
                 </para>
 	    </listitem>
 	    <listitem>
 	      <para>
-		     It guarantees consistency in writing style between English 
-		     messages. Though not strictly related to 
-		     the l10n tasks, it rapidly appeared that the i18n team is
-		     most often the first aware of new needed templates and an
-		     established practice is now, for developers, to have
-		     a discussion about writing style for new templates.
+		     guarantees consistency in English writing style;
                </para>
 	    </listitem>
 	    <listitem>
 	      <para>
-		     Search for and <literal>validate</literal> new translators.
-		     There are two ways for new languages to get
-		     included: self-nominated volunteers or contacts
-		     established by one of the i18n team members. All these
-		     new translators have to be mentored during the early
-		     stages of their work, up to the moment they can handle
-		     it in complete autonomy. This process could be called
-		     the "New Translator" process, even if it is not as
-		     formalized as the New Maintainer process.
+		     search for and <literal>validate</literal> new translators;
                 </para>
 	    </listitem>
 	    <listitem>
 	      <para>
-		     The translators need tools to check whether their
-		     translation work is still up-to-date. Translators are
-		     never happy until they reached the heavens of 100%
-		     completion. The role of the
-		     &d-i; i18n team is to provide them with these tools.
+		     maintain helper tools;
                 </para>
 	    </listitem>
 	    <listitem>
 	      <para>
-		      The i18n team members have to get a good knowledge of
-		      &d-i; development to be able to assist translators as
-		      well as handle i18n-related issues and bug reports.
-		      Some &d-i; packages are also partly maintained by the
-		      i18n team, such as <classname>localechooser</classname>.
+		      follow developement and maintain <classname>localechooser</classname>;
                 </para>
 	    </listitem>
 	    <listitem>
 	      <para>
-		      Some expertise in more specific topics such as
+		      expertise in more specific topics such as
 		      encoding, left-to-right text handling, special
 		      packages to support arabic, oriental languages
-		      is also needed. More precisely, the i18n team
-		      members do not have to get a deep knowledge of
-		      all these topics, but rather develop of web of
-		      knowledge of all these areas with more specific
-		      contacts with the real specialists.
+		      is also needed;
                 </para>
 	    </listitem>
 	    <listitem>
 	      <para>
-		      In general, the i18n team coordinates all i18n-related activities
-		      in the &d-i; team; It also manages the testing of the
-		      release candidates with regards to i18n/l10n.
+		      manages the testing of the
+		      release candidates with regards to i18n/l10n;
                 </para>
 	    </listitem>
 	    <listitem>
 	      <para>
-		      As translators are not always completely aware of the
-		      Debian development environment, the i18n team assists them
-		      with Debian specific parts such as reporting
-		      translations as bugs when they concern packages which
-		      are not maintained by the &d-i; team.
+		      assists translators with the Debian BTS and package maintainers by handling l10n commits for them;
                 </para>
 	    </listitem>
 	    <listitem>
 	      <para>
-		      Bring new ideas and concepts to make the translators
-		      work easier. A translator should not have to focus on
-		      complex systems such as the revision control system
-		      or bug reporting. The translator's time is better
-		      invested doing translation work.
+		      improve the framework to make the translators life easy;
                 </para>
 	    </listitem>
 	    <listitem>
 	      <para>
-		      Maintain contact with translators and put them to work
-		      when releases are due.
+		      maintain contact with translators, derived distributions and organised free software l10n teams (Arabeyes, Indlinux...);
                 </para>
 	    </listitem>
 	    <listitem>
 	      <para>
-		      Maintain contact with derived distributions when coordination
-                      is needed for l10n issues (Skolelinux, Ubuntu...).
-                </para>
-	    </listitem>
-	    <listitem>
-	      <para>
-		      Finally, the i18n team is responsible for all issues
-		      related to Debian installation Manual i18n.
+		      maintain the installation manual i18n.
                 </para>
 	    </listitem>
 	  </itemizedlist>
@@ -728,7 +439,7 @@ great freedom to choose their work method.
 	  <para>
 This results in various situations, from languages where a
 single individual is the only person responsible for the whole translation,
-QA work, and interaction with i18n coordination team; up to languages where
+QA work, and interaction with the i18n team; up to languages where
 a very structured team exists.
 </para>
 
@@ -757,18 +468,30 @@ packages that are not part of the &d-i; team maintenance area.
 	  <title>The developers</title>
 
 	  <para>
-In the i18n process, the role of &d-i; developers is to ensure that all possibly translatable material is properly marked as translatable and use strings from the debconf i18n system for their packages. The <classname>cdebconf</classname> package documentation gives good examples of the use of debconf strings even outside the context of debconf.
+In the i18n process, the role of &d-i; developers is to ensure that
+all possibly translatable material is properly marked as translatable
+and use strings from the debconf i18n system for their packages. The
+<classname>cdebconf</classname> package documentation gives good
+examples of the use of debconf strings even outside the context of
+debconf.
 </para>
 
 	  <para>
-&d-i; developers also have to coordinate their work with the i18n team when their work is likely to introduce new translatable strings. Such strings need peer review for the English messages style consistency checks.
+&d-i; developers also have to coordinate their work with the i18n team
+when their work is likely to introduce new translatable strings. Such
+strings need peer review for the English messages style consistency
+checks. They have to follow the calls for <literal>string
+freezes</literal> during the releases preparation and must work very
+closely to the i18n team when exceptions are needed to the string
+freeze policy.
 </para>
 
 	  <para>
-Developers of packages not maintained by the &d-i; team, but
-needed by the installer (mostly source packages that produce
-udeb packages) are requested to get in touch with the &d-i; i18n team when their
-package includes translatable material.
+Developers of packages not maintained by the &d-i; team, but needed by
+the installer (mostly source packages that produce udeb packages) are
+requested to get in touch with the &d-i; i18n team when their package
+includes translatable material. Following &d-i; string freezes is here
+also very valuable.
 </para>
 
 	</sect3>
@@ -784,18 +507,18 @@ package includes translatable material.
 	    <title>Level 1</title>
 
 	    <para>
-The so-called level 1 of translation in Debian includes all udeb
-files which are part of the first stage of the installation process
-and are maintained by the &d-i; team. This consists of the whole
-<filename>debian-installer/</filename> source tree on the &d-i; development server.
+The so-called level 1 of translation in Debian includes all udeb files
+which are part of the first stage of the installation process and are
+maintained by the &d-i; team. This consists of the whole
+<filename>debian-installer/</filename> source tree on the &d-i;
+development server.
 </para>
 
 	    <para>
-A few packages which technically
-belong in level 1 because some of their translatable material is used
-during the first stage of the installation process, have been moved to
-level 2 to make it clear that the level 1 is the core
-of &d-i; translations.
+A few packages which technically belong in level 1 because some of
+their translatable material is used during the first stage of the
+installation process, have been moved to level 2 to make it clear that
+the level 1 is the core of &d-i; translations.
 </para>
 
 	    <para>
@@ -804,9 +527,10 @@ At the moment of writing of this paper, level 1 consists of
 </para>
 
 	    <para>
-To make the translators work easier to maintain, all strings in level 1 files
-are gathered together in a single <literal>master</literal> file in packages/po in the &d-i;
-development trees (sarge branch and development branch).
+To make the translators work easier to maintain, all strings in level
+1 files are gathered together in a single <literal>master</literal>
+file in packages/po in the &d-i; development trees (sarge branch and
+development branch).
 </para>
 
 	    <para>
@@ -817,41 +541,36 @@ the same way among packages).
 </para>
 
 	    <para>
-At the moment of writing this, only one team has not chosen to
-switch to the <literal>master</literal> file system. This is still possible because
-it is taken into account by the synchronization script.
-</para>
-
-	    <para>
 The synchronization script (l10n-sync) main job is to spread out
-translations from the <literal>master</literal> file to the PO files in each
-package. The internals of this script are detailed in the &d-i; i18n
-documentation. This script also combines the PO templates files (POT files)
-from all packages into a single POT file, which may be used by translators
-starting a new translation.
+translations from the <literal>master</literal> file to the PO files
+in each package. The internals of this script are detailed in the
+&d-i; i18n documentation. This script also combines the PO templates
+files (POT files) from all packages into a single POT file, which may
+be used by translators starting a new translation.
 </para>
 
 	    <para>
-Some languages may be defined as <literal>prospective</literal> languages, which
-means that the translations for these languages are not spread out to
-individual packages. The reason for this is the impact translations
-have on the initial RAM disk size and the memory requirements of
-&d-i;. Languages are removed from the <literal>prospective</literal> list only after the
-&d-i; i18n team has received the agreement of the &d-i;
-development coordinator.
+Some languages may be defined as <literal>prospective</literal>
+languages, which means that the translations for these languages are
+not spread out to individual packages. The reason for this is the
+impact translations have on the initial RAM disk size and the memory
+requirements of &d-i;. Languages are removed from the
+<literal>prospective</literal> list only after the &d-i; i18n team has
+received the agreement of the &d-i; development coordinator.
 </para>
 
 	    <para>
-Nine <literal>prospective</literal> languages are waiting for the "opening of the gates".
-These translations were started after the language freeze of &d-i; which occurred during
-&d-i; RC2 development with the decision not to add more languages up to
-the sarge release. These languages have been unmarked during &d-i; Debcamp during Debconf 5.
+Nine <literal>prospective</literal> languages were
+waiting for the "gates opening".  These translations were started
+after the language freeze of &d-i; which occurred during &d-i; RC2
+development with the decision not to add more languages up to the
+sarge release.
 </para>
 
 	    <para>
-Including the <literal>prospective</literal> languages, the total number of languages supported in &d-i; is
-50, including English. The number of languages supported in the sarge
-branch is 41.
+Including the <literal>prospective</literal> languages, the total
+number of languages supported in &d-i; is 50, including English. The
+number of languages supported in the sarge branch is 41.
 </para>
 
 	  </sect4>
@@ -860,8 +579,9 @@ branch is 41.
 	    <title>Level 2</title>
 
 	    <para>
-&d-i; translation level 2 includes all packages <emphasis>prompting</emphasis>
-users during a default (high priority) base system installation.
+&d-i; translation level 2 includes all packages
+<emphasis>prompting</emphasis> users during a default (high priority)
+base system installation.
 </para>
 
 	    <para>
@@ -879,7 +599,8 @@ installation process have been added to this level. These include
 	    <para>
 Finally, two regular packages are also included in level 2 because
 part of their debconf templates are used during the second stage of
-the installation process: <classname>shadow</classname> and <classname>exim4</classname>.
+the installation process: <classname>shadow</classname> and
+<classname>exim4</classname>.
 </para>
 
 	  </sect4>
@@ -888,18 +609,22 @@ the installation process: <classname>shadow</classname> and <classname>exim4</cl
 	    <title>Level 3</title>
 
 	    <para>
-&d-i; translation level 3 includes all packages <emphasis>prompting</emphasis>
-users during any kind of base system installation.
+&d-i; translation level 3 includes all packages
+<emphasis>prompting</emphasis> users during any kind of base system
+installation.
 </para>
 
 	    <para>
 It currently includes only regular Debian packages, some of which are
-quite widely used in some types of installs (<classname>aptitude</classname>, <classname>pppconfig</classname>).
-Some others that are no longer prompting users but used to in the past, are kept for
-historical reasons or in case they come back (<classname>popularity-contest</classname>,
-<classname>pcmcia-cs</classname>..) and a few which currently only have their menu entry to
-base-config that needs translation (<classname>xdebconfigurator</classname>,
-<classname>localization-config</classname>).
+quite widely used in some types of installs
+(<classname>aptitude</classname>, <classname>pppconfig</classname>).
+Some others that are no longer prompting users but used to in the
+past, are kept for historical reasons or in case they come back
+(<classname>popularity-contest</classname>,
+<classname>pcmcia-cs</classname>..) and a few which currently only
+have their menu entry to base-config that needs translation
+(<classname>xdebconfigurator</classname>,
+<classname>l10n-config</classname>).
 </para>
 
 	  </sect4>
@@ -939,31 +664,36 @@ Several steps are required for new translators to integrate the &d-i; translatio
 </para>
 	  <itemizedlist>
 	    <listitem>
-	      <para>First contact : the translator may come by him/herself, or be directed by a third party to the &d-i; development team. The i18n team also happens to be proactive towards translators already working in other FLOSS projects and try convincing them to work on &d-i; translations.</para>
+	      <para>First contact: the translator may come by
+	      him/herself, or be directed by a third party to the
+	      &d-i; development team. The i18n team also happens to be
+	      proactive towards translators already working in other
+	      FLOSS projects and try convincing them to work on &d-i;
+	      translations;</para>
 	    </listitem>
 	    <listitem>
-	      <para>Locale and language code identification : from
+	      <para>Locale and language code identification: from
 	      information given by the candidate translator, the i18n
 	      team determines the language code that needs to be
 	      used. If a locale already exists in Debian for that
 	      language, the work can go on. Otherwise, the coordinator
 	      and the translator work on writing one (which is a very
 	      tedious task) and propose it to the locales package
-	      maintainers.
+	      maintainers;
 </para>
 	    </listitem>
 	    <listitem>
-	      <para>Local language name : the translator send the coordinators the name of the language as a UTF-8 string. The i18n coordinator updates <classname>localechooser</classname> accordingly.
+	      <para>Local language name: the translator sends the
+	      coordinators the name of the language as a UTF-8
+	      string. The i18n coordinator updates
+	      <classname>localechooser</classname> accordingly;
 </para>
 	    </listitem>
 	    <listitem>
 <para>
-   Activate early support : the i18n coordinator adds the <classname>localechooser</classname> entry and request the translator about needed information for this : display specifics, input systems...
-</para>
-	    </listitem>
-	    <listitem>
-<para>
-   The <classname>localechooser</classname> package is modified accordingly and possibly uploaded
+   Activate early support: the i18n coordinator requests the
+   translator about needed information for this: display specifics,
+   input systems...
 </para>
 	    </listitem>
 	    <listitem>
@@ -971,17 +701,21 @@ Several steps are required for new translators to integrate the &d-i; translatio
    The translator begins working on level1, translating a few strings
    and sends the new PO file to the i18n coordinator who checks it and
    commits it (not forgetting to add the given language to the
-   prospective languages list).
+   prospective languages list);
 </para>
 	    </listitem>
 	    <listitem>
 <para>
-   The new translator registers for an account on Alioth and the i18n coordinator ass him/her to the &d-i; commiters list. Subscription to the debian-i18n is also highly encouraged (and actually presented as mandatory). Subscription to the debian-boot mailing list is also encouraged but less enforced.
+   The new translator registers for an account on Alioth and the i18n
+   coordinator ass him/her to the &d-i; commiters list. Subscription
+   to the <email>debian-i18n@lists.debian.org</email> mailing list is also highly
+   encouraged (and actually presented as mandatory). Subscription to
+   the <email>debian-boot@lists.debian.org</email> mailing list is also encouraged but less enforced;
 </para>
 	    </listitem>
 	    <listitem>
 <para>
-   Finally, the i18n coordinator assists the new translator for SVN commits/checkouts so that (s)he can work autonomously
+   Finally, the i18n coordinator assists the new translator for SVN commits/checkouts so that (s)he can work autonomously.
 </para>
 	    </listitem>
 	  </itemizedlist>
@@ -993,29 +727,37 @@ This whole process has been proven to be a good way to integrate new translators
 	<sect3>
 	  <title>The framework</title>
 
-	  <para>Stricto sensu, the &d-i; internationalization framework only consists in the tools used to manage translation of level 1 packages (all packages developed by the &d-i; team) and the tools use to monitor the translation status. This paper will not describe any special method involved in handling translations for level 2-4 packages because there is indeed no special method involve to handle their translation except regular bug reporting and handling of PO files by their maintainers.
+	  <para>Stricto sensu, the &d-i; i18n framework only consists
+	  in the tools used to manage translation of level 1 packages
+	  (all packages developed by the &d-i; team) and the tools use
+	  to monitor the translation status. This paper will not
+	  describe any special method involved in handling
+	  translations for level 2-4 packages because there is indeed
+	  nothing really special regular bug reporting and handling of
+	  PO files by their maintainers.
 </para>
 
 	  <sect4>
 	    <title>Handling of level 1 PO files</title>
 
 <para>All PO files coming from all &d-i;packages are combined together
-in a big PO file named the <literal>master</literal> file. This has the advantage of
-avoiding translators to dig in each and every &d-i; package to update
-its translation. Moreover, as several packages share common strings
-(or similar strings), having these only translated once helps in
-keeping the general consistency among translations.
+in a big PO file named the <literal>master</literal> file. This has
+the advantage of avoiding translators to dig in each and every &d-i;
+package to update its translation. Moreover, as several packages share
+common strings (or similar strings), having these only translated once
+helps in keeping the general consistency among translations.
 </para>
 
-	    <para>Translators only work on the <literal>master</literal> file and all
-mergin/spreading of translations back and forth this master file to
-all individual packages is handled by special script named
-<command>l10n-sync</command>. This script is maintained by the &d-i; i18n coordination
-team and is run from one of the Debian servers available to
-developers.
+	    <para>Translators only work on the
+	    <literal>master</literal> file and all mergin/spreading of
+	    translations back and forth this master file to all
+	    individual packages is handled by special script named
+	    <command>l10n-sync</command>. This script is maintained by
+	    the &d-i; i18n coordination team and is run from one of
+	    the Debian servers available to developers.
 </para>
 
-<para><command>l10n-sync</command> tasks :</para>
+<para><command>l10n-sync</command> tasks:</para>
 <itemizedlist>
 	      <listitem>
 		<para>merge together all POT files in a single POT file
@@ -1032,11 +774,11 @@ developers.
 	    </itemizedlist>
 <para>All this is achieved with a simple shell script, by using the
 various gettext utilities. A minor drawback of this is being dependent
-on the version of the gettext utilities used to run <command>l10n-sync</command>. For
-instance, woody's gettext utilities have different behaviour and
-different options than sarge's gettext utilities. This sometimes
-resulted in gratuitous commits by the script and some headaches for
-the &d-i; developers.
+on the version of the gettext utilities used to run
+<command>l10n-sync</command>. For instance, woody's gettext utilities
+have different behaviour and different options than sarge's gettext
+utilities. This sometimes resulted in gratuitous commits by the script
+and some headaches for the &d-i; developers.
 </para>
 <para><command>l10n-sync</command> also has the ability to update a branch of the installer development repository from the PO files in another branch. For instance, the current sarge branch is updated from the PO files in the trunk. This is again aimed to simplfy the work of translators who only have to deal with one file.
 </para>
@@ -1055,11 +797,12 @@ translate without digging into packages and/or repositories.
 </para>
 
 <para>
-To make this work easier, the translation status pages collect the
-files from either the Debian archive (when no public repository is
-accessible for the given package) or from the maintainer(s) CVS or SVN
-repositories. That allows translators to easily grab the files to
-translate without digging into packages and/or repositories.
+To make this work easier, the translation status pages aintenance
+scripts collect the files from either the Debian archive (when no
+public repository is accessible for the given package) or from the
+maintainer(s) CVS or SVN repositories. That allows translators to
+easily grab the files to translate without digging into packages
+and/or repositories.
 </para>
 
 <para>
@@ -1080,12 +823,12 @@ The &d-i; i18n team maintains status pages for all levels translations. The main
 
 	  <para>
 The staus page is built by scripts run from the i18n coordinators
-account on people.debian.org. These scripts spider through all
+account on <classname>people.debian.org</classname>. These scripts spider through all
 relevant repositories or in the Debian archive (when no repository is
 available for the package). They currently cannot easily work with
 distributed revision control systems. Two packages in the various
 &d-i; l10n levels use such systems (<classname>apt</classname> and <classname>dpkg</classname>). For these packages,
-one of the i18n coordinators maintains a special tla branch for l10n.
+one of the i18n coordinators maintains a special arch branch for l10n.
 </para>
 
 	  </sect4>
@@ -1109,7 +852,7 @@ translators, which is currently not yet achieved for all languages.
 Except for automated spellchecking, no special infrastructure exists
 for peer review of translations. Several teams have setup their own
 policyand sometimes even did document it. The Dutch team peer review
-system is for instance very well documented : <ulink>http://wiki.debian.net/?l10nCoordination</ulink>.
+system is for instance very well documented: <ulink>http://wiki.debian.net/?l10nCoordination</ulink>.
 </para>
 
 	    </sect4>
@@ -1121,7 +864,12 @@ During the very late steps of sarge development, Davide Viti has setup a framewo
 </para>
 
 	  <para>
-A common word list is built for each &d-i; i18n level : this word list contains all words not recognized by aspell (most of the time, jargon words, words kept in English, acronyms, etc.). Each language team can also build its own word list with all words from this language which are not recognized by aspell even if they are correct (here again , most often jargon words, acronyms, country names, etc.).
+A common word list is built for each &d-i; i18n level: this word list
+contains all words not recognized by aspell (most of the time, jargon
+words, words kept in English, acronyms, etc.). Each language team can
+also build its own word list with all words from this language which
+are not recognized by aspell even if they are correct (here again ,
+most often jargon words, acronyms, country names, etc.).
 </para>
 
 	  <para>
@@ -1154,22 +902,32 @@ Web-based translation tools cannot completely replace specialized
 software such as KBabel, Poedit, Gtranslator or Emacs PO mode,
 especially on heavy translation work. However, they may be very
 convenient for translation maintenance as well as giving more
-opportunities to get new (wo)manpower to localization team.
+opportunities to get new (wo)manpower to l10n team.
 </para>
 
 <para>Two main systems have emerged recently:
 </para>
 <itemizedlist>
 <listitem>
+<para>
 Rosetta, developed for the Ubuntu project, is used quite widely in
-Ubuntu for localization work. Being mostly developed by contributors in (or near) the Debian community, it may very likely be adapted for Debian specific needs. Its main rawback is being based on a technlogy which does not meet the Debian Free Software Guidelines (at least at the time of this writing).
+Ubuntu for l10n work. Being mostly developed by contributors in (or
+near) the Debian community, it may very likely be adapted for Debian
+specific needs. Its main rawback is being based on a technlogy which
+does not meet the Debian Free Software Guidelines (at least at the
+time of this writing).
+</para>
 </listitem>
 <listitem>
+<para>
 Pootle, developed by contributors of the translate.org project, has
-got a very wide recognition by several major localization projects in
+got a very wide recognition by several major l10n projects in
 FLOSS. The developers have setup a server at
-http://pootle.wordforge.net but they also made the Pootle Toolkit
-available to teams who want to setup their own Pootle server. Setting up a Pootle server for Debian could be a way to go, which could help in &d-i; localization as well as all other localization work in the project.
+<ulink>http://pootle.wordforge.org</ulink> but they also made the Pootle Toolkit
+available to teams who want to setup their own Pootle server. Setting
+up a Pootle server for Debian could be a way to go, which could help
+in &d-i; l10n as well as all other l10n work in the project.
+</para>
 </listitem>
 </itemizedlist>
 
@@ -1192,12 +950,12 @@ Currently, integrating a new language in &d-i; needs to remove it from the <lite
     <sect1><title>Installation Guide</title>
 <para>
 
-The final part of this article concerns the Debian Installation Guide.
-The purpose of this manual is to provide users with a definitive guide
-to installing Debian using any of the installation methods for all of the
-architectures supported by Debian. Although for some architectures the
-basics of the installation process are fairly well covered, the manual
-unfortunately falls well short of this goal.
+
+The purpose of the Debian Installation Guide is to provide users with
+a definitive guide to installing Debian using any of the installation
+methods for all of the architectures supported by Debian. Although for
+some architectures the basics of the installation process are fairly
+well covered, the manual unfortunately falls well short of this goal.
 
 </para><para>
 
@@ -1438,6 +1196,7 @@ that can convert an existing XML-based translation to PO files.
 </para>
       </sect3>
      </sect2>
+
      <sect2><title>How can you help?</title>
 <para>
 
@@ -1565,5 +1324,274 @@ maybe work towards a more common infrastructure.
       </sect3>
      </sect2>
     </sect1>
+
+   <sect1>
+<title>The future of Debian Installer: how to help</title>
+<para>
+
+Here are some ways you can get involved and help &d-i; development.
+
+</para>
+
+    <sect2><title>Translate &d-i;</title>
+<para>
+
+   We are still looking for more new languages, as well as more translators
+   to keep the translations we have current.
+
+</para>
+    </sect2>
+    <sect2><title>Make it install an UTF-8 system</title>
+<para>
+
+   With all these languages, it's time Debian became UTF-8 by default. If
+   you agree, then research the pitfalls, convince everyone this is the
+   right choice, and make it happen.
+
+</para>
+    </sect2>
+    <sect2><title>Get involved in supporting your architecture in &d-i;</title>
+<para>
+
+   &d-i; has between zero and two porters for most architectures. This
+   sometimes results in &d-i; developers who have little experience with 
+   an architecture making important changes for it. For example, a few
+   months ago kernel updates for &d-i; hppa had to be done by a developer
+   who knew very little about the architecture. This was not ideal. 
+   
+</para><para>
+
+   Continued involvement of porters to the less popular architectures is
+   essential if &d-i; is to continue to support those architectures let alone
+   improve its support. It's quite possible that future &d-i; beta releases
+   for etch may not be available for all ports, if we don't have active 
+   developers and testers for those ports.
+
+</para><para>
+
+   We wouldn't mind seeing &d-i; work as an installer for the Hurd or a BSD
+   either.
+
+</para>
+    </sect2>
+    <sect2><title>Work on &d-i; updates for sarge</title>
+<para>
+
+   &d-i;'s modular design makes it pretty easy to update individual udebs
+   in a sarge point release to fix important bugs. Many such bugs are
+   already known and fixed in unstable; some fixes need backporting to
+   sarge, while some fixes are backported to our sarge branch and need only
+   testing and uploads.
+   
+</para><para>
+
+   Some examples of things it would be nice to fix include some nasty bugs
+   in translations (especially debconf substitution variable typos),
+   updates to the mirror list to reflect changes since rc3, kernel security
+   updates, and updates to the discover1-data hardware detection database to
+   make sarge autodetect some more hardware.
+
+</para>
+    </sect2>
+    <sect2><title>Work on supporting sarge installs using the etch installer</title>
+<para>
+
+   It should be possible to install sarge using a &d-i; with a newer kernel
+   than 2.6.8 and 2.4.27, so that as new hardware comes out sarge can still
+   be installed on it. Etch's &d-i; is planned to be backwards compatible and
+   capable of installing sarge, but to make it work usefully some packages
+   in sarge (such as kernel and hardware detection packages) will need to
+   be updated in a backports-like repository. And someone would need to do
+   the work to set up such a repository, put together a version of &d-i; that
+   can use this repository, and make CD images based on it.
+
+</para>
+    </sect2>
+    <sect2><title>Help us develop a graphical installer</title>
+<para>
+
+   Work on a graphical version of &d-i; has already begun, and indeed it's
+   now mostly usable. It still needs a lot of work, so people proficient in
+   UI polishing, graphics, and the technical side of making it work well on
+   a variety of graphics hardware are needed in the &d-i; team.
+
+</para>
+    </sect2>
+    <sect2><title>Help improve automated installs</title>
+<para>
+
+   Automated installs work for sarge, but the documentation is poor, it can
+   be hard to set up, and the need to preseed parameters to set up a network
+   interface at the kernel boot line is unwieldy and problematic. Also
+   work needs to be done on making the partitioner more flexible and
+   friendly for automated installs, enabling automated LVM and RAID setup,
+   and so on.
+ 
+</para>
+    </sect2>
+    <sect2><title>Add encrypted filesystem support to partman</title>
+<para>
+
+   Partman was designed with support for encrypted filesystems in mind, so
+   this is just a small matter of code. Your laptop will thank you.
+
+</para>
+    </sect2>
+    <sect2><title>Help improve hardware detection</title>
+<para>
+
+   We hope to be switching &d-i; to use hotplug for hardware detection, at
+   least for 2.6, based on work done by Ubuntu, and we need people to help
+   work on that. Also one of sarge's weak points is that SATA often doesn't
+   work very well, or that other HDD modules are loaded in the wrong order
+   to work properly. We also have issues with network interfaces sometimes
+   changing names between the installer and the installed system.
+
+</para>
+    </sect2>
+    <sect2><title>Help support non-free drivers/firmware</title>
+<para>
+
+   Since Debian is removing non-free firmware from main for etch, we need
+   to make sure that &d-i; can still make use of that firmware, from
+   non-free, if the user needs it. We have some interesting ideas involving
+   initramfs and catting non-free images to free &d-i; images, but all this
+   needs developers to make happen or to come up with better ideas.
+
+</para>
+    </sect2>
+    <sect2><title>Help support secure apt</title>
+<para>
+
+   &d-i; will need changes to support secure apt and signed Packages files.
+   To secure the whole installation, &d-i; needs to check signatures of the
+   udebs it downloads, too.
+
+</para>
+    </sect2>
+    <sect2><title>Help support installation by the blind</title>
+<para>
+
+   Sarge's installer only supports blind users installing on i386 with 2.4,
+   using <emphasis>floppies</emphasis>. We need someone who is committed to
+   making this better and making &d-i; fully accessible to these users.
+
+</para>
+    </sect2>
+    <sect2><title>Help improve base-config, X setup, etc</title>
+<para>
+ 
+   Because the installation doesn't finish where &d-i; proper leaves off.
+   This part of the install is noticeably lacking polish compared to the
+   rest of &d-i;, and we need to find ways to improve that. One possibility
+   is to move all of this part into the first stage of the installer, so
+   that the installer boots directly into a fully installer desktop system.
+
+</para>
+    </sect2>
+    <sect2><title>Add support for installs via PPPOE</title>
+<para>
+   
+   PPPOE is not well integrated with the installer, it is not supported in
+   the first stage install and has to be set up by hand in the second
+   stage. To get this improved we need a developer who is familiar with
+   PPPOE.
+
+</para>
+    </sect2>
+    <sect2><title>Make it easier to build custom CDs and otherwise customize the installer</title>
+<para>
+
+   Many of our users need custom versions of the installer, and we need
+   improved documentation and/or better tools for doing this.
+   
+</para><para>
+
+   A particular problem area is CD generation, which is very hard to get
+   working. That could be improved by making some easier CD creation tool
+   (like pickax) support &d-i;, or improving debian-cd, or some other way. 
+
+</para><para>
+
+   Another problem area is building versions of the installer with a custom
+   kernel or third party modules. This needs to be made easier, so that a
+   regular user can hope to do it, and it needs to be well documented.
+
+</para>
+    </sect2>
+    <sect2><title>Find a way to remove a single question from the standard install process</title>
+<para>
+
+   Every question the installer asks a user is one more place for the
+   installation process to go wrong or for a newbie to give up. During your
+   next install, pick a question and figure out ways to do away with it.
+   
+</para><para>
+
+   Some candidates:
+<itemizedlist>
+<listitem><para>
+       Why should the installer ask the user to choose a Debian mirror when
+       it can pick a good one? 
+</para></listitem>
+<listitem><para>
+       Could the installer get enough sanity checks added so it could 
+       sometimes safely install grub without asking the user for
+       confirmation?
+</para></listitem>
+<listitem><para>
+       Could the installer automatically resize existing Windows partitions
+       to make room for Debian, without the user having to work out how to do
+       it by hand?
+</para></listitem>
+<listitem><para>
+       Could the installer figure out that a machine is a laptop and
+       install the right set of packages for it?
+</para></listitem>
+</itemizedlist>
+
+</para>
+    </sect2>
+    <sect2><title>Invent the next great thing in &d-i;</title>
+<para>
+
+   The &d-i; developers love to take a good idea and run with it. For
+   example, last spring some basic work was contributed to let &d-i; detect
+   other OSes and other linux distros also installed on the machine. Now we
+   detect a dozen or so OSes and all major distros; this feature is a key
+   part of &d-i; and is used in the bootloader setup, partitioner, and
+   elsewhere. It wouldn't have happened without that initial idea and the
+   beginning of work on what has become our os-prober component. Next time
+   you install sarge, see if you cannot think of novel way that &d-i; could
+   improve the installation process -- and then work on coding up enough of
+   it so there's a plausible premise of a nice feature -- and we will help
+   you take it the rest of the way.
+
+</para>
+    </sect2>
+    <sect2><title>Add moon-buggy to &d-i;</title>
+<para>
+
+   This one has just been on our TODO list for too long to be ignored..
+
+</para>
+    </sect2>
+</sect1>
+
+
+<sect1>
+   <title>Conclusion</title>
+
+<para>
+
+Please don't assume that &d-i; development is over, or that
+it can be put off until near the release of etch. We lost some development
+momentum while the installer was frozen for the sarge release. Now we're
+trying to ramp things back up, involve as many developers with the
+installer as we can, and make sarge's old installer, in a year's time, look
+as quaint as the boot-floppies do today.
+
+</para>
+  </sect1>
 
   </article>
