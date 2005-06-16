@@ -19,7 +19,8 @@ else
 fi
 
 if [ -f index.html ] ; then
- mv index.html d-i_debconf5.html
+ # The mv thing breaks internal links
+ # mv index.html d-i_debconf5.html
  if [ -n "$sgmltools" -a -n "$w3m" ] ; then
     # To be checked
     $sgmltools --backend=txt d-i_debconf5.html >d-i_debconf5.txt
