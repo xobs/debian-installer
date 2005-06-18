@@ -27,13 +27,17 @@ my ($parentcollect, $parentexclude)=getlists($driver_for) if length $driver_for;
 foreach my $p (sort keys %$collect) {
 	print "$p\n" unless $exclude->{$p} || $parentcollect->{$p};
 
-	# Warn about missing deps. This is not perfect, in since pkgdeps
-	# ignores dependencies on virtual packages and does not support
-	# alternates (which are not really allowed for udebs anyway).
-	# Still, it will catch most common mistakes.
-	foreach my $dep (pkgdeps($p)) {
-		if (! $collect->{$dep} && ! $exclude->{$dep} && ! $parentcollect->{$dep}) {
-			warning("in $type, $p has unsatisfied dependency on $dep");
+	# Warn about missing deps.
+	foreach my $deplist (pkgdeps($p)) {
+		my $ok=0;
+		foreach my $dep (@$deplist) {
+			if ($collect->{$dep} || $exclude->{$dep} || $parentcollect->{$dep}) {
+				$ok=1;
+			}
+		}
+		if (! $ok) {
+			warning("in $type, $p has unsatisfied dependency on ".
+				join(" | ", @$deplist));
 		}
 	}
 }
@@ -97,26 +101,46 @@ sub collectdeps {
 	%seendeps=%{shift()} if @_;
 	return if $seendeps{$package};
 	$seendeps{$package}=1;
-	foreach my $dep (pkgdeps($package)) {
-		$collect->{$dep}=1;
-		collectdeps($dep, $collect, \%seendeps);
+	foreach my $deplist (pkgdeps($package)) {
+		# If there's more than one alternative to satisfy a dep,
+		# just take the first.
+		$collect->{$deplist->[0]}=1;
+		collectdeps($deplist->[0], $collect, \%seendeps);
 	}
 }
-		
-# Get the dependencies of a package;
+
+# Get the dependencies of a package. Returns a list of sublists; at least
+# one item from each sublist is needed to satisfy the dependencies.
 sub pkgdeps {
 	my $package=shift;
 	my @ret;
-	my @deps=apt_cache("depends $package");
-	shift @deps; # package name;
-	foreach my $dep (@deps) {
-		chomp $dep;
+	my @lines=map { chomp $_; $_ } apt_cache("depends $package");
+	shift @lines; # package name;
+	for (my $x=0; $x < $#lines; $x++) {
+		my $dep=$lines[$x];
 		# Note that this intentionally skips alternate
-		# dependencies, taking only the first.
+		# dependencies, since udebs are not allowed to have
+		# alternates.
 		if ($dep=~/^\s*Depends:\s/) {
 			$dep=~s/^\s*Depends:\s*//;
-			next if $dep=~/\<.*\>/; # skip virtual packages
-			push @ret, $dep;
+			if ($dep=~/\<.+\>/) {
+				# Virtual package, so collect all providers.
+				my @deps;
+				for ($x++; $x < $#lines; $x++) {
+					if ($lines[$x]=~/^    (.+)/) {
+						push @deps, $1;
+					}
+					else {
+						last;
+					}
+				}
+				if (@deps) {
+					push @ret, \@deps;
+				}
+			}
+			else {
+				push @ret, [$dep];
+			}
 		}
 	}
 	return @ret;
