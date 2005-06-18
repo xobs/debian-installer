@@ -116,7 +116,7 @@ sub pkgdeps {
 	my @ret;
 	my @lines=map { chomp $_; $_ } apt_cache("depends $package");
 	shift @lines; # package name;
-	for (my $x=0; $x < $#lines; $x++) {
+	for (my $x=0; $x < @lines; $x++) {
 		my $dep=$lines[$x];
 		# Note that this intentionally skips alternate
 		# dependencies, since udebs are not allowed to have
@@ -126,7 +126,7 @@ sub pkgdeps {
 			if ($dep=~/\<.+\>/) {
 				# Virtual package, so collect all providers.
 				my @deps;
-				for ($x++; $x < $#lines; $x++) {
+				for ($x++; $x < @lines; $x++) {
 					if ($lines[$x]=~/^    (.+)/) {
 						push @deps, $1;
 					}
