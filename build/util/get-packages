@@ -87,7 +87,7 @@ else
 	:
 fi
 
-# Update package lists and autoclean cache
+# Update package lists and autoclean cache.
 if [ "$ONLINE" = "y" ]; then
 	$APT_GET update || {
 		echo "Failed to update the Packages file. This usually means either of:"
@@ -103,6 +103,8 @@ if [ "$ONLINE" = "y" ]; then
 		exit 1
 	}
 	$APT_GET autoclean
+else
+	$APT_GET update || echo "Ignoring update failure in offline mode"
 fi
 
 if [ "$PACKAGES" = update ]; then
