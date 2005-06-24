@@ -56,6 +56,8 @@ install: build
 
 	install -d $(IMAGEDIR)
 	cp -a build/dest/* $(IMAGEDIR)
+	egrep '^[[:space:]]' $(IMAGEDIR)/MANIFEST.udebs | \
+		sed 's/^[[:space:]]*//' > $(IMAGEDIR)/udeb.list
 	cd $(IMAGEDIR) && md5sum `find . -type f` > MD5SUMS
 	ln -s $(DATE) $(ARCHIVEDIR)/current
 

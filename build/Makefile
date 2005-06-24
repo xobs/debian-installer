@@ -267,7 +267,7 @@ build_%:
 .PHONY: _build
 _build:
 	@[ -n "$(SUBARCH) $(MEDIUM) $(FLAVOUR)" ] || { echo "invalid target"; false; }
-	@$(submake) tree_umount $(EXTRATARGETS) $(TARGET) udeb-list
+	@$(submake) tree_umount $(EXTRATARGETS) $(TARGET)
 
 # Convenience rules to clean and build.
 .PHONY: rebuild_%
@@ -323,7 +323,7 @@ $(STAMPS)tree-unpack-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-s
 		mv $(TEMP)/diskusage.txt.new $(TEMP)/diskusage.txt
 	grep-dctrl -nsPackage,Version,Architecture '' $(TREE)/var/lib/dpkg/status | \
 		perl -nle '$$p = $$_; $$v = <>; chomp $$v; $$a = <>; chomp $$a; <>; print "$$p $$v $$a"' | \
-		sort > $(TEMP_INITRD_LIST)
+		sort > $(TEMP_UDEB_LIST)
 
 	# Clean up after dpkg.
 	rm -rf $(DPKGDIR)/updates
@@ -593,20 +593,13 @@ $(TREE)/lib/unifont.bgf: $(TEMP)/all.utf
 	bdftobogl -b $(TEMP)/unifont.bdf > $@.tmp
 	mv $@.tmp $@
 
-udeb-list: $(TEMP_INITRD_LIST)
-	(cat $(TEMP_INITRD_LIST) ; cat $(UDEB_LIST) 2>/dev/null) | sort | uniq > $(UDEB_LIST).new
-	mv -f $(UDEB_LIST).new $(UDEB_LIST)
-	update-manifest $(UDEB_LIST) $(MANIFEST-UDEB_LIST)
-
 #
 # Create the images for dest/. Those are the targets called from config.
 #
 # Create a compressed image of the root filesystem by way of genext2fs.
-$(INITRD): $(TEMP_INITRD) $(TEMP_INITRD_LIST)
+$(INITRD): $(TEMP_INITRD)
 	install -m 644 -D $< $@
-	install -m 644 -D $(TEMP_INITRD_LIST) $(INITRD_LIST)
-	update-manifest $@ $(MANIFEST-INITRD)
-	update-manifest $(INITRD_LIST) $(MANIFEST-INITRD_LIST)
+	update-manifest $@ $(TEMP_UDEB_LIST) $(MANIFEST-INITRD)
 
 $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 	# Only build the font if we have rootskel-locale
@@ -634,19 +627,17 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 	esac
 	gzip -v9f $(TEMP)/initrd
 
-$(TEMP_INITRD_LIST): $(TEMP_INITRD)
-
 # raw kernel images
 $(KERNEL): TEMP_REAL_KERNEL = $(TEMP)/$(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,')
 $(KERNEL):
 	@$(MAKE) $(STAMPS)tree-unpack-$(targetstring)-stamp $(TEMP_REAL_KERNEL)
 	install -m 644 -D $(TEMP_REAL_KERNEL) $@
-	update-manifest $@ $(MANIFEST-KERNEL)
+	update-manifest $@ "" $(MANIFEST-KERNEL)
 
 # bootable images
 $(BOOT): $(TEMP_BOOT)
 	install -m 644 -D $(TEMP_BOOT)$(GZIPPED) $@
-	update-manifest $@ $(MANIFEST-BOOT)
+	update-manifest $@ $(TEMP_UDEB_LIST) $(MANIFEST-BOOT)
 
 $(TEMP_KERNEL): $(STAMPS)tree-unpack-$(targetstring)-stamp
 
@@ -655,21 +646,21 @@ $(TEMP_BOOT): $(TEMP_INITRD) $(TEMP_KERNEL) $(TEMP_BOOT_SCREENS) arch_boot
 # non-bootable root images
 $(ROOT): $(TEMP_ROOT)
 	install -m 644 -D $(TEMP_ROOT)$(GZIPPED) $@
-	update-manifest $@ $(MANIFEST-ROOT)
+	update-manifest $@ $(TEMP_UDEB_LIST) $(MANIFEST-ROOT)
 
 $(TEMP_ROOT): $(TEMP_INITRD) arch_root
 
 # miniature ISOs with only a boot image
 $(MINIISO): $(TEMP_MINIISO)
 	install -m 644 -D $(TEMP_MINIISO) $@
-	update-manifest $@ $(MANIFEST-MINIISO)
+	update-manifest $@ $(TEMP_UDEB_LIST) $(MANIFEST-MINIISO)
 
 $(TEMP_MINIISO): $(TEMP_BOOT_SCREENS) arch_miniiso
 
 # various kinds of information, for use on debian-cd isos
 $(DEBIAN_CD_INFO): $(TEMP_BOOT_SCREENS)
 	(cd $(TEMP_BOOT_SCREENS); tar czf - .) > $@
-	update-manifest $@ $(MANIFEST-DEBIAN_CD_INFO)
+	update-manifest $@ "" $(MANIFEST-DEBIAN_CD_INFO)
 
 # a directory full of files for netbooting
 $(NETBOOT_DIR): $(NETBOOT_DIR_TARGETS) $(TEMP_BOOT_SCREENS) $(TEMP_NETBOOT_DIR)
@@ -680,12 +671,12 @@ $(NETBOOT_DIR): $(NETBOOT_DIR_TARGETS) $(TEMP_BOOT_SCREENS) $(TEMP_NETBOOT_DIR)
 		rm -f $@/../$(link); \
 		cp -a $(TEMP_NETBOOT_DIR)/$(link) $@/..; \
 	)
-	update-manifest $@ $(MANIFEST-NETBOOT_DIR)
+	update-manifest $@ "" $(MANIFEST-NETBOOT_DIR)
 
 # a tarball for netbooting
 $(NETBOOT_TAR): $(TEMP_NETBOOT_DIR)
 	(cd $(TEMP_NETBOOT_DIR); tar czf - .) > $@
-	update-manifest $@ $(MANIFEST-NETBOOT_TAR)
+	update-manifest $@ "" $(MANIFEST-NETBOOT_TAR)
 
 $(TEMP_BOOT_SCREENS): arch_boot_screens
 $(TEMP_NETBOOT_DIR): arch_netboot_dir
@@ -694,13 +685,13 @@ $(MISC): TEMP_REAL_MISC = $(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,'
 $(MISC): 
 	install -m 644 $(TEMP_REAL_MISC) $(SOME_DEST)/$(EXTRANAME)
 	update-manifest \
-		$(SOME_DEST)/$(EXTRANAME)$(shell basename $(TEMP_REAL_MISC)) \
+		$(SOME_DEST)/$(EXTRANAME)$(shell basename $(TEMP_REAL_MISC)) "" \
 		$(MANIFEST-MISC)
 
 # Other images, e.g. driver floppies. Those are simply handled as flavours
 $(EXTRA): $(TEMP_EXTRA)
 	install -m 644 -D $(TEMP_EXTRA)$(GZIPPED) $@
-	update-manifest $@ $(MANIFEST-EXTRA)
+	update-manifest $@ $(TEMP_UDEB_LIST) $(MANIFEST-EXTRA)
 
 $(TEMP_EXTRA): $(STAMPS)extra-$(targetstring)-stamp
 	install -d $(shell dirname $@)
@@ -721,6 +712,7 @@ $(STAMPS)extra-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
 	@rm -f $@
 	mkdir -p $(TREE)
 	echo -n > $(TEMP)/diskusage.txt
+	echo -n > $(TEMP_UDEB_LIST)
 	
 	set -e; \
 	for file in $(UDEBS); do \
@@ -733,7 +725,9 @@ $(STAMPS)extra-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
 			usedblocks=`du -s $$udeb | awk '{print $$1}'` ; \
 			usedcount=1 ; \
 			version=`dpkg-deb --info $$udeb | grep Version: | awk '{print $$2}'` ; \
-			echo " $$usedsize B - $$usedblocks blocks - $$usedcount files used by pkg $$pkg (version $$version)" >>$(TEMP)/diskusage.txt;\
+			arch=`dpkg-deb --info $$udeb | grep Architecture: | awk '{print $$2}'` ; \
+			echo " $$usedsize B - $$usedblocks blocks - $$usedcount files used by pkg $$pkg (version $$version)" >>$(TEMP)/diskusage.txt; \
+			echo "$$pkg $$version $$arch" >> $(TEMP_UDEB_LIST); \
 		fi; \
 	done
 	sort -n < $(TEMP)/diskusage.txt > $(TEMP)/diskusage.txt.new && \
