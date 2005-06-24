@@ -267,7 +267,7 @@ build_%:
 .PHONY: _build
 _build:
 	@[ -n "$(SUBARCH) $(MEDIUM) $(FLAVOUR)" ] || { echo "invalid target"; false; }
-	@$(submake) tree_umount $(EXTRATARGETS) $(TARGET)
+	@$(submake) tree_umount $(EXTRATARGETS) $(TARGET) udeb-list
 
 # Convenience rules to clean and build.
 .PHONY: rebuild_%
@@ -321,8 +321,8 @@ $(STAMPS)tree-unpack-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-s
 	done
 	sort -n < $(TEMP)/diskusage.txt > $(TEMP)/diskusage.txt.new && \
 		mv $(TEMP)/diskusage.txt.new $(TEMP)/diskusage.txt
-	grep-dctrl -nsPackage,Version '' $(TREE)/var/lib/dpkg/status | \
-		perl -nle '$$p = $$_; $$v = <>; chomp $$v; <>; print "$$p $$v"' | \
+	grep-dctrl -nsPackage,Version,Architecture '' $(TREE)/var/lib/dpkg/status | \
+		perl -nle '$$p = $$_; $$v = <>; chomp $$v; $$a = <>; chomp $$a; <>; print "$$p $$v $$a"' | \
 		sort > $(TEMP_INITRD_LIST)
 
 	# Clean up after dpkg.
@@ -593,6 +593,10 @@ $(TREE)/lib/unifont.bgf: $(TEMP)/all.utf
 	bdftobogl -b $(TEMP)/unifont.bdf > $@.tmp
 	mv $@.tmp $@
 
+udeb-list: $(TEMP_INITRD_LIST)
+	(cat $(TEMP_INITRD_LIST) ; cat $(UDEB_LIST) 2>/dev/null) | sort | uniq > $(UDEB_LIST).new
+	mv -f $(UDEB_LIST).new $(UDEB_LIST)
+	update-manifest $(UDEB_LIST) $(MANIFEST-UDEB_LIST)
 
 #
 # Create the images for dest/. Those are the targets called from config.
