@@ -3,8 +3,8 @@
 # Also cleans manifests of any items that do not exist any longer.
 # May be run with no parameters to only clear old stuff.
 my $file=shift;
-my $udeblist=shift;
 my $desc=shift;
+my @udeblists=shift;
 
 if (length $file && ! length $desc) {
 	print STDERR "warning: no manifest info for $file\n";
@@ -36,6 +36,7 @@ if (-e "dest/MANIFEST.udebs") {
 		elsif (defined $file) {
 			s/^\s+//;
 			push @{$manifest_udebs{$file}}, $_;
+			$seen{$_}=1;
 		}
 	}
 }
@@ -46,11 +47,14 @@ if (length $file) {
 	$manifest{$file}=$desc;
 	
 	delete $manifest_udebs{$file};
-	if (-e $udeblist) {
-		open (IN, "$udeblist") || die $!;
-		while (<IN>) {
-			chomp;
-			push @{$manifest_udebs{$file}}, $_;
+	foreach my $udeblist (@udeblists) {
+		if (-e $udeblist) {
+			my %seen;
+			open (IN, "$udeblist") || die $!;
+			while (<IN>) {
+				chomp;
+				push @{$manifest_udebs{$file}}, $_ unless $seen{$_};
+			}
 		}
 	}
 }
