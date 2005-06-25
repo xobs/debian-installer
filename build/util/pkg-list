@@ -64,6 +64,7 @@ sub collectpackage {
 	my $line=shift;
 	my $collect=shift;
 	my $exclude=shift;
+	my $postponed=shift;
 
 	if ($line=~s/^(.*) \[([0-9. ]+)\]$/$1/) {
 		my %kernels=();
@@ -80,7 +81,7 @@ sub collectpackage {
 		# Asterisk at end means include all dependencies of this
 		# package.
 		$collect->{$1}=1;
-		collectdeps($1, $collect);
+		collectdeps($1, $collect, $postponed);
 	}
 	elsif ($line=~/^(.*) \-$/) {
 		# Minus sign at the end means exclude this package from the
@@ -96,15 +97,21 @@ sub collectpackage {
 sub collectdeps {
 	my $package=shift;
 	my $collect=shift;
+	my $postponed=shift;
 	my %seendeps;
 	%seendeps=%{shift()} if @_;
 	return if $seendeps{$package};
 	$seendeps{$package}=1;
 	foreach my $deplist (pkgdeps($package)) {
-		# If there's more than one alternative to satisfy a dep,
-		# just take the first.
-		$collect->{$deplist->[0]}=1;
-		collectdeps($deplist->[0], $collect, \%seendeps);
+		if (@$deplist > 1) {
+			# If there's more than one alternative to satisfy a
+			# dep, postpone trying to satisfy it until later.
+			push @{$postponed}, $deplist;		
+		}
+		else {
+			$collect->{$deplist->[0]}=1;
+			collectdeps($deplist->[0], $collect, $postponed, \%seendeps);
+		}
 	}
 }
 
@@ -152,6 +159,7 @@ sub getlists {
 
 	my %collect;
 	my %exclude;
+	my @postponed;
 	
 	my @lists = ("pkg-lists/local", "pkg-lists/exclude");
 	my $t="";
@@ -204,16 +212,32 @@ sub getlists {
 					foreach my $v (@kernel_versions) {
 						my $l=$_;
 						$l=~s/\${kernel:Version}/$v-$kernel_flavour/g;
-						collectpackage($l, \%collect, \%exclude);
+						collectpackage($l, \%collect, \%exclude, \@postponed);
 					}
 					next; # move on to the next line
 				}
-				collectpackage($_, \%collect, \%exclude);
+				collectpackage($_, \%collect, \%exclude, \@postponed);
 			}
 			close LIST;
 		}
 	}
 
+	# Make sure any postponed sets of alternative dependencies
+	# are satisfied. If any of the dependencies in a set are already
+	# selected, that satisfies it. If now, arbitrarily choose the
+	# first.
+	foreach my $set (@postponed) {
+		my $satisfied=0;
+		foreach my $d (@$set) {
+			if ($collect->{$d}) {
+				$satisfied=1;
+			}
+		}
+		if (! $satisfied) {
+			$collect->{$set->[0]}=1;
+		}
+	}
+	
 	return \%collect, \%exclude;
 }
 
