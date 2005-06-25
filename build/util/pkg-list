@@ -21,24 +21,21 @@ my @kernel_versions=@ARGV;
 my $deb_host_arch=`dpkg-architecture -qDEB_HOST_ARCH`;
 chomp $deb_host_arch;
 
-my ($collect, $exclude)=getlists($type);
-my ($parentcollect, $parentexclude)=getlists($driver_for) if length $driver_for;
-foreach my $p (sort keys %$collect) {
-	print "$p\n" unless $exclude->{$p} || $parentcollect->{$p};
+sub warning {
+	print STDERR "** warning: @_\n";
+}
 
-	# Warn about missing deps.
-	foreach my $deplist (pkgdeps($p)) {
-		my $ok=0;
-		foreach my $dep (@$deplist) {
-			if ($collect->{$dep} || $exclude->{$dep} || $parentcollect->{$dep}) {
-				$ok=1;
-			}
-		}
-		if (! $ok) {
-			warning("in $type, $p has unsatisfied dependency on ".
-				join(" | ", @$deplist));
-		}
-	}
+my $debug=1;
+my $debugindent=0;
+
+sub debug {
+	return unless $debug;
+	
+	my $indent=shift;
+	my $text=shift;
+
+	print STDERR "pkg-lists: ".("    " x $debugindent)." $text\n" if $text;
+	$debugindent+=$indent;
 }
 
 # Run apt-cache on udebs, return result.
@@ -80,16 +77,22 @@ sub collectpackage {
 	if ($line=~/^(.*) \*$/) {
 		# Asterisk at end means include all dependencies of this
 		# package.
-		$collect->{$1}=1;
-		collectdeps($1, $collect, $postponed);
+		my $package=$1;
+		$collect->{$package}=1;
+		debug 0, "adding $package";
+		collectdeps($package, $collect, $postponed);
 	}
 	elsif ($line=~/^(.*) \-$/) {
 		# Minus sign at the end means exclude this package from the
 		# list.
-		$exclude->{$1}=1;
+		my $package=$1;
+		$exclude->{$package}=1;
+		debug 0, "excluding $package";
 	}
 	else {
-		$collect->{$line}=1;
+		my $package=$line;
+		$collect->{$package}=1;
+		debug 0, "adding $package";
 	}
 }
 
@@ -98,21 +101,30 @@ sub collectdeps {
 	my $package=shift;
 	my $collect=shift;
 	my $postponed=shift;
+	
 	my %seendeps;
 	%seendeps=%{shift()} if @_;
 	return if $seendeps{$package};
 	$seendeps{$package}=1;
+	
+	debug(1, "collecting dependencies for $package");
+	
 	foreach my $deplist (pkgdeps($package)) {
 		if (@$deplist > 1) {
 			# If there's more than one alternative to satisfy a
 			# dep, postpone trying to satisfy it until later.
-			push @{$postponed}, $deplist;		
+			push @{$postponed}, $deplist;
+			debug 0, "postponed satisfying dep on ".
+				join(" | ",@$deplist)." for $package";
 		}
 		else {
 			$collect->{$deplist->[0]}=1;
+			debug 0, "added $deplist->[0] for $package";
 			collectdeps($deplist->[0], $collect, $postponed, \%seendeps);
 		}
 	}
+
+	debug(-1);
 }
 
 # Get the dependencies of a package. Returns a list of sublists; at least
@@ -177,6 +189,7 @@ sub getlists {
 
 	while (@lists) {
 		my $list=pop @lists;
+		debug 1, "processing $list";
 		if (! -e $list) {
 			warning("missing list, $list, for type $type")
 				if $list !~ /local$/ && $list !~ m#$deb_host_arch/$sub_arch.cfg$#;
@@ -220,27 +233,57 @@ sub getlists {
 			}
 			close LIST;
 		}
+
+		debug(-1);
 	}
 
 	# Make sure any postponed sets of alternative dependencies
 	# are satisfied. If any of the dependencies in a set are already
 	# selected, that satisfies it. If now, arbitrarily choose the
 	# first.
-	foreach my $set (@postponed) {
+	while (@postponed) {
+		my $set=pop @postponed;
 		my $satisfied=0;
 		foreach my $d (@$set) {
-			if ($collect->{$d}) {
+			if ($collect{$d}) {
 				$satisfied=1;
 			}
 		}
 		if (! $satisfied) {
-			$collect->{$set->[0]}=1;
+			$collect{$set->[0]}=1;
+			debug 0, "adding $set->[0] (chosen at random out of @$set)";
+			collectdeps($set->[0], \%collect, \@postponed);
 		}
 	}
 	
 	return \%collect, \%exclude;
 }
 
-sub warning {
-	print STDERR "** warning: @_\n";
+# Main program.
+debug 1, "reading pkg-lists for $type";
+my ($collect, $exclude)=getlists($type);
+debug -1;
+
+my ($parentcollect, $parentexclude);
+if (length $driver_for) {
+	debug 1, "reading pkg-lists for $driver_for and excluding";
+	($parentcollect, $parentexclude)=getlists($driver_for);
+	debug -1;
+}
+foreach my $p (sort keys %$collect) {
+	print "$p\n" unless $exclude->{$p} || $parentcollect->{$p};
+
+	# Warn about missing deps.
+	foreach my $deplist (pkgdeps($p)) {
+		my $ok=0;
+		foreach my $dep (@$deplist) {
+			if ($collect->{$dep} || $exclude->{$dep} || $parentcollect->{$dep}) {
+				$ok=1;
+			}
+		}
+		if (! $ok) {
+			warning("in $type, $p has unsatisfied dependency on ".
+				join(" | ", @$deplist));
+		}
+	}
 }
