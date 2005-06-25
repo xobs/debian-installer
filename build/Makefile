@@ -599,7 +599,7 @@ $(TREE)/lib/unifont.bgf: $(TEMP)/all.utf
 # Create a compressed image of the root filesystem by way of genext2fs.
 $(INITRD): $(TEMP_INITRD)
 	install -m 644 -D $< $@
-	update-manifest $@ $(MANIFEST-INITRD) $(TEMP_UDEB_LIST)
+	update-manifest $@ $(MANIFEST-INITRD) $(UDEB_LISTS)
 
 $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
 	# Only build the font if we have rootskel-locale
@@ -637,7 +637,7 @@ $(KERNEL):
 # bootable images
 $(BOOT): $(TEMP_BOOT)
 	install -m 644 -D $(TEMP_BOOT)$(GZIPPED) $@
-	update-manifest $@ $(MANIFEST-BOOT) $(TEMP_UDEB_LIST)
+	update-manifest $@ $(MANIFEST-BOOT) $(UDEB_LISTS)
 
 $(TEMP_KERNEL): $(STAMPS)tree-unpack-$(targetstring)-stamp
 
@@ -646,14 +646,14 @@ $(TEMP_BOOT): $(TEMP_INITRD) $(TEMP_KERNEL) $(TEMP_BOOT_SCREENS) arch_boot
 # non-bootable root images
 $(ROOT): $(TEMP_ROOT)
 	install -m 644 -D $(TEMP_ROOT)$(GZIPPED) $@
-	update-manifest $@ $(MANIFEST-ROOT) $(TEMP_UDEB_LIST)
+	update-manifest $@ $(MANIFEST-ROOT) $(UDEB_LISTS)
 
 $(TEMP_ROOT): $(TEMP_INITRD) arch_root
 
 # miniature ISOs with only a boot image
 $(MINIISO): $(TEMP_MINIISO)
 	install -m 644 -D $(TEMP_MINIISO) $@
-	update-manifest $@ $(MANIFEST-MINIISO) $(TEMP_UDEB_LIST)
+	update-manifest $@ $(MANIFEST-MINIISO) $(UDEB_LISTS)
 
 $(TEMP_MINIISO): $(TEMP_BOOT_SCREENS) arch_miniiso
 
@@ -671,12 +671,12 @@ $(NETBOOT_DIR): $(NETBOOT_DIR_TARGETS) $(TEMP_BOOT_SCREENS) $(TEMP_NETBOOT_DIR)
 		rm -f $@/../$(link); \
 		cp -a $(TEMP_NETBOOT_DIR)/$(link) $@/..; \
 	)
-	update-manifest $@ $(MANIFEST-NETBOOT_DIR) $(TEMP_UDEB_LIST)
+	update-manifest $@ $(MANIFEST-NETBOOT_DIR) $(UDEB_LISTS)
 
 # a tarball for netbooting
 $(NETBOOT_TAR): $(TEMP_NETBOOT_DIR)
 	(cd $(TEMP_NETBOOT_DIR); tar czf - .) > $@
-	update-manifest $@ $(MANIFEST-NETBOOT_TAR) $(TEMP_UDEB_LIST)
+	update-manifest $@ $(MANIFEST-NETBOOT_TAR) $(UDEB_LISTS)
 
 $(TEMP_BOOT_SCREENS): arch_boot_screens
 $(TEMP_NETBOOT_DIR): arch_netboot_dir
@@ -691,7 +691,7 @@ $(MISC):
 # Other images, e.g. driver floppies. Those are simply handled as flavours
 $(EXTRA): $(TEMP_EXTRA)
 	install -m 644 -D $(TEMP_EXTRA)$(GZIPPED) $@
-	update-manifest $@ $(MANIFEST-EXTRA) $(TEMP_UDEB_LIST)
+	update-manifest $@ $(MANIFEST-EXTRA) $(UDEB_LISTS)
 
 $(TEMP_EXTRA): $(STAMPS)extra-$(targetstring)-stamp
 	install -d $(shell dirname $@)
