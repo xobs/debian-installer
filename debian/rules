@@ -3,12 +3,12 @@
 ARCH=$(shell dpkg-architecture -qDEB_BUILD_ARCH)
 VERSION=$(shell LC_ALL=C dpkg-parsechangelog | grep ^Version: | cut -d ' ' -f 2)
 DATE=$(shell echo $(VERSION) | cut -d '.' -f 1)
-DISTRIBUTION=$(shell LC_ALL=C dpkg-parsechangelog | grep ^Distribution: | cut -d ' ' -f 2)
-ifeq (${DISTRIBUTION},unstable)
-DISTRIBUTION=sarge
+SUITE=$(shell LC_ALL=C dpkg-parsechangelog | grep ^Distribution: | cut -d ' ' -f 2)
+ifeq (${SUITE},unstable)
+SUITE=etch
 endif
-ifeq (${DISTRIBUTION},UNRELEASED)
-DISTRIBUTION=unstable
+ifeq (${SUITE},UNRELEASED)
+SUITE=unstable
 endif
 
 ARCHIVEDIR=debian/tmp/installer-$(ARCH)
@@ -29,7 +29,7 @@ clean:
 # Must run as root, so is not run as part of regular build.
 build-images:
 	$(MAKE) -C build all_build stats \
-		SUITE=$(DISTRIBUTION) BUILD_DATE=$(DATE) PRESEED=
+		SUITE=$(SUITE) BUILD_DATE=$(DATE) PRESEED=
 	
 build: build-stamp
 build-stamp:
