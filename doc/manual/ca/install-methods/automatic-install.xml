@@ -1,104 +1,109 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 27518 untranslated -->
+<!-- original version: 27518 -->
 
  <sect1 id="automatic-install">
- <title>Automatic Installation</title>
+ <title>Instal·lació automàtica</title>
 <para>
 
-For installing on multiple computers it's possible to do fully
-automatic installations. Debian packages intended for this include
-<classname>fai</classname> (which uses an install server),
+Si heu d'instal·lar a molts ordinadors, és possible fer instal·lacions
+completament automatitzades. Els paquets dels que es disposa a Debian
+per fer-ho són:
+<classname>fai</classname> (que utilitza un servidor d'instal·lació),
 <classname>replicator</classname>,
 <classname>systemimager</classname>,
-<classname>autoinstall</classname>, and 
-the Debian Installer itself.
+<classname>autoinstall</classname>, i el mateix instal·lador de Debian.
 
 </para>
 
   <sect2 id="preseed">
-  <title>Automatic Installation Using the Debian Installer</title>
+  <title>Instal·lació automàtica utilitzant l'instal·lador de Debian</title>
 <para>
 
-The Debian Installer supports automating installs via preconfiguration
-files. A preconfiguration file can be loaded from the network or from
-removable media, and used to fill in answers to question asked during the
-installation process.
+L'instal·lador de Debian suporta l'automatització de la instal·lació
+utilitzant fitxers de preconfiguració. Es pot carregar un fitxer de
+preconfiguració des de la xarxa o des d'un mitjà extraïble, i el que
+fa és emplenar amb respostes totes les preguntes fetes al procés
+d'instal·lació.
 
 </para><para>
 
-Although most dialogs used by &d-i; can be preseeded using this method,
-there are some notable exceptions. You can (re)partition an entire disk
-or use available free space on a disk; it is not possible to use existing
-partitions. You currently cannot use preseeding to set up RAID and LVM.
-<phrase condition="sarge">Also, with the exception of network driver modules,
-it is not possible to preconfigure kernel module parameters.</phrase>
+Malgrat que els diàlegs utilitzats pel &d-i; es poden precarregar
+utilitzant aquest mètode, hi ha algunes excepcions. Podeu (re)particionar
+un disc complet o utilitzar l'espai buit a un disc, però no és possible
+utilitzar les particions que ja teniu. En aquest moment no podeu
+precarregar les opcions de configuració de RAID i LVM.
+<phrase condition="sarge">A més a més, amb l'excepció dels mòduls dels
+controladors de xarxa, no és possible preconfigurar els paràmetres dels
+mòduls del nucli.
+</phrase>
 
 </para><para>
 
-The preconfiguration file is in the format used by the
-debconf-set-selections command. A well documented and working example that
-you can edit is in <xref linkend="example-preseed"/>.
+El fitxer de preconfiguració està en el format que utilitza l'ordre
+«debconf-set-selections». Podeu trobar un exemple ben documentat i funcional
+que podeu editar a <xref linkend="example-preseed"/>.
 
 </para><para>
 
-Alternatively, one way to get a complete file listing
-all the values that can be preseeded is to do a manual install,
-and then use <filename>debconf-get-selections</filename>,
-from the <classname>debconf-utils</classname> package,
-to dump both the debconf database and the cdebconf
-database in /var/log/debian-installer/cdebconf to a single file:
+D'altra banda, una forma d'aconseguir un fitxer amb una llista completa amb
+tots els valors que poden ser precarregats, és fer una instal·lació
+manual, i aleshores utilitzar <filename>debconf-get-selections</filename>,
+del paquet <classname>debconf-utils</classname>, per abocar les bases de
+dades de debconf i cdebconf que està a /var/log/debian-installer/cdebconf
+a un sol fitxer:
 
 <informalexample><screen>
-$ debconf-get-selections --installer &gt; <replaceable>file</replaceable>
-$ debconf-get-selections &gt;&gt; <replaceable>file</replaceable>
+$ debconf-get-selections --installer &gt; <replaceable>fitxer</replaceable>
+$ debconf-get-selections &gt;&gt; <replaceable>fitxer</replaceable>
 </screen></informalexample>
 
-However, a file generated in this manner will have some items that should
-not be preseeded, and the file in <xref linkend="example-preseed"/> is a
-better starting place for most users.
+Però un fitxer generat d'aquesta manera, tindrà també alguns valors que no
+haurien de ser precarregats, i el fitxer <xref linkend="example-preseed"/>
+és un millor punt de partida per la majoria dels usuaris.
 
 </para><para>
 
-Once you have a preconfiguration file, you can edit it if necessary, and
-place it on a web server, or copy it onto the installer's boot media. Wherever
-you place the file, you need to pass a parameter to the installer at boot
-time to tell it to use the file.
+Quan estigui preparat el fitxer de preconfiguració, podeu editar-lo si ho
+necessiteu, i podeu posar-lo a un servidor web, o copiar-lo a un mitjà
+d'instal·lació. A qualsevol lloc que poseu el fitxer, necessitareu passar-li
+un paràmetre a l'instal·lador en el moment de l'arrencada per dir-li que
+utilitze el fitxer.
 
 </para><para>
 
-To make the installer use a preconfiguration file downloaded from the
-network, add preseed/url=http://url/to/preseed.cfg to the kernel boot
-parameters. Of course the preconfiguration will not take effect until the
-installer manages to set up the network to download the file, so this is
-most useful if the installer can set up the network via DHCP without asking
-any questions. You may want to set the installation priority to critical to
-avoid any questions while the network is being configured. See 
+Per fer que l'instal·lador utilitze un fitxer de preconfiguració baixant-lo
+de la xarxa, afegiu preseed/url=http://url/to/preseed.cfg als paràmetres
+d'arrencada del nucli. Per suposat, el fitxer de preconfiguració no tindrà
+efecte fins que es configure la xarxa per descarregar el fitxer, així que és
+més normal si l'instal·lador pot configurar la xarxa per DHCP sense fer cap
+pregunta. Si voleu, podeu configurar la prioritat d'instal·lació a «critical»
+per evitar les preguntes fins que la xarxa estigui configurada. Vegeu
 <xref linkend="installer-args"/>.
 
 </para><para>
 
-To place a preconfiguration file on a CD, you would need to remaster the
-ISO image to include your preconfiguration file. See the manual page for
-mkisofs for details. Alternatively, put the preseed file on a floppy, and
-use preseed/file=/floppy/preseed.cfg
+Per posar el fitxer de preconfiguració a un CD, necessitaríeu remasteritzar
+la imatge ISO per incloure el fitxer de preconfiguració. Vegeu els detalls
+a la pàgina del manual de mkisofs. De forma alternativa, poseu el fitxer de
+preconfiguració a un disquet, i utilitzeu preseed/file=/floppy/preseed.cfg.
 
 </para><para arch="i386">
 
-If you'll be booting from a USB memory stick, then you can simply copy your
-preconfiguration file onto the memory stick's filesystem, and edit the
-syslinux.cfg file to add preseed/file=/hd-media/preseed.cfg to the kernel boot
-parameters.
+Si arrenqueu des d'un llapis de memòria USB, aleshores podeu copiar el fitxer
+de preconfiguració al llapis de memòria i editar el fitxer syslinux.cfg per
+afegir preseed/file=/hd-media/preseed.cfg als paràmetres d'arrencada del
+nucli.
 
 </para>
-  
+
    <sect3 condition="etch">
-   <title>Using Preseeding to Change Default Values</title>
+   <title>Utilització de precàrrega per canviar els valors predeterminats</title>
 <para>
 
-It is also possible to use preseeding to change the default answer for a
-question, but still have the question asked. To do this the
-<firstterm>seen</firstterm> flag must be reset to <quote>false</quote> after
-setting the value for a template.
+És possible utilitzar les precàrregues per canviar les respostes
+predeterminades a les preguntes, però tot i així haver-les de respondre.
+Per fer-ho, la marca <firstterm>seen</firstterm> ha de posar-se a
+<quote>false</quote> desprès de definir el valor a la plantilla.
 
 <informalexample><screen>
 d-i foo/bar string value
