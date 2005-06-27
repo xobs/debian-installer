@@ -6,9 +6,12 @@ DATE=$(shell echo $(VERSION) | cut -d '.' -f 1)
 SUITE=$(shell LC_ALL=C dpkg-parsechangelog | grep ^Distribution: | cut -d ' ' -f 2)
 ifeq (${SUITE},unstable)
 SUITE=etch
+MANUAL_SUITE=etch
 endif
 ifeq (${SUITE},UNRELEASED)
 SUITE=unstable
+# Still build manual for etch.
+MANUAL_SUITE=etch
 endif
 
 ARCHIVEDIR=debian/tmp/installer-$(ARCH)
@@ -36,7 +39,8 @@ build-stamp:
 	rm -f $@
 	-rm -rf $(MANTMP)
 	set -e && cd doc/manual/build && \
-	        official_build=1 destination=$(MANTMP) \
+		official_build=1 destination=$(MANTMP) \
+		manual_release=$(MANUAL_SUITE) \
 		architectures=$(ARCH) noarchdir=1 ./build.sh
 
 	$(MAKE) -C doc/devel/partman
