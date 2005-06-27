@@ -392,7 +392,7 @@ build_path="$manual_path/build"
 # format to make sure we don't get an arch 'ps' just because it's a
 # substring of 'mipsel'
 
-LANGUAGES=`find $basedir/.. -type d -maxdepth 1 -printf " %f \n" | grep -v "^\ \." | grep -v "historic" | grep -v "build"  | grep -v "scripts" | grep -v "po" | sort | tr -d "\n"`
+LANGUAGES=`find $basedir/.. -type d -maxdepth 1 -printf " %f \n" | grep -v "^\ \." | grep -v "build"  | grep -v "scripts" | grep -v "po" | sort | tr -d "\n"`
 ARCHS=`find arch-options -type f -maxdepth 1 -printf " %f "`
 FORMATS=" html text pdf ps newpdf newps  htmlone latex "
 
