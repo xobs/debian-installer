@@ -16,6 +16,7 @@
 #   UDEBDIR      - directory for ready-to-use udebs (default: udebs)
 #   LOCALUDEBDIR - directory for locally provided udebs (default: localudebs)
 #   ONLINE       - update Packages files (default: y)
+#   KEYRING      - keyring for apt
 
 set -e
 
@@ -39,6 +40,9 @@ if [ ! $LOCALUDEBDIR ]; then
 fi
 if [ ! $ONLINE ]; then
 	ONLINE="y"
+fi
+if [ -z "$KEYRING" ]; then
+	KEYRING=/etc/apt/trusted.gpg
 fi
 
 # Set APTDIR according to type
@@ -65,6 +69,7 @@ APT_GET="apt-get --assume-yes \
 	-o Debug::NoLocking=true \
 	-o Dir::Cache=`pwd`/$APTDIR/cache \
 	-o Acquire::Retries=3 \
+	-o APT::GPGV::TrustedKeyring="$KEYRING" \
 	-o Apt::Architecture=`dpkg-architecture -qDEB_HOST_ARCH`"
 
 # Prepare APTDIR

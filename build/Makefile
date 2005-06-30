@@ -99,6 +99,8 @@ include config/dir
 -include config/$(ARCH)/$(SUBARCH)/$(MEDIUM).cfg
 -include config/$(ARCH)/$(SUBARCH)/$(MEDIUM)/$(FLAVOUR).cfg
 
+export KEYRING
+
 #
 # Useful command sequences
 #
