@@ -385,8 +385,7 @@ ifdef PRESEED
 endif
 ifneq (,$(wildcard $(KEYRING)))
 	mkdir -p $(TREE)/usr/share/keyrings
-	cp -a $(KEYRING) $(TREE)/usr/share/keyrings/
-	echo 'd-i anna/keyring string /usr/share/keyrings/$(basename $(KEYRING))' >>$(TREE)/preseed.cfg
+	cp -a $(KEYRING) $(TREE)/usr/share/keyrings/archive.gpg
 endif
 
 ifdef EXTRAFILES
