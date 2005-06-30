@@ -383,6 +383,11 @@ ifdef PRESEED
 	# Copy in preseed file.
 	cp -a $(PRESEED) $(TREE)/preseed.cfg
 endif
+ifneq (,$(wildcard $(KEYRING)))
+	mkdir -p $(TREE)/usr/share/keyrings
+	cp -a $(KEYRING) $(TREE)/usr/share/keyrings/
+	echo 'd-i anna/keyring string /usr/share/keyrings/$(basename $(KEYRING))' >>$(TREE)/preseed.cfg
+endif
 
 ifdef EXTRAFILES
 	# Copy in any extra files.
