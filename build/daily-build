@@ -54,20 +54,19 @@ build () {
 		TARGETS="$($ROOTCMD make all_list |grep '^build')"
 	fi
 
-	$ROOTCMD make reallyclean
+	$ROOTCMD make reallyclean > /dev/null
 	mkdir dest
 	touch dest/overview.log
 	for t in $TARGETS; do
-		(
-			header BUILDING IMAGE FOR $t
-			if $ROOTCMD make $t; then
-				overview "$t success"
-			else
-				overview "$t failed"
-			fi
-		) 2>&1 | tee dest/$t.log # This is allowed to fail
+		header BUILDING IMAGE FOR $t > dest/$t.log
+		if $ROOTCMD make $t >> dest/$t.log 2>&1; then
+			overview "$t success"
+		else
+			overview "$t failed"
+			echo "building $t failed, see log file dest/$t.log for details" >&2
+		fi
 	done
-	$ROOTCMD make $(echo $TARGETS | sed 's/build_/stats_/g') | 2>&1 tee dest/stats.txt # This is allowed to fail
+	$ROOTCMD make $(echo $TARGETS | sed 's/build_/stats_/g') > dest/stats.txt 2>&1 || true
 }
 
 upload () {
@@ -101,8 +100,8 @@ trim () {
 UPDATED=""
 update () {
 	if [ ! "$UPDATED" ]; then
-		(cd ../debian && svn up || true)
-		svn up || true
+		(cd ../debian && svn -q up || true)
+		svn -q up || true
 		UPDATED=1
 	fi
 }
@@ -140,11 +139,13 @@ case $1 in
 		trim
 	;;
 	'')	# no subcommand, for backwards compatability
+		update
 		build
 		upload
 		trim
 	;;
 	all)	# subcommand
+		update
 		build
 		upload
 		trim
