@@ -48,8 +48,6 @@ header () {
 
 build () {
 	unset LANG LC_ALL LANGUAGE || true
-	(cd ../debian && svn up || true)
-	svn up || true
 
 	# Override $TARGETS with custom makefile targets.
 	if [ -z "$TARGETS" ]; then
@@ -100,6 +98,25 @@ trim () {
 	fi
 }
 
+UPDATED=""
+update () {
+	if [ ! "$UPDATED" ]; then
+		(cd ../debian && svn up || true)
+		svn up || true
+		UPDATED=1
+	fi
+}
+
+deps () {
+	temp=`LANG=C dpkg-checkbuilddeps -B ../debian/control 2>&1`
+	packages=`echo $temp | sed -e 's%dpkg-checkbuilddeps: Unmet build dependencies: %%'`
+	apt-get update
+	if [ "$packages" ]; then
+		DEBCONF_PRIORITY=critical apt-get -y install $packages
+	fi
+	DEBCONF_PRIORITY=critical apt-get -y upgrade
+}
+
 usage () {
 	echo These subcommands are available:
 	awk -F\) '/subcommand$/ { print " ", $1 }' $0
@@ -113,6 +130,7 @@ fi
 
 case $1 in
 	build) 	# subcommand
+		update
 		build
 	;;
 	upload)	# subcommand
@@ -124,11 +142,18 @@ case $1 in
 	'')	# no subcommand, for backwards compatability
 		build
 		upload
+		trim
 	;;
 	all)	# subcommand
 		build
 		upload
 		trim
+	;;
+	update)	# subcommand
+		update
+	;;
+	deps)	# subcommand
+		deps
 	;;
 	*)
 		echo $1 is not a valid subcommand.
