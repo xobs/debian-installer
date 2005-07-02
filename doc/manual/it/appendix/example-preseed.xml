@@ -1,28 +1,52 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 27282 untranslated -->
+<!-- original version: 28659 untranslated -->
 
-<sect1 id="example-preseed">
-<title>Preconfiguration File Example</title>
-
+ <sect1 id="example-preseed">
+ <!--<title>Preconfiguration File Example</title>-->
+ <title>Esempio di file di preconfigurazione</title>
 <para>
 
+<!--
 This is a complete working example of a preconfiguration file for an automated
 install. Its use is explained in <xref linkend="automatic-install"/>. You
 may want to uncomment some of the lines before using the file.
+-->
+
+Questo è un esempio completo e funzionante di un file di preconfigurazione
+da usare per le installazioni automatiche; il suo uso è spiegato in
+<xref linkend="automatic-install"/>. Probabilmente si dovranno decommentare
+alcune righe prima di usare il file.
 
 <note><para>
 
+<!--
 In order to be able to properly present this example in the manual, we've had
 to split some lines. This is indicated by the use of the line-continuation-character
 <quote>\</quote> and extra indentation in the next line. In a real preconfiguration
 file, these split lines have to be joined into <emphasis>one single line</emphasis>.
 If you do not, preconfiguration will fail with unpredictable results.
+-->
+
+Per poter rappresentare correttamente questo esempio nel manuale alcune
+righe sono state spezzate. Queste righe si riconoscono perché terminano
+con il carattere di continuazione della riga <quote>\</quote> e perché la
+riga successava ha una indentanzione maggiore. In un vero file di
+preconfigurazione queste righe devono essere unite in <emphasis>una
+singola riga</emphasis>, altrimenti la preconfigurazione non funziona
+producendo dei risultati imprevedibili.
 
 </para><para>
 
+<!--
 A <quote>clean</quote> example file is included on the official Debian
 installation CD-ROMs in <filename>/doc/install/manual</filename> and available from
 the Internet at <ulink url="&url-example-preseed;"></ulink>.
+-->
+
+Un file di esempio <quote>pulito</quote> è incluso nei CD-ROM
+d'installazione ufficiali nella directory
+<filename>/doc/install/manual</filename> ed è disponibile su Internet
+all'indirizzo <ulink url="&url-example-preseed;"></ulink>.
 
 </para></note>
 
@@ -50,10 +74,16 @@ the Internet at <ulink url="&url-example-preseed;"></ulink>.
 #
 # Language, country, and keyboard selection cannot be preseeded from a file,
 # because the questions are asked before the preseed file can be loaded.
-# Instead, to avoid these questions, pass some more parameters to the kernel:
+# Instead, to avoid these questions, pass some more parameters to the kernel.
+# If you are using the sarge installer, you need three:
 #
 #    languagechooser/language-name=English
 #    countrychooser/shortlist=US
+#    console-keymaps-at/keymap=us
+#
+# Newer versions of the installer need only two:
+#
+#    debian-installer/locale=en_US
 #    console-keymaps-at/keymap=us
 #
 # Note that the kernel accepts a maximum of 8 command line options and
@@ -231,26 +261,34 @@ base-config  base-config/login          note
 # Controls whether or not the hardware clock is set to GMT.
 base-config  tzconfig/gmt                             boolean true
 
+# Simple timezone preseeding. You may set this to any valid setting for $TZ;
+# see the contents of /usr/share/zoneinfo/ for options.
+base-config  tzconfig/preseed_zone                    string US/Eastern
+
+# Timezone preseeding used to be more complex; the old method is documented
+# here as well for completeness. If you're using sarge, you'll need this
+# method.
+
 # If you told the installer that you're in the United States, then you
 # can set the time zone using this variable.
 # (Choices are: Eastern, Central, Mountain, Pacific, Alaska, Hawaii,
 # Aleutian, Arizona East-Indiana, Indiana-Starke, Michigan, Samoa, other)
-base-config  tzconfig/choose_country_zone/US          select Eastern
+#base-config tzconfig/choose_country_zone/US          select Eastern
 # If you told it you're in Canada.
 # (Choices are: Newfoundland, Atlantic, Eastern, Central,
 # East-Saskatchewan, Saskatchewan, Mountain, Pacific, Yukon, other)
-base-config  tzconfig/choose_country_zone/CA          select Eastern
+#base-config tzconfig/choose_country_zone/CA          select Eastern
 # If you told it you're in Brazil. (Choices are: East, West, Acre,
 # DeNoronha, other)
-base-config  tzconfig/choose_country_zone/BR          select East
+#base-config tzconfig/choose_country_zone/BR          select East
 # Many countries have only one time zone. If you told the installer you're
 # in one of those countries, you can choose its standard time zone via this
 # question.
-base-config  tzconfig/choose_country_zone_single      boolean true
+#base-config tzconfig/choose_country_zone_single      boolean true
 # This question is asked as a fallback for countries other than those
 # listed above, which have more than one time zone. You can preseed one of
 # the time zones, or "other".
-#base-config tzconfig/choose_country_zone_multiple    select 
+#base-config tzconfig/choose_country_zone_multiple    select
 
 ###### Account setup.
 
@@ -364,7 +402,11 @@ xserver-xfree86  xserver-xfree86/config/monitor/mode-list \
 #d-i preseed/include_command            string \
 #    if $(grep -q "GUID: 0aec3050aec305000001a003" /proc/scsi/usb-storage-*/*); \
 #    then echo kraken.cfg; else echo otherusb.cfg; fi
+
+# To check the format of your preseed file before performing an install,
+# you can use debconf-set-selections:
+#   debconf-set-selections -c preseed.cfg
 </screen></informalexample>
 
 </para>
-</sect1>
+ </sect1>
