@@ -43,6 +43,13 @@ the Internet at <ulink url="&url-example-preseed;"></ulink>.
 #   preseed/file=/cdrom/preseed
 # Be sure to copy this file to the location you specify.
 #
+# To make sure the installer gets the right preseed file, you can specify
+# a checksum for the file. Currently this needs to be a md5sum, and if
+# specified it must match the file or the installer will refuse to use the
+# file. (Checksums are not supported in the sarge installer.)
+#   preseed/url/checksum=5da499872becccfeda2c4872f9171c3d
+#   preseed/file/checksum=5da499872becccfeda2c4872f9171c3d
+#
 # While you're at it, you may want to throw a debconf/priority=critical in
 # there, to avoid most questions even if the preseeding below misses some.
 # And you might set the timeout to 1 in syslinux.cfg to avoid needing to hit
@@ -372,6 +379,12 @@ xserver-xfree86  xserver-xfree86/config/monitor/mode-list \
 # own as well. Note that if the filenames are relative, they are taken from
 # the same directory as the preseed file that includes them.
 #d-i preseed/include                    string x.cfg
+
+# The installer can optionally verify checksums of preseed files before
+# using them. Currently only md5sums are supported, list the md5sums
+# in the same order as the list of files to include.
+# (Checksums are not supported in the sarge installer.)
+#d-i pressed/include/checksum		string 5da499872becccfeda2c4872f9171c3d
 
 # More flexibly, this runs a shell command and if it outputs the names of
 # preseed files, includes those files. For example, to switch configs based
