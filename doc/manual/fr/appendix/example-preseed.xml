@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 28672 -->
+<!-- original version: 28868 -->
 
 <sect1 id="example-preseed">
 <title>Exemple de fichier de préconfiguration</title>
@@ -46,6 +46,14 @@ sur internet, <ulink url="&url-example-preseed;"></ulink>.
 #   preseed/file=/cdrom/preseed
 # N'oubliez pas de mettre le fichier à l'endroit que vous indiquez.
 # 
+# Pour être sûr que l'installateur prend le bon fichier, vous pouvez indiquer
+# une somme de contrôle pour le fichier. Pour le moment, cette somme doit être
+# de type md5sum. Quand elle est indiquée, elle doit correspondre au fichier ;
+# sinon, l'installateur refuse d'utiliser le fichier. L'installateur de sarge
+# n'accepte pas les sommes de contrôle.
+#   preseed/url/checksum=5da499872becccfeda2c4872f9171c3d
+#   preseed/file/checksum=5da499872becccfeda2c4872f9171c3d
+#
 # Pendant que vous y êtes, vous pourriez déclarer un debconf/priority=critical
 # pour éviter la plupart des questions, même s'il n'y en a pas beaucoup dans 
 # la préconfiguration qui suit.
@@ -343,7 +351,7 @@ tasksel		tasksel/first	multiselect Desktop environment
 
 # Pendant une installation normale, exim pose seulement deux questions. Voici
 # comment les éviter. Une préconfiguration plus complexe est possible.
-exim4-config exim4/dc_eximconfig_configtype \
+exim4-config exim4/no_config boolean true
     select no configuration at this time
 
 # C'est une bonne idée d'indiquer ici le nom de l'utilisateur que vous avez 
@@ -398,6 +406,13 @@ xserver-xfree86	xserver-xfree86/config/monitor/mode-list \
 # Notez que si les fichiers sont relatifs, ils seront pris dans le répertoire 
 # où se trouve le fichier qui les inclut.
 #d-i preseed/include	string x.cfg
+
+# L'installateur peut vérifier la somme de contrôle des fichiers de
+# préconfiguration avant de les utiliser.  Pour le moment, cette somme doit être
+# de type md5sum. Il faut lister les sommes de contrôles dans le même ordre
+# que les fichiers à inclure. L'installateur de sarge
+# n'accepte pas les sommes de contrôle. 
+#d-i pressed/include/checksum          string 5da499872becccfeda2c4872f9171c3d
 
 # D'une manière plus souple, cela exécute des commandes du shell et si le 
 # résultat donne les noms de ces fichiers, ils sont inclus. Par exemple,
