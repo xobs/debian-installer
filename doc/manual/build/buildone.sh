@@ -72,6 +72,8 @@ create_profiled () {
     echo "<!ENTITY architecture \"${arch}\">" >> $dynamic
     echo "<!ENTITY kernelversion \"${kernelversion}\">" >> $dynamic
     echo "<!ENTITY altkernelversion \"${altkernelversion}\">" >> $dynamic
+    echo "<!ENTITY smp-config-section \"${smp_config_section}\">" >> $dynamic
+    echo "<!ENTITY smp-config-option \"${smp_config_option}\">" >> $dynamic
     sed "s:##SRCPATH##:$source_path:" templates/docstruct.ent >> $dynamic
 
     sed "s:##LANG##:$language:g" templates/install.xml.template | \
