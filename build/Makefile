@@ -663,8 +663,8 @@ $(MINIISO): $(TEMP_MINIISO)
 $(TEMP_MINIISO): $(TEMP_BOOT_SCREENS) arch_miniiso
 
 # various kinds of information, for use on debian-cd isos
-$(DEBIAN_CD_INFO): $(TEMP_BOOT_SCREENS)
-	(cd $(TEMP_BOOT_SCREENS); tar czf - .) > $@
+$(DEBIAN_CD_INFO): $(TEMP_BOOT_SCREENS) $(TEMP_CD_INFO_DIR)
+	(cd $(TEMP_CD_INFO_DIR); tar czf - .) > $@
 	update-manifest $@ $(MANIFEST-DEBIAN_CD_INFO)
 
 # a directory full of files for netbooting
@@ -684,6 +684,7 @@ $(NETBOOT_TAR): $(TEMP_NETBOOT_DIR)
 	update-manifest $@ $(MANIFEST-NETBOOT_TAR) $(UDEB_LISTS)
 
 $(TEMP_BOOT_SCREENS): arch_boot_screens
+$(TEMP_CD_INFO_DIR): arch_cd_info_dir
 $(TEMP_NETBOOT_DIR): arch_netboot_dir
 
 $(MISC): TEMP_REAL_MISC = $(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,')
