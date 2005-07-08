@@ -70,6 +70,7 @@ build () {
 }
 
 upload () {
+	(
 	header UPLOADING FILES
 	if [ -n "$RESTRICTED_SSH" ]; then
 		tar zcvf - -C dest/ . | $HELPER
@@ -82,9 +83,11 @@ upload () {
 		$CALL rm -rf $BASEDIR/daily
 		$CALL ln -sf $DIR $BASEDIR/daily
 	fi
+	) > dest/upload.log
 }
 
 trim () {
+	(
 	header TRIMMING OLD BUILDS
 	if [ -n "$RESTRICTED_SSH" ]; then
 		echo "(trim not implemented for RESTRICTED_SSH mode)"
@@ -95,6 +98,7 @@ trim () {
 	else
 		echo "(keeping all old builds)"
 	fi
+	)  > dest/trim.log
 }
 
 UPDATED=""
