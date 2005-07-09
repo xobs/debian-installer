@@ -6,13 +6,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: post-install\n"
 "POT-Creation-Date: 2001-02-09 01:25+0100\n"
-"PO-Revision-Date: 2005-04-08 21:47+0400\n"
+"PO-Revision-Date: 2005-07-08 21:19+0400\n"
 "Last-Translator: Yuri Kozlov <yuray@id.ru>\n"
 "Language-Team: Russian <debian-l10n-russian@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.3.1\n"
+"X-Generator: KBabel 1.9.1\n"
 
 #. Tag: title
 #: post-install.xml:5
@@ -95,7 +95,7 @@ msgstr "Система управления пакетами Debian"
 
 #. Tag: para
 #: post-install.xml:56
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The most important concept to grasp is the Debian packaging system. In "
 "essence, large parts of your system should be considered under the control "
@@ -123,7 +123,7 @@ msgstr ""
 "itemizedlist> Например, если вы заместите <filename>/usr/bin/perl</"
 "filename>, он будет работать, но позже, если вы обновите пакет "
 "<classname>perl</classname>, файл, который вы положили будет заменён. "
-"Эксперты могут обойти это устанавливая на пакеты флаг ``hold'' в "
+"Эксперты могут обойти это установив на пакеты флаг <quote>hold</quote> в "
 "<command>aptitude</command>."
 
 #. Tag: para
@@ -715,7 +715,7 @@ msgstr ""
 #: post-install.xml:456
 #, no-c-format
 msgid "Recovering a Broken System"
-msgstr ""
+msgstr "Восстановление неработающей системы"
 
 #. Tag: para
 #: post-install.xml:457
@@ -728,6 +728,12 @@ msgid ""
 "filename>. Regardless of the cause, you'll need to have a system to work "
 "from while you fix it, and rescue mode can be useful for this."
 msgstr ""
+"Иногда что-то идёт неправильно, и система, которую вы аккуратно установили "
+"больше не загружается. Возможно, испортились настройки системного загрузчика "
+"во время изменения, или не хочет загружаться новое ядро, или космические "
+"лучи попали в жёсткий диск и исправили единичку на нолик в файле <filename>/"
+"sbin/init</filename>. В любом случае, вам нужна система с которой можно всё "
+"исправить, и режим восстановления может помочь в этом."
 
 #. Tag: para
 #: post-install.xml:467
@@ -743,6 +749,14 @@ msgid ""
 "ensure that your disks, network devices, and so on are available to you "
 "while repairing your system."
 msgstr ""
+"Чтобы войтив режим восстановления, введите <userinput>rescue</userinput> "
+"после приглашения <prompt>boot:</prompt>, или загрузитесь с параметром "
+"загрузки <userinput>rescue/enable=true</userinput> . В начале вы пройдёте по "
+"нескольким диалогам программы установки, на которых есть пометка в углу "
+"экрана, что это режим восстановления, а не полная установка. Не волнуйтесь, "
+"ваши данные не исчезнут! Режим восстановления использует программу установки "
+"только для определения имеющихся устройств, таких как диски и сетевые "
+"устройства, и они будут доступны во время восстановления системы."
 
 #. Tag: para
 #: post-install.xml:482
@@ -754,6 +768,11 @@ msgid ""
 "need to repair. You may select partitions on RAID and LVM devices as well as "
 "those created directly on disks."
 msgstr ""
+"Вместо программы разметки, вам покажут список разделов, имеющихся в системе, "
+"попросят выбрать один из них. Обычно, нужно выбрать раздел, содержащий "
+"корневую систему, которую нужно восстановить. Кроме созданных "
+"непосредственно на дисках, вы можете выбирать разделы на устройствах RAID и "
+"LVM."
 
 #. Tag: para
 #: post-install.xml:490
@@ -766,6 +785,12 @@ msgid ""
 "could enter the command <userinput>grub-install '(hd0)'</userinput> to do "
 "so. </phrase>"
 msgstr ""
+"Если возможно, программа установки запустит оболочку командной строки в "
+"выбранной файловой системе, где вы сможете сделать любые "
+"дополнительныепроцедуры восстановления. <phrase arch=\"i386\"> Например, для "
+"переустановки системного загрузчика GRUB в главную загрузочную запись "
+"первого жёсткого диска, введите команду <userinput>grub-install '(hd0)'</"
+"userinput> . </phrase>"
 
 #. Tag: para
 #: post-install.xml:502
@@ -778,12 +803,21 @@ msgid ""
 "often be enough to repair your system anyway. The root file system you "
 "selected will be mounted on the <filename>/target</filename> directory."
 msgstr ""
+"Иногда программе установки не удаётся запустить оболочку командной строки в "
+"выбранной корневой файловой системе. Возможной причиной может быть "
+"повреждение файловой системы, и в этом случае выдаётся предупреждение и "
+"предлагается запустить оболочку командной строки в среде программы "
+"установки. Здесь не так много полезных программ, но и их часто достаточно "
+"для восстановления системы. Выбранная корневая файловая система будет "
+"смонтирована в каталог <filename>/target</filename>."
 
 #. Tag: para
 #: post-install.xml:511
 #, no-c-format
 msgid "In either case, after you exit the shell, the system will reboot."
 msgstr ""
+"В обоих случаях, после выхода из оболочки командной строки система будет "
+"перезагружена."
 
 #. Tag: para
 #: post-install.xml:515
@@ -793,3 +827,7 @@ msgid ""
 "manual does not attempt to go into all the things that might have gone wrong "
 "or how to fix them. If you have problems, consult an expert."
 msgstr ""
+"И напоследок заметим, что восстановление нерабочей системы может оказаться "
+"очень трудным делом, и это руководство не пытается описать все возможные "
+"случаи, которые могут произойти и способы их решения. Если у вас есть "
+"проблемы &mdash; обратитесь к профессионалам."
