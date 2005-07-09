@@ -101,6 +101,10 @@ if [ "$ONLINE" = "y" ]; then
 	}
 	$APT_GET autoclean
 else
+	# A Release.gpg may not be cached, allow continuing w/o it in
+	# offline mode.
+	APT_GET="$APT_GET --allow-unauthenticated"
+	
 	$APT_GET update || echo "Ignoring update failure in offline mode"
 fi
 
