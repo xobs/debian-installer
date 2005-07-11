@@ -1,0 +1,16 @@
+#!/usr/bin/perl
+
+while (<>) {
+	if (($m, $d)=/^r\d+ \| ([^|]+) \| (\d+-\d+-\d+)/) {
+		 $d=~s/-\d+$//;
+		 if (! $seen{$m}{$d}) {
+			  $count{$d}++;
+			 $seen{$m}{$d}=1;
+		}
+	}
+}
+
+my @list=sort keys %count;
+#pop @list; # remove last, probably incomplete month
+
+print "$_, $count{$_}\n" foreach @list;

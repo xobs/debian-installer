@@ -1,0 +1,23 @@
+#!/usr/bin/gnuplot
+
+set terminal png
+set timefmt "%Y-%m"
+set xdata time
+set format x "%m\n%y"
+set xlabel "date"
+set data style boxes
+set pointsize 0.25
+
+set multiplot
+	set title ""
+	set origin 0,0
+	set size 1,0.5
+	plot 'commits' using 1:2 title "commits per month"
+	
+	# committers
+	set title ""
+	set ylabel "number of committers"
+	set origin 0,0.5
+	set size 1,0.5
+	plot 'committers' using 1:2 title "developers committing each month"
+set nomultiplot
