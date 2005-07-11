@@ -1,4 +1,3 @@
-
 TEX    = latex
 DVIPS  = dvips
 PDFTEX = pdflatex
@@ -22,13 +21,15 @@ buildps: $(SOURCES:.dvi=.ps)
 
 .tex.dvi:
 	$(TEX) $(TEXARGS) $(SOURCE)
-	$(TEX) $(TEXARGS) $(SOURCE)
 
 .dvi.ps:
 	$(DVIPS) $(DVIPSARGS) $<
 
+d-i_debconf5.pdf: d-i_debconf5.tex
+	$(PDFTEX) $<
+	$(PDFTEX) $<
+
 .tex.pdf:
-	$(PDFTEX) $(PDFTEXARGS) $<
 	$(PDFTEX) $(PDFTEXARGS) $<
 
 clean:
