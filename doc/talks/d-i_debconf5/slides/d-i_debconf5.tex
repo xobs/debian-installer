@@ -74,8 +74,7 @@
 
 % If you wish to uncover everything in a step-wise fashion, uncomment
 % the following command: 
-
-\beamerdefaultoverlayspecification{<+->}
+%\beamerdefaultoverlayspecification{<+->}
 
 
 \begin{document}
@@ -86,7 +85,15 @@
 
 %%%%%%%%%%%%%%%%%
 
-\section{Debian Installer: past and present}
+\section{General aspects of Debian Installer}
+
+\begin{frame}
+  \frametitle{}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%
+
+\section{The installation manual}
 
 \begin{frame}
   \frametitle{}
@@ -96,10 +103,8 @@
 
 \section{Debian Installer internationalization and localization}
 
-\subsection{Technical aspects}
-
 \begin{frame}
-  \frametitle{Design choices}
+  \frametitle{Drawing ideas}
 	\begin{itemize}
 	\item
 		English sucks
@@ -115,226 +120,76 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Translatable material}
+  \frametitle{Levels: from D-I translation to World Domination}
 	\begin{itemize}
 	\item
-		Non sucking English
-		\begin{itemize}
-			\item
-				Spellchecked
-			\item
-				Consistent (s/filesystem/file system)
-			\item
-				Jargon-free
-		\end{itemize}
+		Level 1: ``core'' D-I packages (stage 1)
 	\item
-		63 packages 
+		Level 2: default base system install - Questions to users
 	\item
-		1260 strings
+		Level 3: any kind base system install - Questions to users
 	\item
-		40+1 languages
-	\end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{The master file concept}
-	\begin{itemize}
+		Level 4: any kind system install - all displayed stuff
 	\item
-		One unique file to translate
+		Level 5: default desktop install
 	\item
-		All PO files merged together
-	\item
-		Synchronisation black magic
-	\end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Maintainers changes propagation cycle}
-	\begin{itemize}
-	\item
-		(maintainer) changes <package>/debian/<package>.templates
-	\item
-		(script) updates <package>/debian/po/template.pot
-	\item
-		(script) merges all template.pot files to po/template.pot
-	\item
-		(script) syncs po/*.po with the new templates.pot
-	\item
-		(script) updates status pages
-	\item
-		(Klingon translator) rants, down to 99\%, in tlh.po
-	\end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Translators changes propagation cycle}
-	\begin{itemize}
-	\item
-		(Klingon translator) updates po/tlh.po to 100\%
-	\item
-		(script) propagates changes to all <package>/debian/po/tlh.po files	\item
-		Sync po/*.po with the new templates.pot --> fuzzy/untranslated
-	\item
-		Update <package>/debian/po/*.po from the master files
-
-	\item
-		(script) updates status pages. tlh back to 100\%
-	\item
-		(Klingon translator) opens beer
-	\end{itemize}
-\end{frame}
-
-\subsection{Organisation aspects}
-
-\begin{frame}
-  \frametitle{Levels of translation: now}
-	\begin{itemize}
-	\item
-		Level 1: all ``core'' D-I packages (stage 1)
-	\item
-		Level 2: packages interacting with users during a default base system install
-		\begin{itemize}
-			\item
-				base-config, tasksel
-			\item
-				exim4, shadow
-			\item
-				iso-codes, console-data
-		\end{itemize}
-	\item
-		Level 3: packages interacting with users during any base system install
-		\begin{itemize}
-			\item
-				pppconfig, popcon, localization-config, aptitude...
-		\end{itemize}
-		\item
-			Level 4: packages displaying information to users during any base system install
-		\begin{itemize}
-			\item
-				dpkg, apt, shadow...
-		\end{itemize}
-	\end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Levels of translation: soon?}
-	\begin{itemize}
-	\item
-		Level 5: packages interacting with users in a default desktop install
-	\item
-		Level 6: all other Debian native packages/debconf translation of stadard+base packages
+		Level 6: debconf templates for all standard packages
 	\item
 		Level 7: English kicked out of Debian
 	\end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Status pages}
-	\begin{itemize}
-	\item
-		Easy picture of overall l10n status 
-	\item
-		Points to packages CVS/SVN/TLA/BAZ/FOO/BAR/... repositories
-	\item
-		Give easy access to up-to-date POT and PO files
-	\end{itemize}
-
-\url{http://people.debian.org/~seppy/d-i/translation-status.html}
-
+  \frametitle{Towards World Domination: potato}
+  \pgfdeclareimage[width=10cm]{potato}{potato}
+  \pgfuseimage{potato}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Quality assurance}
-	\begin{itemize}
-	\item
-		Peer review : the role of translation teams
-	\item
-		Ötaümatëd spelchäcking and comönne errørs tracking
-		\begin{itemize}
-			\item
-				\url{http://d-i.alioth.debian.org/spellcheck/level1-post-sarge/index.html}
-		\end{itemize}
-	\item
-		Test localized installations (hint: D-I works well with QEmu!)
-	\end{itemize}
-
+  \frametitle{Towards World Domination: woody}
+  \pgfdeclareimage[width=10cm]{woody}{woody}
+  \pgfuseimage{woody}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Process to get a new language supported}
-
-	\begin{itemize}
-	\item
-		Find a translator
-	\item
-		Convince her/him
-	\item
-		Check the locale...or write it
-	\item
-		Early support
-		\begin{itemize}
-			\item
-				Input methods
-			\item
-				Language rendering
-			\item
-				Support in localization-config
-		\end{itemize}
-	\item
-		Basic SVN course
-	\item
-		Help for Debian specifics
-	\item
-		Check his work
-	\item
-		Be responsive and often patient...:-)
-	\item
-		Remove it from PROSPECTIVE
-	\end{itemize}
-
+  \frametitle{Towards World Domination: sarge}
+  \pgfdeclareimage[width=10cm]{sarge}{sarge}
+  \pgfuseimage{sarge}
 \end{frame}
 
-\subsection{The future}
+\begin{frame}
+  \frametitle{Towards World Domination: etch}
+  \pgfdeclareimage[width=10cm]{etch}{etch}
+  \pgfuseimage{etch}
+\end{frame}
 
 \begin{frame}
-  \frametitle{Thou shalt be translated?}
+  \frametitle{The future: Thou shalt be translated?}
 
-We need increase the number of supported languages: 60 languages in
-etch installer?
 
 	\begin{itemize}
 	\item
-		Assist new translators
+		New languages: assist new translators
 		\begin{itemize}
 			\item
 				More locales
 			\item
-				Easier to use framework
-			\item
-				More (wo)manpower for ``coaching''
+				Easier to use framework (Rosetta, Pootle, DDTP?)
 		\end{itemize}
 	\item
-		Technical challenges: we need a graphical installer
+		New languages: we need the graphical installer
 		\begin{itemize}
 			\item
-				Support for languages from India
+				Combining languages
 			\item
 				Stop depending on Unicode ``text-mode'' fonts
 			\item
-				Better (RTL) and Bidi display
+				Better RTL and Bidi display
 			\item
 				Klingon support and Universe domination
 		\end{itemize}
 	\end{itemize}
 
-\end{frame}
-
-%%%%%%%%%%%%%%%%%
-
-\section{Installation Guide}
-
-\begin{frame}
-  \frametitle{}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%
