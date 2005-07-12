@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 28672 -->
+<!-- original version: 29046 -->
 
 <!--
 <appendix id="installation-howto">
@@ -260,7 +260,8 @@ image from that file. Write this image directly to your memory stick, which
 must be at least 128 mb in size. Of course this will destroy anything already
 on the memory stick. Then mount the memory stick, which will now have a FAT
 filesystem on it. Next, download a Debian netinst CD image, and copy that file
-to the memory stick; any filename is ok as long as it ends in ".iso".
+to the memory stick; any filename is ok as long as it ends in
+<literal>.iso</literal>.
 -->
 USB メモリスティックを準備する最も簡単な方法は、
 <filename>hd-media/boot.img.gz</filename> をダウンロードし gunzip を使用して、
@@ -269,7 +270,7 @@ USB メモリスティックを準備する最も簡単な方法は、
 メモリスティック上のすでにある何もかもを破壊してしまいます。それから、今ではもう
 FAT ファイルシステムのあるメモリスティックをマウントしてください。次に、Debian netinst CD
 イメージをダウンロードして、メモリスティックにそのファイルをコピーしてください。
-ファイル名が ".iso" で終わりさえすれば、どんなファイル名でも大丈夫です。
+ファイル名が <literal>.iso</literal> で終わりさえすれば、どんなファイル名でも大丈夫です。
 
 </para><para>
 
@@ -286,14 +287,15 @@ sticks. For details, see <xref linkend="boot-usb-files" />.
 
 <!--
 Some BIOSes can boot USB storage directly, and some cannot. You may need to
-configure your BIOS to boot from a "removable drive" or even a "USB-ZIP" to
-get it to boot from the USB device. If it doesn't, you can boot from one
-floppy and use the USB stick for the rest of the install. For helpful hints
-and details, see <xref linkend="usb-boot" />.
+configure your BIOS to boot from a <quote>removable drive</quote> or even a
+<quote>USB-ZIP</quote> to get it to boot from the USB device. If it
+doesn't, you can boot from one floppy and use the USB stick for the rest of
+the install. For helpful hints and details, see <xref linkend="usb-boot" />.
 -->
 いくつかの BIOS は、USB 記憶装置を直接起動できますが、その他では起動できません。 
-"リムーバブルドライブ" や、USB デバイスから起動するためにの "USB-ZIP" から起動するのでさえ、
-BIOS の設定が必要になるかもしれません。もし起動できない場合は、1 枚のフロッピーから起動して、
+<quote>リムーバブルドライブ</quote> から起動するために BIOS を，
+あるいは USB デバイスから起動するためにさらに <quote>USB-ZIP</quote> を設定する
+必要があるかもしれません。もし起動できない場合は、1 枚のフロッピーから起動して、
 残りのインストールには USB スティックが使えます。役に立つヒントや詳細に関しては、
 <xref linkend="usb-boot" />をご覧ください。
 
@@ -359,14 +361,14 @@ It's possible to boot the installer using no removable media, but just an
 existing hard disk, which can have a different OS on it. Download
 <filename>hd-media/initrd.gz</filename>, <filename>hd-media/vmlinuz</filename>,
 and a Debian CD image to the top-level directory of the hard disk. Make sure
-that the CD image has a filename ending in ".iso". Now it's just a matter of
-booting linux with the initrd.
+that the CD image has a filename ending in <literal>.iso</literal>. Now
+it's just a matter of booting linux with the initrd.
 -->
 リムーバブルメディアを使用せずに、単に既存のハードディスク (そこに異なる OS があっても
 構いません) を使ってインストーラを起動することができます。
 <filename>hd-media/initrd.gz</filename>、<filename>hd-media/vmlinuz</filename>
 および Debian CD イメージをハードディスクの一番上のディレクトリにダウンロードしてください。
-CD イメージのファイル名が ".iso" で終わっていることを確かめてください。
+CD イメージのファイル名が <literal>.iso</literal> で終わっていることを確かめてください。
 それは initrd を備えた linux の起動にかかわる問題です。
 <phrase arch="i386">
 <!--
@@ -395,20 +397,40 @@ methods and parameters (see <xref linkend="boot-parms" />).
 起動するために &enterkey; を押すか、他の起動方法やパラメータのための説明を
 読んでください (<xref linkend="boot-parms" />をご覧ください)。
 <phrase arch="i386">
+<phrase condition="sarge">
 <!--
 If you want a 2.6 kernel, type <userinput>linux26</userinput> at the
 <prompt>boot:</prompt> prompt.
 -->
 2.6 系カーネルを希望するのなら、<prompt>boot:</prompt> プロンプトで
 <userinput>linux26</userinput> とタイプしてください。
+</phrase>
+<phrase condition="etch">
+<!--
+If you want a 2.4 kernel, type <userinput>install24</userinput> at the
+<prompt>boot:</prompt> prompt.
+-->
+2.4 系カーネルを希望するのなら、<prompt>boot:</prompt> プロンプトで
+<userinput>install24</userinput> とタイプしてください。
+</phrase>
 <footnote><para>
 
+<phrase condition="sarge">
 <!--
 The 2.6 kernel is available for most boot methods, but not when booting from
 a floppy.
 -->
 ほとんどの起動方法で 2.6 系カーネルが利用できますが、
 フロッピーからの起動では利用できません。
+</phrase>
+<phrase condition="etch">
+<!--
+The 2.6 kernel is the default for most boot methods, but is not available
+when booting from a floppy.
+-->
+ほとんどの起動方法で 2.6 系カーネルが標準で利用できますが、
+フロッピーからの起動では利用できません。
+</phrase>
 
 </para></footnote>
 </phrase>
@@ -489,16 +511,16 @@ room for the Debian install: simply select the partition and specify its new siz
 On the next screen you will see your partition table, how the partitions
 will be formatted, and where they will be mounted. Select a partition to
 modify or delete it. If you did automatic partitioning, you should just be
-able to choose "Finished partitioning" from the menu to use what it set up.
-Remember to assign at least one partition for swap space and to mount a
-partition on <filename>/</filename>. <xref linkend="partitioning" /> has more information
-about partitioning.
+able to choose <guimenuitem>Finished partitioning</guimenuitem> from the
+menu to use what it set up. Remember to assign at least one partition for
+swap space and to mount a partition on <filename>/</filename>.
+<xref linkend="partitioning" /> has more information about partitioning.
 -->
 次の画面でパーティションテーブル (パーティションをどうフォーマットするか、
 それをどこにマウントするか) を見ることになります。修正や削除をするためには、
 パーティションを選択してください。もし自動パーティション分割を行っていれば、
-設定したものを使用するメニューから、"Finished partitioning" で決定できます。
-スワップスペースのために少なくとも 1 つのパーティションを割り当てることと
+設定したものを使用するメニューから、<guimenuitem>Finished partitioning</guimenuitem>
+で決定できます。スワップスペースのために少なくとも 1 つのパーティションを割り当てることと
 <filename>/</filename> にパーティションをマウントすることを忘れないようにしてください。
 <xref linkend="partitioning" />にパーティション分割に関するもっと多くの情報があります。
 
