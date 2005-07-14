@@ -1,7 +1,7 @@
-all: plot.png
+all: svnplot.png
 
 clean:
-	rm -f plot.png log commits committers
+	rm -f svnplot.png log commits committers
 	
 log: svndir
 	svn log -v $(shell cat svndir) > log
@@ -12,5 +12,5 @@ commits: log svncommits
 committers: log svncommitters
 	./svncommitters log > committers
 
-plot.png: commits committers plotdata
-	./plotdata > plot.png
+svnplot.png: commits committers plotdata
+	./plotdata > svnplot.png
