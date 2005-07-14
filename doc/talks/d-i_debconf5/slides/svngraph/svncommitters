@@ -5,11 +5,19 @@ $/="------------------------------------------------------------------------";
 while (<>) {
 	if (($m, $d)=/r\d+ \| ([^|]+) \| (\d+-\d+-\d+)/) {
 		$d=~s/-\d+$//;
+		
+		my $alltrans=1;
+		while (/ M (.*)/sg) {
+			if (! /\.po/ && ! (/manual\/(\w\w)/ && $1 ne 'en')) {
+				$alltrans=0;
+			}
+		}
+		
 		if (! $seen{$m}{$d}) {
 			$count{$d}++;
 			$seen{$m}{$d}=1;
 		}
-		if (! /\.po/ && ! $seendev{$m}{$d}) {
+		if (! $alltrans && ! $seendev{$m}{$d}) {
 			$countdev{$d}++;
 			$seendev{$m}{$d}=1;
 		}
