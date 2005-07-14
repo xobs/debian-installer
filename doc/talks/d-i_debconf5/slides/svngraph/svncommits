@@ -1,13 +1,20 @@
 #!/usr/bin/perl
 
+$/="------------------------------------------------------------------------";
+
 while (<>) {
-	if (($m, $d)=/^r\d+ \| ([^|]+) \| (\d+-\d+-\d+)/) {
-		 $d=~s/-\d+$//;
-		 $count{$d}++;
+	if (($m, $d)=/r\d+ \| ([^|]+) \| (\d+-\d+-\d+)/) {
+		$d=~s/-\d+$//;
+		if (/\.po/) {
+			$pocount{$d}++;
+		}
+		$count{$d}++;
 	}
 }
 
 my @list=sort keys %count;
 pop @list; # remove last, probably incomplete month
 
-print "$_, $count{$_}\n" foreach @list;
+foreach my $d (@list) {
+	print "$d, $count{$d}, ".(defined $pocount{$d} ? $pocount{$d} : '0')."\n";
+}

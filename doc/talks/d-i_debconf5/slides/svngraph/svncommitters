@@ -1,11 +1,17 @@
 #!/usr/bin/perl
 
+$/="------------------------------------------------------------------------";
+
 while (<>) {
-	if (($m, $d)=/^r\d+ \| ([^|]+) \| (\d+-\d+-\d+)/) {
-		 $d=~s/-\d+$//;
-		 if (! $seen{$m}{$d}) {
-			  $count{$d}++;
-			 $seen{$m}{$d}=1;
+	if (($m, $d)=/r\d+ \| ([^|]+) \| (\d+-\d+-\d+)/) {
+		$d=~s/-\d+$//;
+		if (! $seen{$m}{$d}) {
+			$count{$d}++;
+			$seen{$m}{$d}=1;
+		}
+		if (! /\.po/ && ! $seendev{$m}{$d}) {
+			$countdev{$d}++;
+			$seendev{$m}{$d}=1;
 		}
 	}
 }
@@ -13,4 +19,6 @@ while (<>) {
 my @list=sort keys %count;
 #pop @list; # remove last, probably incomplete month
 
-print "$_, $count{$_}\n" foreach @list;
+foreach my $m (@list) {
+	print "$m, $count{$m}, ".(defined $countdev{$m} ? $countdev{$m} : '0')."\n";
+}

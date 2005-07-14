@@ -4,7 +4,7 @@ clean:
 	rm -f plot.png log commits committers
 	
 log: svndir
-	svn log $(shell cat svndir) > log
+	svn log -v $(shell cat svndir) > log
 
 commits: log svncommits
 	./svncommits log > commits
