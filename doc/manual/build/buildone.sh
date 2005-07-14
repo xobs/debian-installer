@@ -157,44 +157,6 @@ create_text () {
         -o display_charset=$CHARSET \
         >$destdir/install.${language}.txt
     RET=$?; [ $RET -ne 0 ] && return $RET
-
-    # Ugly hack because w3m does not compute width for table borders correctly
-    # for oriental character sets.
-    # Output is not perfect, but a lot better than when uncorrected
-    case "$language" in
-        ja)
-            mv $destdir/install.${language}.txt $tempdir
-            sed "s:¨£:¨£¨¡:g
-                 s:¨¨:¨¨¨¡:g
-                 s:¨¤:¨¡¨¤:g
-                 s:¨§:¨§¨¡:g
-                 s:¨«:¨«¨¡:g
-                 s:¨©:¨¡¨©:g
-                 s:¨¦:¨¦¨¡:g
-                 s:¨ª:¨ª¨¡:g
-                 s:¨¥:¨¡¨¥:g
-                 s:¨¢$: ¨¢:g
-                 s:¨¡:¨¡¨¡:g
-                 s:¨¢:¨¢ :g" \
-            $tempdir/install.${language}.txt >$destdir/install.${language}.txt
-            ;;
-        ko)
-            mv $destdir/install.${language}.txt $tempdir
-            sed "s:¦£:¦£¦¡:g
-                 s:¦¨:¦¨¦¡:g
-                 s:¦¤:¦¡¦¤:g
-                 s:¦§:¦§¦¡:g
-                 s:¦«:¦«¦¡:g
-                 s:¦©:¦¡¦©:g
-                 s:¦¦:¦¦¦¡:g
-                 s:¦ª:¦ª¦¡:g
-                 s:¦¥:¦¡¦¥:g
-                 s:¦¢$: ¦¢:g
-                 s:¦¡:¦¡¦¡:g
-                 s:¦¢:¦¢ :g" \
-            $tempdir/install.${language}.txt >$destdir/install.${language}.txt
-            ;;
-    esac
     
     return 0
 }
