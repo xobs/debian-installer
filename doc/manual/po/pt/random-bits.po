@@ -9,13 +9,14 @@
 # 21-05-2005 - Miguel Figueiredo <elmig@debianpt.org> - Typos fixed
 # 05-06-2005 - Etur - Final polishing before release.
 # 15-06-2005 - Etur
+# 15-07-2005 - Miguel Figueiredo <elmig@debianpt.org> - 6f
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: random-bits\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2001-02-09 01:25+0100\n"
-"PO-Revision-Date: 2005-06-05 15:22+0000\n"
+"PO-Revision-Date: 2005-07-15 21:22+0000\n"
 "Last-Translator: Etur\n"
 "Language-Team: Portuguese <traduz@debianpt.org>\n"
 "MIME-Version: 1.0\n"
@@ -80,7 +81,7 @@ msgstr ""
 
 #. Tag: screen
 #: random-bits.xml:35
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "#### Modifying syslinux.cfg.\n"
 "\n"
@@ -487,6 +488,14 @@ msgstr ""
 "#   preseed/file=/cdrom/preseed\n"
 "# Assegure-se que copiou este ficheiro para o local especificado.\n"
 "# \n"
+"# Para ter a certeza que o instalador obtém o ficheiro de preseed correcto,\n"
+"# você pode especificar um checksum para o ficheiro. Actualmente isto tem \n"
+"# de ser um md5sum, e se especificado tem de coincidir com o ficheiro ou o \n"
+"# instalador vai-se recusar a utilizar o ficheiro. (Os checksums não são \n"
+"# suportados no instalador sarge.)\n"
+"# preseed/url/checksum=5da499872becccfeda2c4872f9171c3d\n"
+"# preseed/file/checksum=5da499872becccfeda2c4872f9171c3d\n"
+"#\n"
 "# Enquanto o está a fazer, você pode querer mandar para lá um debconf/"
 "priority=critical\n"
 "# para evitar a maioria das questões mesmo que o preseeding abaixo falhe "
@@ -697,8 +706,13 @@ msgstr ""
 "# Se você instalou um gestor de display, mas não quer inicia-lo "
 "imediatamente\n"
 "# após o base-config terminar.\n"
-"#base-config base-config/start-display-manager        boolean false\n"
+"#base-config base-config/start-display-manager boolean false\n"
 "\n"
+"# Algumas versões do instalador podem relatar de volta o que você instalou.\n"
+"# O padrão é não relatar de volta, mas enviar relatórios ajuda o projecto\n"
+"# a determinar qual o software mais popular e inclui-lo nos CDs.\n"
+"#popularity-contest popularity-contest/participate boolean false\n"
+"\n"	
 "###### Configuração de Fuso Horário.\n"
 "\n"
 "# Controla se o relógio de hardware está ou não definido para GMT.\n"
@@ -854,7 +868,14 @@ msgstr ""
 "incluídas neles\n"
 "# próprios. Note que se os ficheiros forem relativos, eles são tirados da\n"
 "# mesma directoria que o ficheiros de preseed que os inclui.\n"
-"#d-i preseed/include                    string x.cfg\n"
+"#d-i preseed/include string x.cfg\n"
+"\n"
+"# O instalador pode opcionalmente verificar checksums de ficheiros preseed\n"
+"# antes de os utilizar. Actualmente apenas são suportados md5sums, liste os\n"
+"# md5sums na mesma ordem da lista de ficheiros a incluir.\n"
+"# (Checksums não são suportados no instalador sarge.)\n"
+"#d-i pressed/include/checksum string "
+"5da499872becccfeda2c4872f9171c3d\n"
 "\n"
 "# Mais flexibilidade, isto corre um comando da shell e mostra os nomes dos\n"
 "# ficheiros de preseed, inclui esses ficheiros. Por exemplo, para trocar "
@@ -1267,7 +1288,7 @@ msgstr ""
 
 #. Tag: screen
 #: random-bits.xml:204
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "# 3-button mouse emulation\n"
 "# turn on emulation\n"
@@ -1553,7 +1574,7 @@ msgstr "Instalar &debian; a partir de um sistema Unix/Linux"
 
 #. Tag: para
 #: random-bits.xml:332
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "This section explains how to install &debian; from an existing Unix or Linux "
 "system, without using the menu-driven installer as explained in the rest of "
@@ -1564,18 +1585,11 @@ msgid ""
 "to be entered in the user's current system, while <prompt>#</prompt> refers "
 "to a command entered in the Debian chroot."
 msgstr ""
-"Esta secção explica como instalar &debian; a partir de um sistema Linux/Unix "
-"existente, sem utilizar o instalador pelo menu, baseado em ncurses, como é "
-"explicado no resto do manual. Este \"cross-install\" HOWTO foi pedido por "
-"utilizadores que mudam para &debian; a partir de Red Hat, Mandrake e SUSE. "
-"Nesta secção é assumida alguma familiaridade em introduzir comandos *nix e "
-"navegar através do sistema de ficheiros. Nesta secção, <prompt>$</prompt> "
-"simboliza um comando a ser escrito pelo utilizador do sistema actual, e "
-"<prompt>#</prompt> refere-se a comandos introduzidos no chroot Debian."
+"Esta secção explica como instalar &debian; a partir de um sistema Unix ou Linux existente, sem utilizar o instalador guiado pelo menu como é explicado no resto do manual. Este <quote>cross-install</quote> HOWTO foi pedido por utilizadores que mudam para &debian; a partir de Red Hat, Mandrake e SUSE. Nesta secção é assumida alguma familiaridade em introduzir comandos *nix e navegar através do sistema de ficheiros. Nesta secção, <prompt>$</prompt> simboliza um comando a ser escrito pelo utilizador do sistema actual, e <prompt>#</prompt> refere-se a comandos introduzidos no chroot Debian."
 
 #. Tag: para
 #: random-bits.xml:344
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Once you've got the new Debian system configured to your preference, you can "
 "migrate your existing user data (if any) to it, and keep on rolling. This is "
@@ -1586,8 +1600,8 @@ msgstr ""
 "Assim que tiver o novo sistema Debian configurado de acordo com as suas "
 "preferências, você pode migrar os dados existentes dos utilizadores (se os "
 "tiver) para lá, e continuar a rolar. Isto é portanto uma instalação &debian; "
-"com \"zero paragens\". É também uma maneira inteligente de lidar com "
-"hardware que não se dá bem com os vários media ou tipos de arranque."
+"com <quote>zero paragens</quote>. É também uma maneira inteligente de lidar com "
+"hardware que de outro modo não se dá bem com os vários media ou tipos de arranque."
 
 #. Tag: title
 #: random-bits.xml:356
@@ -1821,9 +1835,9 @@ msgstr ""
 
 #. Tag: screen
 #: random-bits.xml:475
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "# LANG= chroot /mnt/debinst /bin/bash"
-msgstr "# chroot /mnt/debinst /bin/bash"
+msgstr "# LANG= chroot /mnt/debinst /bin/bash"
 
 #. Tag: title
 #: random-bits.xml:480
@@ -1927,7 +1941,7 @@ msgstr "Configurar a Rede"
 
 #. Tag: para
 #: random-bits.xml:520
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "To configure networking, edit <filename>/etc/network/interfaces</filename>, "
 "<filename>/etc/resolv.conf</filename>, and <filename>/etc/hostname</"
@@ -1999,7 +2013,7 @@ msgstr ""
 "# auto eth0\n"
 "# iface eth0 inet dhcp\n"
 "\n"
-"# Um exemplo de uma configuração de IP estático: (broadcast e gateway são "
+"# Exemplo de uma configuração com IP estático: (broadcast e gateway são "
 "opcionais)\n"
 "#\n"
 "# auto eth0\n"
