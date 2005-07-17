@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 28809 -->
+<!-- original version: 28991 -->
 
 <sect1 id="example-preseed">
 <title>Beispiel einer Voreinstellungs-Datei</title>
@@ -48,6 +48,14 @@ im Internet auf <ulink url="&url-example-preseed;"></ulink>.
 # Stellen Sie sicher, dass Sie die Datei in dem Verzeichnis ablegen, das
 # Sie angeben.
 # 
+# Um sicherzustellen, dass der Installer die richtige Voreinstellungsdatei
+# nutzt, können Sie eine Prüfsumme für die Datei festlegen. Dies muss
+# derzeit eine md5sum-Prüfsumme sein und wenn sie angegeben ist, muss
+# sie auch für die Datei passen, ansonsten wird der Installer ablehnen,
+# sie zu benutzen (Prüfsummen werden im Sarge-Installer nicht unterstützt).
+#   preseed/url/checksum=5da499872becccfeda2c4872f9171c3d
+#   preseed/file/checksum=5da499872becccfeda2c4872f9171c3d
+#
 # Während Sie hiermit arbeiten, sollten Sie vielleicht die Priorität auf
 # kritisch setzen (debconf/priority=critical), um die meisten Fragen zu
 # unterdrücken, auch wenn in der Voreinstellungs-Datei Einträge fehlen sollten.
@@ -242,6 +250,12 @@ base-config base-config/login           note
 # soll, nachdem base-config beendet ist:
 #base-config base-config/start-display-manager        boolean false
 
+# Einige Versionen des Installer können Informationen zurück senden, was
+# Sie installiert haben. Standardeinstellung ist, nichts zu senden, aber
+# Informationen zu senden hilft dem Projekt zu entscheiden, welche Software
+# wie beliebt ist und auf die CDs gepackt werden sollte.
+#popularity-contest popularity-contest/participate    boolean false
+
 ###### Einstellung der Zeitzone.
 
 # Ob die Hardware-Uhr auf GMT gesetzt ist oder nicht:
@@ -385,6 +399,13 @@ xserver-xfree86	xserver-xfree86/config/monitor/mode-list \
 # gleichen Verzeichnis aus, wie die Voreinstellungs-Datei, in der sie integriert
 # sind.
 #d-i preseed/include                    string x.cfg
+
+# Der Installer kann optional Prüfsummen von Voreinstellungsdateien überprüfen,
+# bevor er sie nutzt. Zurzeit werden nur md5sum-Prüfsummen unterstützt; die
+# md5sums müssen in der gleichen Reihenfolge aufgelistet werden wie die Dateien,
+# die genutzt werden sollen.
+# (Prüfsummen werden im Sarge-Installer nicht unterstützt.)
+#d-i pressed/include/checksum          string 5da499872becccfeda2c4872f9171c3d
 
 # Der flexiblere Weg: dies startet ein Shell-Kommando und wenn dies die Namen
 # von Voreinstellungs-Dateien zurückgibt, werden Sie integriert. Ein Beispiel:

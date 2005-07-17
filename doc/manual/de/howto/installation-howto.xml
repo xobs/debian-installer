@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 28672 -->
+<!-- original version: 29046 -->
 
 <appendix id="installation-howto">
 <title>Installations-Howto</title>
@@ -152,7 +152,7 @@ Kopieren Sie dieses Image direkt auf Ihren Memory-Stick, der natürlich mindeste
 gelöscht. Hängen Sie dann den Memory-Stick ins Dateisystem ein, der jetzt ein
 FAT-Dateisystem enthält. Laden Sie als nächstes ein Debian Netinst-CD-Image
 herunter und kopieren Sie es auf den Memory-Stick; als Dateiname ist alles ok,
-solange es auf <quote>.iso</quote> endet.
+solange es auf <literal>.iso</literal> endet.
 
 </para><para>
 
@@ -211,8 +211,8 @@ auswechselbares Medium nutzen, sondern einfach eine vorhandene Festplatte,
 die sogar ein anderes Betriebssystem enthalten kann. Laden Sie
 <filename>hd-media/initrd.gz</filename>, <filename>hd-media/vmlinuz</filename>
 und ein Debian-CD-Image in das Wurzelverzeichnis der Festplatte.
-Stellen Sie sicher, dass der Dateiname des CD-Images auf ".iso" endet.
-Jetzt ist es lediglich erforderlich, Linux per initrd zu starten.
+Stellen Sie sicher, dass der Dateiname des CD-Images auf <literal>.iso</literal>
+endet. Jetzt ist es lediglich erforderlich, Linux mit der initrd zu starten.
 <phrase arch="i386">
 <xref linkend="boot-initrd" /> beschreibt einen Weg, wie dies funktioniert.
 </phrase>
@@ -229,12 +229,24 @@ Sobald der Installer startet, werden Sie mit einem Startbildschirm begrüßt.
 Drücken Sie &enterkey;, um zu starten, oder lesen Sie die Instruktionen über
 andere Boot-Methoden und Parameter (siehe <xref linkend="boot-parms" />).
 <phrase arch="i386">
+<phrase condition="sarge">
 Wollen Sie einen 2.6er Kernel installieren, tippen Sie am <prompt>boot:</prompt>-Prompt
 <userinput>linux26</userinput> ein.
+</phrase>
+<phrase condition="etch">
+Wollen Sie einen 2.4er Kernel installieren, tippen Sie am <prompt>boot:</prompt>-Prompt
+<userinput>install24</userinput> ein.
+</phrase>
 <footnote><para>
 
+<phrase condition="sarge">
 Der 2.6er Kernel ist für die meisten Boot-Methoden verfügbar, jedoch nicht für
 das Booten von Floppy-Disk.
+</phrase>
+<phrase condition="etch">
+Der 2.6er Kernel ist der Standard für die meisten Boot-Methoden, jedoch ist
+er nicht verfügbar für das Booten von Floppy-Disk.
+</phrase>
  
 </para></footnote>
 </phrase>
@@ -290,9 +302,10 @@ Partition aus und geben Sie die neue Größe an.
 Im nächsten Bild sehen Sie Ihre Partitionstabelle, wie die Partitionen
 formatiert werden und wo Sie im Dateisystem eingehängt werden. Um eine
 Partition zu verändern oder zu löschen, markieren Sie sie. Wenn Sie
-vorher automatische Partitionierung gewählt haben, können Sie wohl nur
-<quote>Finish partitioning</quote> (Partitionierung abschließen) im Menü wählen.
-Denken Sie daran, zumindest
+vorher automatische Partitionierung gewählt haben, können Sie lediglich
+<guimenuitem>Finish partitioning</guimenuitem> (Partitionierung
+abschließen) im Menü wählen, um die Einstellungen so zu nutzen, wie sie
+erstellt wurden. Denken Sie daran, zumindest
 eine Partition als Swap (Arbeitsspeicher auslagern) und eine als
 <filename>/</filename> einzurichten und einzuhängen.
 <xref linkend="partitioning" /> bietet mehr Informationen zum Thema
