@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 28991 -->
+<!-- original version: 29505 -->
 
 <sect1 id="example-preseed">
 <title>Beispiel einer Voreinstellungs-Datei</title>
@@ -125,6 +125,10 @@ im Internet auf <ulink url="&url-example-preseed;"></ulink>.
 # bereits Verbindung hat (Netzwerkkabel gesteckt). Diese Zeile vermeidet, dass
 # eine Liste angezeigt wird, wenn mehr als eine Schnittstelle verfügbar ist.
 d-i netcfg/choose_interface select auto
+
+# Wenn Sie einen langsamen DHCP-Server haben und der Installer läuft in eine
+# Zeitüberschreitung, während er auf ihn wartet, könnte dies nützlich sein:
+#d-i netcfg/dhcp_timeout string 60
 
 # Wenn Sie es vorziehen, das Netzwerk manuell zu konfigurieren: hier steht,
 # wie es geht:
@@ -405,7 +409,7 @@ xserver-xfree86	xserver-xfree86/config/monitor/mode-list \
 # md5sums müssen in der gleichen Reihenfolge aufgelistet werden wie die Dateien,
 # die genutzt werden sollen.
 # (Prüfsummen werden im Sarge-Installer nicht unterstützt.)
-#d-i pressed/include/checksum          string 5da499872becccfeda2c4872f9171c3d
+#d-i preseed/include/checksum          string 5da499872becccfeda2c4872f9171c3d
 
 # Der flexiblere Weg: dies startet ein Shell-Kommando und wenn dies die Namen
 # von Voreinstellungs-Dateien zurückgibt, werden Sie integriert. Ein Beispiel:
