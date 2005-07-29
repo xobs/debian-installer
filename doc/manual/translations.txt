@@ -10,7 +10,7 @@ Where is the manual kept?
 The manual is kept in a Subversion repository on svn.debian.org
 as part of the Debian Installer (d-i) project.
 
-The manual and it's translations can be found in ./installer/doc/manual.
+The manual and its translations can be found in ./installer/doc/manual.
 
 How to join the translation effort for an existing translation
 ==============================================================
@@ -27,7 +27,7 @@ How to start a new translation
 ==============================
 
 Starting a translation for a new language without write access to the d-i SVN
-repository realy is not practical. See the section on getting SVN access below;
+repository really is not practical. See the section on getting SVN access below;
 you will also have to get a local working copy of the manual as described there.
 
   1. Create a new directory structure for your translation
@@ -152,8 +152,10 @@ your working copy.
   --------------------------
   - ./scripts/doc-check <lang>
   If changes are listed for documents that are marked 'untranslated', you
-  can just copy the new English version to the directory for your translation
-  and again use rev-update to change the revision comments.
+  can copy the new English version to the directory for your translation
+  by running:
+  - ./scripts/cp-untrans <lang>
+  (this script also runs rev-update automatically).
   If changes are listed for documents that are not marked 'untranslated',
   you can create a diff to find out what the changes are by running:
   - ./scripts/doc-check -d <lang>
@@ -239,7 +241,7 @@ How to get write access to the SVN repository
     svn co svn+ssh://<username>@svn.d-i.alioth.debian.org/svn/d-i/trunk debian-installer
   If you only want to work on the manual, you can retrieve the relevant part
   of the repository using:
-    svn co svn+ssh://<username>@svn.d-i.alioth.debian.org/svn/d-i/trunk debian-installer/installer/doc
+    svn co svn+ssh://<username>@svn.d-i.alioth.debian.org/svn/d-i/trunk/installer/doc
 
   4) Commit your changed translation files to SVN
   -----------------------------------------------
@@ -291,3 +293,6 @@ Changelog:
 
 2004/05/10 Frans Pop
  - file creation
+
+2005/07/28 Cristian Rigamonti
+ - Added cp-untrans, fixed svn command and some typos
