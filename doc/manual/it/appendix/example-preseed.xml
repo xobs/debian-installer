@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 28868 untranslated -->
+<!-- original version: 29505 untranslated -->
 
 
  <sect1 id="example-preseed">
@@ -144,6 +144,10 @@ all'indirizzo <ulink url="&url-example-preseed;"></ulink>.
 # skip displaying a list if there is more than one interface.
 d-i  netcfg/choose_interface            select auto
 
+# If you have a slow dhcp server and the installer times out waiting for
+# it, this might be useful.
+#d-i netcfg/dhcp_timeout string 60
+
 # If you prefer to configure the network manually, here's how:
 #d-i netcfg/disable_dhcp                boolean true
 #d-i netcfg/get_nameservers             string 192.168.1.1
@@ -263,6 +267,11 @@ base-config  base-config/login          note
 # If you installed a display manager, but don't want to start it immediately
 # after base-config finishes.
 #base-config base-config/start-display-manager        boolean false
+
+# Some versions of the installer can report back on what you've installed.
+# The default is not to report back, but sending reports helps the project
+# determine what software is most popular and include it on CDs.
+#popularity-contest popularity-contest/participate    boolean false
 
 ###### Time zone setup.
 
@@ -409,7 +418,7 @@ xserver-xfree86  xserver-xfree86/config/monitor/mode-list \
 # using them. Currently only md5sums are supported, list the md5sums
 # in the same order as the list of files to include.
 # (Checksums are not supported in the sarge installer.)
-#d-i pressed/include/checksum		string 5da499872becccfeda2c4872f9171c3d
+#d-i preseed/include/checksum		string 5da499872becccfeda2c4872f9171c3d
 
 # More flexibly, this runs a shell command and if it outputs the names of
 # preseed files, includes those files. For example, to switch configs based
