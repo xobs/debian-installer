@@ -65,6 +65,8 @@ create_profiled () {
 
     # Join all architecture options into one big variable
     condition="$fdisk;$network;$boot;$smp;$other;$goodies;$unofficial_build;$status;$manual_release"
+    # Add build options for the manual
+    condition="$condition;$unofficial_build;$status;$manual_release"
 
     # Write dynamic non-profilable entities into the file
     echo "<!-- arch- and lang-specific non-profilable entities -->" > $dynamic
