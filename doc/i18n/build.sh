@@ -19,7 +19,10 @@ else
 fi
 
 if [ -f index.html ] ; then
- mv index.html i18n.html
+ #mv index.html i18n.html
+ sed "s/index.html/i18n.html/g" < index.html > i18n.html
+ rm index.html
+
  if [ -n "$sgmltools" -a -n "$w3m" ] ; then
     # To be checked
     $sgmltools --backend=txt i18n.html >i18n.txt
