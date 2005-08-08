@@ -8,7 +8,6 @@
 # a collection of udebs which it downloads from a Debian archive. See
 # README for details.
 #
-
 #
 # General layout of our build directory hierarchy
 #
@@ -383,6 +382,7 @@ ifdef PRESEED
 	# Copy in preseed file.
 	cp -a $(PRESEED) $(TREE)/preseed.cfg
 endif
+
 ifneq (,$(wildcard $(KEYRING)))
 	mkdir -p $(TREE)/usr/share/keyrings
 	cp -a $(KEYRING) $(TREE)/usr/share/keyrings/archive.gpg
@@ -606,7 +606,7 @@ $(INITRD): $(TEMP_INITRD)
 	install -m 644 -D $< $@
 	update-manifest $@ $(MANIFEST-INITRD) $(UDEB_LISTS)
 
-$(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp
+$(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp arch_tree
 	# Only build the font if we have rootskel-locale
 	if [ -d "$(LOCALE_PATH)/C.UTF-8" ] && [ -e /usr/src/unifont.bdf ]; then \
 		$(submake) $(TREE)/lib/unifont.bgf; \
