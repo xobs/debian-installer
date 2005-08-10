@@ -1,10 +1,174 @@
 Source: debian-installer
 Section: devel
 Priority: optional
-Build-Depends: apt, gnupg, bc, libslang2-pic, libnewt-pic, syslinux (>= 2.11-0.1) [i386 amd64], sysutils [i386 amd64], dosfstools [i386 ia64 m68k amd64], libdiscover1-pic [!s390 !s390x], libdiscover1 [!s390 !s390x], ncurses-base, genext2fs (>= 1.3-7.1), e2fsprogs, mklibs (>= 0.1.15), modutils, libc6-pic | libc6.1-pic | libc0.3-pic | glibc-pic, mtools (>= 3.9.9-1) [i386 ia64 m68k amd64], bf-utf-source [!s390 !s390x], upx-ucl-beta (>= 1:1.91+0.20030910cvs-2) [i386], libbogl-dev, libtextwrap1, debhelper (>= 4), tip22 [mips], yaboot [powerpc], mkisofs, elilo [ia64], aboot (>= 0.9b-2) [alpha], silo [sparc], libdebian-installer4 (>= 0.31), libdebconfclient0, palo [hppa], docbook, docbook-xml, docbook-xsl, xsltproc, genisovh [mips], grep-dctrl, bzip2 [powerpc], libparted1.6-12, delo [mipsel], genromfs [sparc], hfsutils [powerpc], colo (>= 1.10-1) [mipsel], sibyl [mips mipsel], atari-bootstrap [m68k], vmelilo [m68k], m68k-vme-tftplilo [m68k], sparc-utils [sparc], cramfsprogs [powerpc ia64 mips], mkvmlinuz [powerpc], module-init-tools [i386 powerpc amd64 hppa ia64 sparc], libnewt0.51, debiandoc-sgml, openjade | openjade1.3, jadetex, docbook-dsssl, gs-common, w3m, gawk, poxml, cpio, dpkg (>= 1.13.9)
+Build-Depends: debhelper (>= 4), apt, gnupg, dpkg (>= 1.13.9), grep-dctrl, bc, libc6-pic | libc6.1-pic | libc0.3-pic | glibc-pic, libdebian-installer4 (>= 0.31), libdebconfclient0, libparted1.6-12, libslang2-pic, libnewt-pic, libdiscover1-pic [!s390 !s390x], libdiscover1 [!s390 !s390x], libbogl-dev, libtextwrap1, cramfsprogs [powerpc ia64 mips], genext2fs (>= 1.3-7.1), e2fsprogs, mklibs (>= 0.1.15), mkisofs, genromfs [sparc], hfsutils [powerpc], dosfstools [i386 ia64 m68k amd64], syslinux (>= 2.11-0.1) [i386 amd64], palo [hppa], elilo [ia64], yaboot [powerpc], aboot (>= 0.9b-2) [alpha], silo [sparc], genisovh [mips], delo [mipsel], tip22 [mips], colo (>= 1.10-1) [mipsel], sibyl [mips mipsel], atari-bootstrap [m68k], vmelilo [m68k], m68k-vme-tftplilo [m68k], sparc-utils [sparc], sysutils [i386 amd64], mtools (>= 3.9.9-1) [i386 ia64 m68k amd64], modutils, module-init-tools [i386 powerpc amd64 hppa ia64 sparc], bf-utf-source [!s390 !s390x], upx-ucl-beta (>= 1:1.91+0.20030910cvs-2) [i386], bzip2 [powerpc], mkvmlinuz [powerpc], docbook, docbook-xml, docbook-xsl, xsltproc, gawk, w3m, poxml, jadetex, openjade | openjade1.3, docbook-dsssl, gs-common, debiandoc-sgml
 Maintainer: Debian Install System Team <debian-boot@lists.debian.org>
 Uploaders: Joey Hess <joeyh@debian.org>, Alastair McKinstry <mckinstry@computer.org>, Joshua Kwan <joshk@triplehelix.org>
 Standards-Version: 3.6.1.0
+
+# This package has the worst Build-Depends in Debian, so it deserves some
+# explanation. Note that this comment can also be used to generate a
+# Build-Depends line, by running the debian/genbuilddeps program.
+# So put each build dep on its own line, prefixed by " - " and to
+# comment out a build dep, start the line with two comments.
+#
+# Base build dependencies:
+#	- debhelper (>= 4)
+#		Of course.
+# 	- apt
+# 		Used for downloading udebs.
+#	- gnupg
+#		New versions of apt need gnupg for security checks.
+#	- dpkg (>= 1.13.9)
+#		We tweak dpkg logging options only understood by this
+#		version.
+#	- grep-dctrl
+#		Various manipulations of the udeb Packages files.
+#	- bc
+#		Used for some image size calculations.
+#	
+# Library build dependencies:
+#	Libraries can come from three sources: From a udeb, from the build
+#	system via library reduction, or from the build system with no library
+#	reduction done. We'd like to eventually do away with that last.
+#	- libc6-pic | libc6.1-pic | libc0.3-pic | glibc-pic
+#		For library reduction.
+#	- libdebian-installer4 (>= 0.31)
+#	- libdebconfclient0
+#		We use the udebs of these, so they're only included because
+#		of broken deps in udebs confusing apt. (Versions are to make
+#		sure the deps are satisfied.) Will be fixed.
+#	- libparted1.6-12
+#		Only needed for monolithic image builds, and only because
+#		of broken udeb deps. Will be fixed.
+#	- libslang2-pic
+#	- libnewt-pic
+#		Rather than use slang and newt udebs, reduced versions of
+#		the libraries are put onto images to save space.
+#	- libdiscover1-pic [!s390 !s390x]
+#	- libdiscover1 [!s390 !s390x]
+#		Currently we use library reduction to get the discover1
+#		library. There is no space gain however, and it should just
+#		use a udeb instead.
+#	- libbogl-dev
+#		bogl is used by bterm. There is no particular reason
+#		why we're copying the library from the build system instead
+#		of using a dependency.
+#	- libtextwrap1
+#		Used by cdebconf. Should be a udeb, but isn't.
+#
+# Filesystem tools:
+#	- cramfsprogs [powerpc ia64 mips]
+#		For arches that use cramfs initrds.
+#	- genext2fs (>= 1.3-7.1)
+#		For creating ext2 filesystems without being root.
+#		1.3-7.1 fixes issues on several arches.
+#	- e2fsprogs, mklibs (>= 0.1.15)
+#		genext2fs doesn't produce perfect filesystems, so we fsck
+#		them.
+#	- mkisofs
+#		For making mini isos.
+#	- genromfs [sparc]
+#		Used for creating sparc floppies (which are not built by
+#		default.)
+#	- hfsutils [powerpc]
+#		For making bootable HFS USB sticks for powerpc.
+#	- dosfstools [i386 ia64 m68k amd64]
+@		For creating FAT filesystems with mkfs.msdos.
+#		Of course i386/amd64 use this for floppies, CDs etc.
+#		ia64 uses it for floppies (?)
+#		m68k uses it for atari floppies
+#
+# Boot loaders:
+#	On many arches boot loaders are copied onto or ran on the boot
+#	images in one way or another. There's a reason our mailing list is
+#	still called debian-boot..
+#	- syslinux (>= 2.11-0.1) [i386 amd64]
+#		The 2.11 release fixed some bad bugs in 2.10.
+#	- palo [hppa]
+#	- elilo [ia64]
+#	- yaboot [powerpc]
+#		For all our powerpc boot needs. Well, not really.
+#	- aboot (>= 0.9b-2) [alpha]
+#		A previous version didn't have netabootwrap.
+#	- silo [sparc]
+#		Using silo is problimatic since it needs to run as root,
+#		so images that need it are not built by default, but we
+#		include it for completeness.
+#	- genisovh [mips]
+#		Makes mini iso images bootable on SGI MIPSen.
+#	- delo [mipsel]
+#		For booting DECstations from storage media.
+#	- tip22 [mips]
+#		Piggyback netboot images.
+#	- colo (>= 1.10-1) [mipsel]
+#		For booting Cobalt machines. This version has TFTP support.
+#	- sibyl [mips mipsel]
+# 		For booting the SWARM board.
+#	- atari-bootstrap [m68k]
+#		Booting and other tools for Atari systems.
+#	- vmelilo [m68k]
+#	- m68k-vme-tftplilo [m68k]
+#		For VME machines, only included for completeness as it
+#		needs to be used and so is not run by default.
+#	- sparc-utils [sparc]
+#		For elftoaout and piggyback, to make netboot images.
+#
+# Architecture specific build dependencies:
+#	- sysutils [i386 amd64]
+#		For todos, used on files that need to be accessible from
+#		DOS.
+#	- mtools (>= 3.9.9-1) [i386 ia64 m68k amd64]
+#		mcopy is used to put files onto FAT filesystems w/o
+#		mounting them.
+#
+#	- modutils
+#		depmod is used to generate a modules.dep for images at
+#		build time. For 2.4 kernels.
+#	- module-init-tools [i386 powerpc amd64 hppa ia64 sparc]
+#		depmod for 2.6 kernels on the arches that support 2.6.
+#
+#	- bf-utf-source [!s390 !s390x]
+#		Contains the unicode font we use. Not  since we
+#		perform font reduction at build time.
+#	- upx-ucl-beta (>= 1:1.91+0.20030910cvs-2) [i386]
+#		i386 uses upx to compress kernels and other binaries
+#		The version is the first one that worked well enough for
+#		us.
+#	- bzip2 [powerpc]
+#		Used by powerpc-builtin-initrd.sh to unpack the kernel
+#		tree. See source for gory details.
+#	- mkvmlinuz [powerpc]
+#		Used to make powerpc images that can boot direct from
+#		firmware w/o using a boot loader.
+#
+# Build dependencies of the manual and docs:
+# 	Note that currently the debian-installer-manual package is used as the
+#	required deb-producing package so that the archive maintenance scripts
+#	work. So it is built on each architecture instead of being built once
+#	as an arch all package for all architectures, and its build
+#	dependencies are included in Build-Depends rather than in
+#	Build-Depends-Indep.
+#	- docbook
+#	- docbook-xml
+#	- docbook-xsl
+#	- xsltproc
+#		The manual is a docbook XML document, so needs these to
+#		build.
+#	- gawk
+#		Used as part of the manual build process.
+#	- w3m
+#		Used to generate plain text manual from html.
+#	- poxml
+#		Translations of the manual are done in po files via poxml.
+#	- jadetex
+#	- openjade | openjade1.3
+#	- docbook-dsssl
+#		Used for producing pdf and ps files.
+#	- gs-common
+#		For pdfs.
+#	- debiandoc-sgml
+#		partman's manual is in debiandoc.
 
 Package: debian-installer-manual
 Architecture: any
