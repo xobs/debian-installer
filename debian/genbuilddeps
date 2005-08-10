@@ -26,9 +26,10 @@ while (<IN>) {
 close IN;
 
 my $builddeps=join(", ", @builddeps);
-open (OUT, ">$control") || die "write $control: $!";
+open (OUT, ">$control.tmp") || die "write $control.tmp: $!";
 foreach (@lines) {
 	s/^(Build-Depends:\s+)(.*)/$1$builddeps/;
-	print OUT;
+	print OUT || die "print: $!";
 }
-close OUT;
+close OUT || die "close: $!";
+rename("control.tmp", "control");
