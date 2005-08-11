@@ -74,15 +74,7 @@ sub collectpackage {
 		return unless length apt_cache("show '$line'");
 	}
 
-	if ($line=~/^(.*) \*$/) {
-		# Asterisk at end means include all dependencies of this
-		# package.
-		my $package=$1;
-		$collect->{$package}=1;
-		debug 0, "adding $package";
-		collectdeps($package, $collect, $postponed);
-	}
-	elsif ($line=~/^(.*) \-$/) {
+	if ($line=~/^(.*) \-$/) {
 		# Minus sign at the end means exclude this package from the
 		# list.
 		my $package=$1;
@@ -93,8 +85,11 @@ sub collectpackage {
 		my $package=$line;
 		$collect->{$package}=1;
 		debug 0, "adding $package";
+		collectdeps($package, $collect, $postponed);
 	}
 }
+
+my %seendeps;
 
 # Recursively add dependencies of package.
 sub collectdeps {
@@ -102,8 +97,6 @@ sub collectdeps {
 	my $collect=shift;
 	my $postponed=shift;
 	
-	my %seendeps;
-	%seendeps=%{shift()} if @_;
 	return if $seendeps{$package};
 	$seendeps{$package}=1;
 	
@@ -120,7 +113,7 @@ sub collectdeps {
 		else {
 			$collect->{$deplist->[0]}=1;
 			debug 0, "added $deplist->[0] for $package";
-			collectdeps($deplist->[0], $collect, $postponed, \%seendeps);
+			collectdeps($deplist->[0], $collect, $postponed);
 		}
 	}
 
