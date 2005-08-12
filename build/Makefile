@@ -261,6 +261,13 @@ rebuild_%:
 _rebuild:
 	@$(submake) _clean _build
 
+# Run before releasing built files.
+release:
+	egrep '^[[:space:]]' $(BASE_DEST)/MANIFEST.udebs | \
+		sed 's/^[[:space:]]*//' | sort | uniq > $(BASE_DEST)/udeb.list
+	rm -f $(BASE_DEST)/MD5SUMS
+	cd $(BASE_DEST) && md5sum `find . -type f` > MD5SUMS
+
 # The general tree target.
 $(STAMPS)tree-unpack-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
 	dh_testroot
