@@ -578,73 +578,73 @@ msgstr ""
 msgid "To get a working keyboard, you should boot the installer with parameter <userinput>debconf/priority=medium</userinput>. When you get to keyboard selection<footnote> <para> If you are installing at default priority you should use the <userinput>Go Back</userinput> button to return to the installer menu when you are shown the list of Sun type keymaps. </para> </footnote>, choose <quote>No keyboard to configure</quote> if you have a keyboard with an American (US) layout, or choose <quote>USB keyboard</quote> if you have a keyboard with a localized layout. Selecting <quote>No keyboard to configure</quote> will leave the kernel keymap in place, which is correct for US keyboards."
 msgstr ""
 
-#: using-d-i.xml:659
+#: using-d-i.xml:655
 #, no-c-format
 #. Tag: title
 msgid "Looking for the Debian Installer ISO Image"
 msgstr ""
 
-#: using-d-i.xml:660
+#: using-d-i.xml:656
 #, no-c-format
 #. Tag: para
 msgid "When installing via the <emphasis>hd-media</emphasis> method, there will be a moment where you need to find and mount the Debian Installer iso image in order to get the rest of the installation files. The component <command>iso-scan</command> does exactly this."
 msgstr ""
 
-#: using-d-i.xml:667
+#: using-d-i.xml:663
 #, no-c-format
 #. Tag: para
 msgid "At first, <command>iso-scan</command> automatically mounts all block devices (e.g. partitions) which have some known filesystem on them and sequentially searches for filenames ending with <filename>.iso</filename> (or <filename>.ISO</filename> for that matter). Beware that the first attempt scans only files in the root directory and in the first level of subdirectories (i.e. it finds <filename>/<replaceable>whatever</replaceable>.iso</filename>, <filename>/data/<replaceable>whatever</replaceable>.iso</filename>, but not <filename>/data/tmp/<replaceable>whatever</replaceable>.iso</filename>). After an iso image has been found, <command>iso-scan</command> checks its content to determine if the image is a valid Debian iso image or not. In the former case we are done, in the latter <command>iso-scan</command> seeks for another image."
 msgstr ""
 
-#: using-d-i.xml:684
+#: using-d-i.xml:680
 #, no-c-format
 #. Tag: para
 msgid "In case the previous attempt to find an installer iso image fails, <command>iso-scan</command> will ask you whether you would like to perform a more thorough search. This pass doesn't just look into the topmost directories, but really traverses whole filesystem."
 msgstr ""
 
-#: using-d-i.xml:691
+#: using-d-i.xml:687
 #, no-c-format
 #. Tag: para
 msgid "If <command>iso-scan</command> does not discover your installer iso image, reboot back to your original operating system and check if the image is named correctly (ending in <filename>.iso</filename>), if it is placed on a filesystem recognizable by &d-i;, and if it is not corrupted (verify the checksum). Experienced Unix users could do this without rebooting on the second console."
 msgstr ""
 
-#: using-d-i.xml:712
+#: using-d-i.xml:708
 #, no-c-format
 #. Tag: title
 msgid "Configuring Network"
 msgstr ""
 
-#: using-d-i.xml:714
+#: using-d-i.xml:710
 #, no-c-format
 #. Tag: para
 msgid "As you enter this step, if the system detects that you have more than one network device, you'll be asked to choose which device will be your <emphasis>primary</emphasis> network interface, i.e. the one which you want to use for installation. The other interfaces won't be configured at this time. You may configure additional interfaces after installation is complete; see the <citerefentry> <refentrytitle>interfaces</refentrytitle> <manvolnum>5</manvolnum> </citerefentry> man page."
 msgstr ""
 
-#: using-d-i.xml:725
+#: using-d-i.xml:721
 #, no-c-format
 #. Tag: para
 msgid "By default, &d-i; tries to configure your computer's network automatically via DHCP. If the DHCP probe succeeds, you are done. If the probe fails, it may be caused by many factors ranging from unplugged network cable, to a misconfigured DHCP setup. Or maybe you don't have a DHCP server in your local network at all. For further explanation check the error messages on the third console. In any case, you will be asked if you want to retry, or if you want to perform manual setup. DHCP servers are sometimes really slow in their responses, so if you are sure everything is in place, try again."
 msgstr ""
 
-#: using-d-i.xml:737
+#: using-d-i.xml:733
 #, no-c-format
 #. Tag: para
 msgid "The manual network setup in turn asks you a number of questions about your network, notably <computeroutput>IP address</computeroutput>, <computeroutput>Netmask</computeroutput>, <computeroutput>Gateway</computeroutput>, <computeroutput>Name server addresses</computeroutput>, and a <computeroutput>Hostname</computeroutput>. Moreover, if you have a wireless network interface, you will be asked to provide your <computeroutput>Wireless ESSID</computeroutput> and a <computeroutput>WEP key</computeroutput>. Fill in the answers from <xref linkend=\"needed-info\"/>."
 msgstr ""
 
-#: using-d-i.xml:751
+#: using-d-i.xml:747
 #, no-c-format
 #. Tag: para
 msgid "Some technical details you might, or might not, find handy: the program assumes the network IP address is the bitwise-AND of your system's IP address and your netmask. It will guess the broadcast address is the bitwise OR of your system's IP address with the bitwise negation of the netmask. It will also guess your gateway. If you can't find any of these answers, use the system's guesses &mdash; you can change them once the system has been installed, if necessary, by editing <filename>/etc/network/interfaces</filename>. Alternatively, you can install <classname>etherconf</classname>, which will step you through your network setup."
 msgstr ""
 
-#: using-d-i.xml:790
+#: using-d-i.xml:786
 #, no-c-format
 #. Tag: title
 msgid "Partitioning and Mount Point Selection"
 msgstr ""
 
-#: using-d-i.xml:791
+#: using-d-i.xml:787
 #, no-c-format
 #. Tag: para
 msgid "At this time, after hardware detection has been executed a final time, &d-i; should be at its full strength, customized for the user's needs and ready to do some real work. As the title of this section indicates, the main task of the next few components lies in partitioning your disks, creating filesystems, assigning mountpoints and optionally configuring closely related issues like LVM or RAID devices."
@@ -1664,6 +1664,6 @@ msgstr ""
 #: using-d-i.xml:2093
 #, no-c-format
 #. Tag: para
-msgid "It is possible to configure the base system within the first stage installer (before rebooting from the hard drive), by running <command>base-config</command> in a <firstterm>chroot</firstterm> environment. This is mainly useful for testing the installer and a vast majority of people should avoid it."
+msgid "It is possible to configure the base system within the first stage installer (before rebooting from the hard drive), by running <command>base-config</command> in a <firstterm>chroot</firstterm> environment. This is mainly useful for testing the installer should normally be avoided."
 msgstr ""
 
