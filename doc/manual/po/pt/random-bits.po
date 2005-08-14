@@ -12,13 +12,14 @@
 # 15-07-2005 - Miguel Figueiredo <elmig@debianpt.org> - 6f
 # 18-07-2005 - Miguel Figueiredo <elmig@debianpt.org> - 1f
 # 28-07-2005 - Miguel Figueiredo <elmig@debianpt.org> - 1f
+# 14-08-2005 - Miguel Figueiredo <elmig@debianpt.org> - 5f24u
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: random-bits\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2001-02-09 01:25+0100\n"
-"PO-Revision-Date: 2005-07-28 17:42+0000\n"
+"PO-Revision-Date: 2005-08-14 17:22+0000\n"
 "Last-Translator: Miguel Figueiredo <elmig@debianpt.org>\n"
 "Language-Team: Portuguese <traduz@debianpt.org>\n"
 "MIME-Version: 1.0\n"
@@ -83,7 +84,7 @@ msgstr ""
 
 #. Tag: screen
 #: random-bits.xml:35
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "#### Modifying syslinux.cfg.\n"
 "\n"
@@ -544,13 +545,13 @@ msgstr ""
 "\n"
 "# Este primeiro comando é corrido tão cedo quanto possível, logo após\n"
 "# o preseeding ser lido.\n"
-"#d-i preseed/early_command              string \\\n"
+"#d-i preseed/early_command string \\\n"
 "#    wget http://url/to/my.udeb -O /tmp/my.udeb; udpkg -i /tmp/my.udeb\n"
 "\n"
 "# Este comando é corrido mesmo antes do instalador terminar, mas quando "
 "existe um\n"
 "# directório /target ainda utilizável.\n"
-"#d-i preseed/late_command               string \\\n"
+"#d-i preseed/late_command string echo foo > /target/etc/bar\n"
 "#    for deb in /hd-media/*.deb; do cp $deb /target/tmp; \\\n"
 "#    chroot /target dpkg -i /tmp/$(basename $deb); done\n"
 "\n"
@@ -721,11 +722,21 @@ msgstr ""
 "# a determinar qual o software mais popular e inclui-lo nos CDs.\n"
 "#popularity-contest popularity-contest/participate boolean false\n"
 "\n"
-"###### Configuração de Fuso Horário.\n"
+"###### Configuração do Relógio e do Fuso Horário.\n"
 "\n"
-"# Controla se o relógio de hardware está ou não definido para GMT.\n"
-"base-config  tzconfig/gmt                             boolean true\n"
+"# Controla se o relógio de hardware está ou não definido para UTC.\n"
+"d-i clock-setup/utc boolean true\n"
 "\n"
+"# Você pode definir isto para qualquer configuração válida de $TZ;\n"
+"para as opções veja o conteúdo de /usr/share/zoneinfo/ .\n"
+"d-i time/zone string US/Eastern\n"
+"\n"
+"# Este preseeding costumava ser mais complexo; o método antigo está\n"
+"# aqui documentado para estar completo. Se está a utilizar o Sarge, vai\n"
+"necessitar deste método.\n"
+"\n"
+"# Controla de o relógio do hardware está definido para UTC.\n"
+"#base-config tzconfig/gmt boolean true\n"
 "# Se você disse ao instalador que está nos Estados Unidos, então você\n"
 "# pode definir o fuso horário utilizando esta variável.\n"
 "# (As escolhas são: Eastern, Central, Mountain, Pacific, Alaska, Hawaii,\n"
@@ -792,27 +803,23 @@ msgstr ""
 "\n"
 "###### Selecção de pacotes.\n"
 "\n"
-"# Você pode escolher instalar qualquer combinação de tarefas que estejam "
-"disponíveis.\n"
-"# As tarefas disponíveis até à escrita deste documento incluem: Ambiente "
-"Desktop,\n"
-"# Servidor Webr, Servidor de Impressão, Servidor de DNS, Servidor de "
-"Ficheiros,\n"
-"# Servidor de Mail, Base de Dados SQL, selecção manual de pacotes. A última "
-"irá correr\n"
-"# o aptitude. Você pode também não instalar tarefas, e forçar a\n"
-"# instalação de um conjunto de pacotes de alguma outra forma.\n"
-"tasksel      tasksel/first   multiselect Desktop environment\n"
-"#tasksel     tasksel/first   multiselect Web server, Mail server, DNS "
-"server\n"
+"# Você pode escolher instalar qualquer combinação de tarefas que estejam\n "
+"# disponíveis. As tarefas disponíveis até à escrita deste documento \n"
+"# incluem: Ambiente Desktop, Servidor Web, Servidor de Impressão, Servidor\n"
+"# de DNS, Servidor de Ficheiros, Servidor de Mail, Base de Dados SQL,\n"
+"# Portátil, Sistema Padrão, selecção manual de pacotes. A última irá\n"
+"# correr o aptitude. Você pode também escolher não instalar tarefas, e\n"
+"# forçar a instalação de um conjunto de pacotes de alguma outra forma.\n"
+"tasksel tasksel/first multiselect Desktop environment, Standard system\n"
+"#tasksel tasksel/first multiselect Web server, Standard system\n"
 "\n"
 "###### Configuração do Servidor de Mail.\n"
 "\n"
-"# Durante uma instalação normal, o exim faz apenas duas perguntas. Aqui está "
-"como\n"
-"# evitar até essas. É possível um preseeding mais complicado.\n"
+"# Durante uma instalação normal, o exim faz apenas algumas perguntas.\n"
+"# Aqui está como evitar até essas. É possível um preseeding mais complicado.\n"
 "exim4-config exim4/dc_eximconfig_configtype \\\n"
-"    select no configuration at this time\n"
+" escolher não configurar desta vez\n"
+"exim4-config exim4/no>config boolean true\n"
 "\n"
 "# É boa ideia definir isto para qualquer que seja a conta que você escolha "
 "criar.\n"
@@ -2256,9 +2263,9 @@ msgstr ""
 
 #. Tag: title
 #: random-bits.xml:654
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Installing &debian; over Parallel Line IP (PLIP)"
-msgstr "Instalar &debian; a partir de um sistema Unix/Linux"
+msgstr "Instalar &debian; a partir de uma linha IP Paralela (PLIP)"
 
 #. Tag: para
 #: random-bits.xml:656
@@ -2269,6 +2276,7 @@ msgid ""
 "cable (also called Null-Printer cable). The gateway computer should be "
 "connected to a network that has a Debian mirror on it (e.g. to the Internet)."
 msgstr ""
+"Esta secção explica como instalar &debian; num computador sem placa Ethernet, mas sim com apenas uma gateway remota ligada através de um cabo Null-modem (também chamado cabo Null-printer). O computador gateway deve estar ligado a uma rede que tenha um mirror Debian (p.e. à Internet)."
 
 #. Tag: para
 #: random-bits.xml:664
@@ -2280,6 +2288,7 @@ msgid ""
 "target system and the source system respectively (these addresses should be "
 "unused within your network address space)."
 msgstr ""
+"No exemplo deste apêndice vamos configurar uma ligação PLIP utilizando uma gateway ligada à Internet através de uma ligação dial-up (ppp0). Nós iremos utilizar os endereços IP 192.168.0.1 e 192.168.0.2 para os interfaces PLIP respectivamente nos sistemas alvo e fonte (estes endereços devem estar livres dentro do seu espaço de endereçamento de rede)."
 
 #. Tag: para
 #: random-bits.xml:672
@@ -2289,6 +2298,7 @@ msgid ""
 "after the reboot into the installed system (see <xref linkend=\"boot-new\"/"
 ">)."
 msgstr ""
+"A configuração da ligação PLIP durante a instalação também estará disponível após reiniciar para o sistema instalado (veja <xref linkend=\"boot-new\"/>)."
 
 #. Tag: para
 #: random-bits.xml:677
@@ -2299,12 +2309,13 @@ msgid ""
 "systems. The most common values are <literal>io=0x378</literal>, "
 "<literal>irq=7</literal>."
 msgstr ""
+"Antes de começar, você precisa verificar a configuração da BIOS (endereço base IO e IRQ) para as portas paralelas de ambos os sistemas fonte e alvo. Os valores mais comuns são <literal>io=0x378</literal>, <literal>irq=7</literal>."
 
 #. Tag: title
 #: random-bits.xml:687
 #, no-c-format
 msgid "Requirements"
-msgstr ""
+msgstr "Requisitos"
 
 #. Tag: para
 #: random-bits.xml:690
@@ -2313,12 +2324,13 @@ msgid ""
 "A target computer, called <emphasis>target</emphasis>, where Debian will be "
 "installed."
 msgstr ""
+"Um computador alvo, chamado <emphasis>target</emphasis>, onde será instalado Debian."
 
 #. Tag: para
 #: random-bits.xml:696
 #, no-c-format
 msgid "System installation media; see <xref linkend=\"installation-media\"/>."
-msgstr ""
+msgstr "Media de instalação do sistema; veja <xref linkend=\"installation-media\"/>."
 
 #. Tag: para
 #: random-bits.xml:701
@@ -2327,6 +2339,7 @@ msgid ""
 "Another computer connected to the Internet, called <emphasis>source</"
 "emphasis>, that will function as the gateway."
 msgstr ""
+"Outro computador ligado à Internet, chamado <emphasis>source</emphasis>, que irá funcionar como gateway."
 
 #. Tag: para
 #: random-bits.xml:707
@@ -2336,12 +2349,13 @@ msgid ""
 "\">PLIP-Install-HOWTO</ulink> for more information on this cable and "
 "instructions how to make your own."
 msgstr ""
+"Um cabo Null-Modem DB-25. Para mais informações acerca deste cabo e instruções  de como fazer o seu veja o <ulink url=\"&url-plip-install-howto;\">PLIP-Install-HOWTO</ulink>."
 
 #. Tag: title
 #: random-bits.xml:719
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Setting up source"
-msgstr "Preparando o Seu Rato"
+msgstr "Configurando a fonte"
 
 #. Tag: para
 #: random-bits.xml:720
@@ -2350,6 +2364,7 @@ msgid ""
 "The following shell script is a simple example of how to configure the "
 "source computer as a gateway to the Internet using ppp0."
 msgstr ""
+"A seguinte shell script é um simples exemplo de como configurar o computador fonte como uma gateway para a Internet utilizando ppp0."
 
 #. Tag: screen
 #: random-bits.xml:725
@@ -2374,12 +2389,30 @@ msgid ""
 "MASQUERADE\n"
 "echo 1 > /proc/sys/net/ipv4/ip_forward"
 msgstr ""
+"#!/bin/sh\n"
+"\n"
+"# Nós removemos do kernel módulos em execução para evitar conflitos e\n"
+"# para os reconfigurar manualmente.\n"
+"modprobe -r lp parport_pc\n"
+"modprobe parport_pc io=<replaceable>0x378</replaceable> irq=<replaceable>7</"
+"replaceable>\n"
+"modprobe plip\n"
+"\n"
+"# Configurar o interface plip (plip0 para mim, veja dmesg | grep plip)\n"
+"ifconfig <replaceable>plip0 192.168.0.2</replaceable> pointopoint "
+"<replaceable>192.168.0.1</replaceable> netmask 255.255.255.255 up\n"
+"\n"
+"#Configurar a gateway\n"
+"modprobe iptable_nat\n"
+"iptables -t nat -A POSTROUTING -o <replaceable>ppp0</replaceable> -j "
+"MASQUERADE\n"
+"echo 1 > /proc/sys/net/ipv4/ip_forward"
 
 #. Tag: title
 #: random-bits.xml:731
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Installing target"
-msgstr "Instalar um Kernel"
+msgstr "Instalar o alvo"
 
 #. Tag: para
 #: random-bits.xml:732
@@ -2389,12 +2422,13 @@ msgid ""
 "mode; enter <userinput>expert</userinput> at the boot prompt. Below are the "
 "answers that should be given during various stages of the installation."
 msgstr ""
+"Inicie a partir da media de instalação. A instalação tem de ser corrida em modo avançado; introduza <userinput>expert</userinput> na prompt de aranque. Abaixo estão as respostas que devem ser dadas durante as várias etapas da instalação."
 
 #. Tag: guimenuitem
 #: random-bits.xml:744
 #, no-c-format
 msgid "Load installer components"
-msgstr ""
+msgstr "Carregar componentes do instalador"
 
 #. Tag: para
 #: random-bits.xml:746
@@ -2403,12 +2437,13 @@ msgid ""
 "Select the <userinput>plip-modules</userinput> option from the list; this "
 "will make the PLIP drivers available to the installation system."
 msgstr ""
+"Escolha a opção <userinput>plip-modules</userinput> na lista; isto irá disponibilizar os drivers PLIP para o sistema de instalação."
 
 #. Tag: guimenuitem
 #: random-bits.xml:754
 #, no-c-format
 msgid "Detect network hardware"
-msgstr ""
+msgstr "Detectar hardware de rede"
 
 #. Tag: para
 #: random-bits.xml:759
@@ -2419,12 +2454,13 @@ msgid ""
 "plip instead, you have to deselect all listed driver modules. Obviously, if "
 "target doesn't have a network card, the installer will not show this list."
 msgstr ""
+"Se o alvo <emphasis>tiver</emphasis> uma placa de rede, será mostrada uma lista de módulos das placas detectadas. Se quizer forçar o &d-i a utilizar em vez disso plip, tem de retirar a seleccão de todos os drivers de módulos listados. Obviamente, se o alvo não tiver placa de rede, o instalador não irá mostrar esta lista."
 
 #. Tag: para
 #: random-bits.xml:768
 #, no-c-format
 msgid "Prompt for module parameters: Yes"
-msgstr ""
+msgstr "Pergunta para os parâmetros de módulos: Sim"
 
 #. Tag: para
 #: random-bits.xml:773
@@ -2434,6 +2470,7 @@ msgid ""
 "ask you to select a network driver module from a list. Select the "
 "<userinput>plip</userinput> module."
 msgstr ""
+"Como não foi detectada/seleccionada nenhuma placa de rede anteriormente, o instalador irá pedir-lhe para seleccionar um módulo de driver de rede a partir de uma lista. Escolha o módulo <userinput>plip</userinput>."
 
 #. Tag: para
 #: random-bits.xml:780
@@ -2442,24 +2479,26 @@ msgid ""
 "Additional parameters for module parport_pc: "
 "<userinput><replaceable>io=0x378 irq=7</replaceable></userinput>"
 msgstr ""
+"Parâmetros adicionais para o módulo parport_pc: "
+"<userinput><replaceable>io=0x378 irq=7</replaceable></userinput>"
 
 #. Tag: para
 #: random-bits.xml:786
 #, no-c-format
 msgid "Additional parameters for module plip: leave empty"
-msgstr ""
+msgstr "Parâmetros adicionais para o módulo plip: deixe vazio"
 
 #. Tag: guimenuitem
 #: random-bits.xml:796
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Configure the network"
-msgstr "Configurar a Rede"
+msgstr "Configurar a rede"
 
 #. Tag: para
 #: random-bits.xml:799
 #, no-c-format
 msgid "Auto-configure network with DHCP: No"
-msgstr ""
+msgstr "Auto-configurar a rede com DHCP: Não"
 
 #. Tag: para
 #: random-bits.xml:804
@@ -2467,6 +2506,7 @@ msgstr ""
 msgid ""
 "IP address: <userinput><replaceable>192.168.0.1</replaceable></userinput>"
 msgstr ""
+"Endereço IP: <userinput><replaceable>192.168.0.1</replaceable></userinput>"
 
 #. Tag: para
 #: random-bits.xml:809
@@ -2475,6 +2515,7 @@ msgid ""
 "Point-to-point address: <userinput><replaceable>192.168.0.2</replaceable></"
 "userinput>"
 msgstr ""
+"Endereço ponto-a-ponto: <userinput><replaceable>192.168.0.2</replaceable></userinput>"
 
 #. Tag: para
 #: random-bits.xml:815
@@ -2483,6 +2524,7 @@ msgid ""
 "Name server addresses: you can enter the same addresses used on source (see "
 "<filename>/etc/resolv.conf</filename>)"
 msgstr ""
+"Endereços de servidor de nomes: você pode introduzir os mesmos endereços utilizados na fonte (veja <filename>/etc/resolv.conf</filename>)"
 
 #~ msgid "1537"
 #~ msgstr "1537"
