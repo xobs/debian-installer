@@ -27,7 +27,7 @@ the Internet at <ulink url="&url-example-preseed;"></ulink>.
 </para></note>
 
 <informalexample><screen>
-#### Startup
+#### Startup.
 
 # To use a preseed file, you'll first need to boot the installer,
 # and tell it what preseed file to use. This is done by passing the
@@ -42,10 +42,12 @@ the Internet at <ulink url="&url-example-preseed;"></ulink>.
 # If you're installing from USB media, use this, and put the preseed file
 # in the toplevel directory of the USB stick.
 #   preseed/file=/hd-media/preseed
+#
 # If you feel comfortable modifying the installer's initrd image,
-# you can also place a preseed file in filesystem of the initrd, named
-# "preseed.cfg" -- the installer will always use this file if it is
-# present. Otherwise, be sure to copy this file to the location you
+# you can also place a preseed file in the root directory of the initrd's
+# filesystem, named "preseed.cfg" -- the installer will always use this
+# file if it is present (note: not supported by the Sarge version of the
+# installer). Otherwise, be sure to copy this file to the location you
 # specify.
 #
 # To make sure the installer gets the right preseed file, you can specify
@@ -138,7 +140,7 @@ d-i mirror/http/directory string /debian
 d-i mirror/suite string testing
 d-i mirror/http/proxy string
 
-### Partitioning.
+#### Partitioning.
 
 # If the system has free space you can choose to only partition that space.
 #d-i partman-auto/init_automatically_partition \
@@ -213,7 +215,7 @@ d-i grub-installer/with_other_os boolean true
 #d-i grub-installer/only_debian boolean false
 #d-i grub-installer/with_other_os boolean false
 
-##### Finishing up the first stage install.
+#### Finishing up the first stage install.
 
 # Avoid that last message about the install being complete.
 d-i prebaseconfig/reboot_in_progress note
@@ -244,7 +246,9 @@ d-i prebaseconfig/reboot_in_progress note
 #base-config base-config/late_command string \
 #    apt-get install zsh; chsh -s /bin/zsh
 
-##### Preseeding base-config.
+###### Preseeding the 2nd stage of the installation.
+
+#### Preseeding base-config.
 
 # Avoid the introductory message.
 base-config base-config/intro note
@@ -261,7 +265,7 @@ base-config base-config/login note
 # determine what software is most popular and include it on CDs.
 #popularity-contest popularity-contest/participate boolean false
 
-###### Clock and time zone setup.
+#### Clock and time zone setup.
 
 # Controls whether or not the hardware clock is set to UTC.
 d-i clock-setup/utc boolean true
@@ -297,7 +301,7 @@ d-i time/zone string US/Eastern
 # the time zones, or "other".
 #base-config tzconfig/choose_country_zone_multiple select
 
-###### Account setup.
+#### Account setup.
 
 # To preseed the root password, you have to put it in the clear in this
 # file. That is not a very good idea, use caution!
@@ -314,7 +318,7 @@ d-i time/zone string US/Eastern
 #passwd passwd/user-password password insecure
 #passwd passwd/user-password-again password insecure
 
-###### Apt setup.
+#### Apt setup.
 
 # This question controls what source the second stage installation uses
 # for packages. Choices are cdrom, http, ftp, filesystem, edit sources list
@@ -335,7 +339,7 @@ base-config apt-setup/another boolean false
 # Do enable security updates.
 base-config apt-setup/security-updates boolean true
 
-###### Package selection.
+#### Package selection.
 
 # You can choose to install any combination of tasks that are available.
 # Available tasks as of this writing include: Desktop environment,
@@ -347,7 +351,7 @@ base-config apt-setup/security-updates boolean true
 tasksel tasksel/first multiselect Desktop environment, Standard system
 #tasksel tasksel/first multiselect Web server, Standard system
 
-###### Mailer configuration.
+#### Mailer configuration.
 
 # During a normal install, exim asks only a few questions. Here's how to
 # avoid even those. More complicated preseeding is possible.
@@ -361,7 +365,7 @@ exim4-config exim4/no_config boolean true
 # /var/mail/mail.
 exim4-config exim4/dc_postmaster string
 
-###### X Configuration.
+#### X Configuration.
 
 # Preseeding Debian's X config is possible, but you probably need to know
 # some details about the video hardware of the machine, since Debian's X
@@ -388,7 +392,7 @@ xserver-xfree86 xserver-xfree86/config/monitor/selection-method \
 xserver-xfree86 xserver-xfree86/config/monitor/mode-list \
     select 1024x768 @ 60 Hz
 
-###### Everything else.
+#### Everything else.
 
 # Depending on what software you choose to install, or if things go wrong
 # during the installation process, it's possible that other questions may
