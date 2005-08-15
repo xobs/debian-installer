@@ -3150,17 +3150,143 @@ msgstr ""
 #. Tag: title
 #: using-d-i.xml:2091
 #, no-c-format
+msgid "Installation Over the Network"
+msgstr ""
+
+#. Tag: para
+#: using-d-i.xml:2093
+#, no-c-format
+msgid ""
+"One of the more interesting components is <firstterm>network-console</"
+"firstterm>. It allows you to do a large part of the installation over the "
+"network via SSH. The use of the network implies you will have to perform the "
+"first steps of the installation from the console, at least to the point of "
+"setting up the networking. (Although you can automate that part with <xref "
+"linkend=\"automatic-install\"/>.)"
+msgstr ""
+
+#. Tag: para
+#: using-d-i.xml:2103
+#, no-c-format
+msgid ""
+"This component is not loaded into the main installation menu by default, so "
+"you have to explicitly ask for it. If you are using CD, you need to boot "
+"with medium priority or otherwise invoke the main installation menu and "
+"choose <guimenuitem>Load installer components from CD</guimenuitem> and from "
+"the list of additional components select <guimenuitem>network-console: "
+"Continue installation remotely using SSH</guimenuitem>. Successful load is "
+"indicated by a new menu entry called <guimenuitem>Continue installation "
+"remotely using SSH</guimenuitem>."
+msgstr ""
+
+#. Tag: para
+#: using-d-i.xml:2116
+#, no-c-format
+msgid ""
+"For installations on &arch-title;, this is the default method after setting "
+"up the network."
+msgstr ""
+
+#. Tag: para
+#: using-d-i.xml:2121
+#, no-c-format
+msgid ""
+"<phrase arch=\"not-s390\">After selecting this new entry, you</phrase> "
+"<phrase arch=\"s390\">You</phrase> will be asked for a new password to be "
+"used for connecting to the installation system and for its confirmation. "
+"That's all. Now you should see a screen which instructs you to login "
+"remotely as the user <emphasis>installer</emphasis> with the password you "
+"just provided. Another important detail to notice on this screen is the "
+"fingerprint of this system. You need to transfer the fingerprint securely to "
+"the <quote>person who will continue the installation remotely</quote>."
+msgstr ""
+
+#. Tag: para
+#: using-d-i.xml:2133
+#, no-c-format
+msgid ""
+"Should you decide to continue with the installation locally, you can always "
+"press &enterkey;, which will bring you back to the main menu, where you can "
+"select another component."
+msgstr ""
+
+#. Tag: para
+#: using-d-i.xml:2139
+#, no-c-format
+msgid ""
+"Now let's switch to the other side of the wire. As a prerequisite, you need "
+"to configure your terminal for UTF-8 encoding, because that is what the "
+"installation system uses. If you do not, remote installation will be still "
+"possible, but you may encounter strange display artefacts like destroyed "
+"dialog borders or unreadable non-ascii characters. Establishing a connection "
+"with the installation system is as simple as typing: "
+"<informalexample><screen>\n"
+"<prompt>$</prompt> <userinput>ssh -l installer <replaceable>install_host</"
+"replaceable></userinput>\n"
+"</screen></informalexample> Where <replaceable>install_host</replaceable> is "
+"either the name or IP address of the computer being installed. Before the "
+"actual login the fingerprint of the remote system will be displayed and you "
+"will have to confirm that it is correct."
+msgstr ""
+
+#. Tag: para
+#: using-d-i.xml:2156
+#, no-c-format
+msgid ""
+"If you install several computers in turn and they happen to have the same IP "
+"address or hostname, ssh will refuse to connect to such host. The reason is "
+"that it will have different fingerprint, which is usually a sign of a "
+"spoofing attack. If you are sure this is not the case, you will need to "
+"delete the relevant line from <filename>~/.ssh/known_hosts</filename> and "
+"try again."
+msgstr ""
+
+#. Tag: para
+#: using-d-i.xml:2165
+#, no-c-format
+msgid ""
+"After the login you will be presented with an initial screen where you have "
+"two possibilities called <guimenuitem>Start menu</guimenuitem> and "
+"<guimenuitem>Start shell</guimenuitem>. The former brings you to the main "
+"installer menu, where you can continue with the installation as usual. The "
+"latter starts a shell from which you can examine and possibly fix the the "
+"remote system. You should only start one SSH session for the installation "
+"menu, but may start multiple sessions for shells."
+msgstr ""
+
+#. Tag: para
+#: using-d-i.xml:2175
+#, no-c-format
+msgid ""
+"After you have started the installation remotely over SSH, you should not go "
+"back to the installation session running on the local console. Doing so may "
+"corrupt the database that holds the configuration of the new system. This in "
+"turn may result in a failed installation or problems with the installed "
+"system."
+msgstr ""
+
+#. Tag: para
+#: using-d-i.xml:2183
+#, no-c-format
+msgid ""
+"Also, if you are running the ssh session from an X terminal, you should not "
+"resize the window as that will result in the connection being terminated."
+msgstr ""
+
+#. Tag: title
+#: using-d-i.xml:2198
+#, no-c-format
 msgid "Running <command>base-config</command> From Within &d-i;"
 msgstr "&d-i; 안에서 <command>base-config</command> 실행하기"
 
 #. Tag: para
-#: using-d-i.xml:2093
+#: using-d-i.xml:2200
 #, fuzzy, no-c-format
 msgid ""
 "It is possible to configure the base system within the first stage installer "
 "(before rebooting from the hard drive), by running <command>base-config</"
 "command> in a <firstterm>chroot</firstterm> environment. This is mainly "
-"useful for testing the installer should normally be avoided."
+"useful for testing the installer and should normally be avoided."
 msgstr ""
 "베이스 시스템을 첫번째 단계의 설치 프로그램에서 (하드 드라이브에서 부팅하기 "
 "전에) 설정할 수 있습니다. <firstterm>chroot</firstterm> 환경에서 "
