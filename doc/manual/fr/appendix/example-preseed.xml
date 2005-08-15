@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- original version: 29505 -->
+<!-- original version: 29670 -->
 
 <sect1 id="example-preseed">
 <title>Exemple de fichier de préconfiguration</title>
@@ -96,22 +96,19 @@ sur internet, <ulink url="&url-example-preseed;"></ulink>.
 
 # La première commande est exécutée aussi tôt que possible, juste après
 # la lecture du fichier.
-#d-i preseed/early_command		string \
-#    wget http://url/to/my.udeb -O /tmp/my.udeb; udpkg -i /tmp/my.udeb
+#d-i preseed/early_command string anna-install some-udeb
 
 # Cette commande est exécutée juste avant que l'installation ne se termine,  
 # mais quand le répertoire /target est encore utilisable.
-#d-i preseed/late_command		string \ 
-#    for deb in /hd-media/*.deb; do cp $deb /target/tmp; \
-#    chroot /target dpkg -i /tmp/$(basename $deb); done
+#d-i preseed/late_command string echo foo > /target/etc/bar
 
 # Cette commande est exécutée au moment où base-config commence.
-#base-config base-config/early_command	string echo hi mom
+#base-config base-config/early_command string echo hi mom
 
 # Cette commande est exécutée après base-config, juste avant la connexion.
 # C'est un bon moyen d'installer les paquets que vous voulez ou d'affiner la
 # la configuration du système.
-#base-config base-config/late_command	string \
+#base-config base-config/late_command string \
 #    apt-get install zsh; chsh -s /bin/zsh
 
 #### Configuration du réseau.
@@ -124,41 +121,41 @@ sur internet, <ulink url="&url-example-preseed;"></ulink>.
 
 # Choisir une interface précise pour netcfg. Ce n'est normalement pas 
 # nécessaire puisque netcfg utilise toute interface connectée
-#d-i netcfg/choose_interface	select auto
+#d-i netcfg/choose_interface select auto
 
 # Quand le serveur dhcp est lent et que l'installateur s'arrête pour l'attendre,
 # ceci peut être utile.
-#d-i netcfg/dhcp_timeout               string 60
+#d-i netcfg/dhcp_timeout string 60
 
 
 # Si vous préférez configurer vous-même le réseau, voici comment faire&nbsp;:
-#d-i	netcfg/disable_dhcp	boolean true
-#d-i	netcfg/get_nameservers	string 192.168.1.1
-#d-i	netcfg/get_ipaddress	string 192.168.1.42
-#d-i	netcfg/get_netmask	string 255.255.255.0
-#d-i	netcfg/get_gateway	string 192.168.1.1
-#d-i	netcfg/confirm_static	boolean true
+#d-i netcfg/disable_dhcp boolean true
+#d-i netcfg/get_nameservers string 192.168.1.1
+#d-i netcfg/get_ipaddress string 192.168.1.42
+#d-i netcfg/get_netmask	string 255.255.255.0
+#d-i netcfg/get_gateway	string 192.168.1.1
+#d-i netcfg/confirm_static boolean true
 
 # Remarquez que les valeurs données par dhcp, nom de domaine ou nom de 
 # machine, prennent le pas sur les valeurs déclarées ici. Cependant,
 # cette déclaration empêche que les questions ne soient posées même si les
 # valeurs viennent de dhcp.
-d-i  netcfg/get_hostname	string unassigned-hostname
-d-i  netcfg/get_domain	        string unassigned-domain
+d-i netcfg/get_hostname string unassigned-hostname
+d-i netcfg/get_domain string unassigned-domain
 
 # Supprimer le dialogue irritant sur la clé WEP.
-d-i netcfg/wireless_wep	        string 
+d-i netcfg/wireless_wep string 
 # Et l'étonnant nom de machine dhcp que certains FAI utilisent comme mot de
 # passe.
-#d-i netcfg/dhcp_hostname	string radish
+#d-i netcfg/dhcp_hostname string radish
 
 # Valeurs pour les miroirs
 
-d-i	mirror/country		string enter information manually
-d-i	mirror/http/hostname	string http.us.debian.org
-d-i	mirror/http/directory	string /debian
-d-i	mirror/suite		string testing
-d-i	mirror/http/proxy	string 
+d-i mirror/country string enter information manually
+d-i mirror/http/hostname string http.us.debian.org
+d-i mirror/http/directory string /debian
+d-i mirror/suite string testing
+d-i mirror/http/proxy string 
 
 ### Partitionnement.
 
@@ -170,25 +167,25 @@ d-i	mirror/http/proxy	string
 # Vous pouvez aussi choisir un disque entier. Le format de son nom peut être
 # donné selon le format devfs ou le format traditionnel.
 # Par exemple, pour utiliser le premier disque connu sous devfs&nbsp;:
-d-i	partman-auto/disk	string /dev/discs/disc0/disc
+d-i partman-auto/disk string /dev/discs/disc0/disc
 
-# Vous pouvez choisir parmi tous les schémas prédefinis&nbsp;:
-d-i partman-auto/choose_recipe	    select \
+# Vous pouvez choisir parmi tous les schémas prédefinis...
+d-i partman-auto/choose_recipe select \
     Tous les fichiers dans une seule partition (recommandé aux débutants)
-#d-i	partman-auto/choose_recipe	select Desktop machine
-#d-i	partman-auto/choose_recipe	select Multi-user workstation
+#d-i partman-auto/choose_recipe select Desktop machine
+#d-i partman-auto/choose_recipe select Multi-user workstation
 
-# Ou donner vous-même votre schéma...
+# ...ou donner vous-même votre schéma.
 # Le format des schémas est expliqué dans le fichier 
 # devel/partman-auto-recipe.txt.
 # Si vous avez la possibilité d'obtenir un schéma dans l'environnement de
 # l'installateur, vous pouvez simplement pointer sur lui.
-#d-i	partman-auto/expert_recipe_file	string /hd-media/recipe
+#d-i partman-auto/expert_recipe_file string /hd-media/recipe
 
 # Sinon, vous pouvez écrire un schéma en une seule ligne. L'exemple suivant
 # crée une petite partition /boot, une partition swap convenable, et utilise le
 # reste de l'espace libre pour la partition racine&nbsp;:
-#d-i partman-auto/expert_recipe	     string boot-root :: \
+#d-i partman-auto/expert_recipe string boot-root :: \
 #    20 50 100 ext3 $primary{ } $bootable{ } method{ format } format{ } \
 #    use_filesystem{ } filesystem{ ext3 } mountpoint{ /boot } .  \
 #    500 10000 1000000000 ext3 method{ format } format{ } \
@@ -212,33 +209,32 @@ d-i partman-auto/choose_recipe	    select \
 #	.
 
 # Partman créera automatiquement les partitions sans demander de confirmation.
-d-i partman/confirm_write_new_label    boolean true
-d-i partman/choose_partition	       select \
-   Finish partitioning and write changes to disk
-d-i partman/confirm		       boolean true
+d-i partman/confirm_write_new_label boolean true
+d-i partman/choose_partition select \
+   Terminer le partitionnement et enregistrer les modifications sur le disque
+d-i partman/confirm boolean true
 
 #### Installation du programme d'amorçage.
 
 # Grub est le programme d'amorçage par défaut (pour x86). Si vous préférez
 # LILO, décommentez la ligne suivante&nbsp;:
-#d-i	grub-installer/skip		boolean true
-
+#d-i grub-installer/skip boolean true
 
 # Il n'y a aucun danger à donner ce paramètre&nbsp;: il installe grub sur le
 # secteur d'amorçage principal s'il n'existe aucun autre système d'exploitation
 # sur la machine.
-d-i	grub-installer/only_debian	boolean true
+d-i grub-installer/only_debian boolean true
 
 # Ce paramètre installe grub sur le secteur d'amorçage principal même s'il
 # existe un autre système d'exploitation, ce qui est moins sûr car il pourrait
 # ne pas savoir amorcer cet autre système.
-d-i	grub-installer/with_other_os	boolean true
+d-i grub-installer/with_other_os boolean true
 
 # Vous pouvez aussi l'installer ailleurs que dans le secteur d'amorçage 
 # principal. Décommentez et modifiez les lignes suivantes&nbsp;:
-#d-i	grub-installer/bootdev		string (hd0,0)
-#d-i	grub-installer/only-debian	boolean false
-#d-i	grub-installer/with_other_os	boolean false
+#d-i grub-installer/bootdev string (hd0,0)
+#d-i grub-installer/only-debian boolean false
+#d-i grub-installer/with_other_os boolean false
 
 # TODO comment présélectionner l'installation de LILO ? Les questions posées
 # rendent la tâche difficile.
@@ -246,54 +242,56 @@ d-i	grub-installer/with_other_os	boolean true
 ##### Terminer la première étape de l'installation.
 
 # Pour éviter le dernier message disant que l'installation est terminée.
-d-i	prebaseconfig/reboot_in_progress	note 
+d-i prebaseconfig/reboot_in_progress note 
 
 
 ##### Préconfiguration de base-config.
 
 # Pour éviter le message d'introduction.
-base-config	base-config/intro	note 
+base-config base-config/intro note 
 
 # Pour éviter le dernier message.
-base-config	base-config/login	note 
+base-config base-config/login note 
 
 # Si vous installez un gestionnaire d'affichage et si vous ne voulez pas le
 # lancer immédiatemment après base-config&nbsp;:
-#base-config base-config/start-display-manager	boolean false
+#base-config base-config/start-display-manager boolean false
 
 # Certaines versions de l'installateur peuvent dire ce que vous avez installé.
 # Par défaut, rien n'est signalé. Mais l'envoi de rapport d'installation aide le projet
 # à connaître les logiciels populaires. 
-#popularity-contest popularity-contest/participate    boolean false
+#popularity-contest popularity-contest/participate boolean false
 
 ###### Configuration du fuseau horaire.
 
-# Cette commande règle l'horloge matérielle sur GMT ou non&nbsp;:
-base-config tzconfig/gmt		boolean true
+# Cette commande règle l'horloge matérielle sur UTC ou non&nbsp;:
+d-i clock-setup/utc boolean true
 
-# Configuration simple du fuseau horaire. Vous pouvez mettre toute valeur acceptée pour $TZ.
+# Vous pouvez mettre toute valeur acceptée pour $TZ.
 # Voyez ce que contient /usr/share/zoneinfo/ pour des options.
-base-config  tzconfig/preseed_zone                    string US/Eastern
+d-i time/zone string US/Eastern
 
-# La configuration du fuseau horaire était plus complexe jusqu'à récemment ; l'ancienne
+# La préconfiguration du fuseau horaire était plus complexe jusqu'à récemment ; l'ancienne
 # méthode est expliquée maintenant à toutes fins utiles. Si vous utilisez sarge, 
 # vous avez besoin de cette méthode.
 
+# Cette commande règle l'horloge matérielle sur UTC ou non&nbsp;:
+#base-config tzconfig/gmt boolean true
 # Si vous avez dit à l'installateur que vous habitez aux USA, vous pouvez
 # utiliser cette valeur pour déclarer le fuseau horaire.
 # (Les choix sont les suivants&nbsp;: Eastern, Central, Mountain, Pacific, 
 # Alaska, Hawaii, Aleutian, Arizona East-Indiana, Indiana-Starke, Michigan, 
 # Samoa, autre)
-#base-config tzconfig/choose_country_zone/US	select Eastern
+#base-config tzconfig/choose_country_zone/US select Eastern
 
 # Si vous avez dit à l'installateur que vous habitez au Canada.
 # (Choix : Newfoundland, Atlantic, Eastern, Central,
 # East-Saskatchewan, Saskatchewan, Mountain, Pacific, Yukon, autre)
-#base-config tzconfig/choose_country_zone/CA	select Eastern
+#base-config tzconfig/choose_country_zone/CA select Eastern
 
 # Si vous avez dit à l'installateur que vous habitez au Brésil. (Choix : 
 # East, West, Acre, DeNoronha, autre)
-#base-config tzconfig/choose_country_zone/BR	select East
+#base-config tzconfig/choose_country_zone/BR select East
 
 # Beaucoup de pays n'ont qu'un seul fuseau horaire. Si vous avez dit à 
 # l'installateur que vous habitez dans l'un de ces pays, vous pouvez le choisir
@@ -303,71 +301,74 @@ base-config  tzconfig/preseed_zone                    string US/Eastern
 # Cette question est posée pour les pays qui n'appartiennent pas à la liste
 # précédente et qui ont plusieurs fuseaux horaires. Vous pouvez préconfigurer
 # l'un des fuseaux ou <quote>autre</quote>.
-#base-config tzconfig/choose_country_zone_multiple    select 
+#base-config tzconfig/choose_country_zone_multiple select 
 
 ###### Configuration des comptes.
 
 # Pour préconfigurer le mot de passe de root, vous devez le mettre en clair
 # dans le fichier. Ce n'est pas une très bonne idée, faites attention&nbsp;!
-#passwd		passwd/root-password		password r00tme
-#passwd		passwd/root-password-again	password r00tme
+#passwd	passwd/root-password password r00tme
+#passwd	passwd/root-password-again password r00tme
 
 # Si vous voulez ne pas créer d'utilisateur&nbsp;:
-#passwd		passwd/make-user		boolean false
+#passwd	passwd/make-user boolean false
 
 # Vous pouvez aussi présélectionner le nom de l'utilisateur et son identifiant
 # de connexion.
-#passwd		passwd/user-fullname		string Debian User
-#passwd		passwd/username			string debian
+#passwd	passwd/user-fullname string Debian User
+#passwd	passwd/username string debian
 
 # Et le mot de passe, mais faites attention&nbsp;!
-#passwd		passwd/user-password		password insecure
-#passwd		passwd/user-password-again	password insecure
+#passwd	passwd/user-password password insecure
+#passwd	passwd/user-password-again password insecure
 
 ###### Configuration d'Apt..
 
 # Cette question contrôle la source des paquets qui sera utilisée dans la
 # deuxième étape de l'installation. Les choix sont cdrom, http, ftp, 
 # filesystem, modifier soi-même le fichier sources list.
-base-config	apt-setup/uri_type	select http
+base-config apt-setup/uri_type select http
 
 # Si vous choisissez ftp ou http, on vous demandera un pays et un miroir.
-base-config	apt-setup/country	select enter information manually
-base-config	apt-setup/hostname	string http.us.debian.org
-base-config	apt-setup/directory	string /debian
-
+base-config apt-setup/country select enter information manually
+base-config apt-setup/hostname string http.us.debian.org
+base-config apt-setup/directory string /debian
 # Ne faire le choix que d'un miroir.
-base-config	apt-setup/another	boolean false
+base-config apt-setup/another boolean false
 
 # Vous pouvez choisir d'installer des paquets de non-free et contrib.
-#base-config	apt-setup/non-free	boolean true
-#base-config	apt-setup/contrib	boolean true
+#base-config apt-setup/non-free boolean true
+#base-config apt-setup/contrib boolean true
 
 # Pour autoriser les mises à jour de sécurité.
-base-config	apt-setup/security-updates	boolean true
+base-config apt-setup/security-updates boolean true
 
 ###### Sélection des paquets.
 
 # Vous pouvez installer toute combinaison de tâches parmi celles disponibles.
 # Pour l'heure, les tâches disponibles sont les suivantes&nbsp;: environnement
 # de bureau, serveur Web, serveur d'impression, serveur DNS, serveur de 
-# fichiers, serveur de courrier, base SQL, sélection manuelle des paquets.
+# fichiers, serveur de courrier, base SQL, portable, système standard, sélection manuelle 
+# des paquets.
 # La dernière utilise aptitude. Vous pouvez aussi de ne pas installer de tâches
 # et de forcer l'installation de paquets par un autre moyen.
-tasksel		tasksel/first	multiselect Desktop environment
-#tasksel	tasksel/first	multiselect Web server, Mail server, DNS server
+# Il est recommandé de toujours inclure la tâche Système standard
+tasksel tasksel/first multiselect Desktop environment, Standard system
+#tasksel tasksel/first multiselect Web server, Standard system
 
 ###### Configuration du MTA.
 
-# Pendant une installation normale, exim pose seulement deux questions. Voici
+# Pendant une installation normale, exim pose peu de questions. Voici
 # comment les éviter. Une préconfiguration plus complexe est possible.
-exim4-config exim4/no_config boolean true
+exim4-config exim4/dc_eximconfig_configtype \
     select no configuration at this time
+exim4-config exim4/no_config boolean true
+exim4-config exim4/no_config boolean true 
 
 # C'est une bonne idée d'indiquer ici le nom de l'utilisateur que vous avez 
 # créé. Si vous n'indiquez aucune valeur, le courrier pour postmaster ira dans
 # /var/mail/mail.
-exim4-config	exim4/dc_postmaster		string 
+exim4-config exim4/dc_postmaster string 
 
 ###### Configuration du serveur X.
 
@@ -378,17 +379,17 @@ exim4-config	exim4/dc_postmaster		string
 # X peut détecter le bon pilote pour certaines cartes, mais si vous faites une
 # préconfiguration, vous annulez ce qu'il aura choisi. Cependant vesa
 # fonctionne la plupart du temps.
-#xserver-xfree86	xserver-xfree86/config/device/driver	select vesa
+#xserver-xfree86 xserver-xfree86/config/device/driver select vesa
 
 # Pour la détection automatique de la souris, il faut savoir que si elle
 # échoue, X recommence sans fin le processus. Donc, s'il y a préconfiguration,
 # une boucle infinie peut apparaître si la souris n'est pas détectée.
-#xserver-xfree86	xserver-xfree86/autodetect_mouse	boolean true
+#xserver-xfree86 xserver-xfree86/autodetect_mouse boolean true
 
 # La détection automatique du moniteur est recommandée.
-xserver-xfree86		xserver-xfree86/autodetect_monitor	boolean true
+xserver-xfree86	xserver-xfree86/autodetect_monitor boolean true
 # Décommentez la ligne suivante si vous posséder un écran LCD.
-#xserver-xfree86	xserver-xfree86/config/monitor/lcd	boolean true
+#xserver-xfree86 xserver-xfree86/config/monitor/lcd boolean true
 # X possède trois adresses pour la configuration du moniteur. Voici comment
 # présélectionner l'adresse <quote>medium</quote>, qui est toujours disponible.
 # L'adresse <quote>simple</quote> peut ne pas être disponible et l'adresse
@@ -412,23 +413,23 @@ xserver-xfree86	xserver-xfree86/config/monitor/mode-list \
 # de préconfiguration. Toutes les valeurs de ces fichiers annuleront les
 # valeurs préexistantes. Vous pouvez indiquer plus d'un fichier, en les
 # séparant par des espaces&nbsp;; tous seront chargés. Ces fichiers peuvent
-# à leur tout contenir d'autres directives de préconfiguration ou d'inclusion.
+# à leur tour contenir d'autres directives de préconfiguration ou d'inclusion.
 # Notez que si les fichiers sont relatifs, ils seront pris dans le répertoire 
 # où se trouve le fichier qui les inclut.
-#d-i preseed/include	string x.cfg
+#d-i preseed/include string x.cfg
 
 # L'installateur peut vérifier la somme de contrôle des fichiers de
 # préconfiguration avant de les utiliser.  Pour le moment, cette somme doit être
 # de type md5sum. Il faut lister les sommes de contrôles dans le même ordre
 # que les fichiers à inclure. L'installateur de sarge
 # n'accepte pas les sommes de contrôle. 
-#d-i preseed/include/checksum          string 5da499872becccfeda2c4872f9171c3d
+#d-i preseed/include/checksum string 5da499872becccfeda2c4872f9171c3d
 
 # D'une manière plus souple, cela exécute des commandes du shell et si le 
 # résultat donne les noms de ces fichiers, ils sont inclus. Par exemple,
 # pour changer de configuration, selon tel périphérique de stockage USB,
 # dans ce cas, un lecteur carte intégré&nbsp;:
-#d-i preseed/include_command	string \
+#d-i preseed/include_command string \
 #    if $(grep -q "GUID: 0aec3050aec305000001a003" /proc/scsi/usb-storage-*/*); \
 #   then echo kraken.cfg; else echo otherusb.cfg; fi
 </screen></informalexample>
