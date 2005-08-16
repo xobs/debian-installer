@@ -111,10 +111,6 @@ define recurse
   $(if $($(1)_SUPPORTED),$(call recurse_many,$(1),$(2),$(3)),$(call recurse_once,$(2),$(3)))
 endef
 
-define genext2fs-userdevfs
-  genext2fs -d $(TREE) -b $(USERDEVFS_SIZE) -r 0 -f userdevfs-devs
-endef
-
 define genext2fs
   genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` -r 0
 endef
@@ -404,11 +400,8 @@ $(STAMPS)tree-$(targetstring)-stamp: $(STAMPS)tree-unpack-$(targetstring)-stamp
 	# Create a dev tree.
 	mkdir -p $(TREE)/dev
 	# Always needed, in case devfs is not mounted on boot.
-	# userdevfs uses userdevfs-devs w/genext2fs
-ifndef USERDEVFS
 	mknod $(TREE)/dev/console c 5 1
 	mknod $(TREE)/dev/null c 1 3
-endif
 
 ifdef EXTRADRIVERS
 	# Unpack the udebs of additional driver disks, so mklibs runs on them too.
@@ -559,12 +552,7 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp arch_tree
 
 	case $(INITRD_FS) in \
 	ext2) \
-		if [ "" != "$(USERDEVFS)" ]; then \
-			echo $(USERDEVFS_SIZE) > $(TREE)/ramdisk_settings; \
-			$(genext2fs-userdevfs) $(TEMP)/initrd; \
-		else \
-			$(genext2fs) $(TEMP)/initrd; \
-		fi; \
+		$(genext2fs) $(TEMP)/initrd; \
 		$(e2fsck) $(TEMP)/initrd || true ;; \
 	cramfs) \
 		$(mkcramfs) $(TEMP)/initrd ;; \
@@ -803,18 +791,15 @@ endif
 .PHONY: tree_mount
 tree_mount: $(STAMPS)tree-$(targetstring)-stamp
 	-@sudo /bin/mount -t proc proc $(TREE)/proc
-ifdef USERDEVFS
-	-@sudo chroot $(TREE) /usr/bin/update-dev
-else
-	-@sudo /bin/mount -t devfs dev $(TREE)/dev
-endif
+	-@if [ -e $(TREE)/usr/bin/update-dev ]; then \
+		sudo chroot $(TREE) /usr/bin/update-dev; \
+	else \
+		sudo /bin/mount -t devfs dev $(TREE)/dev; \
+	fi
 
 .PHONY: tree_umount
 tree_umount:
-ifndef USERDEVFS
-	-@[ ! -c $(TREE)/dev/tty ] || sudo /bin/umount $(TREE)/dev
-endif
-	-@[ ! -L $(TREE)/proc/self ] || sudo /bin/umount $(TREE)/proc
+	-@[ ! -L $(TREE)/proc/self ] || [ ! -c $(TREE)/dev/tty ] || sudo /bin/umount $(TREE)/proc
 
 # For manual invocation, we provide a demo rule. This starts the
 # d-i demo from the tree in tmp.
