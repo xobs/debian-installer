@@ -570,6 +570,10 @@ $(INITRD): $(TEMP_INITRD)
 	install -m 644 -D $< $@
 	update-manifest $@ $(MANIFEST-INITRD) $(UDEB_LISTS)
 
+$(RAMDISK): $(TEMP_INITRD)
+	install -m 644 -D $< $@
+	update-manifest $@ $(MANIFEST-RAMDISK) $(UDEB_LISTS)
+
 # raw kernel images
 $(KERNEL): TEMP_REAL_KERNEL = $(TEMP)/$(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,')
 $(KERNEL):
