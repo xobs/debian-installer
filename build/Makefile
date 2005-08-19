@@ -568,23 +568,23 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp arch_tree
 
 $(INITRD): $(TEMP_INITRD)
 	install -m 644 -D $< $@
-	update-manifest $@ "$(MANIFEST-INITRD)" $(UDEB_LISTS)
+	update-manifest $@ $(MANIFEST-INITRD) $(UDEB_LISTS)
 
 $(RAMDISK): $(TEMP_INITRD)
 	install -m 644 -D $< $@
-	update-manifest $@ "$(MANIFEST-RAMDISK)" $(UDEB_LISTS)
+	update-manifest $@ $(MANIFEST-RAMDISK) $(UDEB_LISTS)
 
 # raw kernel images
 $(KERNEL): TEMP_REAL_KERNEL = $(TEMP)/$(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,')
 $(KERNEL):
 	@$(MAKE) $(STAMPS)tree-unpack-$(targetstring)-stamp $(TEMP_REAL_KERNEL)
 	install -m 644 -D $(TEMP_REAL_KERNEL) $@
-	update-manifest $@ "$(MANIFEST-KERNEL)"
+	update-manifest $@ $(MANIFEST-KERNEL)
 
 # bootable images
 $(BOOT): $(TEMP_BOOT)
 	install -m 644 -D $(TEMP_BOOT)$(GZIPPED) $@
-	update-manifest $@ "$(MANIFEST-BOOT)" $(UDEB_LISTS)
+	update-manifest $@ $(MANIFEST-BOOT) $(UDEB_LISTS)
 
 $(TEMP_KERNEL): $(STAMPS)tree-unpack-$(targetstring)-stamp
 
@@ -593,21 +593,21 @@ $(TEMP_BOOT): $(TEMP_INITRD) $(TEMP_KERNEL) $(TEMP_BOOT_SCREENS) arch_boot
 # non-bootable root images
 $(ROOT): $(TEMP_ROOT)
 	install -m 644 -D $(TEMP_ROOT)$(GZIPPED) $@
-	update-manifest $@ "$(MANIFEST-ROOT)" $(UDEB_LISTS)
+	update-manifest $@ $(MANIFEST-ROOT) $(UDEB_LISTS)
 
 $(TEMP_ROOT): $(TEMP_INITRD) arch_root
 
 # miniature ISOs with only a boot image
 $(MINIISO): $(TEMP_MINIISO)
 	install -m 644 -D $(TEMP_MINIISO) $@
-	update-manifest $@ "$(MANIFEST-MINIISO)" $(UDEB_LISTS)
+	update-manifest $@ $(MANIFEST-MINIISO) $(UDEB_LISTS)
 
 $(TEMP_MINIISO): $(TEMP_BOOT_SCREENS) arch_miniiso
 
 # various kinds of information, for use on debian-cd isos
 $(DEBIAN_CD_INFO): $(TEMP_BOOT_SCREENS) $(TEMP_CD_INFO_DIR)
 	(cd $(TEMP_CD_INFO_DIR); tar czf - .) > $@
-	update-manifest $@ "$(MANIFEST-DEBIAN_CD_INFO)"
+	update-manifest $@ $(MANIFEST-DEBIAN_CD_INFO)
 
 # a directory full of files for netbooting
 $(NETBOOT_DIR): $(NETBOOT_DIR_TARGETS) $(TEMP_BOOT_SCREENS) $(TEMP_NETBOOT_DIR)
@@ -618,12 +618,12 @@ $(NETBOOT_DIR): $(NETBOOT_DIR_TARGETS) $(TEMP_BOOT_SCREENS) $(TEMP_NETBOOT_DIR)
 		rm -f $@/../$(link); \
 		cp -a $(TEMP_NETBOOT_DIR)/$(link) $@/..; \
 	)
-	update-manifest $@ "$(MANIFEST-NETBOOT_DIR)" $(UDEB_LISTS)
+	update-manifest $@ $(MANIFEST-NETBOOT_DIR) $(UDEB_LISTS)
 
 # a tarball for netbooting
 $(NETBOOT_TAR): $(TEMP_NETBOOT_DIR)
 	(cd $(TEMP_NETBOOT_DIR); tar czf - .) > $@
-	update-manifest $@ "$(MANIFEST-NETBOOT_TAR)" $(UDEB_LISTS)
+	update-manifest $@ $(MANIFEST-NETBOOT_TAR) $(UDEB_LISTS)
 
 $(TEMP_BOOT_SCREENS): arch_boot_screens
 $(TEMP_CD_INFO_DIR): arch_cd_info_dir
@@ -634,12 +634,12 @@ $(MISC):
 	install -m 644 $(TEMP_REAL_MISC) $(SOME_DEST)/$(EXTRANAME)
 	update-manifest \
 		$(SOME_DEST)/$(EXTRANAME)$(shell basename $(TEMP_REAL_MISC)) \
-		"$(MANIFEST-MISC)"
+		$(MANIFEST-MISC)
 
 # Other images, e.g. driver floppies. Those are simply handled as flavours
 $(EXTRA): $(TEMP_EXTRA)
 	install -m 644 -D $(TEMP_EXTRA)$(GZIPPED) $@
-	update-manifest $@ "$(MANIFEST-EXTRA)" $(UDEB_LISTS)
+	update-manifest $@ $(MANIFEST-EXTRA) $(UDEB_LISTS)
 
 $(TEMP_EXTRA): $(STAMPS)extra-$(targetstring)-stamp
 	install -d $(shell dirname $@)
