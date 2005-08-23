@@ -1,0 +1,340 @@
+<appendix id="svn-basics"><title>Some basic notions about <acronym>SVN</acronym></title>
+
+<sect1>
+<title>Getting an account on &alioth;
+</title>
+
+<para>
+<acronym>SVN</acronym> commit access requires the creation of an account on the &alioth;
+server. This is as simple as opening &url-alioth; and going to the
+account creation pages.
+</para>
+
+<para>
+Official Debian developers will probably use the same login than their
+Debian login, but will to go through the account creation process
+anyway. Non Debian developers should be aware that the login they
+will choose on &alioth; will be followed by "-guest". This has
+absolutely no meaning of any kind of <emphasis>second class
+citizens</emphasis> but is just an easy way for &alioth; system
+administrators to know who is an official Debian developer.
+</para>
+
+</sect1>
+
+<sect1>
+<title>
+Installing <acronym>SVN</acronym>
+</title>
+
+<para>
+Translators and other &d-i; contributors need to install <acronym>SVN</acronym>
+(Subversion) on their system. For Debian <emphasis>sid</emphasis> or
+<emphasis>sarge</emphasis> users, just do <command>aptitude install
+subversion</command>. Users of Debian <emphasis>woody</emphasis>
+release may use backports from &backports;. The following entry to
+<filename>/etc/apt/sources.list</filename> may be used for this:
+</para>
+
+<informalexample>
+<screen>    
+    deb &url-backports;debian stable subversion
+</screen>
+</informalexample>
+
+<para>
+Alternatively, Adam Conrad's backports may be used:
+</para>
+
+<informalexample>
+<screen>
+    deb http://people.debian.org/~adconrad woody subversion
+</screen>
+</informalexample>
+
+<para>
+These backports are not officially supported by the Debian
+Project. Though their maintainers are well-known and respected Debian
+developers, they're the only people who can guarantee that these packages
+are well maintained and secured.
+</para>
+
+<para>
+Users of non-Debian Linux distributions will probably easily find
+installation sources for Subversion in their distribution packages
+list.
+</para>
+
+<para>
+MS-Windows ports of <acronym>SVN</acronym> existence has also been
+reported. Please contact the &i18n-coords; if you have more precise
+references so that they're included in this documentation.
+</para>
+
+</sect1>
+
+<sect1>
+<title>
+Using <acronym>SVN</acronym> to get and commit files
+</title>
+
+<para>
+Once their account is allowed to write to the project, translators and
+developers can download the full project source tree using the
+checkout commands mentioned on the D-I translation reference
+pages:
+</para>
+
+<para>
+&url-d-i-checkout;
+</para>
+
+<para>
+For doing <filename>svn+ssh</filename> connections (mandatory for
+being able to commit files later), users must have an account on
+&alioth; and be authorized for commit to the repository they want to
+checkout.
+</para>
+
+<para>
+<filename>svn+ssh</filename> connections will prompt users for their
+password on &alioth;. Depending on circumstances, this password may
+need to be entered three times.
+</para>
+
+<para>
+To avoid this, users can put their <acronym>SSH</acronym> public key in the appropriate
+place. The following procedure used to work in the past but is not
+guaranteed now. If it doesn't work, the common method of copying the
+<filename>~/.ssh/id_dsa.pub</filename> as <emphasis>~/.ssh/authorized
+keys</emphasis> on &svn-debian; can be used.
+</para>
+
+<informalexample>
+
+<para>
+On &alioth;, login with your account, then go to <emphasis>My
+account</emphasis>. In <emphasis>Shell preferences</emphasis> at the
+bottom of the page, click on <emphasis>Edit keys</emphasis>.</para>
+
+<para>Then, in the <emphasis>authorized keys</emphasis> field, paste the contents of
+<filename>~/.ssh/id_dsa.pub</filename> (if you have a <acronym>SSH</acronym> key generated with "ssh-keygen -t
+dsa").</para>
+
+<para>
+Wait for about one hour. Then you should be able to do
+<emphasis>svn+ssh</emphasis> on &svn-debian;.
+</para>
+
+</informalexample>
+
+<para>
+In case users have problems with <acronym>SVN</acronym> checkouts/commits, they can ask
+for help, either on IRC, &irc-channel; or by mail with the
+&i18n-coords;.</para>
+
+
+</sect1>
+
+<sect1>
+<title>
+Core &d-i; and various levels packages repositories checkout command
+lines
+</title>
+
+<para>
+Typical non anonymous and anonymous checkout command lines for &d-i;
+and related packages are listed on &url-checkouts;.
+</para>
+
+<para>
+Below is an example of a typical checkout for the &base-config; package:
+</para>
+
+<informalexample>
+<screen>
+user@host:~> svn co &svn-base-config; base-config
+TODO
+user@host:~> 
+</screen>
+<para>
+After this the <filename>base-config</filename> directory contains all
+files from the package. Updating this directory later needs running the <command>svn update</command>:
+</para>
+<screen>
+user@host:~> cd base-config
+user@host:~/base-config> svn up
+TODO
+user@host:~>
+</screen>
+<para>
+Subdirectories of a full <acronym>SVN</acronym> directory can also be checked out in case one want to work on specific parts. This can be very useful for &d-i; core translations as &d-i; <acronym>SVN</acronym> repository is very big:
+</para>
+<screen>
+user@host:~> svn co &svn-level1; level1-po
+TODO
+user@host:~> cd level1-po/
+user@host:~/level1-po> ls -l
+total 19112
+-rw-r--r--  1 user user 369598 2005-08-18 02:56 ar.po
+-rw-r--r--  1 user user 266462 2005-08-18 02:56 be.po
+.../...
+-rw-r--r--  1 user user   1120 2005-07-17 08:17 PROSPECTIVE
+.../...
+-rw-r--r--  1 user user   2027 2005-07-31 08:54 README
+-rw-r--r--  1 user user 353752 2005-08-18 02:56 ro.po
+-rw-r--r--  1 user user    324 2005-08-16 16:30 run-l10n-sync
+.../...
+-rw-r--r--  1 user user 237996 2005-08-18 02:56 template.pot
+.../...
+-rw-r--r--  1 user user 350181 2005-08-18 02:56 xh.po
+-rw-r--r--  1 user user 335898 2005-08-18 02:56 zh_CN.po
+-rw-r--r--  1 user user 335413 2005-08-18 02:56 zh_TW.po
+user@host:~/level1-po>
+</screen>
+<para>
+If the translation file already exists, then just update the locale copy:
+</para>
+<screen>
+user@host:~/level1-po> kbabel fr.po
+.../...
+</screen>
+<para>
+(use KBabel or any other gettext utility, see <xref linkend="gettext-tools"/> for details about gettext files handling, editing and maintenance tools)
+</para>
+<para>
+Once saved the modified version of the file, the status can be
+displayed with the <command>svn status</command> command:
+</para>
+<screen>
+user@host:~/level1-po> svn status
+M      fr.po
+user@host:~/level1-po>
+</screen>
+<para>
+The above means that <filename>fr.po</filename> includes uncommited
+modifications. These modifications can be committed by using the <command>svn commit</command> command:
+</para>
+<screen>
+user@host:~/level1-po> svn commit
+</screen>
+<para>
+The user will then be dropped in a file editor (either
+<command>vi</command> of any other file editor pointed by the EDITOR
+variable. The changelog message can be then filled in the
+editor. Saving it and exiting the editor will trigger the commit
+action to the <acronym>SVN</acronym> repository.
+</para>
+<para>
+A more targeted commit command is also possible, as well as giving the
+commit message on the command line:
+</para>
+<screen>
+user@host:~/level1-po> svn commit -m"French translation update" fr.po
+TODO
+user@host:~/level1-po>
+</screen>
+</informalexample>
+
+<para>
+In general, a few recommendations can be made to translators:
+</para>
+
+<itemizedlist>
+<listitem>
+<para>Always use the <command>svn update</command> before working on a
+file or directory. This will minimize <emphasis>conflicts</emphasis>
+in case a file is changed in the repository while they work on it;
+</para>
+</listitem>
+<listitem>
+<para>
+Always use the <command>svn status</command> command before committing
+changes, to be sure that only relevant changes are committed.
+</para>
+</listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1>
+<title>Changelog entries handling
+</title>
+<para>
+When committing translations directly to <acronym>SVN</acronym>
+repositories for Debian packages (except for level 1 translations),
+translators must update the <filename>debian/changelog</filename> file
+accordingly.
+</para>
+
+<para>
+This <emphasis>does not</emphasis> apply to level 1 translations, that
+is the &d-i; <emphasis>core</emphasis> packages translations. For
+these translations, no changelog updates are needed.
+</para>
+
+<para>
+Each change in Debian packages must be documented in the
+<filename>debian/changelog</filename> file.
+</para>
+
+<para>
+Below is an excerpt of the <filename>changelog</filename> file for
+&base-config;:
+</para>
+
+<informalexample>
+<screen>
+base-config (2.39) UNRELEASED; urgency=low
+
+  * Updated translations: 
+    - Croatian by Krunoslav Gernhard
+
+ -- Christian Perrier &lt;bubulle@debian.org&gt;  Sat, 24 Jul 2004 08:14:13 +0200
+
+base-config (2.38) unstable; urgency=high
+.../...
+</screen>
+</informalexample>
+
+<para>This gives the following information:
+</para>
+
+<itemizedlist>
+<listitem>
+<para>
+the last released version of the package is 2.38. The <acronym>SVN</acronym> repository
+  currently contains the future unpublished 2.39 release;
+</para>
+</listitem>
+<listitem>
+<para>
+the only change which occurred since 2.38 is the update of the Croatian
+  translation (made by Krunoslav Gernhard);
+</para>
+</listitem>
+<listitem>
+<para>
+the committer of this change was Christian Perrier.
+</para>
+</listitem>
+</itemizedlist>
+
+<para>
+Different Debian packages may use slightly different methods and
+styles for <filename>changelog</filename> maintenance. When working
+with <acronym>SVN</acronym>/<acronym>CVS</acronym> repositories, using <emphasis>UNRELEASED</emphasis> for the last entry is highly recommended for new unpublished changes.
+</para>
+
+<para>
+Using the <command>debchange</command> utility from the
+<emphasis>devscripts</emphasis> Debian package for handling
+<filename>changelog</filename> entries maintenance is also highly
+recommended..
+</para>
+
+
+</sect1>
+
+
+</appendix>

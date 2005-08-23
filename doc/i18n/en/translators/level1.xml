@@ -1,0 +1,224 @@
+<!-- <chapter id="translators-level1"><title>Translating &d-i; - Level 1</title> -->
+
+<sect1 id="translators-level1">
+<title>
+Level 1
+</title>
+
+<sect2>
+<title>
+Contents
+</title>
+
+<para>
+Level 1 consists of all "core" &d-i; packages, ie all packages with
+translatable material in the &d-i; development tree. These packages
+are used during the installation "first stage".
+</para>
+
+<para>
+In &d-i; jargon, the <emphasis>first stage</emphasis> is the part of
+&d-i; which occurs from the initial boot up to the first (and only)
+reboot of the system. All user interactions screens shown to users
+during this stage are part of the first level for l10n.
+</para>
+
+<para>
+Most part of the translatable material is spread over core &d-i;
+packages. The packages development is handled in the main &d-i;
+Subversion (<acronym>SVN</acronym>) repository.
+</para>
+
+<para>
+Some material (country names and keyboard maps names) are handled in
+non core &d-i; packages. This material will be part of the level 2 of
+translations.
+</para>
+
+<para>
+In order to make the translators work easy and simple, all
+translatable strings are assembled in a single file. Translators must
+work on this file and not on the various files dispersed in the &d-i;
+development tree (these files are automatically generated).
+</para>
+
+</sect2>
+
+<sect2>
+<title>
+Files location and access methods
+</title>
+
+<para>
+Translators should remember that using <acronym>SVN</acronym> is strongly encouraged as
+this is the only way for them to commit their own translations.
+</para>
+
+<itemizedlist>
+  <listitem>
+    <para>
+      <acronym>SVN</acronym> access: &svn-level1;
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <acronym>HTTP</acronym> access: &url-level1;
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          &url-level1-pot-link;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          &url-level1-po-link;
+        </para>
+      </listitem>
+    </itemizedlist>
+  </listitem>
+</itemizedlist>
+
+
+<para>
+To begin the translation work for level 1, translators should copy the
+<filename>packages/po/template.pot</filename> to
+<filename>&language;.po</filename> (where &language; is
+the ISO-639 code of the language, see <xref
+linkend="language-codes"/>) and complete this file.
+</para>
+
+</sect2>
+
+<sect2>
+<title>
+Updating/Adding translations
+</title>
+
+<para>
+Translation updates should be done by direct commits to the &d-i; <acronym>SVN</acronym>
+repository (see <xref linkend="svn-basics"/> for details about <acronym>SVN</acronym>
+use) In case this is absolutely impossible, these updates can be sent
+as bug reports against the <classname>debian-installer</classname>
+package (see <xref linkend="bug-reports"/> for details).
+</para>
+
+</sect2>
+
+<sect2>
+<title>
+Specific recommendations
+</title>
+
+<para>
+The &d-i; core file uses hundreds of strings which represent the content
+of the screens which are or may be shown to &d-i; users during the
+installation process.
+</para>
+
+<para>
+Several of these strings are commented with indications or hints for
+translators.
+</para>
+
+<sect3>
+<title>
+Limited length strings
+</title>
+<para>
+Several strings are limited in length to 65 columns. This means they
+should not exceed 65 characters for single-width character languages
+and 32 characters for double-width character languages such as CJK
+(Chinese/Japanese/Korean) and similar languages.
+</para>
+
+<para>
+This constraint may be checked by the <filename>scripts/l10n/choices-check.pl</filename> script from the &d-i; development tree:
+</para>
+
+<para>
+<command>scripts/l10n/choices-check.pl packages/po/&language;.po</command>
+</para>
+
+<para>
+This script will output the offending line(s) number(s) as well as the number of characters in this/these line(s).
+</para>
+</sect3>
+
+<sect3>
+<title>
+"Choose language" menu entry
+</title>
+
+<para>
+This entry is the language selection screen entry for each
+language. Translators can translate it but they should keep "Choose
+language" in English as an alternative so that users mistakenly
+choosing a language can still find the appropriate entry to change it
+back to their own language.
+</para>
+
+</sect3>
+
+<sect3>
+<title>
+Variable names
+</title>
+
+<para>
+Many places in &d-i; use variables (e.g. "${LOCALE}) is currently not
+supported in Debian"). The variable names should <emphasis>not be
+translated</emphasis> and be kept inside brackets prepended by the
+dollar sign in the translation.
+</para>
+
+<para>
+This constraint is checked by the spell checking scripts which report
+these errors separately (see <xref linkend="spellchecking"/> for
+details about the spell checking scripts).
+</para>
+
+<para>
+Advanced translation software such as <command>kbabel</command> are
+able to visually display such errors and warn about them before saving
+files.
+</para>
+
+</sect3>
+
+<sect3>
+<title>
+Default mirror country
+</title>
+
+<para>
+A special string from the <classname>choose-mirror</classname> package
+is intended to setup the default Debian archive mirror country,
+depending on the language. Translators should put there the ISO-3166
+code of the country to be used as default, most often their own
+country name, or the country their language is spoken in. For
+instance, the Brazilian Portuguese translator will use "BR" as
+translation there, as this is the ISO-3166 code for Brazil.
+</para>
+
+</sect3>
+
+<sect3>
+<title>
+Partman entries
+</title>
+
+<para>
+A few entries in the <classname>partman</classname> are limited to 8
+symbols only. Translators must be VERY careful about not exceeding
+this value, otherwise, the display in the
+<classname>partman</classname> screens will be badly broken.
+</para>
+
+</sect3>
+
+</sect2>
+
+</sect1>
+
+<!-- </chapter> -->
