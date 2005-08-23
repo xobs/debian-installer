@@ -354,9 +354,10 @@ In this case, preventive <emphasis>unfuzzyfication</emphasis> may be done:
 cd &lt;di_dir&gt;/packages/po/
 svn update
 mkdir NEW
-for i in *po ; do
- cat $i | sed 's/partitons/partitions/g' >NEW/$i
- mv NEW/$i $i
+for i in *.po; do
+ msgcat --no-wrap $i |\
+   sed -e '/^msgid/s/partitons/partitions/g' |\
+   msgcat - &gt; NEW/$i &amp;&amp; mv NEW/$i $i
 done
 svn commit -m"Preventive unfuzzy before correcting typo in &lt;mypackage&gt;" *.po
 rmdir NEW
