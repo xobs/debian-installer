@@ -225,6 +225,15 @@ debian-installer (20050630) UNRELEASED; urgency=low
     various ADS arm boards from compact flash. There is not yet a kernel for
     these boards in Debian, so the images do not include a kernel and must be
     used with a monolithic kernel (from ADS).
+  * The stats targets no longer build any images. If the image is not built,
+    it just won't display stats for it. This is mainly to work around a bug
+    that affected the daily builds, where running stats in a separate fakeroot
+    after the build would run build again, and rebuild initrds based on the
+    trees in tmp, messing up permissions and devices. It also removes a lot of
+    unnucessary work in stats, and allows simpler invocation of stats by
+    the daily-build script.
+  * Don't regenerate the list of udebs in an image in stats, this was
+    redundant info and was slow and ugly to generate there.
 
   [ Sven Luther ]
   * Enabled powerpc64 support.

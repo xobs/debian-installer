@@ -730,8 +730,7 @@ _checkedwrite: _write
 	sudo cmp $(FLOPPYDEV) $(TARGET)
 
 
-# generate statistics
-# Suitable for a cron job, you'll only see the stats unless a build fails.
+# Generate statistics for all previously built images.
 .PHONY: stats
 stats:
 	@echo "Image size stats"
@@ -745,11 +744,6 @@ stats_%:
 
 .PHONY: _stats
 _stats: 
-	@install -d $(BASE_TMP)
-	@install -d $(STAMPS)
-	@(set -e; $(submake) _build >$(BASE_TMP)log 2>&1 || \
-	  (echo "build failure!"; cat $(BASE_TMP)log; false))
-	@rm -f $(BASE_TMP)log
 	@[ ! -f $(TEMP)/diskusage.txt ] || $(submake) general-stats
 
 TOTAL_SZ = $(shell expr $(shell du -bs $(TREE) | cut -f 1) / 1024)
@@ -773,7 +767,6 @@ endif
 general-stats:
 	@echo "System stats for $(targetstring)"
 	@echo "-------------------------"
-	@echo "Installed udebs: $(UDEBS)"
 	@printf "Total system size: $(TOTAL_SZ)k"
 ifneq ($(LIBS_SZ)$(MODULES_SZ),)
 	@echo " ($(LIBS_SZ) libs, $(MODULES_SZ) kernel modules)"
