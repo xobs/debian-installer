@@ -10,6 +10,8 @@
 </head>
 <body>
   <p>The following table lists all <a href="http://www.debian.org/devel/debian-installer">Debian Installer</a> translators.</p>
+  <p>Current number of fully supported languages: <xsl:value-of select="count(//language_entry[@supported = 'true'])"/></p>
+  <p>Total number of languages in the table: <xsl:value-of select="count(//language_entry)"/></p>
 <table border="1">
 <tr>
 <th>Code</th>
