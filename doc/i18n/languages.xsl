@@ -17,6 +17,7 @@
 <th>Coordinator</th>
 <th>Backup Coordinator</th>
 <th>Repository</th>
+<th>Supported</th>
 </tr>
 <xsl:apply-templates/>
 </table>
@@ -46,6 +47,16 @@
 </xsl:if>
 </td>
 <td><xsl:value-of select="@team_repository"/></td>
+<td>
+<xsl:choose>
+	<xsl:when test="@supported = 'true'">
+		SUPPORTED
+	</xsl:when>
+	<xsl:otherwise>
+		<xsl:value-of select="@nlp_step"/>
+	</xsl:otherwise>
+</xsl:choose>
+</td>
 </tr>
 </xsl:template>
 </xsl:transform>
