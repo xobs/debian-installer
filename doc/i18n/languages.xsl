@@ -9,11 +9,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 </head>
 <body>
+  <p>The following table lists all <a href="http://www.debian.org/devel/debian-installer">Debian Installer</a> translators.</p>
 <table border="1">
 <tr>
 <th>Code</th>
 <th>Language</th>
-<th>Coordinator</th>
+<th>Initial steps</th><th>Coordinator</th>
 <th>Backup Coordinator</th>
 <th>Repository</th>
 </tr>
@@ -36,12 +37,12 @@
 </xsl:choose>
 <td>
 <xsl:if test="string-length(@coord_name)">
-	<a href="mailto:{@coord_email}"><xsl:value-of select="@coord_name"/></a>
+	<xsl:value-of select="@coord_name"/>
 </xsl:if>
 </td>
 <td>
 <xsl:if test="string-length(@bkp_coord_name)">
-	<a href="mailto:{@bkp_coord_email}"><xsl:value-of select="@bkp_coord_name"/></a>
+	<xsl:value-of select="@bkp_coord_name"/>
 </xsl:if>
 </td>
 <td><xsl:value-of select="@team_repository"/></td>
