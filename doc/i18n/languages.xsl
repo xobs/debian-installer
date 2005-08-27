@@ -42,7 +42,7 @@
 		SUPPORTED
 	</xsl:when>
 	<xsl:otherwise>
-		<xsl:value-of select="@nlp_step"/>
+		<xsl:value-of select="@nlp_step"/>&#160;
 	</xsl:otherwise>
 </xsl:choose>
 </td>
@@ -50,13 +50,15 @@
 <xsl:if test="string-length(@coord_name)">
 	<xsl:value-of select="@coord_name"/>
 </xsl:if>
+&#160;
 </td>
 <td>
 <xsl:if test="string-length(@bkp_coord_name)">
 	<xsl:value-of select="@bkp_coord_name"/>
 </xsl:if>
+&#160;
 </td>
-<td><xsl:value-of select="@team_repository"/></td>
+<td><xsl:value-of select="@team_repository"/>&#160;</td>
 </tr>
 </xsl:template>
 </xsl:transform>
