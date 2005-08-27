@@ -14,7 +14,7 @@
 <tr>
 <th>Code</th>
 <th>Language</th>
-<th>Initial steps</th><th>Coordinator</th>
+<th>Coordinator</th>
 <th>Backup Coordinator</th>
 <th>Repository</th>
 </tr>
