@@ -14,10 +14,10 @@
 <tr>
 <th>Code</th>
 <th>Language</th>
+<th>Supported</th>
 <th>Coordinator</th>
 <th>Backup Coordinator</th>
 <th>Repository</th>
-<th>Supported</th>
 </tr>
 <xsl:apply-templates/>
 </table>
@@ -37,6 +37,16 @@
 	</xsl:otherwise>
 </xsl:choose>
 <td>
+<xsl:choose>
+	<xsl:when test="@supported = 'true'">
+		SUPPORTED
+	</xsl:when>
+	<xsl:otherwise>
+		<xsl:value-of select="@nlp_step"/>
+	</xsl:otherwise>
+</xsl:choose>
+</td>
+<td>
 <xsl:if test="string-length(@coord_name)">
 	<xsl:value-of select="@coord_name"/>
 </xsl:if>
@@ -47,16 +57,6 @@
 </xsl:if>
 </td>
 <td><xsl:value-of select="@team_repository"/></td>
-<td>
-<xsl:choose>
-	<xsl:when test="@supported = 'true'">
-		SUPPORTED
-	</xsl:when>
-	<xsl:otherwise>
-		<xsl:value-of select="@nlp_step"/>
-	</xsl:otherwise>
-</xsl:choose>
-</td>
 </tr>
 </xsl:template>
 </xsl:transform>
