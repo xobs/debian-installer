@@ -129,6 +129,36 @@ Wait for about one hour. Then you should be able to do
 </informalexample>
 
 <para>
+Users can also copy their local <filename>~/.ssh/id_dsa.pub</filename>
+file as <filename>~/.ssh/authorized_keys</filename> on the SVN
+host. Here's an example on svn.debian.org. In this example, the user
+<emphasis>bubulle</emphasis> on the local machine named
+<emphasis>kheops</emphasis> does the needed actions to copy his
+<acronym>SSH</acronym> key to the machine named
+<emphasis>svn.debian.org</emphasis>. His account there is
+<emphasis>cperrier-guest</emphasis>.
+</para>
+
+<informalexample>
+<screen>
+bubulle@kheops:~$ ssh svn.debian.org -l cperrier-guest "mkdir .ssh ; chmod 700 .ssh"
+Password:   <--alioth password goes here
+bubulle@kheops:~$ scp ~/.ssh/id_dsa.pub cperrier-guest@svn.debian.org:.ssh/authorized_keys
+Password:   <--alioth password goes here
+id_dsa.pub                                                        100%  604     0.6KB/s   00:00
+bubulle@kheops:~$ ssh svn.debian.org -l cperrier-guest "chmod 600 .ssh/authorized_keys"
+Enter passphrase for key '/home/bubulle/.ssh/id_dsa': <-- SSH passphrase
+bubulle@kheops:~$ ssh svn.debian.org -l cperrier-guest
+Enter passphrase for key '/home/bubulle/.ssh/id_dsa': <-- SSH passphrase
+Linux costa 2.6.11.7 #8 SMP Mon Apr 11 16:12:21 CEST 2005 i686 GNU/Linux
+.../...
+cperrier-guest@costa:~$ logout
+Connection to svn.debian.org closed.
+</screen>
+</informalexample>
+
+
+<para>
 In case users have problems with <acronym>SVN</acronym> checkouts/commits, they can ask
 for help, either on IRC, &irc-channel; or by mail with the
 &i18n-coords;.</para>
