@@ -55,6 +55,9 @@ create_profiled () {
     if [ -z "$manual_release" ]; then
         manual_release="sarge"
     fi
+    if [ -z "$manual_target" ]; then
+        manual_target="for_cd"
+    fi
 
     # Now we source the profiling information for the selected architecture
     [ -f "arch-options/${arch}" ] || {
@@ -66,7 +69,7 @@ create_profiled () {
     # Join all architecture options into one big variable
     condition="$fdisk;$network;$boot;$smp;$other;$goodies;$unofficial_build;$status;$manual_release"
     # Add build options for the manual
-    condition="$condition;$unofficial_build;$status;$manual_release"
+    condition="$condition;$unofficial_build;$status;$manual_release;$manual_target"
 
     # Write dynamic non-profilable entities into the file
     echo "<!-- arch- and lang-specific non-profilable entities -->" > $dynamic

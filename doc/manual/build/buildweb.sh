@@ -26,6 +26,7 @@ fi
 
 export official_build="1"
 export web_build="1"
+export manual_target="for_wdo"
 
 # We need to merge the XML files for English and update the POT files
 export PO_USEBUILD="1"
