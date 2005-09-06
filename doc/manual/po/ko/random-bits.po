@@ -37,7 +37,7 @@ msgstr ""
 "용하려면 일부 줄의 코멘트를 없애야 할 수도 있습니다."
 
 #. Tag: para
-#: random-bits.xml:19
+#: random-bits.xml:21
 #, no-c-format
 msgid ""
 "In order to be able to properly present this example in the manual, we've "
@@ -54,19 +54,28 @@ msgstr ""
 "으면 미리 설정은 예측할 수 없는 결과를 발생하면서 실패합니다."
 
 #. Tag: para
-#: random-bits.xml:27
-#, no-c-format
+#: random-bits.xml:29
+#, fuzzy, no-c-format
 msgid ""
-"A <quote>clean</quote> example file is included on the official Debian "
-"installation CD-ROMs in <filename>/doc/install/manual</filename> and "
-"available from the Internet at <ulink url=\"&url-example-preseed;\"></ulink>."
+"A <quote>clean</quote> example file is available from &urlset-example-"
+"preseed;<phrase condition=\"for_cd\"> or from the Internet at <ulink url="
+"\"&url-release-area;example-preseed.txt\"></ulink></phrase>."
 msgstr ""
 "여러 줄로 쪼개 놓지 않은 <quote>깨끗한</quote> 예제 파일은 공식 데비안 설치 "
 "CD-ROM의 <filename>/doc/install/manual</filename> 안에 들어 있고 인터넷에서"
 "는 <ulink url=\"&url-example-preseed;\"></ulink>에 있습니다."
 
+#. Tag: para
+#: random-bits.xml:37
+#, no-c-format
+msgid ""
+"The example file is also available from &urlset-example-preseed;<phrase "
+"condition=\"for_cd\"> or from the Internet at <ulink url=\"&url-release-area;"
+"example-preseed.txt\"></ulink></phrase>."
+msgstr ""
+
 #. Tag: screen
-#: random-bits.xml:35
+#: random-bits.xml:49
 #, fuzzy, no-c-format
 msgid ""
 "#### Startup.\n"
@@ -84,20 +93,7 @@ msgid ""
 "# If you're installing from USB media, use this, and put the preseed file\n"
 "# in the toplevel directory of the USB stick.\n"
 "#   preseed/file=/hd-media/preseed\n"
-"#\n"
-"# If you feel comfortable modifying the installer's initrd image,\n"
-"# you can also place a preseed file in the root directory of the initrd's\n"
-"# filesystem, named \"preseed.cfg\" -- the installer will always use this\n"
-"# file if it is present (note: not supported by the Sarge version of the\n"
-"# installer). Otherwise, be sure to copy this file to the location you\n"
-"# specify.\n"
-"#\n"
-"# To make sure the installer gets the right preseed file, you can specify\n"
-"# a checksum for the file. Currently this needs to be a md5sum, and if\n"
-"# specified it must match the file or the installer will refuse to use the\n"
-"# file.\n"
-"#   preseed/url/checksum=5da499872becccfeda2c4872f9171c3d\n"
-"#   preseed/file/checksum=5da499872becccfeda2c4872f9171c3d\n"
+"# Be sure to copy this file to the location you specify.\n"
 "#\n"
 "# Some parts of the installation process cannot be automated using\n"
 "# some forms of preseeding, because the questions are asked before\n"
@@ -127,19 +123,11 @@ msgid ""
 "# for most installations, which may allow you to add more options for\n"
 "# preseeding.\n"
 "\n"
-"# To select your language and country, use this setting, but remember\n"
-"# that this will only work for initrd based preseeding, for other forms of\n"
-"# preseeding you must convert it into a kernel parameter,\n"
-"# such as debian-installer/locale=en_US\n"
-"d-i debian-installer/locale string en_US\n"
-"\n"
-"# The sarge installer had two separate values for language and country:\n"
-"d-i languagechooser/language-name select English\n"
-"d-i countrychooser/shortlist select US\n"
-"\n"
-"# To select your keyboard, use this setting. Again it will need to be\n"
-"# passed as a kernel parameter for most preseed setups.\n"
-"d-i console-keymaps-at/keymap select us\n"
+"# It is not possible to use preseeding to set language, country, and\n"
+"# keyboard. Instead you should use kernel parameters. Example:\n"
+"# languagechooser/language-name=English\n"
+"# countrychooser/shortlist=US\n"
+"# console-keymaps-at/keymap=us\n"
 "\n"
 "#### Network configuration.\n"
 "\n"
@@ -180,13 +168,8 @@ msgid ""
 "d-i mirror/country string enter information manually\n"
 "d-i mirror/http/hostname string http.us.debian.org\n"
 "d-i mirror/http/directory string /debian\n"
+"d-i mirror/suite string testing\n"
 "d-i mirror/http/proxy string\n"
-"\n"
-"# What suite of Debian to install.\n"
-"#d-i mirror/suite string testing\n"
-"# What suite of Debian to use for loading installer components.\n"
-"# (Defaults to same as mirror/suite.)\n"
-"#d-i mirror/udeb/suite string testing\n"
 "\n"
 "#### Partitioning.\n"
 "\n"
@@ -320,17 +303,6 @@ msgid ""
 "#### Clock and time zone setup.\n"
 "\n"
 "# Controls whether or not the hardware clock is set to UTC.\n"
-"d-i clock-setup/utc boolean true\n"
-"\n"
-"# You may set this to any valid setting for $TZ; see the contents of\n"
-"# /usr/share/zoneinfo/ for options.\n"
-"d-i time/zone string US/Eastern\n"
-"\n"
-"# This preseeding used to be more complex; the old method is documented\n"
-"# here as well for completeness. If you're using sarge, you'll need this\n"
-"# method.\n"
-"\n"
-"# Controls whether or not the hardware clock is set to UTC.\n"
 "#base-config tzconfig/gmt boolean true\n"
 "# If you told the installer that you're in the United States, then you\n"
 "# can set the time zone using this variable.\n"
@@ -462,12 +434,6 @@ msgid ""
 "# own as well. Note that if the filenames are relative, they are taken from\n"
 "# the same directory as the preseed file that includes them.\n"
 "#d-i preseed/include string x.cfg\n"
-"\n"
-"# The installer can optionally verify checksums of preseed files before\n"
-"# using them. Currently only md5sums are supported, list the md5sums\n"
-"# in the same order as the list of files to include.\n"
-"# (Checksums are not supported in the sarge installer.)\n"
-"#d-i preseed/include/checksum string 5da499872becccfeda2c4872f9171c3d\n"
 "\n"
 "# More flexibly, this runs a shell command and if it outputs the names of\n"
 "# preseed files, includes those files. For example, to switch configs based\n"
@@ -821,14 +787,732 @@ msgstr ""
 "*/*); \\\n"
 "#    then echo kraken.cfg; else echo otherusb.cfg; fi"
 
+#. Tag: screen
+#: random-bits.xml:55
+#, fuzzy, no-c-format
+msgid ""
+"#### Startup.\n"
+"\n"
+"# To use a preseed file, you'll first need to boot the installer,\n"
+"# and tell it what preseed file to use. This is done by passing the\n"
+"# kernel a boot parameter, either manually at boot or by editing the\n"
+"# syslinux.cfg (or similar) file and adding the parameter to the end\n"
+"# of the append line(s) for the kernel.\n"
+"#\n"
+"# If you're netbooting, use this:\n"
+"#   preseed/url=http://host/path/to/preseed\n"
+"# If you're remastering a CD, you could use this:\n"
+"#   preseed/file=/cdrom/preseed\n"
+"# If you're installing from USB media, use this, and put the preseed file\n"
+"# in the toplevel directory of the USB stick.\n"
+"#   preseed/file=/hd-media/preseed\n"
+"#\n"
+"# If you feel comfortable modifying the installer's initrd image,\n"
+"# you can also place a preseed file in the root directory of the initrd's\n"
+"# filesystem, named \"preseed.cfg\" -- the installer will always use this\n"
+"# file if it is present. Otherwise, be sure to copy this file to the "
+"location\n"
+"# you specify.\n"
+"#\n"
+"# To make sure the installer gets the right preseed file, you can specify\n"
+"# a checksum for the file. Currently this needs to be a md5sum, and if\n"
+"# specified it must match the file or the installer will refuse to use the\n"
+"# file.\n"
+"#   preseed/url/checksum=5da499872becccfeda2c4872f9171c3d\n"
+"#   preseed/file/checksum=5da499872becccfeda2c4872f9171c3d\n"
+"#\n"
+"# Some parts of the installation process cannot be automated using\n"
+"# some forms of preseeding, because the questions are asked before\n"
+"# the preseed file is loaded. For example, if the preseed file is\n"
+"# downloaded over the network, the network setup must be done first.\n"
+"# One reason to use initrd preseeding is that it allows preseeding\n"
+"# of even these early steps of the installation process.\n"
+"#\n"
+"# If a preseed file cannot be used to preseed some steps, the install can\n"
+"# still be fully automated, since you can pass preseed values to the kernel\n"
+"# on the command line. Just pass path/to/var=value for any of the preseed\n"
+"# variables listed below.\n"
+"#\n"
+"# While you're at it, you may want to throw a debconf/priority=critical in\n"
+"# there, to avoid most questions even if the preseeding below misses some.\n"
+"# And you might set the timeout to 1 in syslinux.cfg to avoid needing to "
+"hit\n"
+"# enter to boot the installer.\n"
+"#\n"
+"# Note that the 2.4 kernel accepts a maximum of 8 command line options and\n"
+"# 8 environment options (including any options added by default for the\n"
+"# installer). If these numbers are exceeded, 2.4 kernels will drop any\n"
+"# excess options and 2.6 kernels will panic. With kernel 2.6.9 or newer,\n"
+"# you can use 32 command line options and 32 environment options.\n"
+"#\n"
+"# Some of the default options, like 'vga=normal' may be safely removed\n"
+"# for most installations, which may allow you to add more options for\n"
+"# preseeding.\n"
+"\n"
+"# To select your language and country, use this setting, but remember\n"
+"# that this will only work for initrd based preseeding, for other forms of\n"
+"# preseeding you must convert it into a kernel parameter,\n"
+"# such as debian-installer/locale=en_US\n"
+"d-i debian-installer/locale string en_US\n"
+"\n"
+"# To select your keyboard, use this setting. Again it will need to be\n"
+"# passed as a kernel parameter for most preseed setups.\n"
+"d-i console-keymaps-at/keymap select us\n"
+"\n"
+"#### Network configuration.\n"
+"\n"
+"# Of course, this won't work if you're loading your preseed file from the\n"
+"# network! But it's great if you're booting from CD or USB stick. You can\n"
+"# also pass network config parameters in on the kernel params if you are\n"
+"# loading preseed files from the network.\n"
+"\n"
+"# netcfg will choose an interface that has link if possible. This makes it\n"
+"# skip displaying a list if there is more than one interface.\n"
+"d-i netcfg/choose_interface select auto\n"
+"\n"
+"# If you have a slow dhcp server and the installer times out waiting for\n"
+"# it, this might be useful.\n"
+"#d-i netcfg/dhcp_timeout string 60\n"
+"\n"
+"# If you prefer to configure the network manually, here's how:\n"
+"#d-i netcfg/disable_dhcp boolean true\n"
+"#d-i netcfg/get_nameservers string 192.168.1.1\n"
+"#d-i netcfg/get_ipaddress string 192.168.1.42\n"
+"#d-i netcfg/get_netmask string 255.255.255.0\n"
+"#d-i netcfg/get_gateway string 192.168.1.1\n"
+"#d-i netcfg/confirm_static boolean true\n"
+"\n"
+"# Note that any hostname and domain names assigned from dhcp take\n"
+"# precedence over values set here. However, setting the values still\n"
+"# prevents the questions from being shown even if values come from dhcp.\n"
+"d-i netcfg/get_hostname string unassigned-hostname\n"
+"d-i netcfg/get_domain string unassigned-domain\n"
+"\n"
+"# Disable that annoying WEP key dialog.\n"
+"d-i netcfg/wireless_wep string\n"
+"# The wacky dhcp hostname that some ISPs use as a password of sorts.\n"
+"#d-i netcfg/dhcp_hostname string radish\n"
+"\n"
+"#### Mirror settings.\n"
+"\n"
+"d-i mirror/country string enter information manually\n"
+"d-i mirror/http/hostname string http.us.debian.org\n"
+"d-i mirror/http/directory string /debian\n"
+"d-i mirror/http/proxy string\n"
+"\n"
+"# What suite of Debian to install.\n"
+"#d-i mirror/suite string testing\n"
+"# What suite of Debian to use for loading installer components.\n"
+"# (Defaults to same as mirror/suite.)\n"
+"#d-i mirror/udeb/suite string testing\n"
+"\n"
+"#### Partitioning.\n"
+"\n"
+"# If the system has free space you can choose to only partition that space.\n"
+"#d-i partman-auto/init_automatically_partition \\\n"
+"#      select Use the largest continuous free space\n"
+"\n"
+"# Alternatively, you can specify a disk to partition. The device name can\n"
+"# be given in either devfs or traditional non-devfs format.\n"
+"# For example, to use the first disk devfs knows of:\n"
+"d-i partman-auto/disk string /dev/discs/disc0/disc\n"
+"\n"
+"# You can choose from any of the predefined partitioning recipes:\n"
+"d-i partman-auto/choose_recipe \\\n"
+"       select All files in one partition (recommended for new users)\n"
+"#d-i partman-auto/choose_recipe select Desktop machine\n"
+"#d-i partman-auto/choose_recipe select Multi-user workstation\n"
+"\n"
+"# Or provide a recipe of your own...\n"
+"# The recipe format is documented in the file devel/partman-auto-recipe."
+"txt.\n"
+"# If you have a way to get a recipe file into the d-i environment, you can\n"
+"# just point at it.\n"
+"#d-i partman-auto/expert_recipe_file string /hd-media/recipe\n"
+"\n"
+"# If not, you can put an entire recipe the preseed file in one (logical)\n"
+"# line. This example creates a small /boot partition, suitable swap, and\n"
+"# uses the rest of the space for the root partition:\n"
+"#d-i partman-auto/expert_recipe string                         \\\n"
+"#      boot-root ::                                            \\\n"
+"#              40 50 100 ext3                                  \\\n"
+"#                      $primary{ } $bootable{ }                \\\n"
+"#                      method{ format } format{ }              \\\n"
+"#                      use_filesystem{ } filesystem{ ext3 }    \\\n"
+"#                      mountpoint{ /boot }                     \\\n"
+"#              .                                               \\\n"
+"#              500 10000 1000000000 ext3                       \\\n"
+"#                      method{ format } format{ }              \\\n"
+"#                      use_filesystem{ } filesystem{ ext3 }    \\\n"
+"#                      mountpoint{ / }                         \\\n"
+"#              .                                               \\\n"
+"#              64 512 300% linux-swap                          \\\n"
+"#                      method{ swap } format{ }                \\\n"
+"#              .\n"
+"\n"
+"# This makes partman automatically partition without confirmation.\n"
+"d-i partman/confirm_write_new_label boolean true\n"
+"d-i partman/choose_partition \\\n"
+"       select Finish partitioning and write changes to disk\n"
+"d-i partman/confirm boolean true\n"
+"\n"
+"#### Boot loader installation.\n"
+"\n"
+"# Grub is the default boot loader (for x86). If you want lilo installed\n"
+"# instead, uncomment this:\n"
+"#d-i grub-installer/skip boolean true\n"
+"\n"
+"# This is fairly safe to set, it makes grub install automatically to the "
+"MBR\n"
+"# if no other operating system is detected on the machine.\n"
+"d-i grub-installer/only_debian boolean true\n"
+"\n"
+"# This one makes grub-installer install to the MBR if if finds some other "
+"OS\n"
+"# too, which is less safe as it might not be able to boot that other OS.\n"
+"d-i grub-installer/with_other_os boolean true\n"
+"\n"
+"# Alternatively, if you want to install to a location other than the mbr,\n"
+"# uncomment and edit these lines:\n"
+"#d-i grub-installer/bootdev  string (hd0,0)\n"
+"#d-i grub-installer/only_debian boolean false\n"
+"#d-i grub-installer/with_other_os boolean false\n"
+"\n"
+"#### Finishing up the first stage install.\n"
+"\n"
+"# Avoid that last message about the install being complete.\n"
+"d-i prebaseconfig/reboot_in_progress note\n"
+"\n"
+"# This will prevent the installer from ejecting the CD during the reboot,\n"
+"# which is useful in some situations.\n"
+"#d-i cdrom-detect/eject boolean false\n"
+"\n"
+"#### Shell commands.\n"
+"\n"
+"# d-i preseeding is inherently not secure. Nothing in the installer checks\n"
+"# for attempts at buffer overflows or other exploits of the values of a\n"
+"# preseed file like this one. Only use preseed files from trusted\n"
+"# locations! To drive that home, and because it's generally useful, here's\n"
+"# a way to run any shell command you'd like inside the installer,\n"
+"# automatically.\n"
+"\n"
+"# This first command is run as early as possible, just after\n"
+"# preseeding is read.\n"
+"#d-i preseed/early_command string anna-install some-udeb\n"
+"\n"
+"# This command is run just before the install finishes, but when there is\n"
+"# still a usable /target directory.\n"
+"#d-i preseed/late_command string echo foo > /target/etc/bar\n"
+"\n"
+"# This command is run just as base-config is starting up.\n"
+"#base-config base-config/early_command string echo hi mom\n"
+"\n"
+"# This command is run after base-config is done, just before the login:\n"
+"# prompt. This is a good way to install a set of packages you want, or to\n"
+"# tweak the configuration of the system.\n"
+"#base-config base-config/late_command \\\n"
+"#      string apt-get install zsh; chsh -s /bin/zsh\n"
+"\n"
+"###### Preseeding the 2nd stage of the installation.\n"
+"\n"
+"#### Preseeding base-config.\n"
+"\n"
+"# Avoid the introductory message.\n"
+"base-config base-config/intro note\n"
+"\n"
+"# Avoid the final message.\n"
+"base-config base-config/login note\n"
+"\n"
+"# If you installed a display manager, but don't want to start it "
+"immediately\n"
+"# after base-config finishes.\n"
+"#base-config base-config/start-display-manager boolean false\n"
+"\n"
+"# Some versions of the installer can report back on what you've installed.\n"
+"# The default is not to report back, but sending reports helps the project\n"
+"# determine what software is most popular and include it on CDs.\n"
+"#popularity-contest popularity-contest/participate boolean false\n"
+"\n"
+"#### Clock and time zone setup.\n"
+"\n"
+"# Controls whether or not the hardware clock is set to UTC.\n"
+"d-i clock-setup/utc boolean true\n"
+"\n"
+"# You may set this to any valid setting for $TZ; see the contents of\n"
+"# /usr/share/zoneinfo/ for options.\n"
+"d-i time/zone string US/Eastern\n"
+"\n"
+"#### Account setup.\n"
+"\n"
+"# To preseed the root password, you have to put it in the clear in this\n"
+"# file. That is not a very good idea, use caution!\n"
+"#passwd passwd/root-password password r00tme\n"
+"#passwd passwd/root-password-again password r00tme\n"
+"\n"
+"# If you want to skip creation of a normal user account.\n"
+"#passwd passwd/make-user boolean false\n"
+"\n"
+"# Alternatively, you can preseed the user's name and login.\n"
+"#passwd passwd/user-fullname string Debian User\n"
+"#passwd passwd/username string debian\n"
+"# And their password, but use caution!\n"
+"#passwd passwd/user-password password insecure\n"
+"#passwd passwd/user-password-again password insecure\n"
+"\n"
+"#### Apt setup.\n"
+"\n"
+"# This question controls what source the second stage installation uses\n"
+"# for packages. Choices are cdrom, http, ftp, filesystem, edit sources list\n"
+"# by hand\n"
+"base-config apt-setup/uri_type select http\n"
+"\n"
+"# If you choose ftp or http, you'll be asked for a country and a mirror.\n"
+"base-config apt-setup/country select enter information manually\n"
+"base-config apt-setup/hostname string http.us.debian.org\n"
+"base-config apt-setup/directory string /debian\n"
+"# Stop after choosing one mirror.\n"
+"base-config apt-setup/another boolean false\n"
+"\n"
+"# You can choose to install non-free and contrib software.\n"
+"#base-config apt-setup/non-free boolean true\n"
+"#base-config apt-setup/contrib boolean true\n"
+"\n"
+"# Do enable security updates.\n"
+"base-config apt-setup/security-updates boolean true\n"
+"\n"
+"#### Package selection.\n"
+"\n"
+"# You can choose to install any combination of tasks that are available.\n"
+"# Available tasks as of this writing include: Desktop environment,\n"
+"# Web server, Print server, DNS server, File server, Mail server,\n"
+"# SQL database, Laptop, Standard system, manual package selection. The\n"
+"# last of those will run aptitude. You can also choose to install no\n"
+"# tasks, and force the installation of a set of packages in some other\n"
+"# way. We recommend always including the Standard system task.\n"
+"tasksel tasksel/first multiselect Desktop environment, Standard system\n"
+"#tasksel tasksel/first multiselect Web server, Standard system\n"
+"\n"
+"#### Mailer configuration.\n"
+"\n"
+"# During a normal install, exim asks only a few questions. Here's how to\n"
+"# avoid even those. More complicated preseeding is possible.\n"
+"exim4-config exim4/dc_eximconfig_configtype \\\n"
+"       select no configuration at this time\n"
+"exim4-config exim4/no_config boolean true\n"
+"exim4-config exim4/no_config boolean true\n"
+"\n"
+"# It's a good idea to set this to whatever user account you choose to\n"
+"# create. Leaving the value blank results in postmaster mail going to\n"
+"# /var/mail/mail.\n"
+"exim4-config exim4/dc_postmaster string\n"
+"\n"
+"#### X Configuration.\n"
+"\n"
+"# Preseeding Debian's X config is possible, but you probably need to know\n"
+"# some details about the video hardware of the machine, since Debian's X\n"
+"# configurator does not do fully automatic configuration of everything.\n"
+"\n"
+"# X can detect the right driver for some cards, but if you're preseeding,\n"
+"# you override whatever it chooses. Still, vesa will work most places.\n"
+"#xserver-xfree86 xserver-xfree86/config/device/driver select vesa\n"
+"\n"
+"# A caveat with mouse autodetection is that if it fails, X will retry it\n"
+"# over and over. So if it's preseeded to be done, there is a possibility of\n"
+"# an infinite loop if the mouse is not autodetected.\n"
+"#xserver-xfree86 xserver-xfree86/autodetect_mouse boolean true\n"
+"\n"
+"# Monitor autodetection is recommended.\n"
+"xserver-xfree86 xserver-xfree86/autodetect_monitor boolean true\n"
+"# Uncomment if you have an LCD display.\n"
+"#xserver-xfree86 xserver-xfree86/config/monitor/lcd boolean true\n"
+"# X has three configuration paths for the monitor. Here's how to preseed\n"
+"# the \"medium\" path, which is always available. The \"simple\" path may "
+"not\n"
+"# be available, and the \"advanced\" path asks too many questions.\n"
+"xserver-xfree86 xserver-xfree86/config/monitor/selection-method \\\n"
+"       select medium\n"
+"xserver-xfree86 xserver-xfree86/config/monitor/mode-list \\\n"
+"       select 1024x768 @ 60 Hz\n"
+"\n"
+"#### Everything else.\n"
+"\n"
+"# Depending on what software you choose to install, or if things go wrong\n"
+"# during the installation process, it's possible that other questions may\n"
+"# be asked. You can preseed those too, of course. To get a list of every\n"
+"# possible question that could be asked during an install, do an\n"
+"# installation, and then run these commands:\n"
+"#   debconf-get-selections --installer > file\n"
+"#   debconf-get-selections >> file\n"
+"\n"
+"# If you like, you can include other preseed files into this one.\n"
+"# Any settings in those files will override pre-existing settings from this\n"
+"# file. More that one file can be listed, separated by spaces; all will be\n"
+"# loaded. The included files can have preseed/include directives of their\n"
+"# own as well. Note that if the filenames are relative, they are taken from\n"
+"# the same directory as the preseed file that includes them.\n"
+"#d-i preseed/include string x.cfg\n"
+"\n"
+"# The installer can optionally verify checksums of preseed files before\n"
+"# using them. Currently only md5sums are supported, list the md5sums\n"
+"# in the same order as the list of files to include.\n"
+"#d-i preseed/include/checksum string 5da499872becccfeda2c4872f9171c3d\n"
+"\n"
+"# More flexibly, this runs a shell command and if it outputs the names of\n"
+"# preseed files, includes those files. \n"
+"#d-i preseed/include_command \\\n"
+"#      string echo if [ \"`hostname`\" = bob ]; then echo bob.cfg; fi\n"
+"\n"
+"# To check the format of your preseed file before performing an install,\n"
+"# you can use debconf-set-selections:\n"
+"#   debconf-set-selections -c preseed.cfg"
+msgstr ""
+"#### syslinux.cfg 수정하기.\n"
+"\n"
+"# syslinux.cfg (혹은 그와 비슷한) 파일을 편집하고 커널 append 줄의 \n"
+"# 끝에 파라미터를 추가하십시오.\n"
+"#\n"
+"# 최소한 어디서 미리 설정 파일을 어디서 가져올지 지정하는 파라미터를\n"
+"# 추가합니다.\n"
+"# USB 미디어에서 설치하는 경우라면, 다음 파라미터를 사용하고 미리 설정\n"
+"# 파일을 USB 스틱의 맨 위 디렉토리에 넣으십시오.\n"
+"#   preseed/file=/hd-media/preseed\n"
+"# 네트워크 부팅이라면, 다음 파라미터를 사용하십시오:\n"
+"#   preseed/url=http://host/path/to/preseed\n"
+"# CD를 다시 굽는 경우라면, 다음 파라미터를 사용하십시오:\n"
+"#   preseed/file=/cdrom/preseed\n"
+"# 위에서 지정한 위치에 이 파일을 복사하십시오.\n"
+"# \n"
+"# 거기까지 끝났으면, debconf/priority=critical을 넣어서 아래 미리 설정에\n"
+"# 해당하지 않는 질문은 물어보지 않도록 합니다. 그리고 syslinux.cfg에서\n"
+"# timeout을 1로 놓아서 설치 프로그램에서 부팅할 때 엔터를 누를 필요가\n"
+"# 없도록 합니다.\n"
+"#\n"
+"# 언어, 국가, 키보드 선택은 파일에서 미리 설정할 수 없습니다. 언어, 국가,\n"
+"# 키보드에 해당하는 질문은 미리 설정 파일을 읽어들이기 전에 물어보기\n"
+"# 때문입니다. 파일에 넣는 대신에 파라미터를 몇 개 더 커널에 넘기십시오:\n"
+"#\n"
+"#    languagechooser/language-name=English\n"
+"#    countrychooser/shortlist=US\n"
+"#    console-keymaps-at/keymap=us\n"
+"#\n"
+"# 단 커널은 최대 8개까지의 명령행 파라미터와 8개까지의 환경 파라미터만\n"
+"# 받아들일 수 있습니다. 그 8개에는 설치 프로그램에서 기본으로 추가하는\n"
+"# 파리미터가 포함되어 있습니다. 그 개수가 넘어가면, 2.4 커널은 넘어가는\n"
+"# 옵션을 버리고 2.6 커널은 멎어버립니다. 버전 2.6.9 커널 및 그 이후의\n"
+"# 커널에서는 32개까지의 명령행 파라미터와 32개까지의 환경 파라미터를\n"
+"# 받아들입니다.\n"
+"#\n"
+"# 'vga=normal'이나 'devfs=mount'같은 기본 옵션중의 일부는 대부분의 경우\n"
+"# 안 써도 상관없습니다. 그러면 미리 설정 옵션을 몇 개 더 쓸 수 있습니다.\n"
+"\n"
+"#### 쉘 명령어.\n"
+"\n"
+"# d-i 미리 설정은 원래부터 보안에 안전하지 않습니다. 설치 프로그램 중의\n"
+"# 어느 부분도 버퍼 오버플로우나 그 밖의 방법으로 미리 설정 파일의 값을\n"
+"# 조작하는 공격을 검사하지 않습니다. 믿을 만한 곳에 있는 미리 설정 파일만\n"
+"# 사용하십시오! 설치 프로그램 안에서 어떤 쉘 명령어라도 실행할 수 있는\n"
+"# 방법이 만들어져 있습니다. (위험하지만 이 방법은 유용하게 사용됩니다.)\n"
+"\n"
+"# 첫번째 명령어는 미리 설정 파일을 읽어들인 직후에 가능한 빨리\n"
+"# 실행합니다. \n"
+"#d-i preseed/early_command              string \\\n"
+"#    wget http://url/to/my.udeb -O /tmp/my.udeb; udpkg -i /tmp/my.udeb\n"
+"\n"
+"# 다음 명령어는 설치가 끝나기 직전에, 하지만 /target 디렉토리가 아직\n"
+"# 마운트되어 있을 때 실행합니다.\n"
+"#d-i preseed/late_command               string \\\n"
+"#    for deb in /hd-media/*.deb; do cp $deb /target/tmp; \\\n"
+"#    chroot /target dpkg -i /tmp/$(basename $deb); done\n"
+"\n"
+"# 다음 명령어는 base-config가 시작할 때 실행합니다.\n"
+"#base-config base-config/early_command  string echo hi mom\n"
+"\n"
+"# 다음 명령어는 base-config가 끝난 다음에 login: 프롬프트 직전에\n"
+"# 실행합니다. 다음 명령어는 필요한 꾸러미를 설치하거나 시스템의 설정을\n"
+"# 조작할 때 유용합니다.\n"
+"#base-config base-config/late_command   string \\\n"
+"#    apt-get install zsh; chsh -s /bin/zsh\n"
+"\n"
+"#### 네트워크 설정.\n"
+"\n"
+"# 물론 미리 설정 파일을 네트워크에서 가져오는 경우라면 이렇게 해도\n"
+"# 동작하지 않습니다! 하지만 CD나 USB 스틱에서 부팅하는 경우라면 아주 \n"
+"# 좋습니다. 미리 설정 파일을 네트워크에서 읽어들인다면 네트워크 설정\n"
+"# 파라미터를 커널 파라미터에 넘길 수도 있습니다.\n"
+"\n"
+"# netcfg에서 네트워크에 연결되어 있는 인터페이스를 하나 선택합니다. 이렇게\n"
+"# 하면 인터페이스가 여러 개 있을 때 목록을 표시하지 않고 넘어갑니다.\n"
+"d-i  netcfg/choose_interface            select auto\n"
+"\n"
+"# 네트워크를 수동으로 설정하려면, 다음과 같이 합니다:\n"
+"#d-i netcfg/disable_dhcp                boolean true\n"
+"#d-i netcfg/get_nameservers             string 192.168.1.1\n"
+"#d-i netcfg/get_ipaddress               string 192.168.1.42\n"
+"#d-i netcfg/get_netmask                 string 255.255.255.0\n"
+"#d-i netcfg/get_gateway                 string 192.168.1.1\n"
+"#d-i netcfg/confirm_static              boolean true\n"
+"\n"
+"# 호스트이름이나 도메인이름은 여기 설정한 것보다 DHCP에서 가져온 것이\n"
+"# 우선합니다. 하지만 다음 값을 설정하면 DHCP에서 어떤 값이 오더라도\n"
+"# 물어보지는 않게 합니다.\n"
+"d-i  netcfg/get_hostname                string unassigned-hostname\n"
+"d-i  netcfg/get_domain                  string unassigned-domain\n"
+"\n"
+"# WEB 키 대화 상자를 표시하지 않게 합니다.\n"
+"d-i  netcfg/wireless_wep                string\n"
+"# 일부 ISP는 DHCP 호스트 이름을 암호로 사용합니다.\n"
+"#d-i netcfg/dhcp_hostname               string radish\n"
+"\n"
+"#### 미러 설정.\n"
+"\n"
+"d-i  mirror/country                     string enter information manually\n"
+"d-i  mirror/http/hostname               string http.us.debian.org\n"
+"d-i  mirror/http/directory              string /debian\n"
+"d-i  mirror/suite                       string testing\n"
+"d-i  mirror/http/proxy                  string \n"
+"\n"
+"### 파티션하기.\n"
+"\n"
+"# 시스템에 빈 공간이 있을 때 그 부분을 한 개 파티션으로 사용합니다.\n"
+"#d-i partman-auto/init_automatically_partition \\\n"
+"#    select Use the largest continuous free space\n"
+"\n"
+"# 다른 방법으로 파티션할 디스크를 지정합니다 장치 이름은 DEVFS나\n"
+"# DEVFS가 아닌 전통적인 방식으로 지정할 수 있습니다.\n"
+"# 예를 들어, DEVFS 방식으로 첫번째 디스크는:\n"
+"d-i  partman-auto/disk                  string /dev/discs/disc0/disc\n"
+"\n"
+"# 미리 정의되어 있는 파티션 방식 중의 하나를 사용할 수도 있습니다:\n"
+"d-i  partman-auto/choose_recipe         select \\\n"
+"     All files in one partition (recommended for new users)\n"
+"#d-i partman-auto/choose_recipe         select Desktop machine\n"
+"#d-i partman-auto/choose_recipe         select Multi-user workstation\n"
+"\n"
+"# 그것도 아니고 자기만의 방식을 사용하려면...\n"
+"# 파티션 방식 (recipe) 형식은 devel/partman-auto-recipe.txt 파일에 설명되어\n"
+"# 있습니다. 파티션 방식 파일을 d-i 환경에 집어 넣을 수 있으면, 그 파일\n"
+"# 위치를 써 주기만 하면 됩니다.\n"
+"#d-i partman-auto/expert_recipe_file    string /hd-media/recipe\n"
+"\n"
+"# 그렇지 않다면, 전체 파티션 방식을 한 줄에 넣을 수도 있습니다. 다음\n"
+"# 예제는 작은 /boot 파티션을 만들고, 적당한 스왑을 만들고, 나머지 공간을\n"
+"# 루트 파티션으로 사용합니다:\n"
+"#d-i partman-auto/expert_recipe         string boot-root :: \\\n"
+"#    20 50 100 ext3 $primary{ } $bootable{ } method{ format } format{ } \\\n"
+"#    use_filesystem{ } filesystem{ ext3 } mountpoint{ /boot } . \\\n"
+"#    500 10000 1000000000 ext3 method{ format } format{ } \\\n"
+"#    use_filesystem{ } filesystem{ ext3 } mountpoint{ / } . \\\n"
+"#    64 512 300% linux-swap method{ swap } format{ } . \n"
+"# 참고로, 다음은 위의 파티션 방식을 읽기 좋은 모양으로 쓴 것입니다:\n"
+"#    boot-root ::\n"
+"#       40 50 100 ext3\n"
+"#          $primary{ } $bootable{ }\n"
+"#          method{ format } format{ }\n"
+"#          use_filesystem{ } filesystem{ ext3 }\n"
+"#          mountpoint{ /boot }\n"
+"#       .\n"
+"#       500 10000 1000000000 ext3\n"
+"#          method{ format } format{ }\n"
+"#          use_filesystem{ } filesystem{ ext3 }\n"
+"#          mountpoint{ / }\n"
+"#       .\n"
+"#       64 512 300% linux-swap\n"
+"#          method{ swap } format{ }\n"
+"#       .\n"
+"\n"
+"# 다음을 사용하면 확인 질문 없이 partman에서 자동으로 파티션합니다.\n"
+"d-i partman/confirm_write_new_label     boolean true\n"
+"d-i partman/choose_partition            select \\\n"
+"    Finish partitioning and write changes to disk\n"
+"d-i partman/confirm                     boolean true\n"
+"\n"
+"#### 부트로더 설치.\n"
+"\n"
+"# 기본 부트 로더는 (x86의 경우) GRUB입니다. GRUB 대신에 LILO를 사용하려면,\n"
+"# 다음 줄의 코멘트를 없애십시오:\n"
+"#d-i grub-installer/skip                boolean true\n"
+"\n"
+"# 다음을 설정하는 게 안전합니다. 이렇게 하면 컴퓨터에 다른 운영체제가\n"
+"# 없을 경우에 자동으로 GRUB을 MBR에 설치합니다.\n"
+"d-i  grub-installer/only_debian         boolean true\n"
+"\n"
+"# 다음과 같이 하면 다른 운영체제가 있더라도 GRUB을 MBR에 설치합니다.\n"
+"# 이렇게 하면 다른 운영체제를 부팅할 수 없을 수도 있기 때문에 덜 안전합니"
+"다.\n"
+"d-i  grub-installer/with_other_os       boolean true\n"
+"\n"
+"# 다른 방법으로, MBR이 아닌 위치에 GRUB을 설치하려면 다음 줄의 주석을\n"
+"# 없애고 편집하십시오:\n"
+"#d-i grub-installer/bootdev             string (hd0,0)\n"
+"#d-i grub-installer/only_debian         boolean false\n"
+"#d-i grub-installer/with_other_os       boolean false\n"
+"\n"
+"##### 첫 단계 설치 끝마치기.\n"
+"\n"
+"# 설치가 끝났다는 마지막 메세지를 표시하지 않습니다.\n"
+"d-i  prebaseconfig/reboot_in_progress   note \n"
+"\n"
+"\n"
+"##### base-config 미리 설정.\n"
+"\n"
+"# 들어가는 메세지를 표시하지 않습니다.\n"
+"base-config  base-config/intro          note\n"
+"\n"
+"# 마지막 메세지를 표시하지 않습니다.\n"
+"base-config  base-config/login          note\n"
+"\n"
+"# 디스플레이 관리자를 설치하지만 base-config가 끝난 다음에 바로 시작하지는\n"
+"# 않게 하려면.\n"
+"#base-config base-config/start-display-manager        boolean false\n"
+"\n"
+"###### 시간대 설정.\n"
+"\n"
+"# 하드웨어 시계를 GMT로 할지 여부를 조정합니다.\n"
+"base-config  tzconfig/gmt                             boolean true\n"
+"\n"
+"# 자기가 미국에 있다는 걸 설치 프로그램에 지정하려면, 다음 변수를\n"
+"# 이용해 시간대를 설정할 수 있습니다.\n"
+"# (가능한 값은: Eastern, Central, Mountain, Pacific, Alaska, Hawaii,\n"
+"# Aleutian, Arizona East-Indiana, Indiana-Starke, Michigan, Samoa, other)\n"
+"base-config  tzconfig/choose_country_zone/US          select Eastern\n"
+"# 캐나다에 있다면.\n"
+"# (가능한 값은: Newfoundland, Atlantic, Eastern, Central,\n"
+"# East-Saskatchewan, Saskatchewan, Mountain, Pacific, Yukon, other)\n"
+"base-config  tzconfig/choose_country_zone/CA          select Eastern\n"
+"# Brazil에 있다면. (가능한 값은: East, West, Acre, DeNoronha, other)\n"
+"base-config  tzconfig/choose_country_zone/BR          select East\n"
+"# 많은 국가들은 시간대가 하나밖에 없습니다. 이러한 국가들 중에 하나를\n"
+"# 설치 프로그램에 지정하려면, 다음을 이용해서 표준 시간대를 선택하십시오.\n"
+"base-config  tzconfig/choose_country_zone_single      boolean true\n"
+"# 다음 질문은 위에서 말한 국가들 이외에 시간대가 여러 개인 국가에\n"
+"# 해당하는 것입니다. 시간대 중의 하나 혹은 \"other\"를 미리 설정할 수 \n"
+"# 있습니다.\n"
+"#base-config tzconfig/choose_country_zone_multiple    select \n"
+"\n"
+"###### 계정 설정.\n"
+"\n"
+"# 루트 열쇠글을 미리 설정하려면, 이 파일에 암호를 그대로 씁니다.\n"
+"# 다른 사람이 알 수 없도록 주의하십시오!\n"
+"#passwd passwd/root-password            password r00tme\n"
+"#passwd passwd/root-password-again      password r00tme\n"
+"\n"
+"# 일반 사용자 계정을 만들지 않고 넘어가려면.\n"
+"#passwd passwd/make-user                boolean false\n"
+"\n"
+"# 그게 아니면, 사용자 이름과 로그인을 미리 설정할 수 있습니다.\n"
+"#passwd passwd/user-fullname            string Debian User\n"
+"#passwd passwd/username                 string debian\n"
+"# 그리고 열쇠글입니다. 주의하십시오!\n"
+"#passwd passwd/user-password            password insecure\n"
+"#passwd passwd/user-password-again      password insecure\n"
+"\n"
+"###### APT 설정.\n"
+"\n"
+"# 다음 질문은 두번째 단계에서 꾸러미를 설치할 때 어떤 소스를 사용할 지\n"
+"# 지정합니다. 가능한 값은 cdrom, http, ftp, filesystem, edit source list\n"
+"# by hand입니다.\n"
+"base-config  apt-setup/uri_type         select http\n"
+"\n"
+"# ftp나 http를 사용한다면, 국가와 미러에 대한 질문을 하게 됩니다.\n"
+"base-config  apt-setup/country          select enter information manually\n"
+"base-config  apt-setup/hostname         string http.us.debian.org\n"
+"base-config  apt-setup/directory        string /debian\n"
+"# 미러를 하나 고른 다음에 멈춥니다.\n"
+"base-config  apt-setup/another          boolean false\n"
+"\n"
+"# non-free와 contrib 소프트웨어를 설치합니다.\n"
+"#base-config apt-setup/non-free         boolean true\n"
+"#base-config apt-setup/contrib          boolean true\n"
+"\n"
+"# 보안 업데이트를 사용합니다.\n"
+"base-config  apt-setup/security-updates boolean true\n"
+"\n"
+"###### 꾸러미 선택.\n"
+"\n"
+"# 사용할 수 있으면 뭐든지 작업을 설치할 수 있습니다.\n"
+"# 현재 사용 가능한 작업은: Desktop environment, Web server, Print server, \n"
+"# DNS server, File server, Mail server, SQL database,\n"
+"# manual package selection입니다. manual package selection을 선택하면\n"
+"# aptitude를 실행합니다. 작업을 하나도 설치하지 않을 수도 있고,\n"
+"# 다른 방법으로 꾸러미를 설치할 수도 있습니다.\n"
+"tasksel      tasksel/first   multiselect Desktop environment\n"
+"#tasksel     tasksel/first   multiselect Web server, Mail server, DNS "
+"server\n"
+"\n"
+"###### 메일 프로그램 설정.\n"
+"\n"
+"# 보통 exim을 설치할 때는 두 가지만 질문합니다. 이 두 개 질문도 그냥\n"
+"# 넘어가려면 다음과 같이 합니다. 이것보다 더 복잡하게 미리 설정할 수도\n"
+"# 있습니다.\n"
+"exim4-config exim4/dc_eximconfig_configtype \\\n"
+"    select no configuration at this time\n"
+"\n"
+"# 다음 값을 앞에서 만든 사용자 계정으로 지정하는 게 좋습니다. 이 값을\n"
+"# 비워두면 postmaster 메일이 /var/mail/mail에 쌓입니다.\n"
+"exim4-config exim4/dc_postmaster        string \n"
+"\n"
+"###### X 설정.\n"
+"\n"
+"# 데비안의 X 설정을 미리 설정하는 것도 가능하지만, 해당 컴퓨터의 비디오\n"
+"# 하드웨어에 대해 자세히 알아야 합니다. 데비안의 X 설정은 모든 설정을\n"
+"# 자동으로 하지 못하기 때문입니다.\n"
+"\n"
+"# 일부 카드에 대해서는 X에서 올바른 드라이버를 자동 검색합니다. 하지만\n"
+"# 미리 설정할 경우에 미리 설정하는 게 더 우선합니다. vesa는 대부분의\n"
+"# 경우에 동작합니다.\n"
+"#xserver-xfree86 xserver-xfree86/config/device/driver select vesa\n"
+"\n"
+"# 마우스 자동 검색은 좀 위험한 부분이 있습니다. 실패하면 X가 계속해서\n"
+"# 다시 시도합니다. 그러므로 미리 설정을 하면 마우스를 검색하지 못했을\n"
+"# 때 무한루프테 빠질 가능성이 있습니다.\n"
+"#xserver-xfree86 xserver-xfree86/autodetect_mouse     boolean true\n"
+"\n"
+"# 모니터 자동 검색을 하는 게 좋습니다.\n"
+"xserver-xfree86 xserver-xfree86/autodetect_monitor    boolean true\n"
+"# LCD 디스플레이라면 다음 줄의 주석을 없애십시오.\n"
+"#xserver-xfree86 xserver-xfree86/config/monitor/lcd   boolean true\n"
+"# X의 모니터 설정은 세 가지 방법이 있습니다. 다음은 \"medium\"으로 미리\n"
+"# 설정하는 방법이고 언제나 사용할 수 있습니다. \"simple\"은 사용할 수\n"
+"# 없을 수도 있고, \"advanced\"는 너무 많이 물어봅니다.\n"
+"xserver-xfree86  xserver-xfree86/config/monitor/selection-method \\\n"
+"    select medium\n"
+"xserver-xfree86  xserver-xfree86/config/monitor/mode-list \\\n"
+"    select 1024x768 @ 60 Hz\n"
+"\n"
+"###### 그 외.\n"
+"\n"
+"# 어떤 소프트웨어를 설치하느냐에 따라, 혹은 설치하는 중에 무언가 잘못되는\n"
+"# 경우, 다른 질문을 물어볼 수도 있습니다. 물론 이 질문도 미리 설정할 수\n"
+"# 있습니다. 설치하는 동안 물어볼 수 있는 모든 질문의 목록을 받고 싶다면, \n"
+"# 설치를 한 다음에 다음 명령어를 실행하십시오:\n"
+"#   debconf-get-selections --installer > file\n"
+"#   debconf-get-selections >> file\n"
+"\n"
+"# 원한다면 다른 미리 설정 파일을 여기에 포함할 수도 있습니다. 포함되는\n"
+"# 파일에 들어 있는 설정은 이 파일에 들어 있는 기존의 설정보다 우선합니다.\n"
+"# 여러 개 파일을 공백으로 구분해서 쓸 수도 있습니다. 그러면 모든 파일을\n"
+"# 읽어들입니다. 포함되는 파일에도 각각 preseed/include가 들어 있을 수\n"
+"# 있습니다. 여기에 쓰는 파일이름은 상대경로이므로, 다음 파일은 다음 파일을\n"
+"# 포함하는 파일과 같은 디렉토리에서 가져옵니다.\n"
+"#d-i preseed/include                    string x.cfg\n"
+"\n"
+"# 더 유연하게 하고 싶을 때 다음과 같이 하면 쉘 명령어를 실행하고, 그\n"
+"# 명령어가 미리 설정 파일의 이름을 출력하면, 그 파일을 포함합니다.\n"
+"# 예를 들어, 특정 USB 저장 장치에 따라 다른 설정을 사용하려면 (이 경우에는\n"
+"# 내장 카드 리더) 다음과 같이 합니다;\n"
+"#d-i preseed/include_command            string \\\n"
+"#    if $(grep -q \"GUID: 0aec3050aec305000001a003\" /proc/scsi/usb-storage-"
+"*/*); \\\n"
+"#    then echo kraken.cfg; else echo otherusb.cfg; fi"
+
 #. Tag: title
-#: random-bits.xml:45
+#: random-bits.xml:66
 #, no-c-format
 msgid "Linux Devices"
 msgstr "리눅스 장치"
 
 #. Tag: para
-#: random-bits.xml:46
+#: random-bits.xml:67
 #, no-c-format
 msgid ""
 "In Linux you have various special files in <filename>/dev</filename>. These "
@@ -847,289 +1531,289 @@ msgstr ""
 "게 동작하기도 합니다. 다음은 중요한 장치 파일의 목록입니다."
 
 #. Tag: filename
-#: random-bits.xml:61
+#: random-bits.xml:82
 #, no-c-format
 msgid "<filename>fd0</filename>"
 msgstr "<filename>fd0</filename>"
 
 #. Tag: entry
-#: random-bits.xml:62
+#: random-bits.xml:83
 #, no-c-format
 msgid "First Floppy Drive"
 msgstr "첫번째 플로피 드라이브"
 
 #. Tag: filename
-#: random-bits.xml:64
+#: random-bits.xml:85
 #, no-c-format
 msgid "<filename>fd1</filename>"
 msgstr "<filename>fd1</filename>"
 
 #. Tag: entry
-#: random-bits.xml:65
+#: random-bits.xml:86
 #, no-c-format
 msgid "Second Floppy Drive"
 msgstr "두번째 플로피 드라이브"
 
 #. Tag: filename
-#: random-bits.xml:71
+#: random-bits.xml:92
 #, no-c-format
 msgid "<filename>hda</filename>"
 msgstr "<filename>hda</filename>"
 
 #. Tag: entry
-#: random-bits.xml:72
+#: random-bits.xml:93
 #, no-c-format
 msgid "IDE Hard disk / CD-ROM on the first IDE port (Master)"
 msgstr "첫번째 IDE 포트 마스터에 달린 IDE 하드디스크 / CD-ROM"
 
 #. Tag: filename
-#: random-bits.xml:74
+#: random-bits.xml:95
 #, no-c-format
 msgid "<filename>hdb</filename>"
 msgstr "<filename>hdb</filename>"
 
 #. Tag: entry
-#: random-bits.xml:75
+#: random-bits.xml:96
 #, no-c-format
 msgid "IDE Hard disk / CD-ROM on the first IDE port (Slave)"
 msgstr "첫번째 IDE 포트 슬레이브에 달린 IDE 하드디스크 / CD-ROM"
 
 #. Tag: filename
-#: random-bits.xml:77
+#: random-bits.xml:98
 #, no-c-format
 msgid "<filename>hdc</filename>"
 msgstr "<filename>hdc</filename>"
 
 #. Tag: entry
-#: random-bits.xml:78
+#: random-bits.xml:99
 #, no-c-format
 msgid "IDE Hard disk / CD-ROM on the second IDE port (Master)"
 msgstr "두번째 IDE 포트 마스터에 달린 IDE 하드디스크 / CD-ROM"
 
 #. Tag: filename
-#: random-bits.xml:80
+#: random-bits.xml:101
 #, no-c-format
 msgid "<filename>hdd</filename>"
 msgstr "<filename>hdd</filename>"
 
 #. Tag: entry
-#: random-bits.xml:81
+#: random-bits.xml:102
 #, no-c-format
 msgid "IDE Hard disk / CD-ROM on the second IDE port (Slave)"
 msgstr "두번째 IDE 포트 슬레이브에 달린 IDE 하드디스크 / CD-ROM"
 
 #. Tag: filename
-#: random-bits.xml:83
+#: random-bits.xml:104
 #, no-c-format
 msgid "hda1"
 msgstr "hda1"
 
 #. Tag: entry
-#: random-bits.xml:84
+#: random-bits.xml:105
 #, no-c-format
 msgid "First partition of the first IDE hard disk"
 msgstr "첫번째 IDE 하드디스크의 첫번째 파티션"
 
 #. Tag: filename
-#: random-bits.xml:86
+#: random-bits.xml:107
 #, no-c-format
 msgid "hdd15"
 msgstr "hdd15"
 
 #. Tag: entry
-#: random-bits.xml:87
+#: random-bits.xml:108
 #, no-c-format
 msgid "Fifteenth partition of the fourth IDE hard disk"
 msgstr "네번째 IDE 하드디스크의 열다섯번째 파티션"
 
 #. Tag: filename
-#: random-bits.xml:93
+#: random-bits.xml:114
 #, no-c-format
 msgid "<filename>sda</filename>"
 msgstr "<filename>sda</filename>"
 
 #. Tag: entry
-#: random-bits.xml:94
+#: random-bits.xml:115
 #, no-c-format
 msgid "SCSI Hard disk with lowest SCSI ID (e.g. 0)"
 msgstr "SCSI ID가 가장 낮은 (0번) SCSI 하드디스크"
 
 #. Tag: filename
-#: random-bits.xml:96
+#: random-bits.xml:117
 #, no-c-format
 msgid "<filename>sdb</filename>"
 msgstr "<filename>sdb</filename>"
 
 #. Tag: entry
-#: random-bits.xml:97
+#: random-bits.xml:118
 #, no-c-format
 msgid "SCSI Hard disk with next higher SCSI ID (e.g. 1)"
 msgstr "SCSI ID가 다음 번호인 (1번) SCSI 하드디스크"
 
 #. Tag: filename
-#: random-bits.xml:99
+#: random-bits.xml:120
 #, no-c-format
 msgid "<filename>sdc</filename>"
 msgstr "<filename>sdc</filename>"
 
 #. Tag: entry
-#: random-bits.xml:100
+#: random-bits.xml:121
 #, no-c-format
 msgid "SCSI Hard disk with next higher SCSI ID (e.g. 2)"
 msgstr "SCSI ID가 다음 번호인 (2번) SCSI 하드디스크"
 
 #. Tag: filename
-#: random-bits.xml:102
+#: random-bits.xml:123
 #, no-c-format
 msgid "sda1"
 msgstr "sda1"
 
 #. Tag: entry
-#: random-bits.xml:103
+#: random-bits.xml:124
 #, no-c-format
 msgid "First partition of the first SCSI hard disk"
 msgstr "첫번째 SCSI 하드디스크의 첫번째 파티션"
 
 #. Tag: filename
-#: random-bits.xml:105
+#: random-bits.xml:126
 #, no-c-format
 msgid "sdd10"
 msgstr "sdd10"
 
 #. Tag: entry
-#: random-bits.xml:106
+#: random-bits.xml:127
 #, no-c-format
 msgid "Tenth partition of the fourth SCSI hard disk"
 msgstr "네번째 SCSI 하드디스크의 열번째 파티션"
 
 #. Tag: filename
-#: random-bits.xml:112
+#: random-bits.xml:133
 #, no-c-format
 msgid "<filename>sr0</filename>"
 msgstr "<filename>sr0</filename>"
 
 #. Tag: entry
-#: random-bits.xml:113
+#: random-bits.xml:134
 #, no-c-format
 msgid "SCSI CD-ROM with the lowest SCSI ID"
 msgstr "SCSI ID가 가장 낮은 SCSI CD-ROM"
 
 #. Tag: filename
-#: random-bits.xml:115
+#: random-bits.xml:136
 #, no-c-format
 msgid "<filename>sr1</filename>"
 msgstr "<filename>sr1</filename>"
 
 #. Tag: entry
-#: random-bits.xml:116
+#: random-bits.xml:137
 #, no-c-format
 msgid "SCSI CD-ROM with the next higher SCSI ID"
 msgstr "SCSI ID가 다음 번호인 (2번) SCSI CD-ROM"
 
 #. Tag: filename
-#: random-bits.xml:122
+#: random-bits.xml:143
 #, no-c-format
 msgid "ttyS0"
 msgstr "ttyS0"
 
 #. Tag: entry
-#: random-bits.xml:123
+#: random-bits.xml:144
 #, no-c-format
 msgid "Serial port 0, COM1 under MS-DOS"
 msgstr "시리얼 포트 0, MS-DOS에서는 COM1"
 
 #. Tag: filename
-#: random-bits.xml:125
+#: random-bits.xml:146
 #, no-c-format
 msgid "ttyS1"
 msgstr "ttyS1"
 
 #. Tag: entry
-#: random-bits.xml:126
+#: random-bits.xml:147
 #, no-c-format
 msgid "Serial port 1, COM2 under MS-DOS"
 msgstr "시리얼 포트 1, MS-DOS에서는 COM2"
 
 #. Tag: filename
-#: random-bits.xml:128
+#: random-bits.xml:149
 #, no-c-format
 msgid "psaux"
 msgstr "psaux"
 
 #. Tag: entry
-#: random-bits.xml:129
+#: random-bits.xml:150
 #, no-c-format
 msgid "PS/2 mouse device"
 msgstr "PS/2 마우스 장치"
 
 #. Tag: filename
-#: random-bits.xml:131
+#: random-bits.xml:152
 #, no-c-format
 msgid "gpmdata"
 msgstr "gpmdata"
 
 #. Tag: entry
-#: random-bits.xml:132
+#: random-bits.xml:153
 #, no-c-format
 msgid "Pseudo device, repeater data from GPM (mouse) daemon"
 msgstr "가장 장치, GPM (마우스) 데몬에서 나온 데이터의 리피터"
 
 #. Tag: filename
-#: random-bits.xml:138
+#: random-bits.xml:159
 #, no-c-format
 msgid "cdrom"
 msgstr "cdrom"
 
 #. Tag: entry
-#: random-bits.xml:139
+#: random-bits.xml:160
 #, no-c-format
 msgid "Symbolic link to the CD-ROM drive"
 msgstr "CD-ROM 드라이브에 대한 심볼릭 링크"
 
 #. Tag: filename
-#: random-bits.xml:141
+#: random-bits.xml:162
 #, no-c-format
 msgid "mouse"
 msgstr "마우스"
 
 #. Tag: entry
-#: random-bits.xml:142
+#: random-bits.xml:163
 #, no-c-format
 msgid "Symbolic link to the mouse device file"
 msgstr "마우스 장치 파일에 대한 심볼릭 링크"
 
 #. Tag: filename
-#: random-bits.xml:148
+#: random-bits.xml:169
 #, no-c-format
 msgid "null"
 msgstr "null"
 
 #. Tag: entry
-#: random-bits.xml:149
+#: random-bits.xml:170
 #, no-c-format
 msgid "Everything pointed to this device will disappear"
 msgstr "이 장치로 들어간 데이터는 모두 사라집니다"
 
 #. Tag: filename
-#: random-bits.xml:151
+#: random-bits.xml:172
 #, no-c-format
 msgid "zero"
 msgstr "zero"
 
 #. Tag: entry
-#: random-bits.xml:152
+#: random-bits.xml:173
 #, no-c-format
 msgid "One can endlessly read zeros out of this device"
 msgstr "이 장치에서 끊임없이 0을 읽을 수 있습니다"
 
 #. Tag: title
-#: random-bits.xml:159
+#: random-bits.xml:180
 #, no-c-format
 msgid "Setting Up Your Mouse"
 msgstr "마우스 설정하기"
 
 #. Tag: para
-#: random-bits.xml:161
+#: random-bits.xml:182
 #, no-c-format
 msgid ""
 "The mouse can be used in both the Linux console (with gpm) and the X window "
@@ -1159,7 +1843,7 @@ msgstr ""
 "콜로 합니다."
 
 #. Tag: para
-#: random-bits.xml:173
+#: random-bits.xml:194
 #, no-c-format
 msgid ""
 "This approach to use gpm even in X has advantages when the mouse is "
@@ -1176,7 +1860,7 @@ msgstr ""
 "를 다시 연결합니다."
 
 #. Tag: para
-#: random-bits.xml:182
+#: random-bits.xml:203
 #, no-c-format
 msgid ""
 "If gpm is disabled or not installed with some reason, make sure to set X to "
@@ -1194,7 +1878,7 @@ msgstr ""
 "\">README.mouse</ulink>를 참고하십시오."
 
 #. Tag: para
-#: random-bits.xml:192
+#: random-bits.xml:213
 #, no-c-format
 msgid ""
 "For PowerPC, in <filename>/etc/X11/XF86Config</filename> or <filename>/etc/"
@@ -1206,7 +1890,7 @@ msgstr ""
 "mice\"</userinput>로 하십시오."
 
 #. Tag: para
-#: random-bits.xml:198
+#: random-bits.xml:219
 #, no-c-format
 msgid ""
 "Modern kernels give you the capability to emulate a three-button mouse when "
@@ -1217,7 +1901,7 @@ msgstr ""
 "습니다. 다음 줄을 <filename>/etc/sysctl.conf</filename> 파일에 추가하십시오."
 
 #. Tag: screen
-#: random-bits.xml:204
+#: random-bits.xml:225
 #, fuzzy, no-c-format
 msgid ""
 "# 3-button mouse emulation\n"
@@ -1239,13 +1923,13 @@ msgstr ""
 "# 키가 다르면, showkey로 코드가 무엇인지 알 수 있습니다."
 
 #. Tag: title
-#: random-bits.xml:211
+#: random-bits.xml:232
 #, no-c-format
 msgid "Disk Space Needed for Tasks"
 msgstr "작업마다 필요한 디스크 공간"
 
 #. Tag: para
-#: random-bits.xml:223
+#: random-bits.xml:244
 #, fuzzy, no-c-format
 msgid ""
 "The base installation for i386 using the default 2.4 kernel, including all "
@@ -1255,7 +1939,7 @@ msgstr ""
 "러미를 합쳐서 573MB의 디스크 공간을 차지합니다."
 
 #. Tag: para
-#: random-bits.xml:228
+#: random-bits.xml:249
 #, no-c-format
 msgid ""
 "The following table lists sizes reported by aptitude for the tasks listed in "
@@ -1268,7 +1952,7 @@ msgstr ""
 "자를 합친 전체 크기보다는 작을 수도 있습니다."
 
 #. Tag: para
-#: random-bits.xml:235
+#: random-bits.xml:256
 #, fuzzy, no-c-format
 msgid ""
 "Note that you will need to add the sizes listed in the table to the size of "
@@ -1283,193 +1967,193 @@ msgstr ""
 "시적으로) <filename>/var</filename>에 필요합니다."
 
 #. Tag: entry
-#: random-bits.xml:248
+#: random-bits.xml:269
 #, no-c-format
 msgid "Task"
 msgstr "작업"
 
 #. Tag: entry
-#: random-bits.xml:249
+#: random-bits.xml:270
 #, no-c-format
 msgid "Installed size (MB)"
 msgstr "설치 크기 (MB)"
 
 #. Tag: entry
-#: random-bits.xml:250
+#: random-bits.xml:271
 #, no-c-format
 msgid "Download size (MB)"
 msgstr "다운로드 크기 (MB)"
 
 #. Tag: entry
-#: random-bits.xml:251
+#: random-bits.xml:272
 #, no-c-format
 msgid "Space needed to install (MB)"
 msgstr "설치하는데 필요한 공간 (MB)"
 
 #. Tag: entry
-#: random-bits.xml:257
+#: random-bits.xml:278
 #, no-c-format
 msgid "Desktop"
 msgstr "데스크탑"
 
 #. Tag: entry
-#: random-bits.xml:258
+#: random-bits.xml:279
 #, no-c-format
 msgid "1392"
 msgstr "1392"
 
 #. Tag: entry
-#: random-bits.xml:259
+#: random-bits.xml:280
 #, no-c-format
 msgid "<entry>460</entry>"
 msgstr "<entry>460</entry>"
 
 #. Tag: entry
-#: random-bits.xml:260
+#: random-bits.xml:281
 #, no-c-format
 msgid "1852"
 msgstr "1852"
 
 #. Tag: entry
-#: random-bits.xml:264
+#: random-bits.xml:285
 #, no-c-format
 msgid "Web server"
 msgstr "웹 서버"
 
 #. Tag: entry
-#: random-bits.xml:265
+#: random-bits.xml:286
 #, no-c-format
 msgid "<entry>36</entry>"
 msgstr "<entry>36</entry>"
 
 #. Tag: entry
-#: random-bits.xml:266
+#: random-bits.xml:287
 #, no-c-format
 msgid "<entry>12</entry>"
 msgstr "<entry>12</entry>"
 
 #. Tag: entry
-#: random-bits.xml:267
+#: random-bits.xml:288
 #, no-c-format
 msgid "<entry>48</entry>"
 msgstr "<entry>48</entry>"
 
 #. Tag: entry
-#: random-bits.xml:271
+#: random-bits.xml:292
 #, no-c-format
 msgid "Print server"
 msgstr "인쇄 서버"
 
 #. Tag: entry
-#: random-bits.xml:272
+#: random-bits.xml:293
 #, no-c-format
 msgid "<entry>168</entry>"
 msgstr "<entry>168</entry>"
 
 #. Tag: entry
-#: random-bits.xml:273
+#: random-bits.xml:294
 #, no-c-format
 msgid "<entry>58</entry>"
 msgstr "<entry>58</entry>"
 
 #. Tag: entry
-#: random-bits.xml:274
+#: random-bits.xml:295
 #, no-c-format
 msgid "<entry>226</entry>"
 msgstr "<entry>226</entry>"
 
 #. Tag: entry
-#: random-bits.xml:278
+#: random-bits.xml:299
 #, no-c-format
 msgid "DNS server"
 msgstr "DNS 서버"
 
 #. Tag: entry
-#: random-bits.xml:279
+#: random-bits.xml:300
 #, no-c-format
 msgid "<entry>2</entry>"
 msgstr "<entry>2</entry>"
 
 #. Tag: entry
-#: random-bits.xml:280
+#: random-bits.xml:301
 #, no-c-format
 msgid "<entry>1</entry>"
 msgstr "<entry>1</entry>"
 
 #. Tag: entry
-#: random-bits.xml:281 random-bits.xml:294
+#: random-bits.xml:302 random-bits.xml:315
 #, no-c-format
 msgid "<entry>3</entry>"
 msgstr "<entry>3</entry>"
 
 #. Tag: entry
-#: random-bits.xml:285
+#: random-bits.xml:306
 #, no-c-format
 msgid "File server"
 msgstr "파일 서버"
 
 #. Tag: entry
-#: random-bits.xml:286
+#: random-bits.xml:307
 #, no-c-format
 msgid "<entry>47</entry>"
 msgstr "<entry>47</entry>"
 
 #. Tag: entry
-#: random-bits.xml:287
+#: random-bits.xml:308
 #, no-c-format
 msgid "<entry>24</entry>"
 msgstr "<entry>24</entry>"
 
 #. Tag: entry
-#: random-bits.xml:288
+#: random-bits.xml:309
 #, no-c-format
 msgid "<entry>71</entry>"
 msgstr "<entry>71</entry>"
 
 #. Tag: entry
-#: random-bits.xml:292
+#: random-bits.xml:313
 #, no-c-format
 msgid "Mail server"
 msgstr "메일 서버"
 
 #. Tag: entry
-#: random-bits.xml:293
+#: random-bits.xml:314
 #, no-c-format
 msgid "<entry>10</entry>"
 msgstr "<entry>10</entry>"
 
 #. Tag: entry
-#: random-bits.xml:295
+#: random-bits.xml:316
 #, no-c-format
 msgid "<entry>13</entry>"
 msgstr "<entry>13</entry>"
 
 #. Tag: entry
-#: random-bits.xml:299
+#: random-bits.xml:320
 #, no-c-format
 msgid "SQL database"
 msgstr "SQL 데이터베이스"
 
 #. Tag: entry
-#: random-bits.xml:300
+#: random-bits.xml:321
 #, no-c-format
 msgid "<entry>66</entry>"
 msgstr "<entry>66</entry>"
 
 #. Tag: entry
-#: random-bits.xml:301
+#: random-bits.xml:322
 #, no-c-format
 msgid "<entry>21</entry>"
 msgstr "<entry>21</entry>"
 
 #. Tag: entry
-#: random-bits.xml:302
+#: random-bits.xml:323
 #, no-c-format
 msgid "<entry>87</entry>"
 msgstr "<entry>87</entry>"
 
 #. Tag: para
-#: random-bits.xml:308
+#: random-bits.xml:329
 #, no-c-format
 msgid ""
 "The <emphasis>Desktop</emphasis> task will install both the Gnome and KDE "
@@ -1479,7 +2163,7 @@ msgstr ""
 "다."
 
 #. Tag: para
-#: random-bits.xml:315
+#: random-bits.xml:336
 #, no-c-format
 msgid ""
 "If you install in a language other than English, <command>tasksel</command> "
@@ -1493,13 +2177,13 @@ msgstr ""
 "공간이 있어야 합니다."
 
 #. Tag: title
-#: random-bits.xml:330
+#: random-bits.xml:351
 #, no-c-format
 msgid "Installing &debian; from a Unix/Linux System"
 msgstr "유닉스/리눅스 시스템에서 &debian; 설치하기"
 
 #. Tag: para
-#: random-bits.xml:332
+#: random-bits.xml:353
 #, fuzzy, no-c-format
 msgid ""
 "This section explains how to install &debian; from an existing Unix or Linux "
@@ -1521,7 +2205,7 @@ msgstr ""
 "chroot에서 입력하는 명령어를 말합니다."
 
 #. Tag: para
-#: random-bits.xml:344
+#: random-bits.xml:365
 #, fuzzy, no-c-format
 msgid ""
 "Once you've got the new Debian system configured to your preference, you can "
@@ -1536,13 +2220,13 @@ msgstr ""
 "하지 않는 하드웨어에 설치하는 쉬운 방법이기도 합니다."
 
 #. Tag: title
-#: random-bits.xml:356
+#: random-bits.xml:377
 #, no-c-format
 msgid "Getting Started"
 msgstr "시작하기"
 
 #. Tag: para
-#: random-bits.xml:357
+#: random-bits.xml:378
 #, no-c-format
 msgid ""
 "With your current *nix partitioning tools, repartition the hard drive as "
@@ -1555,7 +2239,7 @@ msgstr ""
 "는 최소 150MB의 공간이 필요하고 X를 설치한다면 최소 300MB가 필요합니다."
 
 #. Tag: para
-#: random-bits.xml:364
+#: random-bits.xml:385
 #, no-c-format
 msgid ""
 "To create file systems on your partitions. For example, to create an ext3 "
@@ -1573,7 +2257,7 @@ msgstr ""
 "j</userinput> 옵션을 빼십시오."
 
 #. Tag: para
-#: random-bits.xml:374
+#: random-bits.xml:395
 #, no-c-format
 msgid ""
 "Initialize and activate swap (substitute the partition number for your "
@@ -1596,7 +2280,7 @@ msgstr ""
 "트 위치 이름은 마음대로 정한 것이고, 아래에서 계속 사용합니다."
 
 #. Tag: screen
-#: random-bits.xml:386
+#: random-bits.xml:407
 #, no-c-format
 msgid ""
 "# mkdir /mnt/debinst\n"
@@ -1606,13 +2290,13 @@ msgstr ""
 "# mount /dev/hda6 /mnt/debinst"
 
 #. Tag: title
-#: random-bits.xml:392
+#: random-bits.xml:413
 #, no-c-format
 msgid "Install <command>debootstrap</command>"
 msgstr "<command>debootstrap</command> 설치"
 
 #. Tag: para
-#: random-bits.xml:393
+#: random-bits.xml:414
 #, no-c-format
 msgid ""
 "The tool that the Debian installer uses, which is recognized as the official "
@@ -1630,7 +2314,7 @@ msgstr ""
 "고 <command>debootstrap</command>을 내려 받고 설치하십시오."
 
 #. Tag: para
-#: random-bits.xml:403
+#: random-bits.xml:424
 #, no-c-format
 msgid ""
 "If you have an rpm-based system, you can use alien to convert the .deb into ."
@@ -1642,7 +2326,7 @@ msgstr ""
 "RPM 버전을 내려 받으십시오."
 
 #. Tag: para
-#: random-bits.xml:409
+#: random-bits.xml:430
 #, no-c-format
 msgid ""
 "Or, you can use the following procedure to install it manually. Make a work "
@@ -1668,7 +2352,7 @@ msgstr ""
 "한이 필요할 것입니다."
 
 #. Tag: screen
-#: random-bits.xml:424
+#: random-bits.xml:445
 #, fuzzy, no-c-format
 msgid ""
 "# ar -x debootstrap_0.X.X_arch.deb\n"
@@ -1680,13 +2364,13 @@ msgstr ""
 "# zcat /full-path-to-work/work/data.tar.gz | tar xv"
 
 #. Tag: title
-#: random-bits.xml:430
+#: random-bits.xml:451
 #, no-c-format
 msgid "Run <command>debootstrap</command>"
 msgstr "<command>debootstrap</command> 실행"
 
 #. Tag: para
-#: random-bits.xml:431
+#: random-bits.xml:452
 #, no-c-format
 msgid ""
 "<command>debootstrap</command> can download the needed files directly from "
@@ -1702,7 +2386,7 @@ msgstr ""
 "org/misc/README.mirror\"></ulink>에 있습니다."
 
 #. Tag: para
-#: random-bits.xml:440
+#: random-bits.xml:461
 #, no-c-format
 msgid ""
 "If you have a &releasename; &debian; CD mounted at <filename>/cdrom</"
@@ -1714,7 +2398,7 @@ msgstr ""
 "userinput>"
 
 #. Tag: para
-#: random-bits.xml:446
+#: random-bits.xml:467
 #, no-c-format
 msgid ""
 "Substitute one of the following for <replaceable>ARCH</replaceable> in the "
@@ -1733,7 +2417,7 @@ msgstr ""
 "<userinput>s390</userinput>, <userinput>sparc</userinput>."
 
 #. Tag: screen
-#: random-bits.xml:463
+#: random-bits.xml:484
 #, no-c-format
 msgid ""
 "# /usr/sbin/debootstrap --arch ARCH &releasename; \\\n"
@@ -1743,13 +2427,13 @@ msgstr ""
 "     /mnt/debinst http://http.us.debian.org/debian"
 
 #. Tag: title
-#: random-bits.xml:469
+#: random-bits.xml:490
 #, no-c-format
 msgid "Configure The Base System"
 msgstr "베이스 시스템 설정"
 
 #. Tag: para
-#: random-bits.xml:470
+#: random-bits.xml:491
 #, no-c-format
 msgid ""
 "Now you've got a real Debian system, though rather lean, on disk. "
@@ -1759,19 +2443,19 @@ msgstr ""
 "로 <command>chroot</command>하십시오:"
 
 #. Tag: screen
-#: random-bits.xml:475
+#: random-bits.xml:496
 #, fuzzy, no-c-format
 msgid "# LANG= chroot /mnt/debinst /bin/bash"
 msgstr "# chroot /mnt/debinst /bin/bash"
 
 #. Tag: title
-#: random-bits.xml:480
+#: random-bits.xml:501
 #, no-c-format
 msgid "Mount Partitions"
 msgstr "파티션 마운트하기"
 
 #. Tag: para
-#: random-bits.xml:481
+#: random-bits.xml:502
 #, no-c-format
 msgid ""
 "You need to create <filename>/etc/fstab</filename>. "
@@ -1835,37 +2519,37 @@ msgstr ""
 "오."
 
 #. Tag: screen
-#: random-bits.xml:502
+#: random-bits.xml:523
 #, no-c-format
 msgid "# mount -t proc proc /proc"
 msgstr "# mount -t proc proc /proc"
 
 #. Tag: title
-#: random-bits.xml:508
+#: random-bits.xml:529
 #, no-c-format
 msgid "Configure Keyboard"
 msgstr "키보드 설정"
 
 #. Tag: para
-#: random-bits.xml:509
+#: random-bits.xml:530
 #, no-c-format
 msgid "To configure your keyboard:"
 msgstr "키보드를 설정하려면:"
 
 #. Tag: screen
-#: random-bits.xml:513
+#: random-bits.xml:534
 #, no-c-format
 msgid "# dpkg-reconfigure console-data"
 msgstr "# dpkg-reconfigure console-data"
 
 #. Tag: title
-#: random-bits.xml:519
+#: random-bits.xml:540
 #, no-c-format
 msgid "Configure Networking"
 msgstr "네트워크 설정하기"
 
 #. Tag: para
-#: random-bits.xml:520
+#: random-bits.xml:541
 #, fuzzy, no-c-format
 msgid ""
 "To configure networking, edit <filename>/etc/network/interfaces</filename>, "
@@ -1963,13 +2647,13 @@ msgstr ""
 "다."
 
 #. Tag: title
-#: random-bits.xml:556
+#: random-bits.xml:577
 #, no-c-format
 msgid "Configure Timezone, Users, and APT"
 msgstr "시간대, 사용자, APT 설정하기"
 
 #. Tag: para
-#: random-bits.xml:557
+#: random-bits.xml:578
 #, no-c-format
 msgid ""
 "Set your timezone, add a normal user, and choose your <command>apt</command> "
@@ -1979,19 +2663,19 @@ msgstr ""
 "command> 소스를 선택하십시오"
 
 #. Tag: screen
-#: random-bits.xml:562
+#: random-bits.xml:583
 #, no-c-format
 msgid "# /usr/sbin/base-config new"
 msgstr "# /usr/sbin/base-config new"
 
 #. Tag: title
-#: random-bits.xml:568
+#: random-bits.xml:589
 #, no-c-format
 msgid "Configure Locales"
 msgstr "로케일 설정하기"
 
 #. Tag: para
-#: random-bits.xml:569
+#: random-bits.xml:590
 #, no-c-format
 msgid ""
 "To configure your locale settings to use a language other than English, "
@@ -2012,13 +2696,13 @@ msgstr ""
 "케일을 사용하려면 그 전에 적당한 지역화 HOWTO를 참고하십시오."
 
 #. Tag: title
-#: random-bits.xml:585
+#: random-bits.xml:606
 #, no-c-format
 msgid "Install a Kernel"
 msgstr "커널 설치"
 
 #. Tag: para
-#: random-bits.xml:586
+#: random-bits.xml:607
 #, no-c-format
 msgid ""
 "If you intend to boot this system, you probably want a Linux kernel and a "
@@ -2034,7 +2718,7 @@ msgstr ""
 "</screen></informalexample> 그리고 꾸러미 이름을 하나 골라서 설치하십시오."
 
 #. Tag: screen
-#: random-bits.xml:595
+#: random-bits.xml:616
 #, no-c-format
 msgid ""
 "# apt-get install kernel-image-<replaceable>2.X.X-arch-etc</replaceable>"
@@ -2042,13 +2726,13 @@ msgstr ""
 "# apt-get install kernel-image-<replaceable>2.X.X-아키텍쳐-따위</replaceable>"
 
 #. Tag: title
-#: random-bits.xml:601
+#: random-bits.xml:622
 #, no-c-format
 msgid "Set up the Boot Loader"
 msgstr "부트로더 설정하기"
 
 #. Tag: para
-#: random-bits.xml:602
+#: random-bits.xml:623
 #, no-c-format
 msgid ""
 "To make your &debian; system bootable, set up your boot loader to load the "
@@ -2062,7 +2746,7 @@ msgstr ""
 "를 설치할 수 있습니다."
 
 #. Tag: para
-#: random-bits.xml:609
+#: random-bits.xml:630
 #, no-c-format
 msgid ""
 "Check <userinput>info grub</userinput> or <userinput>man lilo.conf</"
@@ -2084,13 +2768,13 @@ msgstr ""
 "일을 사용하게 됩니다.)"
 
 #. Tag: para
-#: random-bits.xml:620
+#: random-bits.xml:641
 #, no-c-format
 msgid "Here is a basic <filename>/etc/lilo.conf</filename> as an example:"
 msgstr "다음은 기본적인 <filename>/etc/lilo.conf</filename> 예제입니다:"
 
 #. Tag: screen
-#: random-bits.xml:624
+#: random-bits.xml:645
 #, no-c-format
 msgid ""
 "boot=/dev/hda6\n"
@@ -2110,7 +2794,7 @@ msgstr ""
 "label=Debian"
 
 #. Tag: para
-#: random-bits.xml:626
+#: random-bits.xml:647
 #, no-c-format
 msgid ""
 "Check <userinput>man yaboot.conf</userinput> for instructions on setting up "
@@ -2128,7 +2812,7 @@ msgstr ""
 "<filename>yaboot.conf</filename> 파일을 사용하게 됩니다.)"
 
 #. Tag: para
-#: random-bits.xml:636
+#: random-bits.xml:657
 #, no-c-format
 msgid ""
 "Here is a basic <filename>/etc/yaboot.conf</filename> as an example: "
@@ -2158,13 +2842,13 @@ msgstr ""
 "을 <userinput>hd:</userinput> 대신에 써야 할 수도 있습니다."
 
 #. Tag: title
-#: random-bits.xml:654
+#: random-bits.xml:675
 #, fuzzy, no-c-format
 msgid "Installing &debian; over Parallel Line IP (PLIP)"
 msgstr "유닉스/리눅스 시스템에서 &debian; 설치하기"
 
 #. Tag: para
-#: random-bits.xml:656
+#: random-bits.xml:677
 #, no-c-format
 msgid ""
 "This section explains how to install &debian; on a computer without Ethernet "
@@ -2174,7 +2858,7 @@ msgid ""
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:664
+#: random-bits.xml:685
 #, no-c-format
 msgid ""
 "In the example in this appendix we will set up a PLIP connection using a "
@@ -2185,7 +2869,7 @@ msgid ""
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:672
+#: random-bits.xml:693
 #, no-c-format
 msgid ""
 "The PLIP connection set up during the installation will also be available "
@@ -2194,7 +2878,7 @@ msgid ""
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:677
+#: random-bits.xml:698
 #, no-c-format
 msgid ""
 "Before you start, you will need to check the BIOS configuration (IO base "
@@ -2204,13 +2888,13 @@ msgid ""
 msgstr ""
 
 #. Tag: title
-#: random-bits.xml:687
+#: random-bits.xml:708
 #, no-c-format
 msgid "Requirements"
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:690
+#: random-bits.xml:711
 #, no-c-format
 msgid ""
 "A target computer, called <emphasis>target</emphasis>, where Debian will be "
@@ -2218,13 +2902,13 @@ msgid ""
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:696
+#: random-bits.xml:717
 #, no-c-format
 msgid "System installation media; see <xref linkend=\"installation-media\"/>."
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:701
+#: random-bits.xml:722
 #, no-c-format
 msgid ""
 "Another computer connected to the Internet, called <emphasis>source</"
@@ -2232,7 +2916,7 @@ msgid ""
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:707
+#: random-bits.xml:728
 #, no-c-format
 msgid ""
 "A DB-25 Null-Modem cable. See the <ulink url=\"&url-plip-install-howto;"
@@ -2241,13 +2925,13 @@ msgid ""
 msgstr ""
 
 #. Tag: title
-#: random-bits.xml:719
+#: random-bits.xml:740
 #, fuzzy, no-c-format
 msgid "Setting up source"
 msgstr "마우스 설정하기"
 
 #. Tag: para
-#: random-bits.xml:720
+#: random-bits.xml:741
 #, no-c-format
 msgid ""
 "The following shell script is a simple example of how to configure the "
@@ -2255,7 +2939,7 @@ msgid ""
 msgstr ""
 
 #. Tag: screen
-#: random-bits.xml:725
+#: random-bits.xml:746
 #, no-c-format
 msgid ""
 "#!/bin/sh\n"
@@ -2279,13 +2963,13 @@ msgid ""
 msgstr ""
 
 #. Tag: title
-#: random-bits.xml:731
+#: random-bits.xml:752
 #, fuzzy, no-c-format
 msgid "Installing target"
 msgstr "커널 설치"
 
 #. Tag: para
-#: random-bits.xml:732
+#: random-bits.xml:753
 #, no-c-format
 msgid ""
 "Boot the installation media. The installation needs to be run in expert "
@@ -2294,13 +2978,13 @@ msgid ""
 msgstr ""
 
 #. Tag: guimenuitem
-#: random-bits.xml:744
+#: random-bits.xml:765
 #, no-c-format
 msgid "Load installer components"
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:746
+#: random-bits.xml:767
 #, no-c-format
 msgid ""
 "Select the <userinput>plip-modules</userinput> option from the list; this "
@@ -2308,13 +2992,13 @@ msgid ""
 msgstr ""
 
 #. Tag: guimenuitem
-#: random-bits.xml:754
+#: random-bits.xml:775
 #, no-c-format
 msgid "Detect network hardware"
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:759
+#: random-bits.xml:780
 #, no-c-format
 msgid ""
 "If target <emphasis>does</emphasis> have a network card, a list of driver "
@@ -2324,13 +3008,13 @@ msgid ""
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:768
+#: random-bits.xml:789
 #, no-c-format
 msgid "Prompt for module parameters: Yes"
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:773
+#: random-bits.xml:794
 #, no-c-format
 msgid ""
 "Because no network card was detected/selected earlier, the installer will "
@@ -2339,7 +3023,7 @@ msgid ""
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:780
+#: random-bits.xml:801
 #, no-c-format
 msgid ""
 "Additional parameters for module parport_pc: "
@@ -2347,32 +3031,32 @@ msgid ""
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:786
+#: random-bits.xml:807
 #, no-c-format
 msgid "Additional parameters for module plip: leave empty"
 msgstr ""
 
 #. Tag: guimenuitem
-#: random-bits.xml:796
+#: random-bits.xml:817
 #, fuzzy, no-c-format
 msgid "Configure the network"
 msgstr "네트워크 설정하기"
 
 #. Tag: para
-#: random-bits.xml:799
+#: random-bits.xml:820
 #, no-c-format
 msgid "Auto-configure network with DHCP: No"
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:804
+#: random-bits.xml:825
 #, no-c-format
 msgid ""
 "IP address: <userinput><replaceable>192.168.0.1</replaceable></userinput>"
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:809
+#: random-bits.xml:830
 #, no-c-format
 msgid ""
 "Point-to-point address: <userinput><replaceable>192.168.0.2</replaceable></"
@@ -2380,7 +3064,7 @@ msgid ""
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:815
+#: random-bits.xml:836
 #, no-c-format
 msgid ""
 "Name server addresses: you can enter the same addresses used on source (see "
