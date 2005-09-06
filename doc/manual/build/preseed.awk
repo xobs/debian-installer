@@ -26,10 +26,10 @@ BEGIN {
 
 # Handling of lines not ending with a line continuation character
 ! /\\[[:space:]]*$/ {
-    if ( lckeep == "1" ) {
-        print $0
-    } else {
-        if ( inexample == "1" ) {
+    if ( inexample == "1" ) {
+        if ( lckeep == "1" ) {
+            print $0
+        } else {
             if ( inseq == "1" ) {
                 sub(/^[[:space:]]*/, "")
                 sub(/^#[[:space:]]*/, "")
@@ -45,10 +45,10 @@ BEGIN {
 
 # Handling of lines ending with a line continuation character
 /\\[[:space:]]*$/ {
-    if ( lckeep == "1" ) {
-        print $0
-    } else {
-        if ( inexample == "1" ) {
+    if ( inexample == "1" ) {
+        if ( lckeep == "1" ) {
+            print $0
+        } else {
             if ( inseq == "1" ) {
                 sub(/^[[:space:]]*/, "")
                 sub(/^#[[:space:]]*/, "")
