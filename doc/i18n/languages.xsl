@@ -12,6 +12,7 @@
   <p>The following table lists all <a href="http://www.debian.org/devel/debian-installer">Debian Installer</a> translators.</p>
   <p>Current number of fully supported languages: <xsl:value-of select="count(//language_entry[@supported = 'true'])"/></p>
   <p>Total number of languages in the table: <xsl:value-of select="count(//language_entry)"/></p>
+  <p>D-I now supports <xsl:value-of select="count(//language_entry) div 6400000000"/>% of world popultaion.</p>
 <table border="1">
 <tr>
 <th>Code</th>
@@ -19,6 +20,7 @@
 <th>Supported</th>
 <th>Coordinator</th>
 <th>Backup Coordinator</th>
+<th>Number of Speakers</th>
 <th>Repository</th>
 </tr>
 <xsl:apply-templates/>
@@ -60,6 +62,7 @@
 </xsl:if>
 &#160;
 </td>
+<td><xsl:value-of select="@speakers"/>&#160;</td>
 <td><xsl:value-of select="@team_repository"/>&#160;</td>
 </tr>
 </xsl:template>
