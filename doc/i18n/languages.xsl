@@ -27,6 +27,15 @@
 </tr>
 <xsl:apply-templates/>
 </table>
+  <p>The number of speakers per language comes from data by: <strong>Gordon,
+     Raymond G., Jr. (ed.), 2005.</strong> <em>Ethnologue: Languages of the World, Fifteenth
+     edition.</em> Dallas, Tex.: SIL International. Online version:
+     <a href="http://www.ethnologue.com/">http://www.ethnologue.com/</a>.</p>
+  <p>The second number of speakers are data by Ethnologue <em>corrected</em>
+by Debian Installer developers when they feel Ethnologue data to be
+inaccurate. Ethnologue often focuses on native speakers of a given language
+which often minimizes the number of speakers of that language.</p>
+<!-- World population counter comes from www.geohive.com as of 2005-09-05 -->
 </body>
 </html>
 </xsl:template>
@@ -68,14 +77,5 @@
 <td><xsl:value-of select="@speakers_corr"/>&#160;</td>
 <td><xsl:value-of select="@team_repository"/>&#160;</td>
 </tr>
-  <p>The number of speakers per language comes from data by: <strong>Gordon,
-     Raymond G., Jr. (ed.), 2005.</strong> <em>Ethnologue: Languages of the World, Fifteenth
-     edition.</em> Dallas, Tex.: SIL International. Online version:
-     <a href="http://www.ethnologue.com/">http://www.ethnologue.com/</a>.</p>
-  <p>The second number of speakers are data by Ethnologue <em>corrected</em>
-by Debian Installer developers when they feel Ethnologue data to be
-inaccurate. Ethnologue often focuses on native speakers of a given language
-which often minimizes the number of speakers of that language.</p>
-<!-- World population counter comes from www.geohive.com as of 2005-09-05 -->
 </xsl:template>
 </xsl:transform>
