@@ -12,8 +12,8 @@
   <p>The following table lists all <a href="http://www.debian.org/devel/debian-installer">Debian Installer</a> translators.</p>
   <p>Current number of fully supported languages: <xsl:value-of select="count(//language_entry[@supported = 'true'])"/></p>
   <p>Total number of languages in the table: <xsl:value-of select="count(//language_entry)"/></p>
-  <p>D-I now supports <xsl:value-of select="sum(//@speakers[../@supported = 'true']) div 6459821923 * 100"/>% to <xsl:value-of select="sum(//@speakers_corr[../@supported = 'true']) div 6459821923 * 100"/>% of world population.</p>
-  <p>With future languages, D-I will support <xsl:value-of select="sum(//@speakers) div 6459821923 * 100"/>% to <xsl:value-of select="sum(//@speakers_corr) div 6459821923 * 100"/>% of world population.</p>
+  <p>D-I now supports <xsl:value-of select="round(sum(//@speakers[../@supported = 'true']) div 6459821923 * 100)"/>% to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'true']) div 6459821923 * 100)"/>% of world population.</p>
+  <p>With future languages, D-I will support <xsl:value-of select="round(sum(//@speakers) div 6459821923 * 100)"/>% to <xsl:value-of select="round(sum(//@speakers_corr) div 6459821923 * 100)"/>% of world population.</p>
 <table border="1">
 <tr>
 <th>Code</th>
