@@ -1,95 +1,100 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 28672 untranslated -->
+<!-- original version: 28672 -->
 
    <sect3 id="lvmcfg">
-   <title>Configuring Logical Volume Manager (LVM)</title>
+   <title>Configurant el Gestor de Volums Lògics (LVM)</title>
 <para>
 
-If you are working with computers at the level of system administrator
-or <quote>advanced</quote> user, you have surely seen the situation
-where some disk partition (usually the most important one) was short on
-space, while some other partition was grossly underused and you had to
-manage this situation with moving stuff around, symlinking, etc.
+Si esteu utilitzant l'ordinador com a administrador de sistemes o
+usuari <quote>avançat</quote>, segur que us heu trobat en la situació
+que alguna partició del disc (normalment la més important) ha
+exhaurit tot l'espai lliure, mentre que d'altres particions estan
+molt poc utilitzades i heu hagut de reconduir la situació movent
+continguts, creant enllaços simbòlics, etc.
 
 </para><para>
 
-To avoid the described situation you can use Logical Volume Manager
-(LVM). Simply said, with LVM you can combine your partitions
-(<firstterm>physical volumes</firstterm> in LVM lingo) to form
-a virtual disc (so called <firstterm>volume group</firstterm>), which
-can then be divided into virtual partitions (<firstterm>logical
-volumes</firstterm>). The point is that logical volumes (and of course
-underlying volume groups) can span across several physical discs.
+Per evitar la situació descrita anteriorment podeu utilitzar el Gestor
+de Volums Lògics (LVM). Resumit d'una manera fàcil, amb LVM podeu
+combinar particions (anomenades <firstterm>volums físics</firstterm> en
+l'entorn de LVM) per formar un disc virtual (anomenat <firstterm>grup de
+volums</firstterm>), que es pot dividir en particions virtuals
+(<firstterm>volums lògics</firstterm>). La característica interessant és
+que els volums lògics (i per descomptat els grups de volums associats)
+es poden expandir a través de múltiples discs físics.
 
 </para><para>
 
-Now when you realize you need more space for your old 160GB
-<filename>/home</filename> partition, you can simply add a new 300GB
-disc to the computer, join it with your existing volume group and then
-resize the logical volume which holds your <filename>/home</filename>
-filesystem and voila &mdash; your users have some room again on their
-renewed 460GB partition.  This example is of course a bit
-oversimplified. If you haven't read it yet, you should consult the
-<ulink url="&url-lvm-howto;">LVM HOWTO</ulink>.
+En cas d'adonar-vos que necessiteu més espai per a l'antiga partició
+<filename>/home</filename> de 160GB, simplement podeu afegir un nou
+disc de 300GB i ajuntar-lo al grup de volums i seguidament redimensionar
+el volum lògic que disposa el sistema de fitxers <filename>/home</filename> i
+per art de màgia &mdash; els usuaris disposaran de més espai en
+la seva nova partició de 460GB. Aquest exemple està un pèl sobresimplificat.
+Llegiu el document <ulink url="&url-lvm-howto;">LVM HOWTO</ulink> en cas 
+d'encara no haver-ho fet.
 
 </para><para>
 
-LVM setup in &d-i; is quite simple. At first, you have to mark your
-partitions to be used as physical volumes for LVM. (This is done in
-<command>partman</command> in the <guimenu>Partition
-settings</guimenu> menu where you should select <menuchoice>
-<guimenu>Use as:</guimenu> <guimenuitem>physical volume for
-LVM</guimenuitem> </menuchoice>.) Then start the
-<command>lvmcfg</command> module (either directly from
-<command>partman</command> or from the &d-i;'s main menu) and combine
-physical volumes to volume group(s) under the <guimenuitem>Modify
-volume groups (VG)</guimenuitem> menu. After that, you should create
-logical volumes on the top of volume groups from the menu
-<guimenuitem>Modify logical volumes (LV)</guimenuitem>.
+La configuració de LVM en l'&d-i; és força simple. Primer heu de
+marcar les particions per a ser utilitzades com a volums físics
+per part de LVM (l'opció s'habilita al <command>partman</command>
+al menú <guimenu>Paràmetres de la partició</guimenu> on hauríeu
+de seleccionar <menuchoice>Utilitza com a :</guimenu>
+<guimenuitem>volum físic per a LVM</guimenuitem> </menuchoice>.)
+Seguidament inicieu el mòdul <command>lvmcfg</command> (directament
+a través de <command>partman</command> o a través de l'opció
+del menú principal del &d-i;) i combineu volums físics amb grups
+de volums a través del menú <guimenuitem>Modifica els volums de grups (VG)
+</guimenuitem>. A continuació hauríeu de crear volums lògics sobre
+els grups de volums al menú <guimenuitem>Modifica els volums lògics (LV)
+</guimenuitem>.
 
 <note arch="powerpc"><para>
 
-There is no widely accepted standard to identify partitions containing
-LVM data on Apple Power Macintosh hardware. On this particular
-hardware, the above procedure for creating physical volumes and volume
-groups will not work. There is a good workaround for this limitation,
-provided you are familiar with the underlying LVM tools.
+No hi ha un estàndard àmpliament acceptat per identificar les particions
+que contenen dades LVM en el cas del maquinari de l'Apple Power Macintosh.
+En aquest maquinari concret, el procediment anterior per a la creació de
+volums física i grups de volums no funcionarà. Hi ha una bona solució
+alternativa per a aquesta limitació, considerant que sou coneixedor de
+les eines associades al LVM.
 
 </para><para>
 
-To install using logical volumes on Power Macintosh hardware you
-should create all the disk partitions for your logical volumes as
-usual. In the <guimenu>Partition settings</guimenu> menu you should
-choose <menuchoice><guimenu>Use as:</guimenu> <guimenuitem>Do Not
-Use</guimenuitem></menuchoice> for these partitions (you will not be
-offered the option to use the partition as a physical volume). When
-you are done with creating all your partitions, you should start the
-logical volume manager as usual. However, since no physical volumes
-have been created you must now access the command shell available on
-the second virtual terminal (see <xref linkend="shell"/>) and create
-them manually.
+Per a la instal·lació utilitzant volums lògics en el maquinari del
+Power Macintosh hauríeu de crear segons el procediment normal, totes les
+ particions del disc pels volums lògics. En el menú <guimenu>Paràmetres
+de la partició</guimenu> hauríeu de seleccionar <menuchoice><guimenu>
+Utilitza com a:</guimenu><guimenuitem>No ho utilitzis</guimenuitem>
+</menuchoice> per a les particions (no us apareixerà l'opció
+d'utilitzar la partició com un volum físic). Un cop creades les particions,
+hauríeu d'iniciar el gestor de volums lògics. Tot i això, com que no
+s'han creat volums físics heu d'accedir a l'intèrpret d'ordres
+disponible al segon terminal virtual (vegeu <xref linkend="shell"/>) i
+crear-los manualment.
 
 </para><para>
 
-Use the <command>pvcreate</command> command at the shell command prompt
-to create a physical volume on each of your chosen partitions. Then use
-the <command>vgcreate</command> command to create each volume group
-you want. You can safely ignore any errors about incorrect metadata
-area header checksums and fsync failures while doing this. When you
-have finished creating all your volume groups, you should go back to
-the first virtual terminal and skip directly to the
-<command>lvmcfg</command> menu items for logical volume
-management. You will see your volume groups and you can create the
-logical volumes you need as usual.
+Per crear un volum físic en cada una de les particions escollides,
+utilitzeu l'ordre <command>pvcreate</command> a l'indicador de
+l'intèrpret d'ordres. Seguidament utilitzeu l'ordre <command>
+vgcreate</command> per crear cada grup de volums. Podeu ignorar
+els errors referents a les sumes de verificació de les capçaleres
+de l'àrea de metadades i els errors de l'fsync. Un cop creats
+tots els grups de volums, hauríeu de tornar al primer terminal
+virtual i saltar directament a l'element del menú
+<command>lvmcfg</command> per a la gestió de volums lògics.
+Visualitzareu els grups de volums i podreu crear els volums
+lògics necessari seguint el mètode habitual.
 
 </para></note>
 
 </para><para>
 
-After returning from <command>lvmcfg</command> back to
-<command>partman</command>, you will see any created logical volumes
-in the same way as ordinary partitions (and you should treat them like
-that).
+Un cop finalitzada l'execució de <command>lvmcfg</command> torneu a
+<command>partman</command>, visualitzareu qualsevol volum lògic creat
+de la mateixa manera que les particions ordinàries (i les haureu
+de gestionar de la mateixa manera).
 
 </para>
    </sect3>

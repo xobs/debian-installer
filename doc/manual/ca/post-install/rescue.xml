@@ -1,71 +1,73 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 28732 untranslated -->
+<!-- original version: 28732 -->
 
  <sect1 id="rescue" condition="etch">
- <title>Recovering a Broken System</title>
+ <title>Restaurant un sistema amb errors</title>
 <para>
 
-Sometimes, things go wrong, and the system you've carefully installed is no
-longer bootable. Perhaps the boot loader configuration broke while trying
-out a change, or perhaps a new kernel you installed won't boot, or perhaps
-cosmic rays hit your disk and flipped a bit in
-<filename>/sbin/init</filename>. Regardless of the cause, you'll need to
-have a system to work from while you fix it, and rescue mode can be useful
-for this.
+En alguns casos, les coses no acaben de funcionar correctament, i el sistema
+que curosament heu instal·lat no es torna a arrencar. Probablement el
+carregador de l'arrencada no s'hagi executat correctament durant la
+comprovació d'un canvi, o potser el nucli instal·lat no s'arrenqui, o potser
+els raigs còsmics hagin efectat el disc i hagin alterat un bit del fitxer
+<filename>/sbin/init</filename>. Independentment de l'origen l'error,
+necessiteu un sistema per treballar mentre no solucioneu el problema,
+en aquesta situació el mode de rescat us pot ser útil.
 
 </para><para>
 
 <!-- TODO: describe what to do on arches where this isn't set up in the
      bootloader -->
 
-To access rescue mode, type <userinput>rescue</userinput> at the
-<prompt>boot:</prompt> prompt, or boot with the
-<userinput>rescue/enable=true</userinput> boot parameter. You'll be shown
-the first few screens of the installer, with a note in the corner of the
-display to indicate that this is rescue mode, not a full installation. Don't
-worry, your system is not about to be overwritten! Rescue mode simply takes
-advantage of the hardware detection facilities available in the installer to
-ensure that your disks, network devices, and so on are available to you
-while repairing your system.
+Per accedir al mode de rescat, escriviu <userinput>rescue</userinput> a
+l'indicador <prompt>boot:</prompt> o arrenqueu amb el paràmetre
+d'arrencada <userinput>rescue/enable=true</userinput>. Us apareixeran les
+primeres pantalles de l'instal·lador amb una nota a la cantonada indicant
+que l'esteu executant en el mode de rescat, no realitzant una instal·lació
+completa. No us preocupeu, no se us sobreescriurà el sistema! El mode de
+rescat únicament aprofita les facilitats de detecció de maquinari disponibles
+en l'instal·lador per assegurar que disposeu dels discs, dispositius de xarxa
+i similars durant la reparació del sistema.
 
 </para><para>
 
-Instead of the partitioning tool, you should now be presented with a list of
-the partitions on your system, and asked to select one of them. Normally,
-you should select the partition containing the root file system that you
-need to repair. You may select partitions on RAID and LVM devices as well as
-those created directly on disks.
+En comptes de l'eina de particionat, us hauria d'aparèixer una llista de
+particions del sistema i demanar-vos que n'escolliu una. En la majoria dels
+casos hauríeu de seleccionar la partició que contingui el sistema de fitxers
+arrel que voleu reparar. Us seria possible seleccionar les particions en
+els dispositius RAID i LVM i les creades directament als discs.
 
 </para><para>
 
-If possible, the installer will now present you with a shell prompt in the
-file system you selected, which you can use to perform any necessary
-repairs.
+L'instal·lador intentarà donar-vos accés a l'indicador de l'intèrpret d'ordres
+del sistema de fitxers seleccionat amb el qual intentar reparar el sistema.
 
 <phrase arch="i386">
-For example, if you need to reinstall the GRUB boot loader into the master
-boot record of the first hard disk, you could enter the command
-<userinput>grub-install '(hd0)'</userinput> to do so.
+Per exemple, si heu de tornar a instal·lar el carregador d'arrencada GRUB
+al registre d'arrencada del primer disc dur, podríeu utilitzar l'ordre
+<userinput>grub-install '(hd0)'</userinput>.
 </phrase>
 
 </para><para>
 
-If the installer cannot run a usable shell in the root file system you
-selected, perhaps because the file system is corrupt, then it will issue a
-warning and offer to give you a shell in the installer environment instead.
-You may not have as many tools available in this environment, but they will
-often be enough to repair your system anyway. The root file system you
-selected will be mounted on the <filename>/target</filename> directory.
+Si l'instal·lador no pot executar un intèrpret d'ordres en el sistema
+de fitxers arrel que heu seleccionat, pot ser que el primer contingui
+errors, en aquest cas mostrarà un avís us permetrà utilitzar un intèrpret
+d'ordres en l'entorn de l'instal·lador. En aquest entorn no disposareu
+de tantes eines, però segurament seran suficient per solucionar l'error
+del sistema. L'arrel del sistema de fitxers que heu seleccionat es muntarà
+al directori <filename>/target</filename>.
 
 </para><para>
 
-In either case, after you exit the shell, the system will reboot.
+En qualsevol cas, un cop sortiu de la línia d'ordres el sistema es
+reiniciarà.
 
 </para><para>
 
-Finally, note that repairing broken systems can be difficult, and this
-manual does not attempt to go into all the things that might have gone wrong
-or how to fix them. If you have problems, consult an expert.
+Com apunt final, recordeu que la reparació d'un sistema amb errors pot ser
+difícil, i que aquest manual no pretén endinsar-se en totes les possibles
+causes o solucions. Si teniu problemes, consulteu un expert.
 
 </para>
  </sect1>
