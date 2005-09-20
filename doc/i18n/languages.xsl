@@ -16,7 +16,7 @@
   <p>With future languages, D-I will support <xsl:value-of select="round(sum(//@speakers) div 6459821923 * 100)"/>% to <xsl:value-of select="round(sum(//@speakers_corr) div 6459821923 * 100)"/>% of world population.</p>
 <table border="1">
 <tr>
-<th>Code</th>
+  <th>Code</th>
 <th>Language</th>
 <th>Supported</th>
 <th>Coordinator</th>
@@ -42,7 +42,18 @@ which often minimizes the number of speakers of that language.</p>
 
 <xsl:template match="language_entry">
 <tr>
-<td><xsl:value-of select="@code"/></td>
+<td>
+<xsl:choose>
+	<xsl:when test="string-length(@code3)">
+		  <a href="http://www.ethnologue.com/show_language.asp?code={@code3}">
+		  <xsl:value-of select="@code"/>
+		  </a>
+	</xsl:when>
+	<xsl:otherwise>
+		  <xsl:value-of select="@code"/>
+	</xsl:otherwise>
+</xsl:choose>
+</td>
 <xsl:choose>
 	<xsl:when test="string-length(@team_email)">
 		<td><a href="mailto:{@team_email}"><xsl:value-of select="@english_name"/></a></td>
