@@ -16,7 +16,7 @@
   <p>With future languages, D-I will support <xsl:value-of select="round(sum(//@speakers) div 6459821923 * 100)"/>% to <xsl:value-of select="round(sum(//@speakers_corr) div 6459821923 * 100)"/>% of world population.</p>
 <table border="1">
 <tr>
-  <th>Code</th>
+<th>Code</th>
 <th>Language</th>
 <th>Supported</th>
 <th>Coordinator</th>
@@ -27,6 +27,7 @@
 </tr>
 <xsl:apply-templates/>
 </table>
+
   <p>The number of speakers per language comes from data by: <strong>Gordon,
      Raymond G., Jr. (ed.), 2005.</strong> <em>Ethnologue: Languages of the World, Fifteenth
      edition.</em> Dallas, Tex.: SIL International. Online version:
@@ -36,24 +37,37 @@ by Debian Installer developers when they feel Ethnologue data to be
 inaccurate. Ethnologue often focuses on native speakers of a given language
 which often minimizes the number of speakers of that language.</p>
 <!-- World population counter comes from www.geohive.com as of 2005-09-05 -->
+<p>
+Countries where at least one of the supported languages is an official language:
+</p>
+<p>
+<xsl:variable name="codes_off">
+  <xsl:for-each select="//@countries_official[../@supported = 'true']">
+<xsl:value-of select="string()"/>
+</xsl:for-each>
+</xsl:variable>
+<!-- <xsl:value-of select="$codes_off"/> -->
+<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes_off}"/>
+</p>
+<p>
+Countries where at least one of the supported languages is the most widely spoken language:
+</p>
+<p>
+<xsl:variable name="codes_most">
+  <xsl:for-each select="//@countries_most_spoken[../@supported = 'true']">
+<xsl:value-of select="string()"/>
+</xsl:for-each>
+</xsl:variable>
+<!-- <xsl:value-of select="$codes_most"/> -->
+<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes_most}"/>
+</p>
 </body>
 </html>
 </xsl:template>
 
 <xsl:template match="language_entry">
 <tr>
-<td>
-<xsl:choose>
-	<xsl:when test="string-length(@code3)">
-		  <a href="http://www.ethnologue.com/show_language.asp?code={@code3}">
-		  <xsl:value-of select="@code"/>
-		  </a>
-	</xsl:when>
-	<xsl:otherwise>
-		  <xsl:value-of select="@code"/>
-	</xsl:otherwise>
-</xsl:choose>
-</td>
+<td><xsl:value-of select="@code"/></td>
 <xsl:choose>
 	<xsl:when test="string-length(@team_email)">
 		<td><a href="mailto:{@team_email}"><xsl:value-of select="@english_name"/></a></td>
