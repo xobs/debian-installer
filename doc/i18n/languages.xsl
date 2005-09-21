@@ -5,15 +5,198 @@
 <xsl:template match="language_entries">
 <html>
 <head>
-<title>Debian-Installer Translators</title>
+<title>Debian-Installer languages support, statistics and translators</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 </head>
 <body>
-  <p>The following table lists all <a href="http://www.debian.org/devel/debian-installer">Debian Installer</a> translators.</p>
-  <p>Current number of fully supported languages: <xsl:value-of select="count(//language_entry[@supported = 'true'])"/></p>
-  <p>Total number of languages in the table: <xsl:value-of select="count(//language_entry)"/></p>
-  <p>D-I now supports <xsl:value-of select="round(sum(//@speakers[../@supported = 'true']) div 6459821923 * 100)"/>% to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'true']) div 6459821923 * 100)"/>% of world population.</p>
-  <p>With future languages, D-I will support <xsl:value-of select="round(sum(//@speakers) div 6459821923 * 100)"/>% to <xsl:value-of select="round(sum(//@speakers_corr) div 6459821923 * 100)"/>% of world population.</p>
+<p align="center"><strong>World population coverage</strong></p>
+  <table border="1" align="center">
+    <tr>
+      <th>
+Debian releases
+      </th>
+      <th>
+Potato
+      </th>
+      <th>
+Woody
+      </th>
+      <th>
+Sarge
+      </th>
+      <th>
+Etch
+      </th>
+      <th>
+Work in progress
+      </th>
+    </tr>
+    <tr>
+      <td>
+Number of supported languages
+      </td>
+      <td align="center">
+<xsl:value-of select="count(//language_entry[@supported = 'potato'])"/>
+      </td>
+      <td align="center">
+        <xsl:value-of select="count(//language_entry[@supported = 'woody'] | //language_entry[@supported = 'potato'])"/>
+      </td>
+      <td align="center">
+<xsl:value-of select="count(//language_entry[@supported = 'sarge'] | //language_entry[@supported = 'woody'] | //language_entry[@supported = 'potato'])"/>
+      </td>
+      <td align="center">
+<xsl:value-of select="count(//language_entry[@supported = 'etch'] | //language_entry[@supported = 'sarge'] | //language_entry[@supported = 'woody'] | //language_entry[@supported = 'potato'])"/>
+      </td>
+      <td align="center">
+<xsl:value-of select="count(//language_entry)"/>
+      </td>
+    </tr>
+    <tr>
+      <td>
+Percent world population
+      </td>
+      <td align="center">
+<xsl:value-of select="round(sum(//@speakers[../@supported = 'potato']) div 6459821923 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'potato']) div 6459821923 * 100)"/>%.
+      </td>
+      <td align="center">
+<xsl:value-of select="round(sum(//@speakers[../@supported = 'woody'] | //@speakers[../@supported = 'potato']) div 6459821923 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'woody'] | //@speakers_corr[../@supported = 'potato']) div 6459821923 * 100)"/>%
+      </td>
+      <td align="center">
+<xsl:value-of select="round(sum(//@speakers[../@supported = 'sarge'] | //@speakers[../@supported = 'woody'] | //@speakers[../@supported = 'potato']) div 6459821923 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'sarge'] | //@speakers_corr[../@supported = 'woody'] | //@speakers_corr[../@supported = 'potato']) div 6459821923 * 100)"/>%
+      </td>
+      <td align="center">
+<xsl:value-of select="round(sum(//@speakers[../@supported = 'etch'] | //@speakers[../@supported = 'sarge'] | //@speakers[../@supported = 'woody'] | //@speakers[../@supported = 'potato']) div 6459821923 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'etch'] | //@speakers_corr[../@supported = 'sarge'] | //@speakers_corr[../@supported = 'woody'] | //@speakers_corr[../@supported = 'potato']) div 6459821923 * 100)"/>%
+      </td>
+      <td align="center">
+<xsl:value-of select="round(sum(//@speakers) div 6459821923 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr) div 6459821923 * 100)"/>%
+      </td>
+    </tr>
+</table>
+
+<p align="center"><strong>World geographical coverage</strong></p>
+  <table border="1" align="center">
+  <tr>
+    <th>
+Releases
+    </th>
+    <th>
+Official
+    </th>
+    <th>
+Most spoken
+    </th>
+  </tr>
+  <tr>
+      <td align="center">
+Potato
+      </td>
+      <td align="center">
+<xsl:variable name="codes">
+  <xsl:for-each select="//@countries_official[../@supported = 'potato']">
+<xsl:value-of select="string()"/>
+</xsl:for-each>
+</xsl:variable>
+<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes}" width="200" height="100"/>
+      </td>
+      <td align="center">
+<xsl:variable name="codes">
+  <xsl:for-each select="//@countries_most_spoken[../@supported = 'potato']">
+<xsl:value-of select="string()"/>
+</xsl:for-each>
+</xsl:variable>
+<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes}" width="200" height="100"/>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+Woody
+      </td>
+      <td align="center">
+<xsl:variable name="codes">
+  <xsl:for-each select="//@countries_official[../@supported = 'woody'] | //@countries_official[../@supported = 'potato']">
+<xsl:value-of select="string()"/>
+</xsl:for-each>
+</xsl:variable>
+<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes}" width="200" height="100"/>
+      </td>
+      <td align="center">
+<xsl:variable name="codes">
+  <xsl:for-each select="//@countries_most_spoken[../@supported = 'woody'] | //@countries_most_spoken[../@supported = 'potato']">
+<xsl:value-of select="string()"/>
+</xsl:for-each>
+</xsl:variable>
+<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes}" width="200" height="100"/>
+      </td>
+  </tr>
+  <tr>
+      <td align="center">
+Sarge
+      </td>
+      <td align="center">
+<xsl:variable name="codes">
+  <xsl:for-each select="//@countries_official[../@supported = 'sarge'] | //@countries_official[../@supported = 'woody'] | //@countries_official[../@supported = 'potato']">
+<xsl:value-of select="string()"/>
+</xsl:for-each>
+</xsl:variable>
+<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes}" width="200" height="100"/>
+      </td>
+      <td align="center">
+<xsl:variable name="codes">
+  <xsl:for-each select="//@countries_most_spoken[../@supported = 'sarge'] | //@countries_most_spoken[../@supported = 'woody'] | //@countries_most_spoken[../@supported = 'potato']">
+<xsl:value-of select="string()"/>
+</xsl:for-each>
+</xsl:variable>
+<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes}" width="200" height="100"/>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+Etch
+      </td>
+      <td align="center">
+<xsl:variable name="codes">
+  <xsl:for-each select="//@countries_official[../@supported = 'etch'] | //@countries_official[../@supported = 'sarge'] | //@countries_official[../@supported = 'woody'] | //@countries_official[../@supported = 'potato']">
+<xsl:value-of select="string()"/>
+</xsl:for-each>
+</xsl:variable>
+<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes}" width="200" height="100"/>
+      </td>
+      <td align="center">
+<xsl:variable name="codes">
+  <xsl:for-each select="//@countries_most_spoken[../@supported = 'etch'] | //@countries_most_spoken[../@supported = 'sarge'] | //@countries_most_spoken[../@supported = 'woody'] | //@countries_most_spoken[../@supported = 'potato']">
+<xsl:value-of select="string()"/>
+</xsl:for-each>
+</xsl:variable>
+<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes}" width="200" height="100"/>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
+Future
+      </td>
+      <td align="center">
+<xsl:variable name="codes">
+  <xsl:for-each select="//@countries_official">
+<xsl:value-of select="string()"/>
+</xsl:for-each>
+</xsl:variable>
+<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes}" width="200" height="100"/>
+      </td>
+      <td align="center">
+<xsl:variable name="codes">
+  <xsl:for-each select="//@countries_most_spoken">
+<xsl:value-of select="string()"/>
+</xsl:for-each>
+</xsl:variable>
+<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes}" width="200" height="100"/>
+      </td>
+    </tr>
+    
+</table>
+
+<p align="center"><strong><a href="http://www.debian.org/devel/debian-installer">Debian Installer</a> translators and translation teams</strong></p>
+  <p></p>
+
 <table border="1">
 <tr>
 <th>Code</th>
@@ -28,39 +211,32 @@
 <xsl:apply-templates/>
 </table>
 
-  <p>The number of speakers per language comes from data by: <strong>Gordon,
+
+<p><em>Official</em>: countries where at least one of the supported languages is an official language:
+</p>
+<p><em>Most spoken</em>: countries where at least one of the supported languages is the most widely spoken language:
+</p>
+
+<p><strong>References:</strong></p>
+<ul>
+  <li>
+  Number of speakers per language: <strong>Gordon,
      Raymond G., Jr. (ed.), 2005.</strong> <em>Ethnologue: Languages of the World, Fifteenth
      edition.</em> Dallas, Tex.: SIL International. Online version:
-     <a href="http://www.ethnologue.com/">http://www.ethnologue.com/</a>.</p>
-  <p>The second number of speakers are data by Ethnologue <em>corrected</em>
-by Debian Installer developers when they feel Ethnologue data to be
-inaccurate. Ethnologue often focuses on native speakers of a given language
-which often minimizes the number of speakers of that language.</p>
-<!-- World population counter comes from www.geohive.com as of 2005-09-05 -->
-<p>
-Countries where at least one of the supported languages is an official language:
-</p>
-<p>
-<xsl:variable name="codes_off">
-  <xsl:for-each select="//@countries_official[../@supported = 'true']">
-<xsl:value-of select="string()"/>
-</xsl:for-each>
-</xsl:variable>
-<!-- <xsl:value-of select="$codes_off"/> -->
-<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes_off}"/>
-</p>
-<p>
-Countries where at least one of the supported languages is the most widely spoken language:
-</p>
-<p>
-<xsl:variable name="codes_most">
-  <xsl:for-each select="//@countries_most_spoken[../@supported = 'true']">
-<xsl:value-of select="string()"/>
-</xsl:for-each>
-</xsl:variable>
-<!-- <xsl:value-of select="$codes_most"/> -->
-<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes_most}"/>
-</p>
+     <a href="http://www.ethnologue.com/">http://www.ethnologue.com/</a>.
+   </li>
+  <li>
+<em>Corrected</em> number of speakers: above data <em>corrected</em>
+by Debian Installer developers when they feel it to be
+inaccurate.
+   </li>
+  <li>
+    World population: <a href="http://www.geohive.com">www.geohive.com</a> as of 2005-09-05
+   </li>
+  <li>
+    Maps: <a href="http://www.world66.com/myworld66/visitedCountries">Visited countries</a>
+   </li>
+</ul>
 </body>
 </html>
 </xsl:template>
