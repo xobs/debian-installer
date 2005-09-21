@@ -83,9 +83,16 @@ Releases
 Official
     </th>
     <th>
-Most spoken
+Most widely spoken
     </th>
   </tr>
+  <tr>
+    <td colspan="3">
+<em>Official</em>: countries where at least one of the supported languages is an official language:
+<br></br>
+<em>Most widely spoken</em>: countries where at least one of the supported languages is the most widely spoken language:
+    </td>
+</tr>
   <tr>
       <td align="center">
 Potato
@@ -212,10 +219,6 @@ Future
 </table>
 
 
-<p><em>Official</em>: countries where at least one of the supported languages is an official language:
-</p>
-<p><em>Most spoken</em>: countries where at least one of the supported languages is the most widely spoken language:
-</p>
 
 <p><strong>References:</strong></p>
 <ul>
