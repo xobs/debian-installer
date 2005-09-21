@@ -239,6 +239,12 @@ inaccurate.
   <li>
     Maps: <a href="http://www.world66.com/myworld66/visitedCountries">Visited countries</a>
    </li>
+  <li>
+    XSL Transform wizardry courtesy of Eugeniy Meshcheryakov
+   </li>
+  <li>
+    Data collected by Christian Perrier
+   </li>
 </ul>
 </body>
 </html>
