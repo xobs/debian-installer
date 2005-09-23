@@ -227,11 +227,24 @@ Future
      Raymond G., Jr. (ed.), 2005.</strong> <em>Ethnologue: Languages of the World, Fifteenth
      edition.</em> Dallas, Tex.: SIL International. Online version:
      <a href="http://www.ethnologue.com/">http://www.ethnologue.com/</a>.
+     <br></br>
+       Please note that Ethnologue refers to a number of
+       <strong>native</strong> speakers of a given language. This
+       explains some very low numbers and also explains why, while we
+       are currently covering all major languages of the world, we
+       "only" cover less than 60% of the world population. Having
+       numbers for people who are completely literate in a given
+       language is far less easier and estimations often vary
+       considerable. For instance, English has an estimate of 300M up
+       to 500M "speakers" (310M for Ethnologue), depending on sources,
+       while French has 80M to 135M (Ethnologue gives a very low
+       number or 64M which is roughly the population of France
+       alone).
    </li>
   <li>
 <em>Corrected</em> number of speakers: above data <em>corrected</em>
 by Debian Installer developers when they feel it to be
-inaccurate.
+badly representing reality.
    </li>
   <li>
     World population: <a href="http://www.geohive.com">www.geohive.com</a> as of 2005-09-05
