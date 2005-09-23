@@ -4,7 +4,8 @@ Priority: optional
 Maintainer: Debian Install System Team <debian-boot@lists.debian.org>
 Uploaders: Joey Hess <joeyh@debian.org>, Alastair McKinstry <mckinstry@computer.org>, Joshua Kwan <joshk@triplehelix.org>
 Standards-Version: 3.6.2
-Build-Depends: debhelper (>= 4), apt, gnupg, dpkg (>= 1.13.9), grep-dctrl, bc, libc6-pic | libc6.1-pic | libc0.3-pic | glibc-pic, libdebian-installer4 (>= 0.31), libdebconfclient0, libparted1.6-13, libslang2-pic, libnewt-pic, libdiscover1-pic [!s390 !s390x], libdiscover1 [!s390 !s390x], libbogl-dev, libtextwrap1, cramfsprogs [powerpc ia64 mips], genext2fs (>= 1.3-7.1), e2fsprogs, mklibs (>= 0.1.15), mkisofs, genromfs [sparc], hfsutils [powerpc], dosfstools [i386 ia64 m68k amd64], syslinux (>= 2.11-0.1) [i386 amd64], palo [hppa], elilo [ia64], yaboot [powerpc], aboot (>= 0.9b-2) [alpha], silo [sparc], sparc-utils [sparc], genisovh [mips], delo [mipsel], tip22 [mips], colo (>= 1.10-1) [mipsel], sibyl [mips mipsel], atari-bootstrap [m68k], vmelilo [m68k], m68k-vme-tftplilo [m68k], sysutils [i386 amd64], mtools (>= 3.9.9-1) [i386 ia64 m68k amd64], modutils, module-init-tools [i386 powerpc amd64 hppa ia64 sparc], bf-utf-source [!s390 !s390x], upx-ucl-beta (>= 1:1.91+0.20030910cvs-2) [i386], mkvmlinuz [powerpc], docbook, docbook-xml, docbook-xsl, xsltproc, gawk, w3m, poxml, jadetex, openjade | openjade1.3, docbook-dsssl, gs-common, debiandoc-sgml
+Build-Conflicts: libnewt-pic [mipsel]
+Build-Depends: debhelper (>= 4), apt, gnupg, dpkg (>= 1.13.9), grep-dctrl, bc, libc6-pic | libc6.1-pic | libc0.3-pic | glibc-pic, libdebian-installer4 (>= 0.31), libdebconfclient0, libparted1.6-13, libslang2-pic, libnewt-pic [!mipsel], libdiscover1-pic [!s390 !s390x], libdiscover1 [!s390 !s390x], libbogl-dev, libtextwrap1, cramfsprogs [powerpc ia64 mips], genext2fs (>= 1.3-7.1), e2fsprogs, mklibs (>= 0.1.15), mkisofs, genromfs [sparc], hfsutils [powerpc], dosfstools [i386 ia64 m68k amd64], syslinux (>= 2.11-0.1) [i386 amd64], palo [hppa], elilo [ia64], yaboot [powerpc], aboot (>= 0.9b-2) [alpha], silo [sparc], sparc-utils [sparc], genisovh [mips], delo [mipsel], tip22 [mips], colo (>= 1.10-1) [mipsel], sibyl [mips mipsel], atari-bootstrap [m68k], vmelilo [m68k], m68k-vme-tftplilo [m68k], sysutils [i386 amd64], mtools (>= 3.9.9-1) [i386 ia64 m68k amd64], modutils, module-init-tools [i386 powerpc amd64 hppa ia64 sparc], bf-utf-source [!s390 !s390x], upx-ucl-beta (>= 1:1.91+0.20030910cvs-2) [i386], mkvmlinuz [powerpc], docbook, docbook-xml, docbook-xsl, xsltproc, gawk, w3m, poxml, jadetex, openjade | openjade1.3, docbook-dsssl, gs-common, debiandoc-sgml
 # This package has the worst Build-Depends in Debian, so it deserves some
 # explanation. Note that this comment can also be used to generate a
 # Build-Depends line, by running the debian/genbuilddeps program.
@@ -42,9 +43,11 @@ Build-Depends: debhelper (>= 4), apt, gnupg, dpkg (>= 1.13.9), grep-dctrl, bc, l
 #		Only needed for monolithic image builds, and only because
 #		of broken udeb deps. Will be fixed.
 #	- libslang2-pic
-#	- libnewt-pic
+#	- libnewt-pic [!mipsel]
 #		Rather than use slang and newt udebs, reduced versions of
 #		the libraries are put onto images to save space.
+#		(On mipsel, we can't use libnewt-pic right now due to bug
+#		#329733. See Build-Conflicts above.)
 #	- libdiscover1-pic [!s390 !s390x]
 #	- libdiscover1 [!s390 !s390x]
 #		Currently we use library reduction to get the discover1
