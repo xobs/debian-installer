@@ -235,7 +235,7 @@ Future
        "only" cover less than 60% of the world population. Having
        numbers for people who are completely literate in a given
        language is far less easier and estimations often vary
-       considerable. For instance, English has an estimate of 300M up
+       considerably. For instance, English has an estimate of 300M up
        to 500M "speakers" (310M for Ethnologue), depending on sources,
        while French has 80M to 135M (Ethnologue gives a very low
        number or 64M which is roughly the population of France
