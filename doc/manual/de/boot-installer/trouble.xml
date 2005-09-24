@@ -7,7 +7,7 @@
 </para>
 
   <sect2 condition="supports-floppy-boot" id="unreliable-floppies">
-  <title>Zuverlässigkeit von Floppy-Disks</title>
+  <title>(Un-)Zuverlässigkeit von Floppy-Disks</title>
 
 <para>
 
@@ -18,8 +18,8 @@ Debian benutzen, scheint die (Un-)Zuverlässigkeit der Floppy-Disks zu sein.
 
 Die Boot-Floppy ist die Floppy, die die größten Probleme macht,
 weil sie direkt von der Hardware gelesen wird, bevor Linux bootet.
-Oft liest der Hardwaretreiber nicht so verlässlich wie der
-Linux-Floppy-Disk-Treiber und könnte einfach ohne jede Fehlermeldung
+Oft liest der Hardwaretreiber nicht so zuverlässig wie der
+Linux Floppy-Disk-Treiber und könnte einfach ohne jede Fehlermeldung
 stoppen, wenn er inkorrekte Daten ausliest. Auch die Disketten können
 fehlerhaft sein, was sich als Flut von »disk I/O error«-Meldungen
 zeigt.
@@ -31,13 +31,14 @@ haben, sollten Sie als erstes das Floppy-Disk-Image erneut herunterladen
 und auf eine <emphasis>andere</emphasis> Diskette schreiben. Die alte
 Disk einfach nur neu zu formatieren, könnte nicht ausreichend sein,
 selbst wenn das Neuformatieren und Beschreiben scheinbar ohne Fehler
-funktioniert hat. Manchmal kann es auch sinnvoll sein, die Floppy
+funktioniert. Manchmal kann es auch sinnvoll sein, die Floppy
 testweise auf einem anderen System zu beschreiben.
 
 </para><para>
 
-Jemand hat uns berichtet, dass er die drei Images <emphasis>dreimal</emphasis>
-auf unterschiedliche Disketten schreiben musste, bis alle drei funktionierten.
+Jemand hat uns berichtet, dass er die Images <emphasis>dreimal</emphasis>
+auf Diskette schreiben musste, bis eine funktionierte, und dann war auch
+mit der dritten Floppy alles in Ordnung.
 
 </para><para>
 
@@ -53,9 +54,9 @@ Firmware-Floppy-Driver zurückzuführen.
 
 <para>
 
-Wenn Sie Probleme haben, dass der Kernel während des Bootprozesses
-hängen bleibt oder Ihre Peripherie bzw. Laufwerke nicht korrekt erkannt
-wird, sollten Sie als erstes die Boot-Parameter überprüfen, die in
+Wenn Sie Probleme haben und der Kernel bleibt während des Bootprozesses
+hängen oder Ihre Peripherie bzw. Laufwerke werden nicht korrekt erkannt,
+sollten Sie als erstes die Boot-Parameter überprüfen, die in
 <xref linkend="boot-parms"/> erläutert werden.
 
 </para><para>
@@ -99,13 +100,13 @@ dass die Disk in Ordnung ist, versuchen Sie den Parameter
 
 </para><para>
 
-Auf einigen System wie dem IBM PS/1 oder ValuePoint (das ST-506-Laufwerkstreiber
-hat) werden IDE-Laufwerke unter Umständen nicht korrekt erkannt.
+Auf einigen System wie dem IBM PS/1 oder ValuePoint (die ST-506-Laufwerkstreiber
+haben) werden IDE-Laufwerke unter Umständen nicht korrekt erkannt.
 Versuchen Sie es hier zunächst ohne Boot-Parameter und überprüfen Sie,
 ob das IDE-Laufwerk richtig erkannt wird. Falls nicht, bestimmen Sie
 die Geometrie-Parameter Ihrer Festplatte (Zylinder, Köpfe und Sektoren)
 und nutzen Sie das Boot-Argument
-<userinput>hd=<replaceable>cylinders</replaceable>,<replaceable>heads</replaceable>,<replaceable>sectors</replaceable></userinput>.
+<userinput>hd=<replaceable>Zylinder</replaceable>,<replaceable>Köpfe</replaceable>,<replaceable>Sektoren</replaceable></userinput>.
 
 </para><para>
 
@@ -150,9 +151,9 @@ die Ihre Hardware benötigt. Ein Beispiel: wenn Sie einen der oben
 erwähnten Dell-Laptops besitzen, sollten Sie hier
 <userinput>exclude port 0x800-0x8ff</userinput> eingeben.
 Im <ulink url="http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-HOWTO-1.html#ss1.12">Kapitel
-<quote>System resource settings</quote> des PCMCIA-HOWTOs</ulink> gibt es eine
+<quote>System resource settings</quote> des PCMCIA-HowTos</ulink> gibt es eine
 Liste mit einigen allgemeinen Angaben über Ressourcenbereiche.
-Beachten Sie, dass Sie alle Kommata weglassen müssen, wenn Sie 
+Beachten Sie, dass Sie alle eventuell vorhandenen Kommata weglassen müssen, wenn Sie
 Angaben von dieser Quelle in den Installer eingeben.
 
 </para>
@@ -163,8 +164,8 @@ Angaben von dieser Quelle in den Installer eingeben.
 <para>
 
 Der Kernel versucht normalerweise, die USB-Module und die USB-Tastatur-Treiber
-zu laden, um einige <quote>non-standard</quote>-USB-Tastaturen unterstützen zu können.
-Allerdings gibt es einige kaputte USB-Systeme, bei denen sich der Treiber während
+zu laden, um einige nicht standardkonforme USB-Tastaturen unterstützen zu können.
+Allerdings gibt es einige gestörte USB-Systeme, bei denen sich der Treiber während
 des Ladens aufhängt. Eine Möglichkeit, dies zu umgehen, ist, den USB-Controller
 im BIOS des Mainboards zu deaktivieren. Ein anderer Weg wäre,
 den Parameter <userinput>debian-installer/probe/usb=false</userinput>
@@ -175,7 +176,7 @@ am Boot-Prompt einzugeben; dies verhindert, dass die Module geladen werden.
   </sect2>
 
   <sect2 id="kernel-msgs">
-  <title>Die Startmeldungen des Kernels verstehen</title>
+  <title>Die Startmeldungen des Kernels deuten</title>
 
 <para>
 
@@ -191,10 +192,10 @@ Kernel des Installationssystems gebaut wurde, um auf vielen Maschinen
 mit viel verschiedener Hardware zu funktionieren. Wahrscheinlich wird
 kein Rechner alle möglichen Peripheriegeräte beinhalten, deswegen
 wird das Betriebssystem wohl immer etwas zu beklagen haben, wenn es
-Peripherie sucht, die Sie nicht besitzen. Sie werden feststellen, dass
+Peripherie sucht, die Sie nicht besitzen. Sie werden vielleicht auch feststellen, dass
 das System für eine Weile pausiert. Dies kommt vor, wenn es auf die
 Antwort eines Gerätes wartet, das in Ihrem System nicht vorhanden ist.
-Wenn Sie meinen, dass die Zeit zum Booten des System unakzeptabel lang
+Wenn Sie meinen, dass die Zeit zum Booten des Systems unakzeptabel lang
 ist, können Sie später einen eigenen, maßgeschneiderten Kernel erstellen
 (siehe auch <xref linkend="kernel-baking"/>).
 

@@ -9,19 +9,19 @@
 Dieses Kapitel beschreibt, wie man &debian; von einem vorhandenen
 Unix- oder Linux-System aus installiert, ohne den
 menügeführten Installer zu verwenden, der im Rest dieses Handbuchs
-beschrieben wird. Dieses <quote>Einmal-quer-durch-die-Installation</quote>-HOWTO
-wurde erbeten von Leuten, die von Red Hat, Mandrake oder SUSE zu
+beschrieben wird. Dieses <quote>Einmal-quer-durch-die-Installation</quote>-HowTo
+wurde erbeten von Leuten, die von Red Hat, Mandrake oder Suse zu
 &debian; wechseln. In diesem Kapitel gehen wir davon aus, dass Sie
 ein wenig Erfahrung mit *nix-Befehlen haben sowie mit der Navigation
-durch das Dateisystem. Ein <prompt>$</prompt> in diesem Abschnitt
-symbolisiert einen Befehl, der im Homeverzeichnis des Benutzers
+durch das Dateisystem. In diesem Abschnitt symbolisiert ein <prompt>$</prompt>
+einen Befehl, der im Homeverzeichnis des Benutzers
 ausgeführt wird, während <prompt>#</prompt> bedeutet, dass das
 Kommando im Debian-chroot ausgeführt wird.
 
 </para><para>
 
 Sobald Sie das neue Debian-System nach Ihren Wünschen konfiguriert haben,
-können Sie Ihre vorhandenen eigenen Dateien hinüber verschieben und loslegen.
+können Sie Ihre evtl. vorhandenen eigenen Dateien hinüber verschieben und loslegen.
 Deswegen wird dies auch die <quote>zero-downtime</quote>-&debian;-Installation (Installation
 ohne eine Zeitspanne, während der das System nicht verfügbar ist) genannt. Es ist
 ebenso ein geschickter Weg, mit Hardwarekomponenten zurechtzukommen, die sich
@@ -41,7 +41,8 @@ ein Minimum von 300MB, wenn Sie vorhaben, X zu installieren.
 
 </para><para>
 
-Um ein Dateisystem auf einer Partition zu erstellen, zum Beispiel ein
+Dateisysteme auf Ihren Partitionen erzeugen:
+um ein Dateisystem auf einer Partition zu erstellen, zum Beispiel ein
 ext3-Dateisystem auf <filename>/dev/hda6</filename> (dies soll in diesem
 Beispiel unsere root-Partition sein):
 
@@ -67,7 +68,7 @@ Hängen Sie eine Partition (wahrscheinlich die neue) als <filename>/mnt/debinst<
 Dateisystem ein (das Installationsverzeichnis; es wird das
 root-(<filename>/</filename>)-Dateisystem des neuen Debian). Der
 Einhängepunkt (<filename>/mnt/debinst</filename>) ist rein willkürlich
-gewählt, es wird später nach darauf verwiesen.
+gewählt, es wird später noch öfter darauf verwiesen.
 
 <informalexample><screen>
 # mkdir /mnt/debinst
@@ -131,8 +132,8 @@ Binär-Dateien zu installieren.
 
 <command>debootstrap</command> kann die benötigten Dateien direkt vom
 Archiv herunterladen, wenn Sie es starten. Sie können in dem folgenden Befehl jeden
-Debian-Archiv-Mirror-Server statt <userinput>http.us.debian.org/debian</userinput>
-einsetzen, vorzugsweise einen Mirror in Ihrer Nähe. Eine Liste aller Mirror-Server
+Debian-Archivspiegel-Server statt <userinput>http.us.debian.org/debian</userinput>
+einsetzen, vorzugsweise einen Spiegel in Ihrer Nähe. Eine Liste aller Spiegelserver
 finden Sie auf <ulink url="http://www.debian.org/misc/README.mirrors"></ulink>.
 
 </para><para>
@@ -212,7 +213,7 @@ proc             /proc         proc    defaults                 0     0
 
 Nutzen Sie den Befehl <userinput>mount -a</userinput>, um alle Dateisysteme,
 die Sie in <filename>/etc/fstab</filename> angegeben haben, einzuhängen; um
-die Dateisysteme einzeln einzuhängen benutzen Sie:
+die Dateisysteme einzeln einzuhängen, benutzen Sie:
 
 <informalexample><screen>
 # mount /path   # z.B.: mount /usr
@@ -277,7 +278,7 @@ iface lo inet loopback
 # iface eth0 inet dhcp
 
 # An example static IP setup: (broadcast and gateway are optional)
-# (ein Beispiel für eine statische IP-Einstellung/ broadcast und gateway
+# (ein Beispiel für eine statische IP-Einstellung / broadcast und gateway
 # sind hierbei optional):
 # auto eth0
 # iface eth0 inet static
@@ -332,7 +333,7 @@ Sie die Paketquellen für <command>apt</command>, indem Sie Folgendes ausführen
    </sect3>
 
    <sect3>
-   <title>Die lokalen Einstellungen konfigurieren</title>
+   <title>Die lokalen Einstellungen (locales) konfigurieren</title>
 <para>
 
 Um Ihre lokalen Einstellungen anzupassen, wenn Sie nicht Englisch
@@ -346,7 +347,7 @@ es:
 
 BEACHTEN SIE: APT muss vor diesem Schritt eingerichtet werden, z.B. während
 der base-config-Phase. Bevor Sie locales mit anderen Zeichensätzen als ASCII oder
-latin1 verwenden, lesen Sie das dazugehörige <quote>Localization</quote>-HOWTO.
+latin1 verwenden, lesen Sie das dazugehörige <quote>Localization</quote>-HowTo.
 
 </para>
    </sect3>
@@ -356,7 +357,7 @@ latin1 verwenden, lesen Sie das dazugehörige <quote>Localization</quote>-HOWTO.
   <title>Einen Kernel installieren</title>
 <para>
 
-Wenn Sie vorhaben, dieses System zu booten, benötigen Sie wahrscheinlich
+Wenn Sie vorhaben, dieses System zu booten, wollen Sie wahrscheinlich
 einen Linux-Kernel und einen Bootloader. Sie finden verfügbare, bereits
 fertig paketierte Kernel mit dem Befehl
 
@@ -391,8 +392,8 @@ zu bekommen. Wenn Sie das Betriebssystem, das Sie zur Installation von Debian be
 haben, behalten möchten, müssen Sie lediglich einen Eintrag zur vorhandenen
 grub-<filename>menu.lst</filename> oder zu <filename>lilo.conf</filename>
 hinzufügen. Die Datei <filename>lilo.conf</filename> können Sie auch auf Ihr
-neues Debian-System kopieren und dort bearbeiten. Danach rufen Sie lilo auf
-(bedenken Sie, lilo nutzt die <filename>lilo.conf</filename> relativ zum
+neues Debian-System kopieren und dort bearbeiten. Rufen Sie danach <command>lilo</command> auf
+(bedenken Sie: lilo nutzt die <filename>lilo.conf</filename> relativ zum
 System, von dem aus Sie es aufrufen).
 
 </para><para arch="i386">
@@ -417,8 +418,8 @@ zur Installation von Debian benutzt haben, behalten möchten, müssen Sie
 lediglich einen Eintrag für das Debian-System zur vorhandenen
 <filename>yaboot.conf</filename> hinzufügen.
 Sie können auch die Datei <filename>yaboot.conf</filename> auf Ihr
-neues Debian-System kopieren und dort bearbeiten. Danach rufen Sie ybin auf
-(bedenken Sie, ybin nutzt die <filename>yaboot.conf</filename> relativ zum
+neues Debian-System kopieren und dort bearbeiten. Rufen Sie danach <command>ybin</command> auf
+(bedenken Sie: ybin nutzt die <filename>yaboot.conf</filename> relativ zum
 System, von dem aus Sie es aufrufen).
 
 </para><para arch="powerpc">

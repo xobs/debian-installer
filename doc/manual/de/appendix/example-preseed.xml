@@ -32,14 +32,14 @@ im Internet auf <ulink url="&url-example-preseed;"></ulink>.
 <informalexample><screen>
 #### Modifikation von syslinux.cfg.
 
-# Editieren Sie die syslinux.cfg (oder eine ähnliche Datei) und fügen Sie
-# Kernelparameter an das Ende der "append"-Zeile an.
+# Editieren Sie die syslinux.cfg (oder eine vergleichbare Datei) und fügen
+# Sie Kernelparameter an das Ende der "append"-Zeile an.
 #
 # Zumindest sollten Sie einen Parameter hinzufügen, der dem Installer sagt,
 # woher er seine Voreinstellungs-Datei bekommt.
 # Wenn Sie von einem USB-Speicher installieren, benutzen Sie diesen Parameter
 # und speichern Sie die Voreinstellungs-Datei im Toplevel-Verzeichnis des
-# USB-Sticks ab.
+# USB-Sticks ab:
 #   preseed/file=/hd-media/preseed
 # Wenn Sie per Netzwerk booten, benutzen Sie stattdessen:
 #   preseed/url=http://host/path/to/preseed
@@ -49,7 +49,7 @@ im Internet auf <ulink url="&url-example-preseed;"></ulink>.
 # Sie angeben.
 # 
 # Um sicherzustellen, dass der Installer die richtige Voreinstellungsdatei
-# nutzt, können Sie eine Prüfsumme für die Datei festlegen. Dies muss
+# nutzt, können Sie eine Prüfsumme für die Datei angeben. Dies muss
 # derzeit eine md5sum-Prüfsumme sein und wenn sie angegeben ist, muss
 # sie auch für die Datei passen, ansonsten wird der Installer ablehnen,
 # sie zu benutzen (Prüfsummen werden im Sarge-Installer nicht unterstützt).
@@ -80,8 +80,8 @@ im Internet auf <ulink url="&url-example-preseed;"></ulink>.
 # 2.6.9-Kernel oder höher akzeptieren 32 Kommandozeilen-Optionen und
 # 32 Umgebungsoptionen.
 # Einige der Standardoptionen wie "vga=normal"
-# können bei den meisten Installationen getrost entfernt werden, wodurch
-# Sie mehr Optionen für Voreinstellungen frei haben.
+# können bei den meisten Installationen getrost entfernt werden, was es
+# Ihnen erlaubt, mehr Optionen für Voreinstellungen anzugeben.
 
 #### Shell-Befehle.
 
@@ -93,8 +93,8 @@ im Internet auf <ulink url="&url-example-preseed;"></ulink>.
 # Möglichkeit, jegliche Shell-Befehle, die Sie gerne im Installer hätten,
 # automatisch zu starten.
 
-# Dieser erste Befehl wird so früh wie möglich ausgeführt, direkt nachdem die
-# Verarbeitung der Voreinstellungs-Datei abgeschlossen ist.
+# Dieser erste Befehl wird so früh wie möglich ausgeführt, direkt nachdem das
+# Lesen der Voreinstellungs-Datei abgeschlossen ist.
 #d-i preseed/early_command              string \
 #    wget http://url/to/my.udeb -O /tmp/my.udeb ; udpkg -i /tmp/my.udeb
 
@@ -150,7 +150,7 @@ d-i netcfg/wireless_wep	string
 # Der verrückte DHCP-Hostname, den einige ISP als eine Art Passwort benutzen.
 #d-i netcfg/dhcp_hostname               string radish
 
-#### Einstellungen für den Mirror-Server.
+#### Einstellungen für den Debian-Spiegelserver.
 
 d-i mirror/country                      string enter information manually
 d-i mirror/http/hostname                string http.us.debian.org
@@ -225,7 +225,7 @@ d-i partman/confirm                     boolean	true
 # in den MBR installiert wird, wenn kein anderes Betriebssystem erkannt wird. 
 d-i grub-installer/only_debian          boolean true
 
-# Dies bewirkt, dass grub auch dann in den MBR installiert wird, wenn andere
+# Dies bewirkt, dass grub in den MBR installiert wird, wenn andere
 # Betriebssysteme erkannt werden. Es ist nicht sehr sicher, da so möglicherweise
 # die anderen Systeme nicht mehr gestartet werden können.
 d-i grub-installer/with_other_os        boolean true
@@ -314,8 +314,8 @@ base-config apt-setup/uri_type          select http
 base-config apt-setup/country           select enter information manually
 base-config apt-setup/hostname          string http.us.debian.org
 base-config apt-setup/directory         string /debian
-# Den Dialog nach der Auswahl des Mirrors beenden (keine weitere Paketquelle
-# angeben).
+# Den Dialog nach der Auswahl des Spiegelservers beenden (keine weitere
+# Paketquelle angeben).
 base-config apt-setup/another           boolean false
 
 # Sie können wählen, ob Sie Software aus dem "non-free"- und "contrib"-Zweig
@@ -346,8 +346,8 @@ exim4-config exim4/dc_eximconfig_configtype \
     select no configuration at this time
 exim4-config exim4/no_config boolean true
 
-# Es ist eine gute Idee, für diese Einstellung den Benutzernamen zu wählen,
-# den Sie erstellt haben. Wenn Sie es leer lassen, bedeutet das, das
+# Es ist eine gute Idee, diese Einstellung auf das Benutzerkonto zu setzen,
+# das Sie erstellt haben. Wenn Sie es leer lassen, bedeutet das, das
 # Mails für den "postmaster" nach /var/mail/mail gehen.
 exim4-config exim4/dc_postmaster        string 
 
@@ -406,8 +406,8 @@ xserver-xfree86	xserver-xfree86/config/monitor/mode-list \
 
 # Der Installer kann optional Prüfsummen von Voreinstellungsdateien überprüfen,
 # bevor er sie nutzt. Zurzeit werden nur md5sum-Prüfsummen unterstützt; die
-# md5sums müssen in der gleichen Reihenfolge aufgelistet werden wie die Dateien,
-# die genutzt werden sollen.
+# md5sums müssen in der gleichen Reihenfolge aufgelistet werden wie die Dateien
+# in den include-Regeln vorher, zu denen sie gehören.
 # (Prüfsummen werden im Sarge-Installer nicht unterstützt.)
 #d-i preseed/include/checksum          string 5da499872becccfeda2c4872f9171c3d
 

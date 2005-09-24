@@ -19,18 +19,18 @@ Das PC-BIOS an sich erlegt dem Partitionieren von Festplatten
 zusätzliche Beschränkungen auf. Es gibt ein Limit, wie viele
 <quote>primäre</quote> und <quote>logische</quote> Partitionen
 eine Festplatte enthalten darf. Zusätzlich gibt es mit BIOS-Versionen vor
-1994&ndash;98 eine Einschränkung, wo auf der Platte die bootfähige Partition liegen
-darf. Mehr Informationen finden Sie im
-<ulink url="&url-partition-howto;">Linux Partition HOWTO</ulink> und in der
+1994&ndash;98 Einschränkungen, von welchem Bereichen der Festplatte das BIOS booten kann.
+Mehr Informationen finden Sie im
+<ulink url="&url-partition-howto;">Linux-Partition-HowTo</ulink> und in der
 <ulink url="&url-phoenix-bios-faq-large-disk;">Phoenix-BIOS-FAQ</ulink>,
 aber dieses Kapitel wird Ihnen einen kurzen Überblick geben, um Ihnen zu
-helfen, die meisten Situationen zu meistern.
+helfen, die häufigsten Situationen zu meistern.
 
 </para><para>
 
 <quote>Primäre</quote> Partitionen sind das ursprüngliche Partitionsprinzip
 für PC-Festplatten. Allerdings kann es davon nur vier Stück geben. Um diese
-Grenze überschreiten zu können, wurden <quote>erweiterte</quote> (extended) und
+Grenze überschreiten zu können, wurden zusätzlich <quote>erweiterte</quote> (extended) und
 <quote>logische</quote> Partitionen eingeführt. Wenn Sie eine Ihrer primären
 Partitionen als erweiterte Partition einrichten, können Sie den Platz, den diese
 Partition einnimmt, in logische Partitionen aufteilen. Sie können bis zu
@@ -44,8 +44,8 @@ Linux beschränkt die Partitionen pro Platte auf 15 bei SCSI-Festplatten
 bei IDE-Festplatten (3 nutzbare primäre Partitionen, 60 logische Partitionen).
 Allerdings bietet das normale &debian;-System nur 20 Devices
 (Geräteschnittstellen) für Partitionen, deswegen können Sie nicht auf
-Partitionen höher als 20 installieren, außer Sie erstellen manuell
-weitere Devices für diese Partitionen.
+Partitionen höher als 20 installieren, ohne vorher manuell
+weitere Devices für diese Partitionen zu erstellen.
 
 </para><para>
 
@@ -59,27 +59,27 @@ BIOS-Translation ungefähr 524 Megabyte).
 </para><para>
 
 Diese Einschränkung betrifft Sie nicht, wenn Sie ein BIOS haben, das neuer
-als 1995&ndash;98 (abhängig vom Hersteller) ist und die <quote>Enhanced
+als von 1995&ndash;98 (abhängig vom Hersteller) ist und die <quote>Enhanced
 Disk Drive Support Specification</quote> unterstützt. Sowohl LILO, der
 LInux-LOader, wie auch Debians Alternative <command>mbr</command> müssen
 das BIOS nutzen, um den Kernel von der Platte in den RAM zu laden.
-Wenn die »BIOS Int 0x13 Large Disk Access Extensions« im BIOS gefunden
-werden, werden Sie auch genutzt. Andernfalls wird das »Legacy Disk Access Interface«
+Wenn die <quote>BIOS Int 0x13 Large Disk Access Extensions</quote> im BIOS gefunden
+werden, werden Sie auch genutzt. Andernfalls wird das <quote>Legacy Disk Access Interface</quote>
 als Fallback genutzt; allerdings können dann keine Festplattenbereiche
 oberhalb des 1023. Zylinders angesprochen werden. Sobald Linux gebootet ist,
 spielen diese Einschränkungen keine Rolle mehr, egal welches BIOS der Rechner
-hat, da Linux dann das BIOS für den Festplattenzugriff nicht mehr benötigt.
+hat, da Linux das BIOS für den Festplattenzugriff nicht mehr benötigt.
 
 </para><para>
 
 Wenn Sie eine große Festplatte haben, müssen Sie möglicherweise
-Techniken zur Zylinder-Übersetzung (»cylinder translation«) benutzen, die
+Techniken zur Zylinder-Übersetzung (<quote>cylinder translation</quote>) benutzen, die
 über das BIOS eingestellt werden, wie z.B. LBA (Logical Block Addressing)
 oder CHS Translation Mode (auf <quote>Large</quote> (groß) einstellen).
 Mehr Informationen über das Thema große Festplatten finden Sie im
-<ulink url="&url-large-disk-howto;">Large Disk-HOWTO</ulink>.
+<ulink url="&url-large-disk-howto;">Large-Disk-HowTo</ulink>.
 Wenn Sie ein Zylinder-Übersetzungs-Schema nutzen, Ihr BIOS aber nicht die
-»Large Disk Access Extensions« unterstützt, muss Ihre Bootpartition innerhalb
+<quote>Large Disk Access Extensions</quote> unterstützt, muss Ihre Bootpartition innerhalb
 des <emphasis>übersetzten</emphasis> Bereichs der ersten 1024 Zylinder liegen.
 
 </para><para>
@@ -91,8 +91,8 @@ Bereich Partitionen nach Ihren Vorstellungen anlegen. Diese Boot-Partition
 <emphasis>muss</emphasis> als <filename>/boot</filename> gemountet
 (ins Dateisystem eingehängt) werden, da dort der oder die Linux-Kernel
 gespeichert werden. Diese Konfiguration sollte auf allen Systemen funktionieren,
-egal, ob LBA-Adressierung oder CHS-Translation für große Festplatten
-genutzt wird und unabhängig davon, ob Ihr BIOS die Large Disk Access Extensions unterstützt.
+egal, ob LBA-Adressierung oder <quote>CHS-Translation</quote> für große Festplatten
+genutzt wird und unabhängig davon, ob Ihr BIOS die <quote>Large Disk Access Extensions</quote> unterstützt.
 
 </para>
   </sect2>

@@ -15,14 +15,14 @@ sind auch zwei Arten von Konsolen-Firmware verfügbar:
 <itemizedlist>
 <listitem><para>
 
-  <emphasis>SRM console</emphasis>, basiert auf der Alpha Console Subsystem-Spezifikation,
+  <emphasis>SRM Console</emphasis> basiert auf der Alpha Console Subsystem-Spezifikation,
   die eine Betriebsumgebung für OpenVMS, Tru64 UNIX und Linux-Betriebssysteme
   zur Verfügung stellt.
 
 </para></listitem>
 <listitem><para>
 
-  <emphasis>ARC, AlphaBIOS oder ARCSBIOS console</emphasis>, basiert auf der
+  <emphasis>ARC, AlphaBIOS oder ARCSBIOS Console</emphasis> basiert auf der
   Advanced RISC Computing-(ARC)Spezifikation, die eine Betriebsumgebung für
   Windows NT zur Verfügung stellt.
 
@@ -32,26 +32,26 @@ sind auch zwei Arten von Konsolen-Firmware verfügbar:
 <para>
 
 Aus der Perspektive des Benutzers gesehen ist der wichtigste Unterschied
-zwischen SRM und ARC, dass die Wahl der Konsole das mögliche
-Partitionsschema der Festplatte beeinflusst, von der Sie booten möchten.
+zwischen SRM und ARC, dass die Wahl der Konsole die möglichen
+Partitionsschemata der Festplatte einschränkt, von der Sie booten möchten.
 
 </para><para>
 
 ARC erfordert, dass Sie eine MS-DOS-Partitionstabelle für die
 Boot-Platte verwenden (wie sie durch <command>cfdisk</command>
 erstellt wird). Deswegen ist die MS-DOS-Partitionstabelle das
-<quote>native</quote> Partitionsformat, wenn man von ARC bootet. Allerdings
+<quote>native</quote> Partitionsformat, wenn man von ARC bootet. Da
+AlphaBIOS allerdings ein Festplatten-Partitionierungs-Werkzeug enthält,
 sollten Sie es vorziehen, Ihre Festplatten über das Firmware-Menü
-zu partitionieren, bevor Sie Linux installieren, da AlphaBIOS
-ein Festplatten-Partitionierungs-Werkzeug enthält.
+zu partitionieren, bevor Sie Linux installieren.
 
 </para><para>
 
 Auf der anderen Seite ist SRM <emphasis>inkompatibel</emphasis><footnote>
 
 <para>
-Genauer gesagt, kollidiert das Format des Bootsektors
-der Console-Subsystem-Spezifikation mit der Platzierung der
+Genauer gesagt, kollidiert das Format des Bootsektors, das
+die Console-Subsystem-Spezifikation verlangt, mit der Platzierung der
 DOS-Partitionstabelle.
 </para>
 
@@ -62,7 +62,7 @@ für SRM-Installationen.
 </para><para>
 
 GNU/Linux ist das einzige Betriebssystem, das auf Alpha-Systemen von
-beiden Konsolentypen booten kann, aber &debian; &release; unterstützt
+beiden Konsolentypen gebootet werden kann, aber &debian; &release; unterstützt
 nur das Booten von SRM-basierten Systemen. Wenn Sie eine Alpha-Maschine
 haben, für die keine SRM-Version verfügbar ist, wenn Sie ein Dual-Boot-System
 mit Windows-NT aufbauen möchten oder wenn Ihr Boot-Laufwerk für die
@@ -85,7 +85,7 @@ dass Sie wenn möglich SRM benutzen.
 Die folgende Tabelle fasst verfügbare und unterstützte Systemtypen
 bzw. Konsolenkombinationen zusammen (<xref linkend="alpha-cpus"/>
 enthält Infos über die Systemtypen-Bezeichnungen). Das Wort <quote>ARC</quote>
-in der Tabelle bezeichnet alle ARC-konformen Konsolen.
+in der Tabelle kennzeichnet alle ARC-konformen Konsolen.
 
 </para><para>
 
@@ -191,7 +191,7 @@ Generell kann keine der Konsolen Linux direkt booten; es ist immer
 die Hilfe eines zwischengeschalteten Bootloaders erforderlich. Für die
 SRM-Konsole gibt es <command>aboot</command>, einen kleinen,
 plattform-unabhängigen Bootloader. Sehen Sie sich auch das (leider veraltete)
-<ulink url="&url-srm-howto;">SRM-HOWTO</ulink> an.
+<ulink url="&url-srm-howto;">SRM-Firmware-HowTo</ulink> an.
 
 <!-- </para><para condition="FIXME"> -->
 <!-- commented out outdated paragraphs - H. Wansing
@@ -216,13 +216,13 @@ zu booten. <command>MILO</command> ist plattform-spezifisch (unterschiedliche
 Versionen von <command>MILO</command> für die verschiedenen Systemtypen sind
 nötig) und existiert nur für solche Systeme, die in der Tabelle mit ARC-Support
 aufgelistet sind. Lesen Sie auch das (leider überholte)
-<ulink url="&url-milo-howto;">MILO HOWTO</ulink>.
+<ulink url="&url-milo-howto;">MILO HowTo</ulink>.
 
 </para><para condition="FIXME">
 
 <command>aboot</command> ist ein kleiner, plattform-unabhängiger Bootloader,
 der nur auf SRM läuft. Siehe auch das (leider ebenfalls veraltete)
-<ulink url="&url-srm-howto;">SRM HOWTO</ulink>, wenn Sie mehr Infos über
+<ulink url="&url-srm-howto;">SRM HowTo</ulink>, wenn Sie mehr Infos über
 <command>aboot</command> wünschen.
 
 </para><para condition="FIXME">
@@ -251,8 +251,8 @@ Die Mehrzahl von AlphaServer-Systemen und aller aktuellen Server und
 Workstations enthalten sowohl SRM wie auch AlphaBIOS in ihrer Firmware.
 Bei <quote>half-flash</quote>-Maschinen wie den verschiedenen Evaluation-Boards ist
 es möglich, zwischen den beiden Versionen umzuschalten, indem man die
-Firmware neu flasht. Wenn also SRM installiert ist, kann man
-ARC/AlphaBIOS von einer Floppy starten (benutzen Sie dazu den
+Firmware neu flasht. Auch ist es möglich, ARC/AlphaBIOS von einer
+Floppy zu starten, wenn SRM einmal installiert ist (benutzen Sie dazu den
 <command>arc</command>-Befehl). Aus den bereits erwähnten Gründen
 empfehlen wir, auf SRM umzusteigen, bevor &debian; installiert wird.
 
@@ -301,7 +301,7 @@ Stellen Sie jetzt sicher, dass der richtige Medientyp eingestellt ist:
 &gt;&gt;&gt; set ewa0_mode <replaceable>mode</replaceable>
 </screen></informalexample>
 
-Mit <userinput>&gt;&gt;&gt;set ewa0_mode</userinput> bekommen Sie eine Auflistung der
+Mit <userinput>&gt;&gt;&gt;set ewa0_mode</userinput> bekommen Sie eine Liste der
 möglichen Modi.
 
 </para><para>
@@ -318,7 +318,7 @@ enthalten sind.
 </para><para>
 
 Wollen Sie eine serielle Konsole benutzen, <emphasis>müssen</emphasis>
-Sie dem Kernel den Parameter <userinput>console=</userinput> mitgeben.
+Sie dem Kernel den Parameter <userinput>console=</userinput> übergeben.
 Dies wird mit dem <userinput>-flags</userinput>-Argument gemacht, das zum
 SRM-<userinput>boot</userinput>-Kommando hinzugefügt wird. Die seriellen Ports sind
 wie die entsprechenden Dateien in <userinput>/dev</userinput> benannt.
@@ -387,9 +387,9 @@ das Floppy-Laufwerk; tippen Sie
 
 ein, um eine Liste der Geräte zu bekommen (z.B. auch, wenn Sie von CD booten
 möchten). Beachten Sie: wenn Sie via MILO booten, wird das
-<command>-flags</command>-Argument ignoriert; Sie können also einfach
+<command>-flags</command>-Argument ignoriert; Sie können also nur
 <command>boot dva0</command> benutzen.
-Wenn alles richtig läuft, werden Sie schließlich sehen, wie der Linux-Kernel
+Wenn alles richtig läuft, werden Sie eventuell sehen, wie der Linux-Kernel
 startet.
 
 </para><para>

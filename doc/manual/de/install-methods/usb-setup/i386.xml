@@ -20,7 +20,7 @@ und erstellen dann ein Dateisystem, indem Sie folgendes eingeben:
 # mkdosfs /dev/<replaceable>sda1</replaceable>
 </screen></informalexample>
 
-Sorgen Sie dafür, dass Sie den richtigen Gerätenamen für den USB-Stick
+Achten Sie darauf, dass Sie den richtigen Gerätenamen für den USB-Stick
 verwenden. Das Programm <command>mkdosfs</command> ist in dem Debian-Paket
 <classname>dosfstools</classname> enthalten.
 
@@ -28,7 +28,7 @@ verwenden. Das Programm <command>mkdosfs</command> ist in dem Debian-Paket
 
 Um den Kernel zu starten, nachdem wir vom USB-Stick gebootet haben,
 werden wir einen Bootloader auf dem Stick ablegen. Obwohl jeder Bootloader
-(wie z.B. <command>LILO</command>) funktionieren sollte, wird empfohlen,
+(wie z.B. <command>lilo</command>) funktionieren sollte, wird empfohlen,
 <command>SYSLINUX</command> zu verwenden, da er eine FAT16-Partition
 benutzt und über eine Textdatei konfiguriert werden kann. Jedes Betriebssystem,
 das das FAT-Dateisystem unterstützt, kann verwendet werden, um die
@@ -45,7 +45,7 @@ befördern, installieren Sie die Pakete <classname>syslinux</classname> und
 </screen></informalexample>
 
 Hier wieder die Warnung, den richtigen Gerätenamen zu verwenden.
-Die Partition darf nicht anderweitig ins Dateisystem eingehängt sein,
+Die Partition darf nicht ins Dateisystem eingehängt sein,
 wenn <command>SYSLINUX</command> gestartet wird. Durch diese Prozedur
 wird ein Bootsektor auf die Partition geschrieben und die Datei
 <filename>ldlinux.sys</filename> erstellt, die den Bootloader-Code
@@ -94,7 +94,7 @@ append initrd=initrd.gz ramdisk_size=12000 root=/dev/rd/0 init=/linuxrc rw
 </screen></informalexample>
 
 Beachten Sie bitte, dass der Wert für den Parameter <userinput>ramdisk_size</userinput>
-evtl. abhängig von dem Image, das Sie booten, noch erhöht werden muss.
+abhängig von dem Image, das Sie booten, evtl. noch erhöht werden muss.
 <phrase condition="sarge">Falls der Systemstart fehlschlägt, versuchen Sie,
 <userinput>devfs=mount,dall</userinput> zur <quote>append</quote>-Zeile
 hinzuzufügen.</phrase>

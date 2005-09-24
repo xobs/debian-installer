@@ -4,7 +4,7 @@
  <sect1 id="kernel-baking"><title>Einen neuen Kernel kompilieren</title>
 <para>
 
-Warum sollte jemand einen neuen Kernel kompilieren wollen?
+Warum sollte jemand einen neuen, eigenen Kernel kompilieren wollen?
 Es ist oft nicht nötig, da der Standardkernel in Debian die meisten
 Konfigurationen bedient. Allerdings kann es unter folgenden Umständen nützlich
 sein, einen neuen Kernel zu kompilieren:
@@ -13,7 +13,7 @@ sein, einen neuen Kernel zu kompilieren:
 <listitem><para>
 
 spezielle Hardwareanforderungen bewältigen oder Hardwarekonflikte mit den
-vorkompilierten Kernels
+vorkompilierten Kernel
 
 </para></listitem>
 <listitem><para>
@@ -36,7 +36,7 @@ wie z.B. Unterstützung für viel Arbeitsspeicher (high memory support)
 </para></listitem>
 <listitem><para>
 
-einen aktualisierten oder Entwicklungskernel verwenden
+einen aktualisierten oder Entwicklerkernel verwenden
 
 </para></listitem>
 <listitem><para>
@@ -67,7 +67,7 @@ komplette Liste).
 </para><para>
 
 Diese Methode erstellt ein .deb-Paket aus den Kernelquellen und, falls
-Sie Nicht-Standard-Module verwenden, auch ein synchrones .deb für diese
+Sie Nicht-Standard-Module verwenden, auch ein synchrones abhängiges .deb für diese
 Module. Es ist ein besserer Weg, um die Kernel-Images zu verwalten
 (verglichen mit der Nicht-Debian-Methode, einen Kernel zu erzeugen);
 <filename>/boot</filename> enthält den Kernel, die dazugehörige
@@ -104,7 +104,7 @@ da er keine speziellen Berechtigungen erfordert.
 
 </para>
 
-</footnote>. Ebenso gehen wird davon aus, dass die zu bauende Kernel-Version
+</footnote>. Ebenso gehen wird davon aus, dass Ihre zu bauende Kernel-Version
 &kernelversion; ist. Vergewissern Sie sich, dass Sie sich in dem Verzeichnis
 befinden, in das Sie die Kernelquellen entpacken möchten und extrahieren Sie
 sie mittels <userinput>tar xjf /usr/src/kernel-source-&kernelversion;.tar.bz2</userinput>.
@@ -116,7 +116,7 @@ das erzeugt wurde.
 Sie können jetzt Ihren Kernel konfigurieren. Führen Sie <userinput>make
 xconfig</userinput> aus, wenn X11 installiert, konfiguriert und gestartet ist;
 andernfalls nehmen Sie <userinput>make menuconfig</userinput> (hierzu muss
-das Paket <classname>libncurses5-dev</classname>-Paket installiert sein). Nehmen Sie sich
+das Paket <classname>libncurses5-dev</classname> installiert sein). Nehmen Sie sich
 die Zeit, die Onlinehilfe zu lesen, und wählen Sie sorgfältig die Optionen aus.
 Wenn Sie Zweifel haben, ist es typischerweise besser, den zweifelhaften
 Gerätetreiber mit in den Kernel zu integrieren (ein Gerätetreiber ist ein
@@ -127,8 +127,6 @@ belassen, wenn Sie sie nicht verstehen. Vergessen Sie nicht, den
 <quote>Kernel module loader</quote> unter <quote>Loadable module support</quote>
 zu aktivieren (diese Option ist standardmäßig nicht aktiv). Tun Sie dies nicht, wird
 Ihr Debian-System Probleme machen.
-
- <quote>Kernel module loader</quote>
 
 </para><para>
 
@@ -143,7 +141,7 @@ Kompilieren Sie jetzt den Kernel mit:
 Die Versionsnummer <quote>1.0</quote> können Sie nach Belieben ändern. Sie wird nur
 von Ihnen selbst verwendet, um Ihre verschiedenen Kernel zu verwalten.
 Ebenso können Sie jedes andere Wort statt <quote>custom</quote> verwenden (z.B. den
-Host-Namen des Rechners). Die Kernelkompilierung könnte eine Weile dauern,
+Host-Namen des Rechners). Die Kernelkompilierung könnte eine ganze Weile dauern,
 abhängig von der Leistungsfähigkeit Ihres Rechners.
 
 </para><para condition="supports-pcmcia">
@@ -161,7 +159,8 @@ Sobald die Kompilierung beendet ist, können Sie Ihren eigenen Kernel wie
 ein Paket installieren. Tippen Sie als root <userinput>dpkg -i
 ../kernel-image-&kernelversion;-<replaceable>subarchitecture</replaceable>_custom.1.0_&architecture;.deb</userinput>
 ein. Der Teil <replaceable>subarchitecture</replaceable> im Dateinamen ist eine
-optionale Unterarchitektur, <phrase arch="i386"> wie z.B. <quote>i586</quote>, </phrase>
+optionale Bezeichnung für die Unterarchitektur, <phrase arch="i386"> wie
+z.B. <quote>i586</quote>, </phrase>
 abhängig davon, welche Kerneloptionen Sie gesetzt haben.
 <userinput>dpkg -i kernel-image...</userinput> installiert den Kernel
 zusammen mit ein paar anderen dazugehörigen Dateien. Zum Beispiel wird
@@ -171,7 +170,7 @@ die <filename>System.map</filename> korrekt installiert
 sie enthält Ihre aktuelle Konfiguration. Ihr neues
 <classname>kernel-image-&kernelversion;</classname>-Paket ist ebenfalls
 clever genug, automatisch eine Aktualisierung Ihres Bootloaders zu starten,
-die es Ihnen erlaubt, den neuen Kernel zu booten, ohne den Bootloader
+die es Ihnen erlaubt, den neuen Kernel zu booten, ohne den Bootloader manuell
 neu konfigurieren zu müssen. Wenn Sie auch ein Modul-Paket erzeugt
 haben, weil Sie z.B. PCMCIA benötigen, müssen Sie auch dieses Paket noch
 installieren.

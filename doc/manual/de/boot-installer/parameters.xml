@@ -22,9 +22,9 @@ ausprobieren, die den Kernel über Ihre Hardware informieren.
 
 Informationen über viele Boot-Parameter finden Sie im
 <ulink url="http://www.tldp.org/HOWTO/BootPrompt-HOWTO.html"> Linux
-BootPrompt-HOWTO</ulink>, inklusive Tipps für problematische Hardware.
+BootPrompt-HowTo</ulink>, inklusive Tipps für problematische Hardware.
 Dieses Kapitel enthält nur einen Abriss der wichtigsten Parameter.
-Einige allgemeine Parameter sind in <xref linkend="boot-troubleshooting"/>
+Einige häufig vorkommenden Problemfälle sind in <xref linkend="boot-troubleshooting"/>
 beschrieben.
 
 </para><para>
@@ -40,7 +40,7 @@ erscheinen.
 <replaceable>Total</replaceable> sollte der Summe des installierten
 Arbeitsspeichers in Kilobyte entsprechen. Wenn dem nicht so ist,
 müssen Sie den Parameter <userinput>mem=<replaceable>ram</replaceable></userinput>
-verwenden, wobei <replaceable>ram</replaceable> durch den Gesamtwert des RAMs
+verwenden, wobei <replaceable>ram</replaceable> durch den Gesamtwert des Arbeitsspeichers
 ersetzt werden muss (mit einem nachfolgenden <quote>k</quote> für Kilobyte
 oder <quote>m</quote> für Megabyte). Ein Beispiel: sowohl
 <userinput>mem=65536k</userinput>
@@ -187,8 +187,8 @@ Sie die Shell, um den Bootprozess fortzusetzen).
 <term><userinput>BOOT_DEBUG=3</userinput></term>
 <listitem><para>
 
-An verschiedenen Stellen des Boot-Prozesses wird eine Shell gestartet, um 
-detaillierte Fehlersuche zu ermöglichen. Schließen Sie die Shell, um den 
+An verschiedenen Stellen des Boot-Prozesses wird eine Shell gestartet, um
+detaillierte Fehlersuche zu ermöglichen. Schließen Sie die Shell, um den
 Bootvorgang fortzusetzen.
 
 </para></listitem>
@@ -203,15 +203,15 @@ Bootvorgang fortzusetzen.
 <term>INSTALL_MEDIA_DEV</term>
 <listitem><para>
 
-Der Wert dieses Parameters ist der Pfad zu dem Gerät, von dem der 
+Der Wert dieses Parameters ist der Pfad zu dem Gerät, von dem der
 Installer geladen wird. Ein Beispiel: 
 <userinput>INSTALL_MEDIA_DEV=/dev/floppy/0</userinput>
 
 </para><para>
 
-Die Boot-Floppy scannt normalerweise alle möglichen Floppy-Laufwerke 
-und USB-Speicher-Geräte, um die Root-Floppy zu finden; der  
-Parameter kann dies überschreiben, so dass nur dieses eine Gerät 
+Die Boot-Floppy scannt normalerweise alle möglichen Floppy-Laufwerke
+und USB-Speicher-Geräte, um die Root-Floppy zu finden; der
+Parameter kann dies überschreiben, so dass nur dieses eine Gerät
 durchsucht wird.
 
 </para></listitem>
@@ -221,33 +221,33 @@ durchsucht wird.
 <term>debian-installer/framebuffer</term>
 <listitem><para>
 
-Auf einigen Architekturen wird der Kernel-Framebuffer benutzt, um 
-die Installation in vielen verschiedenen Sprachen anbieten zu können. 
-Falls der Framebuffer auf Ihrem System Probleme macht, können Sie ihn 
-mit dem Parameter <userinput>debian-installer/framebuffer=false</userinput> 
-deaktivieren. Symptome für diese Probleme können Fehlermeldungen über 
-<quote>bterm</quote> oder <quote>boql</quote> sein sowie ein schwarzer Bildschirm oder ein 
+Auf einigen Architekturen wird der Kernel-Framebuffer benutzt, um
+die Installation in vielen verschiedenen Sprachen anbieten zu können.
+Falls der Framebuffer auf Ihrem System Probleme macht, können Sie ihn
+mit dem Parameter <userinput>debian-installer/framebuffer=false</userinput>
+deaktivieren. Symptome für diese Probleme können Fehlermeldungen betreffend
+<quote>bterm</quote> oder <quote>bogl</quote> sein sowie ein schwarzer Bildschirm oder ein
 Einfrieren des Systems ein paar Minuten nach dem Installationsstart.
 
 </para><para arch="i386">
 
-Manchmal muss <userinput>video=vga16:off</userinput> benutzt werden, 
-um den Framebuffer zu deaktivieren. Solche Probleme wurden von 
+Manchmal muss auch <userinput>video=vga16:off</userinput> benutzt werden,
+um den Framebuffer zu deaktivieren. Solche Probleme wurden von
 einem Dell Inspiron mit Mobile Radeon-Grafikkarte berichtet.
 
 </para><para arch="m68k">
 
-Probleme mit dem Framebuffer wurden auch von Amiga 1200 und SE/30 berichtet.
+Probleme mit dem Framebuffer wurden u.a. von Amiga 1200 und SE/30 berichtet.
 
 </para><para arch="hppa">
 
-Probleme mit dem Framebuffer wurden auch von hppa-Systemen berichtet.
+Probleme mit dem Framebuffer wurden u.a. von hppa-Systemen berichtet.
 
 </para><note arch="sparc"><para>
 
 Aufgrund von Darstellungsproblemen auf manchen Systemen ist die
 Framebuffer-Unterstützung für die &arch-title;-Architektur <emphasis>standardmäßig
-deaktiviert</emphasis>. Dies kann auf Systemen, die Framebuffer eigentlich
+deaktiviert</emphasis>. Dies kann auf Systemen, die den Framebuffer eigentlich
 korrekt unterstützen (wie solche mit ATI-Grafikkarten), zu einer seltsamen
 Anzeige führen. Wenn Sie solche Anzeigeprobleme im Installer feststellen,
 können Sie versuchen, mit dem Parameter
@@ -260,8 +260,8 @@ können Sie versuchen, mit dem Parameter
 <term>debian-installer/probe/usb</term>
 <listitem><para>
 
-Auf <userinput>false</userinput> gesetzt unterbindet dieses Argument 
-die Suche nach USB-Geräten, falls diese Probleme verursacht.
+Auf <userinput>false</userinput> gesetzt unterbindet dieses Argument
+die Suche nach USB-Geräten für den Fall, dass diese sonst Probleme verursacht.
 
 </para></listitem>
 </varlistentry>
@@ -291,9 +291,9 @@ einzugeben.
 <term>hw-detect/start_pcmcia</term>
 <listitem><para>
 
-Setzen Sie diesen Parameter auf <userinput>false</userinput>, 
-um den Start von PCMCIA-Diensten zu verhindern, falls dies 
-Probleme verursacht. Einige Laptops sind bekannt für solche 
+Setzen Sie diesen Parameter auf <userinput>false</userinput>,
+um den Start von PCMCIA-Diensten zu verhindern, falls dies sonst
+Probleme verursacht. Einige Laptops sind bekannt für solche
 Phänomene.
 
 </para></listitem>
@@ -303,8 +303,8 @@ Phänomene.
 <term>preseed/url</term>
 <listitem><para>
 
-Geben Sie die URL einer Voreinstellungs-Datei an, die heruntergeladen 
-und benutzt wird, um die Installation zu automatisieren. Siehe auch 
+Geben Sie die URL einer Voreinstellungs-Datei an, die heruntergeladen
+und benutzt wird, um die Installation zu automatisieren. Siehe auch
 <xref linkend="automatic-install"/>.
 
 </para></listitem>
@@ -314,8 +314,8 @@ und benutzt wird, um die Installation zu automatisieren. Siehe auch
 <term>preseed/file</term>
 <listitem><para>
 
-Geben Sie den Pfad zu einer Voreinstellungs-Datei an, die geladen werden kann, 
-um die Installation zu automatisieren. Siehe auch 
+Geben Sie den Pfad zu einer Voreinstellungs-Datei an, die geladen werden kann,
+um die Installation zu automatisieren. Siehe auch
 <xref linkend="automatic-install"/>.
 
 </para></listitem>
@@ -346,7 +346,7 @@ der Basisinstallation nicht mehr vom optischen Laufwerk bootet.
 <term>ramdisk_size</term>
 <listitem><para>
 
-Wenn Sie einen Kernel in Version 2.2.x benutzen, müssen Sie unter Umständen 
+Wenn Sie einen Kernel in Version 2.2.x benutzen, müssen Sie unter Umständen
 die &ramdisksize; angeben.
 
 </para></listitem>

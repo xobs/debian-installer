@@ -9,15 +9,15 @@ Wenn Ihr Rechner mit einem Netzwerk (Local Area Network, LAN) verbunden ist,
 sind Sie vielleicht in der Lage, über das Netzwerk per TFTP von einem
 anderen Rechner aus zu booten. Wenn Sie dies vorhaben, müssen
 die Boot-Dateien in speziellen Verzeichnissen auf diesem entfernten Rechner
-abgelegt werden und der Rechner muss für das Booten Ihrer Maschine
-speziell konfiguriert werden.
+abgelegt werden und der Rechner muss für das Booten speziell Ihrer Maschine
+konfiguriert werden.
 
 </para><para>
 
-Sie müssen einen TFTP-Server einrichten und in manchen Fällen auch
-einen BOOTP-Server 
-<phrase condition="supports-rarp">oder einen RARP-Server</phrase>
-<phrase condition="supports-dhcp">oder einen DHCP-Server</phrase>.
+Sie müssen einen TFTP-Server einrichten und in vielen Fällen auch
+einen BOOTP-Server<phrase
+condition="supports-rarp"> oder einen RARP-Server</phrase><phrase
+condition="supports-dhcp"> oder einen DHCP-Server</phrase>.
 
 </para><para>
 
@@ -29,7 +29,7 @@ verwenden soll. Ein anderer Weg wäre, das BOOTP-Protokoll zu verwenden. </phras
 Computer seine IP-Adresse mitteilt und wo er im Netzwerk ein Boot-Image
 findet. </phrase>
 
-<phrase arch="m68k">Noch eine andere Möglichkeit auf VMEbus-Systemen:
+<phrase arch="m68k">Auf VMEbus-Systemen existiert noch eine andere Möglichkeit:
 die IP-Adresse kann manuell im Boot-ROM eingestellt werden. </phrase>
 
 <phrase condition="supports-dhcp">Das Dynamic-Host-Configuration-Protocol
@@ -42,7 +42,7 @@ Auf PowerPCs, wenn Sie einen NewWorld-PowerMac haben, ist es eine
 gute Idee, DHCP statt BOOTP zu benutzen. Einige der Maschinen der letzten
 Generationen können nicht per BOOTP starten.
 
-</para><para arch="alpha"> 
+</para><para arch="alpha">
 
 Im Gegensatz zu OpenFirmware auf Sparc- und PowerPC-Maschinen kann
 die SRM-Konsole RARP <emphasis>nicht</emphasis> nutzen, um eine IP-Adresse
@@ -62,7 +62,7 @@ Ihrem Alpha-Rechner zu booten.
 </footnote>Sie können ebenfalls die IP-Konfiguration für
 Netzwerk-Schnittstellen direkt in der SRM-Konsole eingeben.
 
-</para><para arch="hppa"> 
+</para><para arch="hppa">
 
 Einige ältere HPPA-Maschinen (wie z.B. 715/75) funktionieren eher
 mit RBOOTD als mit BOOTP. Ein RBOOTD-Paket ist auf der Parisc-Linux-Website
@@ -71,14 +71,14 @@ verfügbar.
 </para><para>
 
 Das Trivial-File-Transfer-Protocol (TFTP) wird benutzt, um dem Client
-das Boot-Image zur Verfügung zu stellen. Theoretisch kann jeder Server
+das Boot-Image zur Verfügung zu stellen. Theoretisch könnte jeder Server
 auf jeder Plattform benutzt werden, der diese Protokolle implementiert hat.
 In den Beispielen in diesem Abschnitt geben wir Kommandos für
 SunOS 4.x, SunOS 5.x (a.k.a. Solaris) und GNU/Linux an.
 
 <note arch="i386"><para>
 
-Um die Pre-Boot-Execution-Environment-(PXE-)Methode von TFTP zu nutzen,
+Um die Pre-Boot-Execution-Environment- (PXE) Methode von TFTP zu nutzen,
 benötigen Sie einen TFTP-Server mit Unterstützung für
 <userinput>tsize</userinput>. Auf einem &debian;-Server sind dies
 <classname>atftpd</classname> und <classname>tftpd-hpa</classname>;
@@ -104,7 +104,7 @@ wie der folgenden in <filename>/etc/inetd.conf</filename> erreichen:
 tftp dgram udp wait nobody /usr/sbin/tcpd in.tftpd /tftpboot
 </screen></informalexample>
 
-Debian-Pakete richten dies generell korrekt ein, wenn sie installiert werden.
+Die Debian-Pakete richten dies generell standardmäßig korrekt ein, wenn sie installiert werden.
 
 </para><para>
 
@@ -113,30 +113,30 @@ als Argument hinter <command>in.tftpd</command> eingetragen ist; Sie
 werden es später brauchen. Das Argument <userinput>-l</userinput>
 aktiviert bei einigen Versionen von <command>in.tftpd</command> das
 Logging, so dass alle Anfragen im Systemlog protokolliert werden;
-dies ist sinnvoll für die Fehlersuche bei Bootproblemen.
+dies ist nützlich für die Fehlersuche bei Bootproblemen.
 Wenn Sie <filename>/etc/inetd.conf</filename> ändern mussten,
 ist es nötig, dem laufenden <command>inetd</command>-Prozess
 mitzuteilen, dass sich die Konfigurationsdatei geändert hat.
 Auf einem Debian-Rechner erledigen Sie das mit
 <userinput>/etc/init.d/inetd reload</userinput>; auf anderen Maschinen
 müssen Sie die Prozess-ID von <command>inetd</command> herausfinden
-und <userinput>kill -HUP <replaceable>inetd-pid</replaceable></userinput>
+und <userinput>kill -HUP <replaceable>Prozess-ID</replaceable></userinput>
 ausführen.
 
 </para><para arch="mips">
 
 Wenn Sie vorhaben, Debian auf einer SGI-Maschine zu installieren, und Ihr
 TFTP-Server ist ein GNU/Linux-Rechner mit Linux 2.4, müssen Sie auf dem
-Server folgendes ausführen:
+Server folgendes ausführen
 
 <informalexample><screen>
 # echo 1 &gt; /proc/sys/net/ipv4/ip_no_pmtu_disc
 </screen></informalexample>
 
-um Path MTU discovery auszuschalten, andernfalls kann der PROM des Indy
+um <quote>Path MTU discovery</quote> auszuschalten, andernfalls kann der PROM des Indy
 den Kernel nicht herunterladen. Außerdem müssen Sie sicherstellen, dass
 TFTP-Pakete von einem Quellport nicht größer als 32767 verschickt werden,
-sonst wird der Download nach dem ersten Paket gestoppt. Es ist wieder
+sonst wird der Download nach dem ersten Paket stoppen. Es ist wieder
 der Linux-Kernel 2.4.x, der diesen Fehler im PROM auslöst, aber Sie können
 dies vermeiden, indem Sie
 
@@ -168,14 +168,14 @@ TFTP-Client ab und es gibt dabei keine festen Standards.
 Auf NewWorld-PowerMacs müssen Sie den <command>yaboot</command>-Bootloader
 als TFTP-Bootimage einstellen. <command>Yaboot</command> wird dann
 selbst das Kernel- und RAM-Disk-Image per TFTP abrufen. Für Netzwerk-Boot
-benutzen Sie die Datei <filename>yaboot-netboot.conf</filename> und
-benennen sie einfach in <filename>yaboot.conf</filename> im TFTP-Verzeichnis
+benutzen Sie die Datei <filename>yaboot-netboot.conf</filename>;
+benennen sie sie einfach in <filename>yaboot.conf</filename> im TFTP-Verzeichnis
 um.
 
 </para><para arch="i386">
 
 Um per PXE zu booten, müssen Sie nur den
-<filename>netboot/netboot.tar.gz</filename>-Tarball vorbereiten.
+<filename>netboot/netboot.tar.gz</filename>-Tarball einrichten.
 Entpacken Sie den Tarball einfach in das
 <command>tftpd</command>-Bootimage-Verzeichnis. Stellen Sie sicher, dass
 der DHCP-Server konfiguriert ist, <filename>/pxelinux.0</filename> als
@@ -184,7 +184,7 @@ zu bootende Datei zum <command>tftpd</command> weiterzuleiten.
 </para><para arch="ia64">
 
 Um per PXE zu booten, müssen Sie nur den
-<filename>netboot/netboot.tar.gz</filename>-Tarball vorbereiten.
+<filename>netboot/netboot.tar.gz</filename>-Tarball einrichten.
 Entpacken Sie den Tarball einfach in das
 <command>tftpd</command>-Bootimage-Verzeichnis. Stellen Sie sicher, dass
 der DHCP-Server konfiguriert ist, <filename>/debian-installer/ia64/elilo.efi</filename>
@@ -200,8 +200,8 @@ Für DECstations gibt es tftp-Image-Dateien für jede Unterarchitektur,
 die sowohl Kernel wie auch den Installer in einer Datei enthalten.
 Sie sind nach dem Schema <replaceable>subarchitecture</replaceable>/netboot-boot.img
 benannt. Kopieren Sie die tftp-Image-Datei, die Sie benutzen wollen,
-nach <userinput>/tftpboot/tftpboot.img</userinput> (wenn Sie das Beispiel
-mit BOOTP/DHCP von oben verwenden).
+nach <userinput>/tftpboot/tftpboot.img</userinput> (wenn Sie das obige Beispiel
+mit BOOTP/DHCP verwenden).
 
 </para><para>
 
@@ -219,7 +219,7 @@ zusätzliche Parameter angeben müssen, können Sie folgende Syntax verwenden:
 
 </para><para>
 
-Einige Versionen der DECstation-Firmware haben ein Problem betreffend das
+Mehrere Versionen der DECstation-Firmware haben ein Problem betreffend das
 Booten per Netzwerk: die Übertragung beginnt, aber nach einiger Zeit stoppt
 sie mit einem Fehler (<computeroutput>a.out err</computeroutput>).
 Dies kann verschiedene Gründe haben:
@@ -298,7 +298,7 @@ Dateinamen zu bekommen, müssen Sie alle Buchstaben in Großbuchstaben
 Manche Sparc-Systeme kann man zwingen, nach einem bestimmten Dateinamen
 zu suchen, indem man ihn ans Ende des OpenPROM-Boot-Befehls anhängt, z.B.
 <userinput>boot net my-sparc.image</userinput>. Die Datei muss dabei immer
-in dem Verzeichnis liegen, in dem der TFTP-Server danach sucht.
+in dem Verzeichnis liegen, in dem der TFTP-Server sucht.
 
 </para>
    </sect3>

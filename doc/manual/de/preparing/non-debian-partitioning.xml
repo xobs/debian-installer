@@ -7,15 +7,15 @@
 
 Das Partitionieren Ihrer Festplatte ist das Aufteilen Ihrer Platte
 in einzelne Abschnitte. Jeder Abschnitt ist von den anderen unabhängig. Es
-ist so ähnlich wie das Aufstellen von Wänden in Ihrem Haus; wenn Sie in
+ist so ähnlich wie das Aufstellen von Wänden in einem Haus; wenn Sie in
 einem Raum ein Möbelstück aufstellen, beeinflusst das die anderen Räume
 nicht.
 
 </para><para arch="s390">
 
-Wenn hier von <quote>Festplatten</quote> gesprochen wird, sollten Sie das für die &arch-title;-Welt
-als DASD oder VM-Minidisk verstehen. Mit einem Rechner ist in diesem Fall ein LPAR
-oder VM-Gast gemeint.
+Wenn hier von <quote>Festplatten</quote> gesprochen wird, sollten Sie das
+für die &arch-title;-Welt als DASD oder VM-Minidisk verstehen. Mit einem
+Rechner ist in diesem Fall ein LPAR oder VM-Gast gemeint.
 
 </para><para>
 
@@ -42,7 +42,7 @@ neu partitionieren. Debian benötigt eigene Festplatten-Partitionen.
 Es kann nicht auf Windows- oder MacOS-Partitionen installiert werden.
 Es kann sich möglicherweise Partitionen mit anderen Linux-Systemen teilen,
 was hier jedoch nicht behandelt wird.
-Sie brauchen mindestens eine Partition für das Debian-Hauptverzeichnis.
+Sie brauchen mindestens eine eigene Partition für das Debian-Root-Verzeichnis.
 
 </para><para>
 
@@ -52,7 +52,6 @@ arch="i386">, wie etwa fdisk oder PartitionMagic</phrase><phrase
 arch="powerpc">, wie etwa Drive Setup, HD Toolkit oder MacTools</phrase><phrase
 arch="m68k">, wie etwa HD SC Setup, HDToolBox oder SCSITool</phrase><phrase
 arch="s390">, wie dem VM diskmap</phrase>.
-
 Partitionierungsprogramme bieten immer eine Möglichkeit,
 existierende Partitionen anzuzeigen, ohne Änderungen vorzunehmen.
 
@@ -73,8 +72,8 @@ zerstören.
 
 Wenn Ihr Rechner mehr als eine Festplatte hat, möchten Sie vielleicht
 eine der Festplatten komplett für Debian verwenden. Wenn dies der Fall
-ist, müssen Sie diese Festplatte nicht partitionieren, bevor Sie das
-Installationssystem starten; das im Installer enthaltene
+ist, müssen Sie diese Festplatte nicht partitionieren, bevor Sie die
+Installation starten; das im Installer enthaltene
 Partitionierungsprogramm kann diese Aufgabe problemlos übernehmen.
 
 </para><para>
@@ -86,7 +85,8 @@ warten, bis es als Teil des Installationsprozesses aufgerufen wird
 System-Tapes, CD-ROM oder per Netzwerk-Boot starten.
 Denken Sie daran: wenn Sie von Dateien booten, die sich auf der
 Festplatte befinden, und diese Festplatte im Installationsvorgang neu
-partitionieren, sollten Sie hoffen, dass die Installation gleich
+partitionieren (das heißt, Sie zerstören die Bootdateien), sollten Sie
+hoffen, dass die Installation gleich
 auf Anhieb erfolgreich funktioniert. Zumindest sollten Sie in diesem
 Fall eine alternative Methode zum Wiederherstellen des Systems wie zum
 Beispiel die CDs oder Tapes der Originalinstallation bereithalten.
@@ -95,7 +95,7 @@ Beispiel die CDs oder Tapes der Originalinstallation bereithalten.
 
 Wenn Ihr Gerät bereits mehrere Partitionen hat und genug Platz durch das
 Löschen oder Ersetzen von einer oder mehreren von ihnen geschaffen werden
-kann, dann können Sie auch warten und das Partitionierungsprogramm des
+kann, dann können Sie ebenfalls warten und das Partitionierungsprogramm des
 Debian-Installers verwenden. Sie sollten sich trotzdem die folgenden
 Informationen durchlesen, da es spezielle Umstände (wie die Reihenfolge
 der existierenden Partitionen innerhalb der Partitionstabelle) gibt,
@@ -124,26 +124,26 @@ Partitionen dieses Betriebssystems erstellen, die Sie behalten wollen.
 
 Wenn Sie mehr als ein Betriebssystem auf dem gleichen Gerät installieren,
 sollten Sie alle anderen Betriebssysteme installieren, bevor Sie mit
-der Linux-Installation fortfahren. Windows- und andere
+der Linux-Installation beginnen. Windows- und andere
 Betriebssystem-Installationen könnten das Starten von Linux unmöglich machen,
 oder Ihnen empfehlen, nicht-eigene Partitionen neu zu formatieren.
 
 </para><para>
 
-Sie können Beschädigungen durch diese Aktionen reparieren oder vermeiden,
+Sie können Beschädigungen durch solche Aktionen reparieren oder vermeiden,
 aber das vorherige Installieren dieser Systeme erspart Probleme.
 
 </para><para arch="powerpc">
 
 Damit OpenFirmware &debian; automatisch startet, sollten sich die
 Linux-Partitionen vor allen anderen Partitionen auf der Platte befinden,
-speziell vor Mac-OS-Boot-Partitionen. Daran sollten Sie denken, wenn Sie im
-voraus partitionieren; Sie sollten einen Platzhalter für eine Linux-Partition
+speziell vor MacOS-Boot-Partitionen. Daran sollten Sie denken, wenn Sie vor der
+Linuxinstallation partitionieren; Sie sollten einen Platzhalter für eine Linux-Partition
 <emphasis>vor</emphasis> den anderen bootfähigen Partitionen auf der Platte
 anlegen. (Die kleinen Partitionen, die für Apple-Disk-Treiber reserviert sind,
-sind nicht bootfähig.)
-Sie können den Platzhalter mit den Linux-Partitionsprogrammen später während
-der eigentlichen Installation löschen und durch Linux-Partitionen ersetzen.
+sind <emphasis>keine</emphasis> bootfähigen Partitionen.)
+Sie können die Platzhalter-Partition später während der eigentlichen Installation
+mit den Linux-Partitionierungsprogrammen löschen und durch Linux-Partitionen ersetzen.
 
 </para><para>
 
@@ -169,26 +169,26 @@ um den Start des MacOS-Systems von der CD zu erzwingen.</phrase>
 </para></listitem>
 <listitem><para>
 
-Verwenden Sie das native Partitionierungsprogramm zum Erstellen der
+Verwenden Sie die nativen Partitionierungsprogramme von MacOS zum Erstellen der
 nativen Systempartition(en). Erzeugen Sie entweder eine
 Platzhalter-Partition oder lassen Sie freien Speicherplatz für &debian;.
 
 </para></listitem>
 <listitem><para>
 
-Installieren Sie das native Betriebssystem in seiner neuen Partition.
+Installieren Sie das native Betriebssystem neu in seiner neuen (verkleinerten) Partition.
 
 </para></listitem>
 <listitem><para>
 
 Starten Sie das native Betriebssystem, um sicherzustellen, dass alles
-funktioniert, und um die Debian-Installer-Boot-Dateien herunterzuladen.
+funktioniert, und um die Debian-Installer-Bootdateien herunterzuladen.
 
 </para></listitem>
 <listitem><para>
 
 Starten Sie den Debian-Installer, um mit der Debian-Installation
-fortzufahren.
+weiterzumachen.
 
 </para></listitem>
 </orderedlist>

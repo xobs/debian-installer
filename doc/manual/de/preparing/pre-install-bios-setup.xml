@@ -6,11 +6,11 @@
 <para>
 
 Dieses Kapitel wird Sie durch die Hardware-Einstellungen vor der Installation
-leiten (falls nötig), die Sie machen müssen, bevor Sie Debian installieren.
-Generell beinhaltet dies das Überprüfen und eventuell Ändern von 
+leiten, die Sie eventuell machen müssen, bevor Sie Debian installieren.
+Generell beinhaltet dies das Überprüfen und eventuell Ändern von
 Firmware-Einstellungen für Ihr System. Die <quote>Firmware</quote> ist die von der Hardware
 genutzte interne Software; sie ist meistens höchst kritisch in den Bootprozess
-involviert (nach dem Einschalten). Bekannte Hardware-Probleme, die die 
+involviert (nach dem Einschalten). Bekannte Hardware-Probleme, die die
 Betriebssicherheit von &debian; auf Ihrem System beeinträchtigen könnten, werden hier
 ebenfalls behandelt.
 
@@ -31,26 +31,26 @@ Temperatur sowie einiger anderer Faktoren und könnte beschädigt werden.
 Einer der Autoren dieses Dokuments hatte sein eigenes System für ein Jahr
 übertaktet, und dann begannen Probleme, dass das <command>gcc</command>-Programm
 während der Kompilierung von Betriebssystem-Kernels aufgrund eines 
-unerwarteten Signals abbrach. Das Problem konnte nur durch Reduzieren des 
+unerwarteten Signals abbrach. Das Problem konnte nur durch Reduzieren des
 CPU-Taktes auf den regulären Wert gelöst werden.
 
 </para><para arch="not-s390">
 
-Der <command>gcc</command>-Compiler ist oft die erste Anwendung, die 
-aufgrund von schlechten/defekten Speichermodulen (oder anderen 
-Hardware-Problemen, durch die Daten unberechenbar verändert werden) abstürzt, 
+Der <command>gcc</command>-Compiler ist oft die erste Anwendung, die
+aufgrund von schlechten/defekten Speichermodulen (oder anderen
+Hardware-Problemen, durch die Daten unberechenbar verändert werden) abstürzt,
 weil er gewaltige Datenstrukturen verarbeitet, die dabei wiederholt
 durchlaufen werden. Jeglicher Fehler in diesen Strukturen verursacht
-das Ausführen eines unerlaubten Befehls oder das Adressieren einer
-nicht existenten Adresse. Durch diese Symptome wird der <command>gcc</command>
+das Ausführen eines unerlaubten Befehls oder den Zugriff auf eine
+nicht existente Adresse. Durch diese Symptome wird der <command>gcc</command>
 aufgrund eines unerwarteten Signals beendet.
 
 </para><para arch="m68k">
 
 Atari-TT-RAM-Boards sind berühmt-berüchtigt für RAM-Probleme unter Linux;
-wenn Ihnen seltsame Symptome unterkommen, versuchen Sie zuerst, den Kernel
+wenn Ihnen seltsame Symptome unterkommen, versuchen Sie, zumindest den Kernel
 im ST-RAM laufen zu lassen. Amiga-Nutzer müssen vielleicht einen Teil
-des RAMs ausschließen (benutzen Sie dafür das <quote>booter-memfile</quote>).
+des RAMs ausschließen (benutzen Sie dafür ein <quote>booter memfile</quote>).
 
 <phrase condition="FIXME"><emphasis>
 
@@ -62,17 +62,17 @@ FIXME: more description of this needed.
 
 Wirklich gute Mainboards unterstützen RAM mit Parity und informieren
 den Benutzer, falls das System einen Single-Bit-Fehler im RAM hat.
-Allerdings haben sie keine Möglichkeit, das Problem zu beheben, da sie
-unverzüglich abstürzen, nachdem sie den RAM-Fehler gemeldet haben. Dennoch
+Allerdings haben sie keine Möglichkeit, das Problem zu beheben; deswegen stürzen
+sie unverzüglich ab, nachdem sie den RAM-Fehler gemeldet haben. Dennoch
 ist es besser, über den defekten Speicher informiert zu werden, als wenn
-sich unbemerkt Fehler einschleichen. Deswegen haben die besten Systeme
+unbemerkt Fehler in Ihre Daten eingeschleust werden. Deswegen haben die besten Systeme
 Motherboards, die Parity und True-Parity-Speichermodule unterstützen;
 siehe auch <xref linkend="Parity-RAM"/>.
 
 </para><para arch="i386">
 
 Wenn Sie True-Parity-Speicher haben und Ihr Motherboard damit umgehen
-kann, stellen Sie sicher, dass die entsprechenden BIOS-Einstellungen 
+kann, stellen Sie sicher, dass die entsprechenden BIOS-Einstellungen
 aktiviert sind, so dass das Motherboard abbricht, falls ein Speicher-Parity-Fehler
 auftritt.
 
@@ -81,13 +81,13 @@ auftritt.
    <sect3 arch="i386"><title>Der Turbo-Schalter</title>
 <para>
 
-Viele Systeme haben einen <emphasis>turbo</emphasis>-Schalter, der den
+Viele Systeme haben einen <emphasis>Turbo</emphasis>-Schalter, der den
 CPU-Takt beeinflusst. Wählen Sie die Einstellung für hohe Geschwindigkeit.
 Wenn ihr BIOS die Möglichkeit bietet, den Turboschalter zu deaktivieren
 (oder die Kontrolle des CPU-Takts per Software), tun Sie es und setzen
-Sie den CPU-Takt fest auf die schnelle Geschwindigkeit. Uns wurde berichtet,
-dass Linux auf einem besonderen System während der Hardwareerkennung
-fälschlicherweise die Software-Control-Einstellung des Turboschalters 
+Sie den CPU-Takt fest auf die schnelle Geschwindigkeit. Uns wurde von einem
+speziellen System berichtet, auf dem Linux während der Hardwareerkennung
+fälschlicherweise die Software-Control-Einstellung für den Turboschalter
 verändern könnte.
 
 </para>
@@ -105,8 +105,8 @@ System sonst <emphasis>erheblich</emphasis> langsamer läuft.
 </para><para>
 
 Wir denken, dass dies nicht zwingend ein Fehler der Cyrix-CPU sein muss.
-Es ist möglicherweise ein Problem, das sich durch Linux umgehen ließe. Wir werden 
-dies weiter beobachten. Für alle technisch Interessierten: wir vermuten, 
+Es ist möglicherweise ein Problem, das sich mit Linux umgehen ließe. Wir werden
+dies weiter beobachten. Für alle technisch Interessierten: wir vermuten,
 dass der Cache nach einem Umschalten von 16-Bit- auf 32-Bit-Code gestört
 ist.
 
@@ -116,15 +116,15 @@ ist.
    <sect3 arch="i386"><title>Hardware-Einstellungen für Peripheriegeräte</title>
 <para>
 
-Sie müssen eventuell einige Einstellungen oder Jumper der Erweiterungskarten
-ändern. Einige Karten haben Setup-Menüs, während andere über Jumper eingestellt
+Sie müssen eventuell einige Einstellungen oder Jumper auf Erweiterungskarten Ihres
+Computers ändern. Einige Karten haben Setup-Menüs, während andere über Jumper eingestellt
 werden. Dieses Handbuch kann nicht für alle Geräte vollständige Informationen
 anbieten; wir hoffen nur, nützliche Tipps geben zu können.
 
 </para><para>
 
 Falls solche Karten erweiterten Speicher (<quote>mapped memory</quote>) anbieten,
-sollte diesem ein Adressbereich zwischen 0xA0000 und 0xFFFFF (von 640K bis 
+sollte diesem ein Adressbereich zwischen 0xA0000 und 0xFFFFF (von 640K bis
 gerade noch unterhalb von 1 Megabyte) zugewiesen werden, oder aber ein Bereich
 mindestens 1 Megabyte oberhalb des insgesamt verfügbaren Arbeitsspeichers.
 
@@ -135,10 +135,10 @@ mindestens 1 Megabyte oberhalb des insgesamt verfügbaren Arbeitsspeichers.
    <title>USB-Bios-Support und Tastaturen</title>
 <para>
 
-Falls Sie keine AT-Tastatur haben und lediglich ein USB-Modell, müssen Sie
-vielleicht <quote>Legacy AT keyboard emulation</quote> im BIOS aktivieren. Tun Sie dies
+Falls Sie keine AT-Tastatur haben, sondern lediglich ein USB-Modell, müssen Sie
+eventuell <quote>Legacy AT keyboard emulation</quote> im BIOS aktivieren. Tun Sie dies
 nur, wenn das Installationssystem Ihre Tastatur im USB-Modus nicht nutzen kann.
-Umgekehrt kann es auf einige Systemen (speziell Laptops) auch nötig sein, 
+Umgekehrt kann es auf einige Systemen (speziell Laptops) auch nötig sein,
 <quote>Legacy USB Support</quote> zu deaktivieren, wenn die Tastatur nicht funktioniert.
 Konsultieren Sie das Handbuch Ihres Mainboards und schauen Sie im BIOS nach
 Optionen für <quote>Legacy keyboard emulation</quote> oder <quote>USB keyboard support</quote>.
@@ -150,7 +150,8 @@ Optionen für <quote>Legacy keyboard emulation</quote> oder <quote>USB keyboard 
 <para>
 
 Der Linux-Kernel kann nicht immer die korrekte Größe des Arbeitsspeichers
-erkennen. Falls dies der Fall sein sollte, gehen Sie zu <xref linkend="boot-parms"/>.
+erkennen, den Sie installiert haben. Falls dies der Fall sein sollte, gehen Sie
+zu <xref linkend="boot-parms"/>.
 
 </para>
    </sect3>

@@ -6,18 +6,19 @@
 <para>
 
 Momentan unterstützt die <emphasis>&architecture;</emphasis>-Portierung
-einige Typen von Sparc-Systemen. Die verbreitetsten Namen für
+mehrere Typen von Sparc-Systemen. Die verbreitetsten Namen für
 Sparc-Systeme sind sun4, sun4c, sun4m, sun4d und sun4u. Momentan unterstützen
 wir keine sehr alte sun4-Hardware. Die anderen Systeme werden jedoch
 unterstützt. Sun4d wurde davon am wenigsten getestet, erwarten Sie
 also mögliche Probleme im Bezug auf die Stabilität des Kernels. Sun4c
 und Sun4m, die am stärksten verbreitete ältere Sparc-Hardware,
-beinhaltet solche Systeme wie die SparcStation 1, 1+, IPC, IPX und die
+beinhaltet solche Systeme wie die SparcStation 1, 1+, IPC, IPX beziehungsweise
 SparcStation LX, 5, 10 und 20. Die UltraSPARC-Systemklasse fällt unter
 die sun4u-Kategorie und wird mit dem sun4u-Satz der Installationsimages
-unterstützt. Bekanntermaßen nicht unterstützte Systeme sind der
-AP1000 Multicomputer und der Tadpole Sparcbook 1. Lesen Sie die
-<ulink url="&url-sparc-linux-faq;">Linux for SPARCProcessors-FAQ</ulink> 
+unterstützt. Einige Systeme, die in diese eigentlich unterstützte Kategorie
+gehören, werden nicht unterstützt. Bekanntermaßen nicht unterstützte Systeme sind der
+AP1000 Multicomputer und das Tadpole Sparcbook 1. Lesen Sie die
+<ulink url="&url-sparc-linux-faq;">Linux for SPARCProcessors-FAQ</ulink>
 bezüglich detaillierter Informationen.
 
 </para>
@@ -28,8 +29,8 @@ bezüglich detaillierter Informationen.
 Bei einigen älteren Sun-Arbeitsplatzrechnern, besonders Sun IPX und Sun IPC,
 befinden sich die Speicherbänke an fixen Stellen im physikalischen Speicherbereich.
 Wenn die Bänke nicht besetzt sind, existieren deshalb Lücken im physikalischen
-Speicher. Die Linux-Installation jedoch benötigt einen zusammenhängenden
-Speicherblock, um den Kernel und die Initial-RAM-Disk zu laden. 
+Speicher. Die Linux-Installation benötigt jedoch einen zusammenhängenden
+Speicherbereich, in den der Kernel und die Initial-RAM-Disk geladen wird.
 Ist dieser nicht verfügbar, führt das zu einer <quote>Data Access Exception</quote>
 (Datenzugriffs-Fehler).
 
@@ -39,17 +40,17 @@ Daher müssen Sie den Speicher so konfigurieren, dass der kleinste
 zusammenhängende Speicherblock mindestens 8MB hat. In den oben
 zitierten IPX und IPC sind die Speicherbänke in 16MB Bereiche
 eingeteilt. Das bedeutet, dass Sie eine ausreichend große
-SIMM in der Bank 0 (1. Steckplatz) haben müssen, um den Kernel 
-und die RAM-Disk fassen zu können. In diesem Fall sind 
+SIMM in der Bank 0 (1. Steckplatz) haben müssen, um den Kernel
+und die RAM-Disk fassen zu können. In diesem Fall sind
 4MB <emphasis>nicht</emphasis> ausreichend.
 
 </para><para>
 
 Beispiel:
 In einer Sun IPX haben Sie einen 16MB SIMM und einen 4MB SIMM. Es gibt
-vier SIMM-Steckplätze (0,1,2,3). (Platz 0 ist am weitesten entfernt von den
+vier SIMM-Steckplätze (0,1,2,3; Platz 0 ist der am weitesten entfernte von den
 SBUS-Anschlüssen). Hier müssen Sie den 16MB SIMM in Steckplatz 0 installieren;
-es wird empfohlen, den 4MB SIMM in Platz 2 zu installieren.
+es wird empfohlen, den 4MB SIMM in Platz 2 zu stecken.
 
 </para>
    </sect3>
@@ -57,28 +58,28 @@ es wird empfohlen, den 4MB SIMM in Platz 2 zu installieren.
    <sect3><title>Grafikkonfiguration</title>
 <para>
 
-Im speziellen Fall von älteren Sun-Workstations ist es relativ 
-verbreitet, dass ein Onboard-Framebuffer vorhanden ist 
-(der später ersetzt wurde, zum Beispiel der bwtwo in einer Sun IPC) 
-und eine SBUS-Karte im SBUS-Slot gesteckt wird, die 
+Im speziellen Fall von älteren Sun-Workstations ist es relativ
+verbreitet, dass ein Onboard-Framebuffer vorhanden ist
+(der später ersetzt wurde, zum Beispiel der bwtwo in einer Sun IPC)
+und eine SBUS-Karte im SBUS-Slot gesteckt wird, die
 wahrscheinlich beschleunigten Pufferspeicher enthält.
-Unter Solaris/SunOS bereitet das keine Probleme, da beide 
+Unter Solaris/SunOS bereitet das keine Probleme, da beide
 Karten initialisiert werden.
 
 </para><para>
 
-Mit Linux könnte das ein Problem werden, weil der Boot-PROM-Monitor 
-seine Meldungen auf dieser zusätzlichen Karte anzeigt, 
-die Boot-Meldungen des Linux-Kernels jedoch zum 
+Mit Linux könnte das ein Problem werden, weil der Boot-PROM-Monitor
+seine Meldungen auf dieser zusätzlichen Karte anzeigt,
+die Boot-Meldungen des Linux-Kernels jedoch zum
 Original-Onboard-Framebuffer umgeleitet werden, so dass <emphasis>keine</emphasis>
-Fehlermeldungen auf dem Bildschirm erscheinen, obwohl die
-Maschine scheinbar beim Laden der RAM-Disk hängt.
+Fehlermeldungen auf dem Bildschirm erscheinen, während die
+Maschine beim Laden der RAM-Disk scheinbar hängt.
 
 </para><para>
 
 Um dieses Problem zu vermeiden, schließen Sie den Bildschirm (wenn nötig)
 an die Video-Karte im SBUS-Slot mit der niedrigsten Nummer an (eine
-Onboard-Karte ist niedriger nummeriert als externe Slots) 
+Onboard-Karte ist niedriger nummeriert als externe Slots)
 Alternativ ist es möglich, eine serielle Konsole zu verwenden.
 
 </para>
