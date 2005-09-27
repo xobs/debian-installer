@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 30020 -->
+<!-- original version: 30283 -->
 
   <sect2 arch="m68k"><title>インストール方法の選択</title>
 
@@ -168,15 +168,24 @@ Mac では 2.4.x カーネルは動作しません。
 
 <!--
 If your hardware uses a 53c9x-based scsi bus, then you may need to
-include the kernel parameter <userinput>mac53c9x=1</userinput>. 
+include the kernel parameter <userinput>mac53c9x=1,0</userinput>.
 Hardware with two such scsi buses, such as the Quadra 950, will need
-<userinput>mac53c9x=2</userinput> instead.
+<userinput>mac53c9x=2,0</userinput> instead. Alternatively, the
+parameter can be specified as <userinput>mac53c9x=-1,0</userinput>
+which will leave autodetection on, but which will disable SCSI
+disconnects. Note that specifying this parameter is only necessary
+if you have more than one hard disk; otherwise, the system will run
+faster if you do not specify it.
 -->
 ハードウェアが 53c9x ベースの scsi バスを使用している場合、
-カーネルパラメータに <userinput>mac53c9x=1</userinput>
+カーネルパラメータに <userinput>mac53c9x=1,0</userinput>
 と指定する必要があります。
 Quadra 950 のように、scsi バスが 2 つある場合は、
-上記のかわりに <userinput>mac53c9x=2</userinput> とする必要があります。
+<userinput>mac53c9x=2,0</userinput> とする必要があります。
+上記の代わりに <userinput>mac53c9x=-1,0</userinput> のようにパラメータを指定して、自動認識を有効にしたまま SCSI disconnect を無効にできます。
+ハードディスクが複数ある場合のみ、
+このパラメータを指定する必要があることに注意してください。
+そうでなければ、これを指定せずにシステムをもっと早く起動できます。
 
 </para>
     </sect3>

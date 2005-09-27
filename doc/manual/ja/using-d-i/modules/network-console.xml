@@ -1,11 +1,16 @@
+<?xml version="1.0" encoding="EUC-JP"?>
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 30086 untranslated -->
+<!-- original version: 30086 -->
 
    <sect3 id="network-console">
+<!--
    <title>Installation Over the Network</title>
+-->
+   <title>ネットワーク越しのインストール</title>
 
 <para arch="not-s390">
 
+<!--
 One of the more interesting components is
 <firstterm>network-console</firstterm>. It allows you to do a large
 part of the installation over the network via SSH. The use of the
@@ -13,12 +18,24 @@ network implies you will have to perform the first steps of the
 installation from the console, at least to the point of setting up
 the networking. (Although you can automate that part with
 <xref linkend="automatic-install"/>.)
+-->
+<firstterm>network-console</firstterm> はとても興味深いコンポーネントで、
+インストールの大部分を、SSH を用いたネットワーク越しで行えるようにします。
+ネットワークを使用すると言うことは、
+少なくともネットワークをセットアップするまで、
+コンソールでインストールを行わなければならないということも含んでいます。
+(でもこの部分は <xref linkend="automatic-install"/> で自動化できます)
 
 </para><para arch="not-s390">
 
+<!--
 This component is not loaded into the main installation menu by default,
 so you have to explicitly ask for it.
+-->
+このコンポーネントは、デフォルトではメインインストールメニューには現れません。
+そのため、自分で明示しなければなりません。
 
+<!--
 If you are installing from CD, you need to boot with medium priority or
 otherwise invoke the main installation menu and choose <guimenuitem>Load
 installer components from CD</guimenuitem> and from the list of
@@ -26,14 +43,26 @@ additional components select <guimenuitem>network-console: Continue
 installation remotely using SSH</guimenuitem>. Successful load is
 indicated by a new menu entry called <guimenuitem>Continue
 installation remotely using SSH</guimenuitem>.
+-->
+CD からインストールする場合、優先度を中にするかインストールメニューを呼び出し、
+<guimenuitem>CD からインストーラコンポーネントをロード</guimenuitem>を選んでください。
+また、追加コンポーネントの一覧から <guimenuitem>network-console: SSH を使ってリモートでインストールを続ける</guimenuitem>を選んでください。
+読み込みに成功すると、
+<guimenuitem>SSH を使ってリモートでインストールを続ける</guimenuitem>
+から呼ばれる新しいメニュー項目が表示されます。
 
 </para><para arch="s390">
 
+<!--
 For installations on &arch-title;, this is the default method after
 setting up the network.
+-->
+&arch-title; のインストールでは、ネットワークの設定の後、
+これがデフォルトの方法です。
 
 </para><para>
 
+<!--
 <phrase arch="not-s390">After selecting this new entry, you</phrase>
 <phrase arch="s390">You</phrase> will be asked for a new password
 to be used for connecting to the installation system and for its
@@ -43,15 +72,31 @@ the password you just provided. Another important detail to notice on
 this screen is the fingerprint of this system.  You need to transfer
 the fingerprint securely to the <quote>person who will continue the
 installation remotely</quote>.
+-->
+<phrase arch="not-s390">この新しいエントリを選択すると、</phrase>
+インストールするシステムに接続する新しいパスワードと、
+その確認を入力してください。
+これで以上です。
+今、リモートでログインするよう促す画面が出ているはずです。
+ユーザは <emphasis>installer</emphasis>、
+パスワードは先ほど入力した物を使用してください。
+この画面にある重要な細かい点として、このシステムの指紋があります。
+この指紋を<quote>リモートでインストールを続ける人</quote>に、
+安全に写す必要があります。
 
 </para><para>
 
+<!--
 Should you decide to continue with the installation locally, you
 can always press &enterkey;, which will bring you back to
 the main menu, where you can select another component.
+-->
+ローカルでインストールすると決めた場合は、&enterkey; を押してください。
+メインメニューに戻ります。そこで別のコンポーネントを選択してください。
 
 </para><para>
 
+<!--
 Now let's switch to the other side of the wire. As a prerequisite, you
 need to configure your terminal for UTF-8 encoding, because that is
 what the installation system uses. If you do not, remote installation
@@ -59,27 +104,49 @@ will be still possible, but you may encounter strange display
 artefacts like destroyed dialog borders or unreadable non-ascii
 characters. Establishing a connection with the installation system
 is as simple as typing:
+-->
+それでは回線の向こう側へ行きましょう。
+前提として、あなたの端末がインストールシステムで使用する UTF-8 エンコードを
+使用できるように設定されている必要があります。
+そうでなければ、リモートインストールは可能ですが、
+ダイアログの線が化けたり ASCII 以外の文字が読めないといった
+妙な表示になってしまいます。
+インストールシステムへの接続を確立するには、単に以下のように入力してください。
 
 <informalexample><screen>
 <prompt>$</prompt> <userinput>ssh -l installer <replaceable>install_host</replaceable></userinput>
 </screen></informalexample>
 
+<!--
 Where <replaceable>install_host</replaceable> is either the name
 or IP address of the computer being installed. Before the actual
 login the fingerprint of the remote system will be displayed and
 you will have to confirm that it is correct.
+-->
+<replaceable>install_host</replaceable> には、
+インストールするコンピュータの名前か IP アドレスのどちらかをセットします。
+実際のログインの前に、リモートシステムの指紋を表示するのでそれが正しいかどうか確認してください。
 
 </para><note><para>
 
+<!--
 If you install several computers in turn and they happen to have the
 same IP address or hostname, <command>ssh</command> will refuse to connect
 to such host. The reason is that it will have different fingerprint, which
 is usually a sign of a spoofing attack. If you are sure this is not the
 case, you will need to delete the relevant line from
 <filename>~/.ssh/known_hosts</filename> and try again.
+-->
+順番にいくつものコンピュータにインストールして、
+同じ IP アドレスやホスト名を持っていたりすると、
+<command>ssh</command> はそういったホストへの接続を拒否します。
+指紋が異なっているというのは、通常なりすまし攻撃のサインです。
+なりすまし攻撃ではないことが確かなら、<filename>~/.ssh/known_hosts</filename>
+から関連する行を削除して、もう一度行う必要があります。
 
 </para></note><para>
 
+<!--
 After the login you will be presented with an initial screen where you
 have two possibilities called <guimenuitem>Start menu</guimenuitem> and
 <guimenuitem>Start shell</guimenuitem>. The former brings you to the
@@ -87,20 +154,39 @@ main installer menu, where you can continue with the installation as
 usual. The latter starts a shell from which you can examine and possibly
 fix the the remote system. You should only start one SSH session for the
 installation menu, but may start multiple sessions for shells.
+-->
+ログインすると <guimenuitem>メニューの開始</guimenuitem>,
+<guimenuitem>シェルの開始</guimenuitem> という 2 つのメニューがある
+初期画面が表示されます。
+前者はメインのインストールメニューに移動し、
+通常のインストールを進めることができます。
+後者はリモートシステムの検査と (可能なら) 修正できるようなシェルを起動します。
+インストールメニュー用の SSH セッションを起動するのは 1 つだけにするべきですが、シェル用には複数のセッションを起動できます。
 
 </para><warning><para>
 
+<!--
 After you have started the installation remotely over SSH, you should
 not go back to the installation session running on the local console.
 Doing so may corrupt the database that holds the configuration of
 the new system. This in turn may result in a failed installation or
 problems with the installed system.
+-->
+SSH を使ってリモートでインストールを始めた後で、
+ローカルコンソールのインストールセッションに戻るべきではありません。
+新システムの設定を保持しているデータベースが破損する可能性があるからです。
+それによりインストールが失敗したり、
+インストールしたシステムに何か問題が発生するかもしれません。
 
 </para><para>
 
+<!--
 Also, if you are running the SSH session from an X terminal, you should
 not resize the window as that will result in the connection being
 terminated.
+-->
+また、X 端末から SSH セッションを実行しているなら、
+接続が終了するまでウィンドウのリサイズを行うべきではありません。
 
 </para></warning>
 
