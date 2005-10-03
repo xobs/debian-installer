@@ -70,6 +70,13 @@ referenced later below.
 </screen></informalexample>
 
 </para>
+<note><para>
+
+If you want to have parts of the filesystem (e.g. /usr) mounted on
+separate partitions, you will need to create these directories manually
+and mount them manually before proceding with the next stage.
+
+</para></note>
   </sect2>
 
   <sect2>
@@ -113,6 +120,13 @@ the binaries.
 # cd /
 # zcat /full-path-to-work/work/data.tar.gz | tar xv
 </screen></informalexample>
+
+</para><para>
+
+Note that running <command>debootstrap</command> may require you to have
+a minimal version of <classname>glibc</classname> installed (currently
+GLIBC_2.3). <command>debootstrap</command> itself is a shell script, but
+it calls various utilities that require <classname>glibc</classname>.
 
 </para>
   </sect2>
@@ -188,7 +202,7 @@ Here is a sample you can modify to suit:
 # /etc/fstab: static file system information.
 #
 # file system    mount point   type    options                  dump pass
-/dev/XXX         /             ext2    defaults                 0    0
+/dev/XXX         /             ext2    defaults                 0    1
 /dev/XXX         /boot         ext2    ro,nosuid,nodev          0    2
 
 /dev/XXX         none          swap    sw                       0    0
@@ -212,12 +226,21 @@ file systems individually use:
 </screen></informalexample>
 
 You can mount the proc file system multiple times and to arbitrary
-locations, though /proc is customary. If you didn't use
-<userinput>mount -a</userinput>, be sure to mount proc before
-continuing:
+locations, though <filename>/proc</filename> is customary. If you didn't use
+<userinput>mount -a</userinput>, be sure to mount proc before continuing:
 
 <informalexample><screen>
 # mount -t proc proc /proc
+</screen></informalexample>
+
+</para><para>
+
+The command <userinput>ls /proc</userinput> should now show a non-empty
+directory. Should this fail, you may be able to mount proc from outside
+the chroot:
+
+<informalexample><screen>
+# mount -t proc proc /mnt/debinst/proc
 </screen></informalexample>
 
 </para>
@@ -232,6 +255,11 @@ To configure your keyboard:
 <informalexample><screen>
 # dpkg-reconfigure console-data
 </screen></informalexample>
+
+</para><para>
+
+Note that the keyboard cannot be set while in the chroot, but will be
+configured for the next reboot.
 
 </para>
    </sect3>
@@ -390,7 +418,7 @@ Here is a basic <filename>/etc/lilo.conf</filename> as an example:
 <informalexample><screen>
 boot=/dev/hda6
 root=/dev/hda6
-install=/boot/boot-menu.b
+install=menu
 delay=20
 lba32
 image=/vmlinuz
