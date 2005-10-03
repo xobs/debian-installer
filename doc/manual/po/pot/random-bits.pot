@@ -1416,25 +1416,31 @@ msgid ""
       "# mount /dev/hda6 /mnt/debinst"
 msgstr ""
 
-#: random-bits.xml:409
+#: random-bits.xml:406
+#, no-c-format
+#. Tag: para
+msgid "If you want to have parts of the filesystem (e.g. /usr) mounted on separate partitions, you will need to create and mount these directories manually before proceding with the next stage."
+msgstr ""
+
+#: random-bits.xml:416
 #, no-c-format
 #. Tag: title
 msgid "Install <command>debootstrap</command>"
 msgstr ""
 
-#: random-bits.xml:410
+#: random-bits.xml:417
 #, no-c-format
 #. Tag: para
 msgid "The tool that the Debian installer uses, which is recognized as the official way to install a Debian base system, is <command>debootstrap</command>. It uses <command>wget</command> and <command>ar</command>, but otherwise depends only on <classname>/bin/sh</classname>. Install <command>wget</command> and <command>ar</command> if they aren't already on your current system, then download and install <command>debootstrap</command>."
 msgstr ""
 
-#: random-bits.xml:420
+#: random-bits.xml:427
 #, no-c-format
 #. Tag: para
 msgid "If you have an rpm-based system, you can use alien to convert the .deb into .rpm, or download an rpm-ized version at <ulink url=\"http://people.debian.org/~blade/install/debootstrap\"></ulink>"
 msgstr ""
 
-#: random-bits.xml:426
+#: random-bits.xml:433
 #, no-c-format
 #. Tag: para
 msgid ""
@@ -1444,7 +1450,7 @@ msgid ""
       "</screen></informalexample> The <command>debootstrap</command> binary is located in the Debian archive (be sure to select the proper file for your architecture). Download the <command>debootstrap</command> .deb from the <ulink url=\"http://ftp.debian.org/debian/pool/main/d/debootstrap/\"> pool</ulink>, copy the package to the work folder, and extract the binary files from it. You will need to have root privileges to install the binaries."
 msgstr ""
 
-#: random-bits.xml:441
+#: random-bits.xml:448
 #, no-c-format
 #. Tag: screen
 msgid ""
@@ -1453,31 +1459,37 @@ msgid ""
       "# zcat /full-path-to-work/work/data.tar.gz | tar xv"
 msgstr ""
 
-#: random-bits.xml:447
+#: random-bits.xml:450
+#, no-c-format
+#. Tag: para
+msgid "Note that running <command>debootstrap</command> may require you to have a minimal version of <classname>glibc</classname> installed (currently GLIBC_2.3). <command>debootstrap</command> itself is a shell script, but it calls various utilities that require <classname>glibc</classname>."
+msgstr ""
+
+#: random-bits.xml:461
 #, no-c-format
 #. Tag: title
 msgid "Run <command>debootstrap</command>"
 msgstr ""
 
-#: random-bits.xml:448
+#: random-bits.xml:462
 #, no-c-format
 #. Tag: para
 msgid "<command>debootstrap</command> can download the needed files directly from the archive when you run it. You can substitute any Debian archive mirror for <userinput>http.us.debian.org/debian</userinput> in the command example below, preferably a mirror close to you network-wise. Mirrors are listed at <ulink url=\"http://www.debian.org/misc/README.mirrors\"></ulink>."
 msgstr ""
 
-#: random-bits.xml:457
+#: random-bits.xml:471
 #, no-c-format
 #. Tag: para
 msgid "If you have a &releasename; &debian; CD mounted at <filename>/cdrom</filename>, you could substitute a file URL instead of the http URL: <userinput>file:/cdrom/debian/</userinput>"
 msgstr ""
 
-#: random-bits.xml:463
+#: random-bits.xml:477
 #, no-c-format
 #. Tag: para
 msgid "Substitute one of the following for <replaceable>ARCH</replaceable> in the <command>debootstrap</command> command: <userinput>alpha</userinput>, <userinput>arm</userinput>, <userinput>hppa</userinput>, <userinput>i386</userinput>, <userinput>ia64</userinput>, <userinput>m68k</userinput>, <userinput>mips</userinput>, <userinput>mipsel</userinput>, <userinput>powerpc</userinput>, <userinput>s390</userinput>, or <userinput>sparc</userinput>."
 msgstr ""
 
-#: random-bits.xml:480
+#: random-bits.xml:494
 #, no-c-format
 #. Tag: screen
 msgid ""
@@ -1485,31 +1497,31 @@ msgid ""
       "     /mnt/debinst http://http.us.debian.org/debian"
 msgstr ""
 
-#: random-bits.xml:486
+#: random-bits.xml:500
 #, no-c-format
 #. Tag: title
 msgid "Configure The Base System"
 msgstr ""
 
-#: random-bits.xml:487
+#: random-bits.xml:501
 #, no-c-format
 #. Tag: para
 msgid "Now you've got a real Debian system, though rather lean, on disk. <command>Chroot</command> into it:"
 msgstr ""
 
-#: random-bits.xml:492
+#: random-bits.xml:506
 #, no-c-format
 #. Tag: screen
 msgid "# LANG= chroot /mnt/debinst /bin/bash"
 msgstr ""
 
-#: random-bits.xml:497
+#: random-bits.xml:511
 #, no-c-format
 #. Tag: title
 msgid "Mount Partitions"
 msgstr ""
 
-#: random-bits.xml:498
+#: random-bits.xml:512
 #, no-c-format
 #. Tag: para
 msgid ""
@@ -1519,7 +1531,7 @@ msgid ""
       "# /etc/fstab: static file system information.\n"
       "#\n"
       "# file system    mount point   type    options                  dump pass\n"
-      "/dev/XXX         /             ext2    defaults                 0    0\n"
+      "/dev/XXX         /             ext2    defaults                 0    1\n"
       "/dev/XXX         /boot         ext2    ro,nosuid,nodev          0    2\n"
       "\n"
       "/dev/XXX         none          swap    sw                       0    0\n"
@@ -1534,40 +1546,58 @@ msgid ""
       "/dev/XXX         /home         ext2    rw,nosuid,nodev          0    2\n"
       "</screen></informalexample> Use <userinput>mount -a</userinput> to mount all the file systems you have specified in your <filename>/etc/fstab</filename>, or to mount file systems individually use: <informalexample><screen>\n"
       "# mount /path   # e.g.: mount /usr\n"
-      "</screen></informalexample> You can mount the proc file system multiple times and to arbitrary locations, though /proc is customary. If you didn't use <userinput>mount -a</userinput>, be sure to mount proc before continuing:"
+      "</screen></informalexample> You can mount the proc file system multiple times and to arbitrary locations, though <filename>/proc</filename> is customary. If you didn't use <userinput>mount -a</userinput>, be sure to mount proc before continuing:"
 msgstr ""
 
-#: random-bits.xml:519
+#: random-bits.xml:532
 #, no-c-format
 #. Tag: screen
 msgid "# mount -t proc proc /proc"
 msgstr ""
 
-#: random-bits.xml:525
+#: random-bits.xml:534
+#, no-c-format
+#. Tag: para
+msgid "The command <userinput>ls /proc</userinput> should now show a non-empty directory. Should this fail, you may be able to mount proc from outside the chroot:"
+msgstr ""
+
+#: random-bits.xml:540
+#, no-c-format
+#. Tag: screen
+msgid "# mount -t proc proc /mnt/debinst/proc"
+msgstr ""
+
+#: random-bits.xml:546
 #, no-c-format
 #. Tag: title
 msgid "Configure Keyboard"
 msgstr ""
 
-#: random-bits.xml:526
+#: random-bits.xml:547
 #, no-c-format
 #. Tag: para
 msgid "To configure your keyboard:"
 msgstr ""
 
-#: random-bits.xml:530
+#: random-bits.xml:551
 #, no-c-format
 #. Tag: screen
 msgid "# dpkg-reconfigure console-data"
 msgstr ""
 
-#: random-bits.xml:536
+#: random-bits.xml:553
+#, no-c-format
+#. Tag: para
+msgid "Note that the keyboard cannot be set while in the chroot, but will be configured for the next reboot."
+msgstr ""
+
+#: random-bits.xml:562
 #, no-c-format
 #. Tag: title
 msgid "Configure Networking"
 msgstr ""
 
-#: random-bits.xml:537
+#: random-bits.xml:563
 #, no-c-format
 #. Tag: para
 msgid ""
@@ -1610,31 +1640,31 @@ msgid ""
       "</screen></informalexample> If you have multiple network cards, you should arrange the names of driver modules in the <filename>/etc/modules</filename> file into the desired order. Then during boot, each card will be associated with the interface name (eth0, eth1, etc.) that you expect."
 msgstr ""
 
-#: random-bits.xml:573
+#: random-bits.xml:599
 #, no-c-format
 #. Tag: title
 msgid "Configure Timezone, Users, and APT"
 msgstr ""
 
-#: random-bits.xml:574
+#: random-bits.xml:600
 #, no-c-format
 #. Tag: para
 msgid "Set your timezone, add a normal user, and choose your <command>apt</command> sources by running"
 msgstr ""
 
-#: random-bits.xml:579
+#: random-bits.xml:605
 #, no-c-format
 #. Tag: screen
 msgid "# /usr/sbin/base-config new"
 msgstr ""
 
-#: random-bits.xml:585
+#: random-bits.xml:611
 #, no-c-format
 #. Tag: title
 msgid "Configure Locales"
 msgstr ""
 
-#: random-bits.xml:586
+#: random-bits.xml:612
 #, no-c-format
 #. Tag: para
 msgid ""
@@ -1644,13 +1674,13 @@ msgid ""
       "</screen></informalexample> NOTE: Apt must be configured before, ie. during the base-config phase. Before using locales with character sets other than ASCII or latin1, please consult the appropriate localization HOWTO."
 msgstr ""
 
-#: random-bits.xml:602
+#: random-bits.xml:628
 #, no-c-format
 #. Tag: title
 msgid "Install a Kernel"
 msgstr ""
 
-#: random-bits.xml:603
+#: random-bits.xml:629
 #, no-c-format
 #. Tag: para
 msgid ""
@@ -1659,56 +1689,56 @@ msgid ""
       "</screen></informalexample> Then install your choice using its package name."
 msgstr ""
 
-#: random-bits.xml:612
+#: random-bits.xml:638
 #, no-c-format
 #. Tag: screen
 msgid "# apt-get install kernel-image-<replaceable>2.X.X-arch-etc</replaceable>"
 msgstr ""
 
-#: random-bits.xml:618
+#: random-bits.xml:644
 #, no-c-format
 #. Tag: title
 msgid "Set up the Boot Loader"
 msgstr ""
 
-#: random-bits.xml:619
+#: random-bits.xml:645
 #, no-c-format
 #. Tag: para
 msgid "To make your &debian; system bootable, set up your boot loader to load the installed kernel with your new root partition. Note that debootstrap does not install a boot loader, though you can use apt-get inside your Debian chroot to do so."
 msgstr ""
 
-#: random-bits.xml:626
+#: random-bits.xml:652
 #, no-c-format
 #. Tag: para
 msgid "Check <userinput>info grub</userinput> or <userinput>man lilo.conf</userinput> for instructions on setting up the bootloader. If you are keeping the system you used to install Debian, just add an entry for the Debian install to your existing grub <filename>menu.lst</filename> or <filename>lilo.conf</filename>. For <filename>lilo.conf</filename>, you could also copy it to the new system and edit it there. After you are done editing, call lilo (remember it will use <filename>lilo.conf</filename> relative to the system you call it from)."
 msgstr ""
 
-#: random-bits.xml:637
+#: random-bits.xml:663
 #, no-c-format
 #. Tag: para
 msgid "Here is a basic <filename>/etc/lilo.conf</filename> as an example:"
 msgstr ""
 
-#: random-bits.xml:641
+#: random-bits.xml:667
 #, no-c-format
 #. Tag: screen
 msgid ""
       "boot=/dev/hda6\n"
       "root=/dev/hda6\n"
-      "install=/boot/boot-menu.b\n"
+      "install=menu\n"
       "delay=20\n"
       "lba32\n"
       "image=/vmlinuz\n"
       "label=Debian"
 msgstr ""
 
-#: random-bits.xml:643
+#: random-bits.xml:669
 #, no-c-format
 #. Tag: para
 msgid "Check <userinput>man yaboot.conf</userinput> for instructions on setting up the bootloader. If you are keeping the system you used to install Debian, just add an entry for the Debian install to your existing <filename>yaboot.conf</filename>. You could also copy it to the new system and edit it there. After you are done editing, call ybin (remember it will use <filename>yaboot.conf</filename> relative to the system you call it from)."
 msgstr ""
 
-#: random-bits.xml:653
+#: random-bits.xml:679
 #, no-c-format
 #. Tag: para
 msgid ""
@@ -1724,79 +1754,79 @@ msgid ""
       "</screen></informalexample> On some machines, you may need to use <userinput>ide0:</userinput> instead of <userinput>hd:</userinput>."
 msgstr ""
 
-#: random-bits.xml:671
+#: random-bits.xml:697
 #, no-c-format
 #. Tag: title
 msgid "Installing &debian; over Parallel Line IP (PLIP)"
 msgstr ""
 
-#: random-bits.xml:673
+#: random-bits.xml:699
 #, no-c-format
 #. Tag: para
 msgid "This section explains how to install &debian; on a computer without Ethernet card, but with just a remote gateway computer attached via a Null-Modem cable (also called Null-Printer cable). The gateway computer should be connected to a network that has a Debian mirror on it (e.g. to the Internet)."
 msgstr ""
 
-#: random-bits.xml:681
+#: random-bits.xml:707
 #, no-c-format
 #. Tag: para
 msgid "In the example in this appendix we will set up a PLIP connection using a gateway connected to the Internet over a dial-up connection (ppp0). We will use IP addresses 192.168.0.1 and 192.168.0.2 for the PLIP interfaces on the target system and the source system respectively (these addresses should be unused within your network address space)."
 msgstr ""
 
-#: random-bits.xml:689
+#: random-bits.xml:715
 #, no-c-format
 #. Tag: para
 msgid "The PLIP connection set up during the installation will also be available after the reboot into the installed system (see <xref linkend=\"boot-new\"/>)."
 msgstr ""
 
-#: random-bits.xml:694
+#: random-bits.xml:720
 #, no-c-format
 #. Tag: para
 msgid "Before you start, you will need to check the BIOS configuration (IO base address and IRQ) for the parallel ports of both the source and target systems. The most common values are <literal>io=0x378</literal>, <literal>irq=7</literal>."
 msgstr ""
 
-#: random-bits.xml:704
+#: random-bits.xml:730
 #, no-c-format
 #. Tag: title
 msgid "Requirements"
 msgstr ""
 
-#: random-bits.xml:707
+#: random-bits.xml:733
 #, no-c-format
 #. Tag: para
 msgid "A target computer, called <emphasis>target</emphasis>, where Debian will be installed."
 msgstr ""
 
-#: random-bits.xml:713
+#: random-bits.xml:739
 #, no-c-format
 #. Tag: para
 msgid "System installation media; see <xref linkend=\"installation-media\"/>."
 msgstr ""
 
-#: random-bits.xml:718
+#: random-bits.xml:744
 #, no-c-format
 #. Tag: para
 msgid "Another computer connected to the Internet, called <emphasis>source</emphasis>, that will function as the gateway."
 msgstr ""
 
-#: random-bits.xml:724
+#: random-bits.xml:750
 #, no-c-format
 #. Tag: para
 msgid "A DB-25 Null-Modem cable. See the <ulink url=\"&url-plip-install-howto;\">PLIP-Install-HOWTO</ulink> for more information on this cable and instructions how to make your own."
 msgstr ""
 
-#: random-bits.xml:736
+#: random-bits.xml:762
 #, no-c-format
 #. Tag: title
 msgid "Setting up source"
 msgstr ""
 
-#: random-bits.xml:737
+#: random-bits.xml:763
 #, no-c-format
 #. Tag: para
 msgid "The following shell script is a simple example of how to configure the source computer as a gateway to the Internet using ppp0."
 msgstr ""
 
-#: random-bits.xml:742
+#: random-bits.xml:768
 #, no-c-format
 #. Tag: screen
 msgid ""
@@ -1817,91 +1847,91 @@ msgid ""
       "echo 1 > /proc/sys/net/ipv4/ip_forward"
 msgstr ""
 
-#: random-bits.xml:748
+#: random-bits.xml:774
 #, no-c-format
 #. Tag: title
 msgid "Installing target"
 msgstr ""
 
-#: random-bits.xml:749
+#: random-bits.xml:775
 #, no-c-format
 #. Tag: para
 msgid "Boot the installation media. The installation needs to be run in expert mode; enter <userinput>expert</userinput> at the boot prompt. Below are the answers that should be given during various stages of the installation."
 msgstr ""
 
-#: random-bits.xml:761
+#: random-bits.xml:787
 #, no-c-format
 #. Tag: guimenuitem
 msgid "Load installer components"
 msgstr ""
 
-#: random-bits.xml:763
+#: random-bits.xml:789
 #, no-c-format
 #. Tag: para
 msgid "Select the <userinput>plip-modules</userinput> option from the list; this will make the PLIP drivers available to the installation system."
 msgstr ""
 
-#: random-bits.xml:771
+#: random-bits.xml:797
 #, no-c-format
 #. Tag: guimenuitem
 msgid "Detect network hardware"
 msgstr ""
 
-#: random-bits.xml:776
+#: random-bits.xml:802
 #, no-c-format
 #. Tag: para
 msgid "If target <emphasis>does</emphasis> have a network card, a list of driver modules for detected cards will be shown. If you want to force &d-i; to use plip instead, you have to deselect all listed driver modules. Obviously, if target doesn't have a network card, the installer will not show this list."
 msgstr ""
 
-#: random-bits.xml:785
+#: random-bits.xml:811
 #, no-c-format
 #. Tag: para
 msgid "Prompt for module parameters: Yes"
 msgstr ""
 
-#: random-bits.xml:790
+#: random-bits.xml:816
 #, no-c-format
 #. Tag: para
 msgid "Because no network card was detected/selected earlier, the installer will ask you to select a network driver module from a list. Select the <userinput>plip</userinput> module."
 msgstr ""
 
-#: random-bits.xml:797
+#: random-bits.xml:823
 #, no-c-format
 #. Tag: para
 msgid "Additional parameters for module parport_pc: <userinput><replaceable>io=0x378 irq=7</replaceable></userinput>"
 msgstr ""
 
-#: random-bits.xml:803
+#: random-bits.xml:829
 #, no-c-format
 #. Tag: para
 msgid "Additional parameters for module plip: leave empty"
 msgstr ""
 
-#: random-bits.xml:813
+#: random-bits.xml:839
 #, no-c-format
 #. Tag: guimenuitem
 msgid "Configure the network"
 msgstr ""
 
-#: random-bits.xml:816
+#: random-bits.xml:842
 #, no-c-format
 #. Tag: para
 msgid "Auto-configure network with DHCP: No"
 msgstr ""
 
-#: random-bits.xml:821
+#: random-bits.xml:847
 #, no-c-format
 #. Tag: para
 msgid "IP address: <userinput><replaceable>192.168.0.1</replaceable></userinput>"
 msgstr ""
 
-#: random-bits.xml:826
+#: random-bits.xml:852
 #, no-c-format
 #. Tag: para
 msgid "Point-to-point address: <userinput><replaceable>192.168.0.2</replaceable></userinput>"
 msgstr ""
 
-#: random-bits.xml:832
+#: random-bits.xml:858
 #, no-c-format
 #. Tag: para
 msgid "Name server addresses: you can enter the same addresses used on source (see <filename>/etc/resolv.conf</filename>)"

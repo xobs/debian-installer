@@ -2282,14 +2282,23 @@ msgstr ""
 "# mkdir /mnt/debinst\n"
 "# mount /dev/hda6 /mnt/debinst"
 
+#. Tag: para
+#: random-bits.xml:406
+#, no-c-format
+msgid ""
+"If you want to have parts of the filesystem (e.g. /usr) mounted on separate "
+"partitions, you will need to create and mount these directories manually "
+"before proceding with the next stage."
+msgstr ""
+
 #. Tag: title
-#: random-bits.xml:409
+#: random-bits.xml:416
 #, no-c-format
 msgid "Install <command>debootstrap</command>"
 msgstr "<command>debootstrap</command> 설치"
 
 #. Tag: para
-#: random-bits.xml:410
+#: random-bits.xml:417
 #, no-c-format
 msgid ""
 "The tool that the Debian installer uses, which is recognized as the official "
@@ -2307,7 +2316,7 @@ msgstr ""
 "고 <command>debootstrap</command>을 내려 받고 설치하십시오."
 
 #. Tag: para
-#: random-bits.xml:420
+#: random-bits.xml:427
 #, no-c-format
 msgid ""
 "If you have an rpm-based system, you can use alien to convert the .deb into ."
@@ -2319,7 +2328,7 @@ msgstr ""
 "RPM 버전을 내려 받으십시오."
 
 #. Tag: para
-#: random-bits.xml:426
+#: random-bits.xml:433
 #, no-c-format
 msgid ""
 "Or, you can use the following procedure to install it manually. Make a work "
@@ -2345,7 +2354,7 @@ msgstr ""
 "한이 필요할 것입니다."
 
 #. Tag: screen
-#: random-bits.xml:441
+#: random-bits.xml:448
 #, fuzzy, no-c-format
 msgid ""
 "# ar -x debootstrap_0.X.X_arch.deb\n"
@@ -2356,14 +2365,24 @@ msgstr ""
 "# cd /\n"
 "# zcat /full-path-to-work/work/data.tar.gz | tar xv"
 
+#. Tag: para
+#: random-bits.xml:450
+#, no-c-format
+msgid ""
+"Note that running <command>debootstrap</command> may require you to have a "
+"minimal version of <classname>glibc</classname> installed (currently "
+"GLIBC_2.3). <command>debootstrap</command> itself is a shell script, but it "
+"calls various utilities that require <classname>glibc</classname>."
+msgstr ""
+
 #. Tag: title
-#: random-bits.xml:447
+#: random-bits.xml:461
 #, no-c-format
 msgid "Run <command>debootstrap</command>"
 msgstr "<command>debootstrap</command> 실행"
 
 #. Tag: para
-#: random-bits.xml:448
+#: random-bits.xml:462
 #, no-c-format
 msgid ""
 "<command>debootstrap</command> can download the needed files directly from "
@@ -2379,7 +2398,7 @@ msgstr ""
 "org/misc/README.mirror\"></ulink>에 있습니다."
 
 #. Tag: para
-#: random-bits.xml:457
+#: random-bits.xml:471
 #, no-c-format
 msgid ""
 "If you have a &releasename; &debian; CD mounted at <filename>/cdrom</"
@@ -2391,7 +2410,7 @@ msgstr ""
 "userinput>"
 
 #. Tag: para
-#: random-bits.xml:463
+#: random-bits.xml:477
 #, no-c-format
 msgid ""
 "Substitute one of the following for <replaceable>ARCH</replaceable> in the "
@@ -2410,7 +2429,7 @@ msgstr ""
 "<userinput>s390</userinput>, <userinput>sparc</userinput>."
 
 #. Tag: screen
-#: random-bits.xml:480
+#: random-bits.xml:494
 #, no-c-format
 msgid ""
 "# /usr/sbin/debootstrap --arch ARCH &releasename; \\\n"
@@ -2420,13 +2439,13 @@ msgstr ""
 "     /mnt/debinst http://http.us.debian.org/debian"
 
 #. Tag: title
-#: random-bits.xml:486
+#: random-bits.xml:500
 #, no-c-format
 msgid "Configure The Base System"
 msgstr "베이스 시스템 설정"
 
 #. Tag: para
-#: random-bits.xml:487
+#: random-bits.xml:501
 #, no-c-format
 msgid ""
 "Now you've got a real Debian system, though rather lean, on disk. "
@@ -2436,20 +2455,20 @@ msgstr ""
 "로 <command>chroot</command>하십시오:"
 
 #. Tag: screen
-#: random-bits.xml:492
+#: random-bits.xml:506
 #, fuzzy, no-c-format
 msgid "# LANG= chroot /mnt/debinst /bin/bash"
 msgstr "# chroot /mnt/debinst /bin/bash"
 
 #. Tag: title
-#: random-bits.xml:497
+#: random-bits.xml:511
 #, no-c-format
 msgid "Mount Partitions"
 msgstr "파티션 마운트하기"
 
 #. Tag: para
-#: random-bits.xml:498
-#, no-c-format
+#: random-bits.xml:512
+#, fuzzy, no-c-format
 msgid ""
 "You need to create <filename>/etc/fstab</filename>. "
 "<informalexample><screen>\n"
@@ -2459,7 +2478,7 @@ msgid ""
 "# /etc/fstab: static file system information.\n"
 "#\n"
 "# file system    mount point   type    options                  dump pass\n"
-"/dev/XXX         /             ext2    defaults                 0    0\n"
+"/dev/XXX         /             ext2    defaults                 0    1\n"
 "/dev/XXX         /boot         ext2    ro,nosuid,nodev          0    2\n"
 "\n"
 "/dev/XXX         none          swap    sw                       0    0\n"
@@ -2477,8 +2496,9 @@ msgid ""
 "or to mount file systems individually use: <informalexample><screen>\n"
 "# mount /path   # e.g.: mount /usr\n"
 "</screen></informalexample> You can mount the proc file system multiple "
-"times and to arbitrary locations, though /proc is customary. If you didn't "
-"use <userinput>mount -a</userinput>, be sure to mount proc before continuing:"
+"times and to arbitrary locations, though <filename>/proc</filename> is "
+"customary. If you didn't use <userinput>mount -a</userinput>, be sure to "
+"mount proc before continuing:"
 msgstr ""
 "<filename>/etc/fstab</filename>을 만들어야 합니다. "
 "<informalexample><screen>\n"
@@ -2512,37 +2532,60 @@ msgstr ""
 "오."
 
 #. Tag: screen
-#: random-bits.xml:519
+#: random-bits.xml:532
 #, no-c-format
 msgid "# mount -t proc proc /proc"
 msgstr "# mount -t proc proc /proc"
 
+#. Tag: para
+#: random-bits.xml:534
+#, no-c-format
+msgid ""
+"The command <userinput>ls /proc</userinput> should now show a non-empty "
+"directory. Should this fail, you may be able to mount proc from outside the "
+"chroot:"
+msgstr ""
+
+#. Tag: screen
+#: random-bits.xml:540
+#, fuzzy, no-c-format
+msgid "# mount -t proc proc /mnt/debinst/proc"
+msgstr "# mount -t proc proc /proc"
+
 #. Tag: title
-#: random-bits.xml:525
+#: random-bits.xml:546
 #, no-c-format
 msgid "Configure Keyboard"
 msgstr "키보드 설정"
 
 #. Tag: para
-#: random-bits.xml:526
+#: random-bits.xml:547
 #, no-c-format
 msgid "To configure your keyboard:"
 msgstr "키보드를 설정하려면:"
 
 #. Tag: screen
-#: random-bits.xml:530
+#: random-bits.xml:551
 #, no-c-format
 msgid "# dpkg-reconfigure console-data"
 msgstr "# dpkg-reconfigure console-data"
 
+#. Tag: para
+#: random-bits.xml:553
+#, no-c-format
+msgid ""
+"Note that the keyboard cannot be set while in the chroot, but will be "
+"configured for the next reboot."
+msgstr ""
+
 #. Tag: title
-#: random-bits.xml:536
+#: random-bits.xml:562
 #, no-c-format
 msgid "Configure Networking"
 msgstr "네트워크 설정하기"
 
 #. Tag: para
-#: random-bits.xml:537
+#: random-bits.xml:563
 #, fuzzy, no-c-format
 msgid ""
 "To configure networking, edit <filename>/etc/network/interfaces</filename>, "
@@ -2640,13 +2683,13 @@ msgstr ""
 "다."
 
 #. Tag: title
-#: random-bits.xml:573
+#: random-bits.xml:599
 #, no-c-format
 msgid "Configure Timezone, Users, and APT"
 msgstr "시간대, 사용자, APT 설정하기"
 
 #. Tag: para
-#: random-bits.xml:574
+#: random-bits.xml:600
 #, no-c-format
 msgid ""
 "Set your timezone, add a normal user, and choose your <command>apt</command> "
@@ -2656,19 +2699,19 @@ msgstr ""
 "command> 소스를 선택하십시오"
 
 #. Tag: screen
-#: random-bits.xml:579
+#: random-bits.xml:605
 #, no-c-format
 msgid "# /usr/sbin/base-config new"
 msgstr "# /usr/sbin/base-config new"
 
 #. Tag: title
-#: random-bits.xml:585
+#: random-bits.xml:611
 #, no-c-format
 msgid "Configure Locales"
 msgstr "로케일 설정하기"
 
 #. Tag: para
-#: random-bits.xml:586
+#: random-bits.xml:612
 #, no-c-format
 msgid ""
 "To configure your locale settings to use a language other than English, "
@@ -2689,13 +2732,13 @@ msgstr ""
 "케일을 사용하려면 그 전에 적당한 지역화 HOWTO를 참고하십시오."
 
 #. Tag: title
-#: random-bits.xml:602
+#: random-bits.xml:628
 #, no-c-format
 msgid "Install a Kernel"
 msgstr "커널 설치"
 
 #. Tag: para
-#: random-bits.xml:603
+#: random-bits.xml:629
 #, no-c-format
 msgid ""
 "If you intend to boot this system, you probably want a Linux kernel and a "
@@ -2711,7 +2754,7 @@ msgstr ""
 "</screen></informalexample> 그리고 꾸러미 이름을 하나 골라서 설치하십시오."
 
 #. Tag: screen
-#: random-bits.xml:612
+#: random-bits.xml:638
 #, no-c-format
 msgid ""
 "# apt-get install kernel-image-<replaceable>2.X.X-arch-etc</replaceable>"
@@ -2719,13 +2762,13 @@ msgstr ""
 "# apt-get install kernel-image-<replaceable>2.X.X-아키텍쳐-따위</replaceable>"
 
 #. Tag: title
-#: random-bits.xml:618
+#: random-bits.xml:644
 #, no-c-format
 msgid "Set up the Boot Loader"
 msgstr "부트로더 설정하기"
 
 #. Tag: para
-#: random-bits.xml:619
+#: random-bits.xml:645
 #, no-c-format
 msgid ""
 "To make your &debian; system bootable, set up your boot loader to load the "
@@ -2739,7 +2782,7 @@ msgstr ""
 "를 설치할 수 있습니다."
 
 #. Tag: para
-#: random-bits.xml:626
+#: random-bits.xml:652
 #, no-c-format
 msgid ""
 "Check <userinput>info grub</userinput> or <userinput>man lilo.conf</"
@@ -2761,18 +2804,18 @@ msgstr ""
 "일을 사용하게 됩니다.)"
 
 #. Tag: para
-#: random-bits.xml:637
+#: random-bits.xml:663
 #, no-c-format
 msgid "Here is a basic <filename>/etc/lilo.conf</filename> as an example:"
 msgstr "다음은 기본적인 <filename>/etc/lilo.conf</filename> 예제입니다:"
 
 #. Tag: screen
-#: random-bits.xml:641
-#, no-c-format
+#: random-bits.xml:667
+#, fuzzy, no-c-format
 msgid ""
 "boot=/dev/hda6\n"
 "root=/dev/hda6\n"
-"install=/boot/boot-menu.b\n"
+"install=menu\n"
 "delay=20\n"
 "lba32\n"
 "image=/vmlinuz\n"
@@ -2787,7 +2830,7 @@ msgstr ""
 "label=Debian"
 
 #. Tag: para
-#: random-bits.xml:643
+#: random-bits.xml:669
 #, no-c-format
 msgid ""
 "Check <userinput>man yaboot.conf</userinput> for instructions on setting up "
@@ -2805,7 +2848,7 @@ msgstr ""
 "<filename>yaboot.conf</filename> 파일을 사용하게 됩니다.)"
 
 #. Tag: para
-#: random-bits.xml:653
+#: random-bits.xml:679
 #, no-c-format
 msgid ""
 "Here is a basic <filename>/etc/yaboot.conf</filename> as an example: "
@@ -2835,13 +2878,13 @@ msgstr ""
 "을 <userinput>hd:</userinput> 대신에 써야 할 수도 있습니다."
 
 #. Tag: title
-#: random-bits.xml:671
+#: random-bits.xml:697
 #, fuzzy, no-c-format
 msgid "Installing &debian; over Parallel Line IP (PLIP)"
 msgstr "유닉스/리눅스 시스템에서 &debian; 설치하기"
 
 #. Tag: para
-#: random-bits.xml:673
+#: random-bits.xml:699
 #, no-c-format
 msgid ""
 "This section explains how to install &debian; on a computer without Ethernet "
@@ -2851,7 +2894,7 @@ msgid ""
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:681
+#: random-bits.xml:707
 #, no-c-format
 msgid ""
 "In the example in this appendix we will set up a PLIP connection using a "
@@ -2862,7 +2905,7 @@ msgid ""
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:689
+#: random-bits.xml:715
 #, no-c-format
 msgid ""
 "The PLIP connection set up during the installation will also be available "
@@ -2871,7 +2914,7 @@ msgid ""
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:694
+#: random-bits.xml:720
 #, no-c-format
 msgid ""
 "Before you start, you will need to check the BIOS configuration (IO base "
@@ -2881,13 +2924,13 @@ msgid ""
 msgstr ""
 
 #. Tag: title
-#: random-bits.xml:704
+#: random-bits.xml:730
 #, no-c-format
 msgid "Requirements"
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:707
+#: random-bits.xml:733
 #, no-c-format
 msgid ""
 "A target computer, called <emphasis>target</emphasis>, where Debian will be "
@@ -2895,13 +2938,13 @@ msgid ""
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:713
+#: random-bits.xml:739
 #, no-c-format
 msgid "System installation media; see <xref linkend=\"installation-media\"/>."
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:718
+#: random-bits.xml:744
 #, no-c-format
 msgid ""
 "Another computer connected to the Internet, called <emphasis>source</"
@@ -2909,7 +2952,7 @@ msgid ""
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:724
+#: random-bits.xml:750
 #, no-c-format
 msgid ""
 "A DB-25 Null-Modem cable. See the <ulink url=\"&url-plip-install-howto;"
@@ -2918,13 +2961,13 @@ msgid ""
 msgstr ""
 
 #. Tag: title
-#: random-bits.xml:736
+#: random-bits.xml:762
 #, fuzzy, no-c-format
 msgid "Setting up source"
 msgstr "마우스 설정하기"
 
 #. Tag: para
-#: random-bits.xml:737
+#: random-bits.xml:763
 #, no-c-format
 msgid ""
 "The following shell script is a simple example of how to configure the "
@@ -2932,7 +2975,7 @@ msgid ""
 msgstr ""
 
 #. Tag: screen
-#: random-bits.xml:742
+#: random-bits.xml:768
 #, no-c-format
 msgid ""
 "#!/bin/sh\n"
@@ -2956,13 +2999,13 @@ msgid ""
 msgstr ""
 
 #. Tag: title
-#: random-bits.xml:748
+#: random-bits.xml:774
 #, fuzzy, no-c-format
 msgid "Installing target"
 msgstr "커널 설치"
 
 #. Tag: para
-#: random-bits.xml:749
+#: random-bits.xml:775
 #, no-c-format
 msgid ""
 "Boot the installation media. The installation needs to be run in expert "
@@ -2971,13 +3014,13 @@ msgid ""
 msgstr ""
 
 #. Tag: guimenuitem
-#: random-bits.xml:761
+#: random-bits.xml:787
 #, no-c-format
 msgid "Load installer components"
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:763
+#: random-bits.xml:789
 #, no-c-format
 msgid ""
 "Select the <userinput>plip-modules</userinput> option from the list; this "
@@ -2985,13 +3028,13 @@ msgid ""
 msgstr ""
 
 #. Tag: guimenuitem
-#: random-bits.xml:771
+#: random-bits.xml:797
 #, no-c-format
 msgid "Detect network hardware"
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:776
+#: random-bits.xml:802
 #, no-c-format
 msgid ""
 "If target <emphasis>does</emphasis> have a network card, a list of driver "
@@ -3001,13 +3044,13 @@ msgid ""
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:785
+#: random-bits.xml:811
 #, no-c-format
 msgid "Prompt for module parameters: Yes"
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:790
+#: random-bits.xml:816
 #, no-c-format
 msgid ""
 "Because no network card was detected/selected earlier, the installer will "
@@ -3016,7 +3059,7 @@ msgid ""
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:797
+#: random-bits.xml:823
 #, no-c-format
 msgid ""
 "Additional parameters for module parport_pc: "
@@ -3024,32 +3067,32 @@ msgid ""
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:803
+#: random-bits.xml:829
 #, no-c-format
 msgid "Additional parameters for module plip: leave empty"
 msgstr ""
 
 #. Tag: guimenuitem
-#: random-bits.xml:813
+#: random-bits.xml:839
 #, fuzzy, no-c-format
 msgid "Configure the network"
 msgstr "네트워크 설정하기"
 
 #. Tag: para
-#: random-bits.xml:816
+#: random-bits.xml:842
 #, no-c-format
 msgid "Auto-configure network with DHCP: No"
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:821
+#: random-bits.xml:847
 #, no-c-format
 msgid ""
 "IP address: <userinput><replaceable>192.168.0.1</replaceable></userinput>"
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:826
+#: random-bits.xml:852
 #, no-c-format
 msgid ""
 "Point-to-point address: <userinput><replaceable>192.168.0.2</replaceable></"
@@ -3057,7 +3100,7 @@ msgid ""
 msgstr ""
 
 #. Tag: para
-#: random-bits.xml:832
+#: random-bits.xml:858
 #, no-c-format
 msgid ""
 "Name server addresses: you can enter the same addresses used on source (see "
