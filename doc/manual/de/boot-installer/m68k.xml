@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 28672 -->
+<!-- original version: 30283 -->
 
   <sect2 arch="m68k"><title>Eine Installations-Methode auswählen</title>
 
@@ -11,14 +11,20 @@ existiert, versuchen Sie den 2.4.x-Linux-Kernel. Der Installer sollte
 dann weniger Speicher benötigen, da für einen 2.2.x-Kernel eine RAM-Disk
 fester Größe erforderlich ist, wohingegen 2.4.x tmpfs benutzt.
 
+</para><para condition="etch">
+
+Wenn Sie einen 2.2.x Linux-Kernel verwenden, müssen Sie den Kernelparameter
+&ramdisksize; benutzen.
+
 </para><para>
 
-Wenn Sie einen 2.2.x-Linux-Kernel benutzen, stellen Sie sicher, dass Sie
-eine RAM-Disk verwenden, die erstellt wurde, um diesen Kernel aufzunehmen;
-siehe auch das <ulink url="&disturl;/main/installer-&architecture;/current/images/MANIFEST">MANIFEST</ulink>.
-Sie müssen ebenfalls den Kernelparameter &ramdisksize; benutzen.
-Dies bedeutet generell, dass Sie die initrd22.gz-RAM-Disk aus dem
-entsprechenden Verzeichnis nehmen müssen.
+</para><para condition="sarge">
+
+Wenn Sie doch einen 2.2.x-Linux-Kernel benutzen, stellen Sie sicher, dass Sie
+eine RAM-Disk verwenden, die erstellt wurde, um genau diesen Kernel aufzunehmen;
+siehe dazu auch das <ulink url="&disturl;/main/installer-&architecture;/current/images/MANIFEST">MANIFEST</ulink>.
+Generell heißt das, dass Sie die initrd22.gz-RAM-Disk aus dem entsprechenden
+Verzeichnis nehmen müssen.
 
 </para><para>
 
@@ -42,7 +48,7 @@ Wenn Sie Probleme haben, besuchen Sie
 </itemizedlist>
 
 
-    <sect3 arch="m68k" id="m68k-boot-amiga"><title>Amiga</title>
+    <sect3 id="m68k-boot-amiga"><title>Amiga</title>
 <para>
 
 Die einzige Installationsmethode für Amiga-Systeme ist die von
@@ -59,7 +65,7 @@ Fehlermeldungen erhalten, müssen Sie den Kernelparameter
 </para>
     </sect3>
 
-    <sect3 arch="m68k" id="m68k-boot-atari"><title>Atari</title>
+    <sect3 id="m68k-boot-atari"><title>Atari</title>
 <para>
 
 Auf Atari-Systemen kann der Installer entweder von Festplatte
@@ -76,7 +82,7 @@ Fehlermeldungen erhalten, müssen Sie den Kernelparameter
 </para>
     </sect3>
 
-    <sect3 arch="m68k" id="m68k-boot-bvme6000"><title>BVME6000</title>
+    <sect3 id="m68k-boot-bvme6000"><title>BVME6000</title>
 <para>
 
 Der Installer für BVME6000 kann entweder von CD-ROM
@@ -87,7 +93,7 @@ Der Installer für BVME6000 kann entweder von CD-ROM
 </para>
     </sect3>
 
-    <sect3 arch="m68k" id="m68k-boot-mac"><title>Macintosh</title>
+    <sect3 id="m68k-boot-mac"><title>Macintosh</title>
 <para>
 
 Die einzige Installationsmethode für Mac-Systeme ist die mittels
@@ -98,14 +104,19 @@ Für Mac gibt es keinen funktionierenden 2.4.x-Kernel.
 </para><para>
 
 Wenn Ihre Hardware einen 53c9x-basierten SCSI-Bus benutzt, müssen
-Sie möglicherweise den Kernelparameter <userinput>mac53c9x=1</userinput>
+Sie möglicherweise den Kernelparameter <userinput>mac53c9x=1,0</userinput>
 anhängen. Systeme mit zwei solchen SCSI-Bus-Systemen, wie der Quadra 950,
-brauchen stattdessen das <userinput>mac53c9x=2</userinput>-Argument.
+brauchen stattdessen das <userinput>mac53c9x=2,0</userinput>-Argument.
+Alternativ kann der Parameter auch als <userinput>mac53c9x=-1,0</userinput>
+angeben werden; dies läßt die Autoerkennung eingeschaltet, jedoch sind
+keine SCSI-Abschaltungen möglich. Beachten Sie, dass es nur nötig ist,
+diesen Parameter zu verwenden, falls Sie mehr als eine Festplatte haben;
+andernfalls wird das System schneller laufen, wenn Sie ihn nicht verwenden.
 
 </para>
     </sect3>
 
-    <sect3 arch="m68k" id="m68k-boot-mvme"><title>MVME147 und MVME16x</title>
+    <sect3 id="m68k-boot-mvme"><title>MVME147 und MVME16x</title>
 <para>
 
 Der Installer für MVME147 und MVME16x kann entweder von
@@ -116,7 +127,7 @@ oder per Netzwerk (siehe <xref linkend="boot-tftp"/>) gestartet werden.
 </para>
     </sect3>
 
-    <sect3 arch="m68k" id="m68k-boot-q40"><title>Q40/Q60</title>
+    <sect3 id="m68k-boot-q40"><title>Q40/Q60</title>
 <para>
 
 Die einzige Installationsmethode für Q40/Q60-Systeme ist die mittels
@@ -161,7 +172,7 @@ schließlich bekommt Installationspakete über das Netzwerk.
 </itemizedlist>
 
 
-    <sect3 arch="m68k" id="m68k-boothd-amiga"><title>Von AmigaOS aus booten</title>
+    <sect3 id="m68k-boothd-amiga"><title>Von AmigaOS aus booten</title>
 <para>
 
 Starten Sie die Linux-Installation, indem Sie im <command>Workbench</command>
@@ -184,7 +195,7 @@ zum Kapitel <xref linkend="d-i-intro"/> wechseln können.
     </sect3>
 
 
-    <sect3 arch="m68k" id="m68k-boothd-atari"><title>Von Atari TOS aus booten</title>
+    <sect3 id="m68k-boothd-atari"><title>Von Atari TOS aus booten</title>
 <para>
 
 Starten Sie die Linux-Installation, indem Sie auf der GEM-Arbeitsoberfläche
@@ -208,7 +219,7 @@ zum Kapitel <xref linkend="d-i-intro"/> wechseln können.
     </sect3>
 
 
-    <sect3 arch="m68k" id="m68k-boothd-mac"><title>Von MacOS aus booten</title>
+    <sect3 id="m68k-boothd-mac"><title>Von MacOS aus booten</title>
 <para>
 
 Sie müssen das originale Mac-Betriebssystem erhalten und von dort aus booten.
@@ -275,7 +286,7 @@ zum Kapitel <xref linkend="d-i-intro"/> wechseln können.
 
     </sect3>
 
-    <sect3 arch="m68k" id="m68k-boothd-q40"><title>Booten von Q40/Q60</title>
+    <sect3 id="m68k-boothd-q40"><title>Booten von Q40/Q60</title>
 
 <para>
 
@@ -291,7 +302,6 @@ zum Kapitel <xref linkend="d-i-intro"/> wechseln können.
     </sect3>
   </sect2>
 
-
   <sect2 arch="m68k" id="m68k-boot-cdrom"><title>Booten von CD-ROM</title>
 <para>
 
@@ -303,7 +313,6 @@ Booten von CD-ROM unterstützt.
 &boot-installer-intro-cd.xml;
 
   </sect2>
-
 
   <sect2 arch="m68k" id="boot-tftp"><title>Booten per TFTP</title>
 
@@ -349,7 +358,6 @@ also z.b. <screen>i6000 TERM=vt100 &enterkey;</screen>.
 
 </para>
   </sect2>
-
 
   <sect2 arch="m68k" id="boot-from-floppies">
   <title>Booten von Floppy</title>

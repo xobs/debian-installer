@@ -1,0 +1,202 @@
+<!-- retain these comments for translator revision tracking -->
+<!-- original version: 29687 -->
+
+ <sect1 id="plip" arch="i386">
+ <title>&debian; über Parallel Line IP (PLIP) installieren</title>
+
+<para>
+
+Dieses Kapitel beschreibt, wie man &debian; auf einem Rechner installiert,
+der keine Ethernetkarte hat, stattdessen aber eine Verbindung per
+Nullmodem-Kabel (auch Nulldrucker-/Nullprinter-Kabel genannt) zu einem anderen
+Gateway-Computer. Dieser Gateway-Rechner sollte mit einem Netzwerk verbunden
+sein, in dem ein Debian-Spiegelserver verfügbar ist (wie z.B. das Internet).
+
+</para><para>
+
+In dem Beispiel in diesem Abschnitt werden wir eine PLIP-Verbindung konfigurieren,
+die ein Gateway verwendet, welches über eine Wählverbindung (ppp0) mit dem
+Internet verbunden ist. Wir werden die IP-Adressen 192.168.0.1 und
+192.168.0.2 für die PLIP-Schnittstellen auf dem Zielsystem respektive
+Quellsystem verwenden (diese Adressen sollten im Adressraum Ihres Netzwerkes
+noch ungenutzt sein, damit dies funktioniert).
+
+</para><para>
+
+Die PLIP-Verbindung, die während der Installation eingerichtet wird, ist
+auch nach dem Neustart in das neu installierte System (siehe
+<xref linkend="boot-new"/>) noch verfügbar.
+
+</para><para>
+
+Bevor Sie beginnen, müssen Sie die BIOS-Einstellungen (IO-Basis-Adresse und
+Interrupt/IRQ) für den Parallelport jeweils auf dem Quell- und dem Zielsystem
+kontrollieren. Allgemein passende Werte sind <literal>io=0x378</literal> und
+<literal>irq=7</literal>.
+
+</para>
+
+  <sect2>
+  <title>Anforderungen</title>
+
+<itemizedlist>
+<listitem><para>
+
+Ein Zielsystem, <emphasis>target</emphasis> genannt; der Computer, auf dem
+Debian installiert wird.
+
+</para></listitem>
+<listitem><para>
+
+System-Installationsmedien; siehe <xref linkend="installation-media"/>.
+
+</para></listitem>
+<listitem><para>
+
+Ein weiterer Computer, <emphasis>source</emphasis> genannt, der mit dem
+Internet verbunden ist; er wird als Gateway fungieren.
+
+</para></listitem>
+<listitem><para>
+
+Ein DB-25 Nullmodem-Kabel. Siehe das 
+<ulink url="&url-plip-install-howto;">PLIP-Install-HowTo</ulink> für
+mehr Informationen über solch ein Kabel und Anweisungen, wie Sie
+sich eines selber machen.
+
+</para></listitem>
+</itemizedlist>
+
+  </sect2>
+
+  <sect2>
+  <title>Den <emphasis>source</emphasis>-Rechner einrichten</title>
+<para>
+
+Das folgende Shell-Script ist ein einfaches Beispiel, wie Sie den
+Source-Rechner als Gateway zum Internet mittels ppp0 einrichten.
+
+<informalexample><screen>
+#!/bin/sh
+
+# Wir entladen aktive Module vom Kernel, um Konflikte zu vermeiden und
+# um Sie manuell neu konfigurieren zu können.
+modprobe -r lp parport_pc
+modprobe parport_pc io=<replaceable>0x378</replaceable> irq=<replaceable>7</replaceable>
+modprobe plip
+
+# Die PLIP-Schnittstelle konfigurieren (hier plip0; siehe "dmesg | grep plip")
+ifconfig <replaceable>plip0 192.168.0.2</replaceable> pointopoint <replaceable>192.168.0.1</replaceable> netmask 255.255.255.255 up
+
+# Den Gateway konfigurieren
+modprobe iptable_nat
+iptables -t nat -A POSTROUTING -o <replaceable>ppp0</replaceable> -j MASQUERADE
+echo 1 > /proc/sys/net/ipv4/ip_forward
+</screen></informalexample>
+
+</para>
+  </sect2>
+
+  <sect2>
+  <title>Debian auf dem <emphasis>target</emphasis>-Rechner installieren</title>
+<para>
+
+Booten Sie vom Installationsmedium. Sie müssen die Installation im
+Experten-Modus durchführen; geben Sie <userinput>expert</userinput>
+am Boot-Prompt ein. Im Folgenden finden Sie die Antworten, die Sie auf
+entsprechende gestellte Fragen während der verschiedenen Stufen der
+Installation geben sollten.
+
+</para>
+
+<orderedlist>
+<listitem><para>
+
+<guimenuitem>Installer-Komponenten laden / Load installer components</guimenuitem>
+
+</para><para>
+
+Wählen Sie die Option <userinput>plip-modules</userinput> aus der Liste;
+dies stellt die PLIP-Treiber dem Installationssystem zur Verfügung.
+
+</para></listitem>
+<listitem><para>
+
+<guimenuitem>Erkenne Netzwerk-Hardware</guimenuitem>
+
+</para>
+
+ <itemizedlist>
+ <listitem><para>
+
+Falls der Target-Rechner eine Netzwerkkarte <emphasis>hat</emphasis>, wird
+eine Liste von Treibermodulen für die erkannten Karten angezeigt. Wenn Sie
+&d-i; zwingen wollen, stattdessen PLIP zu verwenden, müssen Sie alle
+aufgelisteten Treibermodule abwählen/deaktivieren. Falls der Target-Rechner
+<emphasis>keine</emphasis> Netzwerkkarte hat, wird der Installer diese
+Liste natürlich überhaupt nicht anzeigen.
+
+ </para></listitem>
+ <listitem><para>
+
+Nach Modulparametern fragen: Ja
+
+ </para></listitem>
+ <listitem><para>
+
+Da keine Netzwerkkarte erkannt bzw. angewählt wurde, fordert der
+Installer Sie auf, ein Netzwerktreiber-Modul aus der Liste auszuwählen.
+Wählen Sie das <userinput>plip</userinput>-Modul.
+
+ </para></listitem>
+ <listitem><para>
+
+Zusätzliche Parameter für das Modul <quote>parport_pc</quote>:
+<userinput><replaceable>io=0x378 irq=7</replaceable></userinput>
+
+ </para></listitem>
+ <listitem><para>
+
+Zusätzliche Parameter für das Modul <quote>plip</quote>: lassen Sie
+dies leer.
+
+ </para></listitem>
+ </itemizedlist>
+
+</listitem>
+<listitem><para>
+
+<guimenuitem>Das Netzwerk konfigurieren / Configure the network</guimenuitem>
+ 
+ <itemizedlist>
+ <listitem><para>
+
+
+Netzwerk automatisch mit DHCP einrichten: Nein
+
+ </para></listitem>
+ <listitem><para>
+
+IP-Adresse: <userinput><replaceable>192.168.0.1</replaceable></userinput>
+
+ </para></listitem>
+ <listitem><para>
+
+Point-to-point-Adresse:
+<userinput><replaceable>192.168.0.2</replaceable></userinput>
+
+ </para></listitem>
+ <listitem><para>
+
+Name-Server-Adresse (DNS): Sie können die gleichen Adressen eingeben,
+die auch auf dem Source-Rechner genutzt werden (siehe
+<filename>/etc/resolv.conf</filename>).
+
+ </para></listitem>
+ </itemizedlist>
+
+</para></listitem>
+</orderedlist>
+
+  </sect2>
+ </sect1>
