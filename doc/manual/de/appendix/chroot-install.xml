@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 28997 -->
+<!-- original version: 31140 -->
 
  <sect1 id="linux-upgrade">
  <title>&debian; von einem anderen Unix/Linux-System aus installieren</title>
@@ -68,7 +68,7 @@ Hängen Sie eine Partition (wahrscheinlich die neue) als <filename>/mnt/debinst<
 Dateisystem ein (das Installationsverzeichnis; es wird das
 root-(<filename>/</filename>)-Dateisystem des neuen Debian). Der
 Einhängepunkt (<filename>/mnt/debinst</filename>) ist rein willkürlich
-gewählt, es wird später noch öfter darauf verwiesen.
+gewählt; es wird später noch öfter darauf verwiesen.
 
 <informalexample><screen>
 # mkdir /mnt/debinst
@@ -76,6 +76,13 @@ gewählt, es wird später noch öfter darauf verwiesen.
 </screen></informalexample>
 
 </para>
+ <note><para>
+
+Falls Sie Teile des Dateisystems (z.B. /usr) auf andere Partitionen
+eingehängt haben möchten, müssen Sie diese Verzeichnisse manuell erstellen
+und einhängen, bevor Sie mit dem nächsten Schritt weitermachen.
+
+ </para></note>
   </sect2>
 
   <sect2>
@@ -122,6 +129,14 @@ Binär-Dateien zu installieren.
 # cd /
 # zcat /full-path-to-work/work/data.tar.gz | tar xv
 </screen></informalexample>
+
+</para><para>
+
+Beachten Sie, dass Sie eine minimale Version von <classname>glibc</classname>
+(derzeit GLIBC_2.3) installiert haben müssen, um <command>debootstrap</command>
+starten zu können. Zwar ist <command>debootstrap</command> selbst ein
+Shell-Script, aber es ruft verschiedene Werkzeuge auf, die 
+<classname>glibc</classname> erfordern.
 
 </para>
   </sect2>
@@ -196,8 +211,8 @@ Hier ein Beispiel, das Sie sich anpassen können:
 # /etc/fstab: static file system information.
 #
 # file system    mount point   type    options                  dump  pass
-/dev/XXX         /             ext2    defaults                 0     0
-/dev/XXX         /boot         ext2    ro,nosuid,nodev          0     2
+/dev/XXX         /             ext3    defaults                 0     1
+/dev/XXX         /boot         ext3    ro,nosuid,nodev          0     2
 
 /dev/XXX         none          swap    sw                       0     0
 proc             /proc         proc    defaults                 0     0
@@ -205,10 +220,10 @@ proc             /proc         proc    defaults                 0     0
 /dev/fd0         /mnt/floppy   auto    noauto,rw,sync,user,exec 0     0
 /dev/cdrom       /mnt/cdrom    iso9660 noauto,ro,user,exec      0     0
 
-/dev/XXX         /tmp          ext2    rw,nosuid,nodev          0     2
-/dev/XXX         /var          ext2    rw,nosuid,nodev          0     2
-/dev/XXX         /usr          ext2    rw,nodev                 0     2
-/dev/XXX         /home         ext2    rw,nosuid,nodev          0     2
+/dev/XXX         /tmp          ext3    rw,nosuid,nodev          0     2
+/dev/XXX         /var          ext3    rw,nosuid,nodev          0     2
+/dev/XXX         /usr          ext3    rw,nodev                 0     2
+/dev/XXX         /home         ext3    rw,nosuid,nodev          0     2
 </screen></informalexample>
 
 Nutzen Sie den Befehl <userinput>mount -a</userinput>, um alle Dateisysteme,
@@ -220,12 +235,22 @@ die Dateisysteme einzeln einzuhängen, benutzen Sie:
 </screen></informalexample>
 
 Sie können das proc-Dateisystem mehrfach einhängen und in frei wählbare
-Verzeichnisse, obwohl /proc dafür üblich ist. Wenn Sie nicht
-<userinput>mount -a</userinput> verwendet haben, vergewissern Sie sicher, dass
-Sie proc eingehängt haben, bevor Sie weitermachen:
+Verzeichnisse, obwohl <filename>/proc</filename> dafür üblich ist. Wenn Sie nicht
+<userinput>mount -a</userinput> verwendet haben, stellen Sie sicher, dass
+Sie proc einhängen, bevor Sie weitermachen:
 
 <informalexample><screen>
 # mount -t proc proc /proc
+</screen></informalexample>
+
+</para><para>
+
+Der Befehl <userinput>ls /proc</userinput> sollte jetzt ein nicht-leeres
+Verzeichnis zeigen. Falls dies fehlschlägt, können Sie vielleicht proc
+außerhalb der chroot-Umgebung einhängen:
+
+<informalexample><screen>
+# mount -t proc proc /mnt/debinst/proc
 </screen></informalexample>
 
 </para>
@@ -403,7 +428,7 @@ Hier ein grundsätzliches Beispiel einer <filename>/etc/lilo.conf</filename>:
 <informalexample><screen>
 boot=/dev/hda6
 root=/dev/hda6
-install=/boot/boot-menu.b
+install=menu
 delay=20
 lba32
 image=/vmlinuz
