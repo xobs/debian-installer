@@ -1,5 +1,5 @@
 <!-- retain these comments for translator revision tracking -->
-<!-- original version: 28997 -->
+<!-- original version: 31140 -->
 
 
  <sect1 id="linux-upgrade">
@@ -111,7 +111,19 @@ verrà utilizzato da qui in avanti.
 # mount /dev/hda6 /mnt/debinst
 </screen></informalexample>
 
-</para>
+</para><note><para>
+
+<!--
+If you want to have parts of the filesystem (e.g. /usr) mounted on
+separate partitions, you will need to create and mount these directories 
+manually before proceding with the next stage. 
+-->
+
+Nel caso si abbiano delle parti del filesystem (p.e. /usr) montate da
+delle partizioni separate è necessario creare e montare manualmente queste
+directory prima di procedere con la prossima fase.
+
+</para></note>
   </sect2>
 
   <sect2>
@@ -181,6 +193,21 @@ binari. Servono i privilegi di root per installarli.
 # cd /
 # zcat &#60; /full-path-to-work/work/data.tar.gz | tar xv
 </screen></informalexample>
+
+</para><para>
+
+<!--
+Note that running <command>debootstrap</command> may require you to have
+a minimal version of <classname>glibc</classname> installed (currently
+GLIBC_2.3). <command>debootstrap</command> itself is a shell script, but
+it calls various utilities that require <classname>glibc</classname>.
+-->
+
+Notare che l'esecuzione di <command>debootstrap</command> potrebbe
+richiedere l'installazione di una versione minimale della
+<classname>glibc</classname> (al momento GLIBC_2.3).
+<command>debootstrap</command> è semplicemente uno script di shell ma
+richiama diverse utilità che richiedono la <classname>glibc</classname>.
 
 </para>
   </sect2>
@@ -293,7 +320,7 @@ Segue un esempio che si può adattare secondo le proprie necessità:
 # /etc/fstab: static file system information.
 #
 # file system    mount point   type    options                  dump pass
-/dev/XXX         /             ext2    defaults                 0    0
+/dev/XXX         /             ext2    defaults                 0    1
 /dev/XXX         /boot         ext2    ro,nosuid,nodev          0    2
 
 /dev/XXX         none          swap    sw                       0    0
@@ -321,18 +348,34 @@ mentre per montarli singolarmente si usi:
 </screen></informalexample>
 
 <!-- You can mount the proc file system multiple times and to arbitrary
-locations, though /proc is customary. If you didn't use
-<userinput>mount -a</userinput>, be sure to mount proc before
-continuing: -->
+locations, though <filename>/proc</filename> is customary. If you didn't use
+<userinput>mount -a</userinput>, be sure to mount proc before continuing:
+-->
 
 &Egrave; possibile montare il file system proc più volte e in posizioni
-arbitrarie, ma è consuetudine farlo su /proc. In caso non si esegua
-<userinput>mount -a</userinput>, ci si assicuri di montare proc prima
-di continuare:
+arbitrarie, ma è consuetudine farlo su <filename>/proc</filename>. In caso
+non si esegua <userinput>mount -a</userinput>, ci si assicuri di montare
+proc prima di continuare:
 
 <informalexample><screen>
 # mount -t proc proc /proc
 </screen></informalexample>
+
+</para><para>
+
+<!--
+The command <userinput>ls /proc</userinput> should now show a non-empty
+directory. Should this fail, you may be able to mount proc from outside
+the chroot:
+-->
+
+Adesso il comando <userinput>ls /proc</userinput> dovrebbe mostrare una
+directory con dei file. Se non funziona, si dovrebbe essere in grado di
+montare proc da fuori della chroot:
+
+<informalexample><screen> 
+# mount -t proc proc /mnt/debinst/proc 
+</screen></informalexample> 
 
 </para>
    </sect3>
@@ -349,6 +392,16 @@ Per configurare la propria tastiera:
 <informalexample><screen>
 # dpkg-reconfigure console-data
 </screen></informalexample>
+
+</para><para>
+
+<!--
+Note that the keyboard cannot be set while in the chroot, but will be
+configured for the next reboot.
+-->
+
+Notare che la tastiera non può essere impostata quando si è all'interno
+della chroot, sarà possibile configurarla al riavvio successivo.
 
 </para>
    </sect3>
@@ -572,7 +625,7 @@ Di seguito un <filename>/etc/lilo.conf</filename> di base come esempio:
 <informalexample><screen>
 boot=/dev/hda6
 root=/dev/hda6
-install=/boot/boot-menu.b
+install=menu
 delay=20
 lba32
 image=/vmlinuz
