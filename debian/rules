@@ -6,26 +6,20 @@ DATE=$(shell echo $(VERSION) | cut -d '.' -f 1)
 SUITE=$(shell LC_ALL=C dpkg-parsechangelog | grep ^Distribution: | cut -d ' ' -f 2)
 ifeq (${SUITE},unstable)
 SUITE=etch
-MANUAL_SUITE=etch
 endif
 ifeq (${SUITE},UNRELEASED)
 SUITE=unstable
-# Still build manual for etch.
-MANUAL_SUITE=etch
 endif
 
 ARCHIVEDIR=debian/tmp/installer-$(ARCH)
 DESTDIR=$(ARCHIVEDIR)/$(DATE)
 IMAGEDIR=$(DESTDIR)/images
-MANDIR=$(DESTDIR)/doc/manual
-MANTMP=$(shell pwd)/doc/manual/build/manual
 TARNAME=debian-installer-images_$(VERSION)_$(ARCH).tar.gz
 
 clean:
 	dh_testdir
 	dh_testroot
 	dh_clean build-stamp
-	rm -rf $(MANTMP)
 	$(MAKE) -C build reallyclean
 	$(MAKE) -C doc/devel/partman clean
 
@@ -37,14 +31,7 @@ build-images:
 build: build-stamp
 build-stamp:
 	rm -f $@
-	-rm -rf $(MANTMP)
-	set -e && cd doc/manual/build && \
-		official_build=1 destination=$(MANTMP) \
-		manual_release=$(MANUAL_SUITE) \
-		architectures=$(ARCH) noarchdir=1 ./build.sh
-
 	$(MAKE) -C doc/devel/partman
-	
 	touch $@
 
 install: build
@@ -52,9 +39,6 @@ install: build
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	
-	install -d $(MANDIR)
-	cp -a $(MANTMP)/* $(MANDIR)
 	
 	debian/rules build-images
 
@@ -66,11 +50,10 @@ binary-arch: install
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs
-	dh_installdocs $(MANTMP)
-	dh_installdocs -X manual doc/* -X Makefile -X partman-doc.sgml
+	dh_installdocs doc/* -X Makefile -X partman-doc.sgml
 	dh_compress
 	dh_fixperms
-	dh_gencontrol -- -Vkernel:Package='$(KERNELPACKAGE)'
+	dh_gencontrol
 	dh_builddeb
 	cd debian/tmp && tar czvf ../../../$(TARNAME) .
 	dpkg-distaddfile $(TARNAME) raw-installer -
