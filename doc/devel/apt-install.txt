@@ -52,9 +52,6 @@ and in this case will run 'apt-get install' try to fetch and install
 the packages.  If base-installer isn't completed, it will add the
 package name to /var/lib/apt-install/queue.
 
-To make sure apt-install is available as early as possible, the script
-is included in the rootskel package.
-
 At the end of the base-installer postinst script, it will check this
 file and install the packages listed in the file, something like this:
 
@@ -68,15 +65,3 @@ Files
   /bin/apt-install             - request a package installed into /target/
   /var/lib/apt-install/queue   - package queue, installed by base-installer
   /target/etc/apt/sources.list - file created when base-installer completes
-
-Comments
---------
-
-The udeb kernel-installer can be changed to call 'apt-install
-<kernel>' instead of installing the package manually.
-
-The lilo and grub package can call 'apt-install {lilo|grub}' before
-they start to use the grub or lilo programs in /target/.
-
-The brltty-udeb package can call 'apt-install brltty' in its postinst
-and make sure also brltty is installed into /target/.
