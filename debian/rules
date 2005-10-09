@@ -4,9 +4,10 @@ ARCH=$(shell dpkg-architecture -qDEB_BUILD_ARCH)
 VERSION=$(shell LC_ALL=C dpkg-parsechangelog | grep ^Version: | cut -d ' ' -f 2)
 DATE=$(shell echo $(VERSION) | cut -d '.' -f 1)
 SUITE=$(shell LC_ALL=C dpkg-parsechangelog | grep ^Distribution: | cut -d ' ' -f 2)
-ifeq (${SUITE},unstable)
-SUITE=etch
-endif
+# XXX etch is not ready to build from yet
+#ifeq (${SUITE},unstable)
+#SUITE=etch
+#endif
 ifeq (${SUITE},UNRELEASED)
 SUITE=unstable
 endif
