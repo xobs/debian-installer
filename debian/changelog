@@ -7,6 +7,13 @@ debian-installer (20051010) UNRELEASED; urgency=low
   * Copy in EXTRAFILES before depmod so modules can be included if necessary.
   * Remove libiw udeb from netboot-minimal/powerpc.cfg, will be pulled in by
     mklibs/deps as needed.
+  * During library reduction, copy in libraries from driver disks same as
+    other libraries so mklibs knows where to find them. This is a hack to
+    let mklibs work if building a root floppy with driver disks that include
+    libraries that are not on the root floppy. It's not ideal, since the
+    library gets added to the root floppy by mklibs now. (This issue currently
+    only occurs because netcfg, on the root floppies, is linked statically
+    and wireless-tools, on some the driver disks, is not.)
 
  -- Joey Hess <joeyh@debian.org>  Wed, 12 Oct 2005 18:24:53 -0400
 
