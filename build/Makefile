@@ -312,6 +312,15 @@ $(STAMPS)tree-unpack-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-s
 	rm -rf $(DPKGDIR)/updates
 	rm -f $(DPKGDIR)/available $(DPKGDIR)/*-old $(DPKGDIR)/lock
 
+ifdef EXTRAFILES
+	# Copy in any extra files.
+	set -e; \
+	for file in $(EXTRAFILES); do \
+		mkdir -p $(TREE)/`dirname $$file`; \
+		cp -a $$file $(TREE)/$$file; \
+	done
+endif
+
 ifdef KERNELVERSION
 	# Set up modules.dep, ensure there is at least one standard dir (kernel
 	# in this case), so depmod will use its prune list for archs with no
@@ -368,24 +377,6 @@ endif
 ifneq (,$(wildcard $(KEYRING)))
 	mkdir -p $(TREE)/usr/share/keyrings
 	cp -a $(KEYRING) $(TREE)/usr/share/keyrings/archive.gpg
-endif
-
-ifdef EXTRAFILES
-	# Copy in any extra files.
-	set -e; \
-	for file in $(EXTRAFILES); do \
-		mkdir -p $(TREE)/`dirname $$file`; \
-		cp -a $$file $(TREE)/$$file; \
-	done
-endif
-
-ifdef EXTRALIBS
-	# Copy in any extra libs.
-	set -e; \
-	for file in $(EXTRALIBS); do \
-		mkdir -p $(TREE)/`dirname $$file`; \
-		cp -a $$file $(TREE)/$$file; \
-	done
 endif
 
 	# Create an lsb release file.
