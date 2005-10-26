@@ -295,7 +295,7 @@ $(STAMPS)tree-unpack-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-s
 			usedsize=`echo $$newsize - $$oldsize | bc`; \
 			usedblocks=`echo $$newblocks - $$oldblocks | bc`; \
 			usedcount=`echo $$newcount - $$oldcount | bc`; \
-			version=`dpkg-deb --info $$udeb | grep Version: | awk '{print $$2}'` ; \
+			version=`dpkg-deb --info $$udeb | grep '^Version:' | awk '{print $$2}'` ; \
 			echo " $$usedsize B - $$usedblocks blocks - $$usedcount files from $$pkg (version $$version)" >>$(TEMP)/diskusage.txt;\
 			oldsize=$$newsize ; \
 			oldblocks=$$newblocks ; \
@@ -665,7 +665,7 @@ $(STAMPS)extra-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
 			usedsize=`du -bs $$udeb | awk '{print $$1}'` ; \
 			usedblocks=`du -s $$udeb | awk '{print $$1}'` ; \
 			usedcount=1 ; \
-			version=`dpkg-deb --info $$udeb | grep Version: | awk '{print $$2}'` ; \
+			version=`dpkg-deb --info $$udeb | grep '^Version:' | awk '{print $$2}'` ; \
 			arch=`dpkg-deb --info $$udeb | grep Architecture: | awk '{print $$2}'` ; \
 			echo " $$usedsize B - $$usedblocks blocks - $$usedcount files used by pkg $$pkg (version $$version)" >>$(TEMP)/diskusage.txt; \
 			echo "$$pkg $$version $$arch" >> $(TEMP_UDEB_LIST); \
