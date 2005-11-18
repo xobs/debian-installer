@@ -295,7 +295,7 @@ $(STAMPS)tree-unpack-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-s
 			usedsize=`echo $$newsize - $$oldsize | bc`; \
 			usedblocks=`echo $$newblocks - $$oldblocks | bc`; \
 			usedcount=`echo $$newcount - $$oldcount | bc`; \
-			version=`dpkg-deb --info $$udeb | grep '^Version:' | awk '{print $$2}'` ; \
+			version=`dpkg-deb --info $$udeb | grep '^ *Version:' | sed 's/^ *//' | awk '{print $$2}'` ; \
 			echo " $$usedsize B - $$usedblocks blocks - $$usedcount files from $$pkg (version $$version)" >>$(TEMP)/diskusage.txt;\
 			oldsize=$$newsize ; \
 			oldblocks=$$newblocks ; \
