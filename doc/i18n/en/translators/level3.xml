@@ -188,6 +188,102 @@ to change or be added. Anyway, even a partial translation will help the
 users of a given language.
 </para>
 
+<para>
+
+The aptitude maintainer has written a special
+<filename>README.i18n</filename> file to give more details to
+translators. The contents of this file follows, as of the day of this
+documentation was written.
+</para>
+
+<para>
+<classname>Aptitude</classname> uses the standard gettext mechanism for translations.  However,
+there are a few twists that you should be aware of.
+</para>
+
+<sect4>
+<title>
+External data files
+</title>
+
+<para>
+    There are several external data files that you can choose to
+    translate: <filename>help.txt</filename> (online help), <filename>help-mine.txt</filename> (online help for
+    Minesweeper), and <filename>aptitude.xml</filename> (user's manual/online manual).
+    <filename>aptitude.xml</filename> is a large file, but <filename>help.txt</filename> and <filename>help-mine.txt</filename> are
+    quite tractable and it is recommended that you translate
+    them. (especially <filename>help.txt</filename>)
+</para>
+
+<para>
+    aptitude applies gettext to the file names before loading them, so
+    to tell it that you've translated (eg) <filename>help.txt</filename> to <filename>help-de.txt</filename>,
+    you should add a translation "help.txt" -> "help-de.txt".
+</para>
+
+<para>
+    In addition, each translated file name has a corresponding
+    described translation (see below) indicating its encoding.  You
+    should translate this as necessary if you write an alternate file.
+</para>
+</sect4>
+
+<sect4>
+<title>Manpage</title>
+
+<para>
+    <classname>aptitude</classname> has a manpage, and it can be translated; if you choose to
+    translate it, your translation should be named <filename>aptitude.XX.1</filename>
+    (replace XX with the language code)
+</para>
+
+</sect4>
+<sect4>
+<title>fragf</title>
+
+<para>
+    <classname>aptitude</classname> uses an internal function called fragf to format text
+    with display attributes.  This function works somewhat like
+    printf, but most escape codes have different meanings.  For
+    instance, %B enables the "bold" character attribute, while %b
+    disables it.  See src/vscreen/fragment.h for a full description of
+    all escape codes.  You can use parameter numbers (eg, %1$F) if
+    your language needs to reorder the arguments.
+</para>
+
+</sect4>
+<sect4>
+<title>Key translations</title>
+
+<para>
+    Where it makes sense, <classname>aptitude</classname> allows the default keybinding
+    assigned to a command to be translated.  This is done by creating
+    a dummy translated string ending in "_key"; the first character of
+    the string is the default binding of the key.  For instance, the
+    string "yes_key" is used to set the default binding for buttons
+    labelled "Yes".  To bind "j" to this command, you could translate
+    "yes_key" to "ja_key", "ja", or even just "j".
+</para>
+
+</sect4>
+<sect4>
+<title>Described translations</title>
+
+<para>
+    Some translations have descriptions or disambiguating text to the
+    left of the input and output string.  In these cases, everything
+    up to and including the first pipe character will be removed
+    before the string is used.  If no pipe character is present in the
+    string, the string will be used without modifications.
+
+    For instance, the string "help.txt encoding|UTF-8" can be
+    translated to either "help.txt encoding|ISO-8859-1",
+    "|ISO-8859-1", or "ISO-8859-1", and will have the same effect in
+    each case.
+</para>
+</sect4>
+
+
 </sect3>
 
 </sect2>
