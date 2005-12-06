@@ -11,40 +11,36 @@ Contents
 </title>
 
 <para>
-Most level 2 translations are related to &d-i; <emphasis>second stage</emphasis>.
+Most level 2 translations are related to packages used during the
+installation process which are not packages maintained by the &d-i;
+team.
 </para>
 
-<para>In &d-i; jargon, the <emphasis>second stage</emphasis> is the part of &d-i; which occurs from
-the system reboot up to the <emphasis>Installation is finished</emphasis> screen followed
-by the first <command>login:</command> prompt. This stage is, technically speaking, the
-whole run of the <classname>base-config</classname> program.
+<para>
+Most of these packages are installed during the <emphasis>Select and
+install packages</emphasis> step of &d-i; which occurs before the
+<emphasis>Finish install</emphasis> step.
 </para>
 
-<para>All packages which interact with users during this second stage
-while a Debian base system is installed, with the default level for
-the asked questions (<emphasis>high priority installs</emphasis> in
-&d-i; jargon) are considered part of the <emphasis>level 2</emphasis>
-of &d-i; localization.
+<para>
+Some others provide translatable strings to other parts of &d-i;.
+</para>
+
+<para>
+All packages which interact with users while a Debian base system is
+installed, with the default level for the asked questions
+(<emphasis>high priority installs</emphasis> in &d-i; jargon) are
+considered part of the <emphasis>level 2</emphasis> of &d-i;
+localization.
 </para>
 
 <para>This includes two packages maintained by the &d-i; team as well as a few
 other Debian packages:
 </para>
-
 	  <itemizedlist>
 	    <listitem>
 	      <para>
 		newt
-	      </para>
-	    </listitem>
-	    <listitem>
-	      <para>
-		base-config (&d-i; team)
-	      </para>
-	    </listitem>
-	    <listitem>
-	      <para>
-		shadow
 	      </para>
 	    </listitem>
 	    <listitem>
@@ -74,14 +70,14 @@ other Debian packages:
 	    </listitem>
 	  </itemizedlist>
 
-<para>Iso-codes and console-data packages material is indeed used in
-&d-i; first stage but including them in the level 1 of translation
-would be too confusingas these packages are not maintained by the
-&d-i; team. This is why they are considered part of the level 2.
+<para>
+Iso-codes and console-data packages material is used by some level1
+packages from &d-i; while others are packages installed as part of the
+base system and prompting users in default installs.
 </para>
 
 <para>
-Translators should translate these file in the same order they appear
+Translators should translate these files in the same order they appear
 in this section.
 </para>
 
@@ -160,424 +156,6 @@ N/A
 </sect3>
 
 </sect2>
-
-<sect2>
-<title>
-Base-config
-</title>
-
-<sect3>
-<title>
-Package description
-</title>
-
-<para>
-The &base-config; package is the core of the second stage of the
-installation of a Debian system. It consists in a set of tasks which
-may be called from a general menu. Each of these tasks is responsible
-for a specific operation (users
-creation, email system configuration, etc.) Some of these tasks are directly part of &base-config;,
-some others are handled by separate packages (which translations are
-part of level 2 and level 3)
-</para>
-
-<para>This package is, technically speaking, a <quote>regular</quote> Debian
-package. However, the package maintainer is the &d-i; team and the
-package is managed and developed the same way core &d-i; packages are
-managed. More precisely, all &d-i; translators have been granted a commit access to
-the &base-config; <acronym>SVN</acronym> repository.
-</para>
-
-</sect3>
-
-<sect3>
-<title>
-Files location and access methods
-</title>
-
-<para>
-Translators should remember that using <acronym>SVN</acronym> is strongly encouraged as
-this is the only way for them to commit their own translations.
-</para>
-
-<para>This package's l10n material is spread over two files. These are, by
-order of importance:
-</para>
-
-<itemizedlist>
-<listitem>
-<para>
-<filename>debian/po/templates.pot</filename> : screen shown to users
-while the program runs. These files are named
-<emphasis>debconf</emphasis> translations.
-</para>
-</listitem>
-<listitem>
-<para>
-<filename>po/base-config.pot</filename> : messages displayed by the
-program. These files are named <emphasis>program</emphasis>
-translations.
-</para>
-</listitem>
-</itemizedlist>
-
-<para>
-Access to these files:
-</para>
-
-<itemizedlist>
-  <listitem>
-    <para>
-      <acronym>SVN</acronym> access: &svn-base-config;, directory <filename>debian/po</filename> (debconf) and <filename>po</filename> (programs) 
-    </para>
-  </listitem>
-  <listitem>
-    <para>
-      <acronym>HTTP</acronym> access: 
-    </para>
-    <itemizedlist>
-      <listitem>
-        <para>
-          &url-level2-pot-link;, <filename>base-config_debian_po_templates.pot</filename> (debconf) and &url-level2-pot-link;, <filename>base-config_po.pot</filename> (programs)
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          &url-level2-po-link;, <filename>base-config_debian_po_&language;.po</filename> (debconf) and &url-level2-po-link;, <filename>base-config_po_&language;.po</filename> (programs)
-        </para>
-      </listitem>
-    </itemizedlist>
-  </listitem>
-</itemizedlist>
-
-</sect3>
-
-<sect3>
-<title>
-Updating/Adding translations
-</title>
-
-<para>
-For the <emphasis>debconf</emphasis> translation, translators should
-copy the <filename>templates.pot</filename> file as
-<filename>&language;.po</filename> and work on this file, then add it to the
-repository and later commit the needed updates.
-</para>
-
-
-<para>
-For the <emphasis>program</emphasis> translation, translators should
-copy the <filename>base-config.pot</filename> file as
-<filename>&language;.po</filename> and work on this file, then add it to the
-repository and later commit the needed updates.
-</para>
-
-<para>
- In case <acronym>SVN</acronym> commits are
-absolutely impossible, these updates can be sent as bug reports
-against the <classname>base-config</classname> package (see <xref
-linkend="bug-reports"/> for details) and mention whether the file is
-the <emphasis>debconf</emphasis>
-or <emphasis>program</emphasis> translation.
-</para>
-
-
-</sect3>
-
-<sect3>
-<title>
-Specific recommendations
-</title>
-
-<para>
-In the <emphasis>debconf</emphasis> translation, the entries of type
-"text" are menu entries. Their length shouldn't exceed 65
-characters. Menu entries <emphasis>must not</emphasis> include commas.
-</para>
-
-<para>
-One string in the <emphasis>program</emphasis> translation uses
-<emphasis>Plural-Forms</emphasis>. Translators should use the
-appropriate <classname>Plural-Forms:</classname> header for their
-language (details about Plural Forms in gettext can be found in <xref
-linkend="gettext-tools"/>). This string should also not end with a
-full stop as mentioned in comments.
-</para>
-
-</sect3>
-
-</sect2>
-
-<sect2 id="shadow-level2">
-<title>
-Shadow
-</title>
-
-<sect3>
-<title>
-Package description
-</title>
-
-<para> 
-The shadow package includes several core utilities for a Unix
-system (<command>login</command>, <command>passwd</command>...) as
-well as the root user password setting step and the creation of a
-non-privileged user.  </para>
-
-<para> 
-It is installed and configured from
-<classname>base-config</classname> which triggers some of these
-operations and thus implies user input.
-</para>
-
-<para> 
-The programs (passwd, login and so on) are
-internationalized but this translation is not considered in level 2,
-but in level 4 (see <xref linkend="translators-level4"/>). The only
-level 2 translation is the <emphasis>debconf</emphasis> translation
-(user input screens).  
-</para>
-
-</sect3>
-
-<sect3>
-<title>
-Files location and access methods
-</title>
-
-<para>
-This package is a <quote>regular</quote> Debian package. The
-package maintenance team uses a <acronym>SVN</acronym> repository.
-</para>
-
-<itemizedlist>
-  <listitem>
-    <para>
-      <acronym>SVN</acronym> access: &svn-shadow;<filename>/debian/po</filename> (anonymous only)
-    </para>
-  </listitem>
-  <listitem>
-    <para>
-      <acronym>HTTP</acronym> access: 
-    </para>
-    <itemizedlist>
-      <listitem>
-        <para>
-          &url-level2-pot-link;, <filename>shadow_debian_po_templates.pot</filename>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          &url-level2-po-link;, <filename>shadow_debian_po_&language;.po</filename>
-        </para>
-      </listitem>
-    </itemizedlist>
-  </listitem>
-</itemizedlist>
-
-</sect3>
-
-<sect3>
-<title>
-Updating/Adding translations
-</title>
-
-<para>
-Translations should be reported as bugs against the <classname>shadow</classname> package.
-</para>
-
-</sect3>
-
-<sect3>
-<title>
-Specific recommendations
-</title>
-
-<para>
-Translators should be very careful when translating the shadow user
-interaction screens. The most important screen is the one asking for
-the root password. It should be kept short so that the screen fits on
-one screen. Jargon must be avoided (&d-i; is targeted to low skilled
-users and to Unix beginners). For instance, translators should try to
-keep the mention of <emphasis>root</emphasis> being the system
-administrator.
-</para>
-
-<para>
-Another potential source of confusion are the screens asking about the
-newly created user real name and login name. The English version tries
-to be clear about what is what and translations should make this
-distinction very clear.
-</para>
-
-</sect3>
-
-</sect2>
-
-<sect2>
-<title>
-Tasksel
-</title>
-
-<sect3>
-<title>
-Package description
-</title>
-
-<para>
-The &tasksel; package, called from <classname>base-config</classname>
-for each installation, proposes <emphasis>tasks</emphasis> to trigger
-the installation of complete sets of Debian packages. A
-<emphasis>task</emphasis> is a collection of several individual Debian
-packages all related to a specific activity.
-</para>
-
-<para>
-This package is, technically speaking, a <quote>regular</quote>
-Debian package. However, the package maintainer is the &d-i; team and
-the package is managed and developed the same way core &d-i; packages
-are managed. More precisely, all &d-i; translators have been granted a
-commit access to the tasksel <acronym>SVN</acronym> repository.
-</para>
-
-<para>
-Several tasks are related to localized environments. These tasks
-install packages that are likely to be useful when using Debian with
-the mentioned languages. The <emphasis>language tasks</emphasis> are
-automatically tagged for install when the given localized environment
-has been used with &d-i;.
-</para>
-
-<para>
-Translators whose language does not currently have such task should
-provide one. See <xref linkend="language-tasks"/> for details about
-this. Other translators should check the existing language task for
-their language.
-</para>
-
-</sect3>
-
-<sect3>
-<title>
-Files location and access methods
-</title>
-
-<para>
-Translators should remember that using <acronym>SVN</acronym> is strongly encouraged as
-this is the only way for them to commit their own translations.
-</para>
-
-<para>This package's l10n material is spread over three files. These are, by
-order of importance:
-</para>
-
-<itemizedlist>
-<listitem>
-<para>
-<filename>tasks/po/debian-tasks.pot</filename>: tasks descriptions translations. These files are named <emphasis>tasks</emphasis>
-translations.
-</para>
-</listitem>
-<listitem>
-<para>
-<filename>debian/po/templates.pot</filename> : text of the screen shown to users. These files are named <emphasis>debconf</emphasis>
-translations.
-</para>
-</listitem>
-<listitem>
-<para>
-<filename>po/tasksel.pot</filename> : messages displayed by the
-program. These files are named <emphasis>program</emphasis>
-translations.
-</para>
-</listitem>
-</itemizedlist>
-
-<para>
-Access to these files:
-</para>
-
-<itemizedlist>
-  <listitem>
-    <para>
-      <acronym>SVN</acronym> access: &svn-tasksel;, directories  <filename>tasks/po</filename>, <filename>debian/po</filename> and <filename>po</filename> 
-    </para>
-  </listitem>
-  <listitem>
-    <para>
-      <acronym>HTTP</acronym> access: 
-    </para>
-    <itemizedlist>
-      <listitem>
-        <para>
-          &url-level2-pot-link;, <filename>tasksel_tasks.pot</filename> (tasks), <filename>tasksel_debian_po_templates.pot</filename> (debconf) and <filename>tasksel_po.pot</filename> (programs)
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          &url-level2-po-link;, <filename>tasksel_tasks_&language;.po</filename> (tasks), <filename>tasksel_debian_po_&language;.po</filename> (debconf) and <filename>tasksel_po_&language;.po</filename> (program)
-        </para>
-      </listitem>
-    </itemizedlist>
-  </listitem>
-</itemizedlist>
-
-
-</sect3>
-
-<sect3>
-<title>
-Updating/Adding translations
-</title>
-
-<para>
-For the <emphasis>tasks</emphasis> translation, translators should
-copy the <filename>debian-tasks.pot</filename> file in <filename>tasks/po</filename> as
-<filename>&language;.po</filename> and work on this file, then add it to the
-repository and later commit the needed updates.
-</para>
-
-
-<para>
-For the <emphasis>debconf</emphasis> translation, translators should
-copy the <filename>templates.pot</filename> file in <filename>debian/po</filename> as
-<filename>&language;.po</filename> and work on this file, then add it to the
-repository and later commit the needed updates.
-</para>
-
-
-<para>
-For the <emphasis>program</emphasis> translation, translators should
-copy the <filename>tasksel.pot</filename> file in <filename>po</filename> as
-<filename>&language;.po</filename> and work on this file, then add it to the
-repository and later commit the needed updates.
-</para>
-
-<para>
- In case <acronym>SVN</acronym> commits are
-absolutely impossible, these updates can be sent as bug reports
-against the <classname>tasksel</classname> package (see <xref
-linkend="bug-reports"/> for details) and mention whether the file is
-the <emphasis>tasks</emphasis>, <emphasis>debconf</emphasis>
-or <emphasis>program</emphasis> translation.
-</para>
-
-</sect3>
-
-<sect3>
-<title>
-Specific recommendations
-</title>
-
-<para>
-In the program translation file, "aptitude" is a program name and
-should not be translated.
-</para>
-
-</sect3>
-
-</sect2>
-
 
 <sect2>
 <title>
