@@ -7,8 +7,6 @@ port d-i to 2.6 for your architecture.
 Kernels and build system
 ------------------------
 
-  * Make sure your kernels have devfs built-in. d-i doesn't do udev yet.
-
   * Create packages/kernel/linux-kernel-di-<architecture>-2.6/ with
     appropriate sets of module udebs. There are plenty of examples to borrow
     from here.
@@ -20,14 +18,16 @@ Kernels and build system
     included in the build system.
 
   * If your kernels don't have ext2 built-in (some 2.6 ones don't), set
-    INITRD_FS = cramfs.
+    INITRD_FS = cramfs (or INITRD_FS = initramfs to live on the bleeding
+    edge).
 
   * Add your architecture to the module-init-tools build-dependency list in
     installer/debian/control.
 
   * If you need different packages in your initrd on 2.6 versus 2.4 which
     aren't already handled by the build system, look in
-    installer/build/pkg-lists/kernel_specific/.
+    installer/build/pkg-lists/kernel_specific/, or use [2.4] and [2.6]
+    qualifiers (see installer/build/README).
 
 Other packages
 --------------
