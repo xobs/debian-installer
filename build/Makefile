@@ -127,6 +127,12 @@ define mkcramfs
   mkcramfs -z $(TREE)
 endef
 
+# Define MKFS_JFFS2 in the config file for your target.
+# For example: MKFS_JFFS2 = mkfs.jffs2 -f -p -b -e 0x20000
+define mkjffs2
+  $(MKFS_JFFS2) -d $(TREE) -o
+endef
+
 # A generic recursion rule
 .PHONY: all_%
 all_%:
@@ -550,16 +556,24 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp arch_tree
 	case $(INITRD_FS) in \
 	ext2) \
 		$(genext2fs) $(TEMP)/initrd; \
-		$(e2fsck) $(TEMP)/initrd || true ;; \
+		$(e2fsck) $(TEMP)/initrd || true; \
+		gzip -v9f $(TEMP)/initrd; \
+	;; \
 	cramfs) \
-		$(mkcramfs) $(TEMP)/initrd ;; \
+		$(mkcramfs) $(TEMP)/initrd; \
+		gzip -v9f $(TEMP)/initrd; \
+	;; \
 	initramfs) \
-		$(mkinitramfs) $(TEMP)/initrd ;; \
+		$(mkinitramfs) $(TEMP)/initrd; \
+		gzip -v9f $(TEMP)/initrd; \
+	;; \
+	jffs2) \
+		$(mkjffs2) $(TEMP_INITRD); \
+	;; \
 	*) \
 		echo "Unsupported filesystem type"; \
 		exit 1 ;; \
 	esac
-	gzip -v9f $(TEMP)/initrd
 
 # Create the images for dest/. Those are the targets called from config.
 
