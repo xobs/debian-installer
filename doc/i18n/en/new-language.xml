@@ -275,7 +275,7 @@ value to <emphasis>language_name</emphasis>.
 
 </sect1>
 
-<sect1>
+<sect1 id="localechooser-entry">
 <title>
 Localechooser entry
 </title>
@@ -292,11 +292,56 @@ This entry will mention the &d-i; interfaces which this language is available on
 </para>
 
 <para>
-It also mentions a default country choice for this language. This
-country is often the country where the language is the most spoken (or
-the official language) and must be covered by an existing locale. If
-several supported locales exist for this language, this has to be
-mentioned to the &i18n-coords;.
+This defines four categories for languages:
+</para>
+
+<itemizedlist>
+
+<listitem>
+<para>
+<emphasis>Category 0</emphasis>: languages that can be rendered on any ASCII console. This only includes English by a design decision of &d-i;. In short, even if a language can be rendered using only ASCII characters, it will <emphasis>not</emphasis> be placed in category 0;
+</para>
+</listitem>
+
+<listitem>
+<para>
+<emphasis>Category 1</emphasis>: languages that can be rendered on any
+Latin-1 console (several serial terminals). This includes so-called <emphasis>Latin-1</emphasis> languages;
+</para>
+</listitem>
+
+<listitem>
+<para>
+<emphasis>Category 2</emphasis>: languages that can be rendered et the Linux text console, eventually by using a framebuffer terminal. This includes all Latin-based languages as well as CJK (Chinese/Korean/Japanese languages;
+</para>
+</listitem>
+
+<listitem>
+<para>
+<emphasis>Category 2</emphasis>: languages that can be rendered et the
+Linux text console, eventually by using a framebuffer terminal. The
+key point for these languages is the availability of their glyphs in
+the <classname>bterm-unifont</package> package. These language should
+also not need complex rendering mechanisms such as combination
+mechanisms;
+</para>
+</listitem>
+
+<listitem>
+<para>
+<emphasis>Category 3</emphasis>: all other languages.
+</para>
+</listitem>
+
+</itemizedlist>
+
+<para>
+The <classname>localechooser</classname> entry also mentions a default
+country choice for this language. This country is often the country
+where the language is the most spoken (or the official language) and
+must be covered by an existing locale. If several supported locales
+exist for this language, this has to be mentioned to the
+&i18n-coords;.
 </para>
 
 <para>
@@ -341,11 +386,17 @@ which are part of the ASCII character set (characters in the 32-127
 range). This file will be used by the font reduction mechanism (the
 UTF-8 font used in &d-i; is reduced for size constraints) and is
 needed for all Latin languages and all non-Latin languages with
-reasonably sized alphabet. If the new language uses hundreds or
-thousands of characters, the use of this file is not needed and the
-translator should rather check that the
-<classname>bterm-unifont</classname> package includes all characters
-needed by the language. Content example for French:
+reasonably sized alphabet.
+</para>
+
+<para>
+This step is optional for languages that can only be rendered with the graphical version of &d-i; (languages in category "3" at the previous step). 
+For languages which must used the graphical version of &d-i;, this step is automatically considered completed. Translators can however still provide the required file which could be useful in the future. 
+</para>
+
+<para>
+Below is an example of the contents of this file for a Latin language,
+namely French:
 </para>
 
 <informalexample>
@@ -370,8 +421,44 @@ value to <emphasis>needed_characters</emphasis>.
 
 <sect1>
 <title>
+Font for the graphical version of &d-i;
+</title>
+
+<para>
+The graphical version of &d-i; will use several different font sets, depending on the language.
+</para>
+
+<para>
+For each new language, an OpenType font must be available in the main
+Debian archive. This font <emphasis>must</emphasis> respect the Debian
+Free Software Guidelines, in short it must be a free font.
+</para>
+
+
+<para>
+For this step to be completed, the name of the font and the relevant
+Debian package must have been recorded by the &i18n-coords in the
+DebianInstallerGUIFonts wiki page.
+</para>
+
+<para>
+The &i18n-coords; will record this information in the supported
+languages list by changing the <userinput>nlp_step</userinput> field
+value to <emphasis>ttf_font</emphasis>.
+</para>
+
+</sect1>
+
+<sect1>
+<title>
 Default console keyboard and font
 </title>
+
+<para>
+This step is only relevant for languages which can be rendered at the
+console, namely languages in categories 0 to 2 (see <xref
+linkend="localechooser-entry"/>). For languages in category 3,
+this step will be automatically considered completed.
 
 <para>
 If the language coordinator already knows about console font and
@@ -491,12 +578,13 @@ should refer to <xref linkend="gettext-tools"/>.
 </para>
 
 <para>
-At the very minimum, (s) should choose a gettext file editor and
+At the very minimum, (s)he should choose a gettext file editor and
 practice with it enough to be familiar with its basic functions.
 </para>
 
 
-<para>In any case, translators should refer to <xref
+<para>
+In any case, translators should refer to <xref
 linkend="methods-advices"/> for information and guidelines about the
 way they should work.
 </para>
