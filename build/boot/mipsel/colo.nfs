@@ -3,23 +3,13 @@
 # load debian-installer via NFS
 #
 -serial on
-select 'BOOT SELECTION' 50 'install (SSH)' 'install (serial)' 'rescue (SSH)' 'rescue (serial)'
+select 'BOOT SELECTION' 50 Installer 'Rescue Mode'
 goto {menu-option}
-@var title1 'Starting the'
-var title2 'installer (SSH)'
-var args "preseed/url=nfs://{dhcp-next-server}/{dhcp-root-path}/preseed.cfg"
-goto 4
-@var title1 'Starting the'
-var title2 'installer (ttyS)'
+@var image-name 'the Installer'
 var args ''
-goto 3
-@var title1 'Starting rescue'
-var title2 'mode (SSH)'
-var args "rescue/enable=true preseed/url=nfs://{dhcp-next-server}/{dhcp-root-path}/preseed.cfg"
 goto 2
-@var title1 'Starting rescue'
-var title2 'mode (serial)'
+@var image-name 'Rescue Mode'
 var args rescue/enable=true
-@lcd "{title1}" "{title2}"
+@lcd 'Starting' "{image-name}"
 nfs {dhcp-next-server} {dhcp-root-path} vmlinux-2.4.27-r5k-cobalt initrd.gz
 execute rd_start=0x{initrd-start} rd_size=0x{initrd-size} console=ttyS0,{console-speed} {args}
