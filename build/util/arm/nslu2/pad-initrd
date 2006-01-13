@@ -1,0 +1,22 @@
+#!/bin/sh
+
+TEMP=$1
+
+if [ -z "$TEMP" ]; then
+	echo "Usage: "pad-initrd PATH""
+	exit 1
+fi
+
+if [ ! -e $TEMP/initrd.gz ]; then
+	echo "initrd.gz does not exist at $TEMP"
+	exit 1
+fi
+size=$(wc -c $TEMP/initrd.gz | cut -d " " -f 1)
+mod=$(($size % 4))
+pad=$((4 - $mod))
+if [ $pad -gt 0 ]; then
+	tmp=$TEMP/initrd.padding
+	dd if=/dev/zero of=$tmp bs=1 count=$pad
+	cat $tmp >> $TEMP/initrd.gz
+fi
+
