@@ -1,0 +1,23 @@
+# Make sure we won't wait for the user to accept this network-console
+# won't have been started at this point yet.
+d-i lowmem/low                         note
+
+d-i netcfg/choose_interface            select eth0
+d-i netcfg/use_dhcp                    boolean true
+
+# Any hostname and domain names assigned from dhcp take precedence over
+# values set here. However, setting the values still prevents the questions
+# from being shown, even if values come from dhcp.
+d-i netcfg/get_hostname string unassigned-hostname
+d-i netcfg/get_domain string unassigned-domain
+
+# Uh, that's kinda sucky but it seems we need to preseed this. (FIXME)
+d-i languagechooser/language-name      select English
+d-i countrychooser/country-name        select United Kingdom
+
+# Setup ssh password
+# FIXME: we really want to generate a random password and show it on the
+# Cobalt LCD
+d-i network-console/password password install
+d-i network-console/password-again password install
+
