@@ -117,9 +117,10 @@ to mark it as the primary partition.
 The specifiers used in this example are:
 
 method{ format }
-	Used to make the partition be formatted. To keep the content of
-	an existing partition, change "format" to "keep". For swap
-	partitions, change it to "swap".
+	Used to make the partition be formatted. For swap partitions,
+	change it to "swap". To create a new partition but do not
+	format it, change "format" to "keep" (such a partition can be
+	used to reserve for future use some disk space).
 format{ }
 	Also needed to make the partition be formatted.
 use_filesystem{ }
@@ -202,13 +203,18 @@ For other examples, see the architecture-specific recipes in partman-auto.
 
 Due to limitation of the algorithms in partman-auto, there must be at
 least one partition with high maximal size so that the whole free
-space can be used.  Usually you can give the partition containing /home
-a maximal size 1000000000 which is high enough for the present storage
-devices.  Do not use higher than 1000000000 numbers because the shell
-arithmetic is limited to 31 bits (on i386).
+space can be used.  Usually you can give the partition containing
+/home a maximal size 1000000000 which is high enough for the present
+storage devices. If the large /home is not an option for you, you can
+also define in the recipe one additional partition with size
+1000000000, method "keep" and leave it unmounted.  When the
+installation completes you can remove it.
+
+Do not use higher than 1000000000 numbers because the shell arithmetic
+is limited to 31 bits (on i386).
 
 
-5. HOW THE ACTUAL PARTIITON SIZES ARE COMPUTED
+5. HOW THE ACTUAL PARTITION SIZES ARE COMPUTED
 ----------------------------------------------
 
 Suppose we have to create N partitions and min[i], max[i] and
