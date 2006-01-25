@@ -454,7 +454,7 @@ ifdef DROP_LANG
 	# Not ideal, but useful if you're very tight on space.
 	set -e; \
 	for FILE in $$(find $(TREE)/var/lib/dpkg -name "*.templates"); do \
-		perl -e 'my $$status=0; my $$drop=shift; while (<>) { if (/^[A-Z]/ || /^$$/) { if (/^(Choices|Description)-($$drop)/) { $$status = 0 } else { $$status = 1 } } print if ($$status); }' ${DROP_LANG} < $$FILE > temp; \
+		perl -e 'my $$status=0; my $$drop=shift; while (<>) { if (/^[A-Z]/ || /^$$/) { if (/^(Choices|Description|Indices|Default)-($$drop)/) { $$status = 0 } else { $$status = 1 } } print if ($$status); }' ${DROP_LANG} < $$FILE > temp; \
 		mv temp $$FILE; \
 	done
 endif
