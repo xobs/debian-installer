@@ -365,6 +365,10 @@ ifdef KERNELVERSION
 		if [ -d $(TREE)/usr/lib/kernel-image-$(VERSION) ]; then \
 			mv $(TREE)/usr/lib/kernel-image-$(VERSION) \
 				$(TEMP)/lib; \
+		fi; \
+		if [ -d $(TREE)/usr/lib/linux-image-$(VERSION) ]; then \
+			mv $(TREE)/usr/lib/linux-image-$(VERSION) \
+				$(TEMP)/lib; \
 		fi;)
 endif
 
