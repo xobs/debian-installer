@@ -1,0 +1,67 @@
+MIPS based Cobalt machines are a variety of quite similar machines, all no
+longer in production but still quite popular.  There were i386 based Cobalt
+machines later, but these have virtually nothing in common with the MIPS
+based ones and are not supported.
+
+There are the following machines:
+
+ - Cobalt Qube 2700 (aka Qube 1): has no serial console
+ - Cobalt RaQ1
+ - Cobalt Qube 2 (aka Qube 2800), also rebranded as "Gateway Qube"
+ - Cobalt RaQ2
+ - Cobalt RaQ2+: two network interfaces
+ - Cobalt CacheRaQ: a RaQ2 with two IDE interfaces
+
+Basically, the RaQ1, Qube 2, RaQ2 (and RaQ2 and CacheRaQ, which are really
+just variations) are the same from the point of view of debian-installer.
+The only difference is the Qube 2700 because it doesn't have a serial
+console.
+
+All MIPS based Cobalt machines have:
+ - a MIPS CPU (MHz can vary, but the same kernel works on all)
+ - at least one network interface
+ - Standard IDE drive
+ - A LCD that is 2x16 (plus some buttons)
+ - Fairly non-standard EDO RAM (needs 3.3V)
+ - A USB chip, but it's not actually exported (i.e. no connectors)
+
+Cobalt firmware:
+
+The original Cobalt firmware has several restrictions.  For example, it can
+only boot from a partition that is ext2 revision 0 (i.e. the old ext2 type).
+Furthermore, there's a restriction on the size of the kernel it can load.
+Fortunately, Peter Horton wrote a replacement boot loader, known as CoLo
+(Cobalt Loader).  Even though you could in theory overwrite the firmware
+with CoLo, we don't do this: instead, we use the firmware to load CoLo
+(i.e. chain mode) and then use CoLo to load the kernel (and possibly an
+initrd).  This means that the only real restriction left is that the /boot
+partition has to be ext2 rev 0 so the firmware can load CoLo.
+
+The firmware will usually look for a file called vmlinux.gz, so that's what
+we call CoLo.  Apparently, there are variations of the firmware which look
+for another filename, so we also create symlinks for vmlinux_RAQ.gz and
+vmlinux_raq-2800.gz.
+
+The firmware also supports booting via the network.  You can activate that
+by pressing the left and right cursor button at the same time (it'll say
+"Network booting").  The firmware will then load vmlinux.gz via NFS -
+however, note that the firmware does not care about the NFS path you set.
+It will *always* load /nfsroot/vmlinux.gz.  There's no way around this.
+FHS violation, yeah, but the company no longer exists, so who do you sue?
+
+CoLo:
+
+CoLo is a fairly nice bootloader.  It reads a config file from
+/boot/default.colo.  There is good documentation.  The "colo" package also
+includes a number of tools, for example to put stuff on the LCD.  One note
+regarding the LCD: while it is 2x16, only 2x14 can be displayed in menus
+because the cursor will take one character on each side.
+
+debian-installer: we support installations via serial console and (since
+etch) also installations via SSH: a password is either pre-seeded, or a
+random one is generated and displayed on the LCD.
+
+Upstream contact:
+  Peter Horton <pdh@colonel-panic.org> (CoLo and kernel) - a great guy,
+    very responsive
+
