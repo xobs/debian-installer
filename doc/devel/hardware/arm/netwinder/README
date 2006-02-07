@@ -21,7 +21,7 @@ well known "eth0" from which you load the d-i image via TFTP suddenly
 becomes "eth1".  This was problematic in sarge and is still an issue with
 etch -- but it can finally be solved with 2.6 and udev.
 
-Another really funky thing about Netwinder (Nettrom) really is that it can
+Another really funky thing about Netwinder (Nettrom, really) is that it can
 only boot certain TFTP images... in many cases, it will find a gzip marker
 *somewhere* in the kernel image and think it's an initrd... oops.  After
 talking to Ralph Siemsen for quite a while, he figured out a solution: you
@@ -33,7 +33,11 @@ nwutils package.
 One final thing: Nettrom can only boot from a partition that is ext2
 revision 0 (i.e. the old ext2 type).  partman has code for this already.
 
-Apart from that, Netwinders are pretty normal machines.
+Regarding flash and configuration variables: there is no library to change
+variables from within Linux.  In theory, it would be possible to read the
+last 64 KB from /dev/mtd0, change it and write it back, but Ralph Siemsen
+strongly advised against doing so.  debian-installer will therefore simply
+print a list of commands users have to type once in order to boot Debian.
 
 Upstream contacts (both very helpful):
   Ralph Siemsen <ralphs@netwinder.org>
