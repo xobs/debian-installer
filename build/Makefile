@@ -533,15 +533,15 @@ sources.list.udeb:
 
 # Font generation.
 #
-# Use the UTF-8 locale in rootskel-locale. This target shouldn't
+# Use the UTF-8 locale in installation-locale. This target shouldn't
 # be called when it is not present anyway.
 # The locale must be generated after installing the package locales
 $(TREE)/lib/unifont.bgf: $(TEMP)/all.utf
 	set -e; \
 	CHARMAP=`LOCPATH=$(LOCALE_PATH) LC_ALL=C.UTF-8 locale charmap`; \
             if [ UTF-8 != "$$CHARMAP" ]; then \
-	        echo "error: Trying to build unifont.bgf without rootskel-locale!"; \
-		echo "(Alternatively, rootskel-locale may have been built against"; \
+	        echo "error: Trying to build unifont.bgf without installation-locale!"; \
+		echo "(Alternatively, installation-locale may have been built against"; \
 		echo "a version of glibc with a different locale data format.)"; \
 	        exit 1; \
 	    fi
@@ -551,7 +551,7 @@ $(TREE)/lib/unifont.bgf: $(TEMP)/all.utf
 
 # Create a compressed image of the root filesystem.
 $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp arch_tree
-	# Only build the font if we have rootskel-locale
+	# Only build the font if we have installation-locale
 	if [ -d "$(LOCALE_PATH)/C.UTF-8" ] && [ -e /usr/src/unifont.bdf ]; then \
 		$(submake) $(TREE)/lib/unifont.bgf; \
 	fi
