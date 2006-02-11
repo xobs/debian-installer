@@ -190,7 +190,7 @@ Files location and access methods
 
 <para>
 This package is a <quote>regular</quote> Debian package. The
-package maintenance team uses arch repositories to maintain
+package maintenance team uses a SVN repository to maintain
 it. 
 </para>
 
@@ -199,6 +199,11 @@ As arch-style repositories are somewhat complicated to setup, all localization o
 </para>
 
 <itemizedlist>
+<listitem>
+<para>
+<acronym>SVN</acronym> access: &svn-dpkg;, <filename>po</filename> directory (anonymous)
+</para>
+</listitem>
   <listitem>
     <para>
       <acronym>HTTP</acronym> access: 
@@ -227,15 +232,13 @@ Updating/Adding translations
 
 <para>
 Translations should be reported as bugs against the
-<classname>dpkg</classname> package.
+<classname>dpkg</classname> package or commited directly to the SVN repository. Don't forget updating the <classname>po/Changelog</classname> and <classname>debian/changelog</classname> files if you update the translations yourself by getting SVN commit access.
+
 </para>
 
 <para>
-The translation will be committed quickly by the dpkg localization
-maintainer. This will not appear immediately on status pages because
-<classname>dpkg</classname> development is handled in
-<quote>arch</quote> repositories which are not easily handled by the
-scripts which generate the status pages.
+If reported as a bug, the translation will be committed quickly by the dpkg localization
+maintainer.
 </para>
 
 </sect3>
@@ -254,6 +257,22 @@ well as some good experience of command-line programs translation.
 <para>
 The developers have put comments targeted at translators for some
 strings. Translators should read and follow them carefully.
+</para>
+
+<para>
+The <classname>po/</classname> directory contains a file named <classname>Changelog</classname>. Translators must update this file when updating translations, as well as the <classname>debian/changelog</classname> file.
+</para>
+
+<para>
+Adding a new language also requires translators to add it to the
+<classname>po/LINGUAS</classname> file. Otherwise, the new translation
+will not be used.
+</para>
+
+<para>
+<classname>dpkg</classname> man pages can also be translated, using
+gettext files. Please look into the <classname>man/</classname>
+directory in SVN for examples.
 </para>
 
 </sect3>
