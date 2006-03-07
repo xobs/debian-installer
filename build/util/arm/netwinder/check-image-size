@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# NeTTrom can only boot images up to 4 MB
+
+size=$(wc -c $1 | cut -d " " -f 1)
+if [ $size -gt 4194304 ]; then
+	echo "Image is too large ($size bytes)"
+	exit 1
+else
+	echo "Image size is okay ($size bytes)"
+	exit 0
+fi
+
