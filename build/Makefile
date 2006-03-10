@@ -383,6 +383,14 @@ ifdef PRESEED
 	# Copy in preseed file.
 	cp -a $(PRESEED) $(TREE)/preseed.cfg
 endif
+ifdef PRESEED_SUITE
+	# Add suite preseed file.
+	if [ -e "$(TREE)/preseed.cfg" ]; then \
+		cat $(PRESEED_SUITE) >> $(TREE)/preseed.cfg; \
+	else \
+		cp -a $(PRESEED_SUITE) $(TREE)/preseed.cfg; \
+	fi
+endif
 
 ifneq (,$(wildcard $(KEYRING)))
 	mkdir -p $(TREE)/usr/share/keyrings
