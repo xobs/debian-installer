@@ -10,8 +10,21 @@ debian-installer (20060307) UNRELEASED; urgency=low
   * Split off PRESEED_SUITE from PRESEED, use this for the suite setting
     for development builds, and no longer unset PRESEED for release builds.
     Should fix cobalt issues.
+  * Audited the x86 kernel parameter docs in the boot screens vs the 2.6.15
+    kernel. Removed documentation for parameters that are not listed in the
+    kernel's kernel-parameters.txt, and to a certian extent read the source
+    to find places where kernel-parameters.txt is wrong, and removed those
+    too. It's probably better to not document things than to document them
+    incorrectly.
+  * Modified kernel parameter docs to use the module.param=value syntax
+    for all parameters that are owned by a loadable kernel module. The old
+    param=value at the boot line won't work, since d-i doesn't pass kernel
+    command line to modules. The new syntax requires rootskel 1.30 to work.
+    (Not sure what module(s) own hd=, didn't change it yet.)
+  * Remove docs for how to disable gdth, which harks back to a non-modular
+    kernel.
 
- -- Joey Hess <joeyh@debian.org>  Fri, 10 Mar 2006 13:09:46 -0500
+ -- Joey Hess <joeyh@debian.org>  Fri, 10 Mar 2006 13:11:49 -0500
 
 debian-installer (20060304) unstable; urgency=low
 
