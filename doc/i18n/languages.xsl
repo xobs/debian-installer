@@ -115,9 +115,9 @@ Most widely spoken
   </tr>
   <tr>
     <td colspan="3">
-<em>Official</em>: countries where at least one of the supported languages is an official language:
+<em>Official</em>: countries where one of the official languages is supported:
 <br></br>
-<em>Most widely spoken</em>: countries where at least one of the supported languages is the most widely spoken language:
+<em>Most widely spoken</em>: countries where the most widely spoken language is supported:
     </td>
 </tr>
   <tr>
