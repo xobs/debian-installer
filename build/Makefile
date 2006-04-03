@@ -430,10 +430,11 @@ endif
 	# system libs.
 	rm -rf $(TEMP)/udeblibs
 	mkdir -p $(TEMP)/udeblibs
-	-cp -a `find $(EXTRADRIVERSDIR)/lib -type f -name '*.so.*'` $(TEMP)/udeblibs
-	-cp -a `find $(TREE)/lib -type f -name '*.so.*'` $(TEMP)/udeblibs
+	-cp -a `find $(EXTRADRIVERSDIR)/lib -name '*.so.*'` $(TEMP)/udeblibs
+	-cp -a `find $(TREE)/lib -name '*.so.*'` $(TEMP)/udeblibs
 	mkdir -p $(TREE)/lib
-	$(MKLIBS) -L $(TREE)/usr/lib -L $(TEMP)/udeblibs -v -d $(TREE)/lib --root=$(TREE) `find $(TEMP) -type f -perm +0111 -o -name '*.so' | grep -v udeblibs`
+	$(MKLIBS) -L $(TREE)/usr/lib -L $(TEMP)/udeblibs -v -d $(TREE)/lib \
+		--root=$(TREE) `find $(TEMP) -type f -perm +0111 -o -name '*.so' | grep -v udeblibs`
 	rm -rf $(TEMP)/udeblibs
 
 	# Add missing symlinks for libraries
@@ -442,7 +443,7 @@ endif
 	# Remove any libraries that are present in both usr/lib and lib,
 	# from lib. These were unnecessarily copied in by mklibs, and
 	# we want to use the ones in usr/lib instead since they came 
-	# from udebs. Only libdebconf has this problem so far.
+	# from udebs. Only libdebconfclient0 has this problem so far.
 	set -e; \
 	for lib in `find $(TREE)/usr/lib/ -name "lib*" -type f -printf "%f\n" | cut -d . -f 1 | sort | uniq`; do \
 		rm -f $(TREE)/lib/$$lib.*; \
