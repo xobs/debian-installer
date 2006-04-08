@@ -650,7 +650,7 @@ The main difference is that a lot of policy requirements are waived. For example
 Of course, the source package for a udeb <emphasis>does</emphasis> need to contain a proper licence and changelog.
 </para>
 
-</footnote>. Reason is to minimize size which is important as the installation completely takes place in RAM, with swap only becoming available after stage 4 of the installation (partitioning).
+</footnote>. The reason is to minimize size which is important as the installation completely takes place in RAM, with swap only becoming available after stage 4 of the installation (partitioning).
 
 </para><para>
 
@@ -869,7 +869,7 @@ During the build, the needed udebs will be retrieved from a mirror. By default t
    <sect2><title>Build targets</title>
 
 <para>
-To see which targets are available, run <command>make</command>. This will result in a list of 135 targets, most of which are not really relevant. A more useful list can be obtained with <command>make | grep ^build</command>. The table below has the most often used targets for i386.
+To see which targets are available, run <command>make</command>. This will result in a list of some 130 targets, most of which are not really relevant. A more useful list can be obtained with <command>make | grep ^build</command>. The table below has the most often used targets for i386.
 
 <informaltable><tgroup cols='2'><tbody>
   <row>
@@ -963,7 +963,7 @@ The structure of the config files can get quite complex and it can be hard to ke
     <sect3><title>pkg-lists</title>
 
 <para>
-The list of udebs to be included in an image is built by the <command>util/pkg-list</command> script based on definitions in the <filename>pkg-lists</filename> directory. Again, processing is can be quite complex. Let's take the netboot target for i386 as an example to explain it.
+The list of udebs to be included in an image is built by the <command>util/pkg-list</command> script based on definitions in the <filename>pkg-lists</filename> directory. Again, processing can be quite complex. Let's take the netboot target for i386 as an example to explain it.
 
 </para><para>
 
@@ -1009,6 +1009,10 @@ Finally, the script will check for <filename>pkg-lists/local</filename> and <fil
 
 </para><para>
 
+All dependencies of udebs listed in <filename>pkg-lists</filename> will also be automatically included in the image.
+
+</para><para>
+
 To see how the package list is built for a particular image, set <code>my $debug=1;</code> in the <command>util/pkg-list</command> script.
 
 </para>
@@ -1030,7 +1034,7 @@ Before the image is created, its contents are assembled in the directory <filena
    <sect2><title>Library reduction</title>
 
 <para>
-Library reduction (recompiling a library leaving out the code for unused symbols) is used as yet another method to minimize the size of initrds. The downside of library reduction is that this requires the <classname>dev</classname> and <classname>pic</classname> packages for the libraries to be reduced to be installed on the build system which also means that their version needs to match the version of the libraries in the udebs.
+Library reduction (relinking a library leaving out unused symbols) is used as yet another method to minimize the size of initrds. The downside of library reduction is that this requires the <classname>dev</classname> and <classname>pic</classname> packages for the libraries to be reduced to be installed on the build system which also means that their version needs to match the version of the libraries in the udebs.
 
 </para><para>
 
@@ -1072,7 +1076,7 @@ Some things to keep in mind when using localudebs.
 
 <itemizedlist>
  <listitem><para>
-If you add an extra udeb, its dependencies will be included too. If those dependencies include virtual udebs, the result is not always what you'd expect.
+If you add an extra udeb, its dependencies will be included too. If those dependencies include virtual packages, the result is not always what you'd expect.
  </para></listitem>
  <listitem><para>
 Adding extra udebs will increase the size of the initrd; some architectures have limits for initrd size.
