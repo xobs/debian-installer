@@ -12,39 +12,42 @@
 
 <article>
 
-    <articleinfo>
-      <title>Debian Installer internals</title>
-      <authorgroup>
-	<author>
-	  <firstname>Frans</firstname>
-	  <surname>Pop</surname>
-	</author>
-      </authorgroup>
+  <articleinfo>
+    <title>Debian Installer internals</title>
+    <authorgroup>
+      <author>
+        <firstname>Frans</firstname>
+        <surname>Pop</surname>
+     </author>
+    </authorgroup>
 
-      <abstract>
+    <abstract>
 <para>
+
 The Debian Installer is sometimes described as a mini Linux distribution which gives an indication of its complexity. This paper gives an introduction to the inner workings of the installer when it is running, its components (udebs) and its build system.
+
 </para>
-      </abstract>
+    </abstract>
 
-      <copyright>
-	<year>2006 <trademark class="copyright"></trademark></year>
-	<holder>Frans Pop <email>fjp@debian.org</email></holder>
-      </copyright>
-      <legalnotice>
-
+    <copyright>
+      <year>2006 <trademark class="copyright"></trademark></year>
+      <holder>Frans Pop <email>fjp@debian.org</email></holder>
+    </copyright>
+      
+    <legalnotice>
 <para>
+
 This article is free; you may redistribute it and/or modify it
 under the terms of version 2 of the GNU General Public License. 
-</para>
 
-      </legalnotice>
-    </articleinfo>
+</para>
+    </legalnotice>
+  </articleinfo>
 
 
   <sect1><title>Running Debian Installer</title>
-
 <para>
+
 The examples in this section reflect the current status of the Installer, the Etch Beta 2 release, and are based on the CD-ROM and netboot installation methods for i386. The choice for i386 was made as this is most familiar to most users, but installations for other architectures is not structurally different<footnote>
 
 <para>
@@ -326,9 +329,10 @@ The table below shows the answers to these questions for the most common install
 
 </para>
    </sect2>
-   <sect2><title>The boot process</title>
 
+   <sect2><title>The boot process</title>
 <para>
+
 The boot process for the installer is similar to the boot of a regular system. A bootloader (in some cases the system's firmware) is responsible for loading the kernel and loading the initrd after which init is started. The boot process can be debugged by adding the <userinput>BOOT_DEBUG</userinput> parameter.
 
 </para><para>
@@ -446,8 +450,8 @@ Scripts in <filename>/lib/debian-installer(-startup).d</filename> can be archite
    </sect2>
 
    <sect2><title>The Debian Installer Menu</title>
-
 <para>
+
 The component <classname>main-menu</classname> drives the rest of the installation. It is responsible both for dynamically assembling the menu and for executing components when they are selected. Note that the menu is only actually visible when installing at low or medium debconf priority. At higher priorities it is still there, but it will automatically execute the next component without showing the menu to the user.
 
 </para><para>
@@ -498,8 +502,8 @@ Some components are included in the menu but are not run by default. These compo
    </sect2>
 
    <sect2><title>Hooks provide additional flexibility</title>
-
 <para>
+
 At certain points in the installation, components provide run-parts like execution of scripts. This allows other components to just drop scripts there so that commands can be run at that point in the installation, even though the postinst for the component itself is run earlier or later (if the component even has a postinst).
 
 </para><para>
@@ -539,8 +543,8 @@ Besides these general hooks, partman is basically structured as one big collecti
    </sect2>
 
    <sect2><title>Some special tools</title>
-
 <para>
+
 The installer has some special commands which can be used in postinst or preseeding scripts:
 
 <variablelist>
@@ -574,8 +578,8 @@ Allows to run a command in a chroot on <filename>/target</filename> with the chr
    </sect2>
 
    <sect2><title>Automating the install using preseeding</title>
-
 <para>
+
 There are three preseed methods that are currently supported:
 <variablelist>
   <varlistentry>
@@ -620,8 +624,8 @@ Additional information about preseeding is available in an appendix of the Insta
    </sect2>
 
    <sect2><title>Debugging the installer</title>
-
 <para>
+
 Because most of the installer is scripted, it is fairly easy to debug most problems by adding a <userinput>set -x</userinput> in the correct place. The obvious place to start is the postinst of the component you want to debug. The output will appear in <filename>/var/log/syslog</filename>, which can most easily be viewed by starting the internal webserver from the <quote>Save debug logs</quote> menu option (after the network has been configured).
 
 </para><para>
@@ -632,14 +636,24 @@ For components written in C debugging is a bit harder. Options are to use the st
 
 For debugging, you will probably want to control when components are started. Booting the installer with <userinput>install debconf/priority=medium</userinput> is a good way to achieve that. It will make sure the menu is displayed before a new component is started.
 
+</para><para>
+
+If you boot the installer at medium priority, you will also be able to load the optional component <classname>open-ssh-client</classname><footnote>
+
+<para>
+If you want to load optional components when installing at the default priority, just back out to the menu and select the component that installs additional installer components.
+</para>
+
+</footnote>. Loading this component will allow you to use <command>scp</command> to copy files from the system being installed to another computer and vice versa. Also useful for testing new versions of scripts or commands without rebuilding the udeb and image. The command <command>nc</command> from the <classname>netcat</classname> package is available by default in the installer.
+
 </para>
    </sect2>
   </sect1>
 
 
   <sect1><title>D-I components or udebs</title>
-
 <para>
+
 A udeb (or micro-deb) is a special kind of Debian package. Technically udebs are very similar to regular packages: you can look at their contents using <command>dpkg -c</command>, and extract them using <command>dpkg -x</command> and <command>dpkg -e</command>.
 
 </para><para>
@@ -681,8 +695,8 @@ Partman has a very specific structure and requires a fairly strict conformance t
 </para>
 
    <sect2><title>Contents of a udeb</title>
-
 <para>
+
 For components that are included in the main menu, the udeb will at least contain:
 
 <itemizedlist>
@@ -713,8 +727,8 @@ A special type of control file worth mentioning is the <filename>isinstallable</
    </sect2>
 
    <sect2><title>Creating a udeb</title>
-
 <para>
+
 Creating a udeb is not all that hard, especially if you use <classname>debhelper</classname>. <classname>debhelper</classname> knows the special properties of a udeb and will do the right thing by default at build time. That is, if you don't forget to tell it you are creating a udeb.
 
 </para><para>
@@ -759,8 +773,8 @@ The main thing to always keep in mind when creating a udeb is size. It is very i
    </sect2>
 
    <sect2><title>Library udebs</title>
-
 <para>
+
 A major recent improvement is the addition of <quote>package type</quote> support in shlibs files for libraries. This allows <command>dpkg-dev</command> and <classname>debhelper</classname> to automatically set correct dependencies on library udebs when a d-i component that depends on them is built.
 
 </para><para>
@@ -788,8 +802,8 @@ dh_makeshlibs -V -s --add-udeb="libusb-0.1-udeb"
 
 
   <sect1><title>Building installer images</title>
-
 <para>
+
 This paper will only provide an introduction to building installer images using existing definitions. The README in <filename>installer/build</filename> in the SVN repository contains more detailed information about the build system and how to modify existing or define new images.
 
 </para><para>
@@ -851,8 +865,8 @@ This is accomplished by including the <filename>/installer/build/unstable.cfg</f
 </para>
 
    <sect2><title>Requirements for building</title>
-
 <para>
+
 For both release and development builds the build dependencies as listed in <filename>installer/debian/control</filename> need to be satisfied.
 
 </para><para>
@@ -867,8 +881,8 @@ During the build, the needed udebs will be retrieved from a mirror. By default t
    </sect2>
 
    <sect2><title>Build targets</title>
-
 <para>
+
 To see which targets are available, run <command>make</command>. This will result in a list of some 130 targets, most of which are not really relevant. A more useful list can be obtained with <command>make | grep ^build</command>. The table below has the most often used targets for i386.
 
 <informaltable><tgroup cols='2'><tbody>
@@ -893,8 +907,8 @@ The <userinput>reallyclean</userinput> target is often needed when changes are m
    </sect2>
 
    <sect2><title>The build system explained</title>
-
 <para>
+
 The easiest way to start is with the purpose of the subdirectories in the <filename>installer/build</filename> directory.
 
 </para>
@@ -926,9 +940,10 @@ Two files containing important configuration info are <filename>config/dir</file
 Both the <filename>config</filename> and <filename>pkg-lists</filename> directories have a tree structure with general configuration defined in the root and more specific configuration defined in branches and leaves. Branches are defined in directories that have the same name as a config file on the higher level. The <filename>config</filename> directory contains makefile snippets.
 
 </para>
-    <sect3><title>config</title>
 
+    <sect3><title>config</title>
 <para>
+
 For example, the definition for i386 images starts with <filename>config/i386.cfg</filename> which, besides the current kernel versions, defines the media supported with the line:
 
 <informalexample><screen>
@@ -961,8 +976,8 @@ The structure of the config files can get quite complex and it can be hard to ke
     </sect3>
 
     <sect3><title>pkg-lists</title>
-
 <para>
+
 The list of udebs to be included in an image is built by the <command>util/pkg-list</command> script based on definitions in the <filename>pkg-lists</filename> directory. Again, processing can be quite complex. Let's take the netboot target for i386 as an example to explain it.
 
 </para><para>
@@ -1020,8 +1035,8 @@ To see how the package list is built for a particular image, set <code>my $debug
    </sect2>
 
    <sect2><title>Result of the build</title>
-
 <para>
+
 If the build is successful, you will find the images under the <filename>build/dest</filename> directory. Depending on the type of build you will also find manifest and log files there.
 
 </para><para>
@@ -1032,8 +1047,8 @@ Before the image is created, its contents are assembled in the directory <filena
    </sect2>
 
    <sect2><title>Library reduction</title>
-
 <para>
+
 Library reduction (relinking a library leaving out unused symbols) is used as yet another method to minimize the size of initrds. The downside of library reduction is that this requires the <classname>dev</classname> and <classname>pic</classname> packages for the libraries to be reduced to be installed on the build system which also means that their version needs to match the version of the libraries in the udebs.
 
 </para><para>
@@ -1056,8 +1071,8 @@ Note that library reduction is only done after unpacking udebs for inclusion in 
    </sect2>
 
    <sect2><title>Using localudebs</title>
-
 <para>
+
 The <filename>localudebs</filename> directory allows to use a different version of udebs than is available from the mirror you use. This can be used to test a new version of a udeb or to run the installer with a debug version of a udeb. It can also be used to build an image with a custom udeb.
 
 </para><para>
@@ -1099,8 +1114,8 @@ Don't forget to clean up after you're finished.
 
 
   <sect1><title>Conclusion</title>
-
 <para>
+
 Hopefully this paper will help make Debian Installer more accessible to new developers. If you have any suggestions to improve this document, please mail them to the debian-boot list or the author. The intention of the author is to use this paper as the basis for a d-i developers reference.
 
 </para><para>
