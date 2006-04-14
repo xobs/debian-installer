@@ -5,8 +5,7 @@
 \documentclass[a4paper,10pt]{article}
 
 \title{Debian Installer internals}
-% Problem here: < and > printed as inverted ! and ?; same in other places
-\author{Frans Pop <fjp@debian.org> \\
+\author{Frans Pop $<$fjp@debian.org$>$ \\
 Copyright 2006 Frans Pop}
 
 \begin{document}
@@ -184,7 +183,7 @@ This is a run-parts like script that executes or sources scripts in \texttt{/lib
 \item start syslog 
 \item check available memory and, depending on preset limits, enable a lowmem mode if needed 
 \item load any debconf templates present in the initrd 
-\item parse boot parameters to look for debconf patterns (<component>/<template>=<value>) and set these in the debconf database
+\item parse boot parameters to look for debconf patterns ($<$component$>$/$<$template$>$=$<$value$>$) and set these in the debconf database
 \item detect the type of console that is used
 \item load framebuffer modules
 \item detect if the installer should run in rescue mode
@@ -209,7 +208,7 @@ Scripts in \texttt{/lib/debian-installer(-startup).d} can be architecture specif
 \subsection{The Debian Installer Menu}
 The component main-menu drives the rest of the installation. It is responsible both for dynamically assembling the menu and for executing components when they are selected. Note that the menu is only actually visible when installing at low or medium debconf priority. At higher priorities it is still there, but it will automatically execute the next component without showing the menu to the user. 
 
-In some situations the debconf priority is automatically changed. It is reduced when the execution of a component fails, or when the user uses the <go back> button to back out all the way to the menu. In these cases it will also be increased back to the original level when the next component executed finishes successfully. 
+In some situations the debconf priority is automatically changed. It is reduced when the execution of a component fails, or when the user uses the $<$go back$>$ button to back out all the way to the menu. In these cases it will also be increased back to the original level when the next component executed finishes successfully. 
 
 An important characteristic of udebs is that execution of their postinst scripts is delayed. On installation udebs are only unpacked; the execution of the postinst is done by main-menu and is actually what happens when a component is selected in the menu. In other words, main-menu can be said to be responsible for “configuring” the udeb. 
 
@@ -291,7 +290,7 @@ The main purpose of preseeding is to set default values for debconf questions. N
 
 Besides offering the option to set default values for debconf questions, preseeding also makes it possible to run scripts at two distinct moments using \textit{preseed/early\_command} and \textit{preseed/late\_command}. The \textit{early\_command} is executed immediately after the preseed file is parsed (only for file and network preseeding); the \textit{late\_command} is executed as part of the prebaseconfig component. 
 
-These scripts can be made as complex as you like. One option is to use them to install additional packages on the target system (using apt-install). The \textit{early\_command} could be used to install additional d-i components (using anna-install) or to install scripts in the various hook script directories (if commands need to be executed at a specific point in the installation). 
+These scripts can be made as complex as you like. One option is to use them to install additional packages on the target system (using \texttt{apt-install}). The \textit{early\_command} could be used to install additional d-i components (using \texttt{anna-install}) or to install scripts in the various hook script directories (if commands need to be executed at a specific point in the installation). 
 
 Additional information about preseeding is available in an appendix of the Installation Guide. 
 
@@ -379,10 +378,9 @@ libz 1 zlib1g (>= 1:1.2.1)
 udeb: libz 1 zlib1g-udeb (>= 1:1.2.1)
 \end{verbatim}
 
-The second line is specific to the package type “udeb”. This alternative line is used when dpkg-shlibdeps is called with the -tudeb option; dh\_shlibdeps will automatically add this option when processing a udeb. 
+The second line is specific to the package type “udeb”. This alternative line is used when dpkg-shlibdeps is called with the \texttt{-tudeb} option; dh\_shlibdeps will automatically add this option when processing a udeb. 
 
-% Problem here: -- before --add-udeb is interpreted as an mdash!
-Generating the extra udeb: lines is supported by dh\_makeshlibs if the --add-udeb=“<udeb name>” option is used. For example, the debian/rules file for libusb contains the following line: 
+Generating the extra udeb: lines is supported by dh\_makeshlibs if the \texttt{{-}{-}add-udeb="$<$udeb name$>$"} option is used. For example, the \texttt{debian/rules} file for libusb contains the following line: 
 
 \begin{verbatim}
 dh_makeshlibs -V -s --add-udeb="libusb-0.1-udeb"
@@ -409,7 +407,7 @@ It is important to distinguish between building images for release and building 
 
 A release build is done, as for other packages that are to be uploaded, from the installer directory using \texttt{debian/rules}. This will create a binary package (needed for uploading) containing some documentation, but the important bit is a tarball containing all installer images. After the upload this tarball needs BYHAND processing\footnote{This entails unpacking the tarball into the correct location on the master mirror server and creating/updating the correct symlinks. See for example http://ftp.debian.org/debian/dists/sid/main/installer-i386/.} by FTP-masters before the buildds will pick up the upload for other architectures. 
 
-Building images for development and testing is done from the installer/build directory\footnote{This includes the daily built images available from http://www.debian.org/devel/debian-installer. These are generated and uploaded from machines run by d-i porters using the daily-build script.} using \texttt{fakeroot make <target>}. 
+Building images for development and testing is done from the installer/build directory\footnote{This includes the daily built images available from http://www.debian.org/devel/debian-installer. These are generated and uploaded from machines run by d-i porters using the daily-build script.} using \texttt{fakeroot make $<$target$>$}. 
 
 An important difference between release and development builds is that release builds will use udebs for the same suite as the target system being installed, while development builds will by default install testing, but use udebs from unstable\footnote{This is accomplished by including the \texttt{/installer/build/unstable.cfg} preseed file in the initrd.}. This allows to mostly avoid the occasional breakage of the base system and tasks in unstable while using the most recent udebs. 
 
@@ -423,8 +421,7 @@ During the build, the needed udebs will be retrieved from a mirror. By default t
 
 
 \subsection{Build targets}
-% Problem here: The ^ before ^build is placed over the b instead of before it
-To see which targets are available, run make. This will result in a list of some 130 targets, most of which are not really relevant. A more useful list can be obtained with \texttt{make | grep \^build}. The table below has the most often used targets for i386.
+To see which targets are available, run make. This will result in a list of some 130 targets, most of which are not really relevant. A more useful list can be obtained with \texttt{make | grep \^{ }build}. The table below has the most often used targets for i386.
 
 \begin{tabular}{|l|l|}
 \hline
@@ -516,7 +513,7 @@ To see how the package list is built for a particular image, set \texttt{my \$de
 \subsection{Result of the build}
 If the build is successful, you will find the images under the \texttt{build/dest} directory. Depending on the type of build you will also find manifest and log files there. 
 
-Before the image is created, its contents are assembled in the directory \texttt{build/tmp/<target>}. The tree subdirectory there contains the full contents of the initrd; other subdirectories are used for different purposes. 
+Before the image is created, its contents are assembled in the directory \texttt{build/tmp/$<$target$>$}. The tree subdirectory there contains the full contents of the initrd; other subdirectories are used for different purposes. 
 
 
 \subsection{Library reduction}
@@ -536,7 +533,7 @@ The localudebs directory allows to use a different version of udebs than is avai
 
 To use a local udeb, just copy it into the directory. A Packages file will be generated automatically. Your udeb should have a version equal to or greater than the udeb currently on the mirror you use. 
 
-Note that local udebs will only be included in the image if the udeb would be included in a normal build too. So it has to be selected by the pkg-list script. Create a \texttt{pkg-lists/local} or \texttt{pkg-lists/<image>/local} to add udebs to the image that would not normally be included. 
+Note that local udebs will only be included in the image if the udeb would be included in a normal build too. So it has to be selected by the pkg-list script. Create a \texttt{pkg-lists/local} or \texttt{pkg-lists/$<$image$>$/local} to add udebs to the image that would not normally be included. 
 
 Some things to keep in mind when using localudebs. 
 
