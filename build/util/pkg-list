@@ -21,6 +21,17 @@ my @kernel_versions=@ARGV;
 my $deb_host_arch=`LANG=C dpkg-architecture -qDEB_HOST_ARCH`;
 chomp $deb_host_arch;
 
+my $deb_host_arch_os=`dpkg-architecture -qDEB_HOST_ARCH_OS 2>/dev/null`;
+if ($? != 0) {
+	# Take account of old dpkg-architecture output.
+	$deb_host_arch_os=`dpkg-architecture -qDEB_HOST_GNU_SYSTEM`;
+	$deb_host_arch_os=~s/-gnu//;
+	if ($deb_host_arch_os eq 'gnu') {
+		$deb_host_arch_os='hurd';
+	}
+}
+chomp $deb_host_arch_os;
+
 sub warning {
 	print STDERR "** warning: @_\n";
 }
@@ -67,6 +78,11 @@ sub collectpackage {
 		my %kernels=();
 		$kernels{$_} = 1 foreach split ' ', $2;
 		return unless $kernels{$kernel_major};
+	}
+	elsif ($line=~s/^(.*) \[(.+)\]$/$1/) {
+		my %oses=();
+		$oses{$_} = 1 foreach split ' ', $2;
+		return unless $oses{$deb_host_arch_os};
 	}
 	elsif ($line=~s/\s*\?$//) {
 		# Question mark at the end means check for the package and
