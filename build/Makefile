@@ -433,8 +433,8 @@ endif
 	-cp -a `find $(EXTRADRIVERSDIR)/lib -name '*.so.*'` $(TEMP)/udeblibs
 	-cp -a `find $(TREE)/lib -name '*.so.*'` $(TEMP)/udeblibs
 	mkdir -p $(TREE)/lib
-	$(MKLIBS) -L $(TREE)/usr/lib -L $(TEMP)/udeblibs -v -d $(TREE)/lib \
-		--root=$(TREE) `find $(TEMP) -type f -perm +0111 -o -name '*.so' | grep -v udeblibs`
+	$(MKLIBS) -L $(TREE)/usr/lib -L $(TEMP)/udeblibs -v -d $(TREE)/lib --root=$(TREE) \
+		`find $(TEMP) -type f -a \( -perm +0111 -o -name '*.so' -o -name '*.so.*' \) | grep -v udeblibs`
 	rm -rf $(TEMP)/udeblibs
 
 	# Add missing symlinks for libraries
