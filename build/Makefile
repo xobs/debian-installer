@@ -425,6 +425,14 @@ ifdef EXTRADRIVERS
 		$(wildcard $(foreach dir,$(EXTRADRIVERS),$(dir)/*.udeb))
 endif
 
+ifdef GTK-TARBALL-SOURCE
+	@echo "# Unpacking temporary GTK tarballs into tree..."
+	for gtk_tb in $$(ls $(TEMP_GTK-TARBALLS)/*.tgz 2>/dev/null) ; do \
+		echo "# Unpacking: $$gtk_tb" ; \
+		tar xz --directory $(TREE) -f $$gtk_tb ; \
+	done
+endif
+
 	# Library reduction. Existing libs from udebs are put in the udeblibs
 	# directory and mklibs is made to use those in preference to the
 	# system libs.
