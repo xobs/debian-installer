@@ -877,6 +877,9 @@ _qemu: $(TARGET)
 	floppy) \
 		$(QEMU) -fda $(BOOT); \
 	;; \
+	CD-ROM) \
+		$(QEMU) -cdrom $(BOOT); \
+	;; \
 	*) \
 		echo "Sorry, don't know how to handle media type '$(MEDIA_TYPE)'" >&2; \
 		exit 1; \
