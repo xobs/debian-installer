@@ -416,13 +416,19 @@ $(STAMPS)tree-$(targetstring)-stamp: $(STAMPS)tree-unpack-$(targetstring)-stamp
 	mknod $(TREE)/dev/console c 5 1
 	mknod $(TREE)/dev/null c 1 3
 
+	mkdir -p $(EXTRAUDEBSDIR)
+	mkdir -p $(EXTRAUDEBSDPKGDIR)/info $(EXTRAUDEBSDPKGDIR)/updates
+	touch $(EXTRAUDEBSDPKGDIR)/status $(EXTRAUDEBSDPKGDIR)/available
 ifdef EXTRADRIVERS
 	# Unpack the udebs of additional driver disks, so mklibs runs on them too.
-	mkdir -p $(EXTRADRIVERSDIR)
-	mkdir -p $(EXTRADRIVERSDPKGDIR)/info $(EXTRADRIVERSDPKGDIR)/updates
-	touch $(EXTRADRIVERSDPKGDIR)/status $(EXTRADRIVERSDPKGDIR)/available
-	dpkg $(DPKG_UNPACK_OPTIONS) --log=/dev/null --root=$(EXTRADRIVERSDIR) --unpack \
+	dpkg $(DPKG_UNPACK_OPTIONS) --log=/dev/null --root=$(EXTRAUDEBSDIR) --unpack \
 		$(wildcard $(foreach dir,$(EXTRADRIVERS),$(dir)/*.udeb))
+endif
+ifdef EXTRAUDEBS
+	# Get and unpack extra udebs too.
+	get-packages udeb $(EXTRAUDEBS)
+	dpkg $(DPKG_UNPACK_OPTIONS) --log=/dev/null --root=$(EXTRAUDEBSDIR) --unpack \
+		$(foreach udeb,$(EXTRAUDEBS),$(UDEBDIR)/$(udeb).udeb)
 endif
 
 ifdef GTK-TARBALL-SOURCE
@@ -438,7 +444,7 @@ endif
 	# system libs.
 	rm -rf $(TEMP)/udeblibs
 	mkdir -p $(TEMP)/udeblibs
-	-cp -a `find $(EXTRADRIVERSDIR)/lib -name '*.so.*'` $(TEMP)/udeblibs
+	-cp -a `find $(EXTRAUDEBSDIR)/lib -name '*.so.*'` $(TEMP)/udeblibs
 	-cp -a `find $(TREE)/lib -name '*.so.*'` $(TEMP)/udeblibs
 	mkdir -p $(TREE)/lib
 	$(MKLIBS) -L $(TREE)/usr/lib -L $(TEMP)/udeblibs -v -d $(TREE)/lib --root=$(TREE) \
@@ -500,20 +506,15 @@ endif
 	# Collect the used UTF-8 strings, to know which glyphs to include in
 	# the font.
 	cat needed-characters/*.utf > $(TEMP)/all.utf
-ifdef EXTRADRIVERS
-	if [ -n "`find $(EXTRADRIVERSDPKGDIR)/info/ -name \\*.templates`" ]; then \
-		cat $(EXTRADRIVERSDPKGDIR)/info/*.templates >> $(TEMP)/all.utf; \
+	if [ -n "`find $(EXTRAUDEBSDPKGDIR)/info/ -name \\*.templates`" ]; then \
+		cat $(EXTRAUDEBSDPKGDIR)/info/*.templates >> $(TEMP)/all.utf; \
 	fi
-endif
 	if [ -n "`find $(DPKGDIR)/info/ -name \\*.templates`" ]; then \
 		cat $(DPKGDIR)/info/*.templates >> $(TEMP)/all.utf; \
 	fi
 
-ifdef EXTRADRIVERS
-	# Remove additional driver disk contents now that we're done with
-	# them.
-	rm -rf $(EXTRADRIVERSDIR)
-endif
+	# Remove extra udebs now that we're done with them.
+	rm -rf $(EXTRAUDEBSDIR)
 
 	# Tree target ends here. Whew!
 	@touch $@

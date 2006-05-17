@@ -340,12 +340,19 @@ GZIPPED
 EXTRADRIVERS
   This variable points to the directories where additional driver
   .udebs reside. This causes these .udebs to be considered in the font
-  reduction step, so the characters needed for them are kept.
+  and library reduction steps, so the characters and library symbols needed
+  for them are kept.
 
 EXTRATARGETS
   Additional targets which are run before the ones in TARGET. This is
   e.g. useful to build the additional driver images first, and then
   use their intermediate tree for EXTRADRIVERS.
+
+EXTRAUDEBS
+  This variable points to additional udebs that should be considered by the
+  library reduction step. cdebconf plugins should be listed here so the
+  symbols they will need are available on the initrd (since cdebconf runs
+  using the initrd libc, its plugins do too)
 
 DRIVER_FOR
   The variable indicates that the image is just a driver image for some
