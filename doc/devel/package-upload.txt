@@ -1,14 +1,20 @@
+To upload a package correctly, do the following:
 
-At package upload do
+* update from Subversion:
+  svn up
 
-* update the po files
-with the command:
+* update the translator info in debian/changelog by copying and pasting
+  the output (if any) of the following command:
+  scripts/l10n/output-l10n-changes -d
 
-* update the translater info in debian/changelog
-with the command:  
+* change the distribution to unstable:
+  dch -r
 
+* build:
+  debuild
 
-* tag the release in the version control system
-with the comman: svn tag
+* check the resulting package:
+  debdiff, etc.
 
-* ....
+* commit and tag the release:
+  debcommit --release
