@@ -12,12 +12,9 @@ Contents
 
 <para>
 The level 4 of translations groups together the translations of
-programs which may output messages to the screen but do not input users.
-</para>
-
-<para>All internationalized packages which output messages to the screen
-during first and second stage are considered part of the level 4 of
-&d-i; localization.
+packages that are likely to prompt users during the install of one of
+the optional tasks of <classname>tasksel</classname> with the default
+install priority.
 </para>
 
 <para>This includes the following Debian packages:
@@ -25,38 +22,17 @@ during first and second stage are considered part of the level 4 of
 	    <itemizedlist>
 	      <listitem>
 		<para>
-		  debconf (program)
-		</para>
-	      </listitem>
-	      <listitem>
-		<para>
-		  dpkg
-		</para>
-	      </listitem>
-	      <listitem>
-		<para>
-		  apt
+		  samba
 		</para>
 	      </listitem>
 	    </itemizedlist>
 </para>
 		  
-<para>
-<classname>dpkg</classname> and <classname>apt</classname> are very often used during the
-whole life of a Debian system, so having them translated, though very
-tedious, is a must-have for a good localized system.
-</para>
-
-<para>
-<classname>discover1</classname> and <classname>debconf</classname>
-outputs messages to the console during &d-i; processes.
-</para>
-
 </sect2>
 
 <sect2>
 <title>
-debconf (program)
+samba
 </title>
 
 <sect3>
@@ -65,25 +41,13 @@ Package description
 </title>
 
 <para>
-The <command>debconf</command> program is the software which is used
-for user interaction during Debian packages configuration step. All
-Debian packages should use <command>debconf</command> when they need
-user input for installation-time configuration.
+The <classname>samba</classname> Debian package provides the
+network services for SMB clients and is part of the optional <emphasis>File server</emphasis> task of <classname>tasksel</classname>.
 </para>
 
 <para>
-<command>debconf</command> may output information to the screen: this
-is why the program translation is included in &d-i; fourth level of
-translation.
-</para>
-
-<para>
-<classname>Debconf</classname> also prompts users with questions when
-installed. However, during a complete &d-i; run, these questions are
-pre-answered with the similar questions from the
-<classname>cdebconf</classname> package (which is part of level 1). As
-a consequence, the translation of these questions is only part of level
-5.
+It asks, during its installation a few questions to users about the
+default configuration of the file server.
 </para>
 
 </sect3>
@@ -94,34 +58,33 @@ Files location and access methods
 </title>
 
 <para>
-The package uses a <acronym>SVN</acronym> repository. Commit access may be requested to
-the &i18n-coords;. However, as the translatable parts do not change
-very often, getting commit access is not highly useful.
+This package is a <quote>regular</quote> Debian package. The
+package maintenance team uses a <acronym>SVN</acronym> repository.
 </para>
 
 <itemizedlist>
-<listitem>
-<para>
-<acronym>SVN</acronym> access: &svn-debconf;, <filename>src/debconf/po</filename> directory (anonymous)
-</para>
-</listitem>
-<listitem>
-<para>
-<acronym>HTTP</acronym> access: 
-</para>
-<itemizedlist>
-<listitem>
-<para>
-          <ulink url="&url-level4-pot;/debconf_po.pot">&url-level4-pot;/debconf_po.pot</ulink>
-</para>
-</listitem>
-<listitem>
-<para>
-&url-level4-po;/debconf_po_&language;.po
-</para>
-</listitem>
-</itemizedlist>
-</listitem>
+  <listitem>
+    <para>
+      <acronym>SVN</acronym> access: &svn-samba;, <filename>/po/templates.pot</filename>
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <acronym>HTTP</acronym> access: 
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <ulink url="&url-level4-pot;/samba_debian_po.pot">&url-level4-pot;/samba_debian_po.pot</ulink>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          &url-level4-po;/samba_debian_po_&language;.po
+        </para>
+      </listitem>
+    </itemizedlist>
+  </listitem>
 </itemizedlist>
 
 </sect3>
@@ -132,7 +95,8 @@ Updating/Adding translations
 </title>
 
 <para>
-Translations should be reported as bugs against the <classname>debconf</classname> package or committed directly to the <acronym>SVN</acronym> repository.
+Translations should be reported as bugs against the
+<classname>samba</classname> package.
 </para>
 
 </sect3>
@@ -144,244 +108,6 @@ Specific recommendations
 
 <para>
 N/A
-</para>
-
-</sect3>
-
-</sect2>
-
-<sect2>
-<title>
-dpkg
-</title>
-
-<sect3>
-<title>
-Package description
-</title>
-
-<para>
-The <classname>dpkg</classname> program is a low level program which
-installs and removes Debian packages.
-</para>
-
-<para>Including it in &d-i; level 4 of translation is an extension of
-the scope of &d-i; localization process. <classname>dpkg</classname>
-does not output very often during a base system install, but is very
-likely to be used further, either directly invoked by the system
-administrator or from another program such as
-<classname>aptitude</classname>, <classname>apt</classname>, or <classname>dselect</classname>
-(<classname>dselect</classname> translations are part of
-<classname>dpkg</classname> translations).
-</para>
-
-<para><classname>dpkg</classname> full translation is a huge work
-because there are hundreds of strings in the POT file. Most of these
-strings are very short strings and most of them are hard-formatted
-because they are used from a command-line program.
-</para>
-
-</sect3>
-
-<sect3>
-<title>
-Files location and access methods
-</title>
-
-<para>
-This package is a <quote>regular</quote> Debian package. The
-package maintenance team uses a SVN repository to maintain
-it. 
-</para>
-
-<itemizedlist>
-<listitem>
-<para>
-<acronym>SVN</acronym> access: &svn-dpkg;, <filename>po</filename> directory (anonymous)
-</para>
-</listitem>
-  <listitem>
-    <para>
-      <acronym>HTTP</acronym> access: 
-    </para>
-    <itemizedlist>
-      <listitem>
-        <para>
-          <ulink url="&url-level4-pot;/dpkg_po.pot">&url-level4-pot;/dpkg_po.pot</ulink>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          &url-level4-po;/dpkg_po_&language;.po
-        </para>
-      </listitem>
-    </itemizedlist>
-  </listitem>
-</itemizedlist>
-
-</sect3>
-
-<sect3>
-<title>
-Updating/Adding translations
-</title>
-
-<para>
-Translations should be reported as bugs against the
-<classname>dpkg</classname> package or commited directly to the SVN repository. Don't forget updating the <classname>po/Changelog</classname> and <classname>debian/changelog</classname> files if you update the translations yourself by getting SVN commit access.
-
-</para>
-
-<para>
-If reported as a bug, the translation will be committed quickly by the dpkg localization
-maintainer.
-</para>
-
-</sect3>
-
-<sect3>
-<title>
-Specific recommendations
-</title>
-
-<para>
-Undoubtfully, <classname>dpkg</classname> translation
-requires a good knowledge of the Debian package management system as
-well as some good experience of command-line programs translation.
-</para>
-
-<para>
-The developers have put comments targeted at translators for some
-strings. Translators should read and follow them carefully.
-</para>
-
-<para>
-The <classname>po/</classname> directory contains a file named <classname>Changelog</classname>. Translators must update this file when updating translations, as well as the <classname>debian/changelog</classname> file.
-</para>
-
-<para>
-Adding a new language also requires translators to add it to the
-<classname>po/LINGUAS</classname> file. Otherwise, the new translation
-will not be used.
-</para>
-
-<para>
-<classname>dpkg</classname> man pages can also be translated, using
-gettext files. Please look into the <classname>man/</classname>
-directory in SVN for examples.
-</para>
-
-</sect3>
-
-</sect2>
-
-<sect2>
-<title>
-apt
-</title>
-
-<sect3>
-<title>
-Package description
-</title>
-
-<para>
-The <classname>apt</classname> program handles installation and
-removal of Debian packages from packages <emphasis>sources</emphasis>
-such as Debian <acronym>HTTP</acronym>/FTP mirrors, Debian CD's, third party CD's or
-repositories, or local files.
-</para>
-
-<para>
-Including it in &d-i; level 4 of translation is an extension of the
-scope of &d-i; localization process. <classname>apt</classname> does not output
-very often during a base system install, but is very likely to be used
-further.
-</para>
-
-</sect3>
-
-<sect3>
-<title>
-Files location and access methods
-</title>
-
-<para>
-This package is a <quote>regular</quote> Debian package. The
-package maintenance team uses arch repositories to maintain
-it. 
-</para>
-
-<para>
-As arch-style repositories are somewhat complicated to setup, all
-localization of <classname>apt</classname> is handled by one of the
-&i18n-coords;.
-</para>
-
-<itemizedlist>
-  <listitem>
-    <para>
-      <acronym>HTTP</acronym> access: 
-    </para>
-    <itemizedlist>
-      <listitem>
-        <para>
-          <ulink url="&url-level4-pot;/apt_po.pot">&url-level4-pot;/apt_po.pot</ulink>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          &url-level4-po;/apt_po_&language;.po
-        </para>
-      </listitem>
-    </itemizedlist>
-  </listitem>
-</itemizedlist>
-
-</sect3>
-
-<sect3>
-<title>
-Updating/Adding translations
-</title>
-
-<para>
-Translations should be reported as bugs against the
-<classname>apt</classname> package.
-</para>
-
-<para>
-The translation will be committed quickly by the dpkg localization
-maintainer. This will not appear immediately on status pages because
-<classname>apt</classname> development is handled in
-<quote>arch</quote> repositories which are not easily handled by the
-scripts which generate the status pages.
-</para>
-
-</sect3>
-
-<sect3>
-<title>
-Specific recommendations
-</title>
-
-<para><classname>apt</classname> full translation is a huge work because there are hundreds of
-strings in the POT file. Most of these strings are short strings
-and most of them are hard-formatted because they are outputted
-during the use of a command-line program.
-</para>
-
-<para>
-Similarly to <classname>dpkg</classname>, <classname>apt</classname>
-translation requires a good knowledge of the Debian package management
-system as well as some good experience of command-line programs
-translation.
-</para>
-
-<para>
-The developers have put comments targeted at translators for some
-strings. Translators should read them carefully. Some of them are
-<emphasis>very</emphasis> important.
 </para>
 
 </sect3>

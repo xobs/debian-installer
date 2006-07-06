@@ -11,369 +11,47 @@ Contents
 </title>
 
 <para>
-The level 3 of translations groups together the components of the
-installation process which are not always used. These steps are
-optional steps and do no occur on default installs.
+The level 3 of translations groups together packages which prompt
+users during the installation of the <emphasis>desktop</emphasis> and
+<emphasis>desktop</emphasis> tasks of <classname>tasksel</classname>.
 </para>
 
-<para>All packages which interact with users during second stage optional
-steps are considered part of the level 3 of the &d-i; localization.
-</para>
+<para>
+Given its great importance in a localized desktop system, the
+<classname>menu</classname> package (menu sections) has been added to
+this list.</para>
 
 <para>This includes the following Debian packages:
 
 	    <itemizedlist>
-	      <listitem>
-		<para>
-		  aptitude
-		</para>
-	      </listitem>
-	      <listitem>
-		<para>
-		  xdebconfigurator
-		</para>
-	      </listitem>
+<!--
 	      <listitem>
 		<para>
 		  localization-config
 		</para>
 	      </listitem>
+-->
 	      <listitem>
 		<para>
-		  console-common
+		  menu
 		</para>
 	      </listitem>
 	      <listitem>
 		<para>
-		  dictionaries-common
+		  xorg
 		</para>
 	      </listitem>
+	    <listitem>
+	      <para>
+		exim4
+	      </para>
+	    </listitem>
 	    </itemizedlist>
 </para>
 
 </sect2>
 
-<sect2>
-<title>
-aptitude
-</title>
-
-<sect3>
-<title>
-Package description
-</title>
-
-<para>
-The <classname>aptitude</classname> program is an combination of
-interactive and non-interactive tools for installing Debian
-packages. For long-time users of Debian, it may be seen as the
-replacement for both <command>dselect</command> and
-<command>apt-get</command>.
-</para>
-
-<para>It is used from <classname>base-config</classname> when packages
-are installed. It is also used interactively when the user chooses the
-option for installing individual packages of his/her choice.
-</para>
-
-<para>The program uses a text-based menu system when used interactively and
-includes a lot of output messages when it is run non-interactively.
-</para>
-
-<para>
-<classname>aptitude</classname>'s full translation is a huge work
-because there are hundreds of strings in the POT file. Moreover, this
-requires some good knowledge of several Debian package managements
-concepts. It is recommended that this translation is handled by an
-experienced Debian system administrator.
-</para>
-
-</sect3>
-
-<sect3>
-<title>
-Files location and access methods
-</title>
-
-<para>
-This package is a <quote>regular</quote> Debian package. The
-package maintainer uses a <acronym>darcs</acronym> repository for the program development
-(the Debian package is handled in a separate <acronym>SVN</acronym> repository).
-</para>
-
-<itemizedlist>
-  <listitem>
-    <para>
-      <acronym>darcs</acronym> access: &darcs-aptitude;, directory <filename>po</filename> (anonymous access)
-    </para>
-  </listitem>
-  <listitem>
-    <para>
-      <acronym>HTTP</acronym> access: 
-    </para>
-    <itemizedlist>
-      <listitem>
-        <para>
-          <ulink url="&url-level3-pot;/aptitude_po.pot">&url-level3-pot;/aptitude_po.pot</ulink>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          &url-level3-po;/aptitude_po_&language;.po
-        </para>
-      </listitem>
-    </itemizedlist>
-  </listitem>
-</itemizedlist>
-
-</sect3>
-
-<sect3>
-<title>
-Updating/Adding translations
-</title>
-
-<para>
-Translations should be reported as bugs against the
-<classname>aptitude</classname> package.
-</para>
-
-</sect3>
-
-<sect3>
-<title>
-Specific recommendations
-</title>
-
-<para>Without any doubt, <classname>aptitude</classname>'s translation
-is among the most difficult translations involved in &d-i;
-translation. It has an impact far outside &d-i; because
-<classname>aptitude</classname> is likely to be used all along the
-life of a Debian system.
-</para>
-
-<para>
-Several strings in <classname>aptitude</classname> PO file are menu
-entries, pseudo dialog boxes text and all such limited size
-material. The source code is not very widely commented to help out
-translators.
-</para>
-
-<para>
-The ideal way to translate aptitude is by recompiling the software and
-include the translation to be tested. Compiling aptitude requires
-usual build tools and software as well as a few dedicated libraries
-such as <classname>apt</classname> libraries.
-</para>
-
-<para><classname>Aptitude</classname> also includes a small help file, which may be
-translated as well. However, this translation does not use GNU
-gettext, so the translation is quite tricky. See the
-<filename>help*</filename> files in <classname>aptitude</classname>'s source tree.
-</para>
-
-<para><classname>Aptitude</classname>'s documentation may also be
-translated. See the <filename>doc/</filename> directory in the
-package's source tree.
-</para>
-
-<para>Translators should be aware that <classname>aptitude</classname>
-is still under heavy development, so upstream strings are very likely
-to change or be added. Anyway, even a partial translation will help the
-users of a given language.
-</para>
-
-<para>
-
-The aptitude maintainer has written a special
-<filename>README.i18n</filename> file to give more details to
-translators. The contents of this file follows, as of the day of this
-documentation was written.
-</para>
-
-<para>
-<classname>Aptitude</classname> uses the standard gettext mechanism for translations.  However,
-there are a few twists that you should be aware of.
-</para>
-
-<sect4>
-<title>
-External data files
-</title>
-
-<para>
-    There are several external data files that you can choose to
-    translate: <filename>help.txt</filename> (online help), <filename>help-mine.txt</filename> (online help for
-    Minesweeper), and <filename>aptitude.xml</filename> (user's manual/online manual).
-    <filename>aptitude.xml</filename> is a large file, but <filename>help.txt</filename> and <filename>help-mine.txt</filename> are
-    quite tractable and it is recommended that you translate
-    them. (especially <filename>help.txt</filename>)
-</para>
-
-<para>
-    aptitude applies gettext to the file names before loading them, so
-    to tell it that you've translated (eg) <filename>help.txt</filename> to <filename>help-de.txt</filename>,
-    you should add a translation "help.txt" -> "help-de.txt".
-</para>
-
-<para>
-    In addition, each translated file name has a corresponding
-    described translation (see below) indicating its encoding.  You
-    should translate this as necessary if you write an alternate file.
-</para>
-</sect4>
-
-<sect4>
-<title>Manpage</title>
-
-<para>
-    <classname>aptitude</classname> has a manpage, and it can be translated; if you choose to
-    translate it, your translation should be named <filename>aptitude.XX.1</filename>
-    (replace XX with the language code)
-</para>
-
-</sect4>
-<sect4>
-<title>fragf</title>
-
-<para>
-    <classname>aptitude</classname> uses an internal function called fragf to format text
-    with display attributes.  This function works somewhat like
-    printf, but most escape codes have different meanings.  For
-    instance, %B enables the "bold" character attribute, while %b
-    disables it.  See src/vscreen/fragment.h for a full description of
-    all escape codes.  You can use parameter numbers (eg, %1$F) if
-    your language needs to reorder the arguments.
-</para>
-
-</sect4>
-<sect4>
-<title>Key translations</title>
-
-<para>
-    Where it makes sense, <classname>aptitude</classname> allows the default keybinding
-    assigned to a command to be translated.  This is done by creating
-    a dummy translated string ending in "_key"; the first character of
-    the string is the default binding of the key.  For instance, the
-    string "yes_key" is used to set the default binding for buttons
-    labelled "Yes".  To bind "j" to this command, you could translate
-    "yes_key" to "ja_key", "ja", or even just "j".
-</para>
-
-</sect4>
-<sect4>
-<title>Described translations</title>
-
-<para>
-    Some translations have descriptions or disambiguating text to the
-    left of the input and output string.  In these cases, everything
-    up to and including the first pipe character will be removed
-    before the string is used.  If no pipe character is present in the
-    string, the string will be used without modifications.
-
-    For instance, the string "help.txt encoding|UTF-8" can be
-    translated to either "help.txt encoding|ISO-8859-1",
-    "|ISO-8859-1", or "ISO-8859-1", and will have the same effect in
-    each case.
-</para>
-</sect4>
-
-
-</sect3>
-
-</sect2>
-
-<sect2>
-<title>
-Xdebconfigurator
-</title>
-
-<sect3>
-<title>
-Package description
-</title>
-
-<para>
-The <classname>xdebconfigurator</classname> package is a tool aimed at
-automatic configuration of the X-Window server component (most often
-when users choose the installation of the <quote>desktop</quote> task.
-</para>
-
-<para>
-It is called from <classname>base-config</classname> when the
-installed system includes a X Window System server software.
-</para>
-
-<para>
-The only translatable string is the package description, used as a menu
-entry in <classname>base-config</classname>.
-</para>
-
-</sect3>
-
-<sect3>
-<title>
-Files location and access methods
-</title>
-
-<para>
-The xdebconfigurator package is maintained by the Debian-Edu project
-maintainers and is part of Debian-Edu's <acronym>SVN</acronym> repository.
-</para>
-
-<itemizedlist>
-  <listitem>
-    <para>
-      <acronym>SVN</acronym> access: &svn-xdebconfigurator;, <filename>debian/po</filename> directory
-    </para>
-  </listitem>
-  <listitem>
-    <para>
-      <acronym>HTTP</acronym> access: 
-    </para>
-    <itemizedlist>
-      <listitem>
-        <para>
-          <ulink url="&url-level3-pot;/xdebconfigurator_debian_po_templates.pot">&url-level3-pot;/xdebconfigurator_debian_po_templates.pot</ulink>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          &url-level3-po;/xdebconfigurator_debian_po_&language;.po
-        </para>
-      </listitem>
-    </itemizedlist>
-  </listitem>
-</itemizedlist>
-
-</sect3>
-
-<sect3>
-<title>
-Updating/Adding translations
-</title>
-
-<para>
-Translations should be reported as bugs against the
-<classname>xdebconfigurator</classname> package.
-</para>
-
-</sect3>
-
-<sect3>
-<title>
-Specific recommendations
-</title>
-
-<para>
-The translatable part only includes the
-<classname>base-config</classname> menu entry. It must be kept short:
-below 70 columns.
-</para>
-
-</sect3>
-
-</sect2>
+<!--
 
 <sect2>
 <title>
@@ -482,9 +160,11 @@ linkend="localization-config"/> for details.
 
 </sect2>
 
+-->
+
 <sect2>
 <title>
-Console-common
+Menu
 </title>
 
 <sect3>
@@ -493,15 +173,14 @@ Package description
 </title>
 
 <para>
-The <classname>console-common</classname> package includes all tools
-for handling the console (input and output).
+The <classname>menu</classname> Debian package provides all window
+managers, in graphical environments, a standard menu to organize the
+applications launch shortcuts.
 </para>
 
 <para>
-It is installed and configured as part of the Debian base system. Its
-configuration process involves some user input and may be shown to
-users during a base system install, in some occasions (but not
-always).
+The most important items to translate in <classname>menu</classname>
+are the menu section names.
 </para>
 
 </sect3>
@@ -512,12 +191,39 @@ Files location and access methods
 </title>
 
 <para>
+This package is a <quote>regular</quote> Debian package. The
+package maintenance team uses a <acronym>CVS</acronym> repository.
+</para>
+
+<para>
+This package's localization material is spread over two files. These
+are, by order of importance:
+</para>
+
+<itemizedlist>
+<listitem>
+<para>
+<filename>po/*.po</filename>: program translations. The maintainers unfortunately do not keep a templates file in their repositories, so translators should pick up another PO file as a reference to create their own translation file.
+</para>
+</listitem>
+<listitem>
+<para>
+<filename>po-sections/po/menu-sections.pot</filename>: names of the menu sections, which group together the shortcuts for the various programs.
+</para>
+</listitem>
+</itemizedlist>
+
+<para>
+Access to these files:
 </para>
 
 <itemizedlist>
   <listitem>
     <para>
-      <acronym>SVN</acronym> access: &svn-console-common;, <filename>debian/po</filename> directory
+      <acronym>CVS</acronym> access: &cvs-menu;, <filename>po-sections</filename>
+      directory (menu sections translations) and
+      <filename>po-sections</filename> directory (program
+      translations)
     </para>
   </listitem>
   <listitem>
@@ -527,12 +233,12 @@ Files location and access methods
     <itemizedlist>
       <listitem>
         <para>
-          <ulink url="&url-level3-pot;/console-common_debian_po.pot">&url-level3-pot;/console-common_debian_po.pot</ulink>
+          <ulink url="&url-level3-pot;/menu_po.pot">&url-level3-pot;/menu_po.pot</ulink> and <ulink url="&url-level3-pot;/menu_po-sections.pot">&url-level3-pot;/menu_po-sections.pot</ulink>
         </para>
       </listitem>
       <listitem>
         <para>
-          &url-level3-po;/console-common_debian_po_&language;.po
+          &url-level3-po;/menu_po-sections_&language;.po and &url-level3-po;/menu_po_&language;.po
         </para>
       </listitem>
     </itemizedlist>
@@ -548,7 +254,7 @@ Updating/Adding translations
 
 <para>
 Translations should be reported as bugs against the
-<classname>console-common</classname> package.
+<classname>menu</classname> package.
 </para>
 
 </sect3>
@@ -566,9 +272,10 @@ N/A
 
 </sect2>
 
+
 <sect2>
 <title>
-dictionaries-common
+xorg
 </title>
 
 <sect3>
@@ -577,16 +284,15 @@ Package description
 </title>
 
 <para>
-The <classname>dictionaries-common</classname> package includes all
-common tools for using word dictionaries in Debian.
+The <classname>xorg</classname> Debian package provides the
+X-Window System environment which is by far the most common graphical
+environment of Unix systems.
 </para>
 
 <para>
-It is installed and configured as part of the Debian base system. Its
-configuration process inputs the user for choosing a word dictionary
-when the installation is run at <emphasis>medium</emphasis> priority (using the <emphasis>expert</emphasis>
-mode of install...or when some problem occurred earlier in the
-installation process).
+This package is installed on all desktop systems. It asks, during its
+installation several questions to users about their hardware, in order
+to properly setup the X server configuration file.
 </para>
 
 </sect3>
@@ -598,28 +304,32 @@ Files location and access methods
 
 <para>
 This package is a <quote>regular</quote> Debian package. The
-package maintainer currently does no use any <acronym>CVS</acronym> or <acronym>SVN</acronym> repository.
+package maintenance team uses a <acronym>SVN</acronym> repository.
 </para>
 
-
 <itemizedlist>
-<listitem>
-<para>
-<acronym>HTTP</acronym> access: 
-</para>
-<itemizedlist>
-<listitem>
-<para>
-          <ulink url="&url-level3-pot;/dictionaries-common_debian_po.pot">&url-level3-pot;/dictionaries-common_debian_po.pot</ulink>
-</para>
-</listitem>
-<listitem>
-<para>
-&url-level3-po;/dictionaries-common_debian_po_&language;.po
-</para>
-</listitem>
-</itemizedlist>
-</listitem>
+  <listitem>
+    <para>
+      <acronym>SVN</acronym> access: &svn-xorg;, <filename>debian/po/templates.pot</filename>
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <acronym>HTTP</acronym> access: 
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <ulink url="&url-level3-pot;/xorg_debian_po.pot">&url-level3-pot;/xorg_debian_po.pot</ulink>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          &url-level3-po;/xorg_debian_po_&language;.po
+        </para>
+      </listitem>
+    </itemizedlist>
+  </listitem>
 </itemizedlist>
 
 </sect3>
@@ -630,7 +340,8 @@ Updating/Adding translations
 </title>
 
 <para>
-Translations should be reported as bugs against the <classname>dictionaries-common</classname> package.
+Translations should be reported as bugs against the
+<classname>xorg</classname> package.
 </para>
 
 </sect3>
@@ -641,7 +352,104 @@ Specific recommendations
 </title>
 
 <para>
-N/A
+The screens are likely to be seen by all users installing desktop
+systems. Translators should avoid jargon in these translations.
+</para>
+
+</sect3>
+
+</sect2>
+
+<sect2>
+<title>
+Exim4
+</title>
+
+<sect3>
+<title>
+Package description
+</title>
+
+<para>
+The <classname>exim4</classname> package installs the Exim Mail
+Transport Agent (MTA). It is installed by default on all newly
+installed Debian GNU/Linux systems as Exim has always been the default
+Debian MTA (even if other MTA may be used and installed later by the
+system administrator).
+</para>
+
+<para>It is installed and configured from
+<classname>base-config</classname> which triggers some of its
+configuration steps and thus involves user input.
+</para>
+
+</sect3>
+
+<sect3>
+<title>
+Files location and access methods
+</title>
+
+<para>
+This package is a <quote>regular</quote> Debian package. The
+package maintainer currently does no use any public <acronym>CVS</acronym> or <acronym>SVN</acronym> repository.
+</para>
+
+<itemizedlist>
+  <listitem>
+    <para>
+      <acronym>HTTP</acronym> access: 
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          <ulink url="&url-level3-pot;/exim4_debian_po.pot">&url-level3-pot;/exim4_debian_po.pot</ulink>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          &url-level3-po;/exim4_debian_po_&language;.po
+        </para>
+      </listitem>
+    </itemizedlist>
+  </listitem>
+</itemizedlist>
+
+</sect3>
+
+<sect3>
+<title>
+Updating/Adding translations
+</title>
+
+<para>
+Translations should be reported as bugs against the
+<classname>exim4</classname> package.
+</para>
+
+</sect3>
+
+<sect3>
+<title>
+Specific recommendations
+</title>
+
+<para>The translation of some exim4 user input screens may be tricky.
+</para>
+
+<para>
+More particularly, the screen giving the choice between all possible
+types of configurations is not easy to handle for translators. Each
+individual choice contains a description of what this choice means:
+<emphasis>this must be kept shorter</emphasis> than 72 characters,
+otherwise, the display will be cut on most screens.
+</para>
+
+<para>
+Translators should also try to keep the long description of this
+specific screen as short as possible and still be clear and avoid
+jargon. This screen will be shown on every installation, even default
+ones (which are very likely to be used by low skilled users).
 </para>
 
 </sect3>
