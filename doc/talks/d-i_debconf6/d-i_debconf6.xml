@@ -48,7 +48,7 @@ under the terms of version 2 of the GNU General Public License.
   <sect1><title>Running Debian Installer</title>
 <para>
 
-The examples in this section reflect the current status of the Installer, the Etch Beta 2 release, and are based on the CD-ROM and netboot installation methods for i386. The choice for i386 was made as this is most familiar to most users, but installations for other architectures is not structurally different<footnote>
+The examples in this section reflect the current status of the Installer, the Etch Beta 2 release, and are based on the CD-ROM and netboot installation methods for i386. The choice for i386 was made as this is most familiar to most users, but installations for other architectures are not structurally different<footnote>
 
 <para>
 Some architectures currently do not use partman for partitioning, file system creation and mount point selection but instead use other components. Some architectures also use specific additional components as part of their default installation. However, this does not make them structurally different.
@@ -79,7 +79,7 @@ installing the target system
 The first three stages are where the fundamental difference between installation methods can be seen. All components (udebs) used there need to be included in the initrd<footnote>
 
 <para>
-With one exception. In floppy disk based installations, the initrd does not contain all needed components for stage 2, but it does have the ability to load additional components that belong to stage one or are needed for stage 2 from additional floppy disks.
+With one exception. In floppy disk based installations, the initrd does not contain all needed components for stage 2, but it does have the ability to load additional components that belong to stage 1 or are needed for stage 2 from additional floppy disks.
 </para>
 
 </footnote> with which the installer is booted.
@@ -217,7 +217,7 @@ The remainder of the installation is basically the same for all installation met
       <entry>Boot loader installation</entry>
     </row><row>
       <entry>5</entry>
-      <entry>prebaseconfig<superscript>a)</superscript></entry>
+      <entry>finish-install<superscript>a)</superscript></entry>
       <entry>Finish up the installation and reboot</entry>
     </row>
   </tbody>
@@ -225,7 +225,7 @@ The remainder of the installation is basically the same for all installation met
 </informaltable>
 
 <para>
-<superscript>a)</superscript> Will soon be renamed to <classname>finish-install</classname>. The name <quote><classname>prebaseconfig</classname></quote> no longer makes any sense as <classname>base-config</classname> was obsoleted with Etch Beta 2.
+<superscript>a)</superscript> Renamed from <classname>prebaseconfig</classname> after the Etch Beta 2 release because the package <classname>base-config</classname> was obsoleted.
 </para>
 
    <sect2><title>Installation methods</title>
@@ -456,7 +456,7 @@ The component <classname>main-menu</classname> drives the rest of the installati
 
 </para><para>
 
-In some situations the debconf priority is automatically changed. It is reduced when the execution of a component fails, or when the user uses the <userinput>&lt;go back&gt;</userinput> button to back out all the way to the menu. In these cases it will also be increased back to the original level when the next component executed finishes successfully.
+In some situations the debconf priority is automatically changed. It is reduced when the execution of a component fails, or when the user uses the <userinput>&lt;Go Back&gt;</userinput> button to back out all the way to the menu. In these cases it will also be increased back to the original level when the next component executed finishes successfully.
 
 </para><para>
 
@@ -496,7 +496,7 @@ This example also shows that netcfg has been run successfully (<quote>installed<
 
 </para><para>
 
-Some components are included in the menu but are not run by default. These components have a menu number higher than prebaseconfig. Examples are components that allow to change the debconf priority, to save debug logs, to check the integrity of a CD-ROM or to abort the installation.
+Some components are included in the menu but are not run by default. These components have a menu number higher than finish-install. Examples are components that allow to change the debconf priority, to save debug logs, to check the integrity of a CD-ROM or to abort the installation.
 
 </para>
    </sect2>
@@ -524,9 +524,9 @@ Run by base-installer just before kernel selection/installation.
     </para></listitem>
   </varlistentry>
   <varlistentry>
-    <term><filename>/usr/lib/prebaseconfig.d</filename></term>
+    <term><filename>/usr/lib/finish-install.d</filename></term>
     <listitem><para>
-Run by prebaseconfig.
+Run by finish-install.
     </para></listitem>
   </varlistentry>
 </variablelist>
@@ -580,12 +580,12 @@ Allows to run a command in a chroot on <filename>/target</filename> with the chr
    <sect2><title>Automating the install using preseeding</title>
 <para>
 
-There are three preseed methods that are currently supported:
+There are three preconfiguration methods that are currently supported:
 <variablelist>
   <varlistentry>
     <term><emphasis>initrd preseeding</emphasis></term>
     <listitem><para>
-The preseed file <filename>/preseed.cfg</filename> needs to be present in the initrd. It is read as part of the <command>debian-installer-startup</command> processing.
+The preconfiguration file <filename>/preseed.cfg</filename> needs to be present in the initrd. It is read as part of the <command>debian-installer-startup</command> processing.
     </para></listitem>
   </varlistentry>
   <varlistentry>
@@ -606,11 +606,11 @@ Which of these methods is available depends on the installation method.
 
 </para><para>
 
-The main purpose of preseeding is to set default values for debconf questions. Note that it makes no sense when using file or network preseeding to preseed values for questions that are asked <emphasis>before</emphasis> the preseed file is parsed.
+The main purpose of preseeding is to set default values for debconf questions. Note that it makes no sense when using file or network preseeding to preseed values for questions that are asked <emphasis>before</emphasis> the preconfiguration file is parsed.
 
 </para><para>
 
-Besides offering the option to set default values for debconf questions, preseeding also makes it possible to run scripts at two distinct moments using <userinput>preseed/early_command</userinput> and <userinput>preseed/late_command</userinput>. The <userinput>early_command</userinput> is executed immediately after the preseed file is parsed (only for file and network preseeding); the <userinput>late_command</userinput> is executed as part of the <command>prebaseconfig</command> component.
+Besides offering the option to set default values for debconf questions, preseeding also makes it possible to run scripts at two distinct moments using <userinput>preseed/early_command</userinput> and <userinput>preseed/late_command</userinput>. The <userinput>early_command</userinput> is executed immediately after the preconfiguration file is parsed (only for file and network preseeding); the <userinput>late_command</userinput> is executed as part of the <command>finish-install</command> component.
 
 </para><para>
 
@@ -672,7 +672,7 @@ Another important difference is that udebs are not really meant to be uninstalle
 
 </para><para>
 
-The relaxed policy requirements make one of the reasons that udebs should to be installed on a normal system. The other reason being that it just doesn't make sense and it's likely to break things.
+The relaxed policy requirements are one of the reasons that udebs should not be installed on a normal system. The other reason being that it just doesn't make sense and it's likely to break things.
 
 </para><para>
 
@@ -721,7 +721,7 @@ Other things like additional debconf templates, C programs, hook scripts can be 
 
 </para><para>
 
-A special type of control file worth mentioning is the <filename>isinstallable</filename> file. If a script with this name is present in <filename>/var/lib/dpkg/info</filename> for a component, the main menu will run this script and only include the component in the menu if the script exits 0.
+A special type of control file worth mentioning is the <filename>.isinstallable</filename> file. If a script with this extension is present in <filename>/var/lib/dpkg/info</filename> for a component, the main menu will run this script and only include the component in the menu if the script exits 0.
 
 </para>
    </sect2>
@@ -733,7 +733,7 @@ Creating a udeb is not all that hard, especially if you use <classname>debhelper
 
 </para><para>
 
-The example below shows the <filename>debian/control</filename> file for a udeb that is supposed to be included in the main menu. Note the special section.
+The example below shows the <filename>debian/control</filename> file for a udeb that is supposed to be included in the main menu. Note the special <quote>debian-installer</quote> section.
 
 </para>
 
@@ -857,7 +857,7 @@ This includes the daily built images available from <ulink url="http://www.debia
 An important difference between release and development builds is that release builds will use udebs for the same suite as the target system being installed, while development builds will by default install testing, but use udebs from unstable<footnote>
 
 <para>
-This is accomplished by including the <filename>/installer/build/unstable.cfg</filename> preseed file in the initrd.
+This is accomplished by including the <filename>/installer/build/unstable.cfg</filename> preconfiguration file in the initrd.
 </para>
 
 </footnote>. This allows to mostly avoid the occasional breakage of the base system and tasks in unstable while using the most recent udebs.
@@ -962,11 +962,11 @@ EXTRATARGETS = build_netboot_2.6
 
 </para><para>
 
-This defines that the netboot image has two flavors: the default one (using a 2.4 kernel) and an one using a 2.6 kernel, which is further defined in the <filename>config/i386/netboot/2.6.cfg</filename> file where the default values of the variables for the kernel version are overruled.
+This defines that the netboot image has two flavors: the default one (using a 2.4 kernel) and one using a 2.6 kernel, which is further defined in the <filename>config/i386/netboot/2.6.cfg</filename> file where the default values of the variables for the kernel version are overruled.
 
 </para><para>
 
-The files in config are processed recursively to dynamically generate the build targets, so in this example you get a netboot, a <userinput>netboot_2.6</userinput> target and targets for the other media. Building is also recursive, so calling the netboot target will automatically build both the <userinput>netboot</userinput> and <userinput>netboot_2.6</userinput> images.
+The files in config are processed recursively to dynamically generate the build targets, so in this example you get a <userinput>netboot</userinput>, a <userinput>netboot_2.6</userinput> target and targets for the other media. Building is also recursive, so calling the netboot target will automatically build both the <userinput>netboot</userinput> and <userinput>netboot_2.6</userinput> images.
 
 </para><para>
 
@@ -995,7 +995,7 @@ acpi-modules-${kernel:Version} [2.6]
 
 </para><para>
 
-The variable <literal>${kernel:Version}</literal> is expanded to match the package name of the udeb based on the kernel version and flavor. If the name of a udebs is followed by <quote>[2.4]</quote> or <quote>[2.6]</quote>, it is only included if the kernel major version for the image being built matches. If it is followed by a question mark it is skipped if the package is not available (without the question mark an error would be generated).
+The variable <literal>${kernel:Version}</literal> is expanded to match the package name of the udeb based on the kernel version and flavor. If the name of a udeb is followed by <quote>[2.4]</quote> or <quote>[2.6]</quote>, it is only included if the kernel major version for the image being built matches. If it is followed by a question mark it is skipped if the package is not available (without the question mark an error would be generated).
 
 </para><para>
 
@@ -1003,7 +1003,7 @@ The first line with the <literal>#include</literal> results in the file <filenam
 
 </para><para>
 
-The <command>pkg-list</command> script will also always look for the presence of files named <filename>common</filename> and <filename>local</filename> and thus <filename>pkg-lists/netboot/common</filename> is processed next. This file exists and lists a number of udebs that belong in any netboot image, independent of the architecture. This file also contains two include directives:
+The <command>pkg-list</command> script will also look for the presence of files named <filename>common</filename> and <filename>local</filename> and thus <filename>pkg-lists/netboot/common</filename> is processed next. This file exists and lists a number of udebs that belong in any netboot image, independent of the architecture. This file also contains two include directives:
 
 <informalexample><screen>
 #include "base"
@@ -1016,7 +1016,7 @@ Thus, udebs listed in <filename>pkg-lists/base</filename> (containing udebs comm
 
 </para><para>
 
-The file <filename>pkg-lists/netboot/local</filename> does not normally exist as it is intended for the inclusion of non-standard udebs. It is also very useful for testing as it can be used to temporarily add udebs not normally included without teh need to modify the regular files.
+The file <filename>pkg-lists/netboot/local</filename> does not normally exist as it is intended for the inclusion of non-standard udebs. It is also very useful for testing as it can be used to temporarily add udebs not normally included without the need to modify the regular files.
 
 </para><para>
 
