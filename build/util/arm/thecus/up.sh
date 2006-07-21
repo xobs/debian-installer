@@ -13,8 +13,8 @@ debug() {
 	echo "$@" > /tmp/upgrade/debug
 }
 
-# The firmware upgrade script looks for the string "fail" in the error
-# message.
+# Note: the firmware upgrade script looks for the string "fail" in the
+# error message, so make sure this passed to the error function.
 error() {
 	info "$@"
 	debug "$@"
@@ -36,10 +36,10 @@ lockfile /var/lock/upgrade.lock
 
 cd /tmp/upgrade
 
-# If hw_status is 0, the machine is set to "factory default".  In this
-# case, this means that we don't check whether the machine name matches
-# /app/manifest.txt.
-HW_STATUS=`redboot_config get /dev/mtdblock4 hw_status`
+# If hw_status is 0 the machine is being reset to "factory default".  In
+# our case, this means that we don't check whether the machine name
+# matches /app/manifest.txt.
+HW_STATUS=$(redboot_config get /dev/mtdblock4 hw_status)
 if [ $HW_STATUS -ne 1 ]; then
 	product=$(grep "^type" /app/manifest.txt | cut -f 2)
 	case $product in
