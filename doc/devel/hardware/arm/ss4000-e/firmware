@@ -1,0 +1,105 @@
+The Intel SS4000-E is based on a firmware developed by FalconStor Software.
+It contains a standard Redboot, Linux kernel and ramdisk and some
+proprietary software from FalconStore.  The firmware upgrade is shipped as
+a .pkg file.
+
+The Intel SS4000-E has 32 MB flash with the following layout:
+
+0x00000000-0x00040000 : "RedBoot"
+0x00040000-0x00060000 : "log"
+0x00060000-0x000a0000 : "rammode"
+0x000a0000-0x000c0000 : "naskey"
+0x000c0000-0x002c0000 : "zImage"
+0x002c0000-0x006c0000 : "ramdisk.gz"
+0x006c0000-0x01f40000 : "vendor"
+0x01f40000-0x01fc0000 : "wmdata"
+0x01fc0000-0x01fc1000 : "RedBoot config"
+0x01fe0000-0x02000000 : "FIS directory"
+
+ - zImage is the Linux kernel
+ - ramdisk.gz the Linu ramdisk
+ - vendor contains a copy of the .pkg file
+ - wmdata: is the "OEM images", which is put in /sysroot/usr/local/ipstor/
+   This appears to be FalconStor's proprietary software
+
+Note that not all devices supported by FalconStor have 32 MB flash, so the
+upgrade scripts check whether "vendor" exists in flash before writing the
+.pkg file there.
+
+
+The .pkg file
+-------------
+
+The .pkg file contains a header and then a gziped tar file which is
+unpacked in /sysroot.
+
+The header consists of:
+
+32 byte: md5sum of the remaining file
+32 byte: identification string, starting with "FALCONSTOR@" and then
+         followed by the machine identification, e.g. EP219
+8 byte: length of header in KB
+16 byte: firmware version number (e.g. 1.1-b214)
+16 byte: firmware version string (e.g. fs-bc)
+
+The upgrade script, /usr/local/wwwadmin/upgrade_firmware, takes the .pkg
+file, checks the md5sum and then unpacks the gziped tar file into /sysroot.
+
+The script is passed two arguments:
+
+UPGRADE_PKG=$1
+UPGRADE_TYPE=$2
+
+The first is the location of the .pkg file, the second the type of the
+upgrade.  We have 4 known types:
+
+  UPDATE_FLASH    DISK  PKG_FLASH    ZIMAGE_RAMDISK···
+        0           Y      n               n       # load from flash
+        1           Y      Y               Y       # upgrade from web
+        2           n      Y               Y       # load from file
+        3           n      Y               Y       # version different
+
+Explanation:
+DISK: some files on the hard drive are updated - not relevant for Debian
+PKG_FLASH: the .pkg file is written to the "vendor" flash partition
+ZIMAGE_RAMDISK: the zImage and ramdisk are written to flash
+
+Another representation of this information:
+
+  0 Upgrade disk
+      Load From Flash(initialization)  => disk
+  1 Upgrade disk
+      Upgrade from Web                 => disk, zImage/ramdisk.gz, pkg
+  2 Upgrade flash only
+      Load from file to flash          => zImage/ramdisk.gz, pkg
+  3 Upgrade flash only
+      Version different                => zImage/ramdisk.gz, pkg
+
+After unpacking the .pkg file, the upgrade_firmware script will run
+/sysroot/upgrade.sh.  This program is started in the following way:
+    ${UPGRADE_PROG} ${UPGRADE_PKG} ${UPGRADE_TYPE} >> ${UPGRADE_LOG}
+which means that
+  a) the same parameters are passed as to upgrade_firmware
+  b) we can use "echo" for logging.  The log file is
+     /sysroot/var/log/upgrade.log
+
+The .pkg file needs to contain at least the following files:
+
+ ./etc/version
+    in this format: fs-bc - 1.1-b214
+
+ ./upgrade.sh
+    called by upgrade_firmware to do the upgrade
+
+We can make use of /fs/writeflash to write to flash.  It accepts the
+following arguments:
+  %s [-z|-r|-p|-w] [file]
+    where -z:zImage, -r:ramdisk.gz, -p:package, -w:wmdata
+
+Notes about the original firmware:
+
+For some reason, the original firmware unpacks the .pkg file again, puts
+the zImage and ramdisk.gz into /tmp and then flashes it.  However, given
+that upgrade_firmware unpacks the .pkg file into /sysroot, we can simply
+use the file from there, e.g. from /sysroot/images/
+
