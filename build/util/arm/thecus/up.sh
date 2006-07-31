@@ -4,6 +4,9 @@
 
 # This code is covered by the GNU General Public License.
 
+# See installer/doc/devel/hardware/arm/thecus/firmware for an explanation
+# of the upgrade process on Thecus machines.
+
 
 info() {
 	echo "$@" > /tmp/upgrade/message

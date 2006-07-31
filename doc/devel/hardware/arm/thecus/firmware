@@ -1,0 +1,67 @@
+Thecus ships their firmware as a file ending with .bin that is encrypted
+with DES.  They use the "des" utility and use a string as the key.  The
+interesting thing is that it appears that this string, according to
+OpenSSL, is actually an invalid key but the old "des" utility allows it
+anyway.  So far, I haven't managed to decrypt it with OpenSSL while "des"
+works.
+
+The key is:
+  "n2100" for the Thecus N2100 and derivates
+  "n4100" for the Thecus N4100 and derivates
+
+You can decrypt a firmware image this way:
+
+    des -k n2100 -D n2100upgrade.2.1.00.bin > firmware.tar.gz
+
+When you unpack this file, you get a directory called "upgrade" in which a
+number of files are put.  Most notably, you need two files:
+
+ - upgrade/up.sh
+
+   This is a shell script which is started by the upgrade CGI script,
+   /img/htdocs/adm/setupdfw.html
+
+ - upgrade/version
+
+   This contains the version of the firmware, e.g. 2.1.00.  I think it
+   needs to have 3 dot-separated numbers and letters at the end of the
+   last number are stripped off.
+
+The upgrade process:
+
+/img/htdocs/adm/setupdfw.html will decrypt the .bin firmware image, unpack
+it into /upgrade and then run /upgrade/up.sh.  This shell script can then
+basically do whatever it wants; e.g. the official firmware image only
+upgrades RedBoot if your current firmware version is older than a specific
+version.  For Debian, we basically just need to flash the ramdisk and the
+kernel.
+
+While up.sh is running, /img/htdocs/adm/setupdfw.html will show a progress
+bar.  It will also scan the file /tmp/upgrade/message and look for the
+strings "fail" or "success".  Only one such a string is found will the
+upgrade process terminate.
+
+The up.sh script should at the beginning create the lock file
+/var/lock/upgrade.lock and remove it at the end.  Since the web upgrade
+says that the upgrade progress will finish with a beep, the up.sh should
+ideally run the following commands towards the end:
+
+    echo "Buzzer 0" > /proc/thecus_io
+    sleep 1
+    echo "Buzzer 1" > /proc/thecus_io
+
+
+Information and tools:
+
+The file /app/manifest.txt contains information about the machine, e.g.
+
+type	n2100
+producer	THECUS
+
+In general, /app contains the configuration data.  For example,
+/app/cfg/conf.db is a SQLite database of the configuration data ("sqlite
+/app/cfg/conf.db 'select * from conf'" will show all entries).
+
+There is a tool /sbin/fcp to write something to flash (e.g. "/sbin/fcp -v
+ramdisk.arm /dev/mtd1") but "cat" will work as well.
+
