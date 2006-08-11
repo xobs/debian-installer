@@ -1,0 +1,25 @@
+The GLAN Tank is a NAS device with a 400 MHz IOP chip, 2 IDE slots, 128 MB
+RAM, 4 USB ports and 1 GBit Ethernet.  Other devices from IO-Data, in
+particular the HDL-Gxxx, HDL-GWxxx, and HDL-GZxxx series, are very similar
+and should be supported too.
+
+The GLAN Tank only has 0.5 MB flash which contains a version of RedBoot
+that can read a kernel and initrd from IDE disk.  It starts the following
+commands:
+
+RedBoot> load hda1:/initrd -r -v -b 0x00800000 -m disk
+Can't load 'hda1:/initrd': Bad filename
+RedBoot> load hda1:/zImage -r -v -b 0x00012000 -m disk
+Can't load 'hda1:/zImage': Bad filename
+RedBoot> exec -c "root=/dev/hda2 initrd=0xa0800000,8M rw console=ttyS0,115200 mem=128M@0xa0000000"
+
+There are a number of implications for debian-intaller.  First of all,
+given that there's no network support or similar in RedBoot, the initial
+kernel and ramdisk to start d-i have to be put on an IDE manually as
+"zImage" and "initrd" (on hda1).  Secondly, because of the cmd line, d-i
+has to use an initramfs.  An initrd (ext2, cramfs) will not work because
+while it will load the initrd it will then try to access root (/dev/hda2)
+and fail.  d-i can only be started by using an initramfs.  Finally, it
+also means that this machine needs a /boot partition on hda1 and / on
+hda2.
+
