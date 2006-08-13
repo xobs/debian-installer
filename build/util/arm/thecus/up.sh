@@ -74,7 +74,7 @@ if [ -z "$mtdkernel" ]; then
 fi
 
 info "Writing installer ramdisk... please wait..."
-ifile=initrd.img-2.6.17-1-iop3xx
+ifile=initrd
 size=$(grep "ramdisk" /proc/mtd | cut -d " " -f 2)
 size=$(printf "%d" 0x$size)
 isize=$(wc -c $ifile | cut -d " " -f 1)
@@ -88,7 +88,7 @@ if [ $? -ne 0 ]; then
 fi
 
 info "Writing installer kernel... please wait..."
-fcp vmlinuz-2.6.17-1-iop3xx $mtdkernel
+fcp vmlinuz $mtdkernel
 if [ $? -ne 0 ]; then
 	error "Upgrading kernel: fail"
 fi
