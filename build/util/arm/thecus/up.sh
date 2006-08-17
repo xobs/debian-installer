@@ -51,7 +51,7 @@ if [ $HW_STATUS -ne 1 ]; then
 			info "N2100 compatible machine $product found"
 			;;
 		# N4100 and compatible machines
-		n4100 | all6400)
+		n4100 | all6400 | PlatinumNAS)
 			info "N4100 compatible machine $product found"
 			;;
 		# Unknown
