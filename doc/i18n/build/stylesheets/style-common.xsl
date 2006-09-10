@@ -18,4 +18,7 @@
 <!-- Indicate we will be including our own custom style sheet -->
 <xsl:param name="html.stylesheet">install.css</xsl:param>
 
+<!-- We don't want warnings about missing IDs -->
+<xsl:param name="id.warnings">0</xsl:param>
+
 </xsl:stylesheet>
