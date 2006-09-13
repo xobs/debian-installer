@@ -115,7 +115,6 @@ Note the use of $bootable{ } to make the partition bootable, and $primary{ }
 to mark it as the primary partition.
 
 The specifiers used in this example are:
-
 method{ format }
 	Used to make the partition be formatted. For swap partitions,
 	change it to "swap". To create a new partition but do not
@@ -129,6 +128,21 @@ filesystem{ ext3 }
 	Specifies the filesystem to put on the partition.
 mountpoint { / }
 	Where to mount the partition.
+
+Other possible specifiers include:
+defaultignore{ }
+	This is used to void a partition definition so that it is ignored
+	in the default case. That is to say it will be valid in the LVM case.
+lvmignore{ }
+	This is used to void a partition definition so that it is ignored
+	in the LVM case. That is to say it will be valid in the default case.
+lvmok{ }
+	This indicates that the partition is permitted to be an LVM logical 
+	volume should an LVM partitioning scheme be in use.
+	
+The specifiers defaultignore and lvmignore allow one recipe to define different 
+handling of say the /boot partition between and LVM partitioning scheme and a 
+non-LVM scheme.
 
 Here is another example; this time there is a smaller root partition, and a
 separate /home partition.
