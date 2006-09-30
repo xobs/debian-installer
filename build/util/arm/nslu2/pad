@@ -1,22 +1,16 @@
 #!/bin/sh
 
-TEMP=$1
+FILE=$1
+SIZE=$2
 
-if [ -z "$TEMP" ]; then
-	echo "Usage: "pad-initrd PATH""
+if [ -z "$FILE" ]; then
+	echo "Usage: "pad-initrd FILE SIZE""
 	exit 1
 fi
 
-if [ ! -e $TEMP/initrd.gz ]; then
-	echo "initrd.gz does not exist at $TEMP"
-	exit 1
-fi
-size=$(wc -c $TEMP/initrd.gz | cut -d " " -f 1)
-mod=$(($size % 4))
-pad=$((4 - $mod))
+fsize=$(wc -c $FILE | cut -d " " -f 1)
+pad=$(expr $SIZE - $fsize)
 if [ $pad -gt 0 ]; then
-	tmp=$TEMP/initrd.padding
-	dd if=/dev/zero of=$tmp bs=1 count=$pad
-	cat $tmp >> $TEMP/initrd.gz
+	dd if=/dev/zero bs=1 count=$pad 2>/dev/null >> $FILE
 fi
 
