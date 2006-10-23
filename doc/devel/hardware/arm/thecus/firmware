@@ -1,17 +1,21 @@
 Thecus ships their firmware as a file ending with .bin that is encrypted
-with DES.  They use the "des" utility and use a string as the key.  The
-interesting thing is that it appears that this string, according to
-OpenSSL, is actually an invalid key but the old "des" utility allows it
-anyway.  So far, I haven't managed to decrypt it with OpenSSL while "des"
-works.
+with DES.  They use the "des" utility and use a string as the key.  Kurt
+Roeckx found out that you can convert this string to a proper OpenSSL
+key with DES_string_to_key.
 
 The key is:
-  "n2100" for the Thecus N2100 and derivates
-  "n4100" for the Thecus N4100 and derivates
+  n2100 (7A9816A4C275D557) for the Thecus N2100 and derivates
+  n4100 (2A8A312F46D5D64C) for the Thecus N4100 and derivates
 
 You can decrypt a firmware image this way:
 
-    des -k n2100 -D n2100upgrade.2.1.00.bin > firmware.tar.gz
+    openssl enc -d -des -in n2100upgrade.2.1.01.bin -out firmware.tar.gz \
+        -K 7A9816A4C275D557 -iv 0 -nosalt -nopad
+
+You can encrypt it using:
+
+    openssl enc -e -des -in firmware.tar.gz -out n2100.bin \
+        -K 7A9816A4C275D557 -iv 0 -nosalt
 
 When you unpack this file, you get a directory called "upgrade" in which a
 number of files are put.  Most notably, you need two files:
