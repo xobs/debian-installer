@@ -696,12 +696,12 @@ $(STAMPS)extra-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
 	done
 	for udeb in $(TREE)/*.udeb ; do \
 		if [ -f "$$udeb" ]; then \
-			pkg=`basename $$udeb` ; \
+			pkg=`basename $$udeb .udeb` ; \
 			usedsize=`du -bs $$udeb | awk '{print $$1}'` ; \
 			usedblocks=`du -s $$udeb | awk '{print $$1}'` ; \
 			usedcount=1 ; \
-			version=`dpkg-deb --info $$udeb | grep '^Version:' | awk '{print $$2}'` ; \
-			arch=`dpkg-deb --info $$udeb | grep Architecture: | awk '{print $$2}'` ; \
+			version=`dpkg-deb --info $$udeb | grep '^ *Version:' | awk '{print $$2}'` ; \
+			arch=`dpkg-deb --info $$udeb | grep '^ *Architecture:' | awk '{print $$2}'` ; \
 			echo " $$usedsize B - $$usedblocks blocks - $$usedcount files used by pkg $$pkg (version $$version)" >>$(TEMP)/diskusage.txt; \
 			echo "$$pkg $$version $$arch" >> $(TEMP_UDEB_LIST); \
 		fi; \
