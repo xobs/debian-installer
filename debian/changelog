@@ -11,7 +11,22 @@ debian-installer (2006xxxx) UNRELEASED; urgency=low
   * Remove incomplete armeb support.
   * Remove obsolete arm/nslu2 config files.
 
- -- Frans Pop <fjp@debian.org>  Tue, 14 Nov 2006 08:45:16 +0100
+  [ Joey Hess ]
+  * Stop using the system status file; generate a dummy status file for apt
+    containing libc6 and libnewt (the only two debs udebs still depend on).
+  * dhcp3-client-udeb is for some reason Standard priority, so gets included
+    in monolithic image builds (and breaks the build). Exclude it from the
+    monolithic images until its priority is fixed.
+  * The i386 boot floppy will be too big with the 2.6.18 kernel, so drop
+    usb input modules from it. USB keyboard support didn't work before
+    anyway AFAICS, since usb-discover was not included.
+  * With 2.6.18, nic-extra-modules gets too big to fit on the i386
+    net-drivers-1 floppy with nic-modules. Move nic-extra-modules to
+    net-drivers-2 and reorg to fit.
+  * Don't exclude usb drivers from driver floppies; the root floppy does not
+    currently load them.
+
+ -- Joey Hess <joeyh@debian.org>  Thu, 16 Nov 2006 16:14:48 -0500
 
 debian-installer (20061102) unstable; urgency=low
 
