@@ -89,8 +89,8 @@ else
 	# reasons.
 	echo -n > $APTDIR/state/status
 	# Some archs have libc6 others have libc6.1
-	dpkg -s libc6 | grep -v Depends: >> $APTDIR/state/status || \
-	dpkg -s libc6.1 | grep -v Depends: >> $APTDIR/state/status
+	(dpkg -s libc6 || dpkg -s libc6.1) | \
+	    grep -v Depends: >> $APTDIR/state/status
 	echo >> $APTDIR/state/status
 	for i in libnewt0.52; do
 		dpkg -s $i | grep -v Depends: >> $APTDIR/state/status
