@@ -74,7 +74,13 @@ case "$arch" in
 	mv $tftpimage.tmp $tftpimage
 	;;
     mipsel) t-rex -k $tftpimage.tmp -r $rootimage -o $tftpimage ;;
-    mips) tip22 $tftpimage.tmp $rootimage $tftpimage ;;
+    mips)
+	case $tftpimage in
+	    *ip32*) tip=tip32 ;;
+	    *) tip=tip22 ;;
+	esac
+	$tip $tftpimage.tmp $rootimage $tftpimage
+	;;
     *) mv $tftpimage.tmp $tftpimage ;;
 esac
 
