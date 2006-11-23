@@ -66,9 +66,7 @@ list.
 </para>
 
 <para>
-MS-Windows ports of <acronym>SVN</acronym> existence has also been
-reported. Please contact the &i18n-coords; if you have more precise
-references so that they're included in this documentation.
+For MS-Windows users, a good <acronym>SVN</acronym> client is <emphasis>TortoiseSVN</emphasis> which is free software.
 </para>
 
 </sect1>
@@ -98,54 +96,46 @@ name before using the SVN pseudo-URLS.
 </para>
 
 <para>
-When translators are authorised by one the the &i18n-coords; for
-commit access to &d-i; repositories, the authorisation does not take
-place immediately. They need to wait for the account synchronization
-between &alioth; and &svn-debian;. This synchronization is scheduled
-once per day between 06:00 and 06:30 UTC.
+<filename>svn+ssh</filename> connections need that you use DSA key based authentication to connect to &alioth;.
 </para>
 
 <para>
-<filename>svn+ssh</filename> connections will prompt users for their
-password on &alioth;. Depending on circumstances, this password may
-need to be entered three times.
-</para>
-
-<para>
-To avoid this, users can put their <acronym>SSH</acronym> public key
-in the appropriate place. The common method of copying the
-<filename>~/.ssh/id_dsa.pub</filename> as <emphasis>~/.ssh/authorized
-keys</emphasis> on &svn-debian; can be used.
-</para>
-
-<para>
-Users can copy their local <filename>~/.ssh/id_dsa.pub</filename>
-file as <filename>~/.ssh/authorized_keys</filename> on the SVN
-host. Here's an example on svn.debian.org. In this example, the user
-<emphasis>bubulle</emphasis> on the local machine named
-<emphasis>kheops</emphasis> does the needed actions to copy his
-<acronym>SSH</acronym> key to the machine named
-<emphasis>svn.debian.org</emphasis>. His account there is
-<emphasis>cperrier-guest</emphasis>.
+If you don't have an existing SSH keypair on your local system, you must create one with the <command>ssh-keygen</command> command.
 </para>
 
 <informalexample>
 <screen>
-bubulle@kheops:~$ ssh svn.debian.org -l cperrier-guest "mkdir .ssh ; chmod 700 .ssh"
-Password:   &lt;--alioth password goes here
-bubulle@kheops:~$ scp ~/.ssh/id_dsa.pub cperrier-guest@svn.debian.org:.ssh/authorized_keys
-Password:   &lt;--alioth password goes here
-id_dsa.pub                                                        100%  604     0.6KB/s   00:00
-bubulle@kheops:~$ ssh svn.debian.org -l cperrier-guest "chmod 600 .ssh/authorized_keys"
-Enter passphrase for key '/home/bubulle/.ssh/id_dsa': &lt;-- SSH passphrase
-bubulle@kheops:~$ ssh svn.debian.org -l cperrier-guest
-Enter passphrase for key '/home/bubulle/.ssh/id_dsa': &lt;-- SSH passphrase
-Linux costa 2.6.11.7 #8 SMP Mon Apr 11 16:12:21 CEST 2005 i686 GNU/Linux
-.../...
-cperrier-guest@costa:~$ logout
-Connection to svn.debian.org closed.
+spongebob@mykerinos:~$ ssh-keygen -t dsa
+Generating public/private dsa key pair.
+Enter file in which to save the key (/home/spongebob/.ssh/id_dsa):
+Created directory '/home/spongebob/.ssh'.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+passphrase too short: have 3 bytes, need &gt; 4
+Saving the key failed: /home/spongebob/.ssh/id_dsa.
+spongebob@mykerinos:~$ ssh-keygen -t dsa
+Generating public/private dsa key pair.
+Enter file in which to save the key (/home/spongebob/.ssh/id_dsa):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /home/spongebob/.ssh/id_dsa.
+Your public key has been saved in /home/spongebob/.ssh/id_dsa.pub.
+The key fingerprint is:
+8d:6d:14:72:72:07:01:6a:85:de:97:d3:aa:b2:ee:4a spongebob@mykerinos
 </screen>
 </informalexample>
+
+<para>
+In the example below, the user <emphasis>spongebob</emphasis> creates a SSH DSA keypair, which is saved in a directory named <filename>.ssh</filename> in his/her home directory.
+</para>
+
+<para>
+This keypair is protected by a passphrase. The passphrase has to be entered each time the keypair will be used to connect to a remote host. Take care to choose a non trivial passphrase.
+</para>
+
+<para>
+After doing so, the public part of that keypair must be put in your account on &alioth;. For this, you need to output the contents of <filename>.ssh/id_dsa.pub</filename> and paste it in the relevant field of the account management page on &alioth; (&alioth-account-page;), in the section named <emphasis>Shell account informations</emphasis>, by clicking on <emphasis>Edit keys</emphasis>.
+</para>
 
 
 <para>
@@ -153,6 +143,9 @@ In case users have problems with <acronym>SVN</acronym> checkouts/commits, they 
 for help, either on IRC, &irc-channel; or by mail with the
 &i18n-coords;.</para>
 
+<para>
+MS-Windows users who want to use TortoiseSVN to checkout or commit can go to the <ulink url="http://tortoisesvn.net/node/5">TortoiseSVN SSH HowTo</ulink> page to get information about setting up TortoiseSVN to do SVN+SSH connections.
+</para>
 
 </sect1>
 
