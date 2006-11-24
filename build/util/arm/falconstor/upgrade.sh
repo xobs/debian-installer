@@ -17,9 +17,9 @@ case ${UPGRADE_TYPE} in
 	1 | 2 | 3)
 		echo "Upgrading firmware..."
 		echo "Flashing zImage..." > /dev/console
-		/fs/writeflash -z /sysroot/images/vmlinuz-2.6.18-1-iop3xx > /dev/console
+		/fs/writeflash -z /sysroot/images/vmlinuz-2.6.18-3-iop3xx > /dev/console
 		echo "Flashing ramdisk.gz..." > /dev/console
-		/fs/writeflash -r /sysroot/images/initrd.img-2.6.18-1-iop3xx > /dev/console
+		/fs/writeflash -r /sysroot/images/initrd.img-2.6.18-3-iop3xx > /dev/console
 		echo "done"
 		;;
 	*)
