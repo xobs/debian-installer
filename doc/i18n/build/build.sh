@@ -19,7 +19,7 @@ fi
 
 if [ -z "$formats" ]; then
     #formats="html pdf ps txt"
-    formats="html pdf txt"
+    formats="html txt"
 fi
 
 [ -e "$destination" ] || mkdir -p "$destination"
