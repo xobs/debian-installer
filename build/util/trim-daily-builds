@@ -15,7 +15,8 @@ my $num_wanted=shift;
 # reasonable unless num_wanted is very small.
 my $end_span = ($num_wanted < 14) ? ($num_wanted / 2) : 7;
 
-my $br=qr#(?:.*/)?([0-9]+)-([0-9]+)-([0-9]+)$#;
+# We used to use form YYYY-MM-DD, now we use YYYYMMDD-HH:MM
+my $br=qr#(?:.*/)?([0-9]+)-?([0-9]+)-?([0-9]+-?([0-9]*):?([0-9]*))$#;
 
 # Make sure a build directory parses.
 sub parse_build {
@@ -28,9 +29,12 @@ sub parse_build {
 sub build_date {
 	my $build=shift;
 	
-	my ($y, $m, $d)=$build=~/$br/;
+	my ($y, $m, $d, $h, $m)=$build=~/$br/;
+
+	$h=0 unless defined $h;
+	$m=0 unless defined $m;
 	
-	return mktime(0, 0, 0, $d, $m - 1, $y - 1900);
+	return mktime(0, $m, $h, $d, $m - 1, $y - 1900);
 }
 
 # Given two builds, calculate the distance between them in days.

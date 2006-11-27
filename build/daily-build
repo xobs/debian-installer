@@ -94,7 +94,7 @@ trim () {
 	if [ -n "$RESTRICTED_SSH" ]; then
 		echo "(trim not implemented for RESTRICTED_SSH mode)"
 	elif [ -n "$NUM_KEEP" ] && [ "$NUM_KEEP" != 0 ]; then
-		$CALL find $BASEDIR -maxdepth 1 | egrep '/[0-9][0-9][0-9][0-9]+-[0-9][0-9]-[0-9][0-9]$' | \
+		$CALL find $BASEDIR -maxdepth 1 | egrep '/[0-9][0-9][0-9][0-9]+-?[0-9][0-9]-?[0-9][0-9]-?[0-9]*:?[0-9]*$' | \
 			sort -n | ./util/trim-daily-builds "$NUM_KEEP" | \
 			$CALL xargs rm -rf
 	else
