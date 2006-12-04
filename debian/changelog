@@ -55,7 +55,7 @@ debian-installer (2006xxxx) UNRELEASED; urgency=low
 
   [ Stephen R. Marenka ]
   * Add preliminary network-console support to m68k.
-  * Switch m68k to 2.6.18-3. 
+  * Switch m68k to 2.6.18-3.
   * Add back the atari subarch and the floppy initrd.
 
   [ Steve Langasek ]
@@ -69,8 +69,12 @@ debian-installer (2006xxxx) UNRELEASED; urgency=low
 
   [ Frans Pop ]
   * Switch amd64, hppa, sparc and s/390 to 2.6.18-3.
+  * On amd64 we temporarily need to include /lib/libgcc_s.so.1 in g-i initrds
+    to work around #373253 until upstream can remove pthread_cancel() calls in
+    directfb. Because of the Etch release this is implemented for now by
+    setting EXTRAFILES in the relevant files under config/amd64.
 
- -- Frans Pop <fjp@debian.org>  Fri,  1 Dec 2006 20:10:02 +0100
+ -- Frans Pop <fjp@debian.org>  Tue,  5 Dec 2006 00:36:31 +0100
 
 debian-installer (20061102) unstable; urgency=low
 
