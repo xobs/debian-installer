@@ -1,0 +1,41 @@
+The Iomega NAS 100d is a small ARM based gadget which has one
+Ethernet, two USB ports, an internal IDE hard drive and an internal
+Atheros WiFi card.  It is much like the Linksys NSLU2, except that it
+has the internal hard drive, the wireless interface, and also has
+twice the FLASH and twice the RAM compared to the NSLU2.  It shares
+the NSLU2 user community at http://www.nslu2-linux.org/
+
+The firmware is based on RedBoot but unlike the NSLU2 there is no
+bootloader upgrade mode, so for the initial flash of Debian firmware
+you need to either use the stock firmware web upgrade facility
+(preferred, and requires no hardware modifications), or you need to
+have a serial port (soldering holes for a normal RS232 interface are
+on the board) and transfer the firmware via the bootloader serial
+download functionality.  The RedBoot on the NAS100d has full FIS table
+functionality, allowing you to create and delete FIS partitions via
+the bootloader serial console.  There is 2 MB of space in the 'kernel'
+partition, 6MB of space in the 'filesystem' partition, and 6MB of
+space in the 'usr' partition.
+
+However, the stock RedBoot does not pass the machine ID for the
+NAS100d kernel. Since we want to use a generic ixp4xx kernel, we've
+worked around this limitation by using a 2nd boot loader, APEX.  We
+put APEX in an unused part of the flash and tell RedBoot to boot from
+APEX instead of booting the kernel directly.  Effectively, this means
+that there is:
+ - A partition for APEX
+ - A partition for the kernel
+ - A partition for the initrd
+
+A description of the NAS100d's flash layout can be found at
+http://www.nslu2-linux.org/wiki/NAS100d/FisList
+
+There is also a problem with Ethernet: the ixp4xx chip has built-in
+Ethernet but requires a microcode.  Up until recently, there was only a
+driver from Intel, but now a GPLed driver that is aiming for mainline
+inclusion is available.  It's still not clear how to handle the microcode
+but at the moment unofficial images with it are distribution from
+nslu2-firmware.net
+
+Apart from this, the NAS100d is pretty easy to support.
+
