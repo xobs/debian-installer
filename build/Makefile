@@ -483,7 +483,7 @@ endif
 
 	# Strip all kernel modules, just in case they haven't already been
 	set -e; \
-	for module in `find $(TREE)/lib/modules/ -name '*.o' -name '*.ko'`; do \
+	for module in `find $(TREE)/lib/modules/ -name '*.o' -or -name '*.ko'`; do \
 	    strip -R .comment -R .note -g $$module; \
 	done
 
