@@ -19,9 +19,6 @@ time.
 [30%] Might need large rewrites. Current implementation might
       work by accident
 ---------------------------------------------------------------------
-	- ppp support
-		Not as important for analog dialup, as for ISDN, pppoe.
-		Broken following base-config removal.
 	- persistent disk device names
 		With udev, the best approach, according to Md, is to use
 		the /dev/disk/ persistent devices which should always be
@@ -37,8 +34,6 @@ time.
 		http://people.debian.org/~seppy/d-i/translation-status.html
 	- boot loader installers (lilo, grub, etc)
 		Work, except for when they don't. See BTS.
-	- anna
-		Works, mostly.  Needs support for Release files.
 	- disk selector, partitioner
 		We have switched to partman everything except a couple of
 		subarches and s390.
@@ -66,31 +61,15 @@ time.
 		Needs sanity checking for other architectures.
 	- developer documentation
 		We understand it, but it could be improved.
-	- 2.6 support
-		Works on i386, hppa, ia64, sparc, amd64.
-		Works on powerpc, at least newworld. Testing on
-		other subarches needed, especially G5 and oldworld (with
-		mkvmlinuz).
-	- preseeding
-		Works pretty well.
-		Some things still cannot be preseeded. This is generally a
-		bug in the udeb's use of debconf.
-		Some problems with kernel command line limits (ameliorated
-		by 2.6.9+).
-		Too many things need to be set at the kernel command line
-		for netboot preseeding.
-	- udev
-		Needs lots of testing, particularly of unusual partitioning
-		methods.
 	- integrate/document rescue mode support
-		Needs a new section in the manual.
 		Needs bootloader configuration (done on x86, sparc, ia64).
 		Needs easy ways to do common tasks like reinstalling a
 		bootloader (done for grub and yaboot).
-	- GUI frontend to cdebconf.
-		There are some basic implementations. The trick is to make
-		it a GUI that does not suck, while still using debconf
-		underneath.
+	- g-i
+		Working pretty well, still a few known bugs and UI issues.
+	- ppp support
+		Not as important for analog dialup, as for ISDN, pppoe.
+		pppoe-udeb works
 	- most architectures
 		i386
 		ia64
@@ -102,9 +81,9 @@ time.
 		alpha
 		sparc
 			- floppies need root to build
-		arm (some subarches)
+		arm
 		hppa
-		amd64 (unofficial)
+		amd64
 		s390
 
 [90%] Single missing important feature or bug.
@@ -114,15 +93,18 @@ time.
 		as unusable by the rest of the installer.
 	- netcfg
 		Working, pending rewrite for IPv6.
-	- bts
-		Still need a non-manual way to tag our bugs.
 	- localechooser
 		The perennial problem is how to order/present the list of
 		languages. Many complaints, but it works.
 	- base system installer
-		Improve kernel selection. Much of this is done in unstable,
-		but knowing about some kind of preference order for kernels
-		would be good. (Kamion)
+		Improve kernel selection. Knowing about some kind of
+		preference order for kernels would be good. (Kamion)
+	- anna
+		Needs support for Release files.
+	- preseeding
+		Works pretty well.
+		Some things still cannot be preseeded. This is generally a
+		bug in the udeb's use of debconf.
 
 [100%] Those shouldn't need to be touched any more 
        (famous last words)
@@ -142,39 +124,36 @@ time.
 	- library reduction
 	- wireless support
 	- save-logs
+	- 2.6 support
+	- udev
 
 
-Post-sarge goals
+Post-etch goals
 ================
 
-	- 2.6 floppies on i386 (zboob)
 	- fix pkg-lists names to match images (joeyh)
-	- fix udeb dependencies to not refer to library debs (joeyh)
-		(largely done)
 	- consistent indentation of all shell scripts
 	  (with a style that minimises size on initrd! :-) (joeyh)
 	- 16 mb installs
-	- graphical installer
 	- finish partman (anton)
 	- handle debian upgrades in partman (anton)
 	- fai integration (markos)
-	- cloning from installer system (luther)
 	- use same device names in installer and installed
 	  system (kamion)
-	  	(should be done with udev once it drops devfs compatibility)
 	- non-linux d-i (jbailey)
-	- libc udeb renamed to include version number (jbailey)
-	- "vague thoughts of making debian-cd my bitch" (jbailey)
 	- moon-buggy udeb (cts@debian)
 	- britney and udebs
 	- fai disk config files in d-i (holger)
 	- low(er) mem (zboob)
-	- etch in 2005^H6 (or bust) (jvw)
 	- uml for testing d-i (anton)
-	- udebs and debs of same name (gaudenz)
 	- post reboot network configuration (kamion)
 	- real deb from archdetect udeb (luther)
-	- getting rid of hardcoded paths in d-i (kamion, joeyh)
+	- integrate selinux installation into the installer, for a painless
+	  install (joeyh/manoj?)
+	- add a xen server task (joeyh)
+		- requires a way to install the xen kernel, which might
+		  mean moving kernel etc package installation from the end
+		  of base-installer to the end of pkgsel
 
 Common problems and transitions
 ===============================
@@ -195,10 +174,4 @@ code base:
     clarity.
 
   * udebs should not include md5sums files, or postrm, prerm, preinst
-    scripts. This includes ones generated by debhelper. Linda will find
-    these pretty well.
-
-  * There is no need to set the seen flag anymore. All code that does so
-    should be removed, unless that code is expected to also possibly run on
-    a normal debian system (choose-mirror). Seen flag munging can break
-    preseeding.
+    scripts. Linda will find these pretty well.
