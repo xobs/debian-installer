@@ -699,6 +699,13 @@ ask_user <var>a_menu_directory</var> <var>aditional_optional_arguments</var>...
   Otherwise it returns with the exit code of the script
   <prgn>do_option</prgn>.
 
+<p> If <prgn>ask_user</prgn> is called re-entrantly from within a
+<prgn>do_option</prgn> script, then the calling <prgn>do_option</prgn>
+script should typically be careful to handle or discard exit code 255
+itself (and sometimes other codes, depending on the protocol in force)
+to avoid a backup operation inadvertently backing up out of several
+nested menus at once.
+
 <p> The script <prgn>choices</prgn> is invoked with
 <var><tt>aditional_optional_arguments</tt></var> as arguments.  The
 first argument given to <prgn>do_option</prgn> is the
