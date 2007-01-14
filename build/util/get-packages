@@ -40,6 +40,9 @@ fi
 if [ ! $ONLINE ]; then
 	ONLINE="y"
 fi
+if [ ! $KEYRING ]; then
+	KEYRING=/etc/apt/trusted.gpg
+fi
 
 # Set APTDIR according to type
 # debs are kept in another apt cache so only the needed Packages files
@@ -75,8 +78,9 @@ APT_GET="apt-get --assume-yes \
 	-o Dir::Cache=`pwd`/$APTDIR/cache \
 	-o Acquire::Retries=3 \
 	-o Apt::Architecture=`dpkg-architecture -qDEB_HOST_ARCH` \
+	-o Apt::GPGV::TrustedKeyring="$KEYRING" \
 	$SECOPTS"
-
+echo $APT_GET
 # Prepare APTDIR
 mkdir -p $APTDIR/state/lists/partial
 mkdir -p $APTDIR/cache/archives/partial
