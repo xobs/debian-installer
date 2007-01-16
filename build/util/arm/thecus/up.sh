@@ -47,7 +47,7 @@ if [ $HW_STATUS -ne 1 ]; then
 	product=$(grep "^type" /app/manifest.txt | cut -f 2)
 	case $product in
 		# N2100 and compatible machines
-		n2100 | all6500)
+		n2100 | all6500 | Mbox)
 			info "N2100 compatible machine $product found"
 			;;
 		# N4100 and compatible machines
