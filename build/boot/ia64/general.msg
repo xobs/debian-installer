@@ -14,7 +14,7 @@
  7f³70      http://www.debian.org/                                                ³10
  7f³70                                                                            ³10
  7f³70                                                                            ³10
- 7f³70    Debian GNU/Linux is Copyright (C) 1993-2005 Software in the Public      ³10
+ 7f³70    Debian GNU/Linux is Copyright (C) 1993-2007 Software in the Public      ³10
  7f³70    Interest and others and comes with ABSOLUTELY NO WARRANTY, to the       ³10
  7f³70    extent permitted by applicable law.                                     ³10
  7f³70                                                                            ³10
