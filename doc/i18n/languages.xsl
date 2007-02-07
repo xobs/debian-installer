@@ -278,7 +278,7 @@ Etch rc1
     </tr>
     <tr>
       <td align="center">
-Etchpost rc1
+Etch
       </td>
       <td align="center">
 <xsl:variable name="codes">
