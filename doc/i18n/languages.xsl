@@ -37,7 +37,7 @@ Etch beta 3
 Etch rc1
       </th>
       <th>
-Etch post rc1
+Etch
       </th>
       <th>
 Work in progress
@@ -278,7 +278,7 @@ Etch rc1
     </tr>
     <tr>
       <td align="center">
-Etch post rc1
+Etchpost rc1
       </td>
       <td align="center">
 <xsl:variable name="codes">
