@@ -92,13 +92,13 @@ else
 	# currently have udebs, or which udebs still depend on for various
 	# reasons.
 	echo -n > $APTDIR/state/status
-	# Some archs have libc6 others have libc6.1
-	(dpkg -s libc6 2>/dev/null || dpkg -s libc6.1 2>/dev/null ) | \
-	    grep -v Depends: >> $APTDIR/state/status
-	echo >> $APTDIR/state/status
-	for i in libnewt0.52; do
-		dpkg -s $i | grep -v Depends: >> $APTDIR/state/status
-		echo >> $APTDIR/state/status
+	# Some archs have libc6, others have libc6.1. libgcc1 is not used
+	# on all architectures.
+	for i in libc6 libc6.1 libnewt0.52 libgcc1; do
+		if dpkg -s $i >/dev/null 2>&1; then
+			dpkg -s $i | grep -v Depends: >> $APTDIR/state/status
+			echo >> $APTDIR/state/status
+		fi
 	done
 	APT_GET="$APT_GET -o Dir::State::Status=`pwd`/$APTDIR/state/status"
 fi

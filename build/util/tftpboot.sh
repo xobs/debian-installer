@@ -44,7 +44,7 @@ for file in "$kernel" "$rootimage"; do
 done
 
 case "$arch" in
-    arm | i386 | mips | mipsel)
+    arm* | i386 | mips | mipsel)
 	cp $kernel $tftpimage.tmp
 	;;
     *)
@@ -69,7 +69,7 @@ case "$arch" in
 	# Piggyback appends the ramdisk to the a.out image in-place
 	$piggyback $tftpimage $tmp $rootimage
 	;;
-    arm)
+    arm*)
 	cat $rootimage >>$tftpimage.tmp
 	mv $tftpimage.tmp $tftpimage
 	;;
