@@ -19,7 +19,10 @@ d-i netcfg/get_nameservers string 192.168.1.1
 d-i netcfg/get_hostname string unassigned-hostname
 d-i netcfg/get_domain string unassigned-domain
 
-# hack around localechooser being run before network-console
+# Hack around localechooser being run before network-console. Don't
+# preseed countrychooser/country-name in order to force the installer to
+# prompt the user for a country when configuring the clock. Note that for
+# this method to work, localechooser must not be included in the installer
+# image.
 d-i debian-installer/locale string C
-d-i countrychooser/country-name select United States
 
