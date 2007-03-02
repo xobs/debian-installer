@@ -1,7 +1,7 @@
  ° ± ² ³ ´ µ ¶ · ¸ ¹ º » ¼ ½ ¾ ¿ À Á Â Ã Ä Å Æ Ç È É Ê Ë Ì Í Î Ï Ğ Ñ Ò Ó Ô Õ Ö × Ø Ù Ú Û Ü İ Ş ß 
 10 
  7fÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´ 74Debian Installer7f ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ7f¿10
- 7f³70 This is the Debian GNU/Linux installation system, built on ${BUILD_DATE}.       7f³10
+ 7f³70 This is the Debian GNU/Linux installation system, built on ${BUILD_DATE}. 7f³10
  7f³70                                                                            7f³10
  7f³70 Use the arrow keys to select a menu item and then Enter to select it.      7f³10
  7f³70 Use the function keys for help. On a serial console, use Ctrl-F and the    7f³10
