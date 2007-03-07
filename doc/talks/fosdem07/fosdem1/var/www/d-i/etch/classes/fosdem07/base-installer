@@ -1,0 +1,129 @@
+#!/bin/sh
+
+. /usr/share/debconf/confmodule
+. /tmp/HandsOff-fn.sh
+
+db_register hands-off/meta/text hands-off/pause/title
+db_register hands-off/meta/text hands-off/pause
+
+sed -ie 's/Sans 11/Sans 18/' /etc/gtk-2.0/gtkrc
+db_capb backup
+
+SLIDE=1
+
+while true; do
+case $SLIDE in
+
+1)
+db_subst hands-off/pause/title DESC "Setting defaults"
+db_settitle hands-off/pause/title
+db_subst hands-off/pause DESCRIPTION \
+"Use preseeding to set defaults instead of automating.
+
+o in a preconfiguration file
+    d-i partman/choose_partition \\
+        select Finish partitioning and write changes to disk
+    d-i partman/choose_partition seen false
+
+o from the boot prompt
+    foo/bar?=baz"
+db_input critical hands-off/pause
+;;
+
+
+2)
+db_subst hands-off/pause/title DESC "Executing scripts"
+db_settitle hands-off/pause/title
+db_subst hands-off/pause DESCRIPTION \
+"o preseed/early
+   Executed immediately after a preconfiguration file is loaded
+o preseed/late
+   Executed at the end of installation (finish-install)
+o using existing hooks
+   This script: /usr/lib/base-config.d/00fosdem
+
+You can even use scripting to disable standard D-I components or to load your own."
+db_input critical hands-off/pause
+;;
+
+
+3)
+db_subst hands-off/pause/title DESC "Hands-off installations"
+db_settitle hands-off/pause/title
+db_subst hands-off/pause DESCRIPTION \
+"Brings together many of the possibilities offered by preseeding.
+
+o Automatic expansion of 'preseed/url'
+o \"auto\" mode
+   - postpones execution of localechooser and kbd-chooser
+   - equivalent to 'auto=true priority=critical'
+o Implements a class structure
+o Use of ad-hoc defined debconf templates
+o Many other tricks implemented through clever scripting
+
+For details/examples: http://hands.com/d-i/"
+db_input critical hands-off/pause
+;;
+
+
+4)
+db_subst hands-off/pause DESCRIPTION \
+"This installation was booted with
+    auto url=fosdem1 classes=fosdem07
+
+o \"url\" is an alias for \"preseed/url\"
+o \"fosdem1\" is expanded to:
+   http://fosdem1.fosdem.net/d-i/etch/./preseed.cfg
+o because of \"classes=fosdem07\" additional files are read from
+   http://fosdem1.fosdem.net/d-i/etch/./classes/fosdem07/"
+db_input critical hands-off/pause
+;;
+
+
+5)
+db_subst hands-off/pause DESCRIPTION \
+"Example from script used to drive this presentation:
+   #!/bin/sh
+   . /usr/share/debconf/confmodule
+   . /tmp/HandsOff-fn.sh
+
+   db_register hands-off/meta/text hands-off/pause/title
+   db_register hands-off/meta/text hands-off/pause
+
+   db_subst hands-off/pause/title DESC \"Installing a presentation\"
+   db_settitle hands-off/pause/title
+   db_subst hands-off/pause DESCRIPTION \\
+   \"Can everybody read this?\"
+   db_input critical hands-off/pause
+   db_go"
+db_input critical hands-off/pause
+;;
+
+
+6)
+sed -ie 's/Sans 18/Sans 11/' /etc/gtk-2.0/gtkrc
+db_subst hands-off/pause DESCRIPTION \
+""
+db_input critical hands-off/pause
+;;
+
+
+*)
+break ;;
+
+esac
+if db_go; then
+	SLIDE=$(($SLIDE + 1))
+else
+	SLIDE=$(($SLIDE - 1))
+	if [ $SLIDE -lt 1 ]; then
+		exit 30
+	fi
+fi
+done
+
+
+db_unregister hands-off/pause
+db_unregister hands-off/pause/title
+
+exit 0

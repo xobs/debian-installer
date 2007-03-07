@@ -1,0 +1,42 @@
+#!/bin/sh
+
+# see README.local to find out what this is for
+# don't run this unless you don't care about what's in the target
+# directory (either the first parameter, or "local" by default)
+
+local=${1:-local}
+
+[ -d "$local" ] || mkdir -p $local
+
+# copy examples from .local-ex directories
+for localexdir in $( cd classes ; find . -type d -name .local-ex ) ; do
+  dir=$(dirname $localexdir)
+  [ -d "$local/$dir" ] || mkdir -p $local/$dir
+  tar -C classes/$localexdir --exclude='\.svn' -cf - . | \
+    tar -C $local/$dir -xf -
+done
+
+# ensure that there are local preseed files for all the classes
+for preseed in $( cd classes ; find . -name .local-ex -prune -o -name preseed -print ) ; do
+  dir=$(dirname $preseed)
+  [ -d "$local/$dir" ] || mkdir -p $local/$dir
+  [ -f "$local/$preseed" ] || touch $local/$preseed
+done
+
+
+[ -f "$local/README" ] || cat > $local/README <<!EOF!
+The "local" directory is reserved for local site admin use.
+
+The idea is that you can have both generic and class based preseed and
+subclasses files, as well as things like local ssh authorized_keys files
+
+I'd envisage a layout like this:
+
+  local/preseed  -- preseed file comon across the site
+  local/subclasses -- subclasses that should be on all site machines
+  local/foo/*      -- preseed/subclass files that override the ones
+                      from the main directory tree
+  local/files/     -- a place to dump local, possibly security sensitive files
+
+no files here should be submitted to the central svn.
+!EOF!

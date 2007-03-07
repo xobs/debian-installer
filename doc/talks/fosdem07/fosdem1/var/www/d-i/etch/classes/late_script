@@ -1,0 +1,72 @@
+#!/bin/sh
+#
+# Copyright (c) 2005-2006 Hands.com Ltd
+# distributed under the terms of the GNU GPL version 2 or (at your option) any later version
+# see the file "COPYING" for details
+set -e
+
+. /usr/share/debconf/confmodule
+. /tmp/HandsOff-fn.sh
+
+set -x
+# enable -x by setting dbg/flags=late-x
+checkflag dbg/flags all-x late-x && set -x
+
+echo "debug: Running..."
+
+# this is only needed for sarge installs, and not all of them
+udpkg --configure apt-setup-udeb || true
+
+db_register hands-off/meta/text hands-off/title
+db_register hands-off/meta/text hands-off/item
+
+db_subst hands-off/title DESC "Preseed late_script(s)"
+db_progress START 0 $({ echo myself; classes; } | wc -w) hands-off/title
+
+db_subst hands-off/item DESC "Running top level script"
+db_progress INFO hands-off/item
+
+# let's see what was installed by the end of the run (copied to /var/log/debian-installer/ along with the other log files)
+cp /var/lib/dpkg/status /var/log/dpkg-status
+
+# clear the root login if this value has not been overridden in preseeding
+pwfile=shadow
+db_get mirror/suite && [ sarge = "$RET" ] && pwfile=passwd
+sed -i -e 's#^root:!ERASEME!:#root::#' /target/etc/$pwfile
+
+# let's see if we're running under xen
+if [ -e /proc/xen ] ; then
+  mv /target/lib/tls /target/lib/tls.disabled
+  # nasty hack, as we should probably install the kernel package
+  cp -a /lib/modules/2.6.11-xenu /target/lib/modules/2.6.11-xenu
+fi
+
+### for debugging --- reenable the pre-reboot prompt
+if in_class "dbg/late" ; then
+  db_reset finish-install/reboot_in_progress
+fi
+
+db_progress STEP 1
+
+# chain onto class specific late_script(s) if any
+for class in $(classes); do
+  checkflag dbg/pauses all "$class/late" && pause "Late Script: $class"
+  db_subst hands-off/item DESC "Running script for class '$class'"
+  db_progress INFO hands-off/item
+
+  cl_a_ss=$(echo ${class}|sed 's/\([^-a-zA-Z0-9]\)/_/g')
+  prefix=classes/ ; expr "$class" : local/ >/dev/null && prefix=
+  preseed_fetch /${prefix}${class}/late_script /tmp/late_script-${cl_a_ss} && {
+    chmod +x /tmp/late_script-${cl_a_ss}
+    log-output -t ${prefix}${class}/late_script /tmp/late_script-${cl_a_ss}
+  }
+  db_progress STEP 1
+done
+
+db_progress STOP
+
+db_unregister hands-off/title
+db_unregister hands-off/item
+
+checkflag dbg/pauses all late && pause "Top Level Late Script"
+echo "debug: ended successfully"

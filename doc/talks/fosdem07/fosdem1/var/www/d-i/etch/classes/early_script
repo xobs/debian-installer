@@ -1,0 +1,58 @@
+#!/bin/sh
+#
+# Copyright (c) 2005-2006 Hands.com Ltd
+# distributed under the terms of the GNU GPL version 2 or (at your option) any later version
+# see the file "COPYING" for details
+set -e
+
+. /usr/share/debconf/confmodule
+. /tmp/HandsOff-fn.sh
+
+echo "debug: Running..."
+
+# enable -x by setting dbg/flags=early-x or dbg/flags=all-x
+checkflag dbg/flags all-x early-x && set -x
+
+checkflag dbg/pauses all early && pause "Early Script 1"
+
+db_register hands-off/meta/text hands-off/title
+db_register hands-off/meta/text hands-off/item
+
+db_subst hands-off/title DESC "Preseed early_script(s)"
+db_progress START 0 $({ echo myself; classes; } | wc -w) hands-off/title
+
+db_subst hands-off/item DESC "Running top level script"
+db_progress INFO hands-off/item
+
+# script to restart the install -- handy for testing
+{
+  echo "#!/bin/sh"
+  echo "dd if=/dev/zero of=/dev/discs/disc0/disc count=1 && sync && reboot"
+} > /usr/bin/zapme
+chmod +x /usr/bin/zapme
+
+db_progress STEP 1
+# chain onto class specific late_script(s) if any
+for class in $(classes); do
+  checkflag dbg/pauses all "$class/early" && pause "Early Script: $class"
+  db_subst hands-off/item DESC "Running script for class '$class'"
+  db_progress INFO hands-off/item
+
+  CLASS_EARLY_URL="/classes/${class}/early_script"
+  cl_a_ss=$(echo ${class}|sed 's/\([^-a-zA-Z0-9]\)/_/g')
+  preseed_fetch ${CLASS_EARLY_URL} /tmp/early_script-${cl_a_ss} || \
+    echo "warning: .../${CLASS_EARLY_URL} not found"
+
+  if [ -e /tmp/early_script-${cl_a_ss} ] ; then
+    chmod +x /tmp/early_script-${cl_a_ss}
+    log-output -t ${class}/early_script /tmp/early_script-${cl_a_ss}
+  fi
+  db_progress STEP 1
+done
+
+db_progress STOP
+db_unregister hands-off/item
+db_unregister hands-off/title
+
+checkflag dbg/flags all early && pause "Top Level Early Script"
+echo "debug: ends successfully"

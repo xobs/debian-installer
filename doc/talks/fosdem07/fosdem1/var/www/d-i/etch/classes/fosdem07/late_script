@@ -1,0 +1,54 @@
+#!/bin/sh
+
+. /usr/share/debconf/confmodule
+. /tmp/HandsOff-fn.sh
+
+db_register hands-off/meta/text hands-off/pause/title
+db_register hands-off/meta/text hands-off/pause
+
+sed -ie 's/Sans 11/Sans 18/' /etc/gtk-2.0/gtkrc
+db_capb backup
+
+SLIDE=1
+
+while true; do
+case $SLIDE in
+
+1)
+db_subst hands-off/pause/title DESC "Another script"
+db_settitle hands-off/pause/title
+db_subst hands-off/pause DESCRIPTION \
+"So, we've arrived at the end on the installation.
+
+This is run from the preseed/late_command parameter."
+db_input critical hands-off/pause
+;;
+
+
+2)
+sed -ie 's/Sans 18/Sans 11/' /etc/gtk-2.0/gtkrc
+db_subst hands-off/pause DESCRIPTION \
+""
+db_input critical hands-off/pause
+;;
+
+
+*)
+break ;;
+
+esac
+if db_go; then
+	SLIDE=$(($SLIDE + 1))
+else
+	SLIDE=$(($SLIDE - 1))
+	if [ $SLIDE -lt 1 ]; then
+		exit 30
+	fi
+fi
+done
+
+
+db_unregister hands-off/pause
+db_unregister hands-off/pause/title
+
+exit 0

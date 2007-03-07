@@ -1,0 +1,164 @@
+#!/bin/sh
+
+. /usr/share/debconf/confmodule
+. /tmp/HandsOff-fn.sh
+
+db_subst babelbox/info LANGNAME "Preseeded installation"
+db_info babelbox/info
+
+db_register hands-off/meta/text hands-off/pause/title
+db_register hands-off/meta/text hands-off/pause
+
+db_subst hands-off/pause/title DESC "Installing a presentation"
+db_settitle hands-off/pause/title
+
+db_subst hands-off/pause DESCRIPTION \
+"Can everybody read this?"
+db_input critical hands-off/pause
+db_go
+
+sed -ie 's/Sans 9/Sans 18/' /etc/gtk-2.0/gtkrc
+sed -ie 's/FONT_SIZE=9/FONT_SIZE=11/' /usr/bin/gtk-set-font
+
+
+db_subst hands-off/pause DESCRIPTION "Can everybody read this?
+
+Is that better?
+
+It was done by editing /etc/gtk-2.0/grkrc from a
+preconfiguration script:
+   sed -ie 's/Sans 9/Sans 18/' /etc/gtk-2.0/gtkrc"
+db_input critical hands-off/pause
+db_go
+
+
+db_capb backup
+
+
+SLIDE=1
+
+while true; do
+case $SLIDE in
+
+1)
+db_subst hands-off/pause/title DESC "Preseeding"
+db_settitle hands-off/pause/title
+db_subst hands-off/pause DESCRIPTION \
+"o Based on standard debconf functionality
+o Extremely flexible
+   - multiple preseeding methods
+   - chainload preconfiguration files
+   - execute scripts
+   - boot parameters
+
+o Contributors
+   - Joey Hess
+   - Philip Hands - \"hands-off\" installation
+   - Simon Huggins - RAID"
+db_input critical hands-off/pause
+;;
+
+
+2)
+db_subst hands-off/pause/title DESC "Changes in preseeding since Sarge"
+db_settitle hands-off/pause/title
+db_subst hands-off/pause DESCRIPTION \
+"o Changes in the installer
+o Partitioning: RAID, LVM and crypto
+o "Hands-off"
+o Line-wrapping in preconfiguration files
+o Aliases for common boot options
+
+o Installation Guide: separate appendix"
+db_input critical hands-off/pause
+;;
+
+
+3)
+db_subst hands-off/pause/title DESC "Uses Debconf functionality"
+db_settitle hands-off/pause/title
+db_subst hands-off/pause DESCRIPTION \
+"o Most values to be preseeded correspond to dialogs
+o Set the value of questions in the debconf database
+o Set the "seen" flag for those questions
+
+o Limitations
+   - Values can only be set once
+   - Unsuitable for iterative processes: partitioning"
+db_input critical hands-off/pause
+;;
+
+
+4)
+db_subst hands-off/pause/title DESC "Setting values"
+db_settitle hands-off/pause/title
+db_subst hands-off/pause DESCRIPTION \
+"o In a preconfiguration file
+   <owner> <template> <type> <value>
+o At the boot prompt
+   [<owner>:]<template|alias>=<value>
+o <owner> is required for preseeding the target system
+   
+Examples:
+d-i debian-installer/locale string fr_BE
+d-i netcfg/disable_dhcp boolean true
+xserver-xorg xserver-xorg/config/device/driver select vesa"
+db_input critical hands-off/pause
+;;
+
+
+5)
+db_subst hands-off/pause/title DESC "Preseeding methods"
+db_settitle hands-off/pause/title
+db_subst hands-off/pause DESCRIPTION \
+"o initrd
+o file
+   - CD/DVD (remastered)
+   - hd-media
+o network
+   - netboot
+   - other methods after network is set up"
+db_input critical hands-off/pause
+;;
+
+
+6)
+db_subst hands-off/pause/title DESC "How does it get started?"
+db_settitle hands-off/pause/title
+db_subst hands-off/pause DESCRIPTION \
+"o /preseed.cfg file in initrd
+o at boot prompt
+   - preseed/url=http://host/path/preseed.cfg
+   - preseed/file=/path/preseed.cfg
+o DHCP server
+   if substring (option vendor-class-identifier, 0, 3) = \"d-i\" {
+        filename \"http://host/preseed.cfg\";
+   }"
+db_input critical hands-off/pause
+;;
+
+
+*)
+break ;;
+
+esac
+if db_go; then
+	SLIDE=$(($SLIDE + 1))
+else
+	SLIDE=$(($SLIDE - 1))
+	if [ $SLIDE -lt 1 ]; then
+		exit 30
+	fi
+fi
+done
+
+
+db_unregister hands-off/pause
+db_unregister hands-off/pause/title
+
+sed -ie 's/Sans 18/Sans 11/' /etc/gtk-2.0/gtkrc
+
+preseed_fetch /classes/fosdem07/base-installer /usr/lib/base-installer.d/00fosdem
+chmod a+x /usr/lib/base-installer.d/00fosdem
+
+exit 0
