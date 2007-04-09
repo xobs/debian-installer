@@ -836,7 +836,9 @@ demo_%:
 _demo: $(TARGET)
 	@$(submake) tree_mount; \
 	[ -f questions.dat ] && cp -f questions.dat $(TREE)/var/lib/cdebconf/ ; \
-	sudo chroot $(TREE) bin/sh -c "export DEBCONF_DEBUG=5 ; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; exec /usr/share/debconf/frontend /usr/bin/main-menu" ; \
+	: >$(TREE)/var/lib/UTF-8 ; \
+	sudo chroot $(TREE) bin/sh -c "export DEBCONF_DEBUG=5; export LANG=C.UTF-8; export TERM_UTF8=yes; /usr/bin/debconf-loadtemplate debian /var/lib/dpkg/info/*.templates; exec /usr/share/debconf/frontend /usr/bin/main-menu" ; \
+	rm -f $(TREE)/var/lib/UTF-8 ; \
 	$(submake) tree_umount
 
 # For a shell into a d-i chroot.
