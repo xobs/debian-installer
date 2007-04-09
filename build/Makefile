@@ -814,7 +814,7 @@ tree_mount: $(STAMPS)tree-$(targetstring)-stamp
 	-@sudo /bin/mount -t proc proc $(TREE)/proc
 	-@if [ -e $(TREE)/usr/bin/update-dev ]; then \
 		sudo chroot $(TREE) /usr/bin/update-dev; \
-	else \
+	elif [ ! -d $(TREE)/etc/udev ]; then \
 		sudo /bin/mount -t devfs dev $(TREE)/dev; \
 	fi
 
