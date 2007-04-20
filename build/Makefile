@@ -535,7 +535,7 @@ sources.list.udeb:
 	else \
 		grep '^deb[ \t]' $(SYSTEM_SOURCES_LIST) \
 		|grep -v '^deb[ \t]cdrom:' \
-		|grep -v '\(non-US\|non-us.debian.org\|security.debian.org\)' \
+		|grep -v '\(security.debian.org\|volatile.debian.\(net\|org\)\)' \
 		|grep '[ \t]main' \
 		|awk '{print $$1 " " $$2}' \
 		|sed "s,/* *$$, $(SUITE) $(UDEB_COMPONENTS)," \
