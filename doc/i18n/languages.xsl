@@ -25,18 +25,6 @@ Woody
 Sarge
       </th>
       <th>
-Etch beta 1
-      </th>
-      <th>
-Etch beta 2
-      </th>
-      <th>
-Etch beta 3
-      </th>
-      <th>
-Etch rc1
-      </th>
-      <th>
 Etch
       </th>
       <th>
@@ -57,18 +45,6 @@ Number of supported languages
 <xsl:value-of select="count(//language_entry[@supported = 'sarge'] | //language_entry[@supported = 'woody'] | //language_entry[@supported = 'potato'])"/>
       </td>
       <td align="center">
-<xsl:value-of select="count(//language_entry[@supported = 'etch_beta1'] | //language_entry[@supported = 'sarge'] | //language_entry[@supported = 'woody'] | //language_entry[@supported = 'potato'])"/>
-      </td>
-      <td align="center">
-<xsl:value-of select="count(//language_entry[@supported = 'etch_beta2'] | //language_entry[@supported = 'etch_beta1'] | //language_entry[@supported = 'sarge'] | //language_entry[@supported = 'woody'] | //language_entry[@supported = 'potato'])"/>
-      </td>
-      <td align="center">
-<xsl:value-of select="count(//language_entry[@supported = 'etch_beta3'] | //language_entry[@supported = 'etch_beta2'] | //language_entry[@supported = 'etch_beta1'] | //language_entry[@supported = 'sarge'] | //language_entry[@supported = 'woody'] | //language_entry[@supported = 'potato'])"/>
-      </td>
-      <td align="center">
-<xsl:value-of select="count(//language_entry[@supported = 'etch_rc1'] | //language_entry[@supported = 'etch_beta3'] | //language_entry[@supported = 'etch_beta2'] | //language_entry[@supported = 'etch_beta1'] | //language_entry[@supported = 'sarge'] | //language_entry[@supported = 'woody'] | //language_entry[@supported = 'potato'])"/>
-      </td>
-      <td align="center">
 <xsl:value-of select="count(//language_entry[@supported = 'etch'] | //language_entry[@supported = 'etch_rc1'] | //language_entry[@supported = 'etch_beta3'] | //language_entry[@supported = 'etch_beta2'] | //language_entry[@supported = 'etch_beta1'] | //language_entry[@supported = 'sarge'] | //language_entry[@supported = 'woody'] | //language_entry[@supported = 'potato'])"/>
       </td>
       <td align="center">
@@ -87,18 +63,6 @@ Percent world population
       </td>
       <td align="center">
 <xsl:value-of select="round(sum(//@speakers[../@supported = 'sarge'] | //@speakers[../@supported = 'woody'] | //@speakers[../@supported = 'potato']) div 6459821923 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'sarge'] | //@speakers_corr[../@supported = 'woody'] | //@speakers_corr[../@supported = 'potato']) div 6459821923 * 100)"/>%
-      </td>
-      <td align="center">
-<xsl:value-of select="round(sum(//@speakers[../@supported = 'etch_beta1'] | //@speakers[../@supported = 'sarge'] | //@speakers[../@supported = 'woody'] | //@speakers[../@supported = 'potato']) div 6459821923 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'etch'] | //@speakers_corr[../@supported = 'sarge'] | //@speakers_corr[../@supported = 'woody'] | //@speakers_corr[../@supported = 'potato']) div 6459821923 * 100)"/>%
-      </td>
-      <td align="center">
-<xsl:value-of select="round(sum(//@speakers[../@supported = 'etch_beta2'] | //@speakers[../@supported = 'etch_beta1'] | //@speakers[../@supported = 'sarge'] | //@speakers[../@supported = 'woody'] | //@speakers[../@supported = 'potato']) div 6459821923 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'etch_beta2'] | //@speakers_corr[../@supported = 'etch_beta1'] | //@speakers_corr[../@supported = 'sarge'] | //@speakers_corr[../@supported = 'woody'] | //@speakers_corr[../@supported = 'potato']) div 6459821923 * 100)"/>%
-      </td>
-      <td align="center">
-<xsl:value-of select="round(sum(//@speakers[../@supported = 'etch_beta3'] | //@speakers[../@supported = 'etch_beta2'] | //@speakers[../@supported = 'etch_beta1'] | //@speakers[../@supported = 'sarge'] | //@speakers[../@supported = 'woody'] | //@speakers[../@supported = 'potato']) div 6459821923 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'etch_beta3'] |//@speakers_corr[../@supported = 'etch_beta2'] | //@speakers_corr[../@supported = 'etch_beta1'] | //@speakers_corr[../@supported = 'sarge'] | //@speakers_corr[../@supported = 'woody'] | //@speakers_corr[../@supported = 'potato']) div 6459821923 * 100)"/>%
-      </td>
-      <td align="center">
-<xsl:value-of select="round(sum(//@speakers[../@supported = 'etch_rc1'] | //@speakers[../@supported = 'etch_beta3'] | //@speakers[../@supported = 'etch_beta2'] | //@speakers[../@supported = 'etch_beta1'] | //@speakers[../@supported = 'sarge'] | //@speakers[../@supported = 'woody'] | //@speakers[../@supported = 'potato']) div 6459821923 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'etch_rc1'] | //@speakers_corr[../@supported = 'etch_beta3'] | //@speakers_corr[../@supported = 'etch_beta2'] | //@speakers_corr[../@supported = 'etch_beta1'] | //@speakers_corr[../@supported = 'sarge'] | //@speakers_corr[../@supported = 'woody'] | //@speakers_corr[../@supported = 'potato']) div 6459821923 * 100)"/>%
       </td>
       <td align="center">
 <xsl:value-of select="round(sum(//@speakers[../@supported = 'etch'] | //@speakers[../@supported = 'etch_rc1'] | //@speakers[../@supported = 'etch_beta3'] | //@speakers[../@supported = 'etch_beta2'] | //@speakers[../@supported = 'etch_beta1'] | //@speakers[../@supported = 'sarge'] | //@speakers[../@supported = 'woody'] | //@speakers[../@supported = 'potato']) div 6459821923 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'etch'] | //@speakers_corr[../@supported = 'etch_rc1'] | //@speakers_corr[../@supported = 'etch_beta3'] | //@speakers_corr[../@supported = 'etch_beta2'] | //@speakers_corr[../@supported = 'etch_beta1'] | //@speakers_corr[../@supported = 'sarge'] | //@speakers_corr[../@supported = 'woody'] | //@speakers_corr[../@supported = 'potato']) div 6459821923 * 100)"/>%
@@ -192,90 +156,7 @@ Sarge
 <img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes}" width="200" height="100"/>
       </td>
     </tr>
-    <tr>
-      <td align="center">
-Etch beta 1
-      </td>
-      <td align="center">
-<xsl:variable name="codes">
-  <xsl:for-each select="//@countries_official[../@supported = 'etch_beta1'] | //@countries_official[../@supported = 'sarge'] | //@countries_official[../@supported = 'woody'] | //@countries_official[../@supported = 'potato']">
-<xsl:value-of select="string()"/>
-</xsl:for-each>
-</xsl:variable>
-<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes}" width="200" height="100"/>
-      </td>
-      <td align="center">
-<xsl:variable name="codes">
-  <xsl:for-each select="//@countries_most_spoken[../@supported = 'etch_beta1'] | //@countries_most_spoken[../@supported = 'sarge'] | //@countries_most_spoken[../@supported = 'woody'] | //@countries_most_spoken[../@supported = 'potato']">
-<xsl:value-of select="string()"/>
-</xsl:for-each>
-</xsl:variable>
-<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes}" width="200" height="100"/>
-      </td>
-    </tr>
-    <tr>
-      <td align="center">
-Etch beta 2
-      </td>
-      <td align="center">
-<xsl:variable name="codes">
-  <xsl:for-each select="//@countries_official[../@supported = 'etch_beta2'] | //@countries_official[../@supported = 'etch_beta1'] | //@countries_official[../@supported = 'sarge'] | //@countries_official[../@supported = 'woody'] | //@countries_official[../@supported = 'potato']">
-<xsl:value-of select="string()"/>
-</xsl:for-each>
-</xsl:variable>
-<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes}" width="200" height="100"/>
-      </td>
-      <td align="center">
-<xsl:variable name="codes">
-  <xsl:for-each select="//@countries_most_spoken[../@supported = 'etch_beta2'] | //@countries_most_spoken[../@supported = 'etch_beta1'] | //@countries_most_spoken[../@supported = 'sarge'] | //@countries_most_spoken[../@supported = 'woody'] | //@countries_most_spoken[../@supported = 'potato']">
-<xsl:value-of select="string()"/>
-</xsl:for-each>
-</xsl:variable>
-<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes}" width="200" height="100"/>
-      </td>
-    </tr>
-    <tr>
-      <td align="center">
-Etch beta 3
-      </td>
-      <td align="center">
-<xsl:variable name="codes">
-  <xsl:for-each select="//@countries_official[../@supported = 'etch_beta3'] | //@countries_official[../@supported = 'etch_beta2'] | //@countries_official[../@supported = 'etch_beta1'] | //@countries_official[../@supported = 'sarge'] | //@countries_official[../@supported = 'woody'] | //@countries_official[../@supported = 'potato']">
-<xsl:value-of select="string()"/>
-</xsl:for-each>
-</xsl:variable>
-<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes}" width="200" height="100"/>
-      </td>
-      <td align="center">
-<xsl:variable name="codes">
-  <xsl:for-each select="//@countries_most_spoken[../@supported = 'etch_beta3'] | //@countries_most_spoken[../@supported = 'etch_beta2'] | //@countries_most_spoken[../@supported = 'etch_beta1'] | //@countries_most_spoken[../@supported = 'sarge'] | //@countries_most_spoken[../@supported = 'woody'] | //@countries_most_spoken[../@supported = 'potato']">
-<xsl:value-of select="string()"/>
-</xsl:for-each>
-</xsl:variable>
-<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes}" width="200" height="100"/>
-      </td>
-    </tr>
-    <tr>
-      <td align="center">
-Etch rc1
-      </td>
-      <td align="center">
-<xsl:variable name="codes">
-  <xsl:for-each select="//@countries_official[../@supported = 'etch_rc1'] | //@countries_official[../@supported = 'etch_beta3'] | //@countries_official[../@supported = 'etch_beta2'] | //@countries_official[../@supported = 'etch_beta1'] | //@countries_official[../@supported = 'sarge'] | //@countries_official[../@supported = 'woody'] | //@countries_official[../@supported = 'potato']">
-<xsl:value-of select="string()"/>
-</xsl:for-each>
-</xsl:variable>
-<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes}" width="200" height="100"/>
-      </td>
-      <td align="center">
-<xsl:variable name="codes">
-  <xsl:for-each select="//@countries_most_spoken[../@supported = 'etch_rc1'] | //@countries_most_spoken[../@supported = 'etch_beta3'] | //@countries_most_spoken[../@supported = 'etch_beta2'] | //@countries_most_spoken[../@supported = 'etch_beta1'] | //@countries_most_spoken[../@supported = 'sarge'] | //@countries_most_spoken[../@supported = 'woody'] | //@countries_most_spoken[../@supported = 'potato']">
-<xsl:value-of select="string()"/>
-</xsl:for-each>
-</xsl:variable>
-<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes}" width="200" height="100"/>
-      </td>
-    </tr>
+
     <tr>
       <td align="center">
 Etch
