@@ -22,10 +22,6 @@
 # It will be loaded by the initrd-preseed udeb.
 PRESEED = 
 
-# Right now we want all d-i development and daily builds to use udebs from
-# unstable, so load the unstable.cfg. This is disabled for official builds.
-PRESEED_SUITE ?= unstable.cfg
-
 # The library reducer to use. Can be mklibs.sh or mklibs.py.
 MKLIBS = mklibs 
 
@@ -34,21 +30,26 @@ MKLIBS = mklibs
 # this. You can use copy:/ to use a local mirror
 #MIRROR = http://www.us.debian.org/debian
 
-# Define here if debian-installer should be built with modules from
-# stable, testing or unstable.
-SUITE ?= unstable
-
-# Archive components from which to fetch debian-installer modules.
-UDEB_COMPONENTS ?= main/debian-installer
-
 # Options to pass to dpkg when it is unpacking the udebs to create the
 # image. None should be needed, but --force-overwrite might need to be
 # enabled from time to time if udebs have conflicting files.
 DPKG_UNPACK_OPTIONS = --force-overwrite
 
-# The version of Debian targeted by the installation images.
+# The codename of the Debian release that should be installed by default.
+DEBIAN_RELEASE = lenny
+
+# The version number of the Debian release targeted by the installation images.
+# (The codename is used while the version number has not yet been determined.)
 #DEBIAN_VERSION = 4.0
 DEBIAN_VERSION = lenny
+
+# Define here from what release (codename!) components (udebs) should be taken
+# to build debian-installer. By default this is set to 'unstable' for building
+# daily images. For official builds this is overruled in debian/rules.
+USE_UDEBS_FROM ?= unstable
+
+# Archive components from which to fetch debian-installer modules.
+UDEB_COMPONENTS ?= main/debian-installer
 
 # The date the installer is built.
 BUILD_DATE ?= $(shell date -u '+%Y%m%d-%H:%M')

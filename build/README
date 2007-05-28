@@ -326,8 +326,21 @@ MEDIA_TYPE
   The type of media produced, currently used to make qemu boot the image
   properly. Suggested values: "CD-ROM", "netboot image", "floppy", etc.
 
+DEBIAN_RELEASE
+  The codename of the debian release to be installed by default.
+  Included in /etc/default-release in most initrds.
+
 DEBIAN_VERSION
-  The debian version descriptive name.
+  The version number of the Debian release.
+
+USE_UDEBS_FROM
+  Normally the codename of the release to use for the build. Defaults to
+  unstable for daily builds.
+  Included in /etc/udebs-source in most initrds.
+
+OMIT_RELEASE_INFO
+  Can be used to suppress the inclusion of the files /etc/default-release and
+  /etc/udebs-source in some targets (like boot floppies).
 
 DOS_VOLUME_ID
 DOS_VOLUME_LABEL
@@ -383,7 +396,6 @@ WRITE_MEDIA
   Mostly useful for floppies.
 
 UDEB_LISTS
-
   List of files listing udebs that were used to build the image.
 
 
@@ -405,19 +417,12 @@ MIRROR
   The mirror to get .deb and .udeb packages from. Defaults to the same
   as the host machine uses.
 
-SUITE
-  The suite to use for the build. Defaults to unstable.
-
 UDEB_COMPONENTS
   Archive components from which to fetch .udeb packages. Defaults to
   main/debian-installer.
 
 PRESEED
   An initrd preseed file to put in the initrd.
-
-PRESEED_SUITE
-  An initrd preseed file to append to any other preseed file put in the
-  initrd by PRESEED; used to preseed the suite for daily builds.
 
 Rules invoked from the various targets:
 
