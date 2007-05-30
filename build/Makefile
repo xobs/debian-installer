@@ -384,6 +384,11 @@ ifdef PRESEED
 	cp -a $(PRESEED) $(TREE)/preseed.cfg
 endif
 
+ifneq (,$(wildcard $(KEYRING)))
+	mkdir -p $(TREE)/usr/share/keyrings
+	cp -a $(KEYRING) $(TREE)/usr/share/keyrings/archive.gpg
+endif
+
 	# Create an lsb release file.
 	if [ ! -e $(TREE)/etc/lsb-release ]; then \
 		set -e; \
