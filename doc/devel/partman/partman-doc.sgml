@@ -170,14 +170,44 @@ This process is <file>/bin/parted_server</file> from the package
   check if there is some new kernel module giving access to new still
   undiscovered device.
 
-<p> Any udeb may install a script in this directory.  For example the
-script <file>/lib/partman/init.d/30parted</file> from the package
+  <p> Any udeb may install a script in this directory.  For example
+the script <file>/lib/partman/init.d/30parted</file> from the package
 <package>partman-base</package> is responsible for running
 <prgn>parted_server</prgn>.  Notice that the scripts are prefixed by a
 two-digit number.  This number determines the order the scripts are
 executed.  If any of the scripts exit with non-zero exit code the
 partitioning will be aborted.  This means that in almost all cases
 these scripts must end with exit-code 0.
+
+<p> When the initialisation completes, the scripts from
+<file>/lib/partman/display.d</file> are executed.  These scripts are
+supposed to make the actual partitioning interactively or
+non-interactively.  The exit code <var>code</var> of these scripts is
+interpreted as follows:
+<list>
+<item><var>code</var> = 0: the script did nothing, move to the next;
+<item>1 &lt;= <var>code</var> &lt;= 99: restart partitioning (move
+again to the first script in <prgn>display.d</prgn>);
+<item>100 &lt;= <var>code</var> &lt;= 254: the script succesfuly
+partitioned the disks;
+<item><var>code</var> = 255: abort the partitioning
+</list>
+
+<p> When the disks become ready, the scripts in
+<file>/lib/partman/check.d</file> are executed.  They have to check if
+everything is OK to proceed with commiting the changes on the disks,
+mounting file systems, etc.  For example the package
+<package>partman-target</package> installs there a script to check if
+there is a root file system.  If a script in <prgn>check.d</prgn>
+exits with non-zero exit code then the scripts in
+<prgn>display.d</prgn > are executed again and as a result the user is
+allowed to fix the partitioning.
+
+<p> The directory <prgn>check.d</prgn> is remarkable with the fact
+that some of the scripts in it are installed by non-partman packages.
+The packages for the various bootloaders (lilo, grub, palo, etc.)
+install there scripts to ensure the partitioning scheme conforms to
+their requirements.
 
 <p> While the user is modifying the partitions this happens only in
   the memory of the computer and not in the edited devices.  This is
@@ -187,11 +217,12 @@ these scripts must end with exit-code 0.
   everything.  When the user chooses to undo the scripts in the
   directory <file>/lib/partman/undo.d/</file> are executed.  Any udeb
   may install a script in this directory.  For example the script
-  <file>/lib/partman/undo.d/30parted</file> is responsible for restoring
-  the contents of the data structures of <prgn>parted_server</prgn>.
-  In most cases the scripts from <prgn>undo.d</prgn> must exit with
-  exit-code 0.  If any of the scripts exit with non-zero exit code
-  the partitioning will be aborted.
+  <file>/lib/partman/undo.d/30parted</file> is responsible for
+  restoring the contents of the data structures of
+  <prgn>parted_server</prgn>.  In most cases the scripts from
+  <prgn>undo.d</prgn> must exit with exit-code 0.  If any of the
+  scripts exit with non-zero exit code the partitioning will be
+  aborted.
 
 <p> In order to perform the editing operations on the storage devices
 (and in particular to transfer the partitions from the internal
