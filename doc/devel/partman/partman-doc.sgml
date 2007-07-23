@@ -184,14 +184,16 @@ these scripts must end with exit-code 0.
 supposed to make the actual partitioning interactively or
 non-interactively.  The exit code <var>code</var> of these scripts is
 interpreted as follows:
-<list>
-<item><var>code</var> = 0: the script did nothing, move to the next;
-<item>1 &lt;= <var>code</var> &lt;= 99: restart partitioning (move
-again to the first script in <prgn>display.d</prgn>);
-<item>100 &lt;= <var>code</var> &lt;= 254: the script succesfuly
-partitioned the disks;
-<item><var>code</var> = 255: abort the partitioning
-</list>
+<taglist compact>
+<tag><var>code</var> = 0<item>The script did nothing, move to the next
+script in <prgn>display.d</prgn>.
+<tag>1 &lt;= <var>code</var> &lt;= 99<item>Restart the partitioning (move
+again to the first script in <prgn>display.d</prgn>).
+<tag>100 &lt;= <var>code</var> &lt;= 254<item>The script succesfuly
+partitioned the disks, do not execute the following scripts in
+<prgn>display.d</prgn>.
+<tag><var>code</var> = 255<item>Abort the partitioning.
+</taglist>
 
 <p> When the disks become ready, the scripts in
 <file>/lib/partman/check.d</file> are executed.  They have to check if
