@@ -67,7 +67,7 @@ them to undo their partitioning operations.
   existing udebs and no recompilation would be required.
 
 <p> The script <file>partman</file> from the package
-<package>partman</package> opens the main partitioning menu; it may
+<package>partman-base</package> opens the main partitioning menu; it may
 look like this one:
 <example>
 +------------------+ [!!] Partition the storage devices +-----------------+
@@ -159,7 +159,7 @@ allowed to undo everything.
 keep the data structures of libparted in a daemon process and
 communicate with it in order to make changes in these data structures.
 This process is <file>/bin/parted_server</file> from the package
-<package>partman</package>.
+<package>partman-base</package>.
 
 <p> The scripts from <file>/lib/partman/init.d/</file> are executed
   before all partitioning operations.  They can be used to initialise
@@ -172,7 +172,7 @@ This process is <file>/bin/parted_server</file> from the package
 
 <p> Any udeb may install a script in this directory.  For example the
 script <file>/lib/partman/init.d/30parted</file> from the package
-<package>partman</package> is responsible for running
+<package>partman-base</package> is responsible for running
 <prgn>parted_server</prgn>.  Notice that the scripts are prefixed by a
 two-digit number.  This number determines the order the scripts are
 executed.  If any of the scripts exit with non-zero exit code the
@@ -282,7 +282,7 @@ installer.  If we want to add support to the installer say for XFS or
 UMSDOS file systems, only a few new udebs must be all that is needed.
 
 <p> In order to achieve this flexibility the package
- <package>partman</package> provides support for the so-called
+ <package>partman-base</package> provides support for the so-called
  menu-directories.  Every such a directory contains files named
  <prgn>question</prgn> and <prgn>priority</prgn>.  They contain the
  name of a Debconf template and the priority of the question
@@ -440,7 +440,7 @@ the partition tables from the internal structures of
 <file>/lib/partman/finish.d/80parted</file> stops
 <prgn>parted_server</prgn>.
 
-<p> The package <package>partman</package> installs in
+<p> The package <package>partman-base</package> installs in
 <prgn>update.d</prgn> (see <ref id="update_partitions">) a script to
 ensure that for every partition that contains some file system there
 is a file <prgn>detected_filesystem</prgn> in the directory of the
@@ -450,7 +450,7 @@ returned by <prgn>parted_server</prgn>.
 <sect> Setup <file>/target</file>
 
 <p> Without the package <package>partman-target</package> the packages
-<package>partman</package> and <package>partman-partitioning</package>
+<package>partman-base</package> and <package>partman-partitioning</package>
 provide only the regular partitioning operations.  However if the
 package <package>partman-target</package> is also unpacked then the
 user will be provided with options to choose file systems for the
@@ -625,7 +625,7 @@ partition should be used.
 
 <chapt> <file>/lib/partman/definitions.sh</file>
 
-<p> The package <package>partman</package> contains the script
+<p> The package <package>partman-base</package> contains the script
 <file>/lib/partman/definitions.sh</file>.  It defines some useful
 variables and functions.  They are documented in this chapter.
 <footnote>The script <file>/lib/partman/definitions.sh</file> became
@@ -836,7 +836,7 @@ $10,... are not defined.
 
 <sect> Communication with <prgn>parted_server</prgn>
 
-<p> The package <package>partman</package> creates two FIFOs &ndash;
+<p> The package <package>partman-base</package> creates two FIFOs &ndash;
 <file>/var/lib/partman/infifo</file> and
 <file>/var/lib/partman/outfifo</file>.  <prgn>Parted_server</prgn>
 reads instructions from <prgn>infifo</prgn> and responds by writting
