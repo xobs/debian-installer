@@ -61,13 +61,8 @@ gzip -cdq $sysmap > $tmp || true
 case "$arch" in
     sparc)
 	elftoaout -o $tftpimage $tftpimage.tmp
-	case $tftpimage in
-	    *sun4u*) piggyback=piggyback64 ;;
-	    *sparc64*) piggyback=piggyback64 ;;
-	    *) piggyback=piggyback ;;
-	esac
 	# Piggyback appends the ramdisk to the a.out image in-place
-	$piggyback $tftpimage $tmp $rootimage
+	piggyback64 $tftpimage $tmp $rootimage
 	;;
     arm*)
 	cat $rootimage >>$tftpimage.tmp
