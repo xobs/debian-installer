@@ -112,7 +112,7 @@ define recurse
 endef
 
 define genext2fs
-  genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` -r 0
+  genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` -m 0
 endef
 
 define mkinitramfs
@@ -669,7 +669,7 @@ $(TEMP_EXTRA): $(STAMPS)extra-$(targetstring)-stamp
 	install -d $(TREE)
 	set -e; case $(INITRD_FS) in \
 	ext2) \
-		genext2fs -d $(TREE) -b $(IMAGE_SIZE) -r 0 $@ ; \
+		genext2fs -d $(TREE) -b $(IMAGE_SIZE) -m 0 $@ ; \
 		$(e2fsck) $@ || true ;; \
 	cramfs) \
 		$(mkcramfs) $@ ;; \
