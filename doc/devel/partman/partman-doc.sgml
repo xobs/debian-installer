@@ -143,6 +143,7 @@ sections in this document.
 formerly in <prgn>finish.d</prgn>
 <item> New directory <prgn>display.d</prgn> with different methods to
 do the partitioning (manual, automatic, etc.)
+<item> New command GET_LABEL_TYPE in parted_server
 </list>
 
 <chapt> Package interrelations
@@ -1159,7 +1160,7 @@ close_dialog
 cd <var>device_directory</var>
 open_dialog LABEL_TYPES
 supported=$(read_list)
-end_dialog
+close_dialog
 </example>
 For the result of this command <var><tt>device_directory</tt></var> is
 irrelevant.  Despite this <var><tt>device_directory</tt></var> must be
@@ -1171,13 +1172,33 @@ $supported is a comma-separated list of the supported types.  At the
 time of writting the following types are supported: bsd, gpt, mac,
 dvh, msdos, pc98, sun and loop.
 
+<sect> Get the type of the disk label
+
+<p> Synopsis:
+<example>
+cd <var>device_directory</var>
+open_dialog GET_LABEL_TYPE
+read_line label_type
+close_dialog
+if [ "$label_type" = unknown ]; then
+    echo "The disk is unknown or it has no disk label
+          or the disk label is unknown"
+else
+    echo "The type of the disk label is:" "$label_type"
+fi
+</example>
+This command returns the type of the disk label (i.e. the partition
+table) of a disk.  It can be used to check if there is a partition
+table (if not, then it is safe to create a new partition table or to
+use the entire disk for RAID, LVM, encrypted unit, etc).
+
 <sect> Create a new empty partition table
 
 <p> Synopsis:
 <example>
 cd <var>device_directory</var>
 open_dialog NEW_LABEL <var>partition_table_type</var>
-end_dialog
+close_dialog
 </example>
 This command creates in the device a new empty partition table with
 type <var><tt>partition_table_type</tt></var>.  (Of course it won't be
@@ -1190,7 +1211,7 @@ written to the disk if you don't use the command COMMIT.)
 cd <var>device_directory</var>
 open_dialog VALID_FLAGS <var>partition_id</var>
 meaningful_flags=$(read_list)
-end_dialog
+close_dialog
 </example>
 $meaningful_flags is a comma-separated list of the flags that are
 meaningful for the partition with id
@@ -1208,7 +1229,7 @@ while { read_line flag; [ "$flag" ]; }; do
         # you may not use break here
     fi
 done
-end_dialog
+close_dialog
 </example>
 
 <sect> Getting the active flags of a partition
@@ -1218,7 +1239,7 @@ end_dialog
 cd <var>device_directory</var>
 open_dialog GET_FLAGS <var>partition_id</var>
 active_flags=$(read_list)
-end_dialog
+close_dialog
 </example>
 $active_flags is a comma-separated list of the flags of the partition
 with id <var><tt>partition_id</tt></var> that are in state 1.  This is
@@ -1236,7 +1257,7 @@ while { read_line flag; [ "$flag" ]; }; do
         # you may not use break here
     fi
 done
-end_dialog
+close_dialog
 </example>
 
 <sect> Set the flags of a partition
@@ -1249,7 +1270,7 @@ for flag in $all_flags_that_should_be_active; do
     write_line $flag
 done
 write_line NO_MORE
-end_dialog
+close_dialog
 </example>
 
 <p> If you want to denote some partition as non-bootable you can use
@@ -1280,7 +1301,7 @@ close_dialog
 cd <var>device_directory</var>
 open_dialog USES_NAMES
 read_line supported
-end_dialog
+close_dialog
 case $supported in
     yes)
         # the partition table supports partition names
@@ -1297,7 +1318,7 @@ esac
 <example>
 cd <var>device_directory</var>
 open_dialog SET_NAME <var>partition_id</var> <var>new_name</var>
-end_dialog
+close_dialog
 </example>
 After this command the name of <var><tt>partition_id</tt></var> will
 be <var><tt>new_name</tt></var>.  It is an error to use this command with
@@ -1321,7 +1342,7 @@ logger "This disk may contain up to $primaries primary partitions"
 cd <var>device_directory</var>
 open_dialog USES_EXTENDED
 read_line supported
-end_dialog
+close_dialog
 case $supported in
     yes)
         # the partition table supports extended and logical partitions
@@ -1339,7 +1360,7 @@ esac
 cd <var>device_directory</var>
 open_dialog FILE_SYSTEM_TYPES
 known_filesystems=$(read_list)
-end_dialog
+close_dialog
 </example>
 $known_filesystems is a comma-separated list of the file systems that
 are known to <prgn>parted_server</prgn>.  You probably won't need to
@@ -1352,7 +1373,7 @@ use this command.
 cd <var>device_directory</var>
 open_dialog GET_FILE_SYSTEM <var>partition_id</var>
 read_line filesystem
-end_dialog
+close_dialog
 if [ "$filesystem" = none ]; then
     # no known file system is detected
 else
@@ -1366,7 +1387,7 @@ fi
 <example>
 cd <var>device_directory</var>
 open_dialog CHANGE_FILE_SYSTEM <var>partition_id</var> <var>new_filesystem</var>
-end_dialog
+close_dialog
 </example>
 
 <p> libparted assigns every partition some file system.  This command
@@ -1385,7 +1406,7 @@ cd <var>device_directory</var>
 name_progress_bar <var>some/debconf/template</var>
 open_dialog CHECK_FILE_SYSTEM <var>partition_id</var>
 read_line result
-end_dialog
+close_dialog
 case $result in
     good)
         # The file system is in good state
@@ -1411,7 +1432,7 @@ cd <var>device_directory</var>
 name_progress_bar <var>some/debconf/template</var>
 open_dialog CREATE_FILE_SYSTEM <var>partition_id</var> <var>new_filesystem</var>
 read_line result
-end_dialog
+close_dialog
 case $result in
     OK)
         # the file system is successfuly created
