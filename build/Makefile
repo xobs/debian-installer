@@ -86,11 +86,11 @@ targetdirs = $(subst _,/,$(targetstring))
 # a non-existing file and ignore it.
 include config/common
 include config/dir
--include config/local
 -include config/$(ARCH).cfg
 -include config/$(ARCH)/$(SUBARCH).cfg
 -include config/$(ARCH)/$(SUBARCH)/$(MEDIUM).cfg
 -include config/$(ARCH)/$(SUBARCH)/$(MEDIUM)/$(FLAVOUR).cfg
+-include config/local
 
 export KEYRING
 
