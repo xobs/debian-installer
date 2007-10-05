@@ -109,7 +109,7 @@ know which package the string (s)he translates belongs to.
 
 <sect2>
 <title>
-New strings introduction
+New debconf templates introduction
 </title>
 
 <para>
@@ -130,8 +130,8 @@ later need to be adapted again when the strings are corrected.
 </para>
 
 <para>
-For that reason, new templates to an existing &d-i; package or a new &d-i;
-package with debconf templates should have them marked as
+For that reason, new templates for an existing &d-i; package should
+initially be marked as
 <emphasis>non translatable</emphasis>. This is done by
 <emphasis>not</emphasis> prepending the templates fields with an
 underscore character. Example:
@@ -142,7 +142,7 @@ underscore character. Example:
 Template: debian-installer/foo/bar
 Type: note
 Description: New note.
- This is a completely new note, aded for package foo.
+ This is a completely new note, added for package foo.
   </screen>
 </informalexample>
 
@@ -322,6 +322,31 @@ not kept and thus the string becomes
 </para>
 
 </sect2>
+
+<sect2>
+<title>
+Review changes to existing templates
+</title>
+
+<para>Some peer review is strongly suggested when changing existing debconf templates and the changes are significant enough to motivate a peer review (maintainers should be aware that even minor changes might be inconsistent with the &d-i; writing style, so in doubt, any change should be considered as significant enough).</para>
+
+<para>
+In such case, it is recommended to first duplicate the existing template, with another name (for instance, the former name followed by <emphasis>_save</emphasis>.
+</para>
+
+<para>The changed template is then unmarked for translation (by removing the leading "_" character) and a review may be requested in the mailing list.
+</para>
+
+<para>
+As soon as the review is completed, the modified template should be marked for translation again.
+</para>
+
+<para>
+Before removing the old template, the i18n synchronisation script must be run once to fill in the new template with the former translation, by <emphasis>fuzzy matching</emphasis>.
+</para>
+
+</sect2>
+
 
 <sect2>
 <title><emphasis>Trivial</emphasis> modifications</title>
