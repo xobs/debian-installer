@@ -1,2 +1,2 @@
-all: *.xsl *.xml *.ent
+all: *.xsl *.xml
 	./build.sh
