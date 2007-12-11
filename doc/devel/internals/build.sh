@@ -8,7 +8,7 @@ stylesheet=/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl
 
 if [ -n "$xsltproc" ] ; then
     if [ -e "$stylesheet" ]; then
-	$xsltproc style-html.xsl d-i_debconf6.xml
+	$xsltproc style-html.xsl internals.xml
     else
 	echo stylesheet missing. Please install the docbook-xsl Debian package
 	exit 1
@@ -23,10 +23,10 @@ exit 0
 if [ -f index.html ] ; then
  if [ -n "$sgmltools" -a -n "$w3m" ] ; then
     # To be checked
-    $sgmltools --backend=txt index.html >d-i_debconf6.txt
+    $sgmltools --backend=txt index.html >internals.txt
  else
     if [ -n "$lynx" ] ; then
-	$lynx -dump -nolist index.html >d-i_debconf6.txt
+	$lynx -dump -nolist index.html >internals.txt
     else
 	echo sgmltools, w3m or lynx not found. 
         echo You need installing either sgmltools+w3m or lynx for
