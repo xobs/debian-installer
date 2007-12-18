@@ -670,15 +670,23 @@ ensure that for every partition that is to be used there is a file
 contents is the identifier of the type of file system under which the
 partition should be used.
 
-<chapt> <file>/lib/partman/definitions.sh</file>
+<chapt> <file>/lib/partman/lib/*</file>
 
-<p> The package <package>partman-base</package> contains the script
-<file>/lib/partman/definitions.sh</file>.  It defines some useful
-variables and functions.  They are documented in this chapter.
-<footnote>The script <file>/lib/partman/definitions.sh</file> became
-too long and this probably makes its sourcing slow.  Maybe it will be
-a good idea to split it into smaller pieces or even convert some of
-the functions to scripts in <file>/bin</file>.</footnote>
+<p> Various scripts in partman make use of <q>function libraries</q>:
+separate files, mostly containing shell functions, that are sourced
+by scripts so they can make use of common functions and code duplication
+can be avoided.
+
+<p> The main function library is <file>base.sh</file>, provided by
+<package>partman-base</package>.  This file is sourced by most scripts
+in partman as it defines a lot of useful variables and common functions.
+Some of these are documented in the remainder of this chapter.
+<footnote>The script <file>base.sh</file> has become somewhat too long and
+this probably makes its sourcing slow.  Although some reorganization has
+already taken place, it could be a good idea to split it up further.</footnote>
+
+<p> Other packages provide more targeted function libraries.  In most cases
+their scope and use can easily be determined from their name.
 
 <sect> Environment
 
@@ -688,7 +696,7 @@ temporary values for the variable <tt>IFS</tt>.  The function
 <prgn>restore_ifs</prgn> restores the variable <tt>IFS</tt> its
 original value.
 
-<p> The script <prgn>definitions.sh</prgn> contains also simple
+<p> The function library <prgn>base.sh</prgn> also contains simple
 reimplementations of <prgn>basename</prgn> and <prgn>dirname</prgn> so
 that busybox doesn't have to provide them.
 
@@ -858,7 +866,7 @@ removed.
 
 <p> In order to solve this difficulty every script that makes changes
 to some partition should invoke the function
-<prgn>update_partition</prgn> from <prgn>definitions.sh</prgn>.
+<prgn>update_partition</prgn> from <prgn>base.sh</prgn>.
 Synopsis:
 <example>
 update_partition <var>device_directory</var> <var>partition_id</var>
@@ -888,8 +896,8 @@ $10,... are not defined.
 <file>/var/lib/partman/outfifo</file>.  <prgn>Parted_server</prgn>
 reads instructions from <prgn>infifo</prgn> and responds by writting
 to <prgn>outfifo</prgn>.  Consequently the clients write to
-<prgn>infifo</prgn> and read from <prgn>outfifo</prgn>.  The script
-<prgn>definitions.sh</prgn> contain several functions to make the
+<prgn>infifo</prgn> and read from <prgn>outfifo</prgn>.  The function
+library <prgn>base.sh</prgn> contain several functions to make the
 communication with <prgn>parted_server</prgn> easier.  Here we will
 omit the details, if you want to know the exact communication protocol
 please read how these functions are implemented.
