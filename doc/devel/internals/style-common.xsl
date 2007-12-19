@@ -10,6 +10,6 @@
 <!-- We want continuous numbering (don't restart with new chapter) -->
 <xsl:param name="section.label.includes.component.label">1</xsl:param>
 
-<xsl:param name="html.stylesheet">talk.css</xsl:param>
+<xsl:param name="html.stylesheet">internals.css</xsl:param>
 
 </xsl:stylesheet>
