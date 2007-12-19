@@ -3,6 +3,7 @@
 % - there should be blank lines before and after tables
 
 \documentclass[a4paper,10pt]{article}
+\usepackage[top=3cm, bottom=2.5cm, left=2cm, right=2cm]{geometry}
 
 \title{Debian Installer internals}
 \author{Frans Pop $<$fjp@debian.org$>$ \\
@@ -39,9 +40,11 @@ The first three stages are where the fundamental difference between installation
 
 The table below shows what components are involved in the first and second stage for the CD-ROM and netboot installation methods and also shows where these differ. 
 
-\begin{tabular}{|c|c|c|l|}
+\
+
+\begin{tabular}{|c|p{3cm}|p{3cm}|p{8cm}|}
 \hline
-\textbf{Stage} & \textbf{CD-ROM} & \textbf{NETBOOT} & \textbf{Comments} \\
+\textbf{Stage} & \centering\textbf{CD-ROM} & \centering\textbf{NETBOOT} & \textbf{Comments} \\
 \hline
 -  & \multicolumn{2}{c|}{initrd-preseed} & Only if /preseed.cfg is present \\
 \hline
@@ -49,50 +52,53 @@ The table below shows what components are involved in the first and second stage
 \hline
 1 & \multicolumn{2}{c|}{kbd-chooser} & Keyboard selection \\
 \hline
-1 & cdrom-detect & eth-detect & Hardware detection and setup \\
+1 & \centering{cdrom-detect} & \centering{eth-detect} & Hardware detection and setup \\
 \hline
-1 & & netcfg & Network configuration \\
+1 & & \centering{netcfg} & Network configuration \\
 \hline
-- & file-preseed & network-preseed & If selected at boot prompt \\
+- & \centering{file-preseed} & \centering{network-preseed} & If selected at boot prompt \\
 \hline
-2 & & choose-mirror & Mirror selection \\
+2 & & \centering{choose-mirror} & Mirror selection \\
 \hline
-2 & load-cdrom (anna) & download-installer (anna) & Retrieve and unpack additional components \\
+2 & \centering{load-cdrom (anna)} & \centering{download-installer (anna)} & Retrieve and unpack additional components \\
 \hline
-3 & eth-detect & & Hardware detection and setup \\
+3 & \centering{eth-detect} & & Hardware detection and setup \\
 \hline
-3 & netcfg & & Network configuration \\
+3 & \centering{netcfg} & & Network configuration \\
 \hline
-3 & choose-mirror & & Mirror selection (sometimes needed for stage 4) \\
+3 & \centering{choose-mirror} & & Mirror selection (sometimes needed for stage 4) \\
 \hline
 \end{tabular}
 
+\
+
 The remainder of the installation is basically the same for all installation methods. 
 
+\
 
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{|c|p{6.5cm}|p{8cm}|}
 \hline
 \textbf{Stage} & & \textbf{Comments} \\
 \hline
-4 & hw-detect & Additional hardware detection \\
+4 & \centering{hw-detect} & Additional hardware detection \\
 \hline
-4 & partman & Partitioning, file system creation and mount point selection \\
+4 & \centering{partman} & Partitioning, file system creation and mount point selection \\
 \hline
-5 & tzsetup & Time zone selection \\
+5 & \centering{tzsetup} & Time zone selection \\
 \hline
-5 & clock-setup & Configure for hardware clock set to UTC or local time zone \\
+5 & \centering{clock-setup} & Configure for hardware clock set to UTC or local time zone \\
 \hline
-5 & user-setup & Set up root and normal user accounts \\
+5 & \centering{user-setup} & Set up root and normal user accounts \\
 \hline
-5 & base-installer & Base system (debootstrap) \& kernel installation \\
+5 & \centering{base-installer} & Base system (debootstrap) \& kernel installation \\
 \hline
-5 & apt-setup & APT configuration in the target system (sources.list) \\
+5 & \centering{apt-setup} & APT configuration in the target system (sources.list) \\
 \hline
-5 & pkgsel & Select and install additional packages (tasksel) \\
+5 & \centering{pkgsel} & Select and install additional packages (tasksel) \\
 \hline
-5 & grub/lilo-installer; nobootloader & Boot loader installation \\
+5 & \centering{grub/lilo-installer; nobootloader} & Boot loader installation \\
 \hline
-5 & finish-install$^{a)}$ & Finish up the installation and reboot \\
+5 & \centering{finish-install$^{a)}$} & Finish up the installation and reboot \\
 \hline
 \end{tabular} 
 
@@ -112,6 +118,8 @@ The installer supports a lot of different installation methods and in some cases
 \end{itemize}
 
 The table below shows the answers to these questions for the most common installation methods. 
+
+\
 
 \begin{tabular}{|l|l|l|l|l|}
 \hline
@@ -423,6 +431,8 @@ During the build, the needed udebs will be retrieved from a mirror. By default t
 \subsection{Build targets}
 To see which targets are available, run make. This will result in a list of some 130 targets, most of which are not really relevant. A more useful list can be obtained with \texttt{make | grep \^{ }build}. The table below has the most often used targets for i386.
 
+\
+
 \begin{tabular}{|l|l|}
 \hline
 \textit{build\_all} & Builds all images \\
@@ -434,6 +444,8 @@ To see which targets are available, run make. This will result in a list of some
 \textit{reallyclean} & Completely cleans the build environment \\
 \hline
 \end{tabular} 
+
+\
 
 The reallyclean target is often needed when changes are made between builds because otherwise udebs or information may be retrieved from temporary or cache directories and the changes will not take effect. The \textit{rebuild\_*} targets clean some of this, but not always enough. 
 
