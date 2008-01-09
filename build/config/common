@@ -23,7 +23,7 @@ EXTRAS ?=
 PRESEED = 
 
 # The library reducer to use. Can be mklibs.sh or mklibs.py.
-MKLIBS = mklibs-copy
+MKLIBS = mklibs 
 
 # Normally the sources.list for building d-i will be derived from your
 # "normal" sources.list. However, you can specify a mirror here to override
@@ -50,10 +50,6 @@ USE_UDEBS_FROM ?= unstable
 
 # Archive components from which to fetch debian-installer modules.
 UDEB_COMPONENTS ?= main/debian-installer
-
-# Status of the D-I release. Valid values are BETA and RC.
-# The RC status should be set by modifying debian/rules, not here.
-DI_STATUS ?= BETA
 
 # The date the installer is built.
 BUILD_DATE ?= $(shell date -u '+%Y%m%d-%H:%M')
@@ -91,26 +87,3 @@ KEYRING=/usr/share/keyrings/debian-archive-keyring.gpg
 # All images that include cdebconf should include symbols needed by these
 # plugins.
 EXTRAUDEBS=cdebconf-newt-entropy
-
-# The links below can be displayed by boot loaders.
-# The actual inclusion of these links is done by scripts in ./boot.
-# Lines should not be longer than 80 characters.
-#
-# By default, only URL_MAN_DEV should be included; for official Release
-# Candidate uploads (if DI_STATUS="RC"), URL_MAN_RC and URL_RN_RC should
-# be included. If a link is empty, it and the introductory text with it
-# should be suppressed.
-# INTRO_GEN plus URL_GEN should be added if a manual and/or release notes
-# are included, otherwise INTRO_GEN_ALT1/2 plus URL_GEN should be.
-#
-# For an example, see config/x86.cfg and boot/x86/f9.txt.
-#
-INTRO_MAN=The Debian Installation Guide for this image is available at:
-URL_MAN_DEV=http://d-i.alioth.debian.org/manual/
-URL_MAN_RC=http://www.debian.org/releases/$(DEBIAN_RELEASE)/installmanual
-INTRO_RN=and the Release Notes for this Debian release at:
-URL_RN_RC=http://www.debian.org/releases/$(DEBIAN_RELEASE)/releasenotes
-INTRO_GEN=Additional documentation is available from the Debian web site:
-INTRO_GEN_ALT1=See the Installation Guide or the FAQ for more information.
-INTRO_GEN_ALT2=Both documents are available from the Debian web site:
-URL_GEN=http://www.debian.org/
