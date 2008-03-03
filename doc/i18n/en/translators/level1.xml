@@ -12,15 +12,7 @@ Contents
 
 <para>
 Level 1 consists of all "core" &d-i; packages, i.e. all packages with
-translatable material in the &d-i; development tree. These packages
-are used during the installation "first stage".
-</para>
-
-<para>
-In &d-i; jargon, the <emphasis>first stage</emphasis> is the part of
-&d-i; which occurs from the initial boot up to the first (and only)
-reboot of the system. All user interactions screens shown to users
-during this stage are part of the first level for l10n.
+translatable material in the &d-i; development tree.
 </para>
 
 <para>
@@ -46,6 +38,48 @@ development tree (these files are automatically generated).
 
 <sect2>
 <title>
+Sublevels
+</title>
+
+<para>
+In the past, all &d-i; level 1 strings were gathered into a single "master" file. While that was easy to manage, it had the inconvenience of grouping very important and often used strings with very obscure strings that are relevant for some architectures only, or some special (and rarely used) features.
+</para>
+
+<para>
+In order for translators to better prioritize their work, this master file has been splitted into five "sublevel" files:
+</para>
+
+<itemizedlist>
+  <listitem>
+    <para>
+      Sublevel 1: strings used for default installs on common architectures
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      Sublevel 2: general strings not used during default installs. Includes error messages and dialogs
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      Sublevel 3: expert strings (some low priority features such as RAID, encrypted partitions, etc.)
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      Sublevel 4: specific to less-popular arches (powerpc, mips, sparc) or used in experimental features
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      Sublevel 5: same for high-end (hppa, ia64, s390) and hobby (m68k) arches and old stuff (partconf,
++partitioner, that are replaced by partman for a while)
+    </para>
+  </listitem>
+</itemizedlist>
+
+<sect2>
+<title>
 Files location and access methods
 </title>
 
@@ -57,7 +91,7 @@ this is the only way for them to commit their own translations.
 <itemizedlist>
   <listitem>
     <para>
-      <acronym>SVN</acronym> access: &svn-level1;
+      <acronym>SVN</acronym> access: &svn-level1;. Sublevel files are in directories named <filename>sublevelX</filename>
     </para>
   </listitem>
   <listitem>
@@ -67,12 +101,52 @@ this is the only way for them to commit their own translations.
     <itemizedlist>
       <listitem>
         <para>
-          &url-level1-pot-link;
+          &url-sublevel1-pot-link;
         </para>
       </listitem>
       <listitem>
         <para>
-          &url-level1-po-link;
+          &url-sublevel1-po-link;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          &url-sublevel2-pot-link;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          &url-sublevel2-po-link;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          &url-sublevel3-pot-link;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          &url-sublevel3-po-link;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          &url-sublevel4-pot-link;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          &url-sublevel4-po-link;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          &url-sublevel5-pot-link;
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          &url-sublevel5-po-link;
         </para>
       </listitem>
     </itemizedlist>
@@ -81,11 +155,11 @@ this is the only way for them to commit their own translations.
 
 
 <para>
-To begin the translation work for level 1, translators should copy the
-<filename>packages/po/template.pot</filename> to
+To begin the translation work for sublevel 1, translators should copy the
+<filename>packages/po/sublevel1/template.pot</filename> to
 <filename>&language;.po</filename> (where &language; is
 the ISO-639 code of the language, see <xref
-linkend="language-codes"/>) and complete this file.
+linkend="language-codes"/>) and complete this file. The same stands for other sublevels.
 </para>
 
 </sect2>
@@ -105,6 +179,17 @@ package (see <xref linkend="bug-reports"/> for details).
 
 </sect2>
 
+<sect2>
+<title>
+Prioritizing work
+</title>
+
+<para>
+Translators should read <xref linkend="prioritizing"/>
+to choose the best priority order for their work on sublevels.
+</para>
+
+</sect2>
 <sect2>
 <title>
 Specific recommendations
