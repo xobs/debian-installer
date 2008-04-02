@@ -494,6 +494,7 @@ endif
 		fi; \
 		rm $$file; \
 	done
+	rm -rf $(TREE)/var/lib/dpkg/triggers
 
 	# Collect the used UTF-8 strings, to know which glyphs to include in
 	# the font.
