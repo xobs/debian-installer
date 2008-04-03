@@ -340,7 +340,7 @@ ifdef KERNELVERSION
 			[ ! -e $(TREE)/boot/System.map ] || sysmap_name="$(TREE)/boot/System.map"; \
 		fi; \
 		[ -z "$$sysmap_name" ] || sysmap_opt="-F $$sysmap_name"; \
-		if [ -d $(TREE)/lib/modules/$(VERSION) ]; then \
+		if [ -d $(TREE)/lib/modules/$(VERSION) ] && [ -z "$(OMIT_DEPMOD)" ]; then \
 			mkdir -p $(TREE)/lib/modules/$(VERSION)/kernel; \
 			$(shell choose-subarch-env $(VERSION)) depmod $$sysmap_opt -q -a -b $(TREE)/ $(VERSION); \
 		fi; \
@@ -384,6 +384,7 @@ ifdef PRESEED
 	cp -a $(PRESEED) $(TREE)/preseed.cfg
 endif
 
+ifndef OMIT_LSB
 	# Create an lsb release file.
 	if [ ! -e $(TREE)/etc/lsb-release ]; then \
 		set -e; \
@@ -393,6 +394,7 @@ endif
 		echo 'DISTRIB_RELEASE=$(LSB_DISTRIB_RELEASE)' >> $(TREE)/etc/lsb-release; \
 		echo 'X_INSTALLATION_MEDIUM=$(MEDIUM)' >> $(TREE)/etc/lsb-release; \
 	fi
+endif
 
 	@touch $@
 
@@ -467,6 +469,10 @@ endif
 	echo "Version: $(subst _,-,$(targetstring))-$(BUILD_DATE)" >> $(DPKGDIR)/status
 	echo "Description: debian installation image" >> $(DPKGDIR)/status
 	echo >> $(DPKGDIR)/status
+
+ifdef OMIT_DPKG
+	rm -rf $(DPKGDIR)
+endif
 
 ifdef DROP_LANG
 	# Remove languages from the templates.
