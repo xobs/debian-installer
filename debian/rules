@@ -6,8 +6,10 @@ DATE=$(shell echo $(VERSION) | cut -d '.' -f 1)
 SUITE=$(shell LC_ALL=C dpkg-parsechangelog | grep ^Distribution: | cut -d ' ' -f 2)
 ifeq (${SUITE},UNRELEASED)
 USE_UDEBS_FROM=unstable
+TRANSSTATUS=
 else
 USE_UDEBS_FROM=lenny
+TRANSSTATUS=translation-status
 endif
 
 ARCHIVEDIR=debian/tmp/installer-$(ARCH)
@@ -26,7 +28,8 @@ clean:
 # Must run as root, so is not run as part of regular build.
 build-images:
 	$(MAKE) -C build all_build stats release \
-		USE_UDEBS_FROM=$(USE_UDEBS_FROM) BUILD_DATE=$(DATE)
+		USE_UDEBS_FROM=$(USE_UDEBS_FROM) BUILD_DATE=$(DATE) \
+		TRANSSTATUS=$(TRANSSTATUS)
 	
 build: build-stamp
 build-stamp:

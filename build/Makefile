@@ -287,6 +287,32 @@ $(STAMPS)tree-unpack-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-s
 	mkdir -p $(DPKGDIR)/updates/
 	touch $(DPKGDIR)/available
 
+ifdef TRANSSTATUS
+	# Include translation status file; warn if older than 2 weeks.
+	# Do this first to make possible warnings more visible.
+	@echo; \
+	if [ -f "$(TRANSSTATUS)" ]; then \
+		olddate=$$(grep "^# Generated on:" $(TRANSSTATUS) | sed "s/.*: //"); \
+		if [ "$$olddate" ]; then \
+			if [ $$(( $$(date -u "+%s") - \
+			          $$(date -d "$$olddate" "+%s") \
+			       )) -gt 1209600 ]; then \
+				echo "WARNING: The data in '$(TRANSSTATUS)' is older than 2 weeks."; \
+				echo "         Should it maybe be updated?"; \
+				sleep 15; \
+			fi; \
+		else \
+			echo "WARNING: no timestamp found in $(TRANSSTATUS)."; \
+			sleep 15; \
+		fi; \
+		mkdir -p $(TREE)/usr/share/localechooser; \
+		cp $(TRANSSTATUS) $(TREE)/usr/share/localechooser/translation-status; \
+	else \
+		echo "WARNING: the file $(TRANSSTATUS) does not exist."; \
+		sleep 5; \
+	fi
+endif
+
 	# Unpack the udebs with dpkg. This command must run as root
 	# or fakeroot.
 	echo -n > $(TEMP)/diskusage.txt
