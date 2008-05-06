@@ -1,0 +1,23 @@
+#!/bin/sh
+# List syslinux cfg files to include on an image.
+
+INCLUDE_GTK="$1"
+INCLUDE_AMD="$2"
+
+filter_gtk () {
+	if [ -n "$INCLUDE_GTK" ]; then
+		cat
+	else
+		grep -v gtk
+	fi
+}
+
+filter_amd () {
+	if [ -n "$INCLUDE_AMD" ]; then
+		cat
+	else
+		grep -v amd
+	fi
+}
+
+ls -1 boot/x86/*.cfg | filter_gtk | filter_amd
