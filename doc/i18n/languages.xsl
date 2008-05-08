@@ -51,7 +51,7 @@ Number of supported languages
 <xsl:value-of select="count(//language_entry[@supported = 'etch'] | //language_entry[@supported = 'sarge'] | //language_entry[@supported = 'woody'] | //language_entry[@supported = 'potato'])"/>
       </td>
       <td align="center">
-<xsl:value-of select="count((//language_entry[@supported = 'lenny_beta2'] | //language_entry[@supported = 'lenny_beta1'] | //language_entry[@supported = 'etch'] | //language_entry[@supported = 'sarge'] | //language_entry[@supported = 'woody'] | //language_entry[@supported = 'potato'])"/>
+<xsl:value-of select="count(//language_entry[@supported = 'lenny_beta2'] | //language_entry[@supported = 'lenny_beta1'] | //language_entry[@supported = 'etch'] | //language_entry[@supported = 'sarge'] | //language_entry[@supported = 'woody'] | //language_entry[@supported = 'potato'])"/>
       </td>
       <td align="center">
 <xsl:value-of select="count(//language_entry)"/>
