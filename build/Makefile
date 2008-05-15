@@ -435,7 +435,7 @@ endif
 
 	# Create a dev tree.
 	mkdir -p $(TREE)/dev
-	# Always needed, in case devfs is not mounted on boot.
+	# Always needed, in case udev is not mounted on boot.
 	mknod $(TREE)/dev/console c 5 1
 	mknod $(TREE)/dev/null c 1 3
 
