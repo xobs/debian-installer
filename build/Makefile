@@ -680,6 +680,9 @@ $(NETBOOT_DIR): $(NETBOOT_DIR_TARGETS) $(TEMP_BOOT_SCREENS) $(TEMP_NETBOOT_DIR)
 
 # a tarball for netbooting
 $(NETBOOT_TAR): $(TEMP_NETBOOT_DIR)
+	# Create an version info file.
+	echo 'Debian version:  $(DEBIAN_VERSION)' > $(TEMP_NETBOOT_DIR)/version.info
+	echo 'Installer build: $(BUILD_DATE)' >> $(TEMP_NETBOOT_DIR)/version.info
 	(cd $(TEMP_NETBOOT_DIR); tar czf - .) > $@
 	update-manifest $@ $(MANIFEST-NETBOOT_TAR) $(UDEB_LISTS)
 
