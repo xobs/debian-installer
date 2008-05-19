@@ -71,7 +71,7 @@ recommended to give small partitions a <priority> larger than their
 
 <specifiers>::=<specifier>|<specifier>_<specifiers>
 
-<specifier>::=<internal specifier>|<regular specifier>
+<specifier>::=<internal specifier>|<regular specifier>|<type specifier>
 
 <internal specifier>::=$primary{_}|$bootable{_}
 
@@ -85,6 +85,21 @@ in partman's filesystem info. (See section 2.4 of the partman manual
 for details.)
 <file contents> is the information to write in this file.
 
+<type specifier>::=$lvmok{_}|$defaultignore{_}|$lvmignore{_}
+
+$lvmok{_}
+	Indicates that the partition is permitted to be an LVM logical 
+	volume should an LVM partitioning scheme be in use.
+$defaultignore{_}
+	Used to void a partition definition so that it is ignored in the
+	default case. That is to say it will be valid in the LVM case.
+$lvmignore{_}
+	Used to void a partition definition so that it is ignored in the
+	LVM case. That is to say it will be valid in the default case.
+
+The specifiers defaultignore and lvmignore allow one recipe to define different 
+handling of say the /boot partition between an LVM partitioning scheme and a 
+non-LVM scheme.
 
 2. EXAMPLES
 -----------
@@ -128,21 +143,6 @@ filesystem{ ext3 }
 	Specifies the filesystem to put on the partition.
 mountpoint{ / }
 	Where to mount the partition.
-
-Other possible specifiers include:
-$defaultignore{ }
-	This is used to void a partition definition so that it is ignored
-	in the default case. That is to say it will be valid in the LVM case.
-$lvmignore{ }
-	This is used to void a partition definition so that it is ignored
-	in the LVM case. That is to say it will be valid in the default case.
-$lvmok{ }
-	This indicates that the partition is permitted to be an LVM logical 
-	volume should an LVM partitioning scheme be in use.
-	
-The specifiers defaultignore and lvmignore allow one recipe to define different 
-handling of say the /boot partition between an LVM partitioning scheme and a 
-non-LVM scheme.
 
 Here is another example; this time there is a smaller root partition, and a
 separate /home partition.
