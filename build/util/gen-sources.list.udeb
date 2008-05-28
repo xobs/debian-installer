@@ -1,0 +1,32 @@
+#! /bin/sh
+set -e
+
+OLDIFS="$IFS"
+NL="
+"
+
+SOURCES_LIST=$1
+SUITE=$2
+UDEB_COMPONENTS=$3
+
+MIRRORS="$(grep '^deb[ \t]' $SOURCES_LIST | \
+	   grep -v '^deb[ \t]cdrom:' | \
+	   grep -v '\(security.debian.org\|volatile.debian.\(net\|org\)\)' | \
+	   grep '[ \t]main' | \
+	   awk '{print $1 " " $2}' | \
+	   sed 's,^deb file,deb copy,' | \
+	   sed 's,/* *$,,')"
+
+IFS=$NL
+for mirror in $MIRRORS; do
+	IFS="$OLDIFS"
+
+	tmirror="$(echo $mirror | sed "s/^deb //")"
+	if echo "$mirror" | grep -Eq "^deb (f|ht)tp" && \
+	   ! HEAD $tmirror/dists/$SUITE/$UDEB_COMPONENTS/ >/dev/null 2>&1; then
+		echo "WARNING: mirror '$tmirror' appears to be invalid; skipping" >&2
+		continue
+	fi
+
+	echo "$mirror $SUITE $UDEB_COMPONENTS"
+done
