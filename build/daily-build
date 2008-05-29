@@ -5,6 +5,7 @@ set -e
 RESTRICTED_SSH=
 SSHKEY=
 SSHKEY=${SSHKEY:+-i $SSHKEY}
+HELPER=${HELPER:-d-i-unpack-helper}
 
 if [ -z "$HOST" ]; then
 	HOST=people.debian.org
@@ -20,13 +21,12 @@ fi
 if [ "$HOST" = "local" ]; then
 	SYNC="rsync"
 	SYNC_BASEDIR="$BASEDIR"
-	HELPER=d-i-unpack-helper
 else
 	CALL="ssh $SSHKEY $HOST"
 	SYNC="rsync"
 	SYNC_BASEDIR="$HOST:$BASEDIR"
 	# trade performance (using rsync) for security (restricted ssh keys)
-	HELPER="ssh $SSHKEY $HOST d-i-unpack-helper"
+	HELPER="ssh $SSHKEY $HOST $HELPER"
 fi
 if [ -z "$NUM_KEEP" ]; then
 	# Default to keeping 30 days of builds. Set to zero to keep all.
