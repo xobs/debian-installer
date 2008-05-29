@@ -9,6 +9,26 @@ SOURCES_LIST=$1
 SUITE=$2
 UDEB_COMPONENTS=$3
 
+# Set to 1 or 2 to see increasing debug info about mirror tests
+# Use 0 for quiet (normal) operation
+VERBOSE=0
+
+test_url() {
+	local url=$1
+	if [ $VERBOSE -ge 1 ]; then
+		echo "DEBUG: testing 'HEAD $url'" >&2
+	fi
+	if [ $VERBOSE -ge 2 ]; then
+		# Redirect output from HEAD to stderr, with prefix
+		if HEAD $url 2>&1 | sed "s/^/  OUT: /" >&2; then
+			return 0
+		fi
+	elif HEAD $url >/dev/null 2>&1; then
+		return 0
+	fi
+	return 1
+}
+
 MIRRORS="$(grep '^deb[ \t]' $SOURCES_LIST | \
 	   grep -v '^deb[ \t]cdrom:' | \
 	   grep -v '\(security.debian.org\|volatile.debian.\(net\|org\)\)' | \
@@ -25,7 +45,7 @@ for mirror in $MIRRORS; do
 	# We should also check that d-i is available, but that's more complex.
 	# Settle for just checking the suite/codename for now.
 	if echo "$mirror" | grep -Eq "^deb (f|ht)tp" && \
-	   ! HEAD $tmirror/dists/$SUITE/Release >/dev/null 2>&1; then
+	   ! test_url $tmirror/dists/$SUITE/Release; then
 		echo "WARNING: mirror '$tmirror' appears to be invalid; skipping" >&2
 		continue
 	fi
