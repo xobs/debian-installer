@@ -22,8 +22,10 @@ for mirror in $MIRRORS; do
 	IFS="$OLDIFS"
 
 	tmirror="$(echo $mirror | sed "s/^deb //")"
+	# We should also check that d-i is available, but that's more complex.
+	# Settle for just checking the suite/codename for now.
 	if echo "$mirror" | grep -Eq "^deb (f|ht)tp" && \
-	   ! HEAD $tmirror/dists/$SUITE/$UDEB_COMPONENTS/Release >/dev/null 2>&1; then
+	   ! HEAD $tmirror/dists/$SUITE/Release >/dev/null 2>&1; then
 		echo "WARNING: mirror '$tmirror' appears to be invalid; skipping" >&2
 		continue
 	fi
