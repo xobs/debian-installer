@@ -1,14 +1,19 @@
 #!/bin/sh
 
-# For use in .ssh/authorized keys as, e.g., command="~/d-i-unpack-helper alpha"
+# For use in .ssh/authorized keys as, e.g.,
+# command="~/d-i-unpack-helper alpha [30]"
 ARCH="$1"
+NUM_KEEP="$2"
+# Note that if NUM_KEEP is set, d-i-unpack-helper will expect
+# to find daily-build and the rest of the d-i installer/build/ tree in 
+# the same directory as itself.
 
 if [ -z "$BASEDIR" ]; then
 	BASEDIR=public_html/d-i/${ARCH:-images}
 fi
 
 if [ -z "$DIR" ]; then
-	DIR=`date +%Y-%m-%d`
+	DIR=$(date -u '+%Y%m%d-%H:%M')
 fi
 
 [ -n "$SSH_ORIGINAL_COMMAND" ] || exit 1
@@ -46,3 +51,19 @@ rm -rf $BASEDIR/$DIR
 mv $BASEDIR/${DIR}_RSYNC_IN_PROGRESS $BASEDIR/$DIR
 rm -rf $BASEDIR/daily
 ln -sf $DIR $BASEDIR/daily
+
+if [ -n "$NUM_KEEP" ]; then
+	cd $BASEDIR
+	BASEDIR=$(pwd)
+
+	MYDIR=$(dirname $0)
+	if [ ! -x "$MYDIR/daily-build" ]; then
+		echo "$MYDIR/daily-build not found, cannot trim" >&2
+		exit 1
+	fi
+	cd "$MYDIR"
+
+	export NUM_KEEP
+	export BASEDIR
+	TRIM_LOG=$BASEDIR/$DIR/trim.log HOST=local ./daily-build trim
+fi

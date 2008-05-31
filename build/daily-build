@@ -2,7 +2,15 @@
 set -e
 
 # Overridable environment variables for uploading.
+
+# Setting RESTRICTED_SSH makes the upload be done by sending a
+# tarball across ssh, which is slow. It's faster to not set it,
+# and instead configure authorized_keys to run d-i-unpack-helper,
+# now that d-i-unpack-helper supports rsync mode. (The name of this
+# variable is a historical accident, since rsync mode with
+# d-i-unpack-helper is just as restricted.)
 RESTRICTED_SSH=
+
 SSHKEY=
 SSHKEY=${SSHKEY:+-i $SSHKEY}
 HELPER=${HELPER:-d-i-unpack-helper}
@@ -25,7 +33,6 @@ else
 	CALL="ssh $SSHKEY $HOST"
 	SYNC="rsync"
 	SYNC_BASEDIR="$HOST:$BASEDIR"
-	# trade performance (using rsync) for security (restricted ssh keys)
 	HELPER="ssh $SSHKEY $HOST $HELPER"
 fi
 if [ -z "$NUM_KEEP" ]; then
@@ -102,18 +109,22 @@ upload () {
 }
 
 trim () {
+	if [ -z "$TRIM_LOG" ]; then
+		TRIM_LOG=dest/trim.log
+	fi
 	(
 	header TRIMMING OLD BUILDS
 	if [ -n "$RESTRICTED_SSH" ]; then
 		echo "(trim not implemented for RESTRICTED_SSH mode)"
 	elif [ -n "$NUM_KEEP" ] && [ "$NUM_KEEP" != 0 ]; then
+		DIR=$(dirname $0)
 		$CALL find $BASEDIR -maxdepth 1 | egrep '/[0-9][0-9][0-9][0-9]+-?[0-9][0-9]-?[0-9][0-9]-?[0-9]*:?[0-9]*$' | \
-			sort -n | ./util/trim-daily-builds "$NUM_KEEP" | \
+			sort -n | "$DIR"/util/trim-daily-builds "$NUM_KEEP" | \
 			$CALL xargs rm -rf
 	else
 		echo "(keeping all old builds)"
 	fi
-	)  > dest/trim.log 2>&1
+	)  > $TRIM_LOG 2>&1
 }
 
 UPDATED=""
