@@ -37,6 +37,11 @@ MIRRORS="$(grep '^deb[ \t]' $SOURCES_LIST | \
 	   sed 's,^deb file,deb copy,' | \
 	   sed 's,/* *$,,')"
 
+if ! which 'HEAD' >/dev/null; then
+	echo "ERROR: the command HEAD is not available; install libwww-perl" >&2
+	exit 1
+fi
+
 IFS=$NL
 for mirror in $MIRRORS; do
 	IFS="$OLDIFS"
