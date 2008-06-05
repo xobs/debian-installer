@@ -563,8 +563,7 @@ sources.list.udeb:
 	if [ "$(MIRROR)x" != "x" ]; then \
 		echo "deb $(MIRROR) $(USE_UDEBS_FROM) $(UDEB_COMPONENTS)"; \
 	else \
-		gen-sources.list.udeb "$(SYSTEM_SOURCES_LIST)" $(USE_UDEBS_FROM) $(UDEB_COMPONENTS) \
-		|perl -ne 'print unless $$seen{$$_}; $$seen{$$_}=1' ; \
+		gen-sources.list.udeb "$(SYSTEM_SOURCES_LIST)" $(USE_UDEBS_FROM) $(UDEB_COMPONENTS) ; \
 	fi) > $@
 
 

@@ -42,6 +42,7 @@ if ! which 'HEAD' >/dev/null; then
 	exit 1
 fi
 
+# Remove any duplicates at the end of the loop (the perl statement)
 IFS=$NL
 for mirror in $MIRRORS; do
 	IFS="$OLDIFS"
@@ -56,4 +57,4 @@ for mirror in $MIRRORS; do
 	fi
 
 	echo "$mirror $SUITE $UDEB_COMPONENTS"
-done
+done | perl -ne 'print unless $seen{$_}; $seen{$_}=1'
