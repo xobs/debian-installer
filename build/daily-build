@@ -137,7 +137,7 @@ update () {
 }
 
 deps () {
-	temp=`LANG=C dpkg-checkbuilddeps -B ../debian/control 2>&1`
+	temp=`LANG=C dpkg-checkbuilddeps -B ../debian/control 2>&1 || true`
 	packages=`echo $temp | sed -e 's%dpkg-checkbuilddeps: Unmet build dependencies: %%'`
 	apt-get update
 	if [ "$packages" ]; then
