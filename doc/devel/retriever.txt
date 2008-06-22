@@ -8,9 +8,10 @@ following types will eventually be implemented:
 - cd retriever
 	Ensures an install cd is mounted, and finds files on it. No real
 	retrieving done.
-- floppy retriever
+- media retriever
+	Handles all sorts of external media, including floppies.
 	May or may not need to deal with files split across multiple
-	floppies. In any case, pulls files off floppies.
+	floppies.
 - hard disk retriever
 	Gets a file from a local hard disk (dos, linux, etc).
 - http retriever
@@ -43,7 +44,7 @@ while the cdrom retriever may need to depend on module(s) that include kernel
 modules for the iso9660 filesystem and cd drivers.
 
 Retrievers may also need to interact with the user when they are retrieving
-a file. For example, the floppy retriever will need to prompt for disks.
+a file. For example, the media retriever will need to prompt for disks.
 This interaction will also be accomplished via debconf.
 
 Retriever interface
@@ -105,7 +106,7 @@ retriever error failing_command
 	but all retreivers should support it now.
 
 retriever cleanup
-	Clean up after a retriever round. This is used by e.g. the floppy
+	Clean up after a retriever round. This is used by e.g. the media
 	retriever to unmount the floppy.
 
 If the destination file already exists, the retriever may optionally attempt
@@ -139,7 +140,7 @@ The default retriever (if more than one is available, and it's the first
 time the question is asked) will be, in turn and if they exist:
  1. net-retriever (if you've got connectivity you probably want to use it)
  2. cdrom-retriever (using a CD is also very common)
- 3. floppy-retriever (we usually don't have to use the floppy)
+ 3. media-retriever (we usually don't have to use the floppy)
  (4. file-retriever? not currently used, but if resurrected, should
                      probably have lower priority than the floppy
                      retriever)
