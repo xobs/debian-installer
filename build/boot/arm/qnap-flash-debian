@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# This code is covered by the GNU General Public License (GPLv2 or higher)
+
+if [ ! -e kernel ]; then
+	echo "You have to download the kernel file from the debian-installer for QNAP"
+	exit 1
+fi
+
+
+if [ ! -e initrd.gz ]; then
+	echo "You have to download the initrd.gz file from the debian-installer for QNAP"
+	exit 1
+fi
+
+ifilesize=$(ls -l initrd.gz | awk '{print $5}')
+if [ $ifilesize -ne 4194303 ]; then
+	echo "The initrd.gz file is corrupt"
+	exit 1
+fi
+
+printf "Writing debian-installer to flash... "
+cat kernel > /dev/mtdblock1
+cat initrd.gz > /dev/mtdblock2
+echo "done."
+echo "Please reboot your QNAP device."
+
