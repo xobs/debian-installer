@@ -854,17 +854,77 @@ This includes the daily built images available from <ulink url="http://www.debia
 
 </footnote> using <command>fakeroot make &lt;<replaceable>target</replaceable>&gt;</command>.
 
-</para><para>
+</para>
 
-An important difference between release and development builds is that release builds will use udebs for the same suite as the target system being installed, while development builds will by default install testing, but use udebs from unstable<footnote>
+   <sect2><title>The standard D-I and CD images</title>
+<para>
+
+An important difference between release and development builds is that release builds will use udebs for the same suite as the target system being installed, while development builds will by default install testing, but use udebs from unstable.
+This allows to mostly avoid the occasional breakage of the base system and tasks in unstable while using the most recent udebs.
+
+</para>
+
+    <sect3><title>Debian Installer images</title>
+
+<itemizedlist>
+ <listitem>
+daily D-I builds are built in unstable and use udebs from unstable
+ </listitem><listitem>
+regular D-I uploads to the archive are built in unstable and use udebs from testing
+ </listitem><listitem>
+D-I uploads to stable are built in stable and use udebs from stable + proposed-updates
+ </listitem>
+</itemizedlist>
 
 <para>
-This is accomplished by including the <filename>/installer/build/unstable.cfg</filename> preconfiguration file in the initrd.
-</para>
 
-</footnote>. This allows to mostly avoid the occasional breakage of the base system and tasks in unstable while using the most recent udebs.
+The two config variables that determine this are:
+
+<variablelist>
+  <varlistentry>
+    <term>USE_UDEBS_FROM</term>
+    <listitem><para>
+Defines the suite or codename from where udebs are taken. The default is set to unstable in <filename>./config/common</filename> for SVN/trunk. For official uploads the value of this variable is overruled in <filename>debian/rules</filename>. 
+    </para><para>
+The value in <filename>./config/common</filename> should be changed to the correct codename for RC release uploads (after branching) to ensure correct builds from the branch post-release.
+    </para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>DEBIAN_RELEASE</term>
+    <listitem><para>
+Defines the <emphasis>codename</emphasis> of the Debian release that should be installed by default. It gets included in /etc/default-release in most initrds and is read by various components during installation.
+    </para><para>
+Because this is set to a codename, the value is correct for the whole lifetime of a Debian release and helps ensure the correct suite gets installed even when a release becomes <quote>oldstable</quote> or gets archived.
+    </para><para>
+Some installation methods allow this value to be overruled by choosing a different suite during mirror selection or passing the <literal>suite=</literal> option boot parameter.
+    </para></listitem>
+  </varlistentry>
+</variablelist>
 
 </para>
+    </sect3>
+
+    <sect3><title>CD and DVD images</title>
+
+<itemizedlist>
+ <listitem>
+daily <quote>sid_d-i</quote> CD images are built using daily D-I builds, udebs from unstable and regular packages from testing
+ </listitem><listitem>
+daily <quote>lenny_d-i</quote> CD/DVD images are built using "current" D-I builds and udebs from testing, and regular packages from testing
+ </listitem><listitem>
+weekly CD builds are built using "current" D-I builds and udebs from testing, and regular packages from testing
+ </listitem><listitem>
+official CD/DVD builds use everything from stable and thus can only be built <emphasis>after</emphasis> the archive has already been updated to a new stable (point) release
+ </listitem>
+</itemizedlist>
+
+<para>
+
+The <quote>sid_d-i</quote> CDs are what's normally linked as the daily built images from the D-I project page; when preparing for a release those will link to <quote>lenny_d-i</quote> CDs to facilitate pre-release testing.
+
+</para>
+    </sect3>
+   </sect2>
 
    <sect2><title>Requirements for building</title>
 <para>
