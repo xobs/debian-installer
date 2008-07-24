@@ -1,0 +1,37 @@
+#!/bin/sh
+
+# This code is covered by the GNU General Public License (GPLv2 or higher)
+
+NVRAM=$(which nvram)
+SETENV="$NVRAM -c set"
+
+path=$(mount | grep ext2 | sed -n '/sda1/ {s/\/dev\/sda1 on \(.*\) type.*/\1/; p}')
+if [ -z "$path" ]; then
+	echo "You have to create an ext2 filesystem on /dev/sda1"
+	exit 1
+fi
+
+if [ ! -e $path/uImage.buffalo ]; then
+	echo "You have to download the uImage.buffalo file from the debian-installer for Kurobox Pro, and put it in $path"
+	exit 1
+fi
+
+if [ ! -e $path/initrd.buffalo ]; then
+	echo "You have to download the initrd.buffalo file from the debian-installer for Kurobox Pro, and put it in $path"
+	exit 1
+fi
+
+if [ -z "$NVRAM" ]; then
+	echo "There is no nvram utility to alter u-boot environment"
+	exit 1
+fi
+
+printf "Saving u-boot environment to ubootenv.bak... "
+$NVRAM -c printenv > ubootenv.bak
+echo "done."
+
+echo "Changing u-boot environment... "
+$SETENV bootcmd 'ide reset; ext2load ide 0:1 $(default_kernel_addr) /$(kernel); ext2load ide 0:1 $(default_initrd_addr) /$(initrd); bootm $(default_kernel_addr) $(default_initrd_addr)'
+echo "done."
+
+echo "Please reboot your Kurobox Pro."
