@@ -16,14 +16,14 @@ VERBOSE=0
 test_url() {
 	local url=$1
 	if [ $VERBOSE -ge 1 ]; then
-		echo "DEBUG: testing 'HEAD $url'" >&2
+		echo "DEBUG: testing 'wget --spider $url'" >&2
 	fi
 	if [ $VERBOSE -ge 2 ]; then
-		# Redirect output from HEAD to stderr, with prefix
-		if HEAD $url 2>&1 | sed "s/^/  OUT: /" >&2; then
+		# Redirect output from wget to stderr, with prefix
+		if wget --spider $url 2>&1 | sed "s/^/  OUT: /" >&2; then
 			return 0
 		fi
-	elif HEAD $url >/dev/null 2>&1; then
+	elif wget -q --spider $url >/dev/null 2>&1; then
 		return 0
 	fi
 	return 1
@@ -37,8 +37,8 @@ MIRRORS="$(grep '^deb[ \t]' $SOURCES_LIST | \
 	   sed 's,^deb file,deb copy,' | \
 	   sed 's,/* *$,,')"
 
-if ! which 'HEAD' >/dev/null; then
-	echo "ERROR: the command HEAD is not available; install libwww-perl" >&2
+if ! which 'wget' >/dev/null; then
+	echo "ERROR: the command wget is not available; please install it" >&2
 	exit 1
 fi
 
