@@ -3,7 +3,7 @@
 # This code is covered by the GNU General Public License (GPLv2 or higher)
 
 NVRAM=$(which nvram)
-SETENV="$NVRAM -c set"
+FW_PRINTENV=$(which fw_printenv)
 
 path=$(mount | grep ext2 | sed -n '/sda1/ {s/\/dev\/sda1 on \(.*\) type.*/\1/; p}')
 if [ -z "$path" ]; then
@@ -21,13 +21,27 @@ if [ ! -e $path/initrd.buffalo ]; then
 	exit 1
 fi
 
-if [ -z "$NVRAM" ]; then
-	echo "There is no nvram utility to alter u-boot environment"
+if [ -n "$NVRAM" ]; then
+	PRINTENV="$NVRAM -c printenv"
+	SETENV="$NVRAM -c set"
+elif [ -n "$FW_PRINTENV" ]; then
+	if [ -n "$(which fw_setenv)" ]; then
+		echo "Program fw_setenv not found, cannot modify U-Boot environment..."
+		exit 1
+	elif [ ! -f /etc/fw_env.config ]; then
+		echo "Configuration file for fw_printenv not found."
+		exit 1
+	else
+		PRINTENV=$FW_PRINTENV
+		SETENV=$(which fw_setenv)
+	fi
+else
+	echo "No tool found for modifying U-Boot environment..."
 	exit 1
 fi
 
 printf "Saving u-boot environment to ubootenv.bak... "
-$NVRAM -c printenv > ubootenv.bak
+$PRINTENV > ubootenv.bak
 echo "done."
 
 echo "Changing u-boot environment... "
