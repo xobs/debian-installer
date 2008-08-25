@@ -4,10 +4,11 @@ Contents:
   0. Introduction
   1. Format of the recipes
   2. Examples
-  3. Architecture specific recipes
-  4. Limitations
-  5. How the actual partition sizes are computed
-  6. Appendix
+  3. LVM specific options
+  4. Architecture specific recipes
+  5. Limitations
+  6. How the actual partition sizes are computed
+  7. Appendix
 
 0. INTRODUCTION
 ---------------
@@ -185,7 +186,46 @@ partman-auto/text/home_scheme ::
 Notice that the partitions will be created in the order they are defined
 in the recipe.
 
-3. ARCHITECTURE DEPENDENT RECIPES
+3. LVM SPECIFIC OPTIONS
+-----------------------
+
+When using the "lvm" autopartioning method, specific options are recognized in
+the recipe. Those enable multiple disks to be partitioned at once, specifiying
+partitions holding Physical Volumes, which Volume Group a Physical Volume hold,
+in which Volume Group a Logical Volume is put and the name of the Logical
+Volumes.
+
+Multiple disks can also be partitioned at the same time. Those must be
+specified in partman-auto/disk. Partitions that are neither on a Logical
+Volumes, nor have a specific device specified (e.g. /boot) will default on
+being on the first disk.
+    
+To explicitely declare a Physical Volume, define a parition  the following:
+
+100 1000 1000000000 ext3
+        $defaultignore{ }
+        $primary{ }
+        method{ lvm }
+        device{ /dev/hdb }
+        vg_name{ vg00 } .
+    
+Both "device{ ... }" and "vg_name{ }" are optional.
+    
+The device *must* be listed in partman-auto/disk.
+    
+The Volume Group holding a Logical Volume can be specified using
+"in_vg{ }", e.g.:
+
+96 512 300% linux-swap
+        $lvmok{ }
+        in_vg{ vg00 }
+        lv_name{ myswap }
+        method{ swap }
+        format{ } .
+
+"lv_name{ }" specify the name of the Logical Volume being created.
+
+4. ARCHITECTURE DEPENDENT RECIPES
 ---------------------------------
 
 Some architectures have specific requirements for their partitions.
@@ -224,7 +264,7 @@ ia64.
 For other examples, see the architecture-specific recipes in partman-auto.
 
 
-4. LIMITATIONS
+5. LIMITATIONS
 --------------
 
 Due to limitation of the algorithms in partman-auto, there must be at
@@ -240,7 +280,7 @@ Do not use higher than 1000000000 numbers because the shell arithmetic
 is limited to 31 bits (on i386).
 
 
-5. HOW THE ACTUAL PARTITION SIZES ARE COMPUTED
+6. HOW THE ACTUAL PARTITION SIZES ARE COMPUTED
 ----------------------------------------------
 
 Suppose we have to create N partitions and min[i], max[i] and
@@ -273,7 +313,7 @@ while (! ready) {
 Then min[i] will be the size of partition #i.
 
 
-6. APPENDIX
+7. APPENDIX
 -----------
 
 On May 25th 2004, it was noted that on i386 systems, the very minimum size of
