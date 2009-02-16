@@ -104,11 +104,11 @@ define recurse_once
 endef
 
 define recurse_many
-  @set -e; $(foreach var,$($(1)_SUPPORTED),$(submake) $(2)_$(3) $(1)=$(var);)
+  @set -e; $(foreach var,$($(1)_SUPPORTED) $(if $(RECURSE_EXTRA),$($(1)_SUPPORTED_EXTRA)),$(submake) $(2)_$(3) $(1)=$(var);)
 endef
 
 define recurse
-  $(if $($(1)_SUPPORTED),$(call recurse_many,$(1),$(2),$(3)),$(call recurse_once,$(2),$(3)))
+  $(if $($(1)_SUPPORTED)$(if $(RECURSE_EXTRA),$($(1)_SUPPORTED_EXTRA)),$(call recurse_many,$(1),$(2),$(3)),$(call recurse_once,$(2),$(3)))
 endef
 
 define genext2fs
@@ -157,7 +157,7 @@ validate_%:
 	@set -e; \
 	SUBARCH= var='$(subst _, ,$(subst validate_,,$@))'; \
 	tmp=$$(echo $$var |sed 's/[ ].*$$//'); \
-	[ -z '$(SUBARCH_SUPPORTED)' ] || [ -z "$$tmp" ] || [ -z "$$(echo $(SUBARCH_SUPPORTED) |grep -w $$tmp)" ] || SUBARCH=$$tmp; \
+	[ -z '$(SUBARCH_SUPPORTED)$(SUBARCH_SUPPORTED_EXTRA)' ] || [ -z "$$tmp" ] || [ -z "$$(echo $(SUBARCH_SUPPORTED) $(SUBARCH_SUPPORTED_EXTRA) |grep -w $$tmp)" ] || SUBARCH=$$tmp; \
 	$(submake) medium_validate SUBARCH=$$SUBARCH var="$$var"
 
 .PHONY: medium_validate
@@ -165,7 +165,7 @@ medium_validate:
 	@set -e; \
 	MEDIUM= var="$(strip $(patsubst $(SUBARCH)%,%,$(var)))"; \
 	tmp=$$(echo $$var |sed 's/[ ].*$$//'); \
-	[ -z '$(MEDIUM_SUPPORTED)' ] || [ -z "$$tmp" ] || [ -z "$$(echo $(MEDIUM_SUPPORTED) |grep -w $$tmp)" ] || MEDIUM=$$tmp; \
+	[ -z '$(MEDIUM_SUPPORTED)$(MEDIUM_SUPPORTED_EXTRA)' ] || [ -z "$$tmp" ] || [ -z "$$(echo $(MEDIUM_SUPPORTED) $(MEDIUM_SUPPORTED_EXTRA) |grep -w $$tmp)" ] || MEDIUM=$$tmp; \
 	$(submake) flavour_validate MEDIUM=$$MEDIUM var="$$var"
 
 .PHONY: flavour_validate
@@ -173,7 +173,7 @@ flavour_validate:
 	@set -e; \
 	FLAVOUR= var="$(strip $(patsubst $(MEDIUM)%,%,$(var)))"; \
 	tmp=$$(echo $$var |sed 's/[ ].*$$//'); \
-	[ -z '$(FLAVOUR_SUPPORTED)' ] || [ -z "$$tmp" ] || [ -z "$$(echo $(FLAVOUR_SUPPORTED) |grep -w $$tmp)" ] || FLAVOUR=$$tmp; \
+	[ -z '$(FLAVOUR_SUPPORTED)$(FLAVOUR_SUPPORTED_EXTRA)' ] || [ -z "$$tmp" ] || [ -z "$$(echo $(FLAVOUR_SUPPORTED) $(FLAVOUR_SUPPORTED_EXTRA) |grep -w $$tmp)" ] || FLAVOUR=$$tmp; \
 	$(submake) finish_validate FLAVOUR=$$FLAVOUR var="$$var"
 
 .PHONY: finish_validate
@@ -199,7 +199,7 @@ list:
 	@echo "all_clean"
 	@echo "reallyclean"
 	@echo
-	@$(submake) all_list
+	@$(submake) all_list RECURSE_EXTRA=1
 
 .PHONY: _list
 _list:
