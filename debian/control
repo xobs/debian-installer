@@ -7,7 +7,7 @@ Standards-Version: 3.6.2
 Vcs-Svn: svn://svn.debian.org/d-i/trunk/installer
 Build-Conflicts: libnewt-pic [mipsel]
 # NOTE: Do not edit the next line by hand. See comment below.
-Build-Depends: debhelper (>= 4), apt, apt-utils, gnupg, debian-archive-keyring (>= 2006.11.22), dpkg (>= 1.13.9), dctrl-tools, wget, bc, debiandoc-sgml, xsltproc, docbook-xml, docbook-xsl, libbogl-dev [!kfreebsd-i386 !kfreebsd-amd64 !hurd-i386], glibc-pic, libslang2-pic (>= 2.0.6-4), libnewt-pic (>= 0.52.2-11.3) [!mipsel], libnewt-dev (>= 0.52.2-11.3) [mipsel], libgcc1 [i386 amd64], cramfsprogs [powerpc ppc64 ia64 mips mipsel armeb armel], genext2fs (>= 1.3-7.1), e2fsprogs, mklibs (>= 0.1.25), mklibs-copy [mips mipsel], genisoimage [!s390 !s390x], genromfs [sparc], hfsutils [powerpc ppc64], dosfstools [i386 ia64 m68k amd64], cpio, devio [armeb armel], slugimage (>= 0.10+r58-6) [armeb armel], dns323-firmware-tools [armel], uboot-mkimage [armel], syslinux (>= 2:3.63+dfsg-2) [i386 amd64], palo [hppa], elilo [ia64], yaboot [powerpc ppc64], aboot (>= 0.9b-2) [alpha], silo [sparc], sparc-utils [sparc], genisovh [mips], tip22 [mips], colo (>= 1.21-1) [mipsel], sibyl [mips mipsel], atari-bootstrap [m68k], vmelilo [m68k], m68k-vme-tftplilo [m68k], amiboot [m68k], emile [m68k], emile-bootblocks [m68k], apex-nslu2 [armeb armel], tofrodos [i386 amd64 kfreebsd-i386 kfreebsd-amd64], mtools (>= 3.9.9-1) [i386 ia64 m68k amd64 kfreebsd-i386 kfreebsd-amd64], module-init-tools [i386 armeb armel amd64 alpha hppa ia64 m68k mips mipsel powerpc ppc64 s390 sparc], bf-utf-source [!s390 !s390x], upx-ucl (>= 3) [i386], mkvmlinuz [powerpc ppc64], openssl [armel], win32-loader [i386 amd64 kfreebsd-i386 kfreebsd-amd64]
+Build-Depends: debhelper (>= 4), apt, apt-utils, gnupg, debian-archive-keyring (>= 2006.11.22), dpkg (>= 1.13.9), dctrl-tools, wget, bc, debiandoc-sgml, xsltproc, docbook-xml, docbook-xsl, libbogl-dev [!kfreebsd-i386 !kfreebsd-amd64 !hurd-i386], glibc-pic, libslang2-pic (>= 2.0.6-4), libnewt-pic (>= 0.52.2-11.3) [!mipsel], libnewt-dev (>= 0.52.2-11.3) [mipsel], libgcc1 [i386 amd64], cramfsprogs [powerpc ia64 mips mipsel armeb armel], genext2fs (>= 1.3-7.1), e2fsprogs, mklibs (>= 0.1.25), mklibs-copy [mips mipsel], genisoimage [!s390 !s390x], genromfs [sparc], hfsutils [powerpc], dosfstools [i386 ia64 m68k amd64], cpio, devio [armeb armel], slugimage (>= 0.10+r58-6) [armeb armel], dns323-firmware-tools [armel], uboot-mkimage [armel], syslinux (>= 2:3.63+dfsg-2) [i386 amd64], palo [hppa], elilo [ia64], yaboot [powerpc], aboot (>= 0.9b-2) [alpha], silo [sparc], sparc-utils [sparc], genisovh [mips], tip22 [mips], colo (>= 1.21-1) [mipsel], sibyl [mips mipsel], atari-bootstrap [m68k], vmelilo [m68k], m68k-vme-tftplilo [m68k], amiboot [m68k], emile [m68k], emile-bootblocks [m68k], apex-nslu2 [armeb armel], tofrodos [i386 amd64 kfreebsd-i386 kfreebsd-amd64], mtools (>= 3.9.9-1) [i386 ia64 m68k amd64 kfreebsd-i386 kfreebsd-amd64], module-init-tools [i386 armeb armel amd64 alpha hppa ia64 m68k mips mipsel powerpc s390 sparc], bf-utf-source [!s390 !s390x], upx-ucl (>= 3) [i386], mkvmlinuz [powerpc], openssl [armel], win32-loader [i386 amd64 kfreebsd-i386 kfreebsd-amd64]
 # This package has the worst Build-Depends in Debian, so it deserves some
 # explanation. Note that this comment can also be used to generate a
 # Build-Depends line, by running the debian/genbuilddeps program.
@@ -62,7 +62,7 @@ Build-Depends: debhelper (>= 4), apt, apt-utils, gnupg, debian-archive-keyring (
 #		calls in directfb. For now, this is done by setting EXTRAFILES.
 #
 # Filesystem tools:
-#	- cramfsprogs [powerpc ppc64 ia64 mips mipsel armeb armel]
+#	- cramfsprogs [powerpc ia64 mips mipsel armeb armel]
 #		For arches that use cramfs initrds.
 #	- genext2fs (>= 1.3-7.1)
 #		For creating ext2 filesystems without being root.
@@ -81,7 +81,7 @@ Build-Depends: debhelper (>= 4), apt, apt-utils, gnupg, debian-archive-keyring (
 #	- genromfs [sparc]
 #		Used for creating sparc floppies (which are not built by
 #		default.)
-#	- hfsutils [powerpc ppc64]
+#	- hfsutils [powerpc]
 #		For making bootable HFS USB sticks for powerpc.
 #	- dosfstools [i386 ia64 m68k amd64]
 #		For creating FAT filesystems with mkfs.msdos.
@@ -108,7 +108,7 @@ Build-Depends: debhelper (>= 4), apt, apt-utils, gnupg, debian-archive-keyring (
 #		With menu default64 support.		
 #	- palo [hppa]
 #	- elilo [ia64]
-#	- yaboot [powerpc ppc64]
+#	- yaboot [powerpc]
 #		For all our powerpc boot needs. Well, not really.
 #	- aboot (>= 0.9b-2) [alpha]
 #		A previous version didn't have netabootwrap.
@@ -148,7 +148,7 @@ Build-Depends: debhelper (>= 4), apt, apt-utils, gnupg, debian-archive-keyring (
 #		mcopy is used to put files onto FAT filesystems w/o
 #		mounting them.
 #
-#	- module-init-tools [i386 armeb armel amd64 alpha hppa ia64 m68k mips mipsel powerpc ppc64 s390 sparc]
+#	- module-init-tools [i386 armeb armel amd64 alpha hppa ia64 m68k mips mipsel powerpc s390 sparc]
 #		depmod for 2.6 kernels on the arches that support 2.6.
 #
 #	- bf-utf-source [!s390 !s390x]
@@ -156,7 +156,7 @@ Build-Depends: debhelper (>= 4), apt, apt-utils, gnupg, debian-archive-keyring (
 #		perform font reduction at build time.
 #	- upx-ucl (>= 3) [i386]
 #		i386 uses upx to compress kernels and other binaries.
-#	- mkvmlinuz [powerpc ppc64]
+#	- mkvmlinuz [powerpc]
 #		Used to make powerpc images that can boot direct from
 #		firmware w/o using a boot loader.
 #	- openssl [armel]
