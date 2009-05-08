@@ -617,20 +617,34 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp arch_tree
 
 # Create the images for dest/. Those are the targets called from config.
 
+ifeq ($(SYMLINK_INITRD),)
 $(INITRD): $(TEMP_INITRD)
 	install -m 644 -D $< $@
 	update-manifest $@ $(MANIFEST-INITRD) $(UDEB_LISTS)
+else
+$(INITRD): $(realpath $(dir $(INITRD))/$(SYMLINK_INITRD))
+	mkdir -p $(dir $(INITRD))
+	ln -s $(SYMLINK_INITRD) $@
+	update-manifest $@ $(MANIFEST-INITRD) $(UDEB_LISTS)
+endif
 
 $(RAMDISK): $(TEMP_INITRD)
 	install -m 644 -D $< $@
 	update-manifest $@ $(MANIFEST-RAMDISK) $(UDEB_LISTS)
 
 # raw kernel images
+ifeq ($(SYMLINK_KERNEL),)
 $(KERNEL): TEMP_REAL_KERNEL = $(TEMP)/$(shell echo ./$@ |sed 's,$(SOME_DEST)/$(EXTRANAME),,')
 $(KERNEL):
 	@$(MAKE) $(STAMPS)tree-unpack-$(targetstring)-stamp $(TEMP_REAL_KERNEL)
 	install -m 644 -D $(TEMP_REAL_KERNEL) $@
 	update-manifest $@ $(MANIFEST-KERNEL)
+else
+$(KERNEL): $(realpath $(dir $(KERNEL))/$(SYMLINK_KERNEL))
+	mkdir -p $(dir $(KERNEL))
+	ln -s $(SYMLINK_KERNEL) $@
+	update-manifest $@ $(MANIFEST-KERNEL)
+endif
 
 # bootable images
 $(BOOT): $(TEMP_BOOT)
