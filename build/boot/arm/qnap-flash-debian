@@ -27,3 +27,13 @@ cat initrd.gz > /dev/mtdblock2
 echo "done."
 echo "Please reboot your QNAP device."
 
+# Show the new MAC address on QNAP TS-119, TS-219 and TS-219P
+if [ $ifilesize -eq 9437184 -a -x /sbin/ubootcfg ]; then
+	echo
+	printf "Please note that your MAC address will change from "
+	get_mac
+	printf "to "
+	/sbin/ubootcfg -b 0 -f /dev/mtdblock4 -o - | grep "^ethaddr=" | sed 's/ethaddr=//'
+	printf "\n"
+fi
+
