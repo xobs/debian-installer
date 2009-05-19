@@ -14,7 +14,9 @@ if [ ! -e initrd.gz ]; then
 fi
 
 ifilesize=$(ls -l initrd.gz | awk '{print $5}')
-if [ $ifilesize -ne 4194304 ]; then
+# The ramdisk partition is 4 MB on the QNAP TS-109 and TS-209, and
+# 9 MB on the QNAP TS-119, TS-219 and TS-219P.
+if [ $ifilesize -ne 4194304 -a $ifilesize -ne 9437184 ]; then
 	echo "The initrd.gz file is corrupt"
 	exit 1
 fi
