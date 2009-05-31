@@ -1,23 +1,96 @@
-#!/bin/sh
-# List syslinux cfg files to include on an image.
+#! /bin/bash
+set -e
 
-INCLUDE_GTK="$1"
-INCLUDE_AMD="$2"
+# Create syslinux configuration or list syslinux configuration files (x86)
+# If called with two arguments (source and destination dir), the script will
+# create a syslinux configuration; if called with only one argument, it will
+# list the files for the created configuration.
+# The variables TYPE, DESKTOP and INCLUDE_GTK - which determine the contents
+# of the created syslinux configuration - should be set in the environment.
 
-filter_gtk () {
+# See also the x86_syslinux target in build/config/x86.cfg and the
+# documentation for the SYSLINUX_CFG option in build/README.
+
+SRC="$1"
+DST="$2"
+
+[ -d "$SRC" ] || exit 1
+
+if [ -z "$DST" ]; then
+	# Only list config files
+	cd "$SRC"
+	find . -type f | sed "s:\./::"
+	exit 0
+elif [ ! -d "$DST" ]; then
+	exit 1
+fi
+
+# Create config for default desktop environment
+create_standard_config() {
+	cp "$SRC"/syslinux.cfg "$SRC"/menu.cfg "$SRC"/stdmenu.cfg \
+	   "$SRC"/prompt.cfg "$SRC"/exithelp.cfg "$DST"/
+	cp "$SRC"/{,ad,rq}txt.cfg "$DST"/
 	if [ -n "$INCLUDE_GTK" ]; then
-		cat
-	else
-		grep -v gtk
+		cp "$SRC"/{ad,rq,}gtk.cfg "$DST"/
 	fi
 }
 
-filter_amd () {
-	if [ -n "$INCLUDE_AMD" ]; then
-		cat
-	else
-		grep -v amd
-	fi
+# Add config for alternative desktop environments
+add_desktop_configs() {
+	local desktop title
+
+	cp "$SRC"/dtmenu.cfg "$DST"/
+
+	for desktop in kde xfce lxde; do
+		mkdir "$DST"/$desktop
+
+		cp "$SRC"/desktop/menu.cfg "$SRC"/desktop/prompt.cfg \
+		   "$SRC"/desktop/prmenu.cfg "$DST"/$desktop/
+		cp "$SRC"/{,ad}txt.cfg "$DST"/$desktop/
+		cp "$SRC"/desktop/{,ad}txtdt.cfg "$DST"/$desktop/
+		if [ -n "$INCLUDE_GTK" ]; then
+			cp "$SRC"/{,ad}gtk.cfg "$DST"/$desktop/
+			cp "$SRC"/desktop/{,ad}gtkdt.cfg "$DST"/$desktop/
+		fi
+
+		case $desktop in
+			kde)	title=KDE ;;
+			xfce)	title=Xfce ;;
+			lxde)	title=LXDE ;;
+		esac
+		sed -i "s/%desktop%/$desktop/
+			s/%dt-title%/$title/" "$DST"/$desktop/*.cfg
+	done
 }
 
-ls -1 boot/x86/*.cfg | filter_gtk | filter_amd
+case $TYPE in
+    template)
+	cp -r "$SRC"/*.cfg "$DST"/
+	mkdir "$DST"/desktop
+	cp -r "$SRC"/desktop/*.cfg "$DST"/desktop/
+	exit 0
+	;;
+    prompt)
+	cp "$SRC"/prompt.cfg "$DST"/syslinux.cfg
+	cp "$SRC"/menu.cfg "$DST"/
+	cp "$SRC"/{,ad,rq}txt.cfg "$DST"/
+	;;
+    standard)
+	create_standard_config
+	;;
+    all-desktop)
+	create_standard_config
+	add_desktop_configs
+	;;
+    *)
+	exit 1
+	;;
+esac
+
+# Set the default desktop environment, or remove if not applicable
+if ([ "$TYPE" = prompt ] || [ "$TYPE" = standard ]) && \
+   [ -n "$DESKTOP" ]; then
+	sed -i "s/%desktop%/$DESKTOP/" "$DST"/*.cfg
+else
+	sed -i "s/desktop=%desktop% //" "$DST"/*.cfg
+fi
