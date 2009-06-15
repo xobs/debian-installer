@@ -36,3 +36,11 @@ To upload a package correctly, do the following:
 
 * Commit and tag the release:
   debcommit --release
+
+Since many packages in d-i only contain shell scripts and the like, you can
+build them even if they aren't for your normal host architecture: just pass
+-a<architecture> to most of the devscripts commands (debuild, debsign, debc,
+and debrelease, but not debcommit and not necessarily debdiff). Be careful
+not to do this for packages containing compiled C code; if you do this by
+accident, you'll get a "binary-from-other-architecture" warning from
+Lintian.
