@@ -93,7 +93,6 @@ include config/dir
 -include config/local
 
 export KEYRING
-export KERNELVERSION
 
 # Useful command sequences
 define submake

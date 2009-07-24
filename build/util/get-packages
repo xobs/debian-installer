@@ -140,24 +140,6 @@ if [ "$PACKAGES" = update ]; then
 	exit 0
 fi
 
-# We should probably select the right packages in pkg-list instead (see
-# #490634), but for now this works around problems with multiple kernel
-# versions in Packages files.
-if [ "$KERNELVERSION" ]; then
-	for packages in `find $APTDIR/state -maxdepth 2 -type f -name \*_Packages ! -name \*_localudebs_Packages -print`; do
-		grep-dctrl -! -rFKernel-Version . -o -XFKernel-Version "$KERNELVERSION" "$packages" > "$packages.tmp"
-		ln "$packages" "$packages.old"
-		mv "$packages.tmp" "$packages"
-	done
-
-	cleanup () {
-		for packages_old in `find $APTDIR/state -maxdepth 2 -type f -name \*_Packages.old -print`; do
-			mv "$packages_old" "${packages%.old}" || true
-		done
-	}
-	trap cleanup EXIT HUP INT QUIT TERM
-fi
-
 # Get udebs.
 if [ "$DEBUG" = y ]; then
 	mkdir -p $DEBUGUDEBDIR
