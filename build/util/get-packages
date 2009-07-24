@@ -83,6 +83,7 @@ APT_GET="apt-get --assume-yes \
 	-o Dir::Etc::Preferences=`pwd`/preferences.$TYPE.local \
 	-o Dir::State=`pwd`/$APTDIR/state \
 	-o Debug::NoLocking=true \
+	-o Debug::pkgDepCache::AutoInstall=true \
 	-o Dir::Cache=`pwd`/$APTDIR/cache \
 	-o Acquire::Retries=3 \
 	-o APT::Install-Recommends=false
@@ -138,6 +139,24 @@ fi
 
 if [ "$PACKAGES" = update ]; then
 	exit 0
+fi
+
+# We do Kernel-Version filtering in pkg-list as well, but for some reason
+# apt pulls in multiple providers of virtual packages unnecessarily which
+# causes problems.
+if [ "$KERNELVERSION" ]; then
+	for packages in `find $APTDIR/state -maxdepth 2 -type f -name \*_Packages ! -name \*_localudebs_Packages -print`; do
+		grep-dctrl -! -rFKernel-Version . -o -XFKernel-Version "$KERNELVERSION" "$packages" > "$packages.tmp"
+		ln "$packages" "$packages.old"
+		mv "$packages.tmp" "$packages"
+	done
+
+	cleanup () {
+		for packages_old in `find $APTDIR/state -maxdepth 2 -type f -name \*_Packages.old -print`; do
+			mv "$packages_old" "${packages%.old}" || true
+		done
+	}
+	trap cleanup EXIT HUP INT QUIT TERM
 fi
 
 # Get udebs.
