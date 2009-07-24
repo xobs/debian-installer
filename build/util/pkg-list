@@ -156,7 +156,20 @@ sub pkgdeps {
 				my @deps;
 				for ($x++; $x < @lines; $x++) {
 					if ($lines[$x]=~/^    (.+)/) {
-						push @deps, $1;
+						my $prov=$1;
+						my %fields;
+						for my $fieldline (apt_cache("show \Q$prov")) {
+							if ($fieldline=~/(.*?):\s*(.*)/) {
+								$fields{lc $1}=$2;
+							}
+						}
+						if (exists $fields{'kernel-version'} and not grep { $_ eq $fields{'kernel-version'} } @kernel_versions) {
+							next;
+						}
+						elsif (exists $fields{subarchitecture} and not grep { $_ eq $sub_arch } split ' ', $fields{subarchitecture}) {
+							next;
+						}
+						push @deps, $prov;
 					}
 					else {
 						$x--;
