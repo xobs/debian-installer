@@ -95,9 +95,13 @@ include config/dir
 export KEYRING
 export KERNELVERSION
 
+ifneq ($(shell id -u),0)
+  ROOTCMD ?= fakeroot
+endif
+
 # Useful command sequences
 define submake
-  $(MAKE) --no-print-directory
+  $(ROOTCMD) $(MAKE) --no-print-directory
 endef
 
 define recurse_once
