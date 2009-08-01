@@ -146,7 +146,11 @@ fi
 # causes problems.
 if [ "$KERNELVERSION" ]; then
 	for packages in `find $APTDIR/state -maxdepth 2 -type f -name \*_Packages ! -name \*_localudebs_Packages -print`; do
-		grep-dctrl -! -rFKernel-Version . -o -XFKernel-Version "$KERNELVERSION" "$packages" > "$packages.tmp"
+		KV_COND=
+		for KV in $KERNELVERSION; do
+			KV_COND="${KV_COND:+$KV_COND }-o -XFKernel-Version $KV"
+		done
+		grep-dctrl -! -rFKernel-Version . $KV_COND "$packages" > "$packages.tmp"
 		ln "$packages" "$packages.old"
 		mv "$packages.tmp" "$packages"
 	done
