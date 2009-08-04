@@ -126,7 +126,7 @@ endef
 
 define mkfs.ufs2
   fs=`mktemp` ; \
-  dd if=/dev/zero of=$${fs} bs=1M count=16 ; \
+  dd if=/dev/zero of=$${fs} bs=1M count=20 ; \
   md=`mdconfig -a -t vnode -f $${fs}` ; \
   mkfs.ufs -O2 /dev/$${md} ; \
   mnt=`mktemp -d` ; mount /dev/$${md} $${mnt} ; \
