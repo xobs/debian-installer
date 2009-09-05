@@ -363,7 +363,7 @@ ifdef EXTRAFILES
 	done
 endif
 
-ifeq ($(DEB_HOST_ARCH),linux)
+ifeq ($(DEB_HOST_ARCH_OS),linux)
 ifdef KERNELVERSION
 	# Set up modules.dep, ensure there is at least one standard dir (kernel
 	# in this case), so depmod will use its prune list for archs with no
@@ -414,8 +414,6 @@ ifdef KERNELNAME
 	# Move the kernel image out of the way.
 	$(foreach name,$(KERNELNAME), \
 		mv -f $(TREE)/boot/$(name) $(TEMP)/$(name);)
-	# 09/04/2009: System.map appeared there and is useless
-	rm $(TREE)/boot/System.map || true
 	rmdir $(TREE)/boot/
 endif
 
