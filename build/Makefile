@@ -415,7 +415,7 @@ ifdef KERNELNAME
 	$(foreach name,$(KERNELNAME), \
 		mv -f $(TREE)/boot/$(name) $(TEMP)/$(name);)
 	# 09/04/2009: System.map appeared there and is useless
-	rm $(TREE)/boot/System.map
+	rm $(TREE)/boot/System.map || true
 	rmdir $(TREE)/boot/
 endif
 
