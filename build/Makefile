@@ -414,6 +414,8 @@ ifdef KERNELNAME
 	# Move the kernel image out of the way.
 	$(foreach name,$(KERNELNAME), \
 		mv -f $(TREE)/boot/$(name) $(TEMP)/$(name);)
+	# 09/04/2009: System.map appeared there and is useless
+	rm $(TREE)/boot/System.map
 	rmdir $(TREE)/boot/
 endif
 
