@@ -62,7 +62,7 @@ DEB_HOST_ARCH = $(shell dpkg-architecture -qDEB_HOST_ARCH)
 DEB_HOST_ARCH_OS = $(shell dpkg-architecture -qDEB_HOST_ARCH_OS)
 DEB_HOST_GNU_CPU = $(shell dpkg-architecture -qDEB_HOST_GNU_CPU)
 DEB_HOST_GNU_SYSTEM = $(shell dpkg-architecture -qDEB_HOST_GNU_SYSTEM)
-export DEB_HOST_ARCH DEB_HOST_GNU_CPU DEB_HOST_GNU_SYSTEM
+export DEB_HOST_ARCH DEB_HOST_ARCH_OS DEB_HOST_GNU_CPU DEB_HOST_GNU_SYSTEM
 endif
 
 # We loop over all needed combinations of ARCH, SUBARCH, MEDIUM, FLAVOUR
