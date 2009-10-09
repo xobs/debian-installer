@@ -2,6 +2,8 @@
 
 # This code is covered by the GNU General Public License (GPLv2 or higher)
 
+# 1) Check the files are okay
+
 if [ ! -e kernel ]; then
 	echo "You have to download the kernel file from the debian-installer for QNAP"
 	exit 1
@@ -21,19 +23,40 @@ if [ $ifilesize -ne 4194304 -a $ifilesize -ne 9437184 ]; then
 	exit 1
 fi
 
+# 2) Change the MAC address on QNAP TS-119, TS-219 and TS-219P
+uboot_mac() {
+	ubootcfg -b 0 -f /dev/mtdblock4 -o - | grep "^ethaddr=" | sed "s/^ethaddr=//"
+}
+
+if [ $ifilesize -eq 9437184 ]; then
+	if [ "$(uboot_mac)" != "`get_mac`" ]; then
+		echo "Updating MAC address..."
+		orig=$(ubootcfg -b 0 -f /dev/mtdblock4 -o - | grep -v "^ethaddr=" | cksum | cut -d " " -f 1)
+		ubootcfg -b 0 -f /dev/mtdblock4 -o - | sed "s/^ethaddr=.*/ethaddr=`get_mac`/" > /tmp/debian.$$
+		conf=$(grep -v "^ethaddr=" /tmp/debian.$$ | cksum | cut -d " " -f 1)
+		if [ "$orig" != "$conf" -o "`cat /tmp/debian.$$`" == "" ]; then
+			echo "Failed to generate new u-boot configuration."
+			rm -f /tmp/debian.$$
+			exit 1
+		fi
+		ubootcfg -b 0 -f /dev/mtdblock4 -i /tmp/debian.$$
+		if [ "$?" != 0 ]; then
+			echo "Error writing new configuration to flash.  Please check if your"
+			echo "configuration looks correct with:"
+			echo "    ubootcfg -b 0 -f /dev/mtdblock4 -o -"
+			rm -f /tmp/debian.$$
+			exit 1
+		fi
+		rm -f /tmp/debian.$$
+	fi
+	echo "Your MAC address is $(uboot_mac)"
+	
+fi
+
+# 3) Finally, write the installer to flash
 printf "Writing debian-installer to flash... "
 cat kernel > /dev/mtdblock1
 cat initrd.gz > /dev/mtdblock2
 echo "done."
 echo "Please reboot your QNAP device."
-
-# Show the new MAC address on QNAP TS-119, TS-219 and TS-219P
-if [ $ifilesize -eq 9437184 -a -x /sbin/ubootcfg ]; then
-	echo
-	printf "Please note that your MAC address will change from "
-	get_mac
-	printf "to "
-	/sbin/ubootcfg -b 0 -f /dev/mtdblock4 -o - | grep "^ethaddr=" | sed 's/ethaddr=//'
-	printf "\n"
-fi
 
