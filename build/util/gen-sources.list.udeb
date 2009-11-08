@@ -8,6 +8,7 @@ NL="
 SOURCES_LIST=$1
 SUITE=$2
 UDEB_COMPONENTS=$3
+USE_PROPOSED_UPDATES=$4 # optional
 
 # Set to 1 or 2 to see increasing debug info about mirror tests
 # Use 0 for quiet (normal) operation
@@ -43,18 +44,26 @@ if ! which 'wget' >/dev/null; then
 fi
 
 # Remove any duplicates at the end of the loop (the perl statement)
-IFS=$NL
+IFS="$NL"
 for mirror in $MIRRORS; do
 	IFS="$OLDIFS"
 
 	tmirror="$(echo $mirror | sed "s/^deb //")"
 	# We should also check that d-i is available, but that's more complex.
 	# Settle for just checking the suite/codename for now.
-	if echo "$mirror" | grep -Eq "^deb (f|ht)tp" && \
-	   ! test_url $tmirror/dists/$SUITE/Release; then
-		echo "WARNING: mirror '$tmirror' appears to be invalid; skipping" >&2
-		continue
+	if echo "$mirror" | grep -Eq "^deb (f|ht)tp"; then
+		if test_url $tmirror/dists/$SUITE/Release; then
+			echo "$mirror $SUITE $UDEB_COMPONENTS"
+		else
+			echo "WARNING: mirror '$tmirror' appears to be invalid; skipping" >&2
+		fi
+		if [ "$USE_PROPOSED_UPDATES" = 1 ] &&
+		   test_url $tmirror/dists/$SUITE-proposed-updates/Release; then
+			echo "$mirror $SUITE-proposed-updates $UDEB_COMPONENTS"
+			echo "INFO: using '$tmirror' for $SUITE-proposed-updates" >&2
+		fi
+	else
+		echo "$mirror $SUITE $UDEB_COMPONENTS"
 	fi
 
-	echo "$mirror $SUITE $UDEB_COMPONENTS"
 done | perl -ne 'print unless $seen{$_}; $seen{$_}=1'

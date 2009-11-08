@@ -575,9 +575,12 @@ sources.list.udeb:
 	if [ "$(MIRROR)x" != "x" ]; then \
 		echo "deb $(MIRROR) $(USE_UDEBS_FROM) $(UDEB_COMPONENTS)"; \
 	else \
-		gen-sources.list.udeb "$(SYSTEM_SOURCES_LIST)" $(USE_UDEBS_FROM) $(UDEB_COMPONENTS) ; \
+		gen-sources.list.udeb "$(SYSTEM_SOURCES_LIST)" $(USE_UDEBS_FROM) $(UDEB_COMPONENTS) $(USE_PROPOSED_UPDATES); \
 	fi) > $@
-
+	if [ "$(USE_PROPOSED_UPDATES)" = 1 ] && ! grep -q proposed-updates $@; then \
+		echo "ERROR: no valid source for $(USE_UDEBS_FROM)-proposed-updates"; \
+		exit 1; \
+	fi
 
 # Font generation.
 #
