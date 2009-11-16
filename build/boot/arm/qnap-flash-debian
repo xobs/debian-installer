@@ -22,17 +22,34 @@ if [ $ifilesize -ne 4194304 -a $ifilesize -ne 9437184 ]; then
 	exit 1
 fi
 
-# 2) Change the MAC address on QNAP TS-119, TS-219 and TS-219P
+# 2) Change the MAC address on QNAP TS-x10/TS-x19
 uboot_mac() {
 	ubootcfg -b 0 -f /dev/mtdblock4 -o - | grep "^ethaddr=" | sed "s/^ethaddr=//"
 }
 
 if [ $ifilesize -eq 9437184 ]; then
-	if [ "$(uboot_mac)" != "`get_mac`" ]; then
+	if which iface_get_mac > /dev/null ; then
+		eth0=$(iface_get_mac eth0)
+	elif which get_mac > /dev/null ; then
+		eth0=$(get_mac)
+	fi
+	if [ -z "$eth0" ]; then
+		echo "Failed to obtain MAC address"
+		exit 1
+	fi
+	if [ "$(uboot_mac)" != "$eth0" ]; then
 		echo "Updating MAC address..."
-		orig=$(ubootcfg -b 0 -f /dev/mtdblock4 -o - | grep -v "^ethaddr=" | cksum | cut -d " " -f 1)
-		ubootcfg -b 0 -f /dev/mtdblock4 -o - | sed "s/^ethaddr=.*/ethaddr=`get_mac`/" > /tmp/debian.$$
-		conf=$(grep -v "^ethaddr=" /tmp/debian.$$ | cksum | cut -d " " -f 1)
+		orig=$(ubootcfg -b 0 -f /dev/mtdblock4 -o - | grep -v "^eth" | cksum | cut -d " " -f 1)
+		ubootcfg -b 0 -f /dev/mtdblock4 -o - | sed "s/^ethaddr=.*/ethaddr=$eth0/" > /tmp/debian.$$
+		if which iface_get_mac > /dev/null ; then
+			eth1=$(iface_get_mac eth1)
+			if [ "$eth1" != "00:00:00:00:05:09" ]; then
+				if ! grep -q "^eth1addr=" /tmp/debian.$$ ; then
+					echo "eth1addr=$eth1" >> /tmp/debian.$$
+				fi
+			fi
+		fi
+		conf=$(grep -v "^eth" /tmp/debian.$$ | cksum | cut -d " " -f 1)
 		if [ "$orig" != "$conf" -o "`cat /tmp/debian.$$`" == "" ]; then
 			echo "Failed to generate new u-boot configuration."
 			rm -f /tmp/debian.$$
