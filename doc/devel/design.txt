@@ -74,10 +74,12 @@ installing packages, and installing the boot loader. Disk partitioning (and
 formatting and mounting to /target) is handled by an installer module or
 modules, currently the partman suite on most architectures (see the
 partman/ directory for docs). Package installation is done by
-base-installer, which calls debootstrap to do most of the work. Boot loader
-installation is handled by a number of architecture-specific modules, such
-as grub-installer, lilo-installer, and yaboot-installer.
+base-installer, which calls debootstrap to do most of the work of
+installing a minimal base system and then installs a kernel; and also by
+pkgsel, which installs a more extensive set of packages, mostly by calling
+tasksel. Boot loader installation is handled by a number of
+architecture-specific modules, such as grub-installer, lilo-installer, and
+yaboot-installer.
 
 The installation finishes up in finish-install, which reboots into the
-installed system. From there base-config is run, and we're out of the part
-of the installation managed by the Debian installer.
+installed system.
