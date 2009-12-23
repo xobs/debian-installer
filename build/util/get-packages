@@ -151,13 +151,14 @@ if [ "$KERNELVERSION" ]; then
 			KV_COND="${KV_COND:+$KV_COND }-o -XFKernel-Version $KV"
 		done
 		grep-dctrl -! -rFKernel-Version . $KV_COND "$packages" > "$packages.tmp"
-		ln "$packages" "$packages.old"
+		ln "$packages" "$packages.orig"
 		mv "$packages.tmp" "$packages"
 	done
 
+	# Ensure the original Packages files get restored
 	cleanup () {
-		for packages_old in `find $APTDIR/state -maxdepth 2 -type f -name \*_Packages.old -print`; do
-			mv "$packages_old" "${packages%.old}" || true
+		for packages_orig in `find $APTDIR/state -maxdepth 2 -type f -name \*_Packages.orig -print`; do
+			mv "$packages_orig" "${packages%.orig}" || true
 		done
 	}
 	trap cleanup EXIT HUP INT QUIT TERM
