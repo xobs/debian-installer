@@ -157,8 +157,8 @@ if [ "$KERNELVERSION" ]; then
 
 	# Ensure the original Packages files get restored
 	cleanup () {
-		for packages_orig in `find $APTDIR/state -maxdepth 2 -type f -name \*_Packages.orig -print`; do
-			mv "$packages_orig" "${packages%.orig}" || true
+		for file in `find $APTDIR/state -maxdepth 2 -type f -name \*_Packages.orig -print`; do
+			mv "$file" "${file%.orig}" || true
 		done
 	}
 	trap cleanup EXIT HUP INT QUIT TERM
