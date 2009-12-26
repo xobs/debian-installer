@@ -30,13 +30,22 @@ test_url() {
 	return 1
 }
 
-MIRRORS="$(grep '^deb[ \t]' $SOURCES_LIST | \
-	   grep -v '^deb[ \t]cdrom:' | \
-	   grep -v '\(security.debian.org\|volatile.debian.\(net\|org\)\)' | \
-	   grep '[ \t]main' | \
-	   awk '{print $1 " " $2}' | \
-	   sed 's,^deb file,deb copy,' | \
-	   sed 's,/* *$,,')"
+get_mirrors() {
+	local file
+	for file in $@; do
+		[ -s $file ] || continue
+		grep '^deb[ \t]' $file | \
+		   grep -v '^deb[ \t]cdrom:' | \
+		   grep -v '\(security.debian.org\|volatile.debian.\(net\|org\)\)' | \
+		   grep '[ \t]main' | \
+		   awk '{print $1 " " $2}' | \
+		   sed 's,^deb file,deb copy,' | \
+		   sed 's,/* *$,,'
+	done
+}
+
+# Also use mirrors defined in files in $SOURCES_LIST.d/
+MIRRORS="$(get_mirrors $SOURCES_LIST $SOURCES_LIST.d/*)"
 
 if ! which 'wget' >/dev/null; then
 	echo "ERROR: the command wget is not available; please install it" >&2
