@@ -34,10 +34,10 @@ get_mirrors() {
 	local file
 	for file in $@; do
 		[ -s $file ] || continue
-		grep '^deb[ \t]' $file | \
-		   grep -v '^deb[ \t]cdrom:' | \
+		grep '^deb[[:space:]]' $file | \
+		   grep -v '^deb[[:space:]]\+cdrom:' | \
 		   grep -v '\(security.debian.org\|volatile.debian.\(net\|org\)\)' | \
-		   grep '[ \t]main' | \
+		   grep '[[:space:]]main' | \
 		   awk '{print $1 " " $2}' | \
 		   sed 's,^deb file,deb copy,' | \
 		   sed 's,/* *$,,'
@@ -57,10 +57,10 @@ IFS="$NL"
 for mirror in $MIRRORS; do
 	IFS="$OLDIFS"
 
-	tmirror="$(echo $mirror | sed -r "s/^deb[ \t]+//")"
+	tmirror="$(echo $mirror | sed -r "s/^deb //")"
 	# We should also check that d-i is available, but that's more complex.
 	# Settle for just checking the suite/codename for now.
-	if echo "$mirror" | grep -Eq "^deb[ \t]+(f|ht)tp"; then
+	if echo "$mirror" | grep -Eq "^deb (f|ht)tp"; then
 		if test_url $tmirror/dists/$SUITE/Release; then
 			echo "$mirror $SUITE $UDEB_COMPONENTS"
 		else
