@@ -1,14 +1,14 @@
 <chapter><title>Running Debian Installer</title>
 <para>
 
-The examples in this section reflect the current status of the Installer,
-the Etch Beta 2 release, and are based on the CD-ROM and netboot installation
-methods for i386. The choice for i386 was made as this is most familiar to
-most users, but installations for other architectures are not structurally
-different<footnote>
+The examples in this chapter reflect the status of the Installer during the
+development of Squeeze, and are based on the CD-ROM and netboot installation
+methods for x86 (the i386 and amd64 architectures). The choice for x86 was
+made as this is most familiar to most users, but installations for other
+architectures are not structurally different<footnote>
 
 <para>
-Some architectures currently do not use partman for partitioning, file
+The mips architectures currently do not use partman for partitioning, file
 system creation and mount point selection but instead use other components.
 Some architectures also use specific additional components as part of their
 default installation. However, this does not make them structurally different.
@@ -81,7 +81,7 @@ these differ.
     </row><row>
       <entry>1</entry>
       <entry namest="c2" nameend="c3">localechooser</entry>
-      <entry>Language/country/locale selection</entry>
+      <entry>Language/location/locale selection</entry>
     </row><row>
       <entry>1</entry>
       <entry namest="c2" nameend="c3">kbd-chooser</entry>
@@ -125,7 +125,7 @@ these differ.
       <entry>3</entry>
       <entry>choose-mirror</entry>
       <entry></entry>
-      <entry>Mirror selection (sometimes needed for stage 4)</entry>
+      <entry>Mirror selection (only if the base system is not installable from CD)</entry>
     </row><row>
       <entry>3</entry>
       <entry namest="c2" nameend="c3">clock-setup</entry>
@@ -184,18 +184,12 @@ methods.
       <entry>Boot loader installation</entry>
     </row><row>
       <entry>5</entry>
-      <entry>finish-install<superscript>a)</superscript></entry>
+      <entry>finish-install</entry>
       <entry>Finish up the installation and reboot</entry>
     </row>
   </tbody>
 </tgroup>
 </informaltable>
-
-<para>
-<superscript>a)</superscript> Renamed from <classname>prebaseconfig</classname>
-after the Etch Beta 2 release because the package
-<classname>base-config</classname> was obsoleted.
-</para>
 
    <sect1><title>Installation methods</title>
 <para>
@@ -275,19 +269,19 @@ installation methods.
       <entry>CD</entry>
       <entry>CD (+ network)</entry>
     </row><row>
-      <entry>hd-media<superscript>b)</superscript></entry>
+      <entry>hd-media<superscript>a)</superscript></entry>
       <entry>harddisk/USB stick</entry>
       <entry>CD image</entry>
       <entry>CD image/network</entry>
       <entry>CD image/network</entry>
     </row><row>
-      <entry>floppy (net)</entry>
+      <entry>floppy (net)<superscript>b)</superscript></entry>
       <entry>boot/root/net-drivers</entry>
       <entry>network</entry>
       <entry>network</entry>
       <entry>network</entry>
     </row><row>
-      <entry>floppy (cd)<superscript>b)</superscript></entry>
+      <entry>floppy (cd)<superscript>a,b)</superscript></entry>
       <entry>boot/root/cd-drivers</entry>
       <entry>CD</entry>
       <entry>CD/network</entry>
@@ -299,9 +293,15 @@ installation methods.
 
 <para>
 
-<superscript>b)</superscript> Whether packages for the base system and
+<superscript>a)</superscript> Whether packages for the base system and
 tasks are retrieved from CD (image) or the network depends on the type of
 CD used in combination with these boot methods.
+
+</para><para>
+
+<superscript>b)</superscript> Unfortunately there are no longer any
+architectures that support booting from floppy. The main reason is the
+increased size of the Linux kernel.
 
 </para>
    </sect1>
@@ -329,16 +329,8 @@ about this in the section on preseeding.
 
 </para><para>
 
-The boot process is currently quite complex as it needs to support several
-generations of linux:
-
-<itemizedlist>
- <listitem>
-2.2, 2.4 and 2.6 kernels with devfs, all subtly different
- </listitem><listitem>
-2.6 kernels with udev; several generations, both with and without hotplug
- </listitem>
-</itemizedlist>
+The boot process is quite complex as it has evolved needing to support
+several generations of linux, with changes in e.g. the kernel and udev.
 
 </para><para>
 
@@ -366,7 +358,7 @@ Sets up initial environment (<filename>/proc</filename>, <filename>/dev</filenam
  </listitem><listitem>
 <literal>::respawn:/sbin/debian-installer</literal>
  </listitem><listitem>
-init for VT2 (busybox shell), VT3 (<filename>/var/log/messages</filename>),
+init for VT2 and VT3 (busybox shell), and for
 VT4 (<filename>/var/log/syslog</filename>)
  </listitem>
 </itemizedlist>
@@ -383,9 +375,7 @@ that are performed are:
 
 <itemizedlist>
  <listitem>
-mount <filename>devfs</filename> and <filename>sysfs</filename> if appropriate
- </listitem><listitem>
-run <command>udev</command>/<command>hotplug</command>
+mount <filename>devfs</filename> and <filename>sysfs</filename>
  </listitem><listitem>
 load acpi modules
  </listitem><listitem>
@@ -415,8 +405,9 @@ detect if the installer should run in rescue mode
     <term>4) <command>/sbin/debian-installer</command></term>
     <listitem><para>
 This is a run-parts like script that sources scripts in
-<filename>/lib/debian-installer.d</filename>. The main functions
-that are performed are:
+<filename>/lib/debian-installer.d</filename>.
+These scripts will be run again if the main installer process dies for some
+reason. The main functions that are performed are:
 
 <itemizedlist>
  <listitem>
@@ -487,21 +478,20 @@ depend on, as shown in the next example.
 <informalexample><screen>
 Package: netcfg
 Status: install ok installed
-Version: 1.23
+Version: 1.52
 Provides: configured-network
-Depends: libc6 (&gt;= 2.3.5-1), libdebconfclient0, libdebian-installer4 (&gt;= 0.37),
-         dhcp-client-udeb | dhcp3-client-udeb | pump-udeb, libiw28-udeb,
-         cdebconf-udeb, ethernet-card-detection
+Depends: libc6-udeb (&gt;= 2.10), libdebconfclient0-udeb,
+         libdebian-installer4-udeb (&gt;= 0.69), libiw30-udeb (&gt;= 30~pre1),
+         ethernet-card-detection
 Description: Configure the network
-Installer-Menu-Item: 18
+Installer-Menu-Item: 1800
 
 Package: choose-mirror
 Status: install ok unpacked
-Version: 1.19
-Depends: libc6 (&gt;= 2.3.5-1), libdebconfclient0, libdebian-installer4 (&gt;= 0.38),
-         configured-network
+Version: 2.32
+Depends: configured-network, choose-mirror-bin
 Description: Choose mirror to install from
-Installer-Menu-Item: 23
+Installer-Menu-Item: 2300
 </screen></informalexample>
 
 </para><para>
@@ -619,6 +609,11 @@ after the base system has been set up.
   </varlistentry>
 </variablelist>
 
+</para><para>
+
+See the <filename>README</filename> in the source for debian-installer-utils
+for more detailed information.
+
 </para>
    </sect1>
 
@@ -646,8 +641,7 @@ boot parameter.
     <term><emphasis>network preseeding</emphasis></term>
     <listitem><para>
 Triggered by the presence of the <userinput>preseed/url</userinput>
-boot parameter. In versions later than Etch Beta 2 it is also possible
-to trigger this from the DHCP server.
+boot parameter. It is also possible to trigger this from the DHCP server.
     </para></listitem>
   </varlistentry>
 </variablelist>
@@ -717,12 +711,14 @@ a new component is started.
 </para><para>
 
 If you boot the installer at medium priority, you will also be able to load
-the optional component <classname>open-ssh-client</classname><footnote>
+the optional component <classname>openssh-client-udeb</classname><footnote>
 
 <para>
 If you want to load optional components when installing at the default
-priority, just back out to the menu and select the component that installs
-additional installer components.
+priority, you need to back out to the menu, change the debconf priority to
+medium or low, and then select the component that installs additional installer
+components. After you've installed the desired components, the debconf priority
+can then be changed back to its original value.
 </para>
 
 </footnote>. Loading this component will allow you to use <command>scp</command>

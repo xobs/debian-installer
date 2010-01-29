@@ -10,15 +10,15 @@ using <command>dpkg -c</command>, and extract them using
 
 The main difference is that a lot of policy requirements are waived. For
 example, a udeb does not contain a changelog, licence, manpages or
-md5sum<footnote>
+md5sums<footnote>
 
 <para>
-Of course, the source package for a udeb <emphasis>does</emphasis> need to
-contain a proper licence and changelog.
+Of course, the source package for a udeb <emphasis>does</emphasis> contain
+a licence and changelog.
 </para>
 
 </footnote>. The reason is to minimize size which is important as the
-installation completely takes place in RAM, with swap only becoming
+installation takes place completely in RAM, with swap only becoming
 available after stage 4 of the installation (partitioning).
 
 </para><para>
@@ -35,14 +35,15 @@ make sense and it's likely to break things.
 </para><para>
 
 Two special classes of udebs should be mentioned here. However, covering
-these in detail is outside the scope of this paper.
+these in detail is outside the scope of this document.
+
 <variablelist>
   <varlistentry>
     <term>Kernel image and kernel module udebs</term>
     <listitem><para>
-Kernel udebs are built basically by repackaging a regular kernel-image
+Kernel udebs are built basically by repackaging a regular kernel image
 package. Reason is again to reduce memory usage: not all modules included
-in a kernel-image package are needed during an installation. Also, different
+in a kernel image package are needed during an installation. Also, different
 modules are needed in the initrd for different installation methods, remaining
 modules can either be loaded later or optionally (by manual selection or
 through dependencies). The package <classname>kernel-wedge</classname>
@@ -64,8 +65,8 @@ conformance to this structure for udebs that extend its functionality.
    <sect1><title>Contents of a udeb</title>
 <para>
 
-For components that are included in the main menu, the udeb will at least
-contain:
+For components that are included in the main menu, the udeb will contain
+at least:
 
 <itemizedlist>
  <listitem><para>
@@ -121,14 +122,16 @@ Section: debian-installer
 Priority: optional
 Maintainer: Debian Install System Team &lt;debian-boot@lists.debian.org&gt;
 Uploaders: [...]
-Build-Depends: debhelper (>= 5.0.22), libdebian-installer4-dev (&gt;= 0.41), po-debconf (&gt;= 0.5.0), flex | flex-old , bison, libdebconfclient0-dev (&gt;= 0.49)
+Build-Depends: debhelper (&gt;= 7.3.10), libdebian-installer4-dev (&gt;= 0.41),
+    po-debconf (&gt;= 0.5.0), flex | flex-old , bison,
+    libdebconfclient0-dev (&gt;= 0.49)
 
 Package: kbd-chooser
 Architecture: i386 amd64 powerpc alpha hppa sparc [...]
 XC-Package-Type: udeb
 Depends: ${shlibs:Depends}, ${misc:Depends}, console-keymaps
 Description: Detect a keyboard and select layout
-XB-Installer-Menu-Item: 12
+XB-Installer-Menu-Item: 1200
 </screen></informalexample>
 
 <para>
@@ -164,19 +167,19 @@ in comments.
    <sect1><title>Library udebs</title>
 <para>
 
-A major recent improvement is the addition of <quote>package type</quote>
-support in shlibs files for libraries. This allows
-<command>dpkg-dev</command> and <classname>debhelper</classname> to
-automatically set correct dependencies on library udebs when a d-i
+Creation of correct dependencies on library udebs depends on
+<quote>package type</quote> support in shlibs files for libraries.
+This allows <command>dpkg-dev</command> and <classname>debhelper</classname>
+to automatically set correct dependencies on library udebs when a d-i
 component that depends on them is built.
 
 </para><para>
 
-For example, the regular binary package <classname>zlib1g</classname> now
-has the following lines in its shlibs control file:
+For example, the regular binary package <classname>zlib1g</classname> has
+the following lines in its shlibs control file:
 <informalexample><screen>
-libz 1 zlib1g (&gt;= 1:1.2.1)
-udeb: libz 1 zlib1g-udeb (&gt;= 1:1.2.1)
+libz 1 zlib1g (>= 1:1.2.3.3.dfsg-1)
+udeb: libz 1 zlib1g-udeb (>= 1:1.2.3.3.dfsg-1)
 </screen></informalexample>
 
 </para><para>

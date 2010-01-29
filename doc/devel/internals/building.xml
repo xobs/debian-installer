@@ -1,7 +1,7 @@
 <chapter><title>Building installer images</title>
 <para>
 
-This paper will only provide an introduction to building installer images
+This document only provides an introduction to building installer images
 using existing definitions. The README in <filename>installer/build</filename>
 in the SVN repository contains more detailed information about the build
 system and how to modify existing or define new images.
@@ -30,10 +30,10 @@ images is <classname>debian-cd</classname>.
 </para><para>
 
 On some architectures there is one CD image that <emphasis>is</emphasis>
-ready for use: the <filename>mini.iso</filename> that is produced as a
-by-product of the netboot target. Reason is that this image does not really
-support installing from CD, it just allows booting from CD but retrieves
-all additional udebs and packages over the network.
+ready for use: the <filename>mini.iso</filename>. This image is produced as
+a by-product of the netboot target. A mini.iso image does not really support
+installing from CD as it retrieves all additional udebs and packages over
+the network.
 
 </para><para>
 
@@ -57,6 +57,8 @@ mirror server and creating/updating the correct symlinks. See for example
 
 </footnote> by FTP-masters before the buildds will pick up the upload for
 other architectures.
+Nowadays the BYHAND processing for <classname>debian-installer</classname>
+(and also for <classname>tasksel</classname>) is automated.
 
 </para><para>
 
@@ -67,7 +69,7 @@ Building images for development and testing is done from the
 This includes the daily built images available from
 <ulink url="http://www.debian.org/devel/debian-installer"/>. These are
 generated and uploaded from machines run by d-i porters using the
-daily-build script.
+<filename>daily-build</filename> script.
 </para>
 
 </footnote> using
@@ -110,8 +112,8 @@ The two config variables that determine this are:
     <term>USE_UDEBS_FROM</term>
     <listitem><para>
 Defines the suite or codename from where udebs are taken. The default is
-set to unstable in <filename>./config/common</filename> for SVN/trunk.
-For official uploads the value of this variable is overruled in
+set to <literal>unstable</literal> in <filename>./config/common</filename> for
+SVN/trunk. For official uploads the value of this variable is overruled in
 <filename>debian/rules</filename>.
     </para><para>
 The value in <filename>./config/common</filename> should be changed to the
@@ -148,11 +150,11 @@ option boot parameter.
 daily <quote>sid_d-i</quote> CD images are built using daily D-I builds,
 udebs from unstable and regular packages from testing
  </listitem><listitem>
-daily <quote>lenny_d-i</quote> CD/DVD images are built using "current"
-D-I builds and udebs from testing, and regular packages from testing
+daily <quote>squeeze_d-i</quote> CD/DVD images are built using the current
+D-I release in testing, udebs from testing and regular packages from testing
  </listitem><listitem>
-weekly CD builds are built using "current" D-I builds and udebs from
-testing, and regular packages from testing
+weekly CD builds are built using the current D-I release in testing, udebs from
+testing and regular packages from testing
  </listitem><listitem>
 official CD/DVD builds use everything from stable and thus can only be
 built <emphasis>after</emphasis> the archive has already been updated to
@@ -164,7 +166,7 @@ a new stable (point) release
 
 The <quote>sid_d-i</quote> CDs are what's normally linked as the daily
 built images from the D-I project page; when preparing for a release
-those will link to <quote>lenny_d-i</quote> CDs to facilitate pre-release
+those will link to <quote>squeeze_d-i</quote> CDs to facilitate pre-release
 testing.
 
 </para>
@@ -179,10 +181,10 @@ in <filename>installer/debian/control</filename> need to be satisfied.
 
 </para><para>
 
-To build installer images from SVN trunk, your build machine needs to be
+To build installer images from SVN trunk, the build machine needs to be
 running unstable or you need to set up a sid chroot to build in. (To build
-images from the sarge branch of the repository, the build machine needs to
-run Sarge.)
+images from one of the older release branches of the repository, the build
+machine needs to run or have a chroot for that release.)
 
 </para><para>
 
@@ -200,7 +202,7 @@ different source, create a file <filename>sources.list.udeb.local</filename>.
 To see which targets are available, run <command>make</command>. This will
 result in a list of some 130 targets, most of which are not really relevant.
 A more useful list can be obtained with <command>make | grep ^build</command>.
-The table below has the most often used targets for i386.
+The table below has the most often used targets for x86.
 
 <informaltable><tgroup cols='2'><tbody>
   <row>
@@ -208,10 +210,10 @@ The table below has the most often used targets for i386.
     <entry>Builds all images</entry>
   </row><row>
     <entry><userinput>build_cdrom_isolinux</userinput></entry>
-    <entry>Builds the cdrom images (both 2.4 and 2.6)</entry>
+    <entry>Builds the cdrom images</entry>
   </row><row>
     <entry><userinput>build_netboot</userinput></entry>
-    <entry>Builds the netboot images (both 2.4 and 2.6) and the mini.iso</entry>
+    <entry>Builds the netboot images and the mini.iso</entry>
   </row><row>
     <entry><userinput>reallyclean</userinput></entry>
     <entry>Completely cleans the build environment</entry>
@@ -237,6 +239,9 @@ The easiest way to start is with the purpose of the subdirectories in the
 
 <itemizedlist>
  <listitem><para>
+<filename>util</filename>: contains helper scripts called from the Makefile
+ </para></listitem>
+ <listitem><para>
 <filename>config</filename>: defines the available targets (per architecture)
  </para></listitem>
  <listitem><para>
@@ -250,9 +255,6 @@ to make images bootable
  <listitem><para>
 <filename>localudebs</filename>: allows to use (versions of) udebs not
 available on the mirror you use
- </para></listitem>
- <listitem><para>
-<filename>util</filename>: contains helper scripts called from the Makefile
  </para></listitem>
 </itemizedlist>
 
@@ -270,7 +272,7 @@ directories have a tree structure with general configuration defined in
 the root and more specific configuration defined in branches and leaves.
 Branches are defined in directories that have the same name as a config
 file on the higher level. The <filename>config</filename> directory
-contains makefile snippets.
+contains Makefile snippets.
 
 </para>
 
@@ -282,36 +284,33 @@ For example, the definition for i386 images starts with
 versions, defines the media supported with the line:
 
 <informalexample><screen>
-MEDIUM_SUPPORTED = cdrom netboot floppy hd-media
+MEDIUM_SUPPORTED = cdrom cdrom-xen netboot netboot-xen hd-media
 </screen></informalexample>
 
 </para><para>
 
 These media correspond to the main targets for i386 and are further defined
-in <filename>config/i386</filename>. The <filename>netboot.cfg</filename>
-file in that directory contains, amongst others, the following three lines:
+in <filename>config/i386</filename>. The <filename>hd-media.cfg</filename>
+file in that directory contains, amongst others, the following lines:
 
 <informalexample><screen>
-FLAVOUR_SUPPORTED = "" 2.6
-MEDIA_TYPE = netboot image
-EXTRATARGETS = build_netboot_2.6
+FLAVOUR_SUPPORTED = "" gtk
+EXTRATARGETS = build_hd-media_gtk
 </screen></informalexample>
 
 </para><para>
 
-This defines that the netboot image has two flavors: the default one (using
-a 2.4 kernel) and one using a 2.6 kernel, which is further defined in the
-<filename>config/i386/netboot/2.6.cfg</filename> file where the default
-values of the variables for the kernel version are overruled.
+Th first line defines that the netboot image has two flavors: the default one
+(for the newt frontend), and a second one for the gtk frontend. The latter is
+further defined in the <filename>config/i386/hd-media/gtk.cfg</filename> file.
+The second line ensures that the gtk image will always be built together with
+the newt image.
 
 </para><para>
 
 The files in config are processed recursively to dynamically generate the
-build targets, so in this example you get a <userinput>netboot</userinput>,
-a <userinput>netboot_2.6</userinput> target and targets for the other media.
-Building is also recursive, so calling the netboot target will automatically
-build both the <userinput>netboot</userinput> and
-<userinput>netboot_2.6</userinput> images.
+build targets, so in this example you get a <userinput>hd-media</userinput>,
+a <userinput>hd-media_gtk</userinput> target and targets for the other media.
 
 </para><para>
 
@@ -335,27 +334,17 @@ First the file <filename>pkg-lists/netboot/i386.cfg</filename> is considered
 and all udebs listed in it are added. Some example lines from that file:
 
 <informalexample><screen>
-#include "discover"
 console-keymaps-at
-console-keymaps-usb
-usb-discover [2.4]
-socket-modules-${kernel:Version} ?
-acpi-modules-${kernel:Version} [2.6]
+nic-modules-${kernel:Version}
+mmc-modules-${kernel:Version} ?
 </screen></informalexample>
 
 </para><para>
 
 The variable <literal>${kernel:Version}</literal> is expanded to match the
 package name of the udeb based on the kernel version and flavor. If the
-name of a udeb is followed by <quote>[2.4]</quote> or <quote>[2.6]</quote>,
-it is only included if the kernel major version for the image being built
-matches. If it is followed by a question mark it is skipped if the package
+name of a udeb is followed by a question mark it is skipped if the package
 is not available (without the question mark an error would be generated).
-
-</para><para>
-
-The first line with the <literal>#include</literal> results in the file
-<filename>pkg-lists/discover</filename> being processed next in the same way.
 
 </para><para>
 
@@ -363,8 +352,8 @@ The <command>pkg-list</command> script will also look for the presence of
 files named <filename>common</filename> and <filename>local</filename>
 and thus <filename>pkg-lists/netboot/common</filename> is processed next.
 This file exists and lists a number of udebs that belong in any netboot
-image, independent of the architecture. This file also contains two
-include directives:
+image, independent of the architecture. This file contains two include
+directives which result in the specified files being processed next:
 
 <informalexample><screen>
 #include "base"
@@ -382,7 +371,7 @@ in all bootable images) are also processed.
 The file <filename>pkg-lists/netboot/local</filename> does not normally
 exist as it is intended for the inclusion of non-standard udebs. It is also
 very useful for testing as it can be used to temporarily add udebs not
-normally included without the need to modify the regular files.
+normally included in an image without the need to modify the regular files.
 
 </para><para>
 
@@ -410,9 +399,9 @@ To see how the package list is built for a particular image, set
    <sect1><title>Result of the build</title>
 <para>
 
-If the build is successful, you will find the images under the
-<filename>build/dest</filename> directory. Depending on the type of build
-you will also find manifest and log files there.
+If the build is successful, the images that were built can be found under
+the <filename>build/dest</filename> directory. Depending on the type of
+build you will also find manifest and log files there.
 
 </para><para>
 
@@ -438,7 +427,8 @@ match the version of the libraries in the udebs.
 
 The size reduction is most significant for libc (40%) and libm (90%). Other
 libraries that are reduced include libresolv, libslang and libnewt. The
-reduction is done by calling mklibs from the main Makefile.
+reduction is done by calling <command>mklibs</command> from the main
+<filename>Makefile</filename>.
 
 </para><para>
 
