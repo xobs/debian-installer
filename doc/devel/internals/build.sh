@@ -5,7 +5,7 @@ stylesheet=/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/html/chunk.xsl
 
 if [ -n "$xsltproc" ] ; then
     if [ -e "$stylesheet" ]; then
-	$xsltproc style-html.xsl internals.xml
+	$xsltproc --xinclude style-html.xsl internals.xml
     else
 	echo stylesheet missing. Please install the docbook-xsl Debian package
 	exit 1
