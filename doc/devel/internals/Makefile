@@ -1,5 +1,5 @@
 all: *.xsl *.xml
-	./build.sh
+	@./build.sh
 
 clean:
-	rm -f *.html
+	@rm -f *.html
