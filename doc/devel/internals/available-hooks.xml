@@ -45,7 +45,7 @@ See also <xref linkend="di-boot"/>.
 <variablelist>
 <varlistentry>
 
-<term>/lib/debian-installer-startup.d [rootskel]</term>
+<term>/lib/debian-installer-startup.d/* [rootskel]</term>
 <listitem><para>
    Early boot scripts. Special feature is that scripts get called if they
    are executable, and get sourced if they are not.
@@ -61,7 +61,7 @@ See also <xref linkend="di-boot"/>.
 
 </varlistentry><varlistentry>
 
-<term>/lib/debian-installer.d [rootskel]</term>
+<term>/lib/debian-installer.d/* [rootskel]</term>
 <listitem><para>
    Initialization and startup of the D-I user interface. These scripts always
    get sourced.
@@ -76,7 +76,7 @@ See also <xref linkend="di-boot"/>.
   </sect2>
 
   <sect2 id="ap-hooks-general">
-  <title>General purpose</title>
+  <title>General purpose run-parts hooks</title>
 
 <para>
 
@@ -95,15 +95,15 @@ in which they are executed during a standard installation.
     The files in this directory are executed after the system has been
     bootstrapped (generally by debootstrap), but before the system is used
     in any way. It is intended to be used for very basic configuration of
-    the target system.
+    the target system. APT has not yet been configured at this point.
 </para></listitem>
 
 </varlistentry><varlistentry>
 
 <term>/usr/lib/post-base-installer.d/* [base-installer]</term>
 <listitem><para>
-    The files in this directory are executed just before kernel selection
-    and installation.
+    The files in this directory are executed after basic configuration of
+    APT and just before kernel selection and installation.
 </para></listitem>
 
 </varlistentry><varlistentry>
@@ -132,12 +132,20 @@ in which they are executed during a standard installation.
   </sect2>
 
   <sect2 id="ap-hooks-special">
-  <title>Special purpose</title>
+  <title>Special purpose run-parts hooks</title>
+
+<para>
+
+This section lists run-parts directories that are less likely to be used
+by other components or for customization, although it is still possible
+to do so.
+
+</para>
 
 <variablelist>
 <varlistentry>
 
-<term>/lib/main-menu.d [main-menu]</term>
+<term>/lib/main-menu.d/* [main-menu]</term>
 <!--
 <listitem><para>
    FIXME
@@ -146,7 +154,7 @@ in which they are executed during a standard installation.
 
 </varlistentry><varlistentry>
 
-<term>/lib/rescue.d [rescue]</term>
+<term>/lib/rescue.d/* [rescue]</term>
 <!--
 <listitem><para>
    FIXME
@@ -155,12 +163,11 @@ in which they are executed during a standard installation.
 
 </varlistentry><varlistentry>
 
-<term>/usr/lib/apt-setup/generators [apt-setup]</term>
-<!--
+<term>/usr/lib/apt-setup/generators/* [apt-setup]</term>
 <listitem><para>
-   FIXME
+   Contains scripts responsible for generating entries in the
+   <filename>/etc/apt/sources.list</filename> on the target system.
 </para></listitem>
--->
 
 </varlistentry>
 </variablelist>
@@ -168,7 +175,7 @@ in which they are executed during a standard installation.
   </sect2>
 
   <sect2>
-  <title>Partitioning - deprecated components</title>
+  <title>Partitioning &mdash; deprecated components</title>
 
 <para>
 
@@ -218,6 +225,15 @@ being used for the mips architecture. All other architectures use
 
  <sect1>
  <title>Other hooks</title>
+
+<para>
+
+The hooks in this section do not contain scripts, but are single files or
+a directory containing files that are read by a certain component or utility.
+Some of these hooks can be used for customization, but others should only be
+modified by using the correct utilities.
+
+</para>
 
 <!--
 Should distinguish between ones that can be directly used and
