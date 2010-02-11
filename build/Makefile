@@ -512,15 +512,37 @@ ifdef OMIT_DPKG
 	rm -rf $(DPKGDIR)
 endif
 
-ifdef DROP_LANG
-	# Remove languages from the templates.
-	# Not ideal, but useful if you're very tight on space.
-	set -e; \
+define drop_lang
+	@echo "Dropping languages: $(1)"
+	@set -e; \
 	for FILE in $$(find $(TREE)/var/lib/dpkg -name "*.templates"); do \
-		perl -e 'my $$status=0; my $$drop=shift; while (<>) { if (/^[A-Z]/ || /^$$/) { if (/^(Choices|Description|Indices|Default)-($$drop)/ && ! /^Choices-C:/) { $$status = 0 } else { $$status = 1 } } print if ($$status); }' ${DROP_LANG} < $$FILE > temp; \
+		perl -e 'my $$status=0; my $$drop=shift; while (<>) { if (/^[A-Z]/ || /^$$/) { if (/^(Choices|Description|Indices|Default)-($$drop)/ && ! /^Choices-C:/) { $$status = 0 } else { $$status = 1 } } print if ($$status); }' $(1) < $$FILE > temp; \
 		mv temp $$FILE; \
 	done
+endef
+
+ifndef KEEP_GI_LANGS
+	# It makes no sense to include languages only supported by the
+	# graphical installer in regular images. This will also ensure
+	# their glyphs don't get included a bit lower down.
+	$(call drop_lang,$(GI_LANGS))
 endif
+
+ifdef DROP_LANG
+	# Remove selected languages from the templates.
+	# Not ideal, but useful if you're very tight on space.
+	$(call drop_lang,$(DROP_LANG))
+endif
+
+	# Collect the used UTF-8 strings, to know which glyphs to include in
+	# the font.
+	cat needed-characters/*.utf > $(TEMP)/all.utf
+	if [ -n "`find $(EXTRAUDEBSDPKGDIR)/info/ -name \\*.templates`" ]; then \
+		cat $(EXTRAUDEBSDPKGDIR)/info/*.templates >> $(TEMP)/all.utf; \
+	fi
+	if [ -n "`find $(DPKGDIR)/info/ -name \\*.templates`" ]; then \
+		cat $(DPKGDIR)/info/*.templates >> $(TEMP)/all.utf; \
+	fi
 
 	# Strip all kernel modules, just in case they haven't already been
 	set -e; \
@@ -539,16 +561,6 @@ endif
 		rm $$file; \
 	done
 	rm -rf $(TREE)/var/lib/dpkg/triggers
-
-	# Collect the used UTF-8 strings, to know which glyphs to include in
-	# the font.
-	cat needed-characters/*.utf > $(TEMP)/all.utf
-	if [ -n "`find $(EXTRAUDEBSDPKGDIR)/info/ -name \\*.templates`" ]; then \
-		cat $(EXTRAUDEBSDPKGDIR)/info/*.templates >> $(TEMP)/all.utf; \
-	fi
-	if [ -n "`find $(DPKGDIR)/info/ -name \\*.templates`" ]; then \
-		cat $(DPKGDIR)/info/*.templates >> $(TEMP)/all.utf; \
-	fi
 
 	# Remove extra udebs now that we're done with them.
 	rm -rf $(EXTRAUDEBSDIR)
