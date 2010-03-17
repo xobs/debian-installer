@@ -28,9 +28,9 @@ uboot_mac() {
 }
 
 if [ $ifilesize -eq 9437184 ]; then
-	if which iface_get_mac > /dev/null ; then
+	if which iface_get_mac > /dev/null && [ `iface_get_mac eth0` != "00:00:00:00:05:09" ] ; then
 		eth0=$(iface_get_mac eth0)
-	elif which get_mac > /dev/null ; then
+	elif which get_mac > /dev/null && [ `get_mac` != "00:00:00:00:05:09" ] ; then
 		eth0=$(get_mac)
 	fi
 	if [ -z "$eth0" ]; then
