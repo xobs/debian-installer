@@ -95,6 +95,7 @@ include config/dir
 
 export KEYRING
 export KERNELVERSION
+export LOCALUDEBDIR
 
 ifneq ($(shell id -u),0)
   ROOTCMD ?= fakeroot
