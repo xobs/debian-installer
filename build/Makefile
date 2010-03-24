@@ -184,7 +184,7 @@ flavour_validate:
 	@set -e; \
 	FLAVOUR= var="$(strip $(patsubst $(MEDIUM)%,%,$(var)))"; \
 	tmp=$$(echo $$var |sed 's/[ ].*$$//'); \
-	[ -z '$(FLAVOUR_SUPPORTED)$(FLAVOUR_SUPPORTED_EXTRA)' ] || [ -z "$$tmp" ] || [ -z "$$(echo $(FLAVOUR_SUPPORTED) $(FLAVOUR_SUPPORTED_EXTRA) |grep -w $$tmp)" ] || FLAVOUR=$$tmp; \
+	[ -z '$(FLAVOUR_SUPPORTED)$(FLAVOUR_SUPPORTED_EXTRA)' ] || [ -z "$$tmp" ] || [ -z "$$(echo $(FLAVOUR_SUPPORTED) $(FLAVOUR_SUPPORTED_EXTRA) | grep -w $$tmp)" ] || FLAVOUR=$$tmp; \
 	$(submake) finish_validate FLAVOUR=$$FLAVOUR var="$$var"
 
 .PHONY: finish_validate
@@ -284,6 +284,7 @@ release:
 # The general tree target.
 $(STAMPS)tree-unpack-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
 	dh_testroot
+	@[ -d ../debian ] || { echo "directory '../debian' not found; complete source of 'debian-installer' package is required"; false; }
 	cd .. && dpkg-checkbuilddeps
 	@rm -f $@
 
