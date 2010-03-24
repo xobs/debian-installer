@@ -543,6 +543,10 @@ endif
 	if [ -n "`find $(DPKGDIR)/info/ -name \\*.templates`" ]; then \
 		cat $(DPKGDIR)/info/*.templates >> $(TEMP)/all.utf; \
 	fi
+	if [ -f $(TREE)/usr/share/localechooser/languagelist.data.gz ]; then \
+		zcat $(TREE)/usr/share/localechooser/languagelist.data.gz >> $(TEMP)/all.utf; \
+	fi
+
 
 	# Strip all kernel modules, just in case they haven't already been
 	set -e; \
