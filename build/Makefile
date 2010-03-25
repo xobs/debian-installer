@@ -478,10 +478,13 @@ ifndef ONLY_KLIBC
 	-cp -a `find $(EXTRAUDEBSDIR)/lib -name '*.so.*'` $(TEMP)/udeblibs
 	-cp -a `find $(TREE)/lib -name '*.so.*'` $(TEMP)/udeblibs
 	mkdir -p $(TREE)/lib
+	# HACK ALERT: X.Org modules are excluded from the scan as mklibs
+	# is unable to find symbols provided by the /usr/bin/Xorg binary
 	$(MKLIBS) -L $(TREE)/usr/lib -L $(TEMP)/udeblibs -v -d $(TREE)/lib --root=$(TREE) \
 		-L $(TREE)/usr/lib/cdebconf/frontend \
 		$(addprefix -l,$(notdir $(wildcard $(TREE)/usr/lib/cdebconf/frontend/*.so))) \
-		`find $(TEMP) -type f -a \( -perm +0111 -o -name '*.so' -o -name '*.so.*' \) | grep -v udeblibs`
+		`find $(TEMP) -type f -a \( -perm +0111 -o -name '*.so' -o -name '*.so.*' \) | \
+		 grep -v udeblibs | grep -v 'usr/lib/xorg/modules/.*\.so'`
 endif
 
 	# Add missing symlinks for libraries
