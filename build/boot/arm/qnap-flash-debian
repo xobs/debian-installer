@@ -27,10 +27,24 @@ uboot_mac() {
 	ubootcfg -b 0 -f /dev/mtdblock4 -o - | grep "^ethaddr=" | sed "s/^ethaddr=//"
 }
 
+valid_mac() {
+	mac="$1"
+	if [ -z "$mac" ]; then
+		return 1
+	fi
+	if [ "$mac" = "00:00:00:00:05:09" ]; then
+		return 1
+	fi
+	if [ -n "$(echo "$mac" | sed "s/^..:..:..:..:..:..$//")" ]; then
+		return 1
+	fi
+	return 0
+}
+
 if [ $ifilesize -eq 9437184 ]; then
-	if which iface_get_mac > /dev/null && [ `iface_get_mac eth0` != "00:00:00:00:05:09" ] ; then
+	if which iface_get_mac > /dev/null && valid_mac "$(iface_get_mac eth0)"; then
 		eth0=$(iface_get_mac eth0)
-	elif which get_mac > /dev/null && [ `get_mac` != "00:00:00:00:05:09" ] ; then
+	elif which get_mac > /dev/null && valid_mac "$(get_mac)"; then
 		eth0=$(get_mac)
 	fi
 	if [ -z "$eth0" ]; then
@@ -41,12 +55,10 @@ if [ $ifilesize -eq 9437184 ]; then
 		echo "Updating MAC address..."
 		orig=$(ubootcfg -b 0 -f /dev/mtdblock4 -o - | grep -v "^eth" | cksum | cut -d " " -f 1)
 		ubootcfg -b 0 -f /dev/mtdblock4 -o - | sed "s/^ethaddr=.*/ethaddr=$eth0/" > /tmp/debian.$$
-		if which iface_get_mac > /dev/null ; then
+		if which iface_get_mac > /dev/null && valid_mac "$(iface_get_mac eth1)"; then
 			eth1=$(iface_get_mac eth1)
-			if [ "$eth1" != "00:00:00:00:05:09" ]; then
-				if ! grep -q "^eth1addr=" /tmp/debian.$$ ; then
-					echo "eth1addr=$eth1" >> /tmp/debian.$$
-				fi
+			if ! grep -q "^eth1addr=" /tmp/debian.$$ ; then
+				echo "eth1addr=$eth1" >> /tmp/debian.$$
 			fi
 		fi
 		conf=$(grep -v "^eth" /tmp/debian.$$ | cksum | cut -d " " -f 1)
