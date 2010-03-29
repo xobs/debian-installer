@@ -22,7 +22,40 @@ if [ $ifilesize -ne 4194304 -a $ifilesize -ne 9437184 ]; then
 	exit 1
 fi
 
-# 2) Change the MAC address on Kirkwood-based QNAP devices
+# 2) Ensure that the right installer files are used
+qnap=$(getcfg System Model)
+if [ -n "$qnap" ]; then
+	case "$qnap" in
+		"TS-109"* | "TS-209"*)
+			qnap="TS-109/TS-209"
+		;;
+		"TS-409"*)
+			qnap="TS-409"
+		;;
+		"TS-110"* | "TS-119"* | "TS-210"* | "TS-219"*)
+			qnap="TS-11x/TS-21x"
+		;;
+		"TS-410"* | "TS-419"*)
+			qnap="TS-41x"
+		;;
+		*)
+			echo "Unknown QNAP model $model: please report this to debian-arm@lists.debian.org"
+			exit 1
+		;;
+	esac
+	if [ -e model ]; then
+		debian=$(cat model)
+		if [ "$debian" != "$qnap" ]; then
+			echo "Installation files don't match system model:"
+			echo "  System model: $qnap"
+			echo "  Installation files: $debian"
+			echo "Please download the correct installation files."
+			exit 1
+		fi
+	fi
+fi
+
+# 3) Change the MAC address on Kirkwood-based QNAP devices
 uboot_mac() {
 	ubootcfg -b 0 -f /dev/mtdblock4 -o - | grep "^ethaddr=" | sed "s/^ethaddr=//"
 }
@@ -81,7 +114,7 @@ if [ $ifilesize -eq 9437184 ]; then
 	
 fi
 
-# 3) Finally, write the installer to flash
+# 4) Finally, write the installer to flash
 printf "Writing debian-installer to flash... "
 cat kernel > /dev/mtdblock1
 cat initrd.gz > /dev/mtdblock2
