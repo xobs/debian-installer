@@ -629,6 +629,15 @@ $(TREE)/lib/unifont.bgf: $(TEMP)/all.utf
 
 # Create a compressed image of the root filesystem.
 $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp arch_tree
+	# Check for lost file attributes
+	@if [ -e $(TREE)/dev/console ] && \
+	    ! ls -l $(TREE)/dev/console | grep -q "^c"; then \
+		echo "Error: incorrect file attributes detected in initrd tree."; \
+		echo "Did you restart a (failed) fakeroot build?"; \
+		echo "See fakeroot(1) ('-s' and '-i' options) for additional information."; \
+		exit 1; \
+	fi
+
 	# Only build the font if we have installation-locale
 	if [ -d "$(LOCALE_PATH)/C.UTF-8" ] && [ -e /usr/src/unifont.bdf ]; then \
 		$(submake) $(TREE)/lib/unifont.bgf; \
