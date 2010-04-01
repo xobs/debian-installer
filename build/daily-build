@@ -1,5 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 set -e
+
+# Ensure all output is in English and consistent.
+# Also needed because the output of some commands is tested.
+export LANG=C
+unset LC_ALL LANGUAGE
 
 # Overridable environment variables for uploading.
 
@@ -26,7 +31,7 @@ fi
 if [ -z "$DIR" ]; then
 	DIR=$(date -u '+%Y%m%d-%H:%M')
 fi
-if [ "$HOST" = "local" ]; then
+if [ "$HOST" = local ]; then
 	SYNC="rsync"
 	SYNC_BASEDIR="$BASEDIR"
 else
@@ -55,8 +60,10 @@ if [ "$ROOTCMD" = fakeroot ]; then
 	ROOTCMDOPTS="-i $FRSAVE -s $FRSAVE"
 fi
 
+LOG_TO_STDOUT=${LOG_TO_STDOUT:-0}
+
 overview () {
-	LANG=C echo "$(dpkg --print-architecture) ($(date)) $(whoami)@$(hostname | cut -d . -f 1) $1" >> dest/overview.log
+	echo "$(dpkg --print-architecture) ($(date)) $(whoami)@$(hostname | cut -d . -f 1) $1" >> dest/overview.log
 }
 
 header () {
@@ -65,9 +72,29 @@ header () {
 	echo
 }
 
-build () {
-	unset LANG LC_ALL LANGUAGE || true
+do_build () {
+	local t=$1
+	local err=0
 
+	# Commands in these two branches should be the same.
+	if [ "$LOG_TO_STDOUT" = 1 ]; then
+		set -o pipefail
+		(
+		header BUILDING IMAGE FOR $t
+		$ROOTCMD $ROOTCMDOPTS make $t 2>&1
+		) | tee -a dest/$t.log || err=$?
+		set +o pipefail
+	else
+		(
+		header BUILDING IMAGE FOR $t
+		$ROOTCMD $ROOTCMDOPTS make $t 2>&1
+		) >> dest/$t.log || err=$?
+	fi
+
+	return $err
+}
+
+build () {
 	# Override $TARGETS with custom makefile targets.
 	if [ -z "$TARGETS" ]; then
 		TARGETS="$($ROOTCMD make all_list | grep '^build')"
@@ -79,8 +106,7 @@ build () {
 
 	# Save file attributes within this loop if fakeroot is used
 	for t in $TARGETS; do
-		header BUILDING IMAGE FOR $t > dest/$t.log
-		if $ROOTCMD $ROOTCMDOPTS make $t >> dest/$t.log 2>&1; then
+		if do_build $t; then
 			overview "$t success"
 		else
 			overview "$t failed"
@@ -124,7 +150,7 @@ trim () {
 	else
 		echo "(keeping all old builds)"
 	fi
-	)  > $TRIM_LOG 2>&1
+	) > $TRIM_LOG 2>&1
 }
 
 UPDATED=""
@@ -137,8 +163,8 @@ update () {
 }
 
 deps () {
-	temp=`LANG=C dpkg-checkbuilddeps -B ../debian/control 2>&1 || true`
-	packages=`echo $temp | sed -e 's%dpkg-checkbuilddeps: Unmet build dependencies: %%'`
+	temp=$(dpkg-checkbuilddeps -B ../debian/control 2>&1 || true)
+	packages=$(echo $temp | sed -e 's%dpkg-checkbuilddeps: Unmet build dependencies: %%')
 	apt-get update
 	if [ "$packages" ]; then
 		DEBIAN_PRIORITY=critical apt-get -y install $packages
