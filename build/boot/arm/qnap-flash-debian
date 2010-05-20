@@ -114,7 +114,18 @@ if [ $ifilesize -eq 9437184 ]; then
 	
 fi
 
-# 4) Finally, write the installer to flash
+# 4) Copy uLinux.conf in case it's not there so we can identify the QNAP model
+path=/tmp/nasconfig_tmp
+mkdir -p $path
+if mount -o rw -t ext2 /dev/mtdblock5 $path; then
+	if [ ! -e $path/uLinux.conf ]; then
+		cp /etc/config/uLinux.conf $path
+	fi
+	umount $path
+fi
+rmdir $path
+
+# 5) Finally, write the installer to flash
 printf "Writing debian-installer to flash... "
 cat kernel > /dev/mtdblock1
 cat initrd.gz > /dev/mtdblock2
