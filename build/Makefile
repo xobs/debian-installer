@@ -615,7 +615,7 @@ sources.list.udeb:
 # be called when it is not present anyway.
 # The locale must be generated after installing the package locales
 $(TREE)/lib/unifont.bgf: $(TEMP)/all.utf
-	set -e; \
+	@set -e; \
 	CHARMAP=`LOCPATH=$(LOCALE_PATH) LC_ALL=C.UTF-8 locale charmap`; \
             if [ UTF-8 != "$$CHARMAP" ]; then \
 	        echo "error: Trying to build unifont.bgf without installation-locale!"; \
