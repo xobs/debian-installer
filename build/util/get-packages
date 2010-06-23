@@ -186,7 +186,13 @@ mkdir -p $UDEBDIR
 
 lnpkg() {
 	local pkg=$1; local dir=$2 debdir=$3
-	local L="`find $dir -name "${pkg}_*" 2>/dev/null | sort | tail -n 1`"
+	local L LV l lv
+	for l in `find $dir -name "${pkg}_*" 2>/dev/null`; do
+		lv=${l%_*}; lv=${lv##*_};
+		if dpkg --compare-versions "$lv" gt "$LV"; then
+			L=$l LV=$lv
+		fi
+	done
 	if [ -e "$L" ]; then
 		ln -f $L $debdir/$pkg.$TYPE
 	fi
