@@ -72,16 +72,16 @@ New language identification
 </title>
 
 <para>
-For technical reasons, only languages listed in the ISO-639 standard
+For technical reasons, only languages listed in the ISO 639-3 standard
 can be supported directly in software translations. The official
-ISO-639 list can be found on <ulink url="TODO">the official ISO-639
+ISO 639-3 list can be found on <ulink url="http://www.sil.org/iso639-3/">the official ISO 639
 Maintenance Agency web site</ulink>. In case a translation effort is
-intended for a language not listed in ISO-639, the use of one of the
-<emphasis>reserved codes</emphasis> of ISO-639 will be needed.
+intended for a language not listed in ISO 639-3, the use of one of the
+<emphasis>reserved codes</emphasis> of ISO 639-3 will be needed.
 </para>
 
 <para>
-If needed, the &i18n-coords; will search for the ISO-639 code for your
+If needed, the &i18n-coords; will search for the ISO 639-3 code for your
 language if the new translator doesn't already know it, as well as the
 official English name for the language. Mutual agreement about these
 important parameters has to be reached at this point.
@@ -96,18 +96,18 @@ must ask for these information to the language coordinator.
 
 <para>
 For this step to be considered complete, the entry for the future
-supported language must be completed by its ISO-639 code in the
+supported language must be completed by its ISO 639-3 code in the
 supported languages list XML file (see <xref linkend="supported"/>,
 with the <emphasis>identification</emphasis> value in the
 <userinput>nlp_step</userinput> field. The fields about the backup
 coordinator and the translation teams are also filled if this information
-was provided.
+can be provided.
 </para>
 
 <itemizedlist>
 <listitem>
 <para>
-<userinput>code</userinput>: language ISO-639 code
+<userinput>code</userinput>: language ISO 639-3 code
 </para>
 </listitem>
 <listitem>
@@ -159,12 +159,12 @@ Informations included in a locale:
 	    <itemizedlist>
 	      <listitem>
 		<para>
-		  name of the days of the weeks (and abbreviations);
+		  names of week days (and abbreviations);
 		</para>
 	      </listitem>
 	      <listitem>
 		<para>
-		name of the months (and abbreviations);
+		names of months (and abbreviations);
 		</para>
 	      </listitem>
 	      <listitem>
@@ -174,17 +174,17 @@ Informations included in a locale:
 	      </listitem>
 	      <listitem>
 		<para>
-		  writing numbers;
+		  writing style for numbers;
 		</para>
 	      </listitem>
 	      <listitem>
 		<para>
-		  writing dates;
+		  writing style for dates;
 		</para>
 	      </listitem>
 	      <listitem>
 		<para>
-		  writing telephone numbers;
+		  writing style for telephone numbers;
 		</para>
 	      </listitem>
 	      <listitem>
@@ -230,8 +230,7 @@ the &i18n-coords;.
 <para>
 For this step to be considered complete, a new locale must either
 exist or be requested for addition (through a regular bug report) in
-one of the following Debian packages: <classname>locales</classname>
-or <classname>belocs-locales-data</classname>.
+the <classname>locales</classname> Debian package.
 </para>
 
 <para>
@@ -288,7 +287,7 @@ process) This will be handled by the &i18n-coords;.
 </para>
 
 <para>
-This entry will mention the &d-i; interfaces which this language is available on (text, latin-1 serial, dialog or graphical interface). This choice depends on the needed rendering mechanism for this language. 
+This entry should mention the &d-i; interfaces which this language is available on (text, latin-1 serial, dialog or graphical interface). This choice depends on the needed rendering mechanism for this language. 
 </para>
 
 <para>
@@ -320,7 +319,7 @@ Latin-1 console (several serial terminals). This includes so-called <emphasis>La
 <para>
 <emphasis>Category 3</emphasis>: languages that can be rendered et the Linux text console, only by using a framebuffer terminal. The
 key point for these languages is the availability of their glyphs in
-the <classname>bterm-unifont</classname> package. These language should
+the <classname>bterm-unifont</classname> package. These languages should
 also not need complex rendering mechanisms such as combination
 mechanisms. The difference with 2 is the possibility to display the language
 at the Linux console without framebuffer. 
@@ -350,8 +349,7 @@ A default locale is also mentioned in this entry. This will be the
 default choice in case this language is supported in several locales.
 In case a new locale has to be written in the former initial steps,
 this default locale can be this new locale, otherwise it must be an
-already existing locale. If this locale only exists in an alternative
-locales package, this must be mentioned to the &i18n-coords;.
+already existing locale.
 </para>
 
 <para>
@@ -381,8 +379,8 @@ Needed characters
 </title>
 
 <para>
-That step can be completely skipped for languages that can only be displayed
-with the graphical frontend of &d-i;
+This step is optional for languages that can only be rendered with the
+graphical version of &d-i; (languages in category 4 at the previous step). 
 </para>
 
 <para>
@@ -399,14 +397,8 @@ reasonably sized alphabet.
 It is allowed to add characters that can be entered directly using a
 "standard" keyboard for the language and are printed on the tops of keys,
 for example as displayed on http://en.wikipedia.org/wiki/Keymap. This
-includes characters accessible through alt-gr and characters that can be
+includes characters accessible through AltGr and characters that can be
 created using dead keys.
-</para>
-
-<para>
-This step is optional for languages that can only be rendered with the
-graphical version of &d-i; (languages in category 4 at the previous step). 
-For languages which must used the graphical version of &d-i;, this step is automatically considered completed. Translators can however still provide the required file which could be useful in the future. 
 </para>
 
 <para>
@@ -423,11 +415,12 @@ namely French:
 <para>
 For this step to be completed, the new file must have been committed in
 the <classname>installer/built/needed-characters</classname>
-directory. The file name must be the ISO-639 language code with <filename>.utf</filename> as extension.
+directory. The file name must be the ISO 639-3 language code with <filename>.utf</filename> as extension.
 </para>
 
 <para>
-As long as the language remains a prospective language, that file should be named after the language's ISO code and the <filename>.prospective</filename> file extension. The extension will be changed to <filename>.utf</filename> when the language is completely supported.
+As long as the language remains a prospective language, that file
+should be named after the language's ISO 639-3 code and the <filename>.prospective</filename> file extension. The extension will be changed to <filename>.utf</filename> when the language is completely supported.
 </para>
 
 <para>
@@ -696,6 +689,8 @@ The &i18n-coords; will record this information in the supported
 languages list by changing the <userinput>nlp_step</userinput> field
 value to <emphasis>prospective</emphasis>. They will also add the
 language to the <command>/l10n/output-l10n-changes</command>.
+Finally, they renamed the <emphasis>needed characters</emphasis> and replace
+the <filename>.prospective</filename> file extension by a <filename>.utf</extension>
 </para>
 
 <para>
