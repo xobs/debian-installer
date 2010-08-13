@@ -189,7 +189,7 @@ lnpkg() {
 	local pkg=$1; local dir=$2 debdir=$3
 	local L LV l lv
 	for l in `find $dir -name "${pkg}_*" 2>/dev/null`; do
-		lv=${l%_*}; lv=${lv##*_};
+		lv=$(dpkg -f "$l" Version); lv=${lv%"Version: "}
 		if dpkg --compare-versions "$lv" gt "$LV"; then
 			L=$l LV=$lv
 		fi
