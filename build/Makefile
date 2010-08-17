@@ -638,10 +638,13 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp arch_tree
 		exit 1; \
 	fi
 
+ifeq ($(DEB_HOST_ARCH_OS),linux)
 	# Only build the font if we have installation-locale
 	if [ -d "$(LOCALE_PATH)/C.UTF-8" ] && [ -e /usr/src/unifont.bdf ]; then \
 		$(submake) $(TREE)/lib/unifont.bgf; \
 	fi
+endif
+
 	install -d $(TEMP)
 
 	case $(INITRD_FS) in \
