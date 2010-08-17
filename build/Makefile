@@ -485,6 +485,16 @@ ifndef ONLY_KLIBC
 		$(addprefix -l,$(notdir $(wildcard $(TREE)/usr/lib/cdebconf/frontend/*.so))) \
 		`find $(TEMP) -type f -a \( -perm +0111 -o -name '*.so' -o -name '*.so.*' \) | \
 		 grep -v udeblibs | grep -v 'usr/lib/xorg/modules/.*\.so'`
+
+ifeq ($(DEB_HOST_ARCH_OS),hurd)
+	# On Hurd the SONAME for the dynamic linker is ld.so.1, but binaries
+	# have the ld.so symlink as the interpreter. Ideally mklibs should
+	# be copying it along with the libraries.
+	ln -s ld.so.1 $(TREE)/lib/ld.so
+
+	# We need /servers/exec at boot time
+	touch $(TREE)/servers/exec
+endif
 endif
 
 	# Add missing symlinks for libraries
