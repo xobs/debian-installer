@@ -624,7 +624,7 @@ sources.list.udeb:
 # Use the UTF-8 locale in installation-locale. This target shouldn't
 # be called when it is not present anyway.
 # The locale must be generated after installing the package locales
-$(TREE)/lib/unifont.bgf: $(TEMP)/all.utf
+$(TEMP)/unifont.bdf: $(TEMP)/all.utf
 	@set -e; \
 	CHARMAP=`LOCPATH=$(LOCALE_PATH) LC_ALL=C.UTF-8 locale charmap`; \
             if [ UTF-8 != "$$CHARMAP" ]; then \
@@ -633,8 +633,17 @@ $(TREE)/lib/unifont.bgf: $(TEMP)/all.utf
 		echo "a version of glibc with a different locale data format.)"; \
 	        exit 1; \
 	    fi
-	LOCPATH=$(LOCALE_PATH) LC_ALL=C.UTF-8 reduce-font /usr/src/unifont.bdf < $(TEMP)/all.utf > $(TEMP)/unifont.bdf
-	bdftobogl -b $(TEMP)/unifont.bdf > $@.tmp
+	LOCPATH=$(LOCALE_PATH) LC_ALL=C.UTF-8 reduce-font /usr/src/unifont.bdf < $(TEMP)/all.utf > $@.tmp
+	mv $@.tmp $@
+
+$(TREE)/lib/unifont.bgf: $(TEMP)/unifont.bdf
+	bdftobogl -b $< > $@.tmp
+	mv $@.tmp $@
+
+# The Hurd console uses BDF fonts instead
+$(TREE)/lib/unifont.bdf: $(TEMP)/unifont.bdf
+	mkdir -p $(dir $@)
+	cp $< $@.tmp
 	mv $@.tmp $@
 
 # Create a compressed image of the root filesystem.
@@ -648,10 +657,16 @@ $(TEMP_INITRD): $(STAMPS)tree-$(targetstring)-stamp arch_tree
 		exit 1; \
 	fi
 
-ifeq ($(DEB_HOST_ARCH_OS),linux)
 	# Only build the font if we have installation-locale
+ifeq ($(DEB_HOST_ARCH_OS),linux)
 	if [ -d "$(LOCALE_PATH)/C.UTF-8" ] && [ -e /usr/src/unifont.bdf ]; then \
 		$(submake) $(TREE)/lib/unifont.bgf; \
+	fi
+endif
+ifeq ($(DEB_HOST_ARCH_OS),hurd)
+	# The hurd console uses a BDF font
+	if [ -d "$(LOCALE_PATH)/C.UTF-8" ] && [ -e /usr/src/unifont.bdf ]; then \
+		$(submake) $(TREE)/lib/unifont.bdf; \
 	fi
 endif
 
