@@ -127,7 +127,7 @@ define mkinitramfs
 endef
 
 define mkfs.ufs1
-  sh -c 'makefs -t ffs -s 40m -f 1000 -o minfree=0,version=1 $$0 ${TREE}'
+  sh -c 'makefs -t ffs -b 8m -f 1000 -o minfree=0,version=1 $$0 ${TREE}'
 endef
 
 define e2fsck
