@@ -78,6 +78,10 @@ all: list
 targetstring = $(patsubst _%,%,$(if $(SUBARCH),_$(SUBARCH),)$(if $(MEDIUM),_$(MEDIUM),)$(if $(FLAVOUR),_$(FLAVOUR),))
 targetdirs = $(subst _,/,$(targetstring))
 
+# Overridden in config/hurd.cfg
+define genext2fs
+  genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` -m 0
+endef
 
 # Configurations for the varying ARCH, SUBARCH, MEDIUM, FLAVOUR.
 # For simplicity, we use a similiar tree layout for config/, tmp/
@@ -116,10 +120,6 @@ endef
 
 define recurse
   $(if $($(1)_SUPPORTED)$(if $(RECURSE_EXTRA),$($(1)_SUPPORTED_EXTRA)),$(call recurse_many,$(1),$(2),$(3)),$(call recurse_once,$(2),$(3)))
-endef
-
-define genext2fs
-  genext2fs -d $(TREE) -b `expr $$(du -s $(TREE) | cut -f 1) + $$(expr $$(find $(TREE) | wc -l) \* 2)` -m 0
 endef
 
 define mkinitramfs
