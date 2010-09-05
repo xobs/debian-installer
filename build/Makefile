@@ -416,7 +416,7 @@ ifdef KERNELNAME
 	# Move the kernel image out of the way.
 	$(foreach name,$(KERNELNAME), \
 		mv -f $(TREE)/boot/$(name) $(TEMP)/$(name);)
-	rmdir $(TREE)/boot/
+	test -e $(TREE)/boot/zfs || rmdir $(TREE)/boot/
 endif
 
 ifdef PRESEED
