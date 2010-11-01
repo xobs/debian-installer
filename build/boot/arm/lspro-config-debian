@@ -5,7 +5,7 @@
 NVRAM=$(which nvram)
 FW_PRINTENV=$(which fw_printenv)
 
-path=$(mount | grep ext2 | sed -n '/sda1/ {s/\/dev\/sda1 on \(.*\) type.*/\1/; p}')
+path=$(mount | grep ext[23] | sed -n '/sda1/ {s/\/dev\/sda1 on \(.*\) type.*/\1/; p}')
 if [ -z "$path" ]; then
 	echo "You have to create an ext2 filesystem on /dev/sda1"
 	exit 1
