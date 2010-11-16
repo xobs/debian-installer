@@ -19,7 +19,11 @@ fi
 
 set -e
 
-isohybrid "$iso"
+# isohybrid's defaults, but let's insure against future changes.
+heads=64
+sectors=32
+
+isohybrid -h "$heads" -s "$sectors" "$iso"
 
 # Make the firmware volume.
 tmpdir="$(mktemp -d)"
@@ -33,17 +37,12 @@ mkfs.msdos -n "$firmware_volume_name" -C "$firmware_volume_file" \
 cat "$firmware_volume_file" >> "$iso"
 rm -r "$tmpdir"
 
+cylinders="$(($(stat -c %s "$iso") / $heads / $sectors))"
+
 # Now adjust the partition table of the hybrid iso.
 # It has a first partition which is the iso; add a second partition for the
 # firmware volume.
 (
-
-# Go into extended menu and set cylinders to 32. 
-# This is the same number of cylinders (currently) used by isohybrid.
-echo x
-echo c
-echo 32
-echo r
 
 # Make new partition #2
 echo n
@@ -59,4 +58,4 @@ echo 1
 
 # Done!
 echo w
-) | fdisk "$iso"
+) | fdisk -C "$cylinders" -H "$heads" -S "$sectors" "$iso"
