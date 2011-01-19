@@ -1,11 +1,11 @@
 To upload a package correctly, do the following:
 
-* Ensure that your build environment is set up correctly to avoid .svn
+* Ensure that your build environment is set up correctly to avoid .git
   directories being included in your uploads.
   The following settings in your configuration should do this (assuming
   'debuild' is used to build the package):
   - ~/.bashrc:
-    export DH_ALWAYS_EXCLUDE=CVS:.svn
+    export DH_ALWAYS_EXCLUDE=CVS:.svn:.git
   - ~/.devscripts:
     DEBUILD_DPKG_BUILDPACKAGE_OPTS="-i -I"
     DEBUILD_PRESERVE_ENVVARS=DH_ALWAYS_EXCLUDE
@@ -15,15 +15,15 @@ To upload a package correctly, do the following:
    
   If you use pdebuild from pbuilder the following settings should be used:
   - ~/.pbuilderrc
-    export DH_ALWAYS_EXCLUDE=CVS:.svn
+    export DH_ALWAYS_EXCLUDE=CVS:.svn:.git
     DEBBUILDOPTS="-i -I"
 
-* Update from Subversion:
-  svn up
+* Update from git:
+  git pull
 
 * Check that you don't have any uncommitted changes or files that do not
   belong in the package:
-  svn st
+  git status
 
 * Update the translator info in debian/changelog by copying and pasting
   the output (if any) of the following command:
@@ -40,7 +40,7 @@ To upload a package correctly, do the following:
   debc, debdiff, etc.
 
 * Commit and tag the release:
-  debcommit --release
+  debcommit --all --release
 
 Since many packages in d-i only contain shell scripts and the like, you can
 build them even if they aren't for your normal host architecture: just pass
