@@ -45,6 +45,7 @@ fi
 BOOTVER=$($GETENV buffalo_ver | sed 's/^.*=//')
 if [ -z "$BOOTVER" ]; then
 	echo "Unable to detect Buffalo bootloader version.  Please ensure that your bootloader supports automatic initrd position/size detection."
+	exit 1
 else
 	BOOTVER_MAJOR=${BOOTVER%.*}
 	BOOTVER_MINOR=${BOOTVER#*.}
@@ -55,7 +56,7 @@ else
 fi
 
 printf "Saving U-Boot environment to ubootenv.bak... "
-$PRINTENV > ubootenv.bak
+$PRINTENV > ubootenv.bak || exit 1
 echo "done."
 
 echo "Changing U-Boot environment... "
