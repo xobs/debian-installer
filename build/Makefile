@@ -1015,3 +1015,18 @@ _qemu: $(TARGET)
 		echo "Sorry, don't know how to handle media type '$(MEDIA_TYPE)'" >&2; \
 		exit 1; \
 	esac
+
+# For running a d-i image in a subhurd
+.PHONY: subhurd_%
+subhurd_%:
+	@set -e; \
+	export SUBARCH=; \
+	export FLAVOUR=; \
+	export MEDIUM=$(subst subhurd_,,$@); \
+	$(submake) _subhurd
+
+.PHONY: _subhurd
+_subhurd: $(TEMP_INITRD)
+	settrans -cfga $(BASE_TMP)/rd0 /hurd/storeio -r -T file initrd.gz
+	-boot -I -f rd0=$(BASE_TMP)/rd0 -c "TERM=vt100 root=gunzip:device:rd0" /boot/servers.boot $(BASE_TMP)/rd0
+
