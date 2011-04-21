@@ -34,6 +34,9 @@ Lenny
 Squeeze
       </th>
       <th>
+Wheezy
+      </th>
+      <th>
 Work in progress
       </th>
     </tr>
@@ -60,6 +63,9 @@ Number of supported languages
 <xsl:value-of select="count(//language_entry[@supported = 'squeeze'] | //language_entry[@supported = 'lenny'] | //language_entry[@supported = 'etch'] | //language_entry[@supported = 'sarge'] | //language_entry[@supported = 'woody'] | //language_entry[@supported = 'potato'])"/>
       </td>
       <td align="center">
+<xsl:value-of select="count(//language_entry[@supported = 'wheezy'] | //language_entry[@supported = 'squeeze'] | //language_entry[@supported = 'lenny'] | //language_entry[@supported = 'etch'] | //language_entry[@supported = 'sarge'] | //language_entry[@supported = 'woody'] | //language_entry[@supported = 'potato'])"/>
+      </td>
+      <td align="center">
 <xsl:value-of select="count(//language_entry)"/>
       </td>
     </tr>
@@ -68,25 +74,28 @@ Number of supported languages
 Percent world population
       </td>
       <td align="center">
-<xsl:value-of select="round(sum(//@speakers[../@supported = 'potato']) div 6459821923 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'potato']) div 6459821923 * 100)"/>%.
+<xsl:value-of select="round(sum(//@speakers[../@supported = 'potato']) div 6892758426 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'potato']) div 6892758426 * 100)"/>%.
       </td>
       <td align="center">
-<xsl:value-of select="round(sum(//@speakers[../@supported = 'woody'] | //@speakers[../@supported = 'potato']) div 6459821923 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'woody'] | //@speakers_corr[../@supported = 'potato']) div 6459821923 * 100)"/>%
+<xsl:value-of select="round(sum(//@speakers[../@supported = 'woody'] | //@speakers[../@supported = 'potato']) div 6892758426 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'woody'] | //@speakers_corr[../@supported = 'potato']) div 6892758426 * 100)"/>%
       </td>
       <td align="center">
-<xsl:value-of select="round(sum(//@speakers[../@supported = 'sarge'] | //@speakers[../@supported = 'woody'] | //@speakers[../@supported = 'potato']) div 6459821923 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'sarge'] | //@speakers_corr[../@supported = 'woody'] | //@speakers_corr[../@supported = 'potato']) div 6459821923 * 100)"/>%
+<xsl:value-of select="round(sum(//@speakers[../@supported = 'sarge'] | //@speakers[../@supported = 'woody'] | //@speakers[../@supported = 'potato']) div 6892758426 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'sarge'] | //@speakers_corr[../@supported = 'woody'] | //@speakers_corr[../@supported = 'potato']) div 6892758426 * 100)"/>%
       </td>
       <td align="center">
-<xsl:value-of select="round(sum(//@speakers[../@supported = 'etch'] | //@speakers[../@supported = 'sarge'] | //@speakers[../@supported = 'woody'] | //@speakers[../@supported = 'potato']) div 6459821923 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'etch'] | //@speakers_corr[../@supported = 'sarge'] | //@speakers_corr[../@supported = 'woody'] | //@speakers_corr[../@supported = 'potato']) div 6459821923 * 100)"/>%
+<xsl:value-of select="round(sum(//@speakers[../@supported = 'etch'] | //@speakers[../@supported = 'sarge'] | //@speakers[../@supported = 'woody'] | //@speakers[../@supported = 'potato']) div 6892758426 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'etch'] | //@speakers_corr[../@supported = 'sarge'] | //@speakers_corr[../@supported = 'woody'] | //@speakers_corr[../@supported = 'potato']) div 6892758426 * 100)"/>%
       </td>
       <td align="center">
-<xsl:value-of select="round(sum(//@speakers[../@supported = 'lenny'] | //@speakers[../@supported = 'etch'] | //@speakers[../@supported = 'sarge'] | //@speakers[../@supported = 'woody'] | //@speakers[../@supported = 'potato']) div 6459821923 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'etch'] | //@speakers_corr[../@supported = 'sarge'] | //@speakers_corr[../@supported = 'woody'] | //@speakers_corr[../@supported = 'potato']) div 6459821923 * 100)"/>%
+<xsl:value-of select="round(sum(//@speakers[../@supported = 'lenny'] | //@speakers[../@supported = 'etch'] | //@speakers[../@supported = 'sarge'] | //@speakers[../@supported = 'woody'] | //@speakers[../@supported = 'potato']) div 6892758426 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'etch'] | //@speakers_corr[../@supported = 'sarge'] | //@speakers_corr[../@supported = 'woody'] | //@speakers_corr[../@supported = 'potato']) div 6892758426 * 100)"/>%
       </td>
       <td align="center">
-<xsl:value-of select="round(sum(//@speakers[../@supported = 'squeeze'] | //@speakers[../@supported = 'lenny'] | //@speakers[../@supported = 'etch'] | //@speakers[../@supported = 'sarge'] | //@speakers[../@supported = 'woody'] | //@speakers[../@supported = 'potato']) div 6459821923 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'etch'] | //@speakers_corr[../@supported = 'sarge'] | //@speakers_corr[../@supported = 'woody'] | //@speakers_corr[../@supported = 'potato']) div 6459821923 * 100)"/>%
+<xsl:value-of select="round(sum(//@speakers[../@supported = 'squeeze'] | //@speakers[../@supported = 'lenny'] | //@speakers[../@supported = 'etch'] | //@speakers[../@supported = 'sarge'] | //@speakers[../@supported = 'woody'] | //@speakers[../@supported = 'potato']) div 6892758426 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'etch'] | //@speakers_corr[../@supported = 'sarge'] | //@speakers_corr[../@supported = 'woody'] | //@speakers_corr[../@supported = 'potato']) div 6892758426 * 100)"/>%
       </td>
       <td align="center">
-<xsl:value-of select="round(sum(//@speakers) div 6459821923 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr) div 6459821923 * 100)"/>%
+<xsl:value-of select="round(sum(//@speakers[../@supported = 'wheezy'] | //@speakers[../@supported = 'squeeze'] | //@speakers[../@supported = 'lenny'] | //@speakers[../@supported = 'etch'] | //@speakers[../@supported = 'sarge'] | //@speakers[../@supported = 'woody'] | //@speakers[../@supported = 'potato']) div 6892758426 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr[../@supported = 'etch'] | //@speakers_corr[../@supported = 'sarge'] | //@speakers_corr[../@supported = 'woody'] | //@speakers_corr[../@supported = 'potato']) div 6892758426 * 100)"/>%
+      </td>
+      <td align="center">
+<xsl:value-of select="round(sum(//@speakers) div 6892758426 * 100)"/> to <xsl:value-of select="round(sum(//@speakers_corr) div 6892758426 * 100)"/>%
       </td>
     </tr>
 </table>
@@ -240,6 +249,27 @@ Squeeze
     </tr>
     <tr>
       <td align="center">
+Wheezy
+      </td>
+      <td align="center">
+<xsl:variable name="codes">
+  <xsl:for-each select="/@countries_official[../@supported = 'wheezy'] | //@countries_official[../@supported = 'squeeze'] | //@countries_official[../@supported = 'lenny'] | //@countries_official[../@supported = 'etch'] | //@countries_official[../@supported = 'sarge'] | //@countries_official[../@supported = 'woody'] | //@countries_official[../@supported = 'potato']">
+<xsl:value-of select="string()"/>
+</xsl:for-each>
+</xsl:variable>
+<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes}" width="200" height="100"/>
+      </td>
+      <td align="center">
+<xsl:variable name="codes">
+  <xsl:for-each select="/@countries_most_spoken[../@supported = 'wheezy'] |  //@countries_most_spoken[../@supported = 'squeeze'] |  //@countries_most_spoken[../@supported = 'lenny'] | //@countries_most_spoken[../@supported = 'etch'] | //@countries_most_spoken[../@supported = 'sarge'] | //@countries_most_spoken[../@supported = 'woody'] | //@countries_most_spoken[../@supported = 'potato']">
+<xsl:value-of select="string()"/>
+</xsl:for-each>
+</xsl:variable>
+<img src="http://www.world66.com/community/mymaps/worldmap?visited={$codes}" width="200" height="100"/>
+      </td>
+    </tr>
+    <tr>
+      <td align="center">
 Future
       </td>
       <td align="center">
@@ -308,7 +338,7 @@ by Debian Installer developers when they feel it to be
 badly representing reality.
    </li>
   <li>
-    World population: <a href="http://www.geohive.com">www.geohive.com</a> as of 2005-09-05
+    World population: <a href="http://www.geohive.com">www.geohive.com</a> as of 2011-04-21
    </li>
   <li>
     Maps: <a href="http://www.world66.com/myworld66/visitedCountries">Visited countries</a>
