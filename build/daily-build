@@ -72,23 +72,26 @@ header () {
 	echo
 }
 
+do_build_helper () {
+	local t=$1
+	header BUILDING IMAGE FOR $t
+	gitver=$(git show-ref HEAD 2>/dev/null) || true
+	if [ -n "$gitver" ]; then
+		echo "debian-installer git tree version: $gitver"
+	fi
+	$ROOTCMD $ROOTCMDOPTS make $t 2>&1
+}
+
 do_build () {
 	local t=$1
 	local err=0
 
-	# Commands in these two branches should be the same.
 	if [ "$LOG_TO_STDOUT" = 1 ]; then
 		set -o pipefail
-		(
-		header BUILDING IMAGE FOR $t
-		$ROOTCMD $ROOTCMDOPTS make $t 2>&1
-		) | tee -a dest/$t.log || err=$?
+		do_build_helper $t | tee -a dest/$t.log || err=$?
 		set +o pipefail
 	else
-		(
-		header BUILDING IMAGE FOR $t
-		$ROOTCMD $ROOTCMDOPTS make $t 2>&1
-		) >> dest/$t.log || err=$?
+		do_build_helper $t >> dest/$t.log || err=$?
 	fi
 
 	return $err
