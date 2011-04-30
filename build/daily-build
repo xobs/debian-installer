@@ -49,6 +49,7 @@ fi
 if [ -z "$ROOTCMD" ]; then
 	ROOTCMD="fakeroot"
 fi
+export ROOTCMD
 
 # Internal environment variables to keep file attributes between targets
 # when fakeroot is used.
@@ -59,6 +60,7 @@ if [ "$ROOTCMD" = fakeroot ]; then
 	trap 'rm -f $FRSAVE' 0 HUP INT QUIT TERM
 	ROOTCMDOPTS="-i $FRSAVE -s $FRSAVE"
 fi
+export ROOTCMDOPTS
 
 LOG_TO_STDOUT=${LOG_TO_STDOUT:-0}
 
