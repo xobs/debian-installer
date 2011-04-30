@@ -49,7 +49,6 @@ fi
 if [ -z "$ROOTCMD" ]; then
 	ROOTCMD="fakeroot"
 fi
-export ROOTCMD
 
 # Internal environment variables to keep file attributes between targets
 # when fakeroot is used.
@@ -60,7 +59,6 @@ if [ "$ROOTCMD" = fakeroot ]; then
 	trap 'rm -f $FRSAVE' 0 HUP INT QUIT TERM
 	ROOTCMDOPTS="-i $FRSAVE -s $FRSAVE"
 fi
-export ROOTCMDOPTS
 
 LOG_TO_STDOUT=${LOG_TO_STDOUT:-0}
 
@@ -90,10 +88,10 @@ do_build () {
 
 	if [ "$LOG_TO_STDOUT" = 1 ]; then
 		set -o pipefail
-		do_build_helper $t | tee -a dest/$t.log || err=$?
+		ROOTCMDOPTS=$ROOTCMDOPTS do_build_helper $t | tee -a dest/$t.log || err=$?
 		set +o pipefail
 	else
-		do_build_helper $t >> dest/$t.log || err=$?
+		ROOTCMDOPTS=$ROOTCMDOPTS do_build_helper $t >> dest/$t.log || err=$?
 	fi
 
 	return $err
