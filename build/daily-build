@@ -78,6 +78,9 @@ do_build_helper () {
 	gitver=$(git show-ref HEAD 2>/dev/null) || true
 	if [ -n "$gitver" ]; then
 		echo "debian-installer git tree version: $gitver"
+	elif [ -d ../.git ]; then
+		githead=$(cat ../.git/refs/heads/master) || true
+		echo "debian-installer git tree head: $githead"
 	fi
 	$ROOTCMD $ROOTCMDOPTS make $t 2>&1
 }
