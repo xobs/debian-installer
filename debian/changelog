@@ -8,18 +8,30 @@ debian-installer (2011xxxx) UNRELEASED; urgency=low
   * Add netboot hurd-i386 package list.
   * Do not enable the Hurd console by default.
   * Stick gnumach kernel versioning to Debian style.
-  * Add hurd-i386 Xen netboot image support
+  * Add hurd-i386 Xen and gtk netboot image support
   * Hack hurd-i386 netboot image size to have some room for downloaded udebs.
-  * Enable netcfg, now having working DHCP support.
+  * Enable netcfg on hurd-i386, now having working DHCP support.
+  * Add hurd-i386 cdrom and pxe support, inspired from kfreebsd.
+  * Add sub-hurd d-i testing target.
+  * Move gtk-common's xserver-xorg-input-evdev-udeb and
+    xserver-xorg-video-fbdev-udeb to arch-specific packages. Use
+    xserver-xorg-input-kbd-udeb, xserver-xorg-input-mouse-udeb and
+    xserver-xorg-video-vesa-udeb for kfreebsd-i386,
+    kfreebsd-amd64 and hurd-i386.
 
   [ Joey Hess ]
   * Initial changes to target wheezy.
 
   [ Christian Perrier ]
   * Add needed characters for Uyghur
+  * No longer Build-Depend on palo (no longer used and
+    will allow removing palo from unstable)
+  * Add fonts-ukij-uyghur-udeb to graphical installer to
+    properly support Uyghur language
+  * Add file-preseed to netboot images. Closes: #621769
 
   [ Otavio Salvador ]
-  * Update Linux kernel to 2.6.37-1.
+  * Update Linux kernel to 2.6.38 (ABI 2). Closes: #617943
 
   [ Martin Michlmayr ]
   * qnap-flash-debian: recognize QNAP TS-x12 devices.
@@ -31,6 +43,17 @@ debian-installer (2011xxxx) UNRELEASED; urgency=low
   * Document Breaks as a disallowed control field.
   * Install /var/lib/dpkg/info/$(dpkg --print-architecture) -> . symlink so
     that images build correctly in the presence of multiarch dpkg.
+  * Skip the option field in sources.list lines, if present.
+  * Add gzio to GRUB_MODULES on kfreebsd, since the kernel is compressed.
+    Closes: #618320
+
+  [ Joey Hess ]
+  * Work around binutils breakage (#623710) that broke mklibs,
+    by using mklibs-copy.
+    Of course this means larger images, and should be reverted ASAP.
+
+  [ Aurelien Jarno ]
+  * Add virtio udebs on s390/generic and s390/netboot.
 
  -- Jurij Smakov <jurij@debian.org>  Mon, 24 Jan 2011 21:27:36 +0000
 

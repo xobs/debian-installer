@@ -492,7 +492,7 @@ ifeq ($(DEB_HOST_ARCH_OS),hurd)
 	# On Hurd the SONAME for the dynamic linker is ld.so.1, but binaries
 	# have the ld.so symlink as the interpreter. Ideally mklibs should
 	# be copying it along with the libraries.
-	ln -s ld.so.1 $(TREE)/lib/ld.so
+	ln -sf ld.so.1 $(TREE)/lib/ld.so
 
 	# We need /servers/exec at boot time
 	touch $(TREE)/servers/exec
@@ -1015,3 +1015,18 @@ _qemu: $(TARGET)
 		echo "Sorry, don't know how to handle media type '$(MEDIA_TYPE)'" >&2; \
 		exit 1; \
 	esac
+
+# For running a d-i image in a subhurd
+.PHONY: subhurd_%
+subhurd_%:
+	@set -e; \
+	export SUBARCH=; \
+	export FLAVOUR=; \
+	export MEDIUM=$(subst subhurd_,,$@); \
+	$(submake) _subhurd
+
+.PHONY: _subhurd
+_subhurd: $(TEMP_INITRD)
+	settrans -cfga $(BASE_TMP)/rd0 /hurd/storeio -r -T file initrd.gz
+	-boot -I -f rd0=$(BASE_TMP)/rd0 -c "TERM=vt100 root=gunzip:device:rd0" /boot/servers.boot $(BASE_TMP)/rd0
+
