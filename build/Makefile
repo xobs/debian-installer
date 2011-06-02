@@ -840,8 +840,9 @@ $(STAMPS)extra-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
 # Get a list of all the standard priority udebs, excluding kernel stuff.
 pkg-lists/standard-udebs:
 	get-packages udeb update
-	grep-dctrl -FPriority -e 'required|standard|important' \
-		-sPackage apt.udeb/state/lists/*_Packages* | \
+	grep-dctrl -sPackage -FPriority -e 'required|standard|important' \
+		$(if $(SUBARCH),-a \( -! -FSubarchitecture -r . -o -FSubarchitecture -e '(^| )$(SUBARCH)( |$$)' \)) \
+		apt.udeb/state/lists/*_Packages* | \
 		grep -v kernel-image | grep -v -- -modules | \
 		cut -d " " -f 2 > $@
 
