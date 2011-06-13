@@ -32,6 +32,9 @@ create_standard_config() {
 	cp "$SRC"/{,ad,rq}txt.cfg "$DST"/
 	if [ -n "$INCLUDE_GTK" ]; then
 		cp "$SRC"/{ad,rq,}gtk.cfg "$DST"/
+		cp "$SRC"/spkgtk.cfg "$DST"/
+	else
+		cp "$SRC"/spk.cfg "$DST"/
 	fi
 }
 
@@ -70,6 +73,9 @@ case $TYPE in
 	cp -r "$SRC"/desktop/*.cfg "$DST"/desktop/
 	if [ -z "$INCLUDE_GTK" ]; then
 		rm -f "$DST"/*gtk.cfg "$DST"/desktop/*{gtk,ag}dt.cfg
+		rm -f "$DST"/*spkgtk.cfg
+	else
+		rm -f "$DST"/*spk.cfg
 	fi
 	exit 0
 	;;
@@ -77,6 +83,7 @@ case $TYPE in
 	cp "$SRC"/prompt.cfg "$DST"/syslinux.cfg
 	cp "$SRC"/menu.cfg "$DST"/
 	cp "$SRC"/{,ad,rq}txt.cfg "$DST"/
+	cp "$SRC"/spk.cfg "$DST"/
 	;;
     standard)
 	create_standard_config
