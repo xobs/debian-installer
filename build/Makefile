@@ -126,8 +126,17 @@ define mkinitramfs
   (cd $(TREE) && find . | cpio --quiet -o -H newc) > 
 endef
 
+# Limit on mfsroot size. It is determined by NKPT (in <machine/pmap.h).
+# On amd64, it can be increased by increasing this variable.  On i386,
+# this is a hard limit due to constraints of 4 GiB VM space.
+ifeq ($(DEB_HOST_ARCH),kfreebsd-i386)
+MFSROOT_LIMIT := 42m
+else ifeq ($(DEB_HOST_ARCH),kfreebsd-amd64)
+MFSROOT_LIMIT := 64m
+endif
+
 define mkfs.ufs1
-  sh -c 'makefs -t ffs -s 42m -f 3000 -o minfree=0,version=1 $$0 ${TREE}'
+  sh -c 'makefs -t ffs -s $(MFSROOT_LIMIT) -f 3000 -o minfree=0,version=1 $$0 ${TREE}'
 endef
 
 define e2fsck
