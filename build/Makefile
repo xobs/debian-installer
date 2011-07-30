@@ -302,7 +302,6 @@ $(STAMPS)tree-unpack-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-s
 	rm -rf $(TREE)
 	# Set up the basic files [u]dpkg needs.
 	mkdir -p $(DPKGDIR)/info
-	ln -nsf . $(DPKGDIR)/info/$(shell dpkg --print-architecture)
 	touch $(DPKGDIR)/status
 	# Create a tmp tree
 	mkdir -p $(TREE)/tmp
@@ -466,7 +465,6 @@ endif
 
 	mkdir -p $(EXTRAUDEBSDIR)
 	mkdir -p $(EXTRAUDEBSDPKGDIR)/info $(EXTRAUDEBSDPKGDIR)/updates
-	ln -nsf . $(EXTRAUDEBSDPKGDIR)/info/$(shell dpkg --print-architecture)
 	touch $(EXTRAUDEBSDPKGDIR)/status $(EXTRAUDEBSDPKGDIR)/available
 
 ifdef EXTRADRIVERS
