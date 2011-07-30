@@ -62,7 +62,8 @@ DEB_HOST_ARCH = $(shell dpkg-architecture -qDEB_HOST_ARCH)
 DEB_HOST_ARCH_OS = $(shell dpkg-architecture -qDEB_HOST_ARCH_OS)
 DEB_HOST_GNU_CPU = $(shell dpkg-architecture -qDEB_HOST_GNU_CPU)
 DEB_HOST_GNU_SYSTEM = $(shell dpkg-architecture -qDEB_HOST_GNU_SYSTEM)
-export DEB_HOST_ARCH DEB_HOST_ARCH_OS DEB_HOST_GNU_CPU DEB_HOST_GNU_SYSTEM
+DEB_HOST_MULTIARCH = $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+export DEB_HOST_ARCH DEB_HOST_ARCH_OS DEB_HOST_GNU_CPU DEB_HOST_GNU_SYSTEM DEB_HOST_MULTIARCH
 endif
 
 # We loop over all needed combinations of ARCH, SUBARCH, MEDIUM, FLAVOUR
@@ -491,7 +492,8 @@ ifndef ONLY_KLIBC
 	mkdir -p $(TREE)/lib
 	# HACK ALERT: X.Org modules are excluded from the scan as mklibs
 	# is unable to find symbols provided by the /usr/bin/Xorg binary
-	$(MKLIBS) -L $(TREE)/usr/lib -L $(TEMP)/udeblibs -v -d $(TREE)/lib --root=$(TREE) \
+	$(MKLIBS) -L $(TREE)/usr/lib -L $(TREE)/usr/lib/$(DEB_HOST_MULTIARCH) \
+		-L $(TEMP)/udeblibs -v -d $(TREE)/lib --root=$(TREE) \
 		-L $(TREE)/usr/lib/cdebconf/frontend \
 		$(addprefix -l,$(notdir $(wildcard $(TREE)/usr/lib/cdebconf/frontend/*.so))) \
 		`find $(TEMP) -type f -a \( -perm +0111 -o -name '*.so' -o -name '*.so.*' \) | \
