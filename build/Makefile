@@ -511,7 +511,7 @@ endif
 endif
 
 	# Add missing symlinks for libraries
-	/sbin/ldconfig -n $(TREE)/lib $(TREE)/usr/lib
+	ldconfig -n $(TREE)/lib $(TREE)/usr/lib
 
 	# Remove any libraries that are present in both usr/lib and lib,
 	# from lib. These were unnecessarily copied in by mklibs, and
