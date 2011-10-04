@@ -350,12 +350,19 @@ endif
 			usedblocks=`echo $$newblocks - $$oldblocks | bc`; \
 			usedcount=`echo $$newcount - $$oldcount | bc`; \
 			version=`dpkg-deb --info $$udeb | grep '^ *Version:' | sed 's/^ *//' | awk '{print $$2}'` ; \
+			source=`dpkg-deb --info $$udeb | grep '^ *Source:' | sed 's/^ *//' | awk '{print $$2}'` ; \
+			if [ -z "$$source" ]; then \
+				source=`dpkg-deb --info $$udeb | grep '^ *Package:' | sed 's/^ *//' | awk '{print $$2}'` ; \
+			fi ; \
 			echo " $$usedsize B - $$usedblocks blocks - $$usedcount files from $$pkg (version $$version)" >>$(TEMP)/diskusage.txt;\
+			echo "$$source (= $$version)" >>$(TEMP)/built-using.txt;\
 			oldsize=$$newsize ; \
 			oldblocks=$$newblocks ; \
 			oldcount=$$newcount ; \
 		fi; \
 	done
+	sort -u < $(TEMP)/built-using.txt > $(TEMP)/built-using.txt.new && \
+		mv $(TEMP)/built-using.txt.new $(TEMP)/built-using.txt
 	sort -n < $(TEMP)/diskusage.txt > $(TEMP)/diskusage.txt.new && \
 		mv $(TEMP)/diskusage.txt.new $(TEMP)/diskusage.txt
 	grep-dctrl -nsPackage,Version,Architecture '' $(TREE)/var/lib/dpkg/status | \
