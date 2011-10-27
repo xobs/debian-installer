@@ -62,7 +62,8 @@ DEB_HOST_ARCH = $(shell dpkg-architecture -qDEB_HOST_ARCH)
 DEB_HOST_ARCH_OS = $(shell dpkg-architecture -qDEB_HOST_ARCH_OS)
 DEB_HOST_GNU_CPU = $(shell dpkg-architecture -qDEB_HOST_GNU_CPU)
 DEB_HOST_GNU_SYSTEM = $(shell dpkg-architecture -qDEB_HOST_GNU_SYSTEM)
-export DEB_HOST_ARCH DEB_HOST_ARCH_OS DEB_HOST_GNU_CPU DEB_HOST_GNU_SYSTEM
+DEB_HOST_MULTIARCH = $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+export DEB_HOST_ARCH DEB_HOST_ARCH_OS DEB_HOST_GNU_CPU DEB_HOST_GNU_SYSTEM DEB_HOST_MULTIARCH
 endif
 
 # We loop over all needed combinations of ARCH, SUBARCH, MEDIUM, FLAVOUR
@@ -126,8 +127,17 @@ define mkinitramfs
   (cd $(TREE) && find . | cpio --quiet -o -H newc) > 
 endef
 
+# Limit on mfsroot size. It is determined by NKPT (in <machine/pmap.h).
+# On amd64, it can be increased by increasing this variable.  On i386,
+# this is a hard limit due to constraints of 4 GiB VM space.
+ifeq ($(DEB_HOST_ARCH),kfreebsd-i386)
+MFSROOT_LIMIT := 42m
+else ifeq ($(DEB_HOST_ARCH),kfreebsd-amd64)
+MFSROOT_LIMIT := 64m
+endif
+
 define mkfs.ufs1
-  sh -c 'makefs -t ffs -s 42m -f 3000 -o minfree=0,version=1 $$0 ${TREE}'
+  sh -c 'makefs -t ffs -s $(MFSROOT_LIMIT) -f 3000 -o minfree=0,version=1 $$0 ${TREE}'
 endef
 
 define e2fsck
@@ -340,12 +350,19 @@ endif
 			usedblocks=`echo $$newblocks - $$oldblocks | bc`; \
 			usedcount=`echo $$newcount - $$oldcount | bc`; \
 			version=`dpkg-deb --info $$udeb | grep '^ *Version:' | sed 's/^ *//' | awk '{print $$2}'` ; \
+			source=`dpkg-deb --info $$udeb | grep '^ *Source:' | sed 's/^ *//' | awk '{print $$2}'` ; \
+			if [ -z "$$source" ]; then \
+				source=`dpkg-deb --info $$udeb | grep '^ *Package:' | sed 's/^ *//' | awk '{print $$2}'` ; \
+			fi ; \
 			echo " $$usedsize B - $$usedblocks blocks - $$usedcount files from $$pkg (version $$version)" >>$(TEMP)/diskusage.txt;\
+			echo "$$source (= $$version)" >>$(TEMP)/built-using.txt;\
 			oldsize=$$newsize ; \
 			oldblocks=$$newblocks ; \
 			oldcount=$$newcount ; \
 		fi; \
 	done
+	sort -u < $(TEMP)/built-using.txt > $(TEMP)/built-using.txt.new && \
+		mv $(TEMP)/built-using.txt.new $(TEMP)/built-using.txt
 	sort -n < $(TEMP)/diskusage.txt > $(TEMP)/diskusage.txt.new && \
 		mv $(TEMP)/diskusage.txt.new $(TEMP)/diskusage.txt
 	grep-dctrl -nsPackage,Version,Architecture '' $(TREE)/var/lib/dpkg/status | \
@@ -475,12 +492,15 @@ endif
 	rm -rf $(TEMP)/udeblibs
 ifndef ONLY_KLIBC
 	mkdir -p $(TEMP)/udeblibs
-	-cp -a `find $(EXTRAUDEBSDIR)/lib -name '*.so.*'` $(TEMP)/udeblibs
-	-cp -a `find $(TREE)/lib -name '*.so.*'` $(TEMP)/udeblibs
+	find $(EXTRAUDEBSDIR)/lib -name '*.so.*' -print0 | \
+		xargs -0r cp -a -t $(TEMP)/udeblibs
+	find $(TREE)/lib -name '*.so.*' -print0 | \
+		xargs -0r cp -a -t $(TEMP)/udeblibs
 	mkdir -p $(TREE)/lib
 	# HACK ALERT: X.Org modules are excluded from the scan as mklibs
 	# is unable to find symbols provided by the /usr/bin/Xorg binary
-	$(MKLIBS) -L $(TREE)/usr/lib -L $(TEMP)/udeblibs -v -d $(TREE)/lib --root=$(TREE) \
+	$(MKLIBS) -L $(TREE)/usr/lib -L $(TREE)/usr/lib/$(DEB_HOST_MULTIARCH) \
+		-L $(TEMP)/udeblibs -v -d $(TREE)/lib --root=$(TREE) \
 		-L $(TREE)/usr/lib/cdebconf/frontend \
 		$(addprefix -l,$(notdir $(wildcard $(TREE)/usr/lib/cdebconf/frontend/*.so))) \
 		`find $(TEMP) -type f -a \( -perm +0111 -o -name '*.so' -o -name '*.so.*' \) | \
@@ -490,7 +510,7 @@ ifeq ($(DEB_HOST_ARCH_OS),hurd)
 	# On Hurd the SONAME for the dynamic linker is ld.so.1, but binaries
 	# have the ld.so symlink as the interpreter. Ideally mklibs should
 	# be copying it along with the libraries.
-	ln -s ld.so.1 $(TREE)/lib/ld.so
+	ln -sf ld.so.1 $(TREE)/lib/ld.so
 
 	# We need /servers/exec at boot time
 	touch $(TREE)/servers/exec
@@ -838,8 +858,9 @@ $(STAMPS)extra-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
 # Get a list of all the standard priority udebs, excluding kernel stuff.
 pkg-lists/standard-udebs:
 	get-packages udeb update
-	grep-dctrl -FPriority -e 'required|standard|important' \
-		-sPackage apt.udeb/state/lists/*_Packages* | \
+	grep-dctrl -sPackage -FPriority -e 'required|standard|important' \
+		$(if $(SUBARCH),-a \( -! -FSubarchitecture -r . -o -FSubarchitecture -e '(^| )$(SUBARCH)( |$$)' \)) \
+		apt.udeb/state/lists/*_Packages* | \
 		grep -v kernel-image | grep -v -- -modules | \
 		cut -d " " -f 2 > $@
 
@@ -1013,3 +1034,18 @@ _qemu: $(TARGET)
 		echo "Sorry, don't know how to handle media type '$(MEDIA_TYPE)'" >&2; \
 		exit 1; \
 	esac
+
+# For running a d-i image in a subhurd
+.PHONY: subhurd_%
+subhurd_%:
+	@set -e; \
+	export SUBARCH=; \
+	export FLAVOUR=; \
+	export MEDIUM=$(subst subhurd_,,$@); \
+	$(submake) _subhurd
+
+.PHONY: _subhurd
+_subhurd: $(TEMP_INITRD)
+	settrans -cfga $(BASE_TMP)/rd0 /hurd/storeio -r -T file initrd.gz
+	-boot -I -f rd0=$(BASE_TMP)/rd0 -c "TERM=vt100 root=gunzip:device:rd0" /boot/servers.boot $(BASE_TMP)/rd0
+

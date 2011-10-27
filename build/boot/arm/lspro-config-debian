@@ -5,19 +5,19 @@
 NVRAM=$(which nvram)
 FW_PRINTENV=$(which fw_printenv)
 
-path=$(mount | grep ext[23] | sed -n '/sda1/ {s/\/dev\/sda1 on \(.*\) type.*/\1/; p}')
+path=$(mount | grep ext[23] | sed -n '/sda1\|md0/ {s/\/dev\/\(sda1\|md0\) on \(.*\) type.*/\2/; p}')
 if [ -z "$path" ]; then
-	echo "You have to create an ext2 filesystem on /dev/sda1"
+	echo "You have to create an ext2 filesystem on /dev/sda1 or /dev/md0"
 	exit 1
 fi
 
 if [ ! -e $path/uImage.buffalo ]; then
-	echo "You have to download the uImage.buffalo file from the debian-installer for Linkstation Pro/Live, and put it in $path"
+	echo "You have to download the uImage.buffalo file from the debian-installer for Linkstation, and put it in $path"
 	exit 1
 fi
 
 if [ ! -e $path/initrd.buffalo ]; then
-	echo "You have to download the initrd.buffalo file from the debian-installer for Linkstation Pro/Live, and put it in $path"
+	echo "You have to download the initrd.buffalo file from the debian-installer for Linkstation, and put it in $path"
 	exit 1
 fi
 
@@ -45,6 +45,7 @@ fi
 BOOTVER=$($GETENV buffalo_ver | sed 's/^.*=//')
 if [ -z "$BOOTVER" ]; then
 	echo "Unable to detect Buffalo bootloader version.  Please ensure that your bootloader supports automatic initrd position/size detection."
+	exit 1
 else
 	BOOTVER_MAJOR=${BOOTVER%.*}
 	BOOTVER_MINOR=${BOOTVER#*.}
@@ -55,7 +56,7 @@ else
 fi
 
 printf "Saving U-Boot environment to ubootenv.bak... "
-$PRINTENV > ubootenv.bak
+$PRINTENV > ubootenv.bak || exit 1
 echo "done."
 
 echo "Changing U-Boot environment... "

@@ -1,0 +1,8 @@
+#!/bin/sh
+
+echo -n "initrd:Built-Using=" >> debian/debian-installer.substvars
+cat build/tmp/*/built-using.txt \
+    | sort -u \
+    | tr "\n" "," \
+    | sed 's/,/, /g;s/, $//g' >> debian/debian-installer.substvars
+echo >> debian/debian-installer.substvars

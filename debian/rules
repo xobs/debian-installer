@@ -9,7 +9,7 @@ USE_UDEBS_FROM=unstable
 TRANSSTATUS=
 BOOTMENU_BEEP=n
 else
-USE_UDEBS_FROM=squeeze
+USE_UDEBS_FROM=wheezy
 USE_PROPOSED_UPDATES=0
 TRANSSTATUS=translation-status
 BOOTMENU_BEEP=y
@@ -34,7 +34,7 @@ build-images:
 		USE_UDEBS_FROM=$(USE_UDEBS_FROM) BUILD_DATE=$(DATE) \
 		USE_PROPOSED_UPDATES=$(USE_PROPOSED_UPDATES) \
 		TRANSSTATUS=$(TRANSSTATUS) BOOTMENU_BEEP=$(BOOTMENU_BEEP)
-	
+
 build: build-stamp
 build-stamp:
 	rm -f $@
@@ -47,7 +47,7 @@ install: build
 	dh_testroot
 	dh_prep
 	dh_installdirs
-	
+
 	debian/rules build-images
 
 	install -d $(IMAGEDIR)
@@ -62,6 +62,9 @@ binary-arch: install
 		-X internals.xml -X partman-doc.sgml
 	dh_compress
 	dh_fixperms
+
+	./build/util/write-built-using
+
 	dh_gencontrol
 	dh_md5sums
 	dh_builddeb

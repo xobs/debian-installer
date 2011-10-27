@@ -1,3 +1,121 @@
+debian-installer (2011xxxx) UNRELEASED; urgency=low
+
+  [ Jurij Smakov ]
+  * Add pata-modules to cdrom config for sparc and sparc64.
+    Closes: #610906.
+
+  [ Samuel Thibault ]
+  * Add netboot hurd-i386 package list.
+  * Do not enable the Hurd console by default.
+  * Stick gnumach kernel versioning to Debian style.
+  * Add hurd-i386 Xen and gtk netboot image support
+  * Hack hurd-i386 netboot image size to have some room for downloaded udebs.
+  * Enable netcfg on hurd-i386, now having working DHCP support.
+  * Add hurd-i386 cdrom and pxe support, inspired from kfreebsd.
+  * Add sub-hurd d-i testing target.
+  * Move gtk-common's xserver-xorg-input-evdev-udeb and
+    xserver-xorg-video-fbdev-udeb to arch-specific packages. Use
+    xserver-xorg-input-kbd-udeb, xserver-xorg-input-mouse-udeb and
+    xserver-xorg-video-vesa-udeb for kfreebsd-i386,
+    kfreebsd-amd64 and hurd-i386.
+  * Add sound-modules and espeakup-udeb to i386 and amd64 gtk images.
+  * Add software speech synthesis as last x86 menu choice with an 's' shortcut.
+  * Widen x86 menu.
+  * Set default desktop to xfce on hurd-i386.
+  * Fix "extras" option in build/boot/x86/xen/debian.cfg. Closes: #637460.
+    Thanks Gedalya for the report.
+  * Rename amdspkgtk.cfg x86 menu item into amdspgtk.cfg to fit 8+3 oldiness.
+
+  [ Joey Hess ]
+  * Initial changes to target wheezy.
+
+  [ Christian Perrier ]
+  * Add needed characters for Uyghur
+  * Add needed characters for Ossetian 
+  * No longer Build-Depend on palo (no longer used and
+    will allow removing palo from unstable)
+  * Add fonts-ukij-uyghur-udeb to graphical installer to
+    properly support Uyghur language
+  * Add file-preseed to netboot images. Closes: #621769
+  * Rename ttf-farsiweb-udeb to fonts-farsiweb-udeb in
+    pkg-lists/gtk-common after package rename because of new
+    fonts packages policy
+  * Rename ttf-khmeros-udeb to fonts-khmeros-udeb in
+    pkg-lists/gtk-common after package rename because of new
+    fonts packages policy
+
+  [ Otavio Salvador ]
+  * Update Linux kernel to 2.6.38 (ABI 2). Closes: #617943
+
+  [ Martin Michlmayr ]
+  * qnap-flash-debian: recognize QNAP TS-x12 devices.
+  * Add Buffalo Linkstation Live V3 and Mini.
+  * lspro-config-debian: Exit if the firmware version cannot be
+    determined.  Thanks John Bytheway.  Closes: #609476
+  * Remove support for Linksys NSLU2.
+  * Remove support for QNAP TS-x09.
+
+  [ Colin Watson ]
+  * Document Breaks as a disallowed control field.
+  * Skip the option field in sources.list lines, if present.
+  * Add gzio to GRUB_MODULES on kfreebsd, since the kernel is compressed.
+    Closes: #618320
+  * Add mipsel/loongson-2f images.
+  * When building for a subarchitecture, don't include udebs for other
+    subarchitectures in standard-udebs.
+  * Document move of /dev/.udev/firmware-missing to
+    /run/udev/firmware-missing in hw-detect 1.87.
+  * Handle udebs installing libraries into /usr/lib/$(DEB_HOST_MULTIARCH).
+  * Don't emit spurious errors if there are no files in $(EXTRAUDEBSDIR)/lib
+    or no files in $(TREE)/lib.
+
+  [ Joey Hess ]
+  * Work around binutils breakage (#623710) that broke mklibs,
+    by using mklibs-copy.
+    Of course this means larger images, and should be reverted ASAP.
+  * Revert use of mklibs-copy, as breakage seems fixed (tested on i386 and
+    amd64). Closes: #624144
+  * Let fdisk choose end sector for piggyback partition. Closes: #642183
+
+  [ Aurelien Jarno ]
+  * Add virtio udebs on s390/generic and s390/netboot.
+
+  [ Robert Millan ]
+  * Enable netboot-gtk flavor on kfreebsd-amd64. Closes: #596596
+  * control: Use "any" architecture wildcards where possible.
+  * Set default desktop to xfce on kfreebsd-any.
+
+  [ Didier Raboud ]
+  * Include win32-loader's setup.exe on kfreebsd.
+
+  [ dann frazier ]
+  * Add pata-modules to cdrom config for ia64. Closes: #622187.
+
+  [ Otavio Salvador ]
+  * i386 (xen): use 686-pae flavour
+  * Switch Linux kernel to 2.6.39 (ABI 2).
+
+  [ Joey Hess ]
+  * Apply internal documentation typo and wording fix patch from
+    Karl Goetz. Closes: #633606
+
+  [ Otavio Salvador ]
+  * Update Linux kernel to 3.0.0-1
+  * Output information of all used udebs into the debian-installer
+    binary package for usage by the archive tool
+
+  [ Samuel Thibault ]
+  * Mention kernel type in any-x86 boot menu.
+
+  [ Hector Oron ]
+  * [armel] Add support for Linkstation Mini.
+    Thanks Benjamin Cama. (Closes: #637339)
+
+  [ Philipp Kern ]
+  * Add support for s390x.
+
+ -- Hector Oron <zumbi@debian.org>  Wed, 10 Aug 2011 17:30:26 +0100
+
 debian-installer (20110106) unstable; urgency=low
 
   * Use SpaceFun theme. Closes #603554.

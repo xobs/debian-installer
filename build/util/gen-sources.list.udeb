@@ -36,6 +36,7 @@ get_mirrors() {
 		[ -s $file ] || continue
 		grep '^deb[[:space:]]' $file | \
 		   grep -v '^deb[[:space:]]\+cdrom:' | \
+		   sed 's,^deb \[[^]]*\] ,deb ,' | \
 		   grep -v '\(security.debian.org\|volatile.debian.\(net\|org\)\)' | \
 		   grep '[[:space:]]main' | \
 		   awk '{print $1 " " $2}' | \
