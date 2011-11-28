@@ -430,6 +430,9 @@ endif
 endif
 
 ifdef KERNELNAME
+ifeq ($(DEB_HOST_ARCH_OS),hurd)
+	cp /lib/ld.so.1   $(TREE)/boot/ld.so.1
+endif
 	# Move the kernel image out of the way.
 	$(foreach name,$(KERNELNAME), \
 		mv -f $(TREE)/boot/$(name) $(TEMP)/$(name);)
