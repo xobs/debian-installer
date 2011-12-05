@@ -151,7 +151,7 @@ if [ "$KERNELVERSION" ]; then
 		for KV in $KERNELVERSION; do
 			KV_COND="${KV_COND:+$KV_COND }-o -XFKernel-Version $KV"
 		done
-		grep-dctrl -! -rFKernel-Version . $KV_COND "$packages" > "$packages.tmp"
+		grep-dctrl -! -rFKernel-Version . $KV_COND "$packages" > "$packages.tmp" || true
 		ln "$packages" "$packages.orig"
 		mv "$packages.tmp" "$packages"
 	done
