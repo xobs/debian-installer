@@ -144,10 +144,6 @@ define e2fsck
   e2fsck -fy
 endef
 
-define mkcramfs
-  mkcramfs -z $(TREE)
-endef
-
 # Define MKFS_JFFS2 in the config file for your target.
 # For example: MKFS_JFFS2 = mkfs.jffs2 -f -p -b -e 0x20000
 define mkjffs2
@@ -702,10 +698,6 @@ endif
 		$(e2fsck) $(TEMP)/initrd || true; \
 		gzip -v9f $(TEMP)/initrd; \
 	;; \
-	cramfs) \
-		$(mkcramfs) $(TEMP)/initrd; \
-		gzip -v9f $(TEMP)/initrd; \
-	;; \
 	initramfs) \
 		$(mkinitramfs) $(TEMP)/initrd; \
 		gzip -v9f $(TEMP)/initrd; \
@@ -823,8 +815,6 @@ $(TEMP_EXTRA): $(STAMPS)extra-$(targetstring)-stamp
 	ext2) \
 		genext2fs -d $(TREE) -b $(IMAGE_SIZE) -m 0 $@ ; \
 		$(e2fsck) $@ || true ;; \
-	cramfs) \
-		$(mkcramfs) $@ ;; \
 	*) \
 		echo "Unsupported filesystem type"; \
 		exit 1 ;; \
