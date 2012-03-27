@@ -346,7 +346,7 @@ endif
 			usedsize=`echo $$newsize - $$oldsize | bc`; \
 			usedblocks=`echo $$newblocks - $$oldblocks | bc`; \
 			usedcount=`echo $$newcount - $$oldcount | bc`; \
-			version=`dpkg-deb --info $$udeb | awk '/ Version: / { print $$2 }'` ; \
+			version=`dpkg-deb --info $$udeb | awk '/ Version: / { print $$2 }' | sed 's/+b[0-9]*$$//g'` ; \
 			source=`dpkg-deb --info $$udeb | awk '/ Source: / { print $$2 }'` ; \
 			if [ -z "$$source" ]; then \
 				source=`dpkg-deb --info $$udeb | awk '/ Package: / { print $$2 }'` ; \
