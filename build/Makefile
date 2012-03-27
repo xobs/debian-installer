@@ -346,10 +346,10 @@ endif
 			usedsize=`echo $$newsize - $$oldsize | bc`; \
 			usedblocks=`echo $$newblocks - $$oldblocks | bc`; \
 			usedcount=`echo $$newcount - $$oldcount | bc`; \
-			version=`dpkg-deb --info $$udeb | grep '^ *Version:' | sed 's/^ *//' | awk '{print $$2}'` ; \
-			source=`dpkg-deb --info $$udeb | grep '^ *Source:' | sed 's/^ *//' | awk '{print $$2}'` ; \
+			version=`dpkg-deb --info $$udeb | awk '/ Version: / { print $$2 }'` ; \
+			source=`dpkg-deb --info $$udeb | awk '/ Source: / { print $$2 }'` ; \
 			if [ -z "$$source" ]; then \
-				source=`dpkg-deb --info $$udeb | grep '^ *Package:' | sed 's/^ *//' | awk '{print $$2}'` ; \
+				source=`dpkg-deb --info $$udeb | awk '/ Package: / { print $$2 }'` ; \
 			fi ; \
 			echo " $$usedsize B - $$usedblocks blocks - $$usedcount files from $$pkg (version $$version)" >>$(TEMP)/diskusage.txt;\
 			echo "$$source (= $$version)" >>$(TEMP)/built-using.txt;\
