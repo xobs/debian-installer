@@ -506,6 +506,12 @@ ifndef ONLY_KLIBC
 		`find $(TEMP) -type f -a \( -perm +0111 -o -name '*.so' -o -name '*.so.*' \) | \
 		 grep -v udeblibs | grep -v 'usr/lib/xorg/modules/.*\.so'`
 
+ifeq ($(DEB_HOST_ARCH),armhf)
+	# armhf has two linkers for now, while the world gets sorted
+	mkdir -p $(TREE)/lib/arm-linux-gnueabihf
+	ln -s /lib/ld-linux-armhf.so.3 $(TREE)/lib/arm-linux-gnueabihf/ld-linux.so.3
+endif
+
 ifeq ($(DEB_HOST_ARCH_OS),hurd)
 	# On Hurd the SONAME for the dynamic linker is ld.so.1, but binaries
 	# have the ld.so symlink as the interpreter. Ideally mklibs should
