@@ -339,7 +339,7 @@ endif
 	oldsize=0; oldblocks=0; oldcount=0; for udeb in $(UDEBDIR)/*.udeb ; do \
 		if [ -f "$$udeb" ]; then \
 			pkg=`basename $$udeb` ; \
-			dpkg $(DPKG_UNPACK_OPTIONS) --log=/dev/null --root=$(TREE) --unpack $$udeb ; \
+			dpkg $(DPKG_UNPACK_OPTIONS) --path-include='*' --log=/dev/null --root=$(TREE) --unpack $$udeb ; \
 			newsize=`du -bs $(TREE) | awk '{print $$1}'` ; \
 			newblocks=`du -s $(TREE) | awk '{print $$1}'` ; \
 			newcount=`find $(TREE) -type f | wc -l | awk '{print $$1}'` ; \
