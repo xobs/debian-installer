@@ -285,8 +285,8 @@ release:
 	egrep '^[[:space:]]' $(BASE_DEST)/MANIFEST.udebs | \
 		sed 's/^[[:space:]]*//' | sort | uniq > $(BASE_DEST)/udeb.list
 	rm -f $(BASE_DEST)/MD5SUMS $(BASE_DEST)/SHA256SUMS
-	cd $(BASE_DEST) && md5sum `find . -type f` > MD5SUMS # XXX remove this
-	cd $(BASE_DEST) && sha256sum `find . -type f` > SHA256SUMS
+	cd $(BASE_DEST) && md5sum `find -L . -type f` > MD5SUMS # XXX remove this
+	cd $(BASE_DEST) && sha256sum `find -L . -type f` > SHA256SUMS
 
 # The general tree target.
 $(STAMPS)tree-unpack-$(targetstring)-stamp: $(STAMPS)get_udebs-$(targetstring)-stamp
