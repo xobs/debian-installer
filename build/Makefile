@@ -399,18 +399,9 @@ ifdef KERNELVERSION
 		fi; \
 		[ -z "$$sysmap_name" ] || mv $$sysmap_name $(TEMP);)
 
-	# These files depmod makes are used by hotplug, if it's being used;
-	# otherwise, we shouldn't need them. Some files aren't even used by
-	# hotplug, so never include them.
-	if [ -d $(TREE)/etc/udev ] || [ -d $(TREE)/etc/hotplug ]; then \
-		find $(TREE)/lib/modules/ -name 'modules*' \
-			-not -name modules.dep -not -name modules.alias \
-			-not -name 'modules.*map' \
-			-not -type d | xargs rm -f; \
-	else \
-		find $(TREE)/lib/modules/ -name 'modules*' \
-			-not -name modules.dep -not -type d | xargs rm -f; \
-	fi
+	# These files depmod makes are used by udev.
+	find $(TREE)/lib/modules/ -name 'modules*.bin' \
+		-not -type d | while read f; do rm -f $${f%.bin}; done
 
 	# These files are used to build special kernel images for some
 	# subarchitectures. Move them out of the way.
