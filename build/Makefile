@@ -236,6 +236,7 @@ _list:
 # Clean all targets.
 .PHONY: reallyclean
 reallyclean: all_clean
+	for png in $(shell awk -F= '/^SPLASH_PNG=/ {print $$2}' config/*.cfg); do if [ -f $${png%%.png}.svg ]; then rm -f $$png; fi; done
 	rm -rf $(APTDIR) $(APTDIR).udeb $(APTDIR).deb $(BASE_DEST) $(BASE_TMP) $(SOURCEDIR) $(DEBUGUDEBDIR)
 	rm -f sources.list sources.list.udeb $(LOCALUDEBDIR)/Packages.gz $(LOCALUDEBDIR)/Packages
 	rm -rf $(UDEBDIR) $(STAMPS)
