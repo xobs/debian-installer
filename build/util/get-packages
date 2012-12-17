@@ -69,10 +69,8 @@ cat $LOCALUDEBDIR/Packages | gzip > $LOCALUDEBDIR/Packages.gz
 if [ -s $LOCALUDEBDIR/Packages ]; then
 	echo "*" >&2
 	echo "* Warning: Building with localudebs." >&2
-	echo "* Secure apt validation will be disabled for this build." >&2
 	echo "* This build should not be used for official purposes." >&2
 	echo "*" >&2
-	SECOPTS="--allow-unauthenticated"
 fi
 
 # All these options make apt read the right sources list, and use APTDIR for
@@ -88,8 +86,8 @@ APT_GET="apt-get --assume-yes \
 	-o Acquire::Retries=3 \
 	-o APT::Install-Recommends=false
 	-o Apt::Architecture=`dpkg-architecture -qDEB_HOST_ARCH` \
-	-o Dir::Etc::trusted="$KEYRING" \
-	$SECOPTS"
+	-o Dir::Etc::trusted="$KEYRING"
+	"
 
 # Prepare APTDIR
 mkdir -p $APTDIR/state/lists/partial
