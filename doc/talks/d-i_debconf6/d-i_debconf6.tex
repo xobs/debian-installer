@@ -365,13 +365,13 @@ Build-Depends: debhelper (>= 5.0.22), libdebian-installer4-dev (>= 0.41), po-deb
 
 Package: kbd-chooser
 Architecture: i386 amd64 powerpc alpha hppa sparc [...]
-Package-Type: udeb
+XC-Package-Type: udeb
 Depends: ${shlibs:Depends}, ${misc:Depends}, console-keymaps
 Description: Detect a keyboard and select layout
-Installer-Menu-Item: 12
+XB-Installer-Menu-Item: 12
 \end{verbatim}
 
-The line \texttt{Package-Type} tells debhelper to treat the package as a udeb. The \texttt{Installer-Menu-Item} is added in the control file for the udeb and will eventually end up in the dpkg status file to help main-menu figure out that this udeb should be included in the menu and in what order\footnote{The file \texttt{installer/doc/devel/menu-item-numbers.txt} in the d-i SVN repository documents menu numbers currently in use.}. Packaging a udeb becomes a bit harder if it is derived from a regular package but needs to be compiled with different compiler options (e.g. some features disabled or a different optimization). 
+The line \texttt{XC-Package-Type} tells debhelper to treat the package as a udeb. The \texttt{XB-Installer-Menu-Item} is added in the control file for the udeb and will eventually end up in the dpkg status file to help main-menu figure out that this udeb should be included in the menu and in what order\footnote{The file \texttt{installer/doc/devel/menu-item-numbers.txt} in the d-i SVN repository documents menu numbers currently in use.}. Packaging a udeb becomes a bit harder if it is derived from a regular package but needs to be compiled with different compiler options (e.g. some features disabled or a different optimization). 
 
 The main thing to always keep in mind when creating a udeb is size. It is very important to keep size as minimal as possible. This includes using tabs instead of spaces when indenting in scripts and not being too verbose in comments. 
 
