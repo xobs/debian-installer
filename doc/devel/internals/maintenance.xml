@@ -8,4 +8,39 @@ d-i release managers.
 
 </para>
 
+<sect1><title>Updating to a new Linux<footnote><para>The same logic should
+be applicable to the FreeBSD kernel, even if some details might be
+different.</para></footnote> kernel version</title>
+
+<para>
+This is possible when the <classname>linux</classname> package gets
+uploaded, bumping its ABI. For example, it gets bumped from
+<code>3.9-1</code> to <code>3.10-1</code>. This becomes needed when
+the <classname>linux-latest</classname> package gets uploaded, since
+obsolete
+<classname>linux-image-&lt;oldabi&gt;-&lt;arch&gt;</classname>
+packages (and relevant kernel modules) get decrufted soon after
+that. Daily builds start to fail to build at this point, failing to
+fetch decrufted packages.
+
+</para><para>
+
+A cron job on <code>d-i.debian.org</code> generates an linux kernel
+ABI summary for the <code>testing</code>, <code>unstable</code>, and
+<code>experimental</code> suites, and also sends a notification when
+the ABI gets bumped in any of them. The summary is available here:
+<ulink url="http://d-i.debian.org/kernel-summary.html" />
+
+</para><para>
+
+The following files need to be updated:
+<filename>build/config/*.cfg</filename>; beware, some architectures
+have specific version handling, so it might be needed to update some
+extra variables (like the upstream kernel version), rather than only
+those containing the kernel ABI.
+
+</para>
+
+</sect1>
+
 </chapter>
