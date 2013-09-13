@@ -1,0 +1,32 @@
+# The kernel image (meta) package to be installed; "none" can be used if no
+# kernel is to be installed.
+d-i base-installer/kernel/image string linux-image-novena
+
+# Individual additional packages to install
+d-i pkgsel/include string u-boot-novena linux-image-novena
+
+# Additional repositories, local[0-9] available
+d-i apt-setup/local0/repository string \
+       http://bunniefoo.com/kosagi-deb wheezy main
+d-i apt-setup/local0/comment string Kosagi repo
+
+# Enable deb-src lines
+d-i apt-setup/local0/source boolean true
+
+# URL to the public key of the local repository; you must provide a key or
+# apt will complain about the unauthenticated repository and so the
+# sources.list line will be left commented out
+d-i apt-setup/local0/key string http://bunniefoo.com/kosagi-deb/kosagi.gpg.key
+
+# Add the debug serial port to inittab
+d-i preseed/late_command string echo "T1:2345:respawn:/sbin/getty -L ttymxc1 115200 vt100" >> /target/etc/inittab
+
+# We don't require additional kernel modules
+d-i anna/no_kernel_modules boolean true
+
+d-i anna/choose_modules string network-console
+d-i network-console/password password kosagi
+d-i network-console/password-again password kosagi
+
+d-i base-installer/kernel/skip-install boolean true
+nobootloader nobootloader/confirmation_common note

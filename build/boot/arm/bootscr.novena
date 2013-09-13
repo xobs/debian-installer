@@ -1,0 +1,26 @@
+# Flip on USB power
+i2c dev 1
+i2c mw 08 66 48
+
+# Set CPU voltage to 1.2V (rather than the default of 1.375V)
+i2c mw 08 20 26
+
+mmc dev 0
+
+# Primary boot
+if fatload mmc 0 0x12000000 /uimage
+then
+	fatload mmc 0 0x11ff0000 /uimage.dtb
+	setenv bootargs console=ttymxc1,115200 init=/lib/systemd/systemd root=/dev/sda2 rootwait rootfstype=ext4 rw consoleblank=0 earlyprintk ignore_loglevel splash
+	bootm 0x12000000 - 0x11ff0000
+fi
+
+# Recovery console/installer
+setenv mmcdev 0
+mmc rescan
+mmc dev ${mmcdev}
+fatload mmc ${mmcdev} 0x11ff0000 /deb-uimage.dtb
+fatload mmc ${mmcdev} 0x12000000 /deb-uimage
+fatload mmc ${mmcdev} 0x12a00000 /deb-uinitrd
+setenv bootargs initrd=0x12a00000 console=ttymxc1,115200 earlyprintk
+bootm 0x12000000 0x12a00000 0x11ff0000
